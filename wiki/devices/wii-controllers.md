@@ -101,6 +101,10 @@ The Wii Remote's IR camera can drive an on-screen pointer. Point the remote at t
 
 Map **IR Pointer X** and **IR Pointer Y** to the right stick to aim, or to mouse motion to point the cursor at the screen.
 
+*Changed after 4.5.3. Pre-release builds have it, and the next release will.* When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote that has not seen the bar since it connected reads center.
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.* The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.
+
 **IR Offscreen** reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button.
 
 A **Pointer** tab appears when the assigned device has an IR camera. It holds two cards.
@@ -129,7 +133,22 @@ The tuning card lines the pointer up with your screen:
 
 Each IR Pointer source row also has a **Sensitivity** dial, from 0.1 to 5.0.
 
+A remote calibrated as a light gun ignores **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits.
+
 ![The Pointer tab with sensor-bar position, vertical offset, smoothing, and per-source sensitivity](../images/pad-pointer.png)
+
+### Light gun
+
+*Added after 4.5.3. Pre-release builds have it, and the next release will.*
+
+Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the [Devices](../features/devices.md#light-gun) page, and in its **Light Gun** section click **Calibrate**. Four targets appear in turn. From where you play, point the remote at each one and press **B**. Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.
+
+For a light-gun game that aims with a stick:
+
+- Map **IR Pointer X** and **IR Pointer Y** onto one stick of whichever virtual controller the game or emulator reads.
+- Leave that stick's **Deadzone X** and **Deadzone Y** at 0 on the [Sticks](../features/stick-deadzones.md) tab. Above 0, the default **Scaled Radial** shape keeps the stick inside a circle, which cuts off the screen's corners.
+- Set the emulator's own deadzone for that stick to 0 and its saturation to full. MAME, for one, starts at a 0.15 deadzone and 0.85 saturation.
+- Map **IR Offscreen** to the game's reload button.
 
 ---
 

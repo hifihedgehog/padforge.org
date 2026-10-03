@@ -5242,9 +5242,9 @@
 <h2 id="wii-remote-ir-pointer-not-working">Wii Remote IR Pointer Not Working<a class="headerlink" href="#wii-remote-ir-pointer-not-working" title="Permanent link">&para;</a></h2>
 <p><strong>A Wii Remote is connected but the IR Pointer source stays centered or does not aim.</strong></p>
 <ol>
-<li>The IR pointer needs a <strong>sensor bar or any IR light source</strong> in view of the remote's camera. It reads the two sensor-bar dots. With no dots visible it reports centered.</li>
+<li>The IR pointer needs a <strong>sensor bar or any IR light source</strong> in view of the remote's camera. It reads the two sensor-bar dots. Until the remote first sees both, it reports centered.</li>
 <li>A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.</li>
-<li>Aim the remote at the bar. When the camera loses the dots the source relaxes to center and re-acquires when a dot returns.</li>
+<li>Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead (changed after 4.5.3, in pre-release builds).</li>
 <li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.</li>
 <li>A right Joy-Con's <strong>IR Brightness</strong> source is different. It reports a single cover/proximity value, not an X/Y pointer.</li>
 </ol>

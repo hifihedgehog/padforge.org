@@ -2409,6 +2409,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#light-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3822,6 +3833,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#light-gun" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Light gun
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4080,6 +4102,8 @@
 <h2 id="ir-pointer">IR pointer<a class="headerlink" href="#ir-pointer" title="Permanent link">&para;</a></h2>
 <p>The Wii Remote's IR camera can drive an on-screen pointer. Point the remote at the screen and the camera tracks the sensor bar. Three mapping sources appear in the picker for a Wii Remote: <strong>IR Pointer X</strong>, <strong>IR Pointer Y</strong>, and <strong>IR Offscreen</strong>. They only show up when the assigned device is a Wii Remote.</p>
 <p>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to the right stick to aim, or to mouse motion to point the cursor at the screen.</p>
+<p><em>Changed after 4.5.3. Pre-release builds have it, and the next release will.</em> When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote that has not seen the bar since it connected reads center.</p>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em> The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. With a Classic Controller attached the driver reports no accelerometer, so PadForge takes the remote as upright each time it finds the bar, and the correction is right only when the remote finds the bar less than a quarter turn from upright.</p>
 <p><strong>IR Offscreen</strong> reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button.</p>
 <p>A <strong>Pointer</strong> tab appears when the assigned device has an IR camera. It holds two cards.</p>
 <h3 id="pointer-mode">Pointer Mode<a class="headerlink" href="#pointer-mode" title="Permanent link">&para;</a></h3>
@@ -4101,7 +4125,18 @@
 <li><strong>Smoothing</strong>: steadies the pointer against camera jitter.</li>
 </ul>
 <p>Each IR Pointer source row also has a <strong>Sensitivity</strong> dial, from 0.1 to 5.0.</p>
+<p>A remote calibrated as a light gun ignores <strong>Sensor Bar Position</strong> and <strong>Vertical Offset</strong>, because the calibration measured where the bar sits.</p>
 <p><img alt="The Pointer tab with sensor-bar position, vertical offset, smoothing, and per-source sensitivity" src="../../images/pad-pointer.png" /></p>
+<h3 id="light-gun">Light gun<a class="headerlink" href="#light-gun" title="Permanent link">&para;</a></h3>
+<p><em>Added after 4.5.3. Pre-release builds have it, and the next release will.</em></p>
+<p>Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the <a href="../../features/devices/#light-gun">Devices</a> page, and in its <strong>Light Gun</strong> section click <strong>Calibrate</strong>. Four targets appear in turn. From where you play, point the remote at each one and press <strong>B</strong>. Esc or <strong>Home</strong> cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.</p>
+<p>For a light-gun game that aims with a stick:</p>
+<ul>
+<li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> onto one stick of whichever virtual controller the game or emulator reads.</li>
+<li>Leave that stick's <strong>Deadzone X</strong> and <strong>Deadzone Y</strong> at 0 on the <a href="../../features/stick-deadzones/">Sticks</a> tab. Above 0, the default <strong>Scaled Radial</strong> shape keeps the stick inside a circle, which cuts off the screen's corners.</li>
+<li>Set the emulator's own deadzone for that stick to 0 and its saturation to full. MAME, for one, starts at a 0.15 deadzone and 0.85 saturation.</li>
+<li>Map <strong>IR Offscreen</strong> to the game's reload button.</li>
+</ul>
 <hr />
 <h2 id="balance-board">Balance Board<a class="headerlink" href="#balance-board" title="Permanent link">&para;</a></h2>
 <p>The Wii Balance Board pairs the same way as any other Wii controller and exposes three sources:</p>

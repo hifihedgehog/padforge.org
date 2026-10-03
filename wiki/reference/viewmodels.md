@@ -1068,12 +1068,14 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `GunCalibration` | `string` | `""` | A GunCon 2's aim range as `UserDevice.GunCalibration` keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun. |
-| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`), online or offline. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
-| `GunConnectedHere` | `bool` | `false` | The gun's live device is this PC's own `SdlDeviceWrapper`. A relayed gun is calibrated on its owner's PC. |
+| `GunCalibration` | `string` | `""` | A GunCon 2's or a Wii Remote's aim range as `UserDevice.GunCalibration` keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun or remote. |
+| `ShowGunCalibration` | `bool` | `false` | The row is a GunCon 2 (`UserDevice.IsGunCon2`) or, after 4.5.3, a Wii Remote with an IR camera (`UserDevice.HasIrCamera`, #485), online or offline. Notifies `ShowGunCalibrationDivider` and `ShowRawInputDivider`. |
+| `GunIsWiiRemote` | `bool` | `false` | *Added after 4.5.3.* The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies `GunCalibrationStatus` and `GunCalibrateTooltip`. |
+| `GunConnectedHere` | `bool` | `false` | The gun's or remote's live device is this PC's own `SdlDeviceWrapper`. A relayed one is calibrated on its owner's PC. |
 | `CanCalibrateGun` | `bool` | - | Computed: `GunConnectedHere && IsOnline`. Enables **Calibrate**. |
 | `ShowGunCalibrationDivider` | `bool` | - | Computed: `ShowGunCalibration && (ShowPowerSection \|\| !ShowInputModeOrHidingSection)`, the rule above the Light Gun section. |
-| `GunCalibrationStatus` | `string` | - | Computed: the aim range, formatted with `Devices_GunWindowDefault` or `Devices_GunWindowCalibrated`. |
+| `GunCalibrationStatus` | `string` | - | Computed: the aim range, formatted with `Devices_GunWindowDefault` or `Devices_GunWindowCalibrated`. A Wii Remote's line says only whether a window is stored (`Devices_WiiAimCalibrated` or `Devices_WiiAimDefault`), since its pointer counts mean nothing to a reader. |
+| `GunCalibrateTooltip` | `string` | - | *Added after 4.5.3.* Computed: what **Calibrate** does for this gun, `Devices_WiiCalibrateTooltip` for a Wii Remote, else `Devices_GunCalibrateTooltip`. |
 | `ShowReadAsICade` | `bool` | `false` | A Bluetooth keyboard with IDs, not the ION iCade cabinet, whose pair `ICadePads` does not list (`ICadePads.CanMark`). |
 | `ShowReadAsKeyboard` | `bool` | `false` | A listed pair's iCade Controller joystick, or its keyboard record while the pad is away. |
 | `ShowUsioTekken` / `ShowUsioTaiko` | `bool` | `false` | A Namco USIO drum or stick joystick, by the names the fork gives each layout. Each offers the other layout. |
@@ -3030,7 +3032,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `d57a725`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.0 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `d57a725`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 

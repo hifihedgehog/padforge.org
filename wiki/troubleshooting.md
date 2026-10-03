@@ -602,9 +602,9 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 **A Wii Remote is connected but the IR Pointer source stays centered or does not aim.**
 
-1. The IR pointer needs a **sensor bar or any IR light source** in view of the remote's camera. It reads the two sensor-bar dots. With no dots visible it reports centered.
+1. The IR pointer needs a **sensor bar or any IR light source** in view of the remote's camera. It reads the two sensor-bar dots. Until the remote first sees both, it reports centered.
 2. A powered USB sensor bar or a pair of IR emitters both drive it. The bar only needs to emit IR, it carries no data.
-3. Aim the remote at the bar. When the camera loses the dots the source relaxes to center and re-acquires when a dot returns.
+3. Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead (changed after 4.5.3, in pre-release builds).
 4. Map **IR Pointer X** and **IR Pointer Y** to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.
 5. A right Joy-Con's **IR Brightness** source is different. It reports a single cover/proximity value, not an X/Y pointer.
 

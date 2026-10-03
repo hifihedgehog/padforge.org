@@ -184,6 +184,8 @@ The first extension block is `BlockExt.GyroAux` (#252): the gyro triple of a com
 
 The second is `BlockExt.RingCon` (hifihedgehog/SDL#33): `RingConStrain` as one float, written after `GyroAux` so a decoder that knows only `GyroAux` reads its block and leaves this one in the tail. Presence comes from the state, as the `JoyConIr` block's does: a strain of exactly 0 is rest or no Ring-Con, the neutral an omitted block decodes to, so only a nonzero strain rides the wire. Decode fails closed on a non-finite float like `GyroAux`, and the consumer's read clamps each direction to 0..1 again.
 
+*Changed after 4.5.3.* `BlockExt.IrCalibrated` (#485), the bit after `AnalogKeys`, carries no payload. It marks the frame's Wii IR aim as already mapped through the owner's light-gun calibration window, so the consumer's IR read adds no Pointer-tab sensor-bar offset, as a local calibrated remote's read does not. The encoder sets it only with the `Ir` block, and the decoder honors it only when that block arrived. A peer that predates the bit leaves it unread, and a tail the bit opens alone is the three-byte header that `MaxEncodedSize` already budgets with the Ring-Con block.
+
 ---
 
 ## Reverse output relay (consumer game to owner hardware)

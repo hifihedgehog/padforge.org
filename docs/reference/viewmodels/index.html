@@ -12288,19 +12288,25 @@
 <td><code>GunCalibration</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
-<td>A GunCon 2's aim range as <code>UserDevice.GunCalibration</code> keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun.</td>
+<td>A GunCon 2's or a Wii Remote's aim range as <code>UserDevice.GunCalibration</code> keeps it. Persisted through the hiding-toggle channel, which also hands it to a connected gun or remote.</td>
 </tr>
 <tr>
 <td><code>ShowGunCalibration</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>), online or offline. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
+<td>The row is a GunCon 2 (<code>UserDevice.IsGunCon2</code>) or, after 4.5.3, a Wii Remote with an IR camera (<code>UserDevice.HasIrCamera</code>, #485), online or offline. Notifies <code>ShowGunCalibrationDivider</code> and <code>ShowRawInputDivider</code>.</td>
+</tr>
+<tr>
+<td><code>GunIsWiiRemote</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td><em>Added after 4.5.3.</em> The light gun is a Wii Remote, not a GunCon 2 (#485). Notifies <code>GunCalibrationStatus</code> and <code>GunCalibrateTooltip</code>.</td>
 </tr>
 <tr>
 <td><code>GunConnectedHere</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>The gun's live device is this PC's own <code>SdlDeviceWrapper</code>. A relayed gun is calibrated on its owner's PC.</td>
+<td>The gun's or remote's live device is this PC's own <code>SdlDeviceWrapper</code>. A relayed one is calibrated on its owner's PC.</td>
 </tr>
 <tr>
 <td><code>CanCalibrateGun</code></td>
@@ -12318,7 +12324,13 @@
 <td><code>GunCalibrationStatus</code></td>
 <td><code>string</code></td>
 <td>-</td>
-<td>Computed: the aim range, formatted with <code>Devices_GunWindowDefault</code> or <code>Devices_GunWindowCalibrated</code>.</td>
+<td>Computed: the aim range, formatted with <code>Devices_GunWindowDefault</code> or <code>Devices_GunWindowCalibrated</code>. A Wii Remote's line says only whether a window is stored (<code>Devices_WiiAimCalibrated</code> or <code>Devices_WiiAimDefault</code>), since its pointer counts mean nothing to a reader.</td>
+</tr>
+<tr>
+<td><code>GunCalibrateTooltip</code></td>
+<td><code>string</code></td>
+<td>-</td>
+<td><em>Added after 4.5.3.</em> Computed: what <strong>Calibrate</strong> does for this gun, <code>Devices_WiiCalibrateTooltip</code> for a Wii Remote, else <code>Devices_GunCalibrateTooltip</code>.</td>
 </tr>
 <tr>
 <td><code>ShowReadAsICade</code></td>
@@ -19097,7 +19109,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.0 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
+<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>d57a725</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
 <h3 id="extendedslotconfigdata">ExtendedSlotConfigData<a class="headerlink" href="#extendedslotconfigdata" title="Permanent link">&para;</a></h3>
 <p>Serializable DTO for persisting in PadForge.xml. All properties have <code>[XmlAttribute]</code>.</p>
 <table>

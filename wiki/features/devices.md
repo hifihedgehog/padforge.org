@@ -506,6 +506,8 @@ A Namco GunCon 2 gets a **Light Gun** section in the detail pane. The gun times 
 
 **Calibrate** turns every monitor white and shows four targets in turn, set in from the corners. Aim the gun at each target on the CRT and pull the trigger. The gun sees only the CRT, so the other monitors show the same targets to no effect. A shot the gun takes off the screen is asked for again, and four shots too close together start over from the first target. Esc, or the gun's A or B button, cancels. The range is saved for that gun and applies at once, and the section's reset button returns it to the starting range. The gun has to be connected to this PC to calibrate. A gun reached through [Remote Link](../guides/remote-link.md) is calibrated on the PC it is plugged into.
 
+A Wii Remote with its IR camera gets the same section, and its line says whether the remote is calibrated to the screen. **Calibrate** shows the same white screens and targets. From where you play, point the remote at each target and press **B**. A press while the remote can't see the sensor bar is asked for again, and Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. A calibrated remote ignores the Pointer tab's **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits. The reset button returns the remote to its default range. [Wii Controllers](../devices/wii-controllers.md#light-gun) covers a light-gun setup.
+
 *Added after 4.5.3. Pre-release builds have it, and the next release will.*
 
 ---

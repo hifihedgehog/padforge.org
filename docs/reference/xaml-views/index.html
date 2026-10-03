@@ -8553,7 +8553,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li>Mouse Motion X/Y (#154): visible on <code>IsMouseMotionSource</code>. Same <code>IrPointerSensitivity</code> binding with its own tooltip string.</li>
 </ul>
 <h3 id="pointer-tab-tab-13-ir-camera-tuning-146">Pointer Tab (Tab 13). IR Camera Tuning (#146)<a class="headerlink" href="#pointer-tab-tab-13-ir-camera-tuning-146" title="Permanent link">&para;</a></h3>
-<p>Wii Remote IR camera tuning. <code>TabPointer</code> (Tag 13) is <code>Visibility="Collapsed"</code> by default and shown by <code>SyncTabVisibility()</code> only when the selected mapped device is an IR-capable Wii Remote (<code>hasIrPointer</code>). Two cards: Pointer Mode (<code>PointerMode</code>: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus <code>PointerFpsSpeed</code>) and Pointer Tuning (sensor-bar position <code>IrSensorBarPos</code> as Centered / Above / Below, <code>IrSensorBarCompPercent</code> compensation, <code>IrSmoothingPercent</code> smoothing), each row with a reset.</p>
+<p>Wii Remote IR camera tuning. <code>TabPointer</code> (Tag 13) is <code>Visibility="Collapsed"</code> by default and shown by <code>SyncTabVisibility()</code> only when the selected mapped device is an IR-capable Wii Remote (<code>hasIrPointer</code>). Two cards: Pointer Mode (<code>PointerMode</code>: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus <code>PointerFpsSpeed</code>) and Pointer Tuning (sensor-bar position <code>IrSensorBarPos</code> as Centered / Above / Below, <code>IrSensorBarCompPercent</code> compensation, <code>IrSmoothingPercent</code> smoothing), each row with a reset. <em>Changed after 4.5.3.</em> The tab's subtitle (<code>Pad_Pointer_Subtitle</code>) sends the player to the Devices page to calibrate the remote as a light gun and says that a calibrated remote ignores the sensor-bar position and offset (#485).</p>
 <h3 id="menus-tab-tab-15-detailed">Menus Tab (Tab 15). Detailed<a class="headerlink" href="#menus-tab-tab-15-detailed" title="Permanent link">&para;</a></h3>
 <p>Radial / touch menu editor (#9). Slot tier like Macros: menus live on the slot's <code>MappingSet</code>. Tag 15 is the appended TabItem's index.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Grid (3 columns)
@@ -8785,44 +8785,45 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>        │   │   ShowIdleDisconnect, #162)
 <a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
 <a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>        │       QuickCharge_Click, #372)
-<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9)
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
 <a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
 <a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>        │   ├─ GunCalibrationStatus line
-<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun) + reset
-<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>        │       (GunCalibration)
-<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>        ├─ Separator (ShowRawInputDivider)
-<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>        └─ Raw Input State section
-<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
-<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
-<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
-<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>            │   and while ShowNamedButtons)
-<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
-<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
-<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
-<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
-<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a>            ├─ Keyboard layout (keyboard devices only)
-<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
-<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a>            ├─ Mouse preview (mouse devices only)
-<a id="__codelineno-11-79" name="__codelineno-11-79" href="#__codelineno-11-79"></a>            │   └─ Viewbox → MousePreviewControl
-<a id="__codelineno-11-80" name="__codelineno-11-80" href="#__codelineno-11-80"></a>            ├─ MIDI preview (MIDI input devices)
-<a id="__codelineno-11-81" name="__codelineno-11-81" href="#__codelineno-11-81"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
-<a id="__codelineno-11-82" name="__codelineno-11-82" href="#__codelineno-11-82"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-11-83" name="__codelineno-11-83" href="#__codelineno-11-83"></a>            │   └─ Horizontal StackPanel of compass indicators
-<a id="__codelineno-11-84" name="__codelineno-11-84" href="#__codelineno-11-84"></a>            │       ├─ 36×36 Ellipse background + center dot
-<a id="__codelineno-11-85" name="__codelineno-11-85" href="#__codelineno-11-85"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-<a id="__codelineno-11-86" name="__codelineno-11-86" href="#__codelineno-11-86"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
-<a id="__codelineno-11-87" name="__codelineno-11-87" href="#__codelineno-11-87"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
-<a id="__codelineno-11-88" name="__codelineno-11-88" href="#__codelineno-11-88"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
-<a id="__codelineno-11-89" name="__codelineno-11-89" href="#__codelineno-11-89"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
-<a id="__codelineno-11-90" name="__codelineno-11-90" href="#__codelineno-11-90"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-<a id="__codelineno-11-91" name="__codelineno-11-91" href="#__codelineno-11-91"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
-<a id="__codelineno-11-92" name="__codelineno-11-92" href="#__codelineno-11-92"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
-<a id="__codelineno-11-93" name="__codelineno-11-93" href="#__codelineno-11-93"></a>            │   VR controllers, Logitech G-Keys rows)
-<a id="__codelineno-11-94" name="__codelineno-11-94" href="#__codelineno-11-94"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
-<a id="__codelineno-11-95" name="__codelineno-11-95" href="#__codelineno-11-95"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
-<a id="__codelineno-11-96" name="__codelineno-11-96" href="#__codelineno-11-96"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
+<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
+<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>        │       ToolTip GunCalibrateTooltip) + reset
+<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>        │       (GunCalibration)
+<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>        ├─ Separator (ShowRawInputDivider)
+<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>        └─ Raw Input State section
+<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
+<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
+<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
+<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>            │   and while ShowNamedButtons)
+<a id="__codelineno-11-72" name="__codelineno-11-72" href="#__codelineno-11-72"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+<a id="__codelineno-11-73" name="__codelineno-11-73" href="#__codelineno-11-73"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
+<a id="__codelineno-11-74" name="__codelineno-11-74" href="#__codelineno-11-74"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
+<a id="__codelineno-11-75" name="__codelineno-11-75" href="#__codelineno-11-75"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+<a id="__codelineno-11-76" name="__codelineno-11-76" href="#__codelineno-11-76"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
+<a id="__codelineno-11-77" name="__codelineno-11-77" href="#__codelineno-11-77"></a>            ├─ Keyboard layout (keyboard devices only)
+<a id="__codelineno-11-78" name="__codelineno-11-78" href="#__codelineno-11-78"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
+<a id="__codelineno-11-79" name="__codelineno-11-79" href="#__codelineno-11-79"></a>            ├─ Mouse preview (mouse devices only)
+<a id="__codelineno-11-80" name="__codelineno-11-80" href="#__codelineno-11-80"></a>            │   └─ Viewbox → MousePreviewControl
+<a id="__codelineno-11-81" name="__codelineno-11-81" href="#__codelineno-11-81"></a>            ├─ MIDI preview (MIDI input devices)
+<a id="__codelineno-11-82" name="__codelineno-11-82" href="#__codelineno-11-82"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
+<a id="__codelineno-11-83" name="__codelineno-11-83" href="#__codelineno-11-83"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
+<a id="__codelineno-11-84" name="__codelineno-11-84" href="#__codelineno-11-84"></a>            │   └─ Horizontal StackPanel of compass indicators
+<a id="__codelineno-11-85" name="__codelineno-11-85" href="#__codelineno-11-85"></a>            │       ├─ 36×36 Ellipse background + center dot
+<a id="__codelineno-11-86" name="__codelineno-11-86" href="#__codelineno-11-86"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
+<a id="__codelineno-11-87" name="__codelineno-11-87" href="#__codelineno-11-87"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
+<a id="__codelineno-11-88" name="__codelineno-11-88" href="#__codelineno-11-88"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
+<a id="__codelineno-11-89" name="__codelineno-11-89" href="#__codelineno-11-89"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
+<a id="__codelineno-11-90" name="__codelineno-11-90" href="#__codelineno-11-90"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
+<a id="__codelineno-11-91" name="__codelineno-11-91" href="#__codelineno-11-91"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+<a id="__codelineno-11-92" name="__codelineno-11-92" href="#__codelineno-11-92"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+<a id="__codelineno-11-93" name="__codelineno-11-93" href="#__codelineno-11-93"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
+<a id="__codelineno-11-94" name="__codelineno-11-94" href="#__codelineno-11-94"></a>            │   VR controllers, Logitech G-Keys rows)
+<a id="__codelineno-11-95" name="__codelineno-11-95" href="#__codelineno-11-95"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
+<a id="__codelineno-11-96" name="__codelineno-11-96" href="#__codelineno-11-96"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
+<a id="__codelineno-11-97" name="__codelineno-11-97" href="#__codelineno-11-97"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
 </code></pre></div>
 <h3 id="key-bindings_1">Key Bindings<a class="headerlink" href="#key-bindings_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -9010,8 +9011,8 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>The two conditional separators around the Power section</td>
 </tr>
 <tr>
-<td><code>ShowGunCalibration</code> / <code>ShowGunCalibrationDivider</code> / <code>GunCalibrationStatus</code> / <code>CanCalibrateGun</code></td>
-<td>Light Gun section visibility, the rule above it, the aim range line and the Calibrate button's enable state</td>
+<td><code>ShowGunCalibration</code> / <code>ShowGunCalibrationDivider</code> / <code>GunCalibrationStatus</code> / <code>CanCalibrateGun</code> / <code>GunCalibrateTooltip</code></td>
+<td>Light Gun section visibility, the rule above it, the aim range line, the Calibrate button's enable state, and its tooltip by kind of gun</td>
 </tr>
 <tr>
 <td><code>ShowReadAsICade</code> / <code>ShowReadAsKeyboard</code></td>

@@ -928,7 +928,7 @@ Two per-source sensitivity rows render inside the mapping source editor, each ga
 
 ### Pointer Tab (Tab 13). IR Camera Tuning (#146)
 
-Wii Remote IR camera tuning. `TabPointer` (Tag 13) is `Visibility="Collapsed"` by default and shown by `SyncTabVisibility()` only when the selected mapped device is an IR-capable Wii Remote (`hasIrPointer`). Two cards: Pointer Mode (`PointerMode`: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus `PointerFpsSpeed`) and Pointer Tuning (sensor-bar position `IrSensorBarPos` as Centered / Above / Below, `IrSensorBarCompPercent` compensation, `IrSmoothingPercent` smoothing), each row with a reset.
+Wii Remote IR camera tuning. `TabPointer` (Tag 13) is `Visibility="Collapsed"` by default and shown by `SyncTabVisibility()` only when the selected mapped device is an IR-capable Wii Remote (`hasIrPointer`). Two cards: Pointer Mode (`PointerMode`: Mouse, FPS Mouse, 4:3 Border, or 16:9 Border, plus `PointerFpsSpeed`) and Pointer Tuning (sensor-bar position `IrSensorBarPos` as Centered / Above / Below, `IrSensorBarCompPercent` compensation, `IrSmoothingPercent` smoothing), each row with a reset. *Changed after 4.5.3.* The tab's subtitle (`Pad_Pointer_Subtitle`) sends the player to the Devices page to calibrate the remote as a light gun and says that a calibrated remote ignores the sensor-bar position and offset (#485).
 
 ### Menus Tab (Tab 15). Detailed
 
@@ -1113,10 +1113,11 @@ Grid (Margin="24,16")
         │   │   ShowIdleDisconnect, #162)
         │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
         │       QuickCharge_Click, #372)
-        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9)
+        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
         │   ├─ Separator (ShowGunCalibrationDivider)
         │   ├─ GunCalibrationStatus line
-        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun) + reset
+        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
+        │       ToolTip GunCalibrateTooltip) + reset
         │       (GunCalibration)
         ├─ Separator (ShowRawInputDivider)
         └─ Raw Input State section
@@ -1203,7 +1204,7 @@ Grid (Margin="24,16")
 | `ShowIdleDisconnect` / `IdleDisconnectMinutes` | Idle-disconnect row visibility and its countdown minutes (#162) |
 | `ShowQuickCharge` / `QuickChargeEnabled` | Quick Charge row visibility and toggle (#372). Also true on a Sony record the USB cable rebound to its wired path, which is not a disconnect target and is exactly when the feature fires |
 | `ShowInputModeOrHidingSection` / `ShowRawInputDivider` | The two conditional separators around the Power section |
-| `ShowGunCalibration` / `ShowGunCalibrationDivider` / `GunCalibrationStatus` / `CanCalibrateGun` | Light Gun section visibility, the rule above it, the aim range line and the Calibrate button's enable state |
+| `ShowGunCalibration` / `ShowGunCalibrationDivider` / `GunCalibrationStatus` / `CanCalibrateGun` / `GunCalibrateTooltip` | Light Gun section visibility, the rule above it, the aim range line, the Calibrate button's enable state, and its tooltip by kind of gun |
 | `ShowReadAsICade` / `ShowReadAsKeyboard` | The iCade pair of buttons |
 | `ShowUsioTekken` / `ShowUsioTaiko` | The USIO layout buttons |
 | `HasCapabilityIcons` / `HasRumble` / `HasGyro` / `ShowTouchpadCapability` | Capability chip strip and its three chips |

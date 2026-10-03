@@ -9250,7 +9250,7 @@
 <a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">BatteryCharging</span><span class="p">;</span><span class="w">    </span><span class="c1">// True when the source pad reports charging or fully charged.</span>
 <a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
 <a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">    </span><span class="c1">// 3.6.0 pointer / mouse sources (value-type fields, no per-frame allocation)</span>
-<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">WiiIrState</span><span class="w"> </span><span class="n">Ir</span><span class="p">;</span><span class="w">           </span><span class="c1">// Wii Remote IR pointer (#146): X, Y in [-1..+1], Detected flag</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">WiiIrState</span><span class="w"> </span><span class="n">Ir</span><span class="p">;</span><span class="w">           </span><span class="c1">// Wii Remote IR pointer (#146): X, Y in [-1..+1], Detected and Calibrated flags</span>
 <a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyConIrIntensity</span><span class="p">;</span><span class="w"> </span><span class="c1">// Right Joy-Con NIR camera average intensity 0..1 (#151)</span>
 <a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">RingConStrain</span><span class="p">;</span><span class="w">     </span><span class="c1">// Ring-Con flex -1..+1, squeeze positive (hifihedgehog/SDL#33)</span>
 <a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">JoyCon2MouseDX</span><span class="p">;</span><span class="w">    </span><span class="c1">// Joy-Con 2 optical mouse X delta since last poll (#154)</span>
@@ -9403,7 +9403,7 @@
 <td><code>Ir</code></td>
 <td><code>WiiIrState</code></td>
 <td><code>Detected=false</code></td>
-<td>(v3.6) Wii Remote IR-camera pointer (#146). <code>X</code> / <code>Y</code> normalized to the [&minus;1..+1] stick range from the two sensor-bar dots, valid only when <code>Detected</code>. Value type, rebuilt each tick.</td>
+<td>(v3.6) Wii Remote IR-camera pointer (#146). <code>X</code> / <code>Y</code> normalized to the [&minus;1..+1] stick range from the two sensor-bar dots, valid only when <code>Detected</code>. <em>Changed after 4.5.3.</em> The aim is twist-compensated, and <code>Calibrated</code> marks an aim the remote's light-gun window already mapped (#485), which the IR read adds no bar offset to. Value type, rebuilt each tick.</td>
 </tr>
 <tr>
 <td><code>JoyConIrIntensity</code></td>
@@ -9821,6 +9821,12 @@
 <td>The beam counts at the picture's edges this gun scales by: X 175..720 and Y 20..240 (beardypig's guncon2 driver defaults) until <code>UserDevice.LoadFromSdlDevice</code> hands it the record's <code>GunCalibration</code>, or the Devices page's calibration screen replaces it. Immutable and swapped with <code>Volatile</code>, so the poll thread reads it without a lock.</td>
 </tr>
 <tr>
+<td><code>WiiPointerCalibration</code></td>
+<td><code>GunCon2Calibration</code></td>
+<td><code>null</code></td>
+<td><em>Added after 4.5.3.</em> A Wii Remote's light-gun window (#485), in pointer counts: the twist-compensated aim times <code>WiiPointerCountsX</code> (512) across and <code>WiiPointerCountsY</code> (384) down. <code>null</code> leaves the default aim range. <code>UserDevice.LoadFromSdlDevice</code> hands it the record's <code>GunCalibration</code>, and the Devices page's save replaces it. <code>StepIrPointer</code> maps the aim through it (<code>ApplyWiiPointerCalibration</code>) and marks the result <code>Ir.Calibrated</code>. Immutable and swapped with <code>Volatile</code>.</td>
+</tr>
+<tr>
 <td><code>HasSpinDial</code></td>
 <td><code>bool</code></td>
 <td>(set at open)</td>
@@ -9870,7 +9876,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>GetCurrentState</code> reads the IR pointer, the NIR scalar, and the Joy-Con 2 mouse counters straight off the raw joystick axes (<code>ReadIrPointer</code> / <code>ReadJoyConIr</code> / <code>ReadJoyCon2Mouse</code>) into the matching <code>CustomInputState</code> fields, alongside the standard gamepad decode. <code>ReadSwitch2Magnetometer</code> fills the wrapper-local magnetometer fields, and <code>ReadNfcTag</code> polls <code>SDL_GetGamepadNfcTagUid</code> only while NFC is armed. The Balance Board's corners need no extra read. Capsense channels come from SDL 3.6.0's <code>SDL_GamepadHasCapSense</code> / <code>SDL_GetGamepadCapSense</code> and are probed once at open into a private <code>_capSenseChannels</code> array, so a capsense-less device pays nothing per frame and never allocates <code>CustomInputState.CapSense</code>.</p>
+<p><code>GetCurrentState</code> reads the IR pointer, the NIR scalar, and the Joy-Con 2 mouse counters straight off the raw joystick axes (<code>ReadIrPointer</code> / <code>ReadJoyConIr</code> / <code>ReadJoyCon2Mouse</code>) into the matching <code>CustomInputState</code> fields, alongside the standard gamepad decode. <code>ReadIrPointer</code> hands the dots, the remote's accelerometer and its B to <code>StepIrPointer</code>, which corrects the aim for twist, latches the light-gun calibration shot and applies <code>WiiPointerCalibration</code> (<a href="../wii-controllers-internals/#twist-compensation">Wii Controllers Internals</a>). <code>ReadSwitch2Magnetometer</code> fills the wrapper-local magnetometer fields, and <code>ReadNfcTag</code> polls <code>SDL_GetGamepadNfcTagUid</code> only while NFC is armed. The Balance Board's corners need no extra read. Capsense channels come from SDL 3.6.0's <code>SDL_GamepadHasCapSense</code> / <code>SDL_GetGamepadCapSense</code> and are probed once at open into a private <code>_capSenseChannels</code> array, so a capsense-less device pays nothing per frame and never allocates <code>CustomInputState.CapSense</code>.</p>
 <h3 id="public-methods">Public Methods<a class="headerlink" href="#public-methods" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -14860,7 +14866,7 @@
 <td><code>string</code></td>
 <td><code>[XmlElement]</code></td>
 <td><code>""</code></td>
-<td>A GunCon 2's calibration (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts. Empty or unusable text reads as <code>GunCon2Calibration.Default</code>. <code>LoadFromSdlDevice</code> hands it to the gun's wrapper on every connect.</td>
+<td>A GunCon 2's calibration (hifihedgehog/SDL#33), <code>"minX,maxX,minY,maxY"</code> in beam counts. Empty or unusable text reads as <code>GunCon2Calibration.Default</code>. <code>LoadFromSdlDevice</code> hands it to the gun's wrapper on every connect. <em>Added after 4.5.3.</em> A Wii Remote keeps its light-gun window here too (#485), in pointer counts, and empty or unusable text leaves it on its default aim range.</td>
 </tr>
 <tr>
 <td><code>HidHideInstanceIds</code></td>

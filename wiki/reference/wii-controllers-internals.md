@@ -29,7 +29,9 @@ So the data flow is: PadForge pairs over Bluetooth, the Microsoft Bluetooth stac
 | `PadForge.App/Common/Input/InputManager.cs` | The SDL Wii hint in `InitializeSdl` and the `RescanWiiControllers` hint toggle. |
 | `PadForge.App/MainWindow.xaml.cs` | The `PairRequested` handler that opens the dialog, then runs the rescan when a Wii controller paired, and the 100 ms `_sdlPumpTimer`. |
 | `PadForge.App/Services/InputService.cs` | `RescanWiiControllers` passthrough to the input manager. |
-| `PadForge.Engine/Common/SdlDeviceWrapper.cs` | The capability gate that stops a stickless Wii Remote from advertising phantom stick axes, the `HasIrCamera` / `IsBalanceBoard` detection, and the IR-pointer read (`ReadIrPointer`). |
+| `PadForge.Engine/Common/SdlDeviceWrapper.cs` | The capability gate that stops a stickless Wii Remote from advertising phantom stick axes, the `HasIrCamera` / `IsBalanceBoard` detection, and the IR-pointer read (`ReadIrPointer`). Twist compensation, the light-gun shot latch and the calibration window (`StepIrPointer`). |
+| `PadForge.Engine/Common/WiiRemoteIdentity.cs` | The three camera configurations by SDL name, and the raw buttons that carry the remote's B and Home in each. |
+| `PadForge.App/Views/GunCalibrationScreen.cs` | The four-target calibration screen, shared with the GunCon 2 through `CalibrationGun`. |
 | `PadForge.Engine/Common/Mapping/SourceCoercion.cs` | `ReadTunedBalanceBoard`: the Lean X / Lean Y / Total Weight coercions from the four corner load cells. The grip rotation (#392): `RotateForGrip`, `GripAxis`, `GripPov`, `ApplyMotionGrip`, `ReadGravity`. |
 | `PadForge.App/Services/GyroCalibratorService.cs` | The at-rest Motion Plus zero: a 1500 ms sample at connect, subtracted in both passthrough toggle states. |
 | `PadForge.App/Common/Input/WiiSpeakerService.cs` | The Wii Remote speaker output sink. `internal static class`, 8-bit PCM at 2 kHz over the raw HID handle. |
@@ -194,18 +196,44 @@ The IR camera path rides the same `SdlDeviceWrapper` read that surfaces the pad.
 
 The SDL fork's `hidapi_wii` driver posts the two IR dots on dedicated joystick axes 6-9 (SDL#6 follow-up `41909fdc4e`), separate from the gamepad sticks so a Nunchuk or Classic extension keeps axes 0-3. Axis 6 is dot 0 X (`0..1023`), axis 7 is dot 0 Y (`0..767`), axis 8 and 9 are dot 1. A value of `-1` means the dot is not detected.
 
-`ReadIrPointer` (`SdlDeviceWrapper.cs`) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four values through `ComputeIrAim` into `CustomInputState.Ir` (a `WiiIrState` with `X`, `Y`, `Detected`):
+`ReadIrPointer` (`SdlDeviceWrapper.cs` line 1324) runs after the standard state read, joystick-direct, because the gamepad mapping does not surface these axes. It reads the four dot values, the remote's accelerometer X and Z, and the remote's B and Home, and hands them to `StepIrPointer` (line 1364), which runs without SDL so the tests can drive it. The step writes `CustomInputState.Ir`, a `WiiIrState` with `X`, `Y`, `Detected` and `Calibrated`.
+
+`ComputeIrAim` (line 1607) turns the dots into the plain pair midpoint:
 
 - All four at exactly 0 means no report has arrived yet (two dots on one pixel is physically impossible), so `Detected` is set false rather than yanking the pointer to a corner on connect.
 - The aim exists only when BOTH sensor-bar dots are visible. `ComputeIrAim` returns `Detected = false` if any of the four dot slots reads negative (fewer than two dots: out of reach). There is no single-dot fallback. Snapping the midpoint to the surviving dot would sit half a dot-separation away, and a steady sweep would re-walk that span of the screen (the #203 bench "double walk"). Every proven reference (Touchmote, Ryochan7-lightgun, Suegrini-4IR, WiimoteLib) computes the aim as a dot-pair midpoint and treats fewer than two dots as out of reach.
 - The `1024x768` camera frame is normalized to the `[-1..+1]` stick range with X mirrored and Y direct, grounded against Touchmote and WiimoteLib.
 
-The wrapper stores only the raw screen-aligned aim. All tuning is applied later at the slot-scoped read in `SourceCoercion.ReadTunedIrPointer`, because one remote can feed several virtual controllers, each with its own settings. That read applies four stages in order:
+*Changed after 4.5.3.* `StepIrPointer` then corrects the midpoint for twist, latches the calibration shot, and maps the aim through the remote's light-gun window when it has one.
+
+### Twist compensation
+
+*Added after 4.5.3.* A port of Touchmote's `pointer_considerRotation`, which every Touchmote variant on disk ships on by default: base Touchmote at 663fe0b (`ScreenPositionCalculator.cs` lines 103-147 and 175-184), the light-gun fork at 3994bb9 (lines 247-301) and the 4IR fork at 850b04c (lines 227-276). Rolling the remote rolls the camera, which turns the dot pair and the midpoint's offset from the camera's center together, so turning the midpoint back by the pair's angle cancels the roll.
+
+1. While the pair is tracked, `StepIrAccel` (line 1443) smooths the remote's own X and Z acceleration 0.9 to 0.1 per 10 ms report. The weight is spread over the 1 ms polls, and a gap counts as one report, since every variant smooths only frames with a pair. The first sample seeds it. Touchmote's fields start at 0, which against its 128-count center reads as upside down on the first acquisition and flips the first track's aim.
+2. When tracking starts, `UpdateIrOrientation` (line 1466) picks upright (0), upside down (2) or a side (1 or 3) from the smoothed reading, with Touchmote's hysteresis: the current orientation's axis gives up 0.2 g, which is 5 of the remote's 25 counts per g, and a reading under 0.2 g changes nothing. `PickIrLeftDot` (line 1487) then names the left LED by Touchmote's table over raw camera pixels: the smaller X upright, the larger X upside down, the larger Y in orientation 1 and the smaller Y in 3, with ties going to dot 1. The choice holds while tracking lasts and resets when the pair is lost.
+3. `IrPairAngle` (line 1499) is `atan2(dy, dx)` of the left-to-right vector in raw pixels, and `RotateIrAim` (line 1512) turns the mirrored aim by it with Touchmote's `rotatePoint`. The two forks rotate the unmirrored point and negate the angle inside their `rotatePoint`, which comes to the same turn. The result is clamped to `[-1..+1]`, as the forks clamp their half-scale point to 0.5. Two dots on one pixel give an angle of 0, where Touchmote's normalization divides by zero.
+
+The fork posts SDL's accelerometer X as the remote's own X negated and SDL's Y as the remote's Z (`SDL_hidapi_wii.c` `HandleWiiRemoteAccelData`, lines 1739-1759 at b12239c8c7), so the read passes `-Accel[0]` and `Accel[1]`. The fork registers that accelerometer for the bare remote and the Nunchuk configuration only (lines 1186-1191). With a Classic Controller attached the step receives zeros and keeps the upright pick, so the correction is right only when the remote finds the bar less than a quarter turn from upright.
+
+### Light-gun calibration
+
+*Added after 4.5.3.* The remote shares the GunCon 2's flow from hifihedgehog/SDL#33 Part 9. A shot is a press of the remote's B, read from the raw button its configuration posts it on (`WiiRemoteIdentity.RemoteButtons`, `WiiRemoteIdentity.cs` line 47): B on 0 and Home on 5 for a bare remote or one with a Nunchuk, 16 and 21 with a Classic Controller, whose controls take the gamepad positions (`SDL_hidapi_wii.c` lines 1886-1907, and the `k_eWiiButtons` block from `SDL_GAMEPAD_BUTTON_MISC1` at lines 136-147). `RecordWiiPointerShot` (line 1562) latches the press on the polling thread with the twist-compensated aim of that poll, before any window applies. It keeps the aim in pointer counts, 512 across and 384 down per unit of aim, with a press count and whether the pair was tracked. `TryGetWiiPointerShot` hands it to the calibration screen, which samples at display rate, the way the GunCon's pull is latched.
+
+`GunCalibrationScreen` reads either gun through `CalibrationGun` (`GunCalibrationScreen.cs` line 21): the latest shot, whether the cancel buttons are down (Home for the remote, A or B for the GunCon) and the screen's text. `GunCon2Calibration.TryFit` fits the window as it does for the gun, and the Devices page stores it in `UserDevice.GunCalibration`. `UserDevice.LoadFromSdlDevice` and the save in `DeviceService` hand it to the wrapper's `WiiPointerCalibration`, as they hand the GunCon its window.
+
+`ApplyWiiPointerCalibration` (line 1542) maps the aim through the window, clamps it to the picture, and stores it divided by the margin stretch, `ApplyGunCon2`'s convention, so the slot read restores it. The step marks that aim `Calibrated`, and Remote Link carries the mark (`BlockExt.IrCalibrated`).
+
+### The slot read
+
+The wrapper stores the screen-aligned aim. All tuning is applied later at the slot-scoped read in `SourceCoercion.ReadTunedIrPointer` (`SourceCoercion.cs` line 2091), because one remote can feed several virtual controllers, each with its own settings. That read applies four stages in order:
 
 1. **Lineage margin stretch** (base aim map, #203 pointer modes): `IrMarginStretchX = 1.8`, `IrMarginStretchY = 2.0`, applied first. A tracked pair midpoint physically cannot reach +/-1, because both LEDs must stay in the camera view. Without this stretch the cursor walls off inside the screen in every pointer mode. This is the base map, not an optional extra.
-2. **Sensor-bar offset** (Y only): the Pointer-tab vertical bar offset, in post-stretch screen space, matching Touchmote's `offsetY`.
+2. **Sensor-bar offset** (Y only): the Pointer-tab vertical bar offset, in post-stretch screen space, matching Touchmote's `offsetY`. A `Calibrated` aim skips it, because the window already measured where the bar sits.
 3. **EMA smoothing**: a per-(device, slot, axis) exponential moving average, clamped to `[0..0.95]`, dropped on sight loss so a re-acquire snaps instead of sliding in from stale.
 4. **Per-source sensitivity**: `MappingSource.IrPointerSensitivity` (default `1.0`), a mapping-row Slider with a reset button on the "IR Pointer X/Y" rows, then a final clamp to `[-1..+1]`.
+
+*Changed after 4.5.3.* While no pair is seen, the read serves the last value it returned for that device, slot and axis, after smoothing and before the row's sensitivity, so two rows with different sensitivities each hold their own reading (`_irHeld`). It used to return 0, which put a light gun's crosshair in the middle of the screen whenever an LED left the camera's view. Touchmote returns its last position marked out of reach (`ScreenPositionCalculator.cs` lines 153-159), and the light-gun fork skips its IR stick update (`ViGEmHandler.cs` line 340). A device not seen since it connected reads 0. `ForgetIrPointerForDevice` (line 2171) drops a device's held values and smoothing state from the removal path that resets the trackball (`InputManager.NeutralizeMappedOutputsFor`). The GunCon 2's Gun Aim sources read through the same path and hold the same way.
 
 ---
 
