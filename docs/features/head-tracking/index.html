@@ -3789,7 +3789,11 @@
 <tbody>
 <tr>
 <td><em>Starting the OpenXR session</em></td>
-<td>Negotiating with the runtime. The line also stays after the runtime ends the session, because PadForge does not reconnect on its own. Turn the input off and on again to start a new session.</td>
+<td>Negotiating with the runtime.</td>
+</tr>
+<tr>
+<td><em>The OpenXR runtime ended the session. Turn OpenXR headset input off and back on to reconnect.</em></td>
+<td>The runtime closed the session, as it does when SteamVR is shut down or the headset's session ends. PadForge does not reopen it on its own, as the OpenXR specification asks of an application whose session the runtime ended, so a runtime you closed stays closed. Turn the input off and on again to start a new session.</td>
 </tr>
 <tr>
 <td><em>Waiting for [runtime] to report a tracked pose</em></td>

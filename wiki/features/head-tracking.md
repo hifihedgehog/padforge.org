@@ -86,7 +86,8 @@ The status line reports each stage:
 
 | Status | Meaning |
 | --- | --- |
-| *Starting the OpenXR session* | Negotiating with the runtime. The line also stays after the runtime ends the session, because PadForge does not reconnect on its own. Turn the input off and on again to start a new session. |
+| *Starting the OpenXR session* | Negotiating with the runtime. |
+| *The OpenXR runtime ended the session. Turn OpenXR headset input off and back on to reconnect.* | The runtime closed the session, as it does when SteamVR is shut down or the headset's session ends. PadForge does not reopen it on its own, as the OpenXR specification asks of an application whose session the runtime ended, so a runtime you closed stays closed. Turn the input off and on again to start a new session. |
 | *Waiting for [runtime] to report a tracked pose* | The session is up and the headset has not been tracked yet. Put it on, or move it into view of its sensors. |
 | *Reading [runtime]* | The pose is live and the six axes are moving. |
 | *No OpenXR runtime is installed* | No runtime is registered, or the chosen runtime's library is missing, does not load, or refuses the loader handshake. Install or repair a runtime, or use one of the other two inputs. |
