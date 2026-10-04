@@ -4,7 +4,7 @@
 
 ![The Updates card in Settings, after a check](../images/settings-updates.png)
 
-The **Updates** card sits in **Settings**, between **Window** and **Input Engine**. It first shipped in PadForge 4.5.3. Version 4.5.2 and older have no updater, so getting to 4.5.3 takes one download from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest). Every version from 4.5.3 on updates itself.
+The **Updates** card sits in **Settings**, between **Window** and **Input Engine**. It first shipped in PadForge 4.5.3. Version 4.5.2 and older have no updater, so updating from them takes one download from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest). Every version from 4.5.3 on updates itself.
 
 ---
 
