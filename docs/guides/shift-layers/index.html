@@ -3825,6 +3825,7 @@
 <p><strong>Layer rows.</strong> Each mapping row belongs to one layer. Base rows belong to Base. Shift rows belong to the layer you bound them on. The same target can have a different row on each layer, so one button does one thing on Base and another while a shift layer is engaged.</p>
 <p><strong>Inherit Unmapped Targets from Base.</strong> A checkbox in the activator dialog. Off by default. The active shift layer <strong>replaces</strong> Base. Targets without a row on the layer output zero. Turn it on and the layer <strong>overlays</strong> Base. Targets without a row fall through to Base.</p>
 <p><strong>Do Not Inherit.</strong> A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.</p>
+<p><strong>Motion rows.</strong> <strong>Motion Gyro</strong> and <strong>Motion Accelerometer</strong> rows are the exception to both settings. A motion channel falls back to the Base row, then to any other layer's row for the same target, whenever the active layer's row supplies no motion. Replace mode and <strong>Do Not Inherit</strong> do not switch motion off. See <a href="../../features/mappings/#motion-sources">Motion sources</a>.</p>
 <hr />
 <h2 id="make-a-shift-layer">Make a shift layer<a class="headerlink" href="#make-a-shift-layer" title="Permanent link">&para;</a></h2>
 <ol>

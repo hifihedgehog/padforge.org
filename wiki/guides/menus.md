@@ -63,7 +63,7 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 
 ![A menu cell bound to a macro](../images/menu-macro-cell.png)
 
-The cell is an extra trigger for the macro rather than a copy of it, so the macro's own fire mode decides what happens: a **While Held** macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. The macro's **Layer** scope and the rest of its settings apply unchanged. A macro with no trigger of its own can be driven entirely from cells.
+The cell is an extra trigger for the macro rather than a copy of it, so the macro's own fire mode decides what happens: a **While Held** macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. The macro's **Layer** scope and the rest of its settings apply unchanged, including on a commit made by leaving the menu's layer (see [Menus and shift layers](#menus-and-shift-layers)). A macro with no trigger of its own can be driven entirely from cells.
 
 Renaming the macro updates every cell that names it. A cell whose macro no longer exists shows as **`<name>` (no such macro)** in the picker and does nothing until you pick another. Macro names on a slot are not unique. When two share a name, the cell fires the first.
 
@@ -71,7 +71,7 @@ Renaming the macro updates every cell that names it. A cell whose macro no longe
 
 Every cell also fires as a menu-item source, pickable in [Mappings](../features/mappings.md) rows and macro triggers as entries like **Menu 1 Cell 3**. A cell set to **None** still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows **Used by a mapping or macro** in its binding picker while it has no direct binding of its own.
 
-A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding.
+A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding. A commit made by releasing the menu's layer is the exception. See [Menus and shift layers](#menus-and-shift-layers).
 
 ---
 
@@ -140,7 +140,9 @@ Each menu carries a **Layer** picker naming the [shift layer](shift-layers.md) t
 
 The fire modes read a little differently in this mode. **On Click** holds the highlighted cell's binding while the click input is held, and a highlighted radial center can fire with the stick at rest. **On Click Release** fires once when the click input releases, falling back to the previous selection if the surface releases in the same instant. **On Touch Release** fires when you lift off or return inside the engage deadzone while the menu stays open, and leaving the layer also commits a selection still being steered.
 
-A menu imported from a Steam config that lived on an action layer engages only while that layer is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, matching Steam's mode-shift behavior.
+A menu imported from a Steam config that lived on an action layer engages only while that layer is held. Releasing the layer counts as letting go, so an On Touch Release menu commits its hovered cell right there, as Steam's mode shift does.
+
+A commit made by leaving a layer arrives after the layer has ended. The cell's own key or controller-button binding fires. A macro cell runs only when the macro's **Layer** is **Any Layer** or the layer you land on, usually **Base**. A mapping row or macro that reads the cell as a source follows the same rule: a row on the layer you left no longer applies, and a macro scoped to that layer stays shut. An import places a cell's actions on the menu's own layer, so releasing that layer commits the cell without running them. To run them, let the menu commit before you release the layer: return the stick to center or lift off the pad first.
 
 The row reset restores **Any Layer** and turns layer-held opening off.
 

@@ -22,6 +22,8 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 
 **Do Not Inherit.** A per-row checkbox in the mapping grid. It appears on a row only when the active layer inherits. Check it to keep one target off on this layer while the rest of the layer falls through to Base. Useful when you want one specific button silenced.
 
+**Motion rows.** **Motion Gyro** and **Motion Accelerometer** rows are the exception to both settings. A motion channel falls back to the Base row, then to any other layer's row for the same target, whenever the active layer's row supplies no motion. Replace mode and **Do Not Inherit** do not switch motion off. See [Motion sources](../features/mappings.md#motion-sources).
+
 ---
 
 ## Make a shift layer

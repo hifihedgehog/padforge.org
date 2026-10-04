@@ -8351,7 +8351,7 @@
 <td><code>NoInherit</code></td>
 <td><code>[XmlAttribute]</code></td>
 <td><code>bool</code></td>
-<td>When true on a non-Base row, suppresses Base fallthrough for this target on this layer even if the row has zero sources.</td>
+<td>When true on a non-Base row, suppresses Base fallthrough for this target on this layer even if the row has zero sources. The <code>MotionGyro</code> and <code>MotionAccel</code> targets ignore it, since the motion lane discards layer suppression.</td>
 </tr>
 <tr>
 <td><code>TrimDeadzone</code></td>
@@ -10886,7 +10886,7 @@
 <tr>
 <td><code>SlotMappingSets</code></td>
 <td><code>MappingSet[]</code></td>
-<td>(v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. <code>ApplyProfile</code> falls back to the legacy migrator in that case.</td>
+<td>(v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. <code>ApplyProfile</code> then leaves the live sets as they are and runs no legacy migration, so each slot keeps the rows it had before the switch.</td>
 </tr>
 <tr>
 <td><code>Macros</code></td>
@@ -11707,7 +11707,7 @@
 <p><strong>Critical load order:</strong> <code>SlotCreated</code> must load before <code>OutputType</code>. Setting <code>OutputType</code> fires <code>PropertyChanged</code> which calls <code>RefreshNavControllerItems()</code> which reads <code>SlotCreated[]</code>. Wrong order causes a double-rebuild crash.</p>
 <p><strong>CloneDeep during load is critical:</strong> Without cloning, devices sharing a checksum would share one <code>PadSetting</code> instance. Changing one device's deadzone would silently corrupt the other's.</p>
 <h3 id="autosave-debounce">Autosave Debounce<a class="headerlink" href="#autosave-debounce" title="Permanent link">&para;</a></h3>
-<p>Two-tier autosave via <code>DispatcherTimer</code> (#331). <code>MarkDirty()</code> starts a 250 ms timer and deliberately never restarts it: a restart on every change would starve tier 1 for as long as the user keeps dragging. Each tick pushes the ViewModel values into the PadSettings and the slot MappingSets (<code>UpdatePadSettingsFromViewModels()</code> + <code>PushUiExtraSourcesIntoSlotMappingSets()</code>), direct property writes the engine reads immediately, with no serialization and no disk. The push never creates a <code>MotionGyro</code> or <code>MotionAccel</code> row for a grid entry that has no source and no <code>NoInherit</code> flag (discussion #446). An empty motion row is how a user switches that channel off, so only a row the user emptied reads as off, and a grid saved before any device reached the slot leaves the motion auto-map free to fill the channel on the next assignment. The full <code>Save()</code> and the <code>AutoSaved</code> event run only after 2 s with no <code>MarkDirty()</code> (<code>PersistQuietMs = 2000</code>), so an editing burst costs one disk write instead of one per adjustment. Direct <code>Save()</code> callers (<code>OnClosing</code>, profile operations) stay synchronous:</p>
+<p>Two-tier autosave via <code>DispatcherTimer</code> (#331). <code>MarkDirty()</code> starts a 250 ms timer and deliberately never restarts it: a restart on every change would starve tier 1 for as long as the user keeps dragging. Each tick pushes the ViewModel values into the PadSettings and the slot MappingSets (<code>UpdatePadSettingsFromViewModels()</code> + <code>PushUiExtraSourcesIntoSlotMappingSets()</code>), direct property writes the engine reads immediately, with no serialization and no disk. The push never creates a <code>MotionGyro</code> or <code>MotionAccel</code> row for a grid entry that has no source and no <code>NoInherit</code> flag (discussion #446). An empty motion row is how a user switches that channel off when no other row for the target supplies it, so only a row the user emptied reads as off, and a grid saved before any device reached the slot leaves the motion auto-map free to fill the channel on the next assignment. The full <code>Save()</code> and the <code>AutoSaved</code> event run only after 2 s with no <code>MarkDirty()</code> (<code>PersistQuietMs = 2000</code>), so an editing burst costs one disk write instead of one per adjustment. Direct <code>Save()</code> callers (<code>OnClosing</code>, profile operations) stay synchronous:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>MarkDirty() called  --&gt;  start 250ms timer (if not running)
 <a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>MarkDirty() called  --&gt;  timer keeps ticking, no restart
 <a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>...250ms tick...    --&gt;  Tier 1: push ViewModels into PadSettings + MappingSets
