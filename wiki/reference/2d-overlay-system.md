@@ -1508,8 +1508,6 @@ The new attributes are append-only and take their defaults when absent from an o
 
 A macro cell is not a separate execution path. The cell is one more trigger source for the named macro, so every macro trigger mode, layer gate, restriction, and pacing rule applies because nothing bypasses `EvaluateMacros`.
 
-The layer gate reads the layer engaged when the macro evaluates. A layered menu sees its layer end only once `GetEngagedLayerMask` already names another layer, and that change is the release edge that commits a Touch Release selection. The stamp therefore lands in a pass where the departed layer is off: `MacroLayerGateOpen` stays shut for a macro scoped to it and opens for an empty mask, for `"Base"` once Base is engaged, or for the layer now engaged. A row on the departed layer that reads the cell as a `Menu N Item K` source is likewise no longer consulted. Direct cell bindings (`CollectMenuDirectOutputs` keys and buttons) check no layer and fire.
-
 | Step | File | Function |
 |------|------|----------|
 | Stamp | `PadForge.App/Common/Input/InputManager.MenuRuntime.cs` | `CollectMenuDirectOutputs()` runs before the slot evaluators. For every item of an enabled menu with a non-empty `MacroName` that `IsMenuItemFired` reports fired, it resolves the name in `MacroSnapshots[slot]` (`OrdinalIgnoreCase`, first match wins) and writes `mac.MenuTriggerTick = MacroPassTick`. |

@@ -71,12 +71,12 @@ Three things still reach it. **Grip** rotates the body gyro, the body accelerome
 
 ### The Mappings grid picks the source device
 
-A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike. While either row exists, DSU follows the rows alone. A channel sends nothing when it has no row, or when none of its rows, on any layer, has a source on an online device with that sensor.
+A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike. While either row exists, DSU follows the rows alone: a missing row, a row with no source, or a row whose devices are all offline sends nothing on that channel.
 
 A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the **Strongest** combine mode uses. The virtual controller itself carries no motion on such a slot. Those slots have no Motion Pitch, Yaw or Roll rows either, so motion from a stick or buttons reaches DSU only from a PlayStation, Nintendo, or Valve slot.
 
 - Several motion devices on one slot stack as sources on the same row. The row's **Combine** setting merges their readings axis by axis: **Strongest** by default, or **Combined**, **Average**, or **Custom**.
-- The rows follow shift layers. While a layer is active its own Motion Gyro row applies. When that row has no source on an online device with the sensor, the Base row applies, then any other layer's row for the same target. A layer never darkens a channel by itself, in replace mode or under **Do Not Inherit**.
+- The rows follow shift layers. While a layer is active its own Motion Gyro row applies, with the Base row as the fallback.
 - On a Joy-Con pair, the source picker also offers **Left Joy-Con Motion Gyro** and **Left Joy-Con Accelerometer** to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers **Nunchuk Accelerometer** the same way.
 - The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows add motion from a stick or buttons. While one of them has an input, DSU sends the frame the virtual controller reports: the real sensors from the two rows above plus the simulated turn and lean, or the simulated motion alone on a slot with no sensors.
 
