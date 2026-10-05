@@ -16,13 +16,15 @@ A **Logitech G-Keys** row then appears on the [Devices](devices.md) page.
 
 ### What you need
 
-Logitech Gaming Software 8.55 or later, running. The SDK ships with it.
+Logitech Gaming Software 8.55 or later, running. The SDK ships with it, and G HUB does not include it.
 
 Two more steps matter, and both happen in Logitech's software rather than in PadForge.
 
 Give each key the **G-key** command. Once PadForge has run with this setting on, Logitech Gaming Software has a profile for PadForge with a G-key command in its command list. Drag that command onto every G-key and extra mouse button you want PadForge to read. A key without it keeps running whatever Logitech's software has on it and never reaches PadForge.
 
 Then make that profile the **persistent profile**. Logitech Gaming Software lets you nominate one, which keeps receiving G-keys no matter which program is in front. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.
+
+While the PadForge profile is persistent, Logitech Gaming Software ignores every other profile, including the profiles linked to your games, so a game's own G-key assignments stop applying. To clear it, right-click the PadForge profile in the Profiles area and select **Set As Persistent** again to remove the check mark.
 
 A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.
 
@@ -75,7 +77,7 @@ A tap can begin and end between two of PadForge's polls, so a press is held asse
 
 This runs against Logitech's own library, and nothing here has been exercised against real Logitech hardware or software. The wire format comes from `LogitechGkeyLib.h` in the SDK, so the decoding is grounded, and the library search and shutdown follow [Mumble](https://github.com/mumble-voip/mumble)'s long-running implementation, but the library loading and calling back on a live machine is unverified.
 
-G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming Software, and a machine running only G HUB may not register it.
+G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logitech has released no G-key SDK for G HUB. Its [developer page](https://www.logitechg.com/en-us/programs/partner-developer-lab) offers a Steering Wheel SDK and an LED Illumination SDK, and G HUB 2026.6 installs a wheel SDK and a Trueforce SDK and nothing for G-keys.
 
 ---
 

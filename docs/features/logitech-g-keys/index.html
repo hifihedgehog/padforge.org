@@ -3624,10 +3624,11 @@
 <p>Open <strong>Settings</strong>, find the <strong>Input Engine</strong> card, and tick <strong>Read Logitech G-Keys</strong>. It is off by default, because turning it on loads a third-party library and opens a session with the Logitech software.</p>
 <p>A <strong>Logitech G-Keys</strong> row then appears on the <a href="../devices/">Devices</a> page.</p>
 <h3 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h3>
-<p>Logitech Gaming Software 8.55 or later, running. The SDK ships with it.</p>
+<p>Logitech Gaming Software 8.55 or later, running. The SDK ships with it, and G HUB does not include it.</p>
 <p>Two more steps matter, and both happen in Logitech's software rather than in PadForge.</p>
 <p>Give each key the <strong>G-key</strong> command. Once PadForge has run with this setting on, Logitech Gaming Software has a profile for PadForge with a G-key command in its command list. Drag that command onto every G-key and extra mouse button you want PadForge to read. A key without it keeps running whatever Logitech's software has on it and never reaches PadForge.</p>
 <p>Then make that profile the <strong>persistent profile</strong>. Logitech Gaming Software lets you nominate one, which keeps receiving G-keys no matter which program is in front. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.</p>
+<p>While the PadForge profile is persistent, Logitech Gaming Software ignores every other profile, including the profiles linked to your games, so a game's own G-key assignments stop applying. To clear it, right-click the PadForge profile in the Profiles area and select <strong>Set As Persistent</strong> again to remove the check mark.</p>
 <p>A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.</p>
 <p>Logitech's profiles are unrelated to PadForge's own <a href="../../guides/profiles/">profiles</a>, which are a different thing that lives on the Profiles page.</p>
 <hr />
@@ -3689,7 +3690,7 @@
 <hr />
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <p>This runs against Logitech's own library, and nothing here has been exercised against real Logitech hardware or software. The wire format comes from <code>LogitechGkeyLib.h</code> in the SDK, so the decoding is grounded, and the library search and shutdown follow <a href="https://github.com/mumble-voip/mumble">Mumble</a>'s long-running implementation, but the library loading and calling back on a live machine is unverified.</p>
-<p>G HUB is not Logitech Gaming Software. The G-key SDK ships with Logitech Gaming Software, and a machine running only G HUB may not register it.</p>
+<p>G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logitech has released no G-key SDK for G HUB. Its <a href="https://www.logitechg.com/en-us/programs/partner-developer-lab">developer page</a> offers a Steering Wheel SDK and an LED Illumination SDK, and G HUB 2026.6 installs a wheel SDK and a Trueforce SDK and nothing for G-keys.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>

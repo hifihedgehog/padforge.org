@@ -86,7 +86,7 @@ Streams the rumble games send to PadForge's virtual controllers into the Interha
 | Needs | Detail |
 |---|---|
 | Software | Razer Synapse 4 with Sensa HD Haptics. In Synapse, set the device's Haptic Source to Sensa HD Games. |
-| Hardware | A Sensa HD device. |
+| Hardware | A Sensa HD device. A Wolverine V3 Pro renders Sensa only on a PC, in PC mode, with firmware v2.02 or later ([Razer's firmware updater](https://mysupport.razer.com/app/answers/detail/a_id/14630)). In Xbox mode it plays no Sensa haptics. Hold Function, Menu and A together for two seconds to switch it to PC mode. |
 | Shipped inside PadForge | The Interhaptics engine (`HAR.dll`) and its Razer provider (`Interhaptics.RazerProvider.dll`), unmodified, under the Wyvrn EULA. Both are x64, so the x64 build carries them and the ARM64 build does not. |
 
 | Status text | Meaning |
