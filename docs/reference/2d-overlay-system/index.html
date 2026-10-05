@@ -7566,7 +7566,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <tr>
 <td>Stamp</td>
 <td><code>PadForge.App/Common/Input/InputManager.MenuRuntime.cs</code></td>
-<td><code>CollectMenuDirectOutputs()</code> runs before the slot evaluators. For every item of an enabled menu with a non-empty <code>MacroName</code> that <code>IsMenuItemFired</code> reports fired, it resolves the name in <code>MacroSnapshots[slot]</code> (<code>OrdinalIgnoreCase</code>, first match wins) and writes <code>mac.MenuTriggerTick = MacroPassTick</code>.</td>
+<td><code>CollectMenuDirectOutputs()</code> runs before the slot evaluators. For every item of an enabled menu with a non-empty <code>MacroName</code> that <code>IsMenuItemFired</code> reports fired, it resolves the name in <code>MacroSnapshots[slot]</code> (<code>OrdinalIgnoreCase</code>, first match wins) and writes <code>mac.MenuTriggerTick = MacroPassTick</code>. When the fire is a commit made by leaving the menu's layer (<code>LayerExitCommitLayer</code>), it also writes that layer to <code>mac.MenuTriggerExitLayer</code>.</td>
 </tr>
 <tr>
 <td>Pass counter</td>
@@ -7577,6 +7577,11 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <td>Read</td>
 <td>same file, both evaluator twins (gamepad and raw Extended)</td>
 <td><code>menuCellHeld = macro.MenuTriggerTick == MacroPassTick</code>. A macro with no trigger of its own uses <code>menuCellHeld</code> as its whole trigger. Custom Expression ORs it into the formula result. The combo path ORs it into <code>triggerActive</code> beside the button, POV, gesture, descriptor, and axis tests.</td>
+</tr>
+<tr>
+<td>Layer gate</td>
+<td>same</td>
+<td><code>MacroLayerGateOpen</code> reads the layer engaged now. When it is closed, <code>LayerExitCommitOpensMacro</code> still passes a current stamp whose <code>MenuTriggerExitLayer</code> opens the macro's gate, so a cell committed by leaving its layer runs a macro scoped to that layer.</td>
 </tr>
 <tr>
 <td>Skip guard</td>
