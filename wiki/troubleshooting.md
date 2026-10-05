@@ -41,7 +41,7 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 **A slot is created and a device assigned, but games do not detect the virtual controller.**
 
 1. Xbox, PlayStation, Nintendo, and Extended output need **HIDMaestro**, which installs itself the first time a slot creates a virtual controller. There is nothing to install from [Settings](features/settings.md). If no virtual controller appears, restart PadForge so the engine tries the setup again.
-2. MIDI output needs **Windows MIDI Services**. Its card on [Settings](features/settings.md) says whether this PC has it.
+2. MIDI output runs on **Windows MIDI Services** or, without it, the legacy MIDI API. Its card on [Settings](features/settings.md) says which one runs. Under the legacy API a MIDI slot needs an **Output Port** picked on its page.
 3. Confirm the slot is enabled. The flame on its Dashboard card should be lit, ember while its virtual controller runs. An outline flame means the slot is disabled.
 4. Confirm the engine is running. The Dashboard shows **Forging** beside a lit ember flame. **Idle** means the engine runs with no slot active, and **Stopped** means it is off.
 5. Restart the game. Some games only scan for controllers at startup.
@@ -155,9 +155,10 @@ The game is reading both the physical controller and PadForge's virtual controll
 **The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".**
 
 1. Open [Settings](features/settings.md) and read the **Windows MIDI Services** card.
-2. **Not Available** means this PC has neither API. Windows MIDI Services is part of **Windows 11 25H2 from the late-November 2026 update**. On Windows 11 24H2 it works only where Microsoft's older runtime is already installed, and Microsoft no longer offers that download. Windows 10 and earlier Windows 11 builds have none.
-3. **Not Running** means the API is here but its service did not start. Windows keeps the service off in Legacy API mode (Microsoft's [How to change the API mode](https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/)). A disabled `midisrv` service (Win+R > `services.msc`) reads the same way. Restart PadForge after fixing either.
-4. "Failed to create MIDI session" means the API started but cannot reach the service. Restart the service or reboot.
+2. **Not Running** means no MIDI API started, the legacy one included, because the Windows MIDI service did not respond. Restart Windows, then PadForge.
+3. "Failed to create MIDI session" means the API started but cannot reach the service. Restart the service or reboot.
+
+Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Legacy API mode, or no runtime installed), the card reads **Legacy MIDI API** and the MIDI button works.
 
 ---
 
@@ -165,12 +166,13 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **A MIDI slot is active but no messages reach the DAW or synthesizer.**
 
-1. In the DAW, look for **"PadForge MIDI N"** in the MIDI input list.
-2. Set the receiving app to read from the PadForge MIDI endpoint.
+1. In the DAW, look for **"PadForge MIDI N"** in the MIDI input list. Under the legacy MIDI API there is no such port: the slot sends to the **Output Port** picked on its page, so the receiving app reads that port, such as the other end of a loopback driver.
+2. Set the receiving app to read from the PadForge MIDI endpoint, or from the picked port.
 3. Confirm the engine is running and the slot is enabled (lit flame on its Dashboard card).
 4. Match the MIDI channel (1-16) between PadForge and the receiving app.
 5. Verify CC numbers (axes) and note numbers (buttons) match what the receiving app expects.
 6. Use a MIDI monitor (MIDI-OX or Windows MIDI Services console) to confirm PadForge is sending. If messages appear there but not in the DAW, the issue is DAW configuration.
+7. Under the legacy MIDI API, a slot that reports its port in use cannot open it while another program holds it. Close that program, then turn the slot off and on.
 
 ---
 
@@ -742,7 +744,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 |---|---|
 | No devices | Check USB, cable, Device Manager |
 | Detected but no mapping | Assign to slot, check source dropdown |
-| No virtual controller in game | HIDMaestro installs itself. Restart PadForge. MIDI needs Windows MIDI Services |
+| No virtual controller in game | HIDMaestro installs itself. Restart PadForge. A MIDI slot on the legacy MIDI API needs an Output Port picked |
 | Nintendo slot not in game | XInput-only games need an Xbox slot |
 | Double input | Install HidHide, enable "Hide Devices from Games" |
 | BLE controller not hidden | Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings |
@@ -754,8 +756,8 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
 | Extended controller not in joy.cpl | Accept UAC, create an Extended slot, restart PadForge |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
-| MIDI button dimmed | Read the Windows MIDI Services card on Settings. Windows 11 25H2 carries it from the late-November 2026 update |
-| No MIDI output | Select "PadForge MIDI N" in DAW input |
+| MIDI button dimmed | No MIDI API started. Read the Windows MIDI Services card on Settings |
+| No MIDI output | Select "PadForge MIDI N" in the DAW, or under the legacy MIDI API the port picked on the slot's page |
 | No motion in emulator | Enable DSU server, match port, use 127.0.0.1 |
 | DSU port in use | Close conflicting app or change port |
 | Web controller disconnected | Same network, check firewall, change the port on the Dashboard |

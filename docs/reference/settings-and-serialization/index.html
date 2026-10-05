@@ -9518,7 +9518,7 @@
 <td><code>MidiSlotConfigData[]</code></td>
 <td><code>[XmlArray][XmlArrayItem("Config")]</code></td>
 <td><code>null</code></td>
-<td>Per-slot MIDI config (channel, CC/note ranges, velocity)</td>
+<td>Per-slot MIDI config (channel, CC/note ranges, velocity, legacy output port)</td>
 </tr>
 <tr>
 <td><code>KbmConfigs</code></td>
@@ -9744,7 +9744,11 @@
 <a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">NoteCount</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
 <a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">StartNote</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">;</span>
 <a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="n">Velocity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">127</span><span class="p">;</span>
-<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="p">}</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">OutputPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ShouldSerializeOutputPort</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">OutputPort</span><span class="p">);</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyOutputPortTo</span><span class="p">(</span><span class="n">MidiSlotConfig</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -9790,8 +9794,14 @@
 <td><code>127</code></td>
 <td>Note-on velocity (0–127)</td>
 </tr>
+<tr>
+<td><code>OutputPort</code></td>
+<td>none</td>
+<td>The output port the slot sends to under the legacy MIDI API, by name. Written only when set</td>
+</tr>
 </tbody>
 </table>
+<p>The output port is saved in <code>&lt;MidiConfigs&gt;</code> and in each profile's <code>&lt;ProfileMidiConfigs&gt;</code>. Loading either applies a port only when the snapshot has one (<code>ApplyOutputPortTo</code>), so a profile saved before a port was picked keeps the slot's current port. Copying settings between slots and the per-slot <code>SlotMidiConfigJson</code> snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.</p>
 <h3 id="kbmslotconfigdata-v4-205">KbmSlotConfigData (v4, #205)<a class="headerlink" href="#kbmslotconfigdata-v4-205" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.App/ViewModels/KbmSlotConfig.cs</code></p>
 <p>Per-slot Keyboard+Mouse DTO: the live surfaces and the SOCD / Snap-Tap config. Stored in <code>&lt;KbmConfigs&gt;</code> (AppSettings) and <code>&lt;ProfileKbmConfigs&gt;</code> (Profiles).</p>
@@ -11812,7 +11822,7 @@
 </tr>
 <tr>
 <td><code>MidiConfigs</code></td>
-<td>Channel 1, 6 CCs at CC 1, 11 notes at note 60, velocity 127</td>
+<td>Channel 1, 6 CCs at CC 1, 11 notes at note 60, velocity 127, no output port</td>
 </tr>
 </tbody>
 </table>

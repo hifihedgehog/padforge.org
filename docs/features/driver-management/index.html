@@ -2223,6 +2223,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#installing-the-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installing the runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-settings-card" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2234,10 +2245,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#removing-the-older-runtime" class="md-nav__link">
+  <a href="#the-legacy-midi-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Removing the older runtime
+        The legacy MIDI API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-the-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing the runtime
       
     </span>
   </a>
@@ -4059,6 +4081,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#installing-the-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installing the runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#the-settings-card" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4070,10 +4103,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#removing-the-older-runtime" class="md-nav__link">
+  <a href="#the-legacy-midi-api" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Removing the older runtime
+        The legacy MIDI API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-the-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing the runtime
       
     </span>
   </a>
@@ -4236,7 +4280,7 @@
 
 
 <h1 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h1>
-<p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and SteamVR) that install and uninstall from </em><em>Settings</em><em>. Windows MIDI Services comes with Windows, and its card on </em><em>Settings</em><em> says whether this PC has it.</em></p>
+<p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and SteamVR) that install and uninstall from </em><em>Settings</em><em>. Windows MIDI Services comes with Windows 11 25H2 from the late-November 2026 update. Until a PC has it, PadForge installs the Windows MIDI Services runtime from </em><em>Settings</em><em>, and without either it uses the legacy MIDI API.</em></p>
 <p><img alt="Driver management cards" src="../../images/settings-drivers.png" /></p>
 <hr />
 <h2 id="whats-required-vs-optional">What's required vs optional<a class="headerlink" href="#whats-required-vs-optional" title="Permanent link">&para;</a></h2>
@@ -4266,8 +4310,8 @@
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
-<td>Part of Windows 11 25H2 from the late-November 2026 update. Needed for MIDI input and the MIDI controller type.</td>
-<td>Virtual MIDI endpoints for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. On Windows 11 24H2 it works only where Microsoft's older runtime is already installed.</td>
+<td>Part of Windows 11 25H2 from the late-November 2026 update. Elsewhere on 24H2 or later, an optional runtime install from <strong>Settings</strong>.</td>
+<td>Virtual MIDI ports for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Without it, PadForge uses the legacy MIDI API, which reads MIDI keyboards too but cannot create ports, so MIDI slots send to a port you pick.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
@@ -4282,7 +4326,7 @@
 <hr />
 <h2 id="first-run-auto-install">First-run auto-install<a class="headerlink" href="#first-run-auto-install" title="Permanent link">&para;</a></h2>
 <p>HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch and the HIDMaestro card on the <strong>Settings</strong> page always reads <strong>Installed</strong>.</p>
-<p>HidHide and SteamVR do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>. Windows MIDI Services has no Install button (see <a href="#windows-midi-services">Windows MIDI Services</a>).</p>
+<p>HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>. The runtime's <strong>Install</strong> shows only on a PC that needs it (see <a href="#windows-midi-services">Windows MIDI Services</a>).</p>
 <p>Two more drivers install outside <strong>Settings</strong>, and only when something needs them. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a>, <a href="../../devices/ps-move/">PS Move</a> or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named <strong>Full</strong>, the two Valve <strong>Composite</strong> profiles, and <strong>Steam Controller (2026)</strong>) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, <strong>DualSense (PS5): Full</strong>, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.</p>
 <hr />
 <h2 id="controllers-windows-leaves-without-a-driver">Controllers Windows leaves without a driver<a class="headerlink" href="#controllers-windows-leaves-without-a-driver" title="Permanent link">&para;</a></h2>
@@ -4337,7 +4381,7 @@
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
-<td>The MIDI slot type won't switch on. Its button stays visible and shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works.</td>
+<td>MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI slot type won't switch on, and its button shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
@@ -4347,7 +4391,7 @@
 </table>
 <hr />
 <h2 id="admin-rights">Admin rights<a class="headerlink" href="#admin-rights" title="Permanent link">&para;</a></h2>
-<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, the older Windows MIDI Services runtime's uninstall, the SteamVR install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
+<p>PadForge always runs as administrator. The UAC prompt fires once per launch, when PadForge itself starts. Everything after that (HIDMaestro auto-install, HidHide install and uninstall, the Windows MIDI Services runtime's install and uninstall, the SteamVR install and uninstall, and HidHide whitelist edits) runs inside that same session, so no second prompt appears.</p>
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro <strong>device profile</strong>. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
@@ -4463,8 +4507,16 @@
 <li>Mapping a MIDI keyboard or control surface as an input (see <a href="../midi-input/">MIDI Input</a>)</li>
 </ul>
 <h3 id="where-it-comes-from">Where it comes from<a class="headerlink" href="#where-it-comes-from" title="Permanent link">&para;</a></h3>
-<p>Windows MIDI Services is part of <strong>Windows 11 25H2 from the late-November 2026 update</strong>. PadForge uses the copy Windows installs and ships none of its own, so there is nothing to download.</p>
-<p>Before that update, Microsoft offered the API as a separate download, <strong>Windows MIDI Services Runtime and Tools</strong>, and removed those installers on October 1, 2026. A PC that already has that older runtime keeps working through it. On Windows 11 24H2 it is the only option, since the in-box API comes to 25H2 only. When a PC has both, PadForge uses the one built into Windows.</p>
+<p>Windows MIDI Services is part of <strong>Windows 11 25H2 from the late-November 2026 update</strong>. PadForge uses the copy Windows installs.</p>
+<p>Until a PC has that update, and on Windows 11 24H2, which never gets it, apps need the <strong>Windows MIDI Services runtime</strong>. Microsoft removed its runtime installers on October 1, 2026. PadForge installs its own build of the same runtime, version 1.0.17-rc.4.25 built from Microsoft's MIT-licensed source, from <a href="https://github.com/hifihedgehog/PadForge-MIDI-Runtime">PadForge-MIDI-Runtime</a> when you click <strong>Install</strong> on the card. A PC that still has Microsoft's runtime keeps using it. When a PC has both the API in Windows and a runtime, PadForge uses the one built into Windows.</p>
+<p>Where neither runs, PadForge falls back to the <strong>legacy MIDI API</strong> (WinMM), which every Windows has: Windows 10, Windows 11 before 24H2, Legacy API mode, and a PC with no runtime installed. See <a href="#the-legacy-midi-api">The legacy MIDI API</a>.</p>
+<h3 id="installing-the-runtime">Installing the runtime<a class="headerlink" href="#installing-the-runtime" title="Permanent link">&para;</a></h3>
+<p><strong>Install</strong> shows on Windows 11 24H2 or later when Windows has no API of its own yet, Legacy API mode is off, and no runtime is installed.</p>
+<ol>
+<li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
+<li>Click <strong>Install</strong>.</li>
+</ol>
+<p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. If the redistributable needs a restart to finish, restart Windows and click <strong>Install</strong> again.</p>
 <h3 id="the-settings-card">The Settings card<a class="headerlink" href="#the-settings-card" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4481,32 +4533,42 @@
 <td>PadForge uses the API in Windows.</td>
 </tr>
 <tr>
-<td><strong>Older Runtime</strong></td>
+<td><strong>App SDK Runtime</strong></td>
 <td>The runtime's version</td>
-<td>PadForge uses the older runtime.</td>
+<td>PadForge uses the runtime, Microsoft's or PadForge's build.</td>
+</tr>
+<tr>
+<td><strong>Legacy MIDI API</strong></td>
+<td>"Each MIDI slot sends to a port picked on the slot's page. MIDI input opens only devices assigned to a slot."</td>
+<td>No Windows MIDI Services API runs, so PadForge uses the legacy API.</td>
 </tr>
 <tr>
 <td><strong>Not Running</strong></td>
-<td>"Windows MIDI Services did not start. It stays off in Legacy API mode."</td>
-<td>The API is on this PC, but its service did not start.</td>
-</tr>
-<tr>
-<td><strong>Not Available</strong></td>
-<td>"Needs Windows 11 25H2 with the late-November 2026 update"</td>
-<td>Neither is on this PC.</td>
+<td>"The Windows MIDI service did not respond. Restarting Windows clears a stuck service."</td>
+<td>The engine's check started nothing.</td>
 </tr>
 </tbody>
 </table>
-<p>The flame lights while either API works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.</p>
-<p>Windows keeps the MIDI service off in Legacy API mode, and Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back. A disabled or stuck service reads <strong>Not Running</strong> too. Restart PadForge after either fix so it checks again.</p>
-<h3 id="removing-the-older-runtime">Removing the older runtime<a class="headerlink" href="#removing-the-older-runtime" title="Permanent link">&para;</a></h3>
-<p><strong>Uninstall</strong> shows while the older runtime is installed, and removes only that runtime. The API built into Windows stays.</p>
+<p>The flame lights while any of them works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.</p>
+<p>In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no <strong>Install</strong>. Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back. Restart PadForge afterward so it checks again.</p>
+<h3 id="the-legacy-midi-api">The legacy MIDI API<a class="headerlink" href="#the-legacy-midi-api" title="Permanent link">&para;</a></h3>
+<p>The legacy API cannot create a port for a MIDI slot, so each slot sends to a port that already exists: a MIDI interface, a synth, or a loopback driver that another program reads.</p>
+<ul>
+<li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked.</li>
+<li>A port another program holds cannot be opened, and the slot reports it. Close that program, then turn the slot off and on.</li>
+<li>Picking another port moves the slot there.</li>
+<li>The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone.</li>
+<li>MIDI input opens a port only while a slot has the device assigned. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.</li>
+</ul>
+<p>When a slot stops, PadForge sends a note off for each note it held and closes the port. It does not send the reset to all 16 channels that some programs send on close.</p>
+<h3 id="removing-the-runtime">Removing the runtime<a class="headerlink" href="#removing-the-runtime" title="Permanent link">&para;</a></h3>
+<p><strong>Uninstall</strong> shows while a runtime is installed. It removes PadForge's build, or Microsoft's runtime together with everything Microsoft's <strong>Windows MIDI Services Runtime and Tools</strong> setup installed beside it, the MIDI Settings app included. Microsoft no longer offers that setup for download. The API built into Windows stays.</p>
 <ol>
-<li>If the card reads <strong>Older Runtime</strong>, delete or retype every MIDI slot on the Dashboard first. When it reads <strong>Built into Windows</strong>, MIDI slots run on the API in Windows and can stay.</li>
+<li>If the card reads <strong>App SDK Runtime</strong>, delete or retype every MIDI slot on the Dashboard first. When it reads <strong>Built into Windows</strong> or <strong>Legacy MIDI API</strong>, MIDI slots run without the runtime and can stay.</li>
 <li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
 <li>Click <strong>Uninstall</strong>.</li>
 </ol>
-<p>While PadForge uses the older runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes.</p>
+<p>While PadForge uses the runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes.</p>
 <hr />
 <h2 id="steamvr">SteamVR<a class="headerlink" href="#steamvr" title="Permanent link">&para;</a></h2>
 <p>The runtime behind the VR slot type. PadForge installs it Steam-free from Valve's servers: no Steam account, no Steam client. It is several GB.</p>
@@ -4586,6 +4648,14 @@
 <td style="text-align: center;">No</td>
 </tr>
 <tr>
+<td><strong>Legacy MIDI API</strong> (no install)</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">Yes (1)</td>
+<td style="text-align: center;">No</td>
+</tr>
+<tr>
 <td><strong>SteamVR</strong></td>
 <td style="text-align: center;">Yes</td>
 <td style="text-align: center;">Yes</td>
@@ -4604,11 +4674,12 @@
 </tbody>
 </table>
 <p>(1) Preliminary. Nothing in the ARM64 column has run on ARM64 hardware yet.
-(2) Built into 25H2 from the late-November 2026 update. On 24H2, only where Microsoft's older runtime is already installed.</p>
+(2) Built into 25H2 from the late-November 2026 update. Elsewhere, through the runtime PadForge installs from <strong>Settings</strong>.</p>
 <ul>
 <li><strong>HIDMaestro</strong> runs in user mode, so it installs with no reboot. It carries an x64 and an ARM64 driver and installs the one that matches the machine.</li>
 <li><strong>HidHide</strong> is a kernel driver, so it has to match the machine: x64 on an x64 PC, ARM64 on an ARM64 PC. Neither install asks for a restart. It does not run on 32-bit Windows.</li>
-<li><strong>Windows MIDI Services</strong> is part of Windows 11 25H2 (build 26200) from the late-November 2026 update, x64 and ARM64 alike. On 24H2 (build 26100) PadForge uses Microsoft's older runtime where it is already installed. Earlier Windows has neither.</li>
+<li><strong>Windows MIDI Services</strong> is part of Windows 11 25H2 (build 26200) from the late-November 2026 update, x64 and ARM64 alike. On 24H2 (build 26100), and on 25H2 before that update, it runs through the runtime, which PadForge installs for x64 and ARM64. Earlier Windows has neither.</li>
+<li><strong>The legacy MIDI API</strong> (WinMM) is part of every Windows. PadForge falls back to it wherever no Windows MIDI Services API runs.</li>
 <li><strong>SteamVR</strong> is x64. Valve ships no ARM64 build.</li>
 <li><strong>Keyboard+Mouse</strong> needs no driver, so it works wherever PadForge itself runs.</li>
 <li><strong>PadForge itself</strong> ships as two 64-bit builds: x64 for Windows 10 and 11, and ARM64 for Windows 11 on ARM64. <a href="../../start/installation/#windows-on-arm-preliminary">Installation</a> lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.</li>
@@ -4629,8 +4700,8 @@
 <td>Any device has <strong>Hide from Games (HidHide)</strong> on.</td>
 </tr>
 <tr>
-<td><strong>Windows MIDI Services</strong> (older runtime)</td>
-<td>Any MIDI slot exists while PadForge uses the older runtime.</td>
+<td><strong>Windows MIDI Services runtime</strong></td>
+<td>Any MIDI slot exists while PadForge uses the runtime.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
@@ -4664,12 +4735,16 @@
 <td>An old ViGEmBus or vJoy install can leave leftovers behind. Remove them from <strong>Windows Settings &gt; Apps &gt; Installed apps</strong>, then restart PadForge.</td>
 </tr>
 <tr>
-<td>Windows MIDI Services card reads <strong>Not Available</strong></td>
-<td>This PC has neither API. Windows 11 25H2 carries it from the late-November 2026 update. <strong>Settings &gt; System &gt; About</strong> in Windows shows the version, and Windows Update brings the update.</td>
+<td>Windows MIDI Services <strong>Install</strong> stops and asks for a restart</td>
+<td>The Visual C++ Redistributable needs a restart to finish. Restart Windows and click <strong>Install</strong> again.</td>
+</tr>
+<tr>
+<td>Windows MIDI Services card reads <strong>Legacy MIDI API</strong> on Windows 11 25H2</td>
+<td>Windows has no API of its own until the late-November 2026 update. <strong>Settings &gt; System &gt; About</strong> in Windows shows the version, and Windows Update brings the update. Until then, click <strong>Install</strong> on the card.</td>
 </tr>
 <tr>
 <td>Windows MIDI Services card reads <strong>Not Running</strong></td>
-<td>The API is here, but its service did not start. Windows keeps it off in Legacy API mode (Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a>). Fix that, then restart PadForge.</td>
+<td>The Windows MIDI service did not respond. Restart Windows, then PadForge.</td>
 </tr>
 </tbody>
 </table>
@@ -4688,10 +4763,18 @@
 </tr>
 <tr>
 <td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)"</td>
-<td>The Windows MIDI Services card on <strong>Settings</strong> says what this PC lacks.</td>
+<td>No MIDI API started. The Windows MIDI Services card on <strong>Settings</strong> says why.</td>
 </tr>
 <tr>
-<td>PadForge disappears when I uninstall the older Windows MIDI Services runtime</td>
+<td>A MIDI slot does not start under the legacy MIDI API</td>
+<td>Pick an <strong>Output Port</strong> on the slot's page. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
+</tr>
+<tr>
+<td>A MIDI keyboard does nothing under the legacy MIDI API</td>
+<td>Assign it to a slot on the <a href="../devices/">Devices</a> page. The legacy API opens a MIDI input port only while a slot has it.</td>
+</tr>
+<tr>
+<td>PadForge disappears when I uninstall the Windows MIDI Services runtime</td>
 <td>Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall.</td>
 </tr>
 <tr>

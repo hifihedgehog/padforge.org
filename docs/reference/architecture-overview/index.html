@@ -4643,7 +4643,7 @@
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        NIN[Nintendo&lt;br/&gt;Switch Pro . Switch 2 Pro]
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        EXT[Extended&lt;br/&gt;Sticks . Wheels . Custom HID]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        KBM[Keyboard+Mouse&lt;br/&gt;SendInput, no driver]
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        MIDI[MIDI&lt;br/&gt;Windows MIDI Services]
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        MIDI[MIDI&lt;br/&gt;Windows MIDI Services or WinMM]
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        VR[VR&lt;br/&gt;SteamVR left+right hand pair]
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    end
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
@@ -4659,7 +4659,7 @@
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;ships 232 profiles, PadForge offers the 134 with a captured descriptor&lt;br/&gt;+ native OpenVR driver for the VR slot]
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        HH[HidHide Driver]
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WMS[Windows MIDI Services]
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WMS[Windows MIDI Services&lt;br/&gt;or legacy WinMM]
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
 <a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        DSU_CLIENT[DSU Clients&lt;br/&gt;Cemu / Dolphin / Yuzu / Ryujinx]
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        BROWSER[Web Browsers&lt;br/&gt;Phone / tablet]
@@ -4767,7 +4767,7 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  Common/
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M)
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    DriverInstaller.cs                # HidHide install, older Windows MIDI Services runtime uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    DriverInstaller.cs                # HidHide install, Windows MIDI Services runtime install and uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
 <a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    MarqueeBehavior.cs                # WPF attached behavior for scrolling/marquee text animation
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    MappingDisplayResolver.cs         # Descriptor → grid display label, including the contextual aux-motion labels
@@ -4821,9 +4821,9 @@
 <a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>      SlotButtonSocd.cs               # Controller-button SOCD cleaner, applied to the slot&#39;s final combined output at the Step 5 submit (#240)
 <a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>      RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
 <a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>      RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
-<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>      MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
-<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>      MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the older App SDK runtime
-<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>      MidiBackend*.cs                 # IMidiBackend and its two implementations, one per API
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>      MidiVirtualController.cs        # IVirtualController for MIDI: its own Windows MIDI Services port, or a picked port through WinMM
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>      MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the App SDK runtime, and predicts the API for the Settings card
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>      MidiBackend*.cs                 # IMidiBackend and its three implementations: in-box, App SDK runtime, legacy WinMM (MidiBackendLegacy)
 <a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>      KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
 <a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>      InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
 <a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>      MirrorDsp.cs                    # Controller-audio DSP chain for the DualSense speaker/jack mirror: crossfeed, parametric EQ, limiter, AutoEq import (#347)
@@ -4872,7 +4872,7 @@
 <a id="__codelineno-1-113" name="__codelineno-1-113" href="#__codelineno-1-113"></a>    MacroItem.cs                      # Macro definition: trigger, actions, repeat mode, state machine
 <a id="__codelineno-1-114" name="__codelineno-1-114" href="#__codelineno-1-114"></a>    ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot&#39;s MappingSet (#61)
 <a id="__codelineno-1-115" name="__codelineno-1-115" href="#__codelineno-1-115"></a>    MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot&#39;s MappingSet, write-through like the mapping grid (#9)
-<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts
+<a id="__codelineno-1-116" name="__codelineno-1-116" href="#__codelineno-1-116"></a>    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts, legacy output port
 <a id="__codelineno-1-117" name="__codelineno-1-117" href="#__codelineno-1-117"></a>    DeviceSlotConfig.cs               # Per-slot PlayStation output config (Adaptive Triggers + Lighting tabs)
 <a id="__codelineno-1-118" name="__codelineno-1-118" href="#__codelineno-1-118"></a>    KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
 <a id="__codelineno-1-119" name="__codelineno-1-119" href="#__codelineno-1-119"></a>    ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
@@ -5782,7 +5782,7 @@
 <a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a>  │      → HMController.SubmitRawReport (Sony Report 0x01 passthrough on DS4 / DualSense)
 <a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a>  │    VR: HMaestroVRController → HMVRController (both SteamVR hands from one slot)
 <a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>  │    KBM: SendInput() → Win32 keyboard/mouse events
-<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>  │    MIDI: Windows MIDI Services → virtual MIDI port
+<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>  │    MIDI: Windows MIDI Services → virtual MIDI port, or WinMM → the port the slot picked
 <a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a>  │
 <a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a>  ▼
 <a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>Step 6: RetrieveOutputStates()
@@ -5851,7 +5851,7 @@
 <td><strong>Microsoft.Windows.Devices.Midi2</strong></td>
 <td>1.0.16-rc.3.7</td>
 <td>App</td>
-<td>Projection of the older Windows MIDI Services runtime, for PCs that still have it</td>
+<td>Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs</td>
 </tr>
 <tr>
 <td><strong>NAudio.Wasapi</strong></td>

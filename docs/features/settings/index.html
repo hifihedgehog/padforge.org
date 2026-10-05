@@ -4737,7 +4737,7 @@
 <ul>
 <li><strong>HidHide Driver</strong> card: Install and Uninstall buttons.</li>
 <li><strong>HIDMaestro Driver</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.</li>
-<li><strong>Windows MIDI Services</strong> card: the API PadForge uses (<strong>Built into Windows</strong> or <strong>Older Runtime</strong>, with the older runtime's version), or <strong>Not Running</strong> or <strong>Not Available</strong> with the reason. No Install button: the API is part of Windows 11 25H2 from the late-November 2026 update. <strong>Uninstall</strong> shows while Microsoft's older runtime is installed and removes only that. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</li>
+<li><strong>Windows MIDI Services</strong> card: the API PadForge uses (<strong>Built into Windows</strong>, <strong>App SDK Runtime</strong> with the runtime's version, or <strong>Legacy MIDI API</strong>), or <strong>Not Running</strong> with the reason. <strong>Install</strong> shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. <strong>Uninstall</strong> shows while a runtime is installed. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</li>
 <li><strong>SteamVR</strong> card: needed only for <a href="../vr-controllers/">VR slots</a>. It describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></li>
 </ul>
 <p>PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.</p>
@@ -4763,8 +4763,8 @@
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
-<td>Sends MIDI virtual-controller output and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update.</td>
-<td>Nothing to install. On 24H2 it works where Microsoft's older runtime is already installed.</td>
+<td>Gives each MIDI slot a port of its own and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. Without it, MIDI runs on the legacy MIDI API, where slots send to a port you pick.</td>
+<td>On 24H2 or later before Windows carries the API, click <strong>Install</strong> on its card for the runtime.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
@@ -4777,7 +4777,7 @@
 <p>PadForge blocks three driver uninstalls until you clear what still depends on them.</p>
 <ul>
 <li><strong>HidHide</strong> stays locked while any device still has the cloak armed. Disarm the cloak on the <a href="../devices/">Devices</a> page first.</li>
-<li><strong>Windows MIDI Services</strong> (the older runtime) stays locked while any slot still outputs MIDI through it. Delete those slots or switch them to another output on the <a href="../controller-slots/">Controller Slots</a> page first. When the API built into Windows runs MIDI, the slots do not hold the older runtime.</li>
+<li><strong>Windows MIDI Services</strong> (the runtime) stays locked while any slot still outputs MIDI through it. Delete those slots or switch them to another output on the <a href="../controller-slots/">Controller Slots</a> page first. When the API built into Windows or the legacy MIDI API runs MIDI, the slots do not hold the runtime.</li>
 <li><strong>SteamVR</strong> stays locked while any VR slot exists. Delete those slots or switch them to another type first.</li>
 </ul>
 <p>Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.</p>

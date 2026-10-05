@@ -47,7 +47,7 @@ Pick the type you want.
 | **Switch logo icon** | Nintendo virtual controller (needs HIDMaestro) |
 | **Joystick icon** | Extended DirectInput joystick (needs HIDMaestro) |
 | **Keyboard icon** | Keyboard+Mouse output (no driver) |
-| **Musical note icon** | MIDI output device (needs Windows MIDI Services) |
+| **Musical note icon** | MIDI output device (Windows MIDI Services, or the legacy MIDI API without it) |
 | **VR icon** | SteamVR hand pair (needs SteamVR) |
 
 ### Dimmed buttons
@@ -55,7 +55,7 @@ Pick the type you want.
 A type button shows faded when:
 
 - **Type at capacity.** The cursor turns into a "no" icon. The tooltip shows the cap.
-- **Missing dependency.** Two types dim when what they need is absent: MIDI without Windows MIDI Services ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
+- **Missing dependency.** Two types dim when what they need is absent: MIDI when no MIDI API starts ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
 
 The Add Controller card disappears when all 16 slots are in use.
 
@@ -148,6 +148,8 @@ Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pai
 
 Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
 
+Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
+
 ![MIDI controller configuration](../images/pad-midi-configbar.png)
 
 ### VR
@@ -156,7 +158,7 @@ Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drive
 
 The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Controllers](vr-controllers.md).
 
-> **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs Windows MIDI Services, and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
+> **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs a MIDI API that starts (Windows MIDI Services or the legacy MIDI API), and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
 
 ---
 

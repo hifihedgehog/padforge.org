@@ -9039,7 +9039,7 @@
 <tr>
 <td><code>IsMidiAvailable</code></td>
 <td><code>bool</code></td>
-<td>A Windows MIDI Services API is available, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the <code>Main_MIDI_RequiresMidiServices</code> tooltip when false.</td>
+<td>A MIDI API started, Windows MIDI Services or the legacy one, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the <code>Main_MIDI_RequiresMidiServices</code> tooltip when false.</td>
 </tr>
 <tr>
 <td><code>IsSteamVrInstalled</code></td>
@@ -10103,7 +10103,7 @@
 </tbody>
 </table>
 <h3 id="driver-status-windows-midi-services">Driver Status: Windows MIDI Services<a class="headerlink" href="#driver-status-windows-midi-services" title="Permanent link">&para;</a></h3>
-<p>There is nothing to install: the API is part of Windows 11 25H2 from the late-November 2026 update. The card names the API in use or what the PC lacks, and offers to remove Microsoft's older runtime. MainWindow's status refresh writes the inputs from <code>MidiApiSelection.ForCard</code> and the runtime's uninstall entry.</p>
+<p>The card names the API PadForge drives (<code>MidiApiSelection</code>), offers PadForge's build of the App SDK runtime where it would give MIDI slots ports of their own, and removes an installed runtime, Microsoft's or PadForge's. MainWindow's status refresh, on the 5-second driver timer, writes the inputs from <code>MidiApiSelection.ForCard</code>, <code>MidiApiSelection.CanOfferRuntimeInstall</code> and <code>DriverInstaller</code>. See <a href="../driver-installation-internals/#windows-midi-services">Driver Installation Internals</a>.</p>
 <table>
 <thead>
 <tr>
@@ -10116,22 +10116,27 @@
 <tr>
 <td><code>ActiveMidiApi</code></td>
 <td><code>MidiApiKind</code> (internal)</td>
-<td><code>InBox</code>, <code>AppSdk</code> or <code>None</code>. Notifies <code>IsMidiAvailable</code> and the card text.</td>
+<td><code>InBox</code>, <code>AppSdk</code>, <code>Legacy</code> or <code>None</code>. Notifies <code>IsMidiAvailable</code> and the card text.</td>
+</tr>
+<tr>
+<td><code>CanInstallMidiRuntime</code></td>
+<td><code>bool</code></td>
+<td>The card offers the runtime (<code>MidiApiSelection.CanOfferRuntimeInstall</code>). Shows the Install button.</td>
 </tr>
 <tr>
 <td><code>IsMidiRuntimeInstalled</code></td>
 <td><code>bool</code></td>
-<td>Microsoft's older runtime is installed. Shows the Uninstall button.</td>
+<td>The App SDK runtime is installed, Microsoft's or PadForge's (<code>DriverInstaller.IsMidiRuntimeInstalled</code>). Shows the Uninstall button.</td>
 </tr>
 <tr>
 <td><code>MidiRuntimeVersion</code></td>
 <td><code>string</code></td>
-<td>The older runtime's version, from its uninstall entry.</td>
+<td>The runtime's version, from its DLL (<code>DriverInstaller.GetMidiRuntimeVersion</code>).</td>
 </tr>
 <tr>
 <td><code>MidiApiNotStarted</code></td>
 <td><code>bool</code></td>
-<td>An API is present but its service did not start (Legacy API mode, or a disabled or stuck service).</td>
+<td>The probe started no API, the legacy one included, or timed out on a stuck service.</td>
 </tr>
 <tr>
 <td><code>IsMidiAvailable</code></td>
@@ -10141,12 +10146,12 @@
 <tr>
 <td><code>MidiServicesStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>Settings_MidiStatusInBox</code> ("Built into Windows"), <code>Settings_MidiStatusRuntime</code> ("Older Runtime"), <code>Settings_MidiStatusNotRunning</code> ("Not Running") or <code>Settings_MidiStatusUnavailable</code> ("Not Available").</td>
+<td>Computed: <code>Settings_MidiStatusInBox</code> ("Built into Windows"), <code>Settings_MidiStatusRuntime</code> ("App SDK Runtime"), <code>Settings_MidiStatusLegacy</code> ("Legacy MIDI API"), <code>Settings_MidiStatusNotRunning</code> ("Not Running") or <code>Settings_MidiStatusUnavailable</code> ("Not Available").</td>
 </tr>
 <tr>
 <td><code>MidiServicesDetailText</code></td>
 <td><code>string</code></td>
-<td>Computed: under the in-box API, empty or <code>Settings_MidiOlderRuntime_Format</code> when the older runtime is also installed. Under the older runtime, its version. Otherwise <code>Settings_MidiNotRunning</code> or <code>Settings_MidiNeedsUpdate</code>.</td>
+<td>Computed: under the in-box API, empty, or <code>Settings_MidiOlderRuntime_Format</code> when a runtime is also installed. Under the runtime, its version. Under the legacy API, <code>Settings_MidiLegacy</code>. Otherwise <code>Settings_MidiNotRunning</code> when the probe failed, else empty.</td>
 </tr>
 <tr>
 <td><code>MidiDetailIsVersion</code></td>
@@ -10165,9 +10170,32 @@
 </thead>
 <tbody>
 <tr>
+<td><code>InstallMidiRuntimeCommand</code></td>
+<td><code>CanInstallMidiRuntime</code></td>
+<td>Raises <code>InstallMidiRuntimeRequested</code>.</td>
+</tr>
+<tr>
 <td><code>UninstallMidiServicesCommand</code></td>
 <td><code>IsMidiRuntimeInstalled &amp;&amp; !(ActiveMidiApi == AppSdk &amp;&amp; HasAnyMidiSlots())</code></td>
-<td>Raises <code>UninstallMidiServicesRequested</code>. With the in-box API in use, MIDI slots do not hold the older runtime.</td>
+<td>Raises <code>UninstallMidiServicesRequested</code>. Under the in-box or the legacy API, MIDI slots do not hold the runtime.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InstallMidiRuntimeRequested</code></td>
+<td>Download and install PadForge's build of the runtime (<code>DriverInstaller.InstallMidiRuntime</code>).</td>
+</tr>
+<tr>
+<td><code>UninstallMidiServicesRequested</code></td>
+<td>Uninstall the installed runtime (<code>DriverInstaller.UninstallMidiRuntime</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -10275,7 +10303,7 @@
 <tr>
 <td><code>HasAnyMidiSlots</code></td>
 <td><code>Func&lt;bool&gt;</code></td>
-<td>Set by MainWindow. True if any slot uses MIDI. Blocks <code>UninstallMidiServicesCommand</code> while the older runtime is the API in use.</td>
+<td>Set by MainWindow. True if any slot uses MIDI. Blocks <code>UninstallMidiServicesCommand</code> while the App SDK runtime is the API in use.</td>
 </tr>
 <tr>
 <td><code>HasAnyVrSlots</code></td>
@@ -12912,6 +12940,11 @@
 <td><code>MidiConfig</code></td>
 <td><code>MidiSlotConfig</code></td>
 <td>Per-slot MIDI config (channel, CC/note mappings). Only meaningful when <code>OutputType == Midi</code>.</td>
+</tr>
+<tr>
+<td><code>IsLegacyMidi</code></td>
+<td><code>bool</code></td>
+<td>True while the legacy MIDI API runs MIDI slots. Shows the MIDI bar's Output Port picker. MainWindow sets it on every pad from the Settings card's refresh.</td>
 </tr>
 </tbody>
 </table>
@@ -19195,7 +19228,7 @@
 <hr />
 <h2 id="midislotconfig">MidiSlotConfig<a class="headerlink" href="#midislotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>MidiSlotConfig.cs</code></p>
-<p>Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, and velocity.</p>
+<p>Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, velocity, and the legacy API's output port.</p>
 <table>
 <thead>
 <tr>
@@ -19249,6 +19282,13 @@
 <td>0–127</td>
 <td>Note velocity for button presses.</td>
 </tr>
+<tr>
+<td><code>OutputPort</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>A port name</td>
+<td>The output port the slot sends to under the legacy MIDI API, by the name the slot's port picker shows. Empty until the user picks one. The Windows MIDI Services APIs create the slot's own port and ignore it.</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -19269,7 +19309,7 @@
 </tr>
 <tr>
 <td><code>ResetToDefaults()</code></td>
-<td>Resets every field in place, starts before counts so the count clamps see the default starts.</td>
+<td>Resets every field in place, starts before counts so the count clamps see the default starts. Clears <code>OutputPort</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -19319,8 +19359,14 @@
 <td><code>byte</code></td>
 <td><code>127</code></td>
 </tr>
+<tr>
+<td><code>OutputPort</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+</tr>
 </tbody>
 </table>
+<p><code>OutputPort</code> is written only when it is set (<code>ShouldSerializeOutputPort</code>). <code>ApplyOutputPortTo(MidiSlotConfig)</code> copies it onto a live config only when it is set, so a snapshot saved before a port was picked keeps the slot's current port.</p>
 <hr />
 <h2 id="deviceslotconfig">DeviceSlotConfig<a class="headerlink" href="#deviceslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>DeviceSlotConfig.cs</code></p>

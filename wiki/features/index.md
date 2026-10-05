@@ -16,7 +16,7 @@ touch.
 | [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR |
 | [Settings](settings.md) | Application-wide options |
 | [Updates](updates.md) | The Updates card on the **Settings** page: automatic checks, one-click installs, and pre-releases |
-| [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, **Install** and **Uninstall** for HidHide and SteamVR, and the Windows MIDI Services API in use |
+| [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, **Install** and **Uninstall** for HidHide, SteamVR and the Windows MIDI Services runtime, and the MIDI API in use |
 
 ## The Pad page, tab by tab
 

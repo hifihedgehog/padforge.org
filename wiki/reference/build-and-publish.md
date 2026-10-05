@@ -52,7 +52,7 @@ PadForge.sln
 ├── PadForge.NativeChecks/    Console helper (net10.0-windows) that PadForge.Tests runs in a child
 │                             process against the bundled x64 SDL3.dll
 │
-├── nuget-local/              Local NuGet source (the older MIDI Services runtime's projection)
+├── nuget-local/              Local NuGet source (the MIDI Services App SDK runtime's projection)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
 ├── .gitattributes             `* text=auto`: every text file is stored with LF
 │
@@ -83,7 +83,7 @@ Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule
 
 Minimum supported OS: Windows 10 1809 (build 17763), set via `SupportedOSPlatformVersion` in the App csproj.
 
-All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. Windows MIDI Services needs no download at all: the in-box API is part of Windows, and the build reads its metadata from `Resources/WinMD`.
+All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. Windows MIDI Services adds no download to the build: the in-box API is part of Windows, and the build reads its metadata from `Resources/WinMD`. The App SDK runtime that the Settings card installs downloads at run time, never at build time.
 
 ## Build Commands
 
@@ -302,7 +302,7 @@ Every build between two releases carries the same version, so the App also stamp
 | **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder and decoder for the DualSense Bluetooth speaker and microphone streams |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | nuget.org | 3D viewport rendering (OBJ model loading, camera, lighting) |
 | **Microsoft.Windows.CsWinRT** | 2.2.0 | nuget.org | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` at build time |
-| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Projection of the older Windows MIDI Services runtime, for PCs that still have it installed |
+| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
 | **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI capture, playback and endpoint enumeration, Media Foundation decode, and mixing through its NAudio.Core dependency: the controller speaker mirror, macro sounds, voice-macro microphones, bass shakers, and bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
 | **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
@@ -337,7 +337,7 @@ All SDL3 and system interop still uses raw `[DllImport]` P/Invoke.
 
 ### Local NuGet Source (`nuget-local/`)
 
-The older Windows MIDI Services runtime's projection is not on nuget.org. The `.nupkg` is stored locally:
+The Windows MIDI Services App SDK runtime's projection is not on nuget.org. The `.nupkg` is stored locally:
 
 ```
 nuget-local/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg
@@ -710,7 +710,7 @@ The script does not build. Run `dotnet publish -c Release` first. It checks for 
 
 PadForge creates `PadForge.xml` alongside the executable to store settings, mappings, and profiles. An unhandled exception appends to `crash.log` in the same directory (`App.xaml.cs`, `AppDomain.CurrentDomain.BaseDirectory`). Those two files are the only ones PadForge is allowed to write beside the exe.
 
-PadForge always requests administrator privileges on startup (declared in `app.manifest` as `requireAdministrator`). HIDMaestro / HidHide management and the older MIDI runtime's uninstall run inside the already-elevated process.
+PadForge always requests administrator privileges on startup (declared in `app.manifest` as `requireAdministrator`). HIDMaestro / HidHide management and the MIDI runtime's install and uninstall run inside the already-elevated process.
 
 ## Release Workflow
 

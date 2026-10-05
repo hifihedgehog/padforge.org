@@ -8792,7 +8792,7 @@
 <li><strong>Device assignments (single-pass transition)</strong>. Builds the desired final assignment map from <code>profile.Entries</code> first, then transitions each <code>UserSetting</code> directly old → new <code>MapTo</code> (or → -1 for entries dropped from the new profile). The "find UserSetting" gate is "not yet consumed by a prior entry in this same apply pass," not the previous reset-MapTo-to-negative gate. This avoids the reset window where the polling thread could observe <code>HasAnyDeviceMapped == false</code> for surviving slots and fall into the <code>!HasAnyDeviceMapped</code> immediate-destroy branch of <code>UpdateVirtualDevices()</code> in <code>InputManager.Step5.VirtualDevices.cs</code>. Slots whose mapping is unchanged across profiles transition with zero teardown.</li>
 <li><strong>Device-GUID remap for same-product reconnects</strong>. When an entry binds by <code>ProductGuid</code> rather than <code>InstanceGuid</code>, the pairing is recorded and <code>RemapDeviceGuidsInSlotMappingSets</code> re-points the just-cloned rows at the instance that actually bound. The macro half of the map is held back and applied after <code>LoadMacros</code>, because that call clears and repopulates every pad's macros. <code>RekeyDeviceConfig</code> carries the same remap into the stored PadSetting device pins (gyro Aim Engage, both trigger-route activators, the per-device touchpad and mouse-gesture catalogs).</li>
 <li><strong>Slot orders</strong>. <code>SlotOrders.RebuildFromCurrentTopology</code> rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.</li>
-<li><strong>Extended, MIDI and KB+M configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity), and the KB+M slot's <code>Surfaces</code> (#408) and <code>SocdMode</code> / <code>SocdPairs</code> (#205).</li>
+<li><strong>Extended, MIDI and KB+M configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile has one), and the KB+M slot's <code>Surfaces</code> (#408) and <code>SocdMode</code> / <code>SocdPairs</code> (#205).</li>
 <li><strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.</li>
 <li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> starts or stops the mirrors a profile has an opinion about. A null leg leaves the global value alone.</li>
 <li><strong>Server and overlay settings</strong>. DSU and web controller enable and port (ports validated to 1024-65535), plus <code>EnableTouchpadOverlay</code>, <code>EnableMenuOverlay</code>, <code>EnableShiftLayerFlyout</code>, <code>EnableProfileOverlay</code> and the touchpad overlay's monitor, position, size and opacity.</li>
@@ -9197,12 +9197,17 @@
 <tr>
 <td><code>ShutdownMidiInputs</code></td>
 <td><code>void ShutdownMidiInputs()</code></td>
-<td>Tears down MIDI inputs before uninstalling the older Windows MIDI Services runtime</td>
+<td>Tears down MIDI inputs before uninstalling the Windows MIDI Services App SDK runtime</td>
 </tr>
 <tr>
 <td><code>ResumeMidiInputs</code></td>
 <td><code>void ResumeMidiInputs()</code></td>
 <td>Lifts that suppression once the uninstaller exits, so the next sweep enumerates through whichever API the next probe picks</td>
+</tr>
+<tr>
+<td><code>SwitchMidiApi</code></td>
+<td><code>void SwitchMidiApi()</code></td>
+<td>After the runtime installs: <code>ShutdownMidiInputs</code>, <code>MidiVirtualController.ResetAvailability</code>, <code>ResumeMidiInputs</code>. MIDI input reopens on the API the next probe picks, and Step 5 rebuilds each MIDI slot made on another API</td>
 </tr>
 <tr>
 <td><code>PumpSdlEvents</code></td>
@@ -9522,7 +9527,7 @@
 <tr>
 <td><code>ApplyMidiConfigToSlot</code></td>
 <td><code>void ApplyMidiConfigToSlot(int slotIndex, MidiSlotConfigData cfg)</code></td>
-<td>Applies the MIDI slot config</td>
+<td>Applies the MIDI slot config, all but the legacy output port</td>
 </tr>
 <tr>
 <td><code>CopySlotConfigsAcrossSlots</code></td>
@@ -9542,7 +9547,7 @@
 <tr>
 <td><code>BuildMidiConfigSnapshotForSlot</code></td>
 <td><code>MidiSlotConfigData BuildMidiConfigSnapshotForSlot(int slotIndex)</code></td>
-<td>Same for the MIDI slot config</td>
+<td>Same for the MIDI slot config, without the legacy output port</td>
 </tr>
 <tr>
 <td><code>BuildKbmConfigSnapshotForSlot</code></td>

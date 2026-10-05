@@ -1438,7 +1438,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
 | `LegacyDeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("PlayStationConfigs")][XmlArrayItem("Config")]` | `null` | Read-only pre-v4 spelling. `MigrateLegacySchema()` moves it into `DeviceSlotConfigs` on load. `ShouldSerializeLegacyDeviceSlotConfigs()` returns false so it never re-serializes. |
 | `UserProfiles` | `UserProfileData[]` | `[XmlArray][XmlArrayItem("Profile")]` | `null` | User-imported HIDMaestro profile JSONs (captured via HMDeviceExtractor). Appear in the Extended dropdown alongside the catalog. |
-| `MidiConfigs` | `MidiSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot MIDI config (channel, CC/note ranges, velocity) |
+| `MidiConfigs` | `MidiSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot MIDI config (channel, CC/note ranges, velocity, legacy output port) |
 | `KbmConfigs` | `KbmSlotConfigData[]` | `[XmlArray("KbmConfigs")][XmlArrayItem("Config")]` | `null` | (#205) Per-slot Keyboard+Mouse config (live surfaces, SOCD / Snap-Tap mode + key pairs). |
 | `DefaultProfileSnapshot` | `ProfileData` | `[XmlElement]` | `null` | Default profile snapshot. Populated only when a named profile is active. See [Default Profile Snapshot](#default-profile-snapshot-mechanism). |
 | `GlobalMacros` | `GlobalMacroData[]` | `[XmlArray][XmlArrayItem("GlobalMacro")]` | `null` | Profile-shortcut macros and other app-wide actions (e.g. v3.2's bulk virtual-controller toggle). |
@@ -1518,6 +1518,10 @@ public class MidiSlotConfigData
     [XmlAttribute] public int NoteCount { get; set; } = 11;
     [XmlAttribute] public int StartNote { get; set; } = 60;
     [XmlAttribute] public byte Velocity { get; set; } = 127;
+    [XmlAttribute] public string OutputPort { get; set; }
+
+    public bool ShouldSerializeOutputPort() => !string.IsNullOrEmpty(OutputPort);
+    public void ApplyOutputPortTo(MidiSlotConfig config);
 }
 ```
 
@@ -1530,6 +1534,9 @@ public class MidiSlotConfigData
 | `NoteCount` | `11` | Note count (maps to buttons) |
 | `StartNote` | `60` | First note (Middle C) |
 | `Velocity` | `127` | Note-on velocity (0–127) |
+| `OutputPort` | none | The output port the slot sends to under the legacy MIDI API, by name. Written only when set |
+
+The output port is saved in `<MidiConfigs>` and in each profile's `<ProfileMidiConfigs>`. Loading either applies a port only when the snapshot has one (`ApplyOutputPortTo`), so a profile saved before a port was picked keeps the slot's current port. Copying settings between slots and the per-slot `SlotMidiConfigJson` snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.
 
 ### KbmSlotConfigData (v4, #205)
 
@@ -2623,7 +2630,7 @@ Array.Copy(appSettings.SlotCreated, SettingsManager.SlotCreated, count);
 | `SlotEnabled` | All `true` |
 | `SlotControllerTypes` | Xbox (`Xbox = 0`). Uncreated slots skipped to prevent stale values. |
 | `ExtendedConfigs` | Nothing is applied, so every slot keeps its `ExtendedSlotConfig` defaults (`ThumbstickCount=2`, `TriggerCount=2`, `PovCount=1`, `ButtonCount=11`) and `Customize=false`. The v2 `Preset` enum that previously seeded these defaults was dropped in commit `d57a725`. The same numeric defaults now come from the field initializers. |
-| `MidiConfigs` | Channel 1, 6 CCs at CC 1, 11 notes at note 60, velocity 127 |
+| `MidiConfigs` | Channel 1, 6 CCs at CC 1, 11 notes at note 60, velocity 127, no output port |
 
 ### Anti-Deadzone Migration
 

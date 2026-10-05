@@ -32,7 +32,7 @@ graph TB
         NIN[Nintendo<br/>Switch Pro . Switch 2 Pro]
         EXT[Extended<br/>Sticks . Wheels . Custom HID]
         KBM[Keyboard+Mouse<br/>SendInput, no driver]
-        MIDI[MIDI<br/>Windows MIDI Services]
+        MIDI[MIDI<br/>Windows MIDI Services or WinMM]
         VR[VR<br/>SteamVR left+right hand pair]
     end
 
@@ -48,7 +48,7 @@ graph TB
         OXI[OpenXInput<br/>xinput1_4 shim]
         HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 232 profiles, PadForge offers the 134 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
-        WMS[Windows MIDI Services]
+        WMS[Windows MIDI Services<br/>or legacy WinMM]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
         DSU_CLIENT[DSU Clients<br/>Cemu / Dolphin / Yuzu / Ryujinx]
         BROWSER[Web Browsers<br/>Phone / tablet]
@@ -133,7 +133,7 @@ PadForge.App/
   Common/
     ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M)
     CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
-    DriverInstaller.cs                # HidHide install, older Windows MIDI Services runtime uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
+    DriverInstaller.cs                # HidHide install, Windows MIDI Services runtime install and uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
     HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
     MarqueeBehavior.cs                # WPF attached behavior for scrolling/marquee text animation
     MappingDisplayResolver.cs         # Descriptor → grid display label, including the contextual aux-motion labels
@@ -187,9 +187,9 @@ PadForge.App/
       SlotButtonSocd.cs               # Controller-button SOCD cleaner, applied to the slot's final combined output at the Step 5 submit (#240)
       RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
       RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
-      MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
-      MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the older App SDK runtime
-      MidiBackend*.cs                 # IMidiBackend and its two implementations, one per API
+      MidiVirtualController.cs        # IVirtualController for MIDI: its own Windows MIDI Services port, or a picked port through WinMM
+      MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the App SDK runtime, and predicts the API for the Settings card
+      MidiBackend*.cs                 # IMidiBackend and its three implementations: in-box, App SDK runtime, legacy WinMM (MidiBackendLegacy)
       KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
       InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
       MirrorDsp.cs                    # Controller-audio DSP chain for the DualSense speaker/jack mirror: crossfeed, parametric EQ, limiter, AutoEq import (#347)
@@ -238,7 +238,7 @@ PadForge.App/
     MacroItem.cs                      # Macro definition: trigger, actions, repeat mode, state machine
     ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot's MappingSet (#61)
     MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot's MappingSet, write-through like the mapping grid (#9)
-    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts
+    MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts, legacy output port
     DeviceSlotConfig.cs               # Per-slot PlayStation output config (Adaptive Triggers + Lighting tabs)
     KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
     ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
@@ -1009,7 +1009,7 @@ Step 5: UpdateVirtualDevices()
   │      → HMController.SubmitRawReport (Sony Report 0x01 passthrough on DS4 / DualSense)
   │    VR: HMaestroVRController → HMVRController (both SteamVR hands from one slot)
   │    KBM: SendInput() → Win32 keyboard/mouse events
-  │    MIDI: Windows MIDI Services → virtual MIDI port
+  │    MIDI: Windows MIDI Services → virtual MIDI port, or WinMM → the port the slot picked
   │
   ▼
 Step 6: RetrieveOutputStates()
@@ -1053,7 +1053,7 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 | **Concentus** | 2.2.2 | App | Pure-C# Opus encoder for the DualSense Bluetooth speaker |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | App | 3D viewport for controller model visualization |
 | **Microsoft.Windows.CsWinRT** | 2.2.0 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
-| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the older Windows MIDI Services runtime, for PCs that still have it |
+| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
 | **NAudio.Wasapi** | 2.2.1 | App | WASAPI loopback capture for bass-driven rumble, plus the WASAPI capture and render behind Bass Shakers, macro sounds, controller audio, haptic tones, and voice macros |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) |
 | **System.Management** | 10.0.11 | App | ACPI-WMI event subscriptions for handheld hidden buttons and their learner (#343) |

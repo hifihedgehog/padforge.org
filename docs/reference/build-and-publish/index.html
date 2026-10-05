@@ -4914,7 +4914,7 @@
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>├── PadForge.NativeChecks/    Console helper (net10.0-windows) that PadForge.Tests runs in a child
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>│                             process against the bundled x64 SDL3.dll
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>│
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>├── nuget-local/              Local NuGet source (the older MIDI Services runtime&#39;s projection)
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>├── nuget-local/              Local NuGet source (the MIDI Services App SDK runtime&#39;s projection)
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>├── nuget.config               Registers nuget.org + nuget-local/ as package sources
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>├── .gitattributes             `* text=auto`: every text file is stored with LF
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>│
@@ -4965,7 +4965,7 @@
 </tbody>
 </table>
 <p>Minimum supported OS: Windows 10 1809 (build 17763), set via <code>SupportedOSPlatformVersion</code> in the App csproj.</p>
-<p>All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. Windows MIDI Services needs no download at all: the in-box API is part of Windows, and the build reads its metadata from <code>Resources/WinMD</code>.</p>
+<p>All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. Windows MIDI Services adds no download to the build: the in-box API is part of Windows, and the build reads its metadata from <code>Resources/WinMD</code>. The App SDK runtime that the Settings card installs downloads at run time, never at build time.</p>
 <h2 id="build-commands">Build Commands<a class="headerlink" href="#build-commands" title="Permanent link">&para;</a></h2>
 <h3 id="debug-build">Debug Build<a class="headerlink" href="#debug-build" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>dotnet<span class="w"> </span>build<span class="w"> </span>-c<span class="w"> </span>Debug
@@ -5267,7 +5267,7 @@
 <td><strong>Microsoft.Windows.Devices.Midi2</strong></td>
 <td>1.0.16-rc.3.7</td>
 <td><strong>nuget-local/</strong></td>
-<td>Projection of the older Windows MIDI Services runtime, for PCs that still have it installed</td>
+<td>Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs</td>
 </tr>
 <tr>
 <td><strong>NAudio.Wasapi</strong></td>
@@ -5353,7 +5353,7 @@
 <h3 id="test-projects">Test Projects<a class="headerlink" href="#test-projects" title="Permanent link">&para;</a></h3>
 <p><code>PadForge.Tests</code> and <code>PadForge.SteamWorkshop.Tests</code> both reference coverlet.collector 6.0.4, Microsoft.NET.Test.Sdk 17.14.1, xunit 2.9.3, and xunit.runner.visualstudio 3.1.4. <code>PadForge.Tests</code> also references Jint 4.16.2, a JavaScript interpreter its touchpad web-page tests run the page script in.</p>
 <h3 id="local-nuget-source-nuget-local">Local NuGet Source (<code>nuget-local/</code>)<a class="headerlink" href="#local-nuget-source-nuget-local" title="Permanent link">&para;</a></h3>
-<p>The older Windows MIDI Services runtime's projection is not on nuget.org. The <code>.nupkg</code> is stored locally:</p>
+<p>The Windows MIDI Services App SDK runtime's projection is not on nuget.org. The <code>.nupkg</code> is stored locally:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>nuget-local/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg
 </code></pre></div>
 <p><code>nuget.config</code> at the solution root registers this folder as a package source:</p>
@@ -5893,7 +5893,7 @@ Carbon set whole and bring only their own shell texture.</p>
 <p>The script does not build. Run <code>dotnet publish -c Release</code> first. It checks for the published exe before stopping anything, so a missing build never leaves the machine without a running PadForge.</p>
 <h3 id="first-run">First Run<a class="headerlink" href="#first-run" title="Permanent link">&para;</a></h3>
 <p>PadForge creates <code>PadForge.xml</code> alongside the executable to store settings, mappings, and profiles. An unhandled exception appends to <code>crash.log</code> in the same directory (<code>App.xaml.cs</code>, <code>AppDomain.CurrentDomain.BaseDirectory</code>). Those two files are the only ones PadForge is allowed to write beside the exe.</p>
-<p>PadForge always requests administrator privileges on startup (declared in <code>app.manifest</code> as <code>requireAdministrator</code>). HIDMaestro / HidHide management and the older MIDI runtime's uninstall run inside the already-elevated process.</p>
+<p>PadForge always requests administrator privileges on startup (declared in <code>app.manifest</code> as <code>requireAdministrator</code>). HIDMaestro / HidHide management and the MIDI runtime's install and uninstall run inside the already-elevated process.</p>
 <h2 id="release-workflow">Release Workflow<a class="headerlink" href="#release-workflow" title="Permanent link">&para;</a></h2>
 <h3 id="1-update-version-if-needed">1. Update Version (if needed)<a class="headerlink" href="#1-update-version-if-needed" title="Permanent link">&para;</a></h3>
 <ul>

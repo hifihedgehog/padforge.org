@@ -3613,17 +3613,19 @@
 <li>Watch the preview while you press a key or turn a knob to confirm which source it is.</li>
 <li>Assign the device to a <a href="../controller-slots/">slot</a> and map its notes and controls on the <a href="../mappings/">Mappings</a> tab.</li>
 </ol>
+<p>Under the legacy MIDI API, assign the device to a slot before step 3. That API opens a MIDI port only while a slot has it, so the preview stays still until then.</p>
 <hr />
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
-<p>MIDI input rides Windows MIDI Services, the same stack the MIDI virtual controller uses. It is part of <strong>Windows 11 25H2 from the late-November 2026 update</strong>. On Windows 11 24H2 it works only where Microsoft's older runtime is already installed, and on older Windows MIDI input does not appear. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</p>
-<p>PadForge's own MIDI virtual controllers show up in the MIDI input list on purpose, so you can test mapping without a hardware keyboard by routing one to the other on the same PC.</p>
+<p>MIDI input rides Windows MIDI Services, the same stack the MIDI virtual controller uses. It is part of <strong>Windows 11 25H2 from the late-November 2026 update</strong>, and on 24H2 or later PadForge installs its runtime from <strong>Settings</strong>. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</p>
+<p>Without Windows MIDI Services, MIDI input runs on the legacy MIDI API, on any Windows. It reads notes, CC and pitch bend from MIDI 1.0 devices, and opens a port only while a slot has the device assigned: on Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds none that nothing uses. A device under the legacy API is a separate entry from the same device under Windows MIDI Services, so its slot assignments do not carry over between the two.</p>
+<p>Under Windows MIDI Services, PadForge's own MIDI virtual controllers show up in the MIDI input list on purpose, so you can test mapping without a hardware keyboard by routing one to the other on the same PC.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../devices/">Devices</a>: the MIDI device card and its live note and CC preview.</li>
 <li><a href="../mappings/">Button and Axis Mappings</a>: bind MIDI notes, CC, pitch bend, and encoders.</li>
 <li><a href="../controller-slots/">Controller Slots</a>: the MIDI virtual controller type for the output direction.</li>
-<li><a href="../driver-management/#windows-midi-services">Driver Management</a>: where Windows MIDI Services comes from.</li>
+<li><a href="../driver-management/#windows-midi-services">Driver Management</a>: where Windows MIDI Services comes from, and the legacy MIDI API.</li>
 <li><a href="../../guides/shift-layers/">Shift Layers</a>: a MIDI button can hold a whole second mapping table.</li>
 </ul>
 <hr />

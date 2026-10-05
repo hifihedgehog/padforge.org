@@ -6785,7 +6785,7 @@
 <p>Dynamic controller cards are appended after "Devices" (index 3 onward) via <code>RebuildControllerSection()</code>, followed by an "Add Controller" entry while any slot remains (<code>HasAnyControllerTypeCapacity()</code>). Each card is a fixed-width pill (233 px) inside its <code>NavigationViewItem</code> and contains:
 - Flame power toggle. Its heat shows the slot's state (ember live, gold waiting, outline cold) and its tooltip names it
 - Global slot number in telemetry mono
-- Mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in <code>VirtualControllerGroups.InOrder</code>, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled without Windows MIDI Services and the VR tile without SteamVR, unless the slot already carries that type
+- Mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in <code>VirtualControllerGroups.InOrder</code>, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled while no MIDI API starts and the VR tile without SteamVR, unless the slot already carries that type
 - Delete button, revealed on card hover</p>
 <p>Called on slot create, delete, or reorder. Uses a <code>_rebuildingControllerSection</code> guard to prevent re-entrancy during selection changes.</p>
 <h3 id="sidebar-drag-reordering">Sidebar Drag Reordering<a class="headerlink" href="#sidebar-drag-reordering" title="Permanent link">&para;</a></h3>
@@ -7919,6 +7919,16 @@
 <td>Same as LostFocus apply</td>
 </tr>
 <tr>
+<td><code>MidiOutputPortBox_DropDownOpened</code></td>
+<td>ComboBox.DropDownOpened</td>
+<td>Reads the output ports again (<code>MidiBackendLegacy.ListOutputPortsBounded</code>) and refills the picker</td>
+</tr>
+<tr>
+<td><code>MidiOutputPortBox_SelectionChanged</code></td>
+<td>ComboBox.SelectionChanged</td>
+<td>Writes the pick to <code>MidiConfig.OutputPort</code>, empty for <strong>None</strong></td>
+</tr>
+<tr>
 <td><code>ResetExtendedSetting_Click</code> / <code>ResetMidiSetting_Click</code></td>
 <td>SettingResetButton.Click</td>
 <td>Resets the Extended or MIDI config field named by the button's <code>Tag</code> (<code>PadPage.SettingResets.cs</code>)</td>
@@ -8717,9 +8727,15 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>MidiConfig.Velocity</code></td>
 <td>0-127</td>
 </tr>
+<tr>
+<td>Output Port ComboBox (<code>MidiOutputPortBox</code>)</td>
+<td><code>MidiConfig.OutputPort</code>, set in code</td>
+<td><strong>None</strong>, the output ports, then the saved port when it is not connected</td>
+</tr>
 </tbody>
 </table>
 <p>All fields have tooltips. <code>_syncingMidiConfig</code> guard prevents recursive updates. When CC/Note counts or start numbers change, <code>vm.RebuildMappings()</code> regenerates mapping rows.</p>
+<p>The Output Port group shows only while <code>PadViewModel.IsLegacyMidi</code> is true, since the Windows MIDI Services APIs create the slot's own port. <code>SyncMidiOutputPortBox</code> fills it: <strong>None</strong> first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. <code>_syncingMidiPort</code> keeps the refill from writing back a pick. Its reset button clears the pick.</p>
 <h3 id="copy-from-dialog">Copy From Dialog<a class="headerlink" href="#copy-from-dialog" title="Permanent link">&para;</a></h3>
 <p>Opens <code>CopyFromDialog</code>. Picking a source slot copies the whole mapping table plus every assigned device's tuning (deadzones, sensitivity, FFB, impulse triggers, adaptive triggers, lighting, gyro, TouchpadSettings) into the target slot. Each source device matches a target device by <code>InstanceGuid</code> first, then <code>ProductGuid</code> as a fallback for the same controller model on a different physical unit. Target devices without a source-side match are left alone. The copied <code>MappingSet</code> also carries the slot's menus, Bass Shakers, SOCD, and Keep Awake settings, and <code>CopySlotConfigsAcrossSlots</code> clones the per-device lighting configs, plus the Extended layout, MIDI layout, or Keyboard + Mouse config when both slots share that type.</p>
 <hr />
@@ -9355,34 +9371,35 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>      │   ├─ Icon E8D6 + title + description
 <a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
 <a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
-<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>      │   └─ Uninstall button (shown while IsMidiRuntimeInstalled, and no Install button)
-<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>      ├─ SteamVR card (#49)
-<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>      │   ├─ Icon F119 + title + description
-<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
-<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>      │   │   Installed, or the runtime / driver / live-controller state)
-<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
-<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
-<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
-<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
-<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>      ├─ Community Configs card (#9)
-<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
-<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
-<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
-<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
-<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>      ├─ Settings File card
-<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>      │   ├─ Icon E8A5 + title + description
-<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
-<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
-<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
-<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>      └─ Diagnostics card
-<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>          ├─ Icon E9D9 + title + description
-<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>          ├─ Grid (140px label + value):
-<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
-<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>          │   ├─ .NET Runtime (RuntimeVersion)
-<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>          │   └─ SDL Version (SdlVersion)
-<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
-<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
-<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>      ├─ SteamVR card (#49)
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>      │   ├─ Icon F119 + title + description
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>      │   │   Installed, or the runtime / driver / live-controller state)
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
+<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
+<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>      ├─ Community Configs card (#9)
+<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
+<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
+<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
+<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
+<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>      ├─ Settings File card
+<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>      │   ├─ Icon E8A5 + title + description
+<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
+<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
+<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
+<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>      └─ Diagnostics card
+<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>          ├─ Icon E9D9 + title + description
+<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>          ├─ Grid (140px label + value):
+<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
+<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>          │   ├─ .NET Runtime (RuntimeVersion)
+<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>          │   └─ SDL Version (SdlVersion)
+<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
+<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
+<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 </code></pre></div>
 <h3 id="key-bindings_2">Key Bindings<a class="headerlink" href="#key-bindings_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -9518,6 +9535,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>MidiServicesStatusText</code> / <code>MidiServicesDetailText</code></td>
 <td>string</td>
 <td>The card's status line and the line under it</td>
+</tr>
+<tr>
+<td><code>CanInstallMidiRuntime</code> / <code>InstallMidiRuntimeCommand</code> / <code>UninstallMidiServicesCommand</code></td>
+<td>bool, ICommand, ICommand</td>
+<td>The Install button's visibility, and the runtime's install and uninstall</td>
 </tr>
 <tr>
 <td><code>IsSteamVrInstalled</code> / <code>IsSteamVrOwned</code> / <code>SteamVrInstallDir</code></td>
@@ -10764,7 +10786,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> (HelixToolkit 3D viewport)</li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>PadSetting</code> descriptors driving mapping grid UI</li>
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by <code>HMaestroVirtualController</code>, VR by <code>HMaestroVRController</code>). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId <code>AddNintendoBtn</code>, capacity via <code>MaxNintendoSlots</code>) between PlayStation and Extended, and a VR button (<code>F119</code> glyph, AutomationId <code>AddVrBtn</code>, capacity via <code>MaxVrSlots</code> = 1) at the tail, the <code>VirtualControllerGroups.InOrder</code> visual order.</li>
-<li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide install/uninstall and the older Windows MIDI Services runtime's uninstall, triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput's <code>xinput1_4.dll</code> unpacks into the single-file extraction directory under <code>%TEMP%\.net\PadForge</code>, which <code>App.OnStartup</code> adds to the DLL search path)</li>
+<li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide install/uninstall and the Windows MIDI Services runtime's install and uninstall, triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput's <code>xinput1_4.dll</code> unpacks into the single-file extraction directory under <code>%TEMP%\.net\PadForge</code>, which <code>App.OnStartup</code> adds to the DLL search path)</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

@@ -72,8 +72,8 @@ graph TB
 | Property | Xbox / PlayStation / Nintendo / Extended | VR | KBM | MIDI |
 |---|---|---|---|---|
 | **Class** | `HMaestroVirtualController` | `HMaestroVRController` | `KeyboardMouseVirtualController` | `MidiVirtualController` |
-| **Backend** | HIDMaestro (UMDF2 user-mode driver, or its USB/IP backend for the composite Sony and Valve profiles) | HIDMaestro's native OpenVR driver | Win32 SendInput (no driver) | Windows MIDI Services SDK |
-| **Required driver** | HIDMaestro | HIDMaestro OpenVR driver plus SteamVR | None | Windows MIDI Services |
+| **Backend** | HIDMaestro (UMDF2 user-mode driver, or its USB/IP backend for the composite Sony and Valve profiles) | HIDMaestro's native OpenVR driver | Win32 SendInput (no driver) | Windows MIDI Services, else the legacy WinMM API |
+| **Required driver** | HIDMaestro | HIDMaestro OpenVR driver plus SteamVR | None | None. Windows MIDI Services gives each slot its own port, and the legacy API sends to a picked one |
 | **Submit methods** | `SubmitGamepadState(Gamepad)` for Xbox slots. A PlayStation overload adds touchpad / IMU / battery. `SubmitRawHidState(RawHidState, sticks, triggers)` (plus a `MotionSnapshot` overload) for Nintendo and Extended slots. `SubmitRawReport(ReadOnlySpan<byte>)` for the Sony USB Report 0x01 layout and for the Valve personas' native frames. `SubmitPackedExtendedReport(ReadOnlySpan<byte>)` for an Extended layout past 32 buttons or one hat | `SubmitVrState(in VrRawState)` | `SubmitKbmState(KbmRawState)` | `SubmitMidiRawState(MidiRawState)` |
 | **Axis format at the SDK boundary** | `HMGamepadState.Axes` = `Dictionary<HMAxis, float>` normalized to [0, 1] (0.5 = stick center, 0 = released trigger). Y flipped to HID convention (up = 0.0) | `HMVRHandState` floats: sticks -1..1 (Y flipped to OpenVR's Y-up), trigger and grip 0..1 | short delta (mouse) | byte CC (0..127) |
 | **Button format** | `HMButton` `[Flags]` enum. The raw path passes all 32 bits | `HMVRButton` flags, 8 bits per hand, identical by construction to `VrHandRaw.Buttons` | Per-VK `SendInput` | MIDI Note On/Off |
@@ -88,7 +88,7 @@ graph TB
 - `PadForge.App/Common/Input/HMaestroVirtualController.cs`. Single class for all four HM-backed categories.
 - `PadForge.App/Common/Input/HMaestroVRController.cs`. The SteamVR hand pair.
 - `PadForge.App/Common/Input/KeyboardMouseVirtualController.cs`. Win32 SendInput, KbmRawState combine logic.
-- `PadForge.App/Common/Input/MidiVirtualController.cs`. Windows MIDI Services virtual endpoint lifecycle, over `MidiBackendInBox` (the in-box `Windows.Devices.Midi2`) or `MidiBackendAppSdk` (the older runtime), as `MidiApiSelection` picks.
+- `PadForge.App/Common/Input/MidiVirtualController.cs`. MIDI virtual controller lifecycle, over `MidiBackendInBox` (the in-box `Windows.Devices.Midi2`) or `MidiBackendAppSdk` (the App SDK runtime) as `MidiApiSelection` picks, else `MidiBackendLegacy` (the legacy WinMM API, `MidiBackendLegacy.cs`).
 
 The lifecycle code that creates / destroys / reorders these instances per slot lives in `PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs` and is documented under [HIDMaestro Deep Dive#Lifecycle Step 5 invariants](../reference/hidmaestro-deep-dive.md#lifecycle-step-5-invariants) (HM thread pool, inactivity timeout, bubble-down cascade for mid-stack destroys, etc.).
 
@@ -158,7 +158,7 @@ All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carr
 
 ### FeedbackPadIndex
 
-Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:494`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3172` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1213`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
+Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:494`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3216` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1213`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
 
 ### Type-Specific Submit Methods
 
@@ -195,9 +195,9 @@ New in 4.1.0. A virtual Nintendo Switch Pro Controller as a first-class slot cat
 
 | Aspect | Behavior |
 |---|---|
-| **Preset** | Two catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009) and `switch2-pro-controller` (VID 0x057E, PID 0x2069). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:451`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2372`) seeds new slots with `switch-pro`. |
-| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2451`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2587`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3019`). |
-| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6352-6354`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1917-1977`). |
+| **Preset** | Two catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009) and `switch2-pro-controller` (VID 0x057E, PID 0x2069). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:451`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2414`) seeds new slots with `switch-pro`. |
+| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2493`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2587`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3019`). |
+| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6352-6354`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1959-2019`). |
 | **Gyro passthrough** | The `MotionSnapshot` overload fills the HM v1.3.18 IMU channel: `AccelGX/GY/GZ` (g) and `GyroDpsX/Y/Z` (deg/s) land verbatim in the SDL sensor frame (`HMaestroVirtualController.cs:1123-1131`). The driver-side packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. Zeroes when the slot maps no motion source and no [Motion Pitch, Yaw or Roll](mappings.md#motion-pitch-yaw-and-roll) row. `switch-pro` only: HIDMaestro keys its Switch Pro protocol (the report 0x30 body with the IMU, and the rumble decode below) on PID 0x2009 (`SwitchProPacker.IsSwitchPro`), and the `switch2-pro-controller` profile's report 0x09 carries no motion field. |
 | **Rumble** | On `switch-pro`, HIDMaestro's SDK (`HMController`, `SwitchProPacker.DecodeRumbleAmplitude`) decodes the game's 0x01/0x10 HD-rumble writes itself and emits `leftMotor` / `rightMotor` on `OutputDecoded` only for genuine rumble frames. `switch2-pro-controller` gets no rumble decode. `MotorWriteAllowed` keeps non-Sony vendors on unconditional trust (the validity-flag semantics are Sony's, `:1869`), and a dedicated `NintendoVid` (0x057E) branch feeds the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236) for Bass Shakers (`:1421-1432`). |
 | **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (`NintendoPreviewMap.ButtonTable`, read by `MacroItem.cs` `NintendoLetteredLabel`). The `switch-pro` table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`NintendoExtendedLabel`). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The `switch2-pro-controller` table has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:6274`). |
@@ -228,7 +228,7 @@ Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not ass
 
 #### Native input frames
 
-`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:1945-1954`).
+`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:1987-1996`).
 
 | Profile | Report | Size | Source |
 |---|---|---|---|
@@ -341,7 +341,7 @@ Stores the arguments, resolves the cached axis keys, and seeds `_axesScratch`. T
 
 `identityKey` is the key HIDMaestro 1.8.0 (HM#60) derives every device path, the container id and, for USB/IP personas, the USB serial from, so the pad comes back at the same paths after a PadForge restart, a reboot or a driver upgrade. `IdentityKeyForPad` builds it as `padforge:slot{N}:{Type}`, where N is the pad's position in its own family's order list, not its pad index, which moves on a reorder. A pad missing from that list gets `padforge:pad{padIndex}:{Type}`. A blank key is stored as null, and HIDMaestro then falls back to its controller index.
 
-`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2557`). It resolves the profile (`:2568`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2646`), then constructs the wrapper with that key (`:2744`).
+`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2599`). It resolves the profile (`:2568`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2646`), then constructs the wrapper with that key (`:2744`).
 
 ### Connect()
 
@@ -422,7 +422,7 @@ Trigger values are mirrored to both the canonical key and the trigger row's own 
 
 ### SubmitRawHidState(RawHidState raw, int sticks, int triggers)
 
-`HMaestroVirtualController.cs:906`, plus the overload taking `in MotionSnapshot` at `:970` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6352-6354`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:1969-1977`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
+`HMaestroVirtualController.cs:906`, plus the overload taking `in MotionSnapshot` at `:970` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6352-6354`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:2011-2019`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
 
 **Why SubmitGamepadState is not enough:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
 
@@ -599,7 +599,7 @@ The "where force COMES FROM" to "toward" 180-degree shift is per HID PID 1.0: a 
 
 A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one `HMVRController` pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.
 
-All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2454`).
+All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2496`).
 
 ### IsAvailable()
 
@@ -671,13 +671,13 @@ public struct VrRawState
 
 **Namespace:** `PadForge.Common.Input`
 **Visibility:** `internal sealed`
-**API:** two backends behind `IMidiBackend` (`MidiBackend.cs`). `MidiBackendInBox` drives the in-box `Windows.Devices.Midi2`, whose projection C#/WinRT 2.2.0 generates from `Resources/WinMD/Windows.Devices.Midi2.winmd` (Microsoft's 0.99.88-preview.10 metadata). The implementation is the copy Windows registers in System32, and PadForge ships none. `MidiBackendAppSdk` drives the older `Microsoft.Windows.Devices.Midi2` 1.0.16-rc.3.7 runtime (from `nuget-local/`) on a PC that still has it installed.
+**API:** three backends behind `IMidiBackend` (`MidiBackend.cs`). `MidiBackendInBox` drives the in-box `Windows.Devices.Midi2`, whose projection C#/WinRT 2.2.0 generates from `Resources/WinMD/Windows.Devices.Midi2.winmd` (Microsoft's 0.99.88-preview.10 metadata). The implementation is the copy Windows registers in System32, and PadForge ships none. `MidiBackendAppSdk` drives the `Microsoft.Windows.Devices.Midi2` App SDK runtime through the 1.0.16-rc.3.7 projection (from `nuget-local/`): Microsoft's install, or PadForge's build of 1.0.17-rc.4.25 that the Settings card installs. `MidiBackendLegacy` (`MidiBackendLegacy.cs`) drives the legacy WinMM API through `IWinMmMidi`, a seam over winmm.dll's MIDI functions.
 **Max instances:** 16 (`MaxMidiSlots = MaxPads`)
-**Availability:** `IsAvailable()` picks the API through `MidiApiSelection.Choose` and starts it. The in-box API is tried first at build 26200 and later. The older runtime runs when the in-box classes are not registered (`REGDB_E_CLASSNOTREG`), it is installed, and the build is 26100 or later. While neither runs, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".
+**Availability:** `IsAvailable()` picks the API through `MidiApiSelection.Choose` and starts it, and where that API is missing or will not start, starts the legacy one. The in-box API is tried first at build 26200 and later. The runtime runs when the in-box classes are not registered (`REGDB_E_CLASSNOTREG`), it is installed, and the build is 26100 or later. While no API starts, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".
 
-Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears in DAWs and MIDI applications as "PadForge MIDI N". Falls back gracefully without MIDI Services.
+Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, which DAWs and MIDI applications list as "PadForge MIDI N". The legacy API cannot create an endpoint, so there the controller opens the existing output port its `OutputPort` names.
 
-**Type gating:** the dashboard's MIDI type tile is inert while `DashboardViewModel.IsMidiAvailable` is false (`DashboardPage.xaml.cs:128-135`), so a slot cannot be switched to MIDI on a machine without the service. The VR tile gates the same way on `HMaestroVRController.IsAvailable()` (SteamVR), and the shared type-change handler enforces the one-slot VR cap through `SettingsManager.CanSlotTakeType`. Every other type accepts the switch.
+**Type gating:** the dashboard's MIDI type tile is inert while `DashboardViewModel.IsMidiAvailable` is false (`DashboardPage.xaml.cs:128-135`), so a slot cannot be switched to MIDI on a machine where no MIDI API starts. The VR tile gates the same way on `HMaestroVRController.IsAvailable()` (SteamVR), and the shared type-change handler enforces the one-slot VR cap through `SettingsManager.CanSlotTakeType`. Every other type accepts the switch.
 
 ### Static Fields
 
@@ -685,11 +685,12 @@ Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears i
 |---|---|---|
 | `_isAvailable` | `bool?` | Cached availability check result (nullable for first-check detection) |
 | `_probeTimedOut` | `bool` (volatile) | Set when the bounded availability probe times out. Later checks return false until `ResetAvailability()` |
-| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the older runtime during its uninstall. Cleared by `ResetAvailability()` |
+| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the runtime during its uninstall. Cleared by `ResetAvailability()` |
 | `_availLock` | `object` | Lock protecting availability check (readonly) |
 | `s_liveEndpoints` | `ConcurrentDictionary<string, long>` | Per-process registry of endpoint ids this process created: creating, ready, or abandoned-at-tick. The janitor keys off it instead of guessing from names |
 | `_backend` | `IMidiBackend` (volatile) | The backend the last successful probe started. MIDI input rides the same one (`Backend`) |
 | `s_backendFactory` | `Func<IMidiBackend>` | `CreateBackend` in production. Tests swap it through `UseBackendFactoryForTest` |
+| `s_legacyFactory` | `Func<IMidiBackend>` | `CreateLegacyBackend` in production. A test that names none in `UseBackendFactoryForTest` gets no fallback, so a fake that refuses to start never reaches the real WinMM |
 
 ### Instance Fields
 
@@ -713,8 +714,9 @@ Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears i
 | `CcNumbers` | `int[]` | `{1, 2, 3, 4, 5, 6}` | MIDI CC numbers for each CC slot |
 | `NoteNumbers` | `int[]` | `{60, 61, ..., 70}` | MIDI note numbers for each note slot (11 notes) |
 | `Velocity` | `byte` | `127` | Note-on velocity for button presses |
+| `OutputPort` | `string` | `""` | The port the legacy API sends to, by the name the slot's picker saved (`MidiSlotConfig.OutputPort`). The Windows MIDI Services backends ignore it |
 
-These are `internal` properties set by the mapping system before `Connect()`. They determine array sizes for change detection.
+These are `internal` properties set by `CreateMidiController` in Step 5 before `Connect()`. The counts determine array sizes for change detection.
 
 ### Auto-Mapping
 
@@ -731,6 +733,7 @@ Same gamepad detection as the HM-backed slots (`CapType == InputDeviceType.Gamep
 | `Type` | `VirtualControllerType` | Always `VirtualControllerType.Midi` |
 | `IsConnected` | `bool` | Read from `_connected` |
 | `FeedbackPadIndex` | `int` | Slot index for feedback routing (unused. MIDI has no rumble) |
+| `ApiKind` | `MidiApiKind` | The API the endpoint was made with, set when `ConnectCore` commits. Step 5 rebuilds the slot when the probe settles on another API, as after the runtime install |
 
 ### Constructor
 
@@ -747,15 +750,15 @@ Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCo
 `ConnectCore` initialization sequence:
 
 1. Registers the id from `BuildUniqueEndpointId` (`"PADFORGE_MIDI_{instanceNum}_{12 hex}"`, unique per creation so a stranded endpoint can never collide with a fresh one) as creating, before the service can materialize the endpoint.
-2. Calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both backends run the same steps under their own namespaces:
+2. Under the legacy API, calls `MidiBackendLegacy.OpenOutputPort(OutputPort)`: the saved name resolves to the port's current WinMM index, and `midiOutOpen` opens it with `CALLBACK_NULL` (RtMidi `MidiOutWinMM::openPort`). It throws `InvalidOperationException` naming the reason when no port is picked, the port is not connected, or another program holds it (`MMSYSERR_ALLOCATED`). Otherwise calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both Windows MIDI Services backends run the same steps under their own namespaces:
     1. `MidiDeclaredEndpointInfo` with the name, `ProductInstanceId` = the id, MIDI 1.0 protocol, static function blocks.
     2. `MidiVirtualDeviceCreationConfig` with the slot description, and one `MidiFunctionBlock` (bidirectional, Group 0, `RepresentsMidi10Connection = YesBandwidthUnrestricted`).
     3. `MidiSession.Create(deviceName)`. Throws if null.
     4. `MidiVirtualDeviceManager.CreateVirtualDevice(config)`, then `SuppressHandledMessages = true`.
     5. A `MidiEndpointConnection` to the device's endpoint ID.
-    6. The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but `MidiMessageProcessingPluginAddResult.Succeeded`, as Microsoft's virtual device sample does. The older runtime's add returns nothing.
+    6. The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but `MidiMessageProcessingPluginAddResult.Succeeded`, as Microsoft's virtual device sample does. The App SDK runtime's add returns nothing.
     7. `Open()`. Throws if false.
-3. Commits `_endpoint`, sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
+3. Commits `_endpoint` and `ApiKind`, sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
 
 **Error handling:** a backend that fails partway disconnects and disposes what it built before re-throwing. `ConnectCore` then drops the registry claim and schedules a janitor sweep (`ReleaseEndpointClaim`). A superseded attempt tears its finished endpoint down through `TeardownLocalCreation` without touching the instance fields.
 
@@ -769,7 +772,7 @@ Returns early if not connected. Sequence:
 4. `IMidiVirtualEndpoint.DisconnectConnection()`, then nulls `_endpoint`.
 5. `IMidiVirtualEndpoint.CloseSession()`.
 
-Whatever the service does, the `finally` drops the registry claim and schedules a janitor sweep.
+Whatever the service does, the `finally` drops the registry claim and schedules a janitor sweep. Under the legacy API, step 4 does nothing and step 5 is `midiOutClose` without `midiOutReset`, which would send All Notes Off and Reset All Controllers on all 16 channels (RtMidi issue #222. PortMidi and NAudio close without it too). Step 2 has already released every note this controller held.
 
 ### SubmitGamepadState(Gamepad gp)
 
@@ -814,7 +817,7 @@ Guarded by `_disposed`. Calls `Disconnect()`.
 
 ### MIDI Message Helpers
 
-All three helpers call `Send(Midi1Status, data1, data2)`, which hands the message to `IMidiVirtualEndpoint.Send`. The backend builds it as a MIDI 1.0 UMP (Universal MIDI Packet) with `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` on group 0 and sends it with `SendSingleMessagePacket()`. A throw drops that message, never the polling thread.
+All three helpers call `Send(Midi1Status, data1, data2)`, which hands the message to `IMidiVirtualEndpoint.Send`. A Windows MIDI Services backend builds it as a MIDI 1.0 UMP (Universal MIDI Packet) with `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` on group 0 and sends it with `SendSingleMessagePacket()`. The legacy backend packs it for `midiOutShortMsg`, status byte low and the two data bytes above it (`MidiBackendLegacy.PackShortMessage`, as RtMidi's `MidiOutWinMM::sendMessage` packs it). A throw drops that message, never the polling thread.
 
 | Helper | MIDI Status | Description |
 |---|---|---|
@@ -829,16 +832,17 @@ All three helpers call `Send(Midi1Status, data1, data2)`, which hands the messag
 Thread-safe, double-checked locking on `_availLock`. Caches result in `_isAvailable`. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), or after an earlier probe timed out (`_probeTimedOut`). The probe runs on `Task.Run`, bounded at 10 seconds. A timeout sets `_probeTimedOut` and returns false, so later creates fail fast instead of waiting again.
 
 1. Fast path: if `_isAvailable.HasValue`, returns cached value.
-2. Under lock: `s_backendFactory()`. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null.
-3. `Start()` on the backend. The in-box backend calls the static `MidiApi.EnsureServiceAvailable()`. The older runtime's backend creates its `MidiDesktopAppSdkInitializer`, then calls `InitializeSdkRuntime()` and `EnsureServiceAvailable()`, disposing the initializer when either fails. A null backend or a false start caches false.
-4. Success: keeps the backend in `_backend`, caches true.
-5. Any exception: stops the backend, which releases an initializer a half-finished start may hold, and caches false.
+2. Under lock: `TryStart(s_backendFactory) ?? TryStart(s_legacyFactory)`. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null. `CreateLegacyBackend` returns a `MidiBackendLegacy`.
+3. `TryStart` calls `Start()` on the backend it creates. The in-box backend calls the static `MidiApi.EnsureServiceAvailable()`, which returns false in Legacy API mode. The runtime's backend creates its `MidiDesktopAppSdkInitializer`, then calls `InitializeSdkRuntime()` and `EnsureServiceAvailable()`, disposing the initializer when either fails. The legacy backend counts the WinMM ports and returns true. A start that returns false or throws stops that backend, which releases an initializer a half-finished start may hold, and yields null.
+4. Keeps the started backend in `_backend` and caches whether one started.
 
-`ActiveApi` reports the started backend's kind after a successful probe and `MidiApiKind.None` otherwise. `ProbeFailed` is true after a probe that found no working API, or timed out, until a reset. The Settings card reads both through `MidiApiSelection.ForCard`.
+A probe that hangs in the first backend never reaches the legacy one: the 10-second bound gives up on both, and on the new MIDI stack WinMM routes through the same service anyway.
+
+`ActiveApi` reports the started backend's kind after a successful probe, `MidiApiKind.Legacy` included, and `MidiApiKind.None` otherwise. `ProbeFailed` is true after a probe that started nothing, or timed out, until a reset. The Settings card reads both through `MidiApiSelection.ForCard`.
 
 #### ResetAvailability()
 
-Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`. The older runtime's uninstall calls it once the uninstaller exits, and `Connect()` calls it after a service restart.
+Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through `InputService.SwitchMidiApi`, and `Connect()` after a service restart.
 
 #### Shutdown(bool skipDispose = false)
 
@@ -846,11 +850,11 @@ Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedO
 public static void Shutdown(bool skipDispose = false)
 ```
 
-Stops and drops the backend. Call on application exit. The in-box backend holds nothing to release.
+Stops and drops the backend. Call on application exit. The in-box and legacy backends hold nothing to release: each legacy port closes with the controller or input device that opened it.
 
-**`skipDispose`:** When true, the older runtime's backend abandons its initializer without `Dispose()`, for teardown while the service may already be mid-removal (app exit racing an external uninstall). `Dispose()` calls into the runtime and crashes if the service is being removed. Either way it resets `_isAvailable = null`.
+**`skipDispose`:** When true, the runtime's backend abandons its initializer without `Dispose()`, for teardown while the service may already be mid-removal (app exit racing an external uninstall). `Dispose()` calls into the runtime and crashes if the service is being removed. Either way it resets `_isAvailable = null`.
 
-The in-app uninstall of the older runtime calls `SuppressForUninstall()` instead, unless the in-box API is the one in use: it sets `_runtimeSuppressed` and calls `Shutdown(skipDispose: false)` while the service still exists, so the runtime releases its DLLs, and availability stays false until `ResetAvailability()`.
+The in-app uninstall of the runtime calls `SuppressForUninstall()` instead, unless the in-box API or the legacy API is the one in use: it sets `_runtimeSuppressed` and calls `Shutdown(skipDispose: false)` while the service still exists, so the runtime releases its DLLs, and availability stays false until `ResetAvailability()`.
 
 ---
 
@@ -1090,7 +1094,7 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 - [Engine Library](../reference/engine-library.md): `IVirtualController` interface, `Gamepad`, `RawHidState`, `KbmRawState`, `MidiRawState`, `Vibration`
 - [VR Controllers](vr-controllers.md): the user-facing side of the VR slot type
 - [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md): HM SDK surface, OpenXInput filter, Step 5 lifecycle invariants, FFB through HM PID descriptors
-- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration (no in-app uninstall), HidHide install / uninstall, and the older Windows MIDI Services runtime's uninstall
+- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration (no in-app uninstall), HidHide install / uninstall, and the Windows MIDI Services runtime's install and uninstall
 - [Settings and Serialization](../reference/settings-and-serialization.md): `VirtualControllerType` (`[XmlEnum("Microsoft")]` / `[XmlEnum("Sony")]` aliases) and per-slot HM profile persistence
 - [Build and Publish](../reference/build-and-publish.md): HIDMaestro and HidHide embedded resources
 

@@ -193,7 +193,7 @@ HIDMaestro ships inside the executable as a managed SDK, so it never had an inst
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsHidHideInstalled` | `bool` | HidHide installed. Written by the status refresh. No Dashboard surface currently reads it. |
-| `IsMidiAvailable` | `bool` | A Windows MIDI Services API is available, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_RequiresMidiServices` tooltip when false. |
+| `IsMidiAvailable` | `bool` | A MIDI API started, Windows MIDI Services or the legacy one, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_RequiresMidiServices` tooltip when false. |
 | `IsSteamVrInstalled` | `bool` | SteamVR installed, which gates the VR slot type (#49). A slot card's VR type button shows a "no" cursor and the `Main_VR_RequiresSteamVR` tooltip when false. The tiered SteamVR status row (#287) lives on the Settings card, which reads the live statics itself. |
 
 ### DSU Motion Server
@@ -476,22 +476,29 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 
 ### Driver Status: Windows MIDI Services
 
-There is nothing to install: the API is part of Windows 11 25H2 from the late-November 2026 update. The card names the API in use or what the PC lacks, and offers to remove Microsoft's older runtime. MainWindow's status refresh writes the inputs from `MidiApiSelection.ForCard` and the runtime's uninstall entry.
+The card names the API PadForge drives (`MidiApiSelection`), offers PadForge's build of the App SDK runtime where it would give MIDI slots ports of their own, and removes an installed runtime, Microsoft's or PadForge's. MainWindow's status refresh, on the 5-second driver timer, writes the inputs from `MidiApiSelection.ForCard`, `MidiApiSelection.CanOfferRuntimeInstall` and `DriverInstaller`. See [Driver Installation Internals](driver-installation-internals.md#windows-midi-services).
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `ActiveMidiApi` | `MidiApiKind` (internal) | `InBox`, `AppSdk` or `None`. Notifies `IsMidiAvailable` and the card text. |
-| `IsMidiRuntimeInstalled` | `bool` | Microsoft's older runtime is installed. Shows the Uninstall button. |
-| `MidiRuntimeVersion` | `string` | The older runtime's version, from its uninstall entry. |
-| `MidiApiNotStarted` | `bool` | An API is present but its service did not start (Legacy API mode, or a disabled or stuck service). |
+| `ActiveMidiApi` | `MidiApiKind` (internal) | `InBox`, `AppSdk`, `Legacy` or `None`. Notifies `IsMidiAvailable` and the card text. |
+| `CanInstallMidiRuntime` | `bool` | The card offers the runtime (`MidiApiSelection.CanOfferRuntimeInstall`). Shows the Install button. |
+| `IsMidiRuntimeInstalled` | `bool` | The App SDK runtime is installed, Microsoft's or PadForge's (`DriverInstaller.IsMidiRuntimeInstalled`). Shows the Uninstall button. |
+| `MidiRuntimeVersion` | `string` | The runtime's version, from its DLL (`DriverInstaller.GetMidiRuntimeVersion`). |
+| `MidiApiNotStarted` | `bool` | The probe started no API, the legacy one included, or timed out on a stuck service. |
 | `IsMidiAvailable` | `bool` | Computed: `ActiveMidiApi != None`. Lights the card's flame. |
-| `MidiServicesStatusText` | `string` | Computed: `Settings_MidiStatusInBox` ("Built into Windows"), `Settings_MidiStatusRuntime` ("Older Runtime"), `Settings_MidiStatusNotRunning` ("Not Running") or `Settings_MidiStatusUnavailable` ("Not Available"). |
-| `MidiServicesDetailText` | `string` | Computed: under the in-box API, empty or `Settings_MidiOlderRuntime_Format` when the older runtime is also installed. Under the older runtime, its version. Otherwise `Settings_MidiNotRunning` or `Settings_MidiNeedsUpdate`. |
+| `MidiServicesStatusText` | `string` | Computed: `Settings_MidiStatusInBox` ("Built into Windows"), `Settings_MidiStatusRuntime` ("App SDK Runtime"), `Settings_MidiStatusLegacy` ("Legacy MIDI API"), `Settings_MidiStatusNotRunning` ("Not Running") or `Settings_MidiStatusUnavailable` ("Not Available"). |
+| `MidiServicesDetailText` | `string` | Computed: under the in-box API, empty, or `Settings_MidiOlderRuntime_Format` when a runtime is also installed. Under the runtime, its version. Under the legacy API, `Settings_MidiLegacy`. Otherwise `Settings_MidiNotRunning` when the probe failed, else empty. |
 | `MidiDetailIsVersion` | `bool` | Computed: the detail line is the runtime's version, which the card sets in the telemetry face. |
 
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
-| `UninstallMidiServicesCommand` | `IsMidiRuntimeInstalled && !(ActiveMidiApi == AppSdk && HasAnyMidiSlots())` | Raises `UninstallMidiServicesRequested`. With the in-box API in use, MIDI slots do not hold the older runtime. |
+| `InstallMidiRuntimeCommand` | `CanInstallMidiRuntime` | Raises `InstallMidiRuntimeRequested`. |
+| `UninstallMidiServicesCommand` | `IsMidiRuntimeInstalled && !(ActiveMidiApi == AppSdk && HasAnyMidiSlots())` | Raises `UninstallMidiServicesRequested`. Under the in-box or the legacy API, MIDI slots do not hold the runtime. |
+
+| Event | Description |
+|-------|-------------|
+| `InstallMidiRuntimeRequested` | Download and install PadForge's build of the runtime (`DriverInstaller.InstallMidiRuntime`). |
+| `UninstallMidiServicesRequested` | Uninstall the installed runtime (`DriverInstaller.UninstallMidiRuntime`). |
 
 ### Driver Status: SteamVR (#49)
 
@@ -523,7 +530,7 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 
 | Member | Type | Description |
 |--------|------|-------------|
-| `HasAnyMidiSlots` | `Func<bool>` | Set by MainWindow. True if any slot uses MIDI. Blocks `UninstallMidiServicesCommand` while the older runtime is the API in use. |
+| `HasAnyMidiSlots` | `Func<bool>` | Set by MainWindow. True if any slot uses MIDI. Blocks `UninstallMidiServicesCommand` while the App SDK runtime is the API in use. |
 | `HasAnyVrSlots` | `Func<bool>` | Set by MainWindow. True if any created slot is a VR slot. Blocks `UninstallSteamVrCommand`. |
 | `HasAnyHidHideDevices` | `Func<bool>` | Set by MainWindow. True if any device has HidHide enabled. Blocks `UninstallHidHideCommand`. |
 | `RefreshDriverGuards()` | method | Re-evaluates uninstall `CanExecute` for HidHide, MIDI Services, and SteamVR. Call after slot creation/deletion/type changes. |
@@ -1242,6 +1249,7 @@ Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They reb
 | Property | Type | Description |
 |----------|------|-------------|
 | `MidiConfig` | `MidiSlotConfig` | Per-slot MIDI config (channel, CC/note mappings). Only meaningful when `OutputType == Midi`. |
+| `IsLegacyMidi` | `bool` | True while the legacy MIDI API runs MIDI slots. Shows the MIDI bar's Output Port picker. MainWindow sets it on every pad from the Settings card's refresh. |
 
 ### Per-(Slot, Device) Lighting / Adaptive Trigger Configuration
 
@@ -3068,7 +3076,7 @@ Older PadForge.xml files written by v2 contained a `Preset` attribute (`Xbox360`
 
 **File:** `MidiSlotConfig.cs`
 
-Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, and velocity.
+Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, velocity, and the legacy API's output port.
 
 | Property | Type | Default | Range | Description |
 |----------|------|---------|-------|-------------|
@@ -3078,12 +3086,13 @@ Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, a
 | `NoteCount` | `int` | `11` | 0–`128 - StartNote` | Note output count. |
 | `StartNote` | `int` | `60` | 0–127 | Starting note number. Re-clamps `NoteCount`. |
 | `Velocity` | `byte` | `127` | 0–127 | Note velocity for button presses. |
+| `OutputPort` | `string` | `""` | A port name | The output port the slot sends to under the legacy MIDI API, by the name the slot's port picker shows. Empty until the user picks one. The Windows MIDI Services APIs create the slot's own port and ignore it. |
 
 | Method | Description |
 |--------|-------------|
 | `GetCcNumbers()` | Returns `int[]` of sequential CC numbers from `StartCc`. |
 | `GetNoteNumbers()` | Returns `int[]` of sequential note numbers from `StartNote`. |
-| `ResetToDefaults()` | Resets every field in place, starts before counts so the count clamps see the default starts. |
+| `ResetToDefaults()` | Resets every field in place, starts before counts so the count clamps see the default starts. Clears `OutputPort`. |
 
 ### MidiSlotConfigData
 
@@ -3098,6 +3107,9 @@ Serializable DTO. All properties have `[XmlAttribute]`.
 | `NoteCount` | `int` | `11` |
 | `StartNote` | `int` | `60` |
 | `Velocity` | `byte` | `127` |
+| `OutputPort` | `string` | `null` |
+
+`OutputPort` is written only when it is set (`ShouldSerializeOutputPort`). `ApplyOutputPortTo(MidiSlotConfig)` copies it onto a live config only when it is set, so a snapshot saved before a port was picked keeps the slot's current port.
 
 ---
 

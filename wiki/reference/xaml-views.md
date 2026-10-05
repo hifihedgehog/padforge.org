@@ -112,7 +112,7 @@ NavigationView items use 48px height and 14px font size. Dashboard, Profiles, an
 Dynamic controller cards are appended after "Devices" (index 3 onward) via `RebuildControllerSection()`, followed by an "Add Controller" entry while any slot remains (`HasAnyControllerTypeCapacity()`). Each card is a fixed-width pill (233 px) inside its `NavigationViewItem` and contains:
 - Flame power toggle. Its heat shows the slot's state (ember live, gold waiting, outline cold) and its tooltip names it
 - Global slot number in telemetry mono
-- Mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled without Windows MIDI Services and the VR tile without SteamVR, unless the slot already carries that type
+- Mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled while no MIDI API starts and the VR tile without SteamVR, unless the slot already carries that type
 - Delete button, revealed on card hover
 
 Called on slot create, delete, or reorder. Uses a `_rebuildingControllerSection` guard to prevent re-entrancy during selection changes.
@@ -561,6 +561,8 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `ExtendedCustomValue_KeyDown` | TextBox.KeyDown(Enter) | Same as LostFocus apply |
 | `MidiConfig_Changed` | TextBox.LostFocus | Applies clamped MIDI config, rebuilds mappings if counts change |
 | `MidiConfig_KeyDown` | TextBox.KeyDown(Enter) | Same as LostFocus apply |
+| `MidiOutputPortBox_DropDownOpened` | ComboBox.DropDownOpened | Reads the output ports again (`MidiBackendLegacy.ListOutputPortsBounded`) and refills the picker |
+| `MidiOutputPortBox_SelectionChanged` | ComboBox.SelectionChanged | Writes the pick to `MidiConfig.OutputPort`, empty for **None** |
 | `ResetExtendedSetting_Click` / `ResetMidiSetting_Click` | SettingResetButton.Click | Resets the Extended or MIDI config field named by the button's `Tag` (`PadPage.SettingResets.cs`) |
 | `StickPresetX_SelectionChanged` | ComboBox.SelectionChanged | Sets `StickConfigItem.SensitivityCurveX` from preset |
 | `StickPresetY_SelectionChanged` | ComboBox.SelectionChanged | Sets `StickConfigItem.SensitivityCurveY` from preset |
@@ -1037,8 +1039,11 @@ Visible when `OutputType == Midi`. Centered horizontal `StackPanel`:
 | Note Count TextBox | `MidiConfig.NoteCount` | 0 to 128 − StartNote (clamped against StartNote) |
 | Start Note TextBox | `MidiConfig.StartNote` | 0-127 |
 | Velocity TextBox | `MidiConfig.Velocity` | 0-127 |
+| Output Port ComboBox (`MidiOutputPortBox`) | `MidiConfig.OutputPort`, set in code | **None**, the output ports, then the saved port when it is not connected |
 
 All fields have tooltips. `_syncingMidiConfig` guard prevents recursive updates. When CC/Note counts or start numbers change, `vm.RebuildMappings()` regenerates mapping rows.
+
+The Output Port group shows only while `PadViewModel.IsLegacyMidi` is true, since the Windows MIDI Services APIs create the slot's own port. `SyncMidiOutputPortBox` fills it: **None** first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. `_syncingMidiPort` keeps the refill from writing back a pick. Its reset button clears the pick.
 
 ### Copy From Dialog
 
@@ -1468,7 +1473,8 @@ ScrollViewer (Padding="24,0")
       │   ├─ Icon E8D6 + title + description
       │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
       │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
-      │   └─ Uninstall button (shown while IsMidiRuntimeInstalled, and no Install button)
+      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
+      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
       ├─ SteamVR card (#49)
       │   ├─ Icon F119 + title + description
       │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
@@ -1527,6 +1533,7 @@ ScrollViewer (Padding="24,0")
 | `AddWhitelistPathCommand` / `RemoveWhitelistPathCommand` | ICommand | Whitelist management |
 | `IsMidiAvailable` / `IsMidiRuntimeInstalled` / `MidiDetailIsVersion` | bool | Windows MIDI Services card: the flame, the Uninstall button's visibility, and the detail line's telemetry face |
 | `MidiServicesStatusText` / `MidiServicesDetailText` | string | The card's status line and the line under it |
+| `CanInstallMidiRuntime` / `InstallMidiRuntimeCommand` / `UninstallMidiServicesCommand` | bool, ICommand, ICommand | The Install button's visibility, and the runtime's install and uninstall |
 | `IsSteamVrInstalled` / `IsSteamVrOwned` / `SteamVrInstallDir` | bool, bool, string | SteamVR card status, whether PadForge created the Steam-free install, and its directory (#49) |
 | `SteamVrStatusText` / `ShowSteamVrUninstall` | string, bool | SteamVR status line, and the Uninstall gate (`IsSteamVrInstalled && IsSteamVrOwned`) |
 | `InstallSteamVrCommand` / `UninstallSteamVrCommand` | ICommand | SteamVR install/uninstall |
@@ -2311,7 +2318,7 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
 - [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by `HMaestroVirtualController`, VR by `HMaestroVRController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, and a VR button (`F119` glyph, AutomationId `AddVrBtn`, capacity via `MaxVrSlots` = 1) at the tail, the `VirtualControllerGroups.InOrder` visual order.
-- [Driver Installation Internals](driver-installation-internals.md): HidHide install/uninstall and the older Windows MIDI Services runtime's uninstall, triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput's `xinput1_4.dll` unpacks into the single-file extraction directory under `%TEMP%\.net\PadForge`, which `App.OnStartup` adds to the DLL search path)
+- [Driver Installation Internals](driver-installation-internals.md): HidHide install/uninstall and the Windows MIDI Services runtime's install and uninstall, triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput's `xinput1_4.dll` unpacks into the single-file extraction directory under `%TEMP%\.net\PadForge`, which `App.OnStartup` adds to the DLL search path)
 
 ---
 

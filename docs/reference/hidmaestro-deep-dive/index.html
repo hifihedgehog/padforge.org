@@ -3886,7 +3886,7 @@
 <tr>
 <td>v1.8.1 (HM#61)</td>
 <td>The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full"</td>
-<td><code>PadForge.App.csproj:294</code>, <code>InputManager.Step5.VirtualDevices.cs:2354</code></td>
+<td><code>PadForge.App.csproj:294</code>, <code>InputManager.Step5.VirtualDevices.cs:2396</code></td>
 </tr>
 <tr>
 <td>v1.9.0</td>
@@ -3944,7 +3944,7 @@
 <tr>
 <td>MIDI (<code>Midi = 3</code>)</td>
 <td>Windows MIDI Services</td>
-<td>NOT HM. Virtual MIDI endpoint through the in-box <code>Windows.Devices.Midi2</code> API, or the older runtime where it is installed.</td>
+<td>NOT HM. Virtual MIDI endpoint through the in-box <code>Windows.Devices.Midi2</code> API or the App SDK runtime, else an existing output port through the legacy WinMM API.</td>
 </tr>
 <tr>
 <td>KeyboardMouse (<code>KeyboardMouse = 4</code>)</td>
