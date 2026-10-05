@@ -18,9 +18,15 @@ A **Logitech G-Keys** row then appears on the [Devices](devices.md) page.
 
 Logitech Gaming Software 8.55 or later, running. The SDK ships with it.
 
-One more step matters, and it happens in Logitech's software rather than in PadForge. Logitech Gaming Software lets you nominate one **persistent profile**, which keeps receiving G-keys no matter which program is in front. Make PadForge that profile. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.
+Two more steps matter, and both happen in Logitech's software rather than in PadForge.
 
-This is unrelated to PadForge's own [profiles](../guides/profiles.md), which are a different thing that lives on the Profiles page.
+Give each key the **G-key** command. Once PadForge has run with this setting on, Logitech Gaming Software has a profile for PadForge with a G-key command in its command list. Drag that command onto every G-key and extra mouse button you want PadForge to read. A key without it keeps running whatever Logitech's software has on it and never reaches PadForge.
+
+Then make that profile the **persistent profile**. Logitech Gaming Software lets you nominate one, which keeps receiving G-keys no matter which program is in front. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.
+
+A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.
+
+Logitech's profiles are unrelated to PadForge's own [profiles](../guides/profiles.md), which are a different thing that lives on the Profiles page.
 
 ---
 
@@ -35,7 +41,7 @@ Under the checkbox is a line saying exactly which of seven situations the machin
 | *Found the G-key SDK and could not load it.* | Usually an architecture mismatch or a damaged install. |
 | *That library is not the G-key SDK this expects.* | Something else is registered under the SDK's key. |
 | *The G-key SDK refused to start. Logitech Gaming Software is usually not running.* | Start Logitech Gaming Software. |
-| *Connected, no key seen yet. In Logitech Gaming Software, make PadForge the persistent profile.* | Do that, then press a G-key. |
+| *Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent.* | Do both, then press a G-key. |
 | *Running, {0} key events* | Working, with the count in place of `{0}`. It rises as you press keys. |
 
 The line is empty while the feature is off.

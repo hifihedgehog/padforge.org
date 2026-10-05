@@ -3625,8 +3625,11 @@
 <p>A <strong>Logitech G-Keys</strong> row then appears on the <a href="../devices/">Devices</a> page.</p>
 <h3 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h3>
 <p>Logitech Gaming Software 8.55 or later, running. The SDK ships with it.</p>
-<p>One more step matters, and it happens in Logitech's software rather than in PadForge. Logitech Gaming Software lets you nominate one <strong>persistent profile</strong>, which keeps receiving G-keys no matter which program is in front. Make PadForge that profile. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.</p>
-<p>This is unrelated to PadForge's own <a href="../../guides/profiles/">profiles</a>, which are a different thing that lives on the Profiles page.</p>
+<p>Two more steps matter, and both happen in Logitech's software rather than in PadForge.</p>
+<p>Give each key the <strong>G-key</strong> command. Once PadForge has run with this setting on, Logitech Gaming Software has a profile for PadForge with a G-key command in its command list. Drag that command onto every G-key and extra mouse button you want PadForge to read. A key without it keeps running whatever Logitech's software has on it and never reaches PadForge.</p>
+<p>Then make that profile the <strong>persistent profile</strong>. Logitech Gaming Software lets you nominate one, which keeps receiving G-keys no matter which program is in front. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.</p>
+<p>A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.</p>
+<p>Logitech's profiles are unrelated to PadForge's own <a href="../../guides/profiles/">profiles</a>, which are a different thing that lives on the Profiles page.</p>
 <hr />
 <h2 id="reading-the-status-line">Reading the status line<a class="headerlink" href="#reading-the-status-line" title="Permanent link">&para;</a></h2>
 <p>Under the checkbox is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.</p>
@@ -3659,8 +3662,8 @@
 <td>Start Logitech Gaming Software.</td>
 </tr>
 <tr>
-<td><em>Connected, no key seen yet. In Logitech Gaming Software, make PadForge the persistent profile.</em></td>
-<td>Do that, then press a G-key.</td>
+<td><em>Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent.</em></td>
+<td>Do both, then press a G-key.</td>
 </tr>
 <tr>
 <td><em>Running, {0} key events</em></td>

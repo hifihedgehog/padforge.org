@@ -81,7 +81,7 @@ The footer under the row reads: *Requires Logitech G HUB (or Logitech Gaming Sof
 
 ## Razer Sensa HD Haptics
 
-Streams the rumble games send to PadForge's virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 line, the Kraken V4 Pro, and the Freyja.
+Streams the rumble games send to PadForge's virtual controllers into the Interhaptics engine, whose Razer provider renders it on Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro, and the Freyja.
 
 | Needs | Detail |
 |---|---|
