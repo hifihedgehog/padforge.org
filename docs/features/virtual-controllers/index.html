@@ -1871,6 +1871,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#applylayoutint-channel-int-startcc-int-cccount-int-startnote-int-notecount-byte-velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplyLayout(int channel, int startCc, int ccCount, int startNote, int noteCount, byte velocity)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#submitmidirawstatemidirawstate-state" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4932,6 +4943,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#applylayoutint-channel-int-startcc-int-cccount-int-startnote-int-notecount-byte-velocity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ApplyLayout(int channel, int startCc, int ccCount, int startNote, int noteCount, byte velocity)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#submitmidirawstatemidirawstate-state" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5501,7 +5523,7 @@
 </table>
 <p>All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carry an explicit -1 for bits a profile does not declare, which is what ended the identity fallthrough that had Share pressing PS on every Sony pad.</p>
 <h3 id="feedbackpadindex">FeedbackPadIndex<a class="headerlink" href="#feedbackpadindex" title="Permanent link">&para;</a></h3>
-<p>Tracks which slot this VC occupies for correct <code>VibrationStates[]</code> writes. The runtime writers are <code>RegisterFeedbackCallback</code> (sets the initial index), <code>RetargetToPad</code> (<code>HMaestroVirtualController.cs:494</code>, invoked by <code>InputManager.RerouteVirtualControllersForReorder</code> at <code>InputManager.Step5.VirtualDevices.cs:3216</code> on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and <code>UnregisterFeedback</code> (<code>HMaestroVirtualController.cs:1213</code>, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a <code>SwapSlotData</code> updater. No such method exists in the codebase.</p>
+<p>Tracks which slot this VC occupies for correct <code>VibrationStates[]</code> writes. The runtime writers are <code>RegisterFeedbackCallback</code> (sets the initial index), <code>RetargetToPad</code> (<code>HMaestroVirtualController.cs:494</code>, invoked by <code>InputManager.RerouteVirtualControllersForReorder</code> at <code>InputManager.Step5.VirtualDevices.cs:3224</code> on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and <code>UnregisterFeedback</code> (<code>HMaestroVirtualController.cs:1213</code>, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a <code>SwapSlotData</code> updater. No such method exists in the codebase.</p>
 <h3 id="type-specific-submit-methods">Type-Specific Submit Methods<a class="headerlink" href="#type-specific-submit-methods" title="Permanent link">&para;</a></h3>
 <p>All implementations have <code>SubmitGamepadState(Gamepad gp)</code> for interface compliance, but the non-gamepad outputs use alternative submit methods and leave it as a no-op:</p>
 <ul>
@@ -5536,15 +5558,15 @@
 <tbody>
 <tr>
 <td><strong>Preset</strong></td>
-<td>Two catalog profiles: <code>switch-pro</code> (VID 0x057E, PID 0x2009) and <code>switch2-pro-controller</code> (VID 0x057E, PID 0x2069). <code>HMaestroProfileCatalog.NintendoProfiles</code> filters on <code>IsNintendoProfile</code> (<code>HMaestroProfileCatalog.cs:451</code>), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. <code>DefaultNintendoProfileId</code> (<code>InputManager.Step5.VirtualDevices.cs:2414</code>) seeds new slots with <code>switch-pro</code>.</td>
+<td>Two catalog profiles: <code>switch-pro</code> (VID 0x057E, PID 0x2009) and <code>switch2-pro-controller</code> (VID 0x057E, PID 0x2069). <code>HMaestroProfileCatalog.NintendoProfiles</code> filters on <code>IsNintendoProfile</code> (<code>HMaestroProfileCatalog.cs:451</code>), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. <code>DefaultNintendoProfileId</code> (<code>InputManager.Step5.VirtualDevices.cs:2423</code>) seeds new slots with <code>switch-pro</code>.</td>
 </tr>
 <tr>
 <td><strong>Creation</strong></td>
-<td><code>CreateVirtualController</code> routes Nintendo through <code>CreateHMaestroController</code> (<code>InputManager.Step5.VirtualDevices.cs:2493</code>), same as the other HM categories. No Customize surface: the profile-override branch in <code>CreateHMaestroController</code> gates on <code>type == Extended</code> (<code>:2587</code>), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (<code>:3019</code>).</td>
+<td><code>CreateVirtualController</code> routes Nintendo through <code>CreateHMaestroController</code> (<code>InputManager.Step5.VirtualDevices.cs:2502</code>), same as the other HM categories. No Customize surface: the profile-override branch in <code>CreateHMaestroController</code> gates on <code>type == Extended</code> (<code>:2638</code>), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (<code>:3069-3072</code>).</td>
 </tr>
 <tr>
 <td><strong>Data path</strong></td>
-<td>The raw HID surface. <code>SlotRawHidSurface</code> is true for both Extended and Nintendo slots (<code>InputService.cs:6352-6354</code>), so Step 3/4 produce <code>RawHidState</code> and Step 5 submits via <code>SubmitRawHidState</code> with the slot's <code>MotionSnapshot</code> riding beside it (<code>InputManager.Step5.VirtualDevices.cs:1959-2019</code>).</td>
+<td>The raw HID surface. <code>SlotRawHidSurface</code> is true for both Extended and Nintendo slots (<code>InputService.cs:6352-6354</code>), so Step 3/4 produce <code>RawHidState</code> and Step 5 submits via <code>SubmitRawHidState</code> with the slot's <code>MotionSnapshot</code> riding beside it (<code>InputManager.Step5.VirtualDevices.cs:1968-2028</code>).</td>
 </tr>
 <tr>
 <td><strong>Gyro passthrough</strong></td>
@@ -5618,7 +5640,7 @@
 <p>Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.</p>
 <p><strong>What a client sees.</strong> On a headless bench, stock SDL3 with <code>SDL_JOYSTICK_HIDAPI_STEAM=1</code> claimed <code>steam-controller-composite</code> as "Steam Controller" with two touchpads, gyro and accelerometer, and a live Steam client opened it, reserved XInput slot 0, took the input stream and loaded the <code>gordon</code> configuration set. Nothing has run against real Valve hardware.</p>
 <h4 id="native-input-frames">Native input frames<a class="headerlink" href="#native-input-frames" title="Permanent link">&para;</a></h4>
-<p><code>ValveReportPackers</code> (<code>PadForge.App/Common/Input/ValveReportPackers.cs</code>) packs the slot's <code>RawHidState</code>, <code>TouchpadState</code> and <code>MotionSnapshot</code> into the device's own report. Step 5 asks <code>ValveReportPackers.ForProfile(profileId)</code>, and when it gets a packer it submits <code>scratch[..packer.Size]</code> through <code>SubmitRawReport</code> instead of <code>SubmitRawHidState</code> (<code>InputManager.Step5.VirtualDevices.cs:1987-1996</code>).</p>
+<p><code>ValveReportPackers</code> (<code>PadForge.App/Common/Input/ValveReportPackers.cs</code>) packs the slot's <code>RawHidState</code>, <code>TouchpadState</code> and <code>MotionSnapshot</code> into the device's own report. Step 5 asks <code>ValveReportPackers.ForProfile(profileId)</code>, and when it gets a packer it submits <code>scratch[..packer.Size]</code> through <code>SubmitRawReport</code> instead of <code>SubmitRawHidState</code> (<code>InputManager.Step5.VirtualDevices.cs:1996-2005</code>).</p>
 <table>
 <thead>
 <tr>
@@ -5863,7 +5885,7 @@
 </code></pre></div>
 <p>Stores the arguments, resolves the cached axis keys, and seeds <code>_axesScratch</code>. Throws <code>ArgumentNullException</code> on null <code>ctx</code> or <code>profile</code>. No driver work happens here. The actual virtual device is created in <code>Connect()</code>.</p>
 <p><code>identityKey</code> is the key HIDMaestro 1.8.0 (HM#60) derives every device path, the container id and, for USB/IP personas, the USB serial from, so the pad comes back at the same paths after a PadForge restart, a reboot or a driver upgrade. <code>IdentityKeyForPad</code> builds it as <code>padforge:slot{N}:{Type}</code>, where N is the pad's position in its own family's order list, not its pad index, which moves on a reorder. A pad missing from that list gets <code>padforge:pad{padIndex}:{Type}</code>. A blank key is stored as null, and HIDMaestro then falls back to its controller index.</p>
-<p><code>InputManager.CreateHMaestroController</code> is the only call site (<code>InputManager.Step5.VirtualDevices.cs:2599</code>). It resolves the profile (<code>:2568</code>), applies any per-slot overrides for Customized Extended slots via <code>new HMProfileBuilder().FromProfile(baseProfile)</code> (<code>:2646</code>), then constructs the wrapper with that key (<code>:2744</code>).</p>
+<p><code>InputManager.CreateHMaestroController</code> is the only call site (<code>InputManager.Step5.VirtualDevices.cs:2608</code>). It resolves the profile (<code>:2619</code>), applies any per-slot overrides for Customized Extended slots via <code>new HMProfileBuilder().FromProfile(baseProfile)</code> (<code>:2697</code>), then constructs the wrapper with that key (<code>:2795</code>).</p>
 <h3 id="connect">Connect()<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroVirtualController.cs:316</code>.</p>
 <ol>
@@ -5971,7 +5993,7 @@
 <p><strong>Hat.</strong> <code>MapHat</code> (<code>HMaestroVirtualController.cs:1903</code>) collapses the four D-Pad bits into a single <code>HMHat</code> direction (<code>North</code>, <code>NorthEast</code>, <code>East</code>, <code>SouthEast</code>, <code>South</code>, <code>SouthWest</code>, <code>West</code>, <code>NorthWest</code>, <code>None</code>). Diagonals take priority over cardinals.</p>
 <p><strong>PlayStation overload.</strong> <code>SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)</code> (<code>:746</code>) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (<code>GyroScale = 16</code>, <code>AccelScale = 8192</code>, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.</p>
 <h3 id="submitrawhidstaterawhidstate-raw-int-sticks-int-triggers">SubmitRawHidState(RawHidState raw, int sticks, int triggers)<a class="headerlink" href="#submitrawhidstaterawhidstate-raw-int-sticks-int-triggers" title="Permanent link">&para;</a></h3>
-<p><code>HMaestroVirtualController.cs:906</code>, plus the overload taking <code>in MotionSnapshot</code> at <code>:970</code> (the 3-argument form forwards with <code>default</code>). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (<code>SubmitRawReport</code>) and a layout past 32 buttons or one hat (<code>SubmitPackedExtendedReport</code>): <code>SlotRawHidSurface</code> is true for both categories (<code>InputService.cs:6352-6354</code>), and the submit site passes the slot's layout counts and <code>MotionSnapshot</code> (<code>InputManager.Step5.VirtualDevices.cs:2011-2019</code>). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.</p>
+<p><code>HMaestroVirtualController.cs:906</code>, plus the overload taking <code>in MotionSnapshot</code> at <code>:970</code> (the 3-argument form forwards with <code>default</code>). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (<code>SubmitRawReport</code>) and a layout past 32 buttons or one hat (<code>SubmitPackedExtendedReport</code>): <code>SlotRawHidSurface</code> is true for both categories (<code>InputService.cs:6352-6354</code>), and the submit site passes the slot's layout counts and <code>MotionSnapshot</code> (<code>InputManager.Step5.VirtualDevices.cs:2020-2028</code>). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.</p>
 <p><strong>Why SubmitGamepadState is not enough:</strong> <code>MapButtons</code> covers a fixed named set, but the XInput-shaped <code>Gamepad</code> struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.</p>
 <p><strong>Idle dedup:</strong> the exact basic-path shape (16 ms keepalive), with a content compare on the pooled arrays (<code>RawFrameUnchanged</code>, <code>:923-940</code>). An identical frame within the window skips the seqlock publish + <code>SetEvent</code>. Motion frames never dedup: <code>SensorTimestamp</code> must advance for downstream fusion, so while <code>motion.HasMotion</code> is set every frame submits (<code>:982-1004</code>). <code>PADFORGE_NO_RAWDEDUP=1</code> disables this path's dedup at launch (<code>:918-921</code>).</p>
 <p><strong>Axis layout:</strong> computed by replicating <code>ExtendedSlotConfig.ComputeAxisLayout</code>. Sticks and triggers are interleaved in groups of <code>(stickX, stickY, trigger)</code> while both are available, then trailing sticks pack at <code>(prev, prev+1)</code> and trailing triggers pack one index at a time. Hardcoded <code>(3, 4)</code> for right-stick X/Y silently dropped Stick 2 Y on every 0-trigger or 1-trigger profile, hence the explicit interleave logic.</p>
@@ -6203,7 +6225,7 @@
 <strong>Backs:</strong> <code>VirtualControllerType.Vr</code>
 <strong>Max instances:</strong> 1 (<code>SettingsManager.MaxVrSlots</code>, <code>SettingsManager.cs:97</code>). Enforced by <code>SettingsManager.CanSlotTakeType</code> (<code>:111</code>), which short-circuits to true for every other type</p>
 <p>A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one <code>HMVRController</code> pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.</p>
-<p>All calls are in-process (named-pipe transport inside <code>HIDMaestro.Core</code>), so <code>Connect</code> / <code>Disconnect</code> need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no <code>HMContext</code> (<code>InputManager.Step5.VirtualDevices.cs:2496</code>).</p>
+<p>All calls are in-process (named-pipe transport inside <code>HIDMaestro.Core</code>), so <code>Connect</code> / <code>Disconnect</code> need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no <code>HMContext</code> (<code>InputManager.Step5.VirtualDevices.cs:2505</code>).</p>
 <h3 id="isavailable">IsAvailable()<a class="headerlink" href="#isavailable" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroVRController.cs:87</code>. True when SteamVR itself is present (<code>HMVR.IsSteamVRInstalled</code>). Without SteamVR the driver has no host to register with, so slot creation refuses early with a clear message instead of a silent dead pipe. Cached for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe walks Steam's library metadata on disk and the sidebar rail queries once per slot. A separate <code>s_availHasValue</code> flag marks a real answer: seeding the cache timestamp with <code>long.MinValue</code> overflowed the TTL compare to a large negative value, which always reads as inside the TTL, so the first call returned the default <code>false</code> without ever probing. <code>ResetAvailability()</code> (<code>:120</code>) clears it.</p>
 <h3 id="connect_1">Connect()<a class="headerlink" href="#connect_1" title="Permanent link">&para;</a></h3>
@@ -6380,7 +6402,7 @@
 <tr>
 <td><code>_channel</code></td>
 <td><code>int</code></td>
-<td>MIDI channel 0–15 (readonly, clamped via <code>Math.Clamp</code>)</td>
+<td>MIDI channel 0–15, clamped. Set by the constructor, then by <code>ApplyLayout</code></td>
 </tr>
 <tr>
 <td><code>_instanceNum</code></td>
@@ -6396,6 +6418,11 @@
 <td><code>_lastNotes</code></td>
 <td><code>bool[]</code></td>
 <td>Last sent note states (change detection)</td>
+</tr>
+<tr>
+<td><code>_layoutApplied</code>, <code>_layoutStartCc</code>, <code>_layoutCcCount</code>, <code>_layoutStartNote</code>, <code>_layoutNoteCount</code></td>
+<td><code>bool</code>, <code>int</code></td>
+<td>The MIDI bar settings <code>CcNumbers</code> and <code>NoteNumbers</code> were last built from, for <code>ApplyLayout</code>'s change test (<code>MidiVirtualController.cs:406</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -6436,7 +6463,7 @@
 </tr>
 </tbody>
 </table>
-<p>These are <code>internal</code> properties set by <code>CreateMidiController</code> in Step 5 before <code>Connect()</code>. The counts determine array sizes for change detection.</p>
+<p><code>ApplyLayout</code> sets the first three from the slot's MIDI bar: <code>CreateMidiController</code> calls it before <code>Connect()</code>, and Pass 3 of Step 5 calls it before every submit. The counts determine array sizes for change detection.</p>
 <h3 id="auto-mapping">Auto-Mapping<a class="headerlink" href="#auto-mapping" title="Permanent link">&para;</a></h3>
 <p>When a recognized gamepad is assigned to a MIDI slot, PadForge auto-maps:
 - <strong>6 axes</strong> to CC slots 0–5 (LX, LY, LT, RX, RY, RT -&gt; <code>MidiCC0</code>–<code>MidiCC5</code>)
@@ -6510,6 +6537,9 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">)</span>
 </code></pre></div>
 <p>Legacy path. Not used for dynamic MIDI. Kept as a no-op for <code>IVirtualController</code> interface compliance.</p>
+<h3 id="applylayoutint-channel-int-startcc-int-cccount-int-startnote-int-notecount-byte-velocity">ApplyLayout(int channel, int startCc, int ccCount, int startNote, int noteCount, byte velocity)<a class="headerlink" href="#applylayoutint-channel-int-startcc-int-cccount-int-startnote-int-notecount-byte-velocity" title="Permanent link">&para;</a></h3>
+<p><code>MidiVirtualController.cs:428</code>. Takes the slot's MIDI bar settings: channel 0–15, the first CC and note numbers with their counts, and the velocity. <code>CreateMidiController</code> calls it before <code>Connect()</code>, and Pass 3 calls it before every submit, the way the Keyboard + Mouse slot takes its SOCD settings, so an edit reaches a running slot without closing its port. It clamps the channel to 0–15 and each run to 0–127 again, because the bar sets a start and then re-clamps its count, and a read between the two sees the new start with the old count. Unchanged settings return after the compares and allocate nothing.</p>
+<p>On a change, a held note whose channel and number survive stays held. Every other held note gets its Note Off on the channel and number it went out on, since a Note Off ends only the Note On with the same channel and key. A CC whose channel and number survive keeps its last sent value, and the rest start again at 64, as at connect. The next submit presses held buttons on their new notes and sends each moved CC that is off center. A new velocity applies from the next Note On. Like <code>DisconnectCore</code>, it sends no All Notes Off (CC 123), which on a legacy port another program shares would end that program's notes too.</p>
 <h3 id="submitmidirawstatemidirawstate-state">SubmitMidiRawState(MidiRawState state)<a class="headerlink" href="#submitmidirawstatemidirawstate-state" title="Permanent link">&para;</a></h3>
 <p>Sends MIDI messages from <code>MidiRawState</code>. Returns immediately if not connected. Only sends on value change.</p>
 <p><strong>CC messages:</strong> Iterates <code>min(state.CcValues.Length, _lastCcValues.Length, CcNumbers.Length)</code>. Changed CC values trigger <code>SendCC()</code>. Triple-min guards against mid-stream config changes.</p>

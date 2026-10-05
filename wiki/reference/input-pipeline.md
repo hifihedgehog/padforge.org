@@ -480,7 +480,7 @@ public void RerouteVirtualControllersForReorder(
     VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)
 ```
 
-`InputManager.Step5.VirtualDevices.cs` line 3040. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
+`InputManager.Step5.VirtualDevices.cs` line 3048. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
 
 - **Same profile at V**: reuse the kernel VC in place. The pad-index pointer in `_virtualControllers[]` moves so the new pad-at-position-V feeds V's kernel slot, and `FeedbackPadIndex` is updated on the surviving VC so the rumble callback writes the right `VibrationStates[]` entry. No teardown.
 - **Different profile at V**: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.
@@ -2560,7 +2560,15 @@ Keyboard+Mouse, MIDI, and VR take the same thread-pool path. MIDI's Connect can 
 `_slotInitializing` clears once a slot's VC reports connected. Then, for each slot with a VC whose inactive counter is 0 or 1 (on the first offline poll, counter 1, Pass 3 clears the slot's `Combined*` states and submits that neutral frame once, so an input held at unplug is released):
 ```csharp
 if (vc is MidiVirtualController midiVc)
+{
+    // The slot's MIDI bar, live: an edit reaches the running controller
+    // without closing its port.
+    var midiCfg = _midiConfigs[padIndex];
+    if (midiCfg != null)
+        midiVc.ApplyLayout(midiCfg.Channel - 1, midiCfg.StartCc, midiCfg.CcCount,
+            midiCfg.StartNote, midiCfg.NoteCount, midiCfg.Velocity);
     midiVc.SubmitMidiRawState(CombinedMidiRawStates[padIndex]);
+}
 else if (vc is KeyboardMouseVirtualController kbmVc)
 {
     kbmVc.ApplySocdConfig(kbmCfg.SocdMode, kbmCfg.SocdPairs);

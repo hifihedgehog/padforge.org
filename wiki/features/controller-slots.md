@@ -146,7 +146,7 @@ Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pai
 
 ### MIDI
 
-Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
+Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
 
 Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
 

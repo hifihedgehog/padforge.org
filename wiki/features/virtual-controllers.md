@@ -158,7 +158,7 @@ All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carr
 
 ### FeedbackPadIndex
 
-Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:494`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3216` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1213`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
+Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:494`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3224` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1213`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
 
 ### Type-Specific Submit Methods
 
@@ -195,9 +195,9 @@ New in 4.1.0. A virtual Nintendo Switch Pro Controller as a first-class slot cat
 
 | Aspect | Behavior |
 |---|---|
-| **Preset** | Two catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009) and `switch2-pro-controller` (VID 0x057E, PID 0x2069). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:451`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2414`) seeds new slots with `switch-pro`. |
-| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2493`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2587`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3019`). |
-| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6352-6354`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1959-2019`). |
+| **Preset** | Two catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009) and `switch2-pro-controller` (VID 0x057E, PID 0x2069). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:451`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2423`) seeds new slots with `switch-pro`. |
+| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2502`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2638`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3069-3072`). |
+| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6352-6354`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:1968-2028`). |
 | **Gyro passthrough** | The `MotionSnapshot` overload fills the HM v1.3.18 IMU channel: `AccelGX/GY/GZ` (g) and `GyroDpsX/Y/Z` (deg/s) land verbatim in the SDL sensor frame (`HMaestroVirtualController.cs:1123-1131`). The driver-side packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. Zeroes when the slot maps no motion source and no [Motion Pitch, Yaw or Roll](mappings.md#motion-pitch-yaw-and-roll) row. `switch-pro` only: HIDMaestro keys its Switch Pro protocol (the report 0x30 body with the IMU, and the rumble decode below) on PID 0x2009 (`SwitchProPacker.IsSwitchPro`), and the `switch2-pro-controller` profile's report 0x09 carries no motion field. |
 | **Rumble** | On `switch-pro`, HIDMaestro's SDK (`HMController`, `SwitchProPacker.DecodeRumbleAmplitude`) decodes the game's 0x01/0x10 HD-rumble writes itself and emits `leftMotor` / `rightMotor` on `OutputDecoded` only for genuine rumble frames. `switch2-pro-controller` gets no rumble decode. `MotorWriteAllowed` keeps non-Sony vendors on unconditional trust (the validity-flag semantics are Sony's, `:1869`), and a dedicated `NintendoVid` (0x057E) branch feeds the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236) for Bass Shakers (`:1421-1432`). |
 | **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (`NintendoPreviewMap.ButtonTable`, read by `MacroItem.cs` `NintendoLetteredLabel`). The `switch-pro` table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`NintendoExtendedLabel`). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The `switch2-pro-controller` table has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:6274`). |
@@ -228,7 +228,7 @@ Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not ass
 
 #### Native input frames
 
-`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:1987-1996`).
+`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:1996-2005`).
 
 | Profile | Report | Size | Source |
 |---|---|---|---|
@@ -341,7 +341,7 @@ Stores the arguments, resolves the cached axis keys, and seeds `_axesScratch`. T
 
 `identityKey` is the key HIDMaestro 1.8.0 (HM#60) derives every device path, the container id and, for USB/IP personas, the USB serial from, so the pad comes back at the same paths after a PadForge restart, a reboot or a driver upgrade. `IdentityKeyForPad` builds it as `padforge:slot{N}:{Type}`, where N is the pad's position in its own family's order list, not its pad index, which moves on a reorder. A pad missing from that list gets `padforge:pad{padIndex}:{Type}`. A blank key is stored as null, and HIDMaestro then falls back to its controller index.
 
-`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2599`). It resolves the profile (`:2568`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2646`), then constructs the wrapper with that key (`:2744`).
+`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2608`). It resolves the profile (`:2619`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2697`), then constructs the wrapper with that key (`:2795`).
 
 ### Connect()
 
@@ -422,7 +422,7 @@ Trigger values are mirrored to both the canonical key and the trigger row's own 
 
 ### SubmitRawHidState(RawHidState raw, int sticks, int triggers)
 
-`HMaestroVirtualController.cs:906`, plus the overload taking `in MotionSnapshot` at `:970` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6352-6354`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:2011-2019`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
+`HMaestroVirtualController.cs:906`, plus the overload taking `in MotionSnapshot` at `:970` (the 3-argument form forwards with `default`). Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6352-6354`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:2020-2028`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
 
 **Why SubmitGamepadState is not enough:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
 
@@ -599,7 +599,7 @@ The "where force COMES FROM" to "toward" 180-degree shift is per HID PID 1.0: a 
 
 A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one `HMVRController` pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.
 
-All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2496`).
+All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2505`).
 
 ### IsAvailable()
 
@@ -702,10 +702,11 @@ Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, whic
 | `_uniqueEndpointId` | `string` | This creation's registry id, the key the janitor and the live-endpoint scanner use |
 | `_creationGen` | `int` | Creation generation. A superseded (timed-out) attempt commits nothing |
 | `_padIndex` | `int` | Slot index (readonly) |
-| `_channel` | `int` | MIDI channel 0–15 (readonly, clamped via `Math.Clamp`) |
+| `_channel` | `int` | MIDI channel 0–15, clamped. Set by the constructor, then by `ApplyLayout` |
 | `_instanceNum` | `int` | 1-based MIDI-type instance number (readonly) |
 | `_lastCcValues` | `byte[]` | Last sent CC values (change detection, initialized to 64 = center) |
 | `_lastNotes` | `bool[]` | Last sent note states (change detection) |
+| `_layoutApplied`, `_layoutStartCc`, `_layoutCcCount`, `_layoutStartNote`, `_layoutNoteCount` | `bool`, `int` | The MIDI bar settings `CcNumbers` and `NoteNumbers` were last built from, for `ApplyLayout`'s change test (`MidiVirtualController.cs:406`) |
 
 ### Configurable Properties
 
@@ -716,7 +717,7 @@ Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, whic
 | `Velocity` | `byte` | `127` | Note-on velocity for button presses |
 | `OutputPort` | `string` | `""` | The port the legacy API sends to, by the name the slot's picker saved (`MidiSlotConfig.OutputPort`). The Windows MIDI Services backends ignore it |
 
-These are `internal` properties set by `CreateMidiController` in Step 5 before `Connect()`. The counts determine array sizes for change detection.
+`ApplyLayout` sets the first three from the slot's MIDI bar: `CreateMidiController` calls it before `Connect()`, and Pass 3 of Step 5 calls it before every submit. The counts determine array sizes for change detection.
 
 ### Auto-Mapping
 
@@ -781,6 +782,12 @@ public void SubmitGamepadState(Gamepad gp)
 ```
 
 Legacy path. Not used for dynamic MIDI. Kept as a no-op for `IVirtualController` interface compliance.
+
+### ApplyLayout(int channel, int startCc, int ccCount, int startNote, int noteCount, byte velocity)
+
+`MidiVirtualController.cs:428`. Takes the slot's MIDI bar settings: channel 0–15, the first CC and note numbers with their counts, and the velocity. `CreateMidiController` calls it before `Connect()`, and Pass 3 calls it before every submit, the way the Keyboard + Mouse slot takes its SOCD settings, so an edit reaches a running slot without closing its port. It clamps the channel to 0–15 and each run to 0–127 again, because the bar sets a start and then re-clamps its count, and a read between the two sees the new start with the old count. Unchanged settings return after the compares and allocate nothing.
+
+On a change, a held note whose channel and number survive stays held. Every other held note gets its Note Off on the channel and number it went out on, since a Note Off ends only the Note On with the same channel and key. A CC whose channel and number survive keeps its last sent value, and the rest start again at 64, as at connect. The next submit presses held buttons on their new notes and sends each moved CC that is off center. A new velocity applies from the next Note On. Like `DisconnectCore`, it sends no All Notes Off (CC 123), which on a legacy port another program shares would end that program's notes too.
 
 ### SubmitMidiRawState(MidiRawState state)
 

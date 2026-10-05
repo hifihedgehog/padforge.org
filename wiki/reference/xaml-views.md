@@ -1041,7 +1041,7 @@ Visible when `OutputType == Midi`. Centered horizontal `StackPanel`:
 | Velocity TextBox | `MidiConfig.Velocity` | 0-127 |
 | Output Port ComboBox (`MidiOutputPortBox`) | `MidiConfig.OutputPort`, set in code | **None**, the output ports, then the saved port when it is not connected |
 
-All fields have tooltips. `_syncingMidiConfig` guard prevents recursive updates. When CC/Note counts or start numbers change, `vm.RebuildMappings()` regenerates mapping rows.
+All fields have tooltips. `_syncingMidiConfig` guard prevents recursive updates. When CC/Note counts or start numbers change, `vm.RebuildMappings()` regenerates mapping rows. A running slot's controller takes every change on its next poll, on the same port (`MidiVirtualController.ApplyLayout`).
 
 The Output Port group shows only while `PadViewModel.IsLegacyMidi` is true, since the Windows MIDI Services APIs create the slot's own port. `SyncMidiOutputPortBox` fills it: **None** first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. `_syncingMidiPort` keeps the refill from writing back a pick. Its reset button clears the pick.
 
