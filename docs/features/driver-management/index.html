@@ -4557,6 +4557,7 @@
 <li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked.</li>
 <li>A port another program holds cannot be opened, and the slot reports it. Close that program, then turn the slot off and on.</li>
 <li>Picking another port moves the slot there.</li>
+<li>A slot whose port is missing, because its device is off or unplugged, does not start. About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.</li>
 <li>The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone.</li>
 <li>MIDI input opens a port only while a slot has the device assigned. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.</li>
 </ul>
@@ -4767,7 +4768,7 @@
 </tr>
 <tr>
 <td>A MIDI slot does not start under the legacy MIDI API</td>
-<td>Pick an <strong>Output Port</strong> on the slot's page. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
+<td>Pick an <strong>Output Port</strong> on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
 </tr>
 <tr>
 <td>A MIDI keyboard does nothing under the legacy MIDI API</td>

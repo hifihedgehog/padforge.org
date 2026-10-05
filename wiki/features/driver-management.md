@@ -217,6 +217,7 @@ The legacy API cannot create a port for a MIDI slot, so each slot sends to a por
 - While the legacy API runs, the slot's page shows **Output Port** beside its MIDI settings. Pick the port there. A slot set to **None** does not start until a port is picked.
 - A port another program holds cannot be opened, and the slot reports it. Close that program, then turn the slot off and on.
 - Picking another port moves the slot there.
+- A slot whose port is missing, because its device is off or unplugged, does not start. About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.
 - The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone.
 - MIDI input opens a port only while a slot has the device assigned. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.
 
@@ -330,7 +331,7 @@ The slot guards read your saved slots, not what the engine is running, so they h
 |---|---|
 | Xbox / PlayStation / Nintendo / Extended slot picked but no virtual controller appears | HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under **Install issues** above. |
 | Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)" | No MIDI API started. The Windows MIDI Services card on **Settings** says why. |
-| A MIDI slot does not start under the legacy MIDI API | Pick an **Output Port** on the slot's page. A port another program holds cannot be opened: close that program, then turn the slot off and on. |
+| A MIDI slot does not start under the legacy MIDI API | Pick an **Output Port** on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. A port another program holds cannot be opened: close that program, then turn the slot off and on. |
 | A MIDI keyboard does nothing under the legacy MIDI API | Assign it to a slot on the [Devices](devices.md) page. The legacy API opens a MIDI input port only while a slot has it. |
 | PadForge disappears when I uninstall the Windows MIDI Services runtime | Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall. |
 | UAC prompt on every launch | Expected. PadForge needs administrator rights to drive its drivers, so Windows asks at startup. Everything after that runs without a second prompt. |
