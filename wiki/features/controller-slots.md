@@ -156,7 +156,7 @@ Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drive
 
 The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Controllers](vr-controllers.md).
 
-> **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs Windows MIDI Services installed, and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
+> **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs Windows MIDI Services, and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
 
 ---
 

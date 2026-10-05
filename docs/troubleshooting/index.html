@@ -4775,7 +4775,7 @@
 <p><strong>A slot is created and a device assigned, but games do not detect the virtual controller.</strong></p>
 <ol>
 <li>Xbox, PlayStation, Nintendo, and Extended output need <strong>HIDMaestro</strong>, which installs itself the first time a slot creates a virtual controller. There is nothing to install from <a href="../features/settings/">Settings</a>. If no virtual controller appears, restart PadForge so the engine tries the setup again.</li>
-<li>Install <strong>Windows MIDI Services</strong> from <a href="../features/settings/">Settings</a> for MIDI output.</li>
+<li>MIDI output needs <strong>Windows MIDI Services</strong>. Its card on <a href="../features/settings/">Settings</a> says whether this PC has it.</li>
 <li>Confirm the slot is enabled. The flame on its Dashboard card should be lit, ember while its virtual controller runs. An outline flame means the slot is disabled.</li>
 <li>Confirm the engine is running. The Dashboard shows <strong>Forging</strong> beside a lit ember flame. <strong>Idle</strong> means the engine runs with no slot active, and <strong>Stopped</strong> means it is off.</li>
 <li>Restart the game. Some games only scan for controllers at startup.</li>
@@ -4871,11 +4871,10 @@
 <h2 id="midi-not-available">MIDI Not Available<a class="headerlink" href="#midi-not-available" title="Permanent link">&para;</a></h2>
 <p><strong>The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".</strong></p>
 <ol>
-<li>Install <strong>Windows MIDI Services</strong> from <a href="../features/settings/">Settings</a>.</li>
-<li>Windows MIDI Services requires <strong>Windows 11 24H2 (build 26100) or later</strong>. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.</li>
-<li>Restart PadForge after installing.</li>
-<li>Verify the Windows MIDI service (<code>midisrv</code>) is running (Win+R &gt; <code>services.msc</code>).</li>
-<li>"Failed to create MIDI session" means the SDK initialized but cannot reach the service. Restart the service or reboot.</li>
+<li>Open <a href="../features/settings/">Settings</a> and read the <strong>Windows MIDI Services</strong> card.</li>
+<li><strong>Not Available</strong> means this PC has neither API. Windows MIDI Services is part of <strong>Windows 11 25H2 from the late-November 2026 update</strong>. On Windows 11 24H2 it works only where Microsoft's older runtime is already installed, and Microsoft no longer offers that download. Windows 10 and earlier Windows 11 builds have none.</li>
+<li><strong>Not Running</strong> means the API is here but its service did not start. Windows keeps the service off in Legacy API mode (Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a>). A disabled <code>midisrv</code> service (Win+R &gt; <code>services.msc</code>) reads the same way. Restart PadForge after fixing either.</li>
+<li>"Failed to create MIDI session" means the API started but cannot reach the service. Restart the service or reboot.</li>
 </ol>
 <hr />
 <h2 id="no-midi-output">No MIDI Output<a class="headerlink" href="#no-midi-output" title="Permanent link">&para;</a></h2>
@@ -5371,7 +5370,7 @@
 </tr>
 <tr>
 <td>No virtual controller in game</td>
-<td>HIDMaestro installs itself. Restart PadForge. MIDI needs MIDI Services</td>
+<td>HIDMaestro installs itself. Restart PadForge. MIDI needs Windows MIDI Services</td>
 </tr>
 <tr>
 <td>Nintendo slot not in game</td>
@@ -5419,7 +5418,7 @@
 </tr>
 <tr>
 <td>MIDI button dimmed</td>
-<td>Install Windows MIDI Services (Win 11 24H2 or later)</td>
+<td>Read the Windows MIDI Services card on Settings. Windows 11 25H2 carries it from the late-November 2026 update</td>
 </tr>
 <tr>
 <td>No MIDI output</td>

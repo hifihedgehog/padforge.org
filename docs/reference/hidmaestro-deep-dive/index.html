@@ -3866,7 +3866,7 @@
 <tr>
 <td>v1.7.1 (HM#58)</td>
 <td>The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and <code>SubmitRawExtendedReport</code> is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing</td>
-<td><code>HMaestroVirtualController.cs:562</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:299</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
+<td><code>HMaestroVirtualController.cs:562</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:323</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
 </tr>
 <tr>
 <td>v1.7.2 (HM#59)</td>
@@ -3876,7 +3876,7 @@
 <tr>
 <td>v1.7.3</td>
 <td>A version resource (company, product, description) on each native binary</td>
-<td><code>PadForge.App.csproj:280</code></td>
+<td><code>PadForge.App.csproj:304</code></td>
 </tr>
 <tr>
 <td>v1.8.0 (HM#60)</td>
@@ -3886,12 +3886,12 @@
 <tr>
 <td>v1.8.1 (HM#61)</td>
 <td>The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full"</td>
-<td><code>PadForge.App.csproj:270</code>, <code>InputManager.Step5.VirtualDevices.cs:2354</code></td>
+<td><code>PadForge.App.csproj:294</code>, <code>InputManager.Step5.VirtualDevices.cs:2354</code></td>
 </tr>
 <tr>
 <td>v1.9.0</td>
 <td>An ARM64 driver payload embedded beside the x64 one, and the USB/IP transport pinned to usbip-win2 0.9.7.5, the last release with an ARM64 build</td>
-<td><code>PadForge.App.csproj:268</code></td>
+<td><code>PadForge.App.csproj:292</code></td>
 </tr>
 <tr>
 <td>v1.9.1 (HM#63, HM#62)</td>
@@ -3901,7 +3901,7 @@
 <tr>
 <td>v1.9.2</td>
 <td>The USB/IP transport moved to usbip-win2 0.9.8.1, with the fix for the attach work item that blocked driver unload, and a client that speaks the 0.9.7.x, 0.9.8.0 and 0.9.8.1 request formats</td>
-<td><code>PadForge.App.csproj:248</code></td>
+<td><code>PadForge.App.csproj:272</code></td>
 </tr>
 <tr>
 <td>v1.10.0 (HM#64)</td>
@@ -3944,7 +3944,7 @@
 <tr>
 <td>MIDI (<code>Midi = 3</code>)</td>
 <td>Windows MIDI Services</td>
-<td>NOT HM. Virtual MIDI endpoint via the Windows MIDI Services SDK.</td>
+<td>NOT HM. Virtual MIDI endpoint through the in-box <code>Windows.Devices.Midi2</code> API, or the older runtime where it is installed.</td>
 </tr>
 <tr>
 <td>KeyboardMouse (<code>KeyboardMouse = 4</code>)</td>
@@ -4147,7 +4147,7 @@
 <ul>
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: IVirtualController surface, per-category implementations.</li>
 <li><a href="../input-pipeline/">Input Pipeline</a>: Step 5 in the broader 6-step polling loop context.</li>
-<li><a href="../../features/driver-management/">Driver Management</a>: install + status flow for HIDMaestro plus install / uninstall flow for HidHide and Windows MIDI Services.</li>
+<li><a href="../../features/driver-management/">Driver Management</a>: install + status flow for HIDMaestro, install / uninstall flow for HidHide, and where Windows MIDI Services comes from.</li>
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: the embedded installer and INF / pnputil mechanics.</li>
 <li><a href="../../features/force-feedback/">Force Feedback</a>: user-facing rumble/FFB tuning controls.</li>
 </ul>

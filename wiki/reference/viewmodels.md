@@ -193,7 +193,7 @@ HIDMaestro ships inside the executable as a managed SDK, so it never had an inst
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsHidHideInstalled` | `bool` | HidHide installed. Written by the status refresh. No Dashboard surface currently reads it. |
-| `IsMidiServicesInstalled` | `bool` | Windows MIDI Services installed. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_RequiresMidiServices` tooltip when false. |
+| `IsMidiAvailable` | `bool` | A Windows MIDI Services API is available, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_RequiresMidiServices` tooltip when false. |
 | `IsSteamVrInstalled` | `bool` | SteamVR installed, which gates the VR slot type (#49). A slot card's VR type button shows a "no" cursor and the `Main_VR_RequiresSteamVR` tooltip when false. The tiered SteamVR status row (#287) lives on the Settings card, which reads the live statics itself. |
 
 ### DSU Motion Server
@@ -476,18 +476,22 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 
 ### Driver Status: Windows MIDI Services
 
+There is nothing to install: the API is part of Windows 11 25H2 from the late-November 2026 update. The card names the API in use or what the PC lacks, and offers to remove Microsoft's older runtime. MainWindow's status refresh writes the inputs from `MidiApiSelection.ForCard` and the runtime's uninstall entry.
+
 | Property | Type | Description |
 |----------|------|-------------|
-| `IsMidiServicesInstalled` | `bool` | Windows MIDI Services available. |
-| `MidiServicesStatusText` | `string` | Computed: `"Installed"` / `"Not Installed"`. |
-| `MidiServicesVersion` | `string` | MIDI Services version. |
-| `IsMidiOsSupported` | `bool` | Static: `true` if OS build >= 26100 (Win11 24H2). |
-| `MidiOsSupported` | `bool` | Instance forwarder over the static above. A XAML `Binding` path resolves against the DataContext instance and cannot reach a static member, so SettingsPage binds this one. Never raises `PropertyChanged` because the OS build cannot change while the app runs. |
+| `ActiveMidiApi` | `MidiApiKind` (internal) | `InBox`, `AppSdk` or `None`. Notifies `IsMidiAvailable` and the card text. |
+| `IsMidiRuntimeInstalled` | `bool` | Microsoft's older runtime is installed. Shows the Uninstall button. |
+| `MidiRuntimeVersion` | `string` | The older runtime's version, from its uninstall entry. |
+| `MidiApiNotStarted` | `bool` | An API is present but its service did not start (Legacy API mode, or a disabled or stuck service). |
+| `IsMidiAvailable` | `bool` | Computed: `ActiveMidiApi != None`. Lights the card's flame. |
+| `MidiServicesStatusText` | `string` | Computed: `Settings_MidiStatusInBox` ("Built into Windows"), `Settings_MidiStatusRuntime` ("Older Runtime"), `Settings_MidiStatusNotRunning` ("Not Running") or `Settings_MidiStatusUnavailable` ("Not Available"). |
+| `MidiServicesDetailText` | `string` | Computed: under the in-box API, empty or `Settings_MidiOlderRuntime_Format` when the older runtime is also installed. Under the older runtime, its version. Otherwise `Settings_MidiNotRunning` or `Settings_MidiNeedsUpdate`. |
+| `MidiDetailIsVersion` | `bool` | Computed: the detail line is the runtime's version, which the card sets in the telemetry face. |
 
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
-| `InstallMidiServicesCommand` | `!IsMidiServicesInstalled && IsMidiOsSupported` | Raises `InstallMidiServicesRequested`. |
-| `UninstallMidiServicesCommand` | `IsMidiServicesInstalled && !HasAnyMidiSlots()` | Raises `UninstallMidiServicesRequested`. |
+| `UninstallMidiServicesCommand` | `IsMidiRuntimeInstalled && !(ActiveMidiApi == AppSdk && HasAnyMidiSlots())` | Raises `UninstallMidiServicesRequested`. With the in-box API in use, MIDI slots do not hold the older runtime. |
 
 ### Driver Status: SteamVR (#49)
 
@@ -519,7 +523,7 @@ The VR slot type needs SteamVR present. PadForge can install it Steam-free throu
 
 | Member | Type | Description |
 |--------|------|-------------|
-| `HasAnyMidiSlots` | `Func<bool>` | Set by MainWindow. True if any slot uses MIDI. Blocks `UninstallMidiServicesCommand`. |
+| `HasAnyMidiSlots` | `Func<bool>` | Set by MainWindow. True if any slot uses MIDI. Blocks `UninstallMidiServicesCommand` while the older runtime is the API in use. |
 | `HasAnyVrSlots` | `Func<bool>` | Set by MainWindow. True if any created slot is a VR slot. Blocks `UninstallSteamVrCommand`. |
 | `HasAnyHidHideDevices` | `Func<bool>` | Set by MainWindow. True if any device has HidHide enabled. Blocks `UninstallHidHideCommand`. |
 | `RefreshDriverGuards()` | method | Re-evaluates uninstall `CanExecute` for HidHide, MIDI Services, and SteamVR. Call after slot creation/deletion/type changes. |

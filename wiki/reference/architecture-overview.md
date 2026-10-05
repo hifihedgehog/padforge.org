@@ -133,7 +133,7 @@ PadForge.App/
   Common/
     ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M)
     CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
-    DriverInstaller.cs                # HidHide / Windows MIDI Services install, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
+    DriverInstaller.cs                # HidHide install, older Windows MIDI Services runtime uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
     HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
     MarqueeBehavior.cs                # WPF attached behavior for scrolling/marquee text animation
     MappingDisplayResolver.cs         # Descriptor → grid display label, including the contextual aux-motion labels
@@ -188,6 +188,8 @@ PadForge.App/
       RumbleAudioService.cs           # Rumble-to-audio (Bass Shakers) renderer: endpoint-keyed WASAPI players fed from the poll loop (#236)
       RumbleAudioSampleProvider.cs    # Allocation-free sine synthesizer for one rumble-to-audio endpoint (#236)
       MidiVirtualController.cs        # IVirtualController for Windows MIDI Services
+      MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the older App SDK runtime
+      MidiBackend*.cs                 # IMidiBackend and its two implementations, one per API
       KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
       InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
       MirrorDsp.cs                    # Controller-audio DSP chain for the DualSense speaker/jack mirror: crossfeed, parametric EQ, limiter, AutoEq import (#347)
@@ -1050,7 +1052,8 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 | **CommunityToolkit.Mvvm** | 8.2.2 | App | MVVM: `ObservableObject`, `SetProperty`, `RelayCommand` |
 | **Concentus** | 2.2.2 | App | Pure-C# Opus encoder for the DualSense Bluetooth speaker |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | App | 3D viewport for controller model visualization |
-| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Windows MIDI Services SDK for virtual MIDI devices |
+| **Microsoft.Windows.CsWinRT** | 2.2.0 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
+| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the older Windows MIDI Services runtime, for PCs that still have it |
 | **NAudio.Wasapi** | 2.2.1 | App | WASAPI loopback capture for bass-driven rumble, plus the WASAPI capture and render behind Bass Shakers, macro sounds, controller audio, haptic tones, and voice macros |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) |
 | **System.Management** | 10.0.11 | App | ACPI-WMI event subscriptions for handheld hidden buttons and their learner (#343) |

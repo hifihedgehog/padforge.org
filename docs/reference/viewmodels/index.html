@@ -9037,9 +9037,9 @@
 <td>HidHide installed. Written by the status refresh. No Dashboard surface currently reads it.</td>
 </tr>
 <tr>
-<td><code>IsMidiServicesInstalled</code></td>
+<td><code>IsMidiAvailable</code></td>
 <td><code>bool</code></td>
-<td>Windows MIDI Services installed. A slot card's MIDI type button shows a "no" cursor and the <code>Main_MIDI_RequiresMidiServices</code> tooltip when false.</td>
+<td>A Windows MIDI Services API is available, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the <code>Main_MIDI_RequiresMidiServices</code> tooltip when false.</td>
 </tr>
 <tr>
 <td><code>IsSteamVrInstalled</code></td>
@@ -10103,6 +10103,7 @@
 </tbody>
 </table>
 <h3 id="driver-status-windows-midi-services">Driver Status: Windows MIDI Services<a class="headerlink" href="#driver-status-windows-midi-services" title="Permanent link">&para;</a></h3>
+<p>There is nothing to install: the API is part of Windows 11 25H2 from the late-November 2026 update. The card names the API in use or what the PC lacks, and offers to remove Microsoft's older runtime. MainWindow's status refresh writes the inputs from <code>MidiApiSelection.ForCard</code> and the runtime's uninstall entry.</p>
 <table>
 <thead>
 <tr>
@@ -10113,29 +10114,44 @@
 </thead>
 <tbody>
 <tr>
-<td><code>IsMidiServicesInstalled</code></td>
+<td><code>ActiveMidiApi</code></td>
+<td><code>MidiApiKind</code> (internal)</td>
+<td><code>InBox</code>, <code>AppSdk</code> or <code>None</code>. Notifies <code>IsMidiAvailable</code> and the card text.</td>
+</tr>
+<tr>
+<td><code>IsMidiRuntimeInstalled</code></td>
 <td><code>bool</code></td>
-<td>Windows MIDI Services available.</td>
+<td>Microsoft's older runtime is installed. Shows the Uninstall button.</td>
+</tr>
+<tr>
+<td><code>MidiRuntimeVersion</code></td>
+<td><code>string</code></td>
+<td>The older runtime's version, from its uninstall entry.</td>
+</tr>
+<tr>
+<td><code>MidiApiNotStarted</code></td>
+<td><code>bool</code></td>
+<td>An API is present but its service did not start (Legacy API mode, or a disabled or stuck service).</td>
+</tr>
+<tr>
+<td><code>IsMidiAvailable</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>ActiveMidiApi != None</code>. Lights the card's flame.</td>
 </tr>
 <tr>
 <td><code>MidiServicesStatusText</code></td>
 <td><code>string</code></td>
-<td>Computed: <code>"Installed"</code> / <code>"Not Installed"</code>.</td>
+<td>Computed: <code>Settings_MidiStatusInBox</code> ("Built into Windows"), <code>Settings_MidiStatusRuntime</code> ("Older Runtime"), <code>Settings_MidiStatusNotRunning</code> ("Not Running") or <code>Settings_MidiStatusUnavailable</code> ("Not Available").</td>
 </tr>
 <tr>
-<td><code>MidiServicesVersion</code></td>
+<td><code>MidiServicesDetailText</code></td>
 <td><code>string</code></td>
-<td>MIDI Services version.</td>
+<td>Computed: under the in-box API, empty or <code>Settings_MidiOlderRuntime_Format</code> when the older runtime is also installed. Under the older runtime, its version. Otherwise <code>Settings_MidiNotRunning</code> or <code>Settings_MidiNeedsUpdate</code>.</td>
 </tr>
 <tr>
-<td><code>IsMidiOsSupported</code></td>
+<td><code>MidiDetailIsVersion</code></td>
 <td><code>bool</code></td>
-<td>Static: <code>true</code> if OS build &gt;= 26100 (Win11 24H2).</td>
-</tr>
-<tr>
-<td><code>MidiOsSupported</code></td>
-<td><code>bool</code></td>
-<td>Instance forwarder over the static above. A XAML <code>Binding</code> path resolves against the DataContext instance and cannot reach a static member, so SettingsPage binds this one. Never raises <code>PropertyChanged</code> because the OS build cannot change while the app runs.</td>
+<td>Computed: the detail line is the runtime's version, which the card sets in the telemetry face.</td>
 </tr>
 </tbody>
 </table>
@@ -10149,14 +10165,9 @@
 </thead>
 <tbody>
 <tr>
-<td><code>InstallMidiServicesCommand</code></td>
-<td><code>!IsMidiServicesInstalled &amp;&amp; IsMidiOsSupported</code></td>
-<td>Raises <code>InstallMidiServicesRequested</code>.</td>
-</tr>
-<tr>
 <td><code>UninstallMidiServicesCommand</code></td>
-<td><code>IsMidiServicesInstalled &amp;&amp; !HasAnyMidiSlots()</code></td>
-<td>Raises <code>UninstallMidiServicesRequested</code>.</td>
+<td><code>IsMidiRuntimeInstalled &amp;&amp; !(ActiveMidiApi == AppSdk &amp;&amp; HasAnyMidiSlots())</code></td>
+<td>Raises <code>UninstallMidiServicesRequested</code>. With the in-box API in use, MIDI slots do not hold the older runtime.</td>
 </tr>
 </tbody>
 </table>
@@ -10264,7 +10275,7 @@
 <tr>
 <td><code>HasAnyMidiSlots</code></td>
 <td><code>Func&lt;bool&gt;</code></td>
-<td>Set by MainWindow. True if any slot uses MIDI. Blocks <code>UninstallMidiServicesCommand</code>.</td>
+<td>Set by MainWindow. True if any slot uses MIDI. Blocks <code>UninstallMidiServicesCommand</code> while the older runtime is the API in use.</td>
 </tr>
 <tr>
 <td><code>HasAnyVrSlots</code></td>

@@ -6,15 +6,16 @@ PadForge v5 deals with six drivers/services and a legacy v2 cleanup path:
 
 1. **HIDMaestro** is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types. It is **not** installed by `DriverInstaller`. The driver binaries, INF, profiles, and signing tools all ship inside `HIDMaestro.Core.dll`. `HMContext.InstallDriver()` (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by `HMVR.EnsureDriverRegistered()` rather than by `InstallDriver()`. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.
 2. **HidHide** is the kernel-mode driver that hides physical controllers from games. On an x64 machine it is an embedded WiX Burn bootstrapper EXE, installed and removed through `msiexec`. On an ARM64 machine it is upstream's Microsoft-signed ARM64 driver package, installed and removed by `HidHideArm64Installer` with upstream's own tool, nefcon.
-3. **Windows MIDI Services** is downloaded on demand from GitHub releases (the installer is ~210 MB, too large to embed) and run with `/install /quiet /norestart`.
+3. **Windows MIDI Services** is part of Windows 11 25H2 from the late-November 2026 update, and PadForge installs nothing for it. Microsoft removed the separate runtime's installers on 2026-10-01, so `DriverInstaller` only detects that older runtime and uninstalls it. `MidiApiSelection` picks which API runs.
 4. **SteamVR** is installed without the Steam client, by downloading Valve's `steamcmd` and running the anonymous `app_update` for app 250820 (issue #49). Uninstall is offered only for the install PadForge itself created.
 5. **The DualShock 3 Bluetooth stack** (BthPS3 + BthPS3PSM) ships as embedded driver packages and is installed from `Ds3DriverInstaller`, which also binds a docked DS3 to inbox WinUSB so the sixpair reports can be sent.
 6. **Controllers Windows leaves without a driver** get inbox WinUSB, or Windows' own Xbox 360 driver xusb22, from `VendorUsbDriverInstaller`, each through a package that names one ID and is signed on this machine: automatically for most, and only on request for four devices whose switch costs Windows something.
 7. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
 
-Driver-side code lives in seven files:
+Driver-side code lives in eight files:
 
-- **`PadForge.App/Common/DriverInstaller.cs`** (`PadForge.Common`) handles HidHide, Windows MIDI Services, and Steam-free SteamVR install/uninstall, plus the legacy v2 ViGEmBus and vJoy uninstall paths.
+- **`PadForge.App/Common/DriverInstaller.cs`** (`PadForge.Common`) handles HidHide and Steam-free SteamVR install/uninstall, detection and uninstall of the older Windows MIDI Services runtime, plus the legacy v2 ViGEmBus and vJoy uninstall paths.
+- **`PadForge.App/Common/Input/MidiApiSelection.cs`** (`PadForge.Common.Input`) picks the Windows MIDI Services API: the in-box one where Windows registers it, else the older runtime where it is installed.
 - **`PadForge.App/Common/HidHideArm64Installer.cs`** (`PadForge.Common`) installs and removes HidHide on an ARM64 machine, and carries the startup check that stands in for HidHide's watchdog service there.
 - **`PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs`** owns `EnsureHMaestroContext()`, which calls into the HM SDK to register the HIDMaestro driver with Windows.
 - **`PadForge.App/App.xaml.cs`** owns the launch-time HIDMaestro orphan sweep and the OEM-name orphan recovery, both before any virtual is created.
@@ -53,7 +54,7 @@ graph TD
     subgraph DriverInstaller["DriverInstaller (static class)"]
         direction TB
         HH["HidHide<br/>x64: embedded EXE bootstrapper<br/>ARM64: driver package and nefcon"]
-        MS["Windows MIDI Services<br/>GitHub releases API download"]
+        MS["Older Windows MIDI Services runtime<br/>detect and uninstall only"]
         SV["SteamVR<br/>steamcmd, anonymous app 250820"]
         LC["Legacy v2 cleanup<br/>(detect + uninstall ViGEmBus, vJoy if present)"]
     end
@@ -72,7 +73,7 @@ graph TD
 
     HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(232 profiles bundled in the SDK,<br/>134 of them offered in PadForge)"]
     HH -->|"x64: HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi<br/>ARM64: nefconc install, then class filters"| HH_DRV["HidHide kernel driver"]
-    MS -->|"GitHub /releases -> SDK Runtime EXE for the machine (x64 or arm64) -> /install"| MS_SVC["Windows MIDI Services<br/>(Win11 24H2+)"]
+    MS -->|"UninstallString -> /uninstall /quiet"| MS_SVC["Windows MIDI Services Runtime and Tools<br/>(the in-box API needs no install)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
     BT -->|"Devcon.Install of the two INFs<br/>+ Bluetooth-class lower filter"| BT_DRV["BthPS3 profile driver<br/>+ BthPS3PSM filter"]
     WU -->|"Inf2Cat + signtool, then<br/>UpdateDriverForPlugAndPlayDevices"| WU_DEV["Docked DS3 on winusb.sys"]
@@ -110,7 +111,7 @@ The OpenXInput shim (`xinput1_4.dll` under `Resources/OpenXInput/x64/`, or `arm6
 | `Resources\OpenXInput\<arch>\xinput1_4.dll` | DLL (Content) | ~172 KB (arm64), ~180 KB (x64) | OpenXInput shim. **Not** an installer. Bundled into the single-file EXE via `IncludeNativeLibrariesForSelfExtract` and loaded via `SetDllDirectory` on the extract directory at runtime. |
 | `Resources\BthPS3\**\*.*` | INF + SYS + CAT | ~750 KB total | Nefarius BthPS3 (`BthPS3\`) and BthPS3PSM (`BthPS3PSM\`) driver packages, each with an `x64\` and an `ARM64\` binary under it since 4.5.1, plus `WinUSB\ds3_winusb.inf`. Each resource carries a `LogicalName` of `BthPS3.{RecursiveDir}{Filename}{Extension}`, which `Ds3DriverInstaller.ExtractDrivers()` maps straight back to a directory tree. |
 
-Windows MIDI Services is **not** embedded. It is downloaded on demand from `api.github.com/repos/microsoft/MIDI/releases` (~210 MB). The download path is ephemeral. Nothing is bundled with PadForge. SteamVR is not embedded either: `steamcmd.zip` comes from `steamcdn-a.akamaihd.net` at install time and the payload is several GB.
+Windows MIDI Services is **not** embedded, and nothing downloads it. The in-box API comes with Windows. PadForge carries only its metadata, `Resources\WinMD\Windows.Devices.Midi2.winmd`, which C#/WinRT reads at build time, and the `RefuseInBoxMidiBinaries` target refuses a publish that would carry Microsoft's `Windows.Devices.Midi2.dll`. SteamVR is not embedded either: `steamcmd.zip` comes from `steamcdn-a.akamaihd.net` at install time and the payload is several GB.
 
 No signed catalog ships for the DS3 WinUSB package. `ds3_winusb.inf` is the only file in `Resources\BthPS3\WinUSB\`, and `ds3_winusb.cat` is generated and signed on the machine that installs it. The two BthPS3 packages do ship with their vendor `.cat` files, which are Microsoft-signed already.
 
@@ -290,49 +291,37 @@ Install, removal and the startup check hold one lock, so the check cannot take o
 
 ## Windows MIDI Services
 
-The installer is ~210 MB so it is not embedded. It is downloaded from the GitHub API at install time.
+PadForge installs nothing for Windows MIDI Services. The API is part of Windows 11 25H2 from the late-November 2026 update. Microsoft removed the separate "Windows MIDI Services Runtime and Tools" installers from every `microsoft/MIDI` release on 2026-10-01, and PadForge's GitHub download went with them. What remains here serves PCs that still have that older runtime: choosing between it and the in-box API, finding it, and uninstalling it.
 
-### InstallMidiServicesAsync()
-
-```csharp
-public static async Task InstallMidiServicesAsync()
-```
-
-```mermaid
-flowchart TD
-    A[Create %TEMP%\PadForge_MidiServices\] --> B
-    B["HttpClient with UserAgent='PadForge'<br/>Timeout = 10 minutes"] --> C
-    C["GET https://api.github.com/repos/<br/>microsoft/MIDI/releases<br/>(full releases list, not /latest)"] --> D
-    D["FindMidiServicesDownloadUrl<br/>Parse JSON for the SDK.Runtime .exe<br/>built for this machine (x64 or arm64)"] --> E
-    E["Download installer (~210 MB)<br/>Stream to MidiServicesSdkRuntime.exe"] --> F
-    F["Run installer directly (no runas)<br/>/install /quiet /norestart<br/>Wait up to 5 minutes"] --> G
-    G["MidiVirtualController.ResetAvailability()<br/>Clear cached SDK check"] --> H
-    H[Cleanup temp directory]
-```
-
-**Why `/releases` not `/releases/latest`**: the `microsoft/MIDI` repo only publishes pre-releases. `/releases/latest` returns 404 without a stable release. `/releases` returns all of them, most recent first.
-
-**Why no `runas`**: PadForge is already elevated via `app.manifest`. Using `Verb = "runas"` when already elevated throws `Win32Exception` on some systems, so MIDI uses a direct `Process.Start`.
-
-**Post-install**: calls `MidiVirtualController.ResetAvailability()` so the cached SDK availability check re-evaluates.
-
-### FindMidiServicesDownloadUrl()
+### Choosing the API (MidiApiSelection)
 
 ```csharp
-private static async Task<string> FindMidiServicesDownloadUrl(HttpClient http)
+internal static MidiApiKind Choose(int osBuild, Func<int> inBoxActivationHr, Func<bool> appSdkRuntimeInstalled)
 ```
 
-Parses the GitHub releases JSON to find the SDK Runtime installer URL for this machine. The service installs for the machine, not the process, so `PlatformSupport.IsArm64Machine` picks the architecture token, `arm64` or `x64`, whichever build is running. Uses simple string search (no JSON library): finds `"browser_download_url"` occurrences, extracts URLs, matches on `"SDK.Runtime"` + `"-<arch>."` + `.exe` (case-insensitive). Returns the first match. Throws `InvalidOperationException` if none found.
+| Build | In-box activation | Older runtime installed | Result |
+|---|---|---|---|
+| 26200 or later | Succeeds | Any | `InBox` |
+| 26200 or later | `REGDB_E_CLASSNOTREG` | Yes | `AppSdk` |
+| 26200 or later | `REGDB_E_CLASSNOTREG` | No | `None` |
+| 26200 or later | Any other failure | Any | `None` |
+| 26100 to 26199 | Not tried | Yes | `AppSdk` |
+| 26100 to 26199 | Not tried | No | `None` |
+| Below 26100 | Not tried | Not asked | `None` |
 
-**Asset pattern**: `Windows.MIDI.Services.SDK.Runtime.and.Tools.*-<arch>.exe`, where `<arch>` is `x64` or `arm64`
+Each input is asked only when its gate admits it. An activation failure other than an unregistered class stops at `None`: the in-box API is present but broken, and swapping in the older runtime would hide that.
 
-### UninstallMidiServices()
+`ProbeInBoxActivation` calls `RoGetActivationFactory` for `Windows.Devices.Midi2.MidiApi` through combase directly, after `CoIncrementMTAUsage` keeps a multithreaded apartment alive for the process, and returns the HRESULT. It does not go through C#/WinRT, whose activation falls back to loading a DLL named after the namespace from the app folder and the normal search path when `RoGetActivationFactory` fails, which could pick up a preview copy another program left there. The engine runs the probe inside its bounded availability check ([`MidiVirtualController.IsAvailable`](../features/virtual-controllers.md#midivirtualcontroller)).
+
+The UI thread never activates anything. `PredictForUi` reads registration from `HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Devices.Midi2.MidiApi` and runs it through the same rule. `ForCard` keeps that prediction until the engine's probe has run, then takes the probe's answer. A failed probe for an API the registry says is present reads as not started, since the in-box `EnsureServiceAvailable` returns false in Legacy API mode.
+
+### UninstallMidiRuntime()
 
 ```csharp
-public static void UninstallMidiServices()
+public static bool UninstallMidiRuntime()
 ```
 
-Calls `FindMidiServicesUninstallString()` to retrieve the registry `UninstallString`. Parses quoted/unquoted exe paths and any preserved arguments, appends `/quiet /norestart MSIRESTARTMANAGERCONTROL=Disable REBOOT=ReallySuppress` (the two MSI properties keep Restart Manager from asking PadForge to close, so in-use files are scheduled for removal instead), launches hidden via `Process.Start`, waits up to 5 minutes. Throws `InvalidOperationException` if no uninstall entry is found.
+Calls `FindMidiServicesUninstallString()` to retrieve the registry `UninstallString`. Parses quoted/unquoted exe paths and any preserved arguments, appends `/quiet /norestart MSIRESTARTMANAGERCONTROL=Disable REBOOT=ReallySuppress` (the two MSI properties keep Restart Manager from asking PadForge to close, so in-use files are scheduled for removal instead), launches hidden via `Process.Start` with no `runas` (PadForge is already elevated), and waits up to 5 minutes. Returns false when the uninstaller is still running then. Throws `InvalidOperationException` if no uninstall entry is found. The in-box API is part of Windows and is never touched.
 
 ### FindMidiServicesUninstallString()
 
@@ -342,13 +331,18 @@ private static string FindMidiServicesUninstallString()
 
 Scans Uninstall keys (Registry64 + Registry32) for `DisplayName` exactly matching `"Windows MIDI Services Runtime and Tools"` (case-insensitive). Returns `UninstallString`, or `null` if not found.
 
-### IsMidiServicesInstalled()
+### IsMidiRuntimeInstalled() and GetMidiRuntimeVersion()
 
 ```csharp
-public static bool IsMidiServicesInstalled()
+public static bool IsMidiRuntimeInstalled()
+public static string GetMidiRuntimeVersion()
 ```
 
-Returns `true` if `FindMidiServicesUninstallString()` is non-null. Checks the registry for the WiX Burn bootstrapper entry, not SDK runtime availability (that lives in `MidiVirtualController.IsAvailable()`).
+`IsMidiRuntimeInstalled` returns `true` if `FindMidiServicesUninstallString()` is non-null. It reads the older runtime's WiX Burn bundle entry, which the in-box API never creates, and does not load the runtime (that would lock its DLLs in-process). Availability lives in `MidiVirtualController.IsAvailable()`. `GetMidiRuntimeVersion` reads `DisplayVersion` from the same entry for the card's version line.
+
+### The uninstall flow
+
+`MainWindow`'s uninstall handler releases the older runtime first unless the in-box API is the one in use: `InputService.ShutdownMidiInputs()`, then `MidiVirtualController.SuppressForUninstall()`. With the in-box API running, nothing in the process touches the runtime's files, and MIDI keeps running through the uninstall. When `UninstallMidiRuntime` returns true (the uninstaller exited) or throws (it never started), the operation lifts the latch off the UI thread: `ResetAvailability()`, then `ResumeMidiInputs()`. An uninstaller still running after its wait keeps the latch until restart, since a probe then could load the files it is deleting.
 
 ---
 
@@ -869,7 +863,7 @@ The Settings page disables uninstall buttons when a driver/service is in use, pr
 | Driver | Guard Condition | Delegate |
 |---|---|---|
 | HidHide | Any device has HidHide hiding enabled | `HasAnyHidHideDevices` |
-| MIDI Services | Any created slot uses MIDI | `HasAnyMidiSlots` |
+| MIDI Services (older runtime) | Any created slot uses MIDI while the older runtime is the API in use | `HasAnyMidiSlots` |
 | SteamVR | Any created slot is a VR slot | `HasAnyVrSlots` |
 
 Guards are `Func<bool>` delegates on `SettingsViewModel`, injected by `MainWindow.xaml.cs`. `RefreshDriverGuards()` re-evaluates `CanExecute` on those three uninstall commands after slot creation, deletion, or type changes.
@@ -895,7 +889,7 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 | PadForge launch | `app.manifest` `requireAdministrator` | 1 (per launch, if UAC is enabled) |
 | `HMContext.InstallDriver()` (HM driver register) | App already elevated | 0 |
 | HidHide install/uninstall | x64: `msiexec` via `RunElevated`. ARM64: `nefconc.exe` via `Process.Start`. The child inherits PadForge's elevation either way | 0 |
-| MIDI Services install | Direct `Process.Start` (no `runas` to avoid `Win32Exception` on already-elevated processes) | 0 |
+| Older MIDI runtime uninstall | Direct `Process.Start` of the bundle's cached uninstaller (no `runas`, which throws `Win32Exception` on some already-elevated systems) | 0 |
 | SteamVR install | Direct `Process.Start` of `steamcmd.exe`, plus an HKLM write for the path hint | 0 |
 | SteamVR uninstall | `Directory.Delete` plus an HKLM value delete, both in-process | 0 |
 | DS3 driver install (BthPS3, BthPS3PSM, WinUSB) | `Devcon.Install`, `UpdateDriverForPlugAndPlayDevices`, class-filter and `LocalMachine` certificate-store writes, all in-process | 0 |
@@ -911,13 +905,12 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 | Driver | Temp Directory |
 |---|---|
 | HidHide | `%TEMP%\PadForge_HidHide\<guid>\`, a folder per attempt |
-| MIDI Services | `%TEMP%\PadForge_MidiServices\` |
 | SteamVR (steamcmd staging) | `%TEMP%\PadForge_SteamCmd\` |
 | DS3 driver packages | `%TEMP%\PadForge\BthPS3Drivers\` |
 | Vendor USB packages | `%TEMP%\PadForge\VendorUsb\<ID>\`, where `<ID>` is the bound ID with every character other than a letter or digit turned into `_`, and `<ID>_xusb22\` for an xusb22 package |
 | Legacy vJoy uninstall script | `%TEMP%\PadForge_vjoy_uninstall.cmd` |
 
-The first three are cleaned up after each operation via `CleanupTempDir()`, and the vJoy script is removed with a direct `File.Delete()`.
+The first two are cleaned up after each operation via `CleanupTempDir()`, and the vJoy script is removed with a direct `File.Delete()`.
 
 `%TEMP%\PadForge\BthPS3Drivers\` is the exception: it persists for the process lifetime and beyond, cached in a static inside `ExtractDrivers()`. The staged INFs are re-read on every filter repair, every WinUSB bind, and every trust check, and the WinUSB catalog is regenerated in place each time. The vendor USB folders persist too, and each bind rewrites its INF and regenerates its catalog.
 
@@ -929,15 +922,15 @@ HIDMaestro has no temp directory because PadForge does not unpack any installer 
 
 ### General Strategy
 
-The temp-dir install flows (HidHide, MIDI Services, SteamVR) use `try/finally` so their temp directory is deleted. HidHide makes one exception: an installer that outlived its wait may still be reading its staging folder, so that folder is left for Windows to clear. The vJoy uninstall deletes its `.cmd` script with a best-effort `try/catch` after the script runs.
+The temp-dir install flows (HidHide, SteamVR) use `try/finally` so their temp directory is deleted. HidHide makes one exception: an installer that outlived its wait may still be reading its staging folder, so that folder is left for Windows to clear. The vJoy uninstall deletes its `.cmd` script with a best-effort `try/catch` after the script runs.
 
 ### Per-driver
 
 | Path | Error Strategy |
 |---|---|
-| HIDMaestro `InstallDriver()` | Caught in `EnsureHMaestroContext`. On failure, sets `_hmaestroContextFailed = true` (sticky until the engine stops, when `DisposeHMaestroContextOnShutdown()` clears it, so the next `Start()` tries again) and calls `RaiseError("Failed to initialize HIDMaestro.", ex)`. The engine continues running for KB+M, VR, and (if installed) MIDI categories. HM-backed slot creation is gated on the context being non-null. |
+| HIDMaestro `InstallDriver()` | Caught in `EnsureHMaestroContext`. On failure, sets `_hmaestroContextFailed = true` (sticky until the engine stops, when `DisposeHMaestroContextOnShutdown()` clears it, so the next `Start()` tries again) and calls `RaiseError("Failed to initialize HIDMaestro.", ex)`. The engine continues running for KB+M, VR, and (when available) MIDI categories. HM-backed slot creation is gated on the context being non-null. |
 | HidHide install/uninstall | On x64 the MSI handles its own rollback. On ARM64 a removal that stops part way tries to put its class filters back. Either way an exit code or a timeout arrives as `InstallerFailedException`, which `MainWindow.DescribeDriverFailure` words in the UI language inside the "Driver operation failed" status line. |
-| MIDI Services | WiX Burn bootstrapper handles rollback. PadForge surfaces no specific error UI. HTTP and process timeouts both throw. |
+| Older MIDI runtime uninstall | The WiX Burn bootstrapper handles rollback. A missing uninstall entry throws `InvalidOperationException`, shown in the "Driver operation failed" status line. An uninstaller still running after five minutes returns false, and MIDI stays released until restart. |
 | SteamVR install | No rollback. The install is verdicted on `vrpathreg.exe` rather than on exit codes, retried up to three times, and throws `InvalidOperationException` carrying the tail of `steamcmd`'s output when the payload never lands. A partial payload is left in place, since the next attempt resumes it. Temp staging is still cleaned in `finally`. |
 | SteamVR uninstall | Three refusals before anything is deleted: no owned install, `vrserver` running, recorded path is a drive root. Past those, `Directory.Delete` is not undoable, so the method proves the result instead: it unloads the cached `openvr_api.dll`, retries the delete ten times at 300 ms against the asynchronous lock release, and throws `IOException` when the directory survives. |
 | DS3 driver install | `EnsureInstalled` returns `false` rather than throwing, and every failure mode logs its own cause. Partial states are repairable rather than rolled back: `HasOrphanedBthPs3Key()` clears the service shell an interrupted install leaves, and `RepairPsmFilter` re-runs the filter half when its control device is missing. |

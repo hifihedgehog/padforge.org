@@ -41,7 +41,7 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 **A slot is created and a device assigned, but games do not detect the virtual controller.**
 
 1. Xbox, PlayStation, Nintendo, and Extended output need **HIDMaestro**, which installs itself the first time a slot creates a virtual controller. There is nothing to install from [Settings](features/settings.md). If no virtual controller appears, restart PadForge so the engine tries the setup again.
-2. Install **Windows MIDI Services** from [Settings](features/settings.md) for MIDI output.
+2. MIDI output needs **Windows MIDI Services**. Its card on [Settings](features/settings.md) says whether this PC has it.
 3. Confirm the slot is enabled. The flame on its Dashboard card should be lit, ember while its virtual controller runs. An outline flame means the slot is disabled.
 4. Confirm the engine is running. The Dashboard shows **Forging** beside a lit ember flame. **Idle** means the engine runs with no slot active, and **Stopped** means it is off.
 5. Restart the game. Some games only scan for controllers at startup.
@@ -154,11 +154,10 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 **The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".**
 
-1. Install **Windows MIDI Services** from [Settings](features/settings.md).
-2. Windows MIDI Services requires **Windows 11 24H2 (build 26100) or later**. Earlier Windows 11 builds and any Windows 10 build are unsupported by Microsoft's SDK.
-3. Restart PadForge after installing.
-4. Verify the Windows MIDI service (`midisrv`) is running (Win+R > `services.msc`).
-5. "Failed to create MIDI session" means the SDK initialized but cannot reach the service. Restart the service or reboot.
+1. Open [Settings](features/settings.md) and read the **Windows MIDI Services** card.
+2. **Not Available** means this PC has neither API. Windows MIDI Services is part of **Windows 11 25H2 from the late-November 2026 update**. On Windows 11 24H2 it works only where Microsoft's older runtime is already installed, and Microsoft no longer offers that download. Windows 10 and earlier Windows 11 builds have none.
+3. **Not Running** means the API is here but its service did not start. Windows keeps the service off in Legacy API mode (Microsoft's [How to change the API mode](https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/)). A disabled `midisrv` service (Win+R > `services.msc`) reads the same way. Restart PadForge after fixing either.
+4. "Failed to create MIDI session" means the API started but cannot reach the service. Restart the service or reboot.
 
 ---
 
@@ -743,7 +742,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 |---|---|
 | No devices | Check USB, cable, Device Manager |
 | Detected but no mapping | Assign to slot, check source dropdown |
-| No virtual controller in game | HIDMaestro installs itself. Restart PadForge. MIDI needs MIDI Services |
+| No virtual controller in game | HIDMaestro installs itself. Restart PadForge. MIDI needs Windows MIDI Services |
 | Nintendo slot not in game | XInput-only games need an Xbox slot |
 | Double input | Install HidHide, enable "Hide Devices from Games" |
 | BLE controller not hidden | Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings |
@@ -755,7 +754,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
 | Extended controller not in joy.cpl | Accept UAC, create an Extended slot, restart PadForge |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
-| MIDI button dimmed | Install Windows MIDI Services (Win 11 24H2 or later) |
+| MIDI button dimmed | Read the Windows MIDI Services card on Settings. Windows 11 25H2 carries it from the late-November 2026 update |
 | No MIDI output | Select "PadForge MIDI N" in DAW input |
 | No motion in emulator | Enable DSU server, match port, use 127.0.0.1 |
 | DSU port in use | Close conflicting app or change port |

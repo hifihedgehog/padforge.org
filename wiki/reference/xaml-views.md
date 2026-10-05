@@ -146,7 +146,7 @@ Drag devices from the Devices page to a sidebar controller card:
 | MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` (16) |
 | VR | `AddVrBtn` | `F119` glyph | `SettingsManager.MaxVrSlots` (1) |
 
-The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires Windows MIDI Services (`DriverInstaller.IsMidiServicesInstalled()`) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
+The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires a Windows MIDI Services API (`SettingsViewModel.IsMidiAvailable`, the Settings card's cached answer) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
 
 ### Status Bar
 
@@ -162,7 +162,7 @@ Bottom `Border` (`StatusBarBorder`), five columns:
 Semi-transparent overlay during driver install/uninstall:
 - `ProgressRing` spinner + text message (`DriverOverlayText`).
 - Blocks all UI (`Grid.RowSpan="3"`, `Panel.ZIndex="1000"`).
-- Shown and hidden by `RunDriverOperationAsync()`, and directly by the Windows MIDI Services and SteamVR install handlers.
+- Shown and hidden by `RunDriverOperationAsync()`, and directly by the SteamVR install handler.
 
 ### Full-Window Overlays
 
@@ -1466,8 +1466,9 @@ ScrollViewer (Padding="24,0")
       │      buttons, because HIDMaestro is embedded in the binary)
       ├─ Windows MIDI Services card
       │   ├─ Icon E8D6 + title + description
-      │   ├─ Status: flame + MidiServicesStatusText + MidiServicesVersion
-      │   └─ Install/Uninstall buttons (Install disabled tooltip when MidiOsSupported=False)
+      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
+      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
+      │   └─ Uninstall button (shown while IsMidiRuntimeInstalled, and no Install button)
       ├─ SteamVR card (#49)
       │   ├─ Icon F119 + title + description
       │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
@@ -1524,7 +1525,8 @@ ScrollViewer (Padding="24,0")
 | `HidHideWhitelistPaths` | Collection | Whitelist ListBox items |
 | `SelectedWhitelistPath` | object | Selected whitelist item |
 | `AddWhitelistPathCommand` / `RemoveWhitelistPathCommand` | ICommand | Whitelist management |
-| `IsMidiServicesInstalled` / `MidiOsSupported` | bool | MIDI Services status. Controls Install button visibility and disabled-tooltip. `MidiOsSupported` is the instance forwarder of the static `IsMidiOsSupported`, which a Binding cannot reach |
+| `IsMidiAvailable` / `IsMidiRuntimeInstalled` / `MidiDetailIsVersion` | bool | Windows MIDI Services card: the flame, the Uninstall button's visibility, and the detail line's telemetry face |
+| `MidiServicesStatusText` / `MidiServicesDetailText` | string | The card's status line and the line under it |
 | `IsSteamVrInstalled` / `IsSteamVrOwned` / `SteamVrInstallDir` | bool, bool, string | SteamVR card status, whether PadForge created the Steam-free install, and its directory (#49) |
 | `SteamVrStatusText` / `ShowSteamVrUninstall` | string, bool | SteamVR status line, and the Uninstall gate (`IsSteamVrInstalled && IsSteamVrOwned`) |
 | `InstallSteamVrCommand` / `UninstallSteamVrCommand` | ICommand | SteamVR install/uninstall |
@@ -2309,7 +2311,7 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
 - [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by `HMaestroVirtualController`, VR by `HMaestroVRController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, and a VR button (`F119` glyph, AutomationId `AddVrBtn`, capacity via `MaxVrSlots` = 1) at the tail, the `VirtualControllerGroups.InOrder` visual order.
-- [Driver Installation Internals](driver-installation-internals.md): HidHide and Windows MIDI Services install/uninstall triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput's `xinput1_4.dll` unpacks into the single-file extraction directory under `%TEMP%\.net\PadForge`, which `App.OnStartup` adds to the DLL search path)
+- [Driver Installation Internals](driver-installation-internals.md): HidHide install/uninstall and the older Windows MIDI Services runtime's uninstall, triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput's `xinput1_4.dll` unpacks into the single-file extraction directory under `%TEMP%\.net\PadForge`, which `App.OnStartup` adds to the DLL search path)
 
 ---
 

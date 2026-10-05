@@ -30,7 +30,7 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 ### Windows on ARM (preliminary)
 
-Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and the Windows MIDI Services setup downloads the ARM64 installer. HidHide, Vosk and Elite paddles joined in 4.5.2.
+Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and Windows MIDI Services comes with Windows on ARM64 as it does on x64. HidHide, Vosk and Elite paddles joined in 4.5.2.
 
 A few features wait on their vendors, because an ARM64 program can load ARM64 libraries only:
 
@@ -80,7 +80,7 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 ## Optional add-ons
 
-Three optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled inside `PadForge.exe`: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. Windows MIDI Services and SteamVR download on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**.
+Two optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled inside `PadForge.exe`: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. SteamVR downloads on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**. Windows MIDI Services comes with Windows, and its card says whether this PC has it.
 
 One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.
 
@@ -93,7 +93,7 @@ Hides physical controllers from games so only the virtual ones are visible. Inst
 
 ### Windows MIDI Services
 
-Creates virtual MIDI endpoints for the MIDI virtual controller type. Install it if you want to send MIDI to DAWs, synthesizers, or VJ tools. Skip it if you do not need MIDI output. Requires Windows 11 24H2 (build 26100) or later. The Install button is disabled on older versions.
+Creates virtual MIDI endpoints for the MIDI virtual controller type and reads MIDI keyboards as inputs. It is part of Windows 11 25H2 from the late-November 2026 update, so there is nothing to install. On Windows 11 24H2, MIDI works only where Microsoft's older Windows MIDI Services runtime is already installed, and Microsoft no longer offers that download. See [Driver Management](../features/driver-management.md#windows-midi-services).
 
 ### SteamVR
 
@@ -111,7 +111,7 @@ PadForge bundles a build of [OpenXInput](https://github.com/hifihedgehog/OpenXin
 
 ## Administrator privileges
 
-PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic, with no in-app uninstall path), HidHide install / uninstall / whitelist edits, and Windows MIDI Services and SteamVR install / uninstall all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
+PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic, with no in-app uninstall path), HidHide install / uninstall / whitelist edits, SteamVR install / uninstall, and removing the older Windows MIDI Services runtime all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
 
 The UAC shield is on the EXE icon as a hint. PadForge prompts once per launch.
 
@@ -145,7 +145,7 @@ Version 4.5.2 and older have no updater. Download the new zip, close PadForge, a
 
 There is no installer, so removal is short.
 
-1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide, Windows MIDI Services, and SteamVR if you installed them. HIDMaestro has no Uninstall button and stays registered. Turn off **Start at Login** too if it is on, so Windows drops its logon task.
+1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers **Uninstall** only for Microsoft's older runtime, which other MIDI apps can use too, so remove it only if nothing else needs it. HIDMaestro has no Uninstall button and stays registered. Turn off **Start at Login** too if it is on, so Windows drops its logon task.
 2. Close PadForge.
 3. Delete the PadForge folder.
 

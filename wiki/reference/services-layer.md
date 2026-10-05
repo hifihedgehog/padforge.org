@@ -879,7 +879,8 @@ The profile-switch flyout is gated differently: `ShowProfileSwitchOverlay` runs 
 | `ClearGyroAutoCalibLatch` | `void ClearGyroAutoCalibLatch(Guid instanceGuid, int slot)` | Re-arms auto-calibration for a (device, slot) pair, clearing both the dedup latch and the retry-attempts ledger under `UserDevices.SyncRoot` |
 | `IsHmVcAt` | `bool IsHmVcAt(int padIndex)` | Whether the slot currently has an HM virtual controller |
 | `NoteManualProfileSwitch` | `void NoteManualProfileSwitch()` | Records the foreground-monitor override and releases an external control hold. Every manual switch lane calls it. See [The manual-switch funnel](#the-manual-switch-funnel) |
-| `ShutdownMidiInputs` | `void ShutdownMidiInputs()` | Tears down MIDI inputs before uninstalling Windows MIDI Services |
+| `ShutdownMidiInputs` | `void ShutdownMidiInputs()` | Tears down MIDI inputs before uninstalling the older Windows MIDI Services runtime |
+| `ResumeMidiInputs` | `void ResumeMidiInputs()` | Lifts that suppression once the uninstaller exits, so the next sweep enumerates through whichever API the next probe picks |
 | `PumpSdlEvents` | `void PumpSdlEvents()` | Pumps SDL's event queue on the UI thread for hot-plug (#116) |
 | `RescanWiiControllers` | `void RescanWiiControllers()` | Re-opens SDL's Wii hidapi devices after a pairing (#116) |
 | `SeedIdentityProtectionDisplay` | `void SeedIdentityProtectionDisplay()` | Reflects the persisted Remote Link identity-protection mode in the Dashboard Remote Link card dropdown, through `SettingsViewModel.SetIdentityProtectionModeSilently` so no change event re-fires. Must run after `SettingsService.Initialize()`, the only point at which `RemoteLink.IdentityProtection` holds the stored choice |

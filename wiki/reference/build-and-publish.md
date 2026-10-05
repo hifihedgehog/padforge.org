@@ -52,7 +52,7 @@ PadForge.sln
 ├── PadForge.NativeChecks/    Console helper (net10.0-windows) that PadForge.Tests runs in a child
 │                             process against the bundled x64 SDL3.dll
 │
-├── nuget-local/              Local NuGet source (MIDI Services SDK)
+├── nuget-local/              Local NuGet source (the older MIDI Services runtime's projection)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
 ├── .gitattributes             `* text=auto`: every text file is stored with LF
 │
@@ -83,7 +83,7 @@ Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule
 
 Minimum supported OS: Windows 10 1809 (build 17763), set via `SupportedOSPlatformVersion` in the App csproj.
 
-All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. The Windows MIDI Services SDK installer is fetched from GitHub releases on demand at runtime when the user clicks Install, not at build time.
+All native DLLs, the HidHide installer, and model assets are checked into the repository. The build downloads nothing beyond the NuGet restore. Windows MIDI Services needs no download at all: the in-box API is part of Windows, and the build reads its metadata from `Resources/WinMD`.
 
 ## Build Commands
 
@@ -190,6 +190,8 @@ Every bundled native binary sits in a folder named for its architecture: `Resour
 
 A publish for either architecture is refused by the `RequireBundledNatives` target if `SDL3.dll` or `libusb-1.0.dll` is missing from `Resources/SDL3/<arch>`, or `xinput1_4.dll` from `Resources/OpenXInput/<arch>`, and an ARM64 publish if `libvosk.dll` is missing from `Resources/Vosk/arm64`. Those `Content` items are conditioned on `Exists`, so without that target a missing DLL would publish anyway, and the auto build runs no tests that would notice. Without `SDL3.dll` the input engine cannot start. Without `libusb-1.0.dll` wired Switch 2 controllers and the GameCube adapter never open, which is the 4.5.0 regression. Without the fork's `xinput1_4.dll` SDL loads the system one and PadForge reads its own virtual controllers back as input. The same target refuses any runtime other than `win-x64` and `win-arm64`, which would otherwise be handed the x64 libraries. A plain `dotnet build` is let through with a message. `SDL3.dll` and `xinput1_4.dll` come from the forks, the ARM64 pair cross-compiled with `cmake -A ARM64`.
 
+The `RefuseInBoxMidiBinaries` target runs after `ComputeResolvedFilesToPublishList` and refuses a publish whose file list carries anything named `Windows.Devices.Midi2` (the DLL, `.pri` or `.pdb` from Microsoft's preview package, which NuGet copies from its `runtimes/win-*/native` folder by itself). PadForge uses the copy of the in-box API that Windows installs in System32 and ships none of its own. The project takes only the metadata, `Resources/WinMD/Windows.Devices.Midi2.winmd` from the 0.99.88-preview.10 package, as a `CsWinRTInputs` item with `CsWinRTIncludes` set to `Windows.Devices.Midi2`, and C#/WinRT 2.2.0 compiles the projection into `PadForge.dll`. C#/WinRT 2.2.0 resolves the Windows metadata it needs from an installed Windows SDK, so the build machine needs the Windows 11 SDK (10.0.26100).
+
 Three features have a native half, and `PadForge.Engine/Common/PlatformSupport.cs` decides each one by the architecture that half follows:
 
 | Feature | Decided by | On ARM64 |
@@ -212,7 +214,7 @@ The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, a
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
-Drivers follow the machine. HIDMaestro 1.10.1 and BthPS3 3.2.1 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and the Windows MIDI Services download picks the `-arm64` installer there. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
+Drivers follow the machine. HIDMaestro 1.10.1 and BthPS3 3.2.1 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and Windows MIDI Services needs nothing from the build on either architecture. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
 
 ## Project Configuration Details
 
@@ -299,7 +301,8 @@ Every build between two releases carries the same version, so the App also stamp
 | **CommunityToolkit.Mvvm** | 8.2.2 | nuget.org | MVVM: `ObservableObject`, `RelayCommand` |
 | **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder and decoder for the DualSense Bluetooth speaker and microphone streams |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | nuget.org | 3D viewport rendering (OBJ model loading, camera, lighting) |
-| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Windows MIDI Services SDK for virtual MIDI device creation |
+| **Microsoft.Windows.CsWinRT** | 2.2.0 | nuget.org | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` at build time |
+| **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Projection of the older Windows MIDI Services runtime, for PCs that still have it installed |
 | **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI capture, playback and endpoint enumeration, Media Foundation decode, and mixing through its NAudio.Core dependency: the controller speaker mirror, macro sounds, voice-macro microphones, bass shakers, and bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 5.2.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) |
 | **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
@@ -334,7 +337,7 @@ All SDL3 and system interop still uses raw `[DllImport]` P/Invoke.
 
 ### Local NuGet Source (`nuget-local/`)
 
-The Windows MIDI Services SDK is not on nuget.org. The `.nupkg` is stored locally:
+The older Windows MIDI Services runtime's projection is not on nuget.org. The `.nupkg` is stored locally:
 
 ```
 nuget-local/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg
@@ -707,7 +710,7 @@ The script does not build. Run `dotnet publish -c Release` first. It checks for 
 
 PadForge creates `PadForge.xml` alongside the executable to store settings, mappings, and profiles. An unhandled exception appends to `crash.log` in the same directory (`App.xaml.cs`, `AppDomain.CurrentDomain.BaseDirectory`). Those two files are the only ones PadForge is allowed to write beside the exe.
 
-PadForge always requests administrator privileges on startup (declared in `app.manifest` as `requireAdministrator`). HIDMaestro / HidHide / MIDI Services management runs inside the already-elevated process.
+PadForge always requests administrator privileges on startup (declared in `app.manifest` as `requireAdministrator`). HIDMaestro / HidHide management and the older MIDI runtime's uninstall run inside the already-elevated process.
 
 ## Release Workflow
 

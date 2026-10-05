@@ -9197,7 +9197,12 @@
 <tr>
 <td><code>ShutdownMidiInputs</code></td>
 <td><code>void ShutdownMidiInputs()</code></td>
-<td>Tears down MIDI inputs before uninstalling Windows MIDI Services</td>
+<td>Tears down MIDI inputs before uninstalling the older Windows MIDI Services runtime</td>
+</tr>
+<tr>
+<td><code>ResumeMidiInputs</code></td>
+<td><code>void ResumeMidiInputs()</code></td>
+<td>Lifts that suppression once the uninstaller exits, so the next sweep enumerates through whichever API the next probe picks</td>
 </tr>
 <tr>
 <td><code>PumpSdlEvents</code></td>

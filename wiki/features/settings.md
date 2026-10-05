@@ -194,11 +194,11 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 ## Driver Management
 
-Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide, HIDMaestro, and Windows MIDI Services also show the installed version.
+Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide and HIDMaestro also show the installed version.
 
 - **HidHide Driver** card: Install and Uninstall buttons.
 - **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.
-- **Windows MIDI Services** card: Install and Uninstall buttons (button is disabled on Windows 10 and pre-24H2 Windows 11).
+- **Windows MIDI Services** card: the API PadForge uses (**Built into Windows** or **Older Runtime**, with the older runtime's version), or **Not Running** or **Not Available** with the reason. No Install button: the API is part of Windows 11 25H2 from the late-November 2026 update. **Uninstall** shows while Microsoft's older runtime is installed and removes only that. See [Driver Management](driver-management.md#windows-midi-services).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
 PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.
@@ -209,7 +209,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
 | **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 232 device profiles, of which PadForge offers the 134 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
-| **Windows MIDI Services** | Sends MIDI virtual-controller output. Needs Windows 11 24H2 (build 26100)+. | You drive a DAW, synth, or other MIDI app from a controller. |
+| **Windows MIDI Services** | Sends MIDI virtual-controller output and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. | Nothing to install. On 24H2 it works where Microsoft's older runtime is already installed. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
 ### Uninstall guards
@@ -217,7 +217,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 PadForge blocks three driver uninstalls until you clear what still depends on them.
 
 - **HidHide** stays locked while any device still has the cloak armed. Disarm the cloak on the [Devices](devices.md) page first.
-- **Windows MIDI Services** stays locked while any slot still outputs MIDI. Delete those slots or switch them to another output on the [Controller Slots](controller-slots.md) page first.
+- **Windows MIDI Services** (the older runtime) stays locked while any slot still outputs MIDI through it. Delete those slots or switch them to another output on the [Controller Slots](controller-slots.md) page first. When the API built into Windows runs MIDI, the slots do not hold the older runtime.
 - **SteamVR** stays locked while any VR slot exists. Delete those slots or switch them to another type first.
 
 Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.

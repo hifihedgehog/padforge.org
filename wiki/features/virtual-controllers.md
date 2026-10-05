@@ -88,7 +88,7 @@ graph TB
 - `PadForge.App/Common/Input/HMaestroVirtualController.cs`. Single class for all four HM-backed categories.
 - `PadForge.App/Common/Input/HMaestroVRController.cs`. The SteamVR hand pair.
 - `PadForge.App/Common/Input/KeyboardMouseVirtualController.cs`. Win32 SendInput, KbmRawState combine logic.
-- `PadForge.App/Common/Input/MidiVirtualController.cs`. Windows MIDI Services SDK, virtual endpoint creation.
+- `PadForge.App/Common/Input/MidiVirtualController.cs`. Windows MIDI Services virtual endpoint lifecycle, over `MidiBackendInBox` (the in-box `Windows.Devices.Midi2`) or `MidiBackendAppSdk` (the older runtime), as `MidiApiSelection` picks.
 
 The lifecycle code that creates / destroys / reorders these instances per slot lives in `PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs` and is documented under [HIDMaestro Deep Dive#Lifecycle Step 5 invariants](../reference/hidmaestro-deep-dive.md#lifecycle-step-5-invariants) (HM thread pool, inactivity timeout, bubble-down cascade for mid-stack destroys, etc.).
 
@@ -671,13 +671,13 @@ public struct VrRawState
 
 **Namespace:** `PadForge.Common.Input`
 **Visibility:** `internal sealed`
-**SDK dependency:** `Microsoft.Windows.Devices.Midi2` (Windows MIDI Services, from `nuget-local/`)
+**API:** two backends behind `IMidiBackend` (`MidiBackend.cs`). `MidiBackendInBox` drives the in-box `Windows.Devices.Midi2`, whose projection C#/WinRT 2.2.0 generates from `Resources/WinMD/Windows.Devices.Midi2.winmd` (Microsoft's 0.99.88-preview.10 metadata). The implementation is the copy Windows registers in System32, and PadForge ships none. `MidiBackendAppSdk` drives the older `Microsoft.Windows.Devices.Midi2` 1.0.16-rc.3.7 runtime (from `nuget-local/`) on a PC that still has it installed.
 **Max instances:** 16 (`MaxMidiSlots = MaxPads`)
-**Availability:** Requires Windows MIDI Services, detected at runtime by `IsAvailable()` (SDK init plus `EnsureServiceAvailable()`, no OS-version gate). While the service is not installed, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".
+**Availability:** `IsAvailable()` picks the API through `MidiApiSelection.Choose` and starts it. The in-box API is tried first at build 26200 and later. The older runtime runs when the in-box classes are not registered (`REGDB_E_CLASSNOTREG`), it is installed, and the build is 26100 or later. While neither runs, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".
 
 Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears in DAWs and MIDI applications as "PadForge MIDI N". Falls back gracefully without MIDI Services.
 
-**Type gating:** the dashboard's MIDI type tile is inert while `DashboardViewModel.IsMidiServicesInstalled` is false (`DashboardPage.xaml.cs:128-135`), so a slot cannot be switched to MIDI on a machine without the service. The VR tile gates the same way on `HMaestroVRController.IsAvailable()` (SteamVR), and the shared type-change handler enforces the one-slot VR cap through `SettingsManager.CanSlotTakeType`. Every other type accepts the switch.
+**Type gating:** the dashboard's MIDI type tile is inert while `DashboardViewModel.IsMidiAvailable` is false (`DashboardPage.xaml.cs:128-135`), so a slot cannot be switched to MIDI on a machine without the service. The VR tile gates the same way on `HMaestroVRController.IsAvailable()` (SteamVR), and the shared type-change handler enforces the one-slot VR cap through `SettingsManager.CanSlotTakeType`. Every other type accepts the switch.
 
 ### Static Fields
 
@@ -685,18 +685,17 @@ Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears i
 |---|---|---|
 | `_isAvailable` | `bool?` | Cached availability check result (nullable for first-check detection) |
 | `_probeTimedOut` | `bool` (volatile) | Set when the bounded availability probe times out. Later checks return false until `ResetAvailability()` |
-| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the SDK runtime during an uninstall. Cleared by `ResetAvailability()` |
+| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the older runtime during its uninstall. Cleared by `ResetAvailability()` |
 | `_availLock` | `object` | Lock protecting availability check (readonly) |
 | `s_liveEndpoints` | `ConcurrentDictionary<string, long>` | Per-process registry of endpoint ids this process created: creating, ready, or abandoned-at-tick. The janitor keys off it instead of guessing from names |
-| `_initializer` | `MidiDesktopAppSdkInitializer` | SDK initializer instance (kept alive for SDK lifetime) |
+| `_backend` | `IMidiBackend` (volatile) | The backend the last successful probe started. MIDI input rides the same one (`Backend`) |
+| `s_backendFactory` | `Func<IMidiBackend>` | `CreateBackend` in production. Tests swap it through `UseBackendFactoryForTest` |
 
 ### Instance Fields
 
 | Field | Type | Description |
 |---|---|---|
-| `_session` | `MidiSession` | Windows MIDI Services session |
-| `_connection` | `MidiEndpointConnection` | Endpoint connection for sending messages |
-| `_virtualDevice` | `MidiVirtualDevice` | The virtual MIDI device (SuppressHandledMessages = true) |
+| `_endpoint` | `IMidiVirtualEndpoint` | The backend's open virtual device: its session, the device (`SuppressHandledMessages = true`) and the device-side connection |
 | `_connected` | `bool` | Whether this controller is connected |
 | `_disposed` | `bool` | Dispose guard |
 | `_uniqueEndpointId` | `string` | This creation's registry id, the key the janitor and the live-endpoint scanner use |
@@ -747,18 +746,18 @@ Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCo
 
 `ConnectCore` initialization sequence:
 
-1. Creates `MidiDeclaredEndpointInfo` with name `"PadForge MIDI {instanceNum}"` and `ProductInstanceId` from `BuildUniqueEndpointId` (`"PADFORGE_MIDI_{instanceNum}_{12 hex}"`, unique per creation so a stranded endpoint can never collide with a fresh one), MIDI 1.0 protocol.
-2. Creates `MidiVirtualDeviceCreationConfig` with slot description.
-3. Adds a `MidiFunctionBlock` (bidirectional, Group 0, `RepresentsMidi10Connection = YesBandwidthUnrestricted`).
-4. `MidiSession.Create(deviceName)`. Throws if null.
-5. Creates virtual device via `MidiVirtualDeviceManager.CreateVirtualDevice(config)`. `SuppressHandledMessages = true`.
-6. Creates `MidiEndpointConnection` to the device's endpoint ID.
-7. Adds virtual device as message processing plugin.
-8. Opens connection. Throws if false.
-9. Sets `_connected = true`.
-10. Initializes `_lastCcValues` (filled with 64) and `_lastNotes`.
+1. Registers the id from `BuildUniqueEndpointId` (`"PADFORGE_MIDI_{instanceNum}_{12 hex}"`, unique per creation so a stranded endpoint can never collide with a fresh one) as creating, before the service can materialize the endpoint.
+2. Calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both backends run the same steps under their own namespaces:
+    1. `MidiDeclaredEndpointInfo` with the name, `ProductInstanceId` = the id, MIDI 1.0 protocol, static function blocks.
+    2. `MidiVirtualDeviceCreationConfig` with the slot description, and one `MidiFunctionBlock` (bidirectional, Group 0, `RepresentsMidi10Connection = YesBandwidthUnrestricted`).
+    3. `MidiSession.Create(deviceName)`. Throws if null.
+    4. `MidiVirtualDeviceManager.CreateVirtualDevice(config)`, then `SuppressHandledMessages = true`.
+    5. A `MidiEndpointConnection` to the device's endpoint ID.
+    6. The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but `MidiMessageProcessingPluginAddResult.Succeeded`, as Microsoft's virtual device sample does. The older runtime's add returns nothing.
+    7. `Open()`. Throws if false.
+3. Commits `_endpoint`, sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
 
-**Error handling:** Steps 4–8 build locals. A failure tears them down through `TeardownLocalCreation` (disconnects the endpoint connection, disposes the session, drops the registry claim, schedules a janitor sweep) before re-throw. Prevents leaked MIDI sessions.
+**Error handling:** a backend that fails partway disconnects and disposes what it built before re-throwing. `ConnectCore` then drops the registry claim and schedules a janitor sweep (`ReleaseEndpointClaim`). A superseded attempt tears its finished endpoint down through `TeardownLocalCreation` without touching the instance fields.
 
 ### Disconnect()
 
@@ -767,9 +766,10 @@ Returns early if not connected. Sequence:
 1. Sets `_connected = false` immediately (prevents sends during cleanup).
 2. Sends Note Off for held notes to prevent stuck notes in DAWs.
 3. Nulls `_lastNotes`.
-4. Disconnects endpoint, nulls `_connection`.
-5. Nulls `_virtualDevice`.
-6. Disposes and nulls `_session`.
+4. `IMidiVirtualEndpoint.DisconnectConnection()`, then nulls `_endpoint`.
+5. `IMidiVirtualEndpoint.CloseSession()`.
+
+Whatever the service does, the `finally` drops the registry claim and schedules a janitor sweep.
 
 ### SubmitGamepadState(Gamepad gp)
 
@@ -787,7 +787,7 @@ Sends MIDI messages from `MidiRawState`. Returns immediately if not connected. O
 
 **Note messages:** Same triple-min pattern. Changed notes trigger `SendNoteOn()` or `SendNoteOff()`.
 
-**Thread safety:** `_connection` is read into a local before null-check and send, preventing races with `Disconnect()`.
+**Thread safety:** `_endpoint` is read into a local before null-check and send, preventing races with `Disconnect()`.
 
 ### MidiRawState
 
@@ -814,7 +814,7 @@ Guarded by `_disposed`. Calls `Disconnect()`.
 
 ### MIDI Message Helpers
 
-All messages are built as MIDI 1.0 UMP (Universal MIDI Packet) via `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` and sent via `_connection.SendSingleMessagePacket()`.
+All three helpers call `Send(Midi1Status, data1, data2)`, which hands the message to `IMidiVirtualEndpoint.Send`. The backend builds it as a MIDI 1.0 UMP (Universal MIDI Packet) with `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` on group 0 and sends it with `SendSingleMessagePacket()`. A throw drops that message, never the polling thread.
 
 | Helper | MIDI Status | Description |
 |---|---|---|
@@ -829,15 +829,16 @@ All messages are built as MIDI 1.0 UMP (Universal MIDI Packet) via `MidiMessageB
 Thread-safe, double-checked locking on `_availLock`. Caches result in `_isAvailable`. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), or after an earlier probe timed out (`_probeTimedOut`). The probe runs on `Task.Run`, bounded at 10 seconds. A timeout sets `_probeTimedOut` and returns false, so later creates fail fast instead of waiting again.
 
 1. Fast path: if `_isAvailable.HasValue`, returns cached value.
-2. Under lock: creates `MidiDesktopAppSdkInitializer.Create()`.
-3. `InitializeSdkRuntime()`. Disposes and caches false on failure.
-4. `EnsureServiceAvailable()`. Disposes and caches false on failure.
-5. Success: keeps `_initializer` alive (required for SDK lifetime), caches true.
-6. Any exception: caches false.
+2. Under lock: `s_backendFactory()`. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null.
+3. `Start()` on the backend. The in-box backend calls the static `MidiApi.EnsureServiceAvailable()`. The older runtime's backend creates its `MidiDesktopAppSdkInitializer`, then calls `InitializeSdkRuntime()` and `EnsureServiceAvailable()`, disposing the initializer when either fails. A null backend or a false start caches false.
+4. Success: keeps the backend in `_backend`, caches true.
+5. Any exception: stops the backend, which releases an initializer a half-finished start may hold, and caches false.
+
+`ActiveApi` reports the started backend's kind after a successful probe and `MidiApiKind.None` otherwise. `ProbeFailed` is true after a probe that found no working API, or timed out, until a reset. The Settings card reads both through `MidiApiSelection.ForCard`.
 
 #### ResetAvailability()
 
-Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, disposes `_initializer` if present, sets `_isAvailable = null`. Call after installing MIDI Services.
+Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`. The older runtime's uninstall calls it once the uninstaller exits, and `Connect()` calls it after a service restart.
 
 #### Shutdown(bool skipDispose = false)
 
@@ -845,11 +846,11 @@ Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedO
 public static void Shutdown(bool skipDispose = false)
 ```
 
-Disposes the SDK initializer. Call on application exit.
+Stops and drops the backend. Call on application exit. The in-box backend holds nothing to release.
 
-**`skipDispose`:** When true, abandons the initializer without `Dispose()`, for teardown while the service may already be mid-removal (app exit racing an external uninstall). `Dispose()` calls into the runtime and crashes if the service is being removed. Either way it resets `_isAvailable = null`.
+**`skipDispose`:** When true, the older runtime's backend abandons its initializer without `Dispose()`, for teardown while the service may already be mid-removal (app exit racing an external uninstall). `Dispose()` calls into the runtime and crashes if the service is being removed. Either way it resets `_isAvailable = null`.
 
-The in-app uninstall calls `SuppressForUninstall()` instead: it sets `_runtimeSuppressed` and calls `Shutdown(skipDispose: false)` while the service still exists, so the SDK releases its DLLs, and availability stays false until `ResetAvailability()`.
+The in-app uninstall of the older runtime calls `SuppressForUninstall()` instead, unless the in-box API is the one in use: it sets `_runtimeSuppressed` and calls `Shutdown(skipDispose: false)` while the service still exists, so the runtime releases its DLLs, and availability stays false until `ResetAvailability()`.
 
 ---
 
@@ -1089,7 +1090,7 @@ Note that mouse movement and scroll do NOT go through `SendInput` here. Those ro
 - [Engine Library](../reference/engine-library.md): `IVirtualController` interface, `Gamepad`, `RawHidState`, `KbmRawState`, `MidiRawState`, `Vibration`
 - [VR Controllers](vr-controllers.md): the user-facing side of the VR slot type
 - [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md): HM SDK surface, OpenXInput filter, Step 5 lifecycle invariants, FFB through HM PID descriptors
-- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration (no in-app uninstall) plus HidHide and Windows MIDI Services install / uninstall
+- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration (no in-app uninstall), HidHide install / uninstall, and the older Windows MIDI Services runtime's uninstall
 - [Settings and Serialization](../reference/settings-and-serialization.md): `VirtualControllerType` (`[XmlEnum("Microsoft")]` / `[XmlEnum("Sony")]` aliases) and per-slot HM profile persistence
 - [Build and Publish](../reference/build-and-publish.md): HIDMaestro and HidHide embedded resources
 

@@ -5381,7 +5381,7 @@
 - <code>PadForge.App/Common/Input/HMaestroVirtualController.cs</code>. Single class for all four HM-backed categories.
 - <code>PadForge.App/Common/Input/HMaestroVRController.cs</code>. The SteamVR hand pair.
 - <code>PadForge.App/Common/Input/KeyboardMouseVirtualController.cs</code>. Win32 SendInput, KbmRawState combine logic.
-- <code>PadForge.App/Common/Input/MidiVirtualController.cs</code>. Windows MIDI Services SDK, virtual endpoint creation.</p>
+- <code>PadForge.App/Common/Input/MidiVirtualController.cs</code>. Windows MIDI Services virtual endpoint lifecycle, over <code>MidiBackendInBox</code> (the in-box <code>Windows.Devices.Midi2</code>) or <code>MidiBackendAppSdk</code> (the older runtime), as <code>MidiApiSelection</code> picks.</p>
 <p>The lifecycle code that creates / destroys / reorders these instances per slot lives in <code>PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs</code> and is documented under <a href="../../reference/hidmaestro-deep-dive/#lifecycle-step-5-invariants">HIDMaestro Deep Dive#Lifecycle Step 5 invariants</a> (HM thread pool, inactivity timeout, bubble-down cascade for mid-stack destroys, etc.).</p>
 <hr />
 <h2 id="ivirtualcontroller-interface">IVirtualController Interface<a class="headerlink" href="#ivirtualcontroller-interface" title="Permanent link">&para;</a></h2>
@@ -6280,11 +6280,11 @@
 <h2 id="midivirtualcontroller">MidiVirtualController<a class="headerlink" href="#midivirtualcontroller" title="Permanent link">&para;</a></h2>
 <p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
 <strong>Visibility:</strong> <code>internal sealed</code>
-<strong>SDK dependency:</strong> <code>Microsoft.Windows.Devices.Midi2</code> (Windows MIDI Services, from <code>nuget-local/</code>)
+<strong>API:</strong> two backends behind <code>IMidiBackend</code> (<code>MidiBackend.cs</code>). <code>MidiBackendInBox</code> drives the in-box <code>Windows.Devices.Midi2</code>, whose projection C#/WinRT 2.2.0 generates from <code>Resources/WinMD/Windows.Devices.Midi2.winmd</code> (Microsoft's 0.99.88-preview.10 metadata). The implementation is the copy Windows registers in System32, and PadForge ships none. <code>MidiBackendAppSdk</code> drives the older <code>Microsoft.Windows.Devices.Midi2</code> 1.0.16-rc.3.7 runtime (from <code>nuget-local/</code>) on a PC that still has it installed.
 <strong>Max instances:</strong> 16 (<code>MaxMidiSlots = MaxPads</code>)
-<strong>Availability:</strong> Requires Windows MIDI Services, detected at runtime by <code>IsAvailable()</code> (SDK init plus <code>EnsureServiceAvailable()</code>, no OS-version gate). While the service is not installed, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".</p>
+<strong>Availability:</strong> <code>IsAvailable()</code> picks the API through <code>MidiApiSelection.Choose</code> and starts it. The in-box API is tried first at build 26200 and later. The older runtime runs when the in-box classes are not registered (<code>REGDB_E_CLASSNOTREG</code>), it is installed, and the build is 26100 or later. While neither runs, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".</p>
 <p>Creates a system-wide virtual MIDI endpoint via Windows MIDI Services. Appears in DAWs and MIDI applications as "PadForge MIDI N". Falls back gracefully without MIDI Services.</p>
-<p><strong>Type gating:</strong> the dashboard's MIDI type tile is inert while <code>DashboardViewModel.IsMidiServicesInstalled</code> is false (<code>DashboardPage.xaml.cs:128-135</code>), so a slot cannot be switched to MIDI on a machine without the service. The VR tile gates the same way on <code>HMaestroVRController.IsAvailable()</code> (SteamVR), and the shared type-change handler enforces the one-slot VR cap through <code>SettingsManager.CanSlotTakeType</code>. Every other type accepts the switch.</p>
+<p><strong>Type gating:</strong> the dashboard's MIDI type tile is inert while <code>DashboardViewModel.IsMidiAvailable</code> is false (<code>DashboardPage.xaml.cs:128-135</code>), so a slot cannot be switched to MIDI on a machine without the service. The VR tile gates the same way on <code>HMaestroVRController.IsAvailable()</code> (SteamVR), and the shared type-change handler enforces the one-slot VR cap through <code>SettingsManager.CanSlotTakeType</code>. Every other type accepts the switch.</p>
 <h3 id="static-fields">Static Fields<a class="headerlink" href="#static-fields" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6308,7 +6308,7 @@
 <tr>
 <td><code>_runtimeSuppressed</code></td>
 <td><code>bool</code> (volatile)</td>
-<td>Latched by <code>SuppressForUninstall()</code> so no check reloads the SDK runtime during an uninstall. Cleared by <code>ResetAvailability()</code></td>
+<td>Latched by <code>SuppressForUninstall()</code> so no check reloads the older runtime during its uninstall. Cleared by <code>ResetAvailability()</code></td>
 </tr>
 <tr>
 <td><code>_availLock</code></td>
@@ -6321,9 +6321,14 @@
 <td>Per-process registry of endpoint ids this process created: creating, ready, or abandoned-at-tick. The janitor keys off it instead of guessing from names</td>
 </tr>
 <tr>
-<td><code>_initializer</code></td>
-<td><code>MidiDesktopAppSdkInitializer</code></td>
-<td>SDK initializer instance (kept alive for SDK lifetime)</td>
+<td><code>_backend</code></td>
+<td><code>IMidiBackend</code> (volatile)</td>
+<td>The backend the last successful probe started. MIDI input rides the same one (<code>Backend</code>)</td>
+</tr>
+<tr>
+<td><code>s_backendFactory</code></td>
+<td><code>Func&lt;IMidiBackend&gt;</code></td>
+<td><code>CreateBackend</code> in production. Tests swap it through <code>UseBackendFactoryForTest</code></td>
 </tr>
 </tbody>
 </table>
@@ -6338,19 +6343,9 @@
 </thead>
 <tbody>
 <tr>
-<td><code>_session</code></td>
-<td><code>MidiSession</code></td>
-<td>Windows MIDI Services session</td>
-</tr>
-<tr>
-<td><code>_connection</code></td>
-<td><code>MidiEndpointConnection</code></td>
-<td>Endpoint connection for sending messages</td>
-</tr>
-<tr>
-<td><code>_virtualDevice</code></td>
-<td><code>MidiVirtualDevice</code></td>
-<td>The virtual MIDI device (SuppressHandledMessages = true)</td>
+<td><code>_endpoint</code></td>
+<td><code>IMidiVirtualEndpoint</code></td>
+<td>The backend's open virtual device: its session, the device (<code>SuppressHandledMessages = true</code>) and the device-side connection</td>
 </tr>
 <tr>
 <td><code>_connected</code></td>
@@ -6471,28 +6466,30 @@
 <p>Returns early if already connected. <code>Connect()</code> is a bounded wrapper: <code>ConnectCore</code> runs on a <code>Task.Run</code> and the caller waits on a <code>ManualResetEventSlim</code> for <code>ConnectTimeoutMs</code> (15 seconds). On timeout it bumps <code>_creationGen</code> (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a <code>MidiEndpointJanitor</code> sweep, and on the first attempt runs <code>MidiServiceRecovery.TryRecoverOnce()</code> and retries once. <code>Disconnect()</code> carries the same bounded shape around <code>DisconnectCore</code> (8 seconds).</p>
 <p><code>ConnectCore</code> initialization sequence:</p>
 <ol>
-<li>Creates <code>MidiDeclaredEndpointInfo</code> with name <code>"PadForge MIDI {instanceNum}"</code> and <code>ProductInstanceId</code> from <code>BuildUniqueEndpointId</code> (<code>"PADFORGE_MIDI_{instanceNum}_{12 hex}"</code>, unique per creation so a stranded endpoint can never collide with a fresh one), MIDI 1.0 protocol.</li>
-<li>Creates <code>MidiVirtualDeviceCreationConfig</code> with slot description.</li>
-<li>Adds a <code>MidiFunctionBlock</code> (bidirectional, Group 0, <code>RepresentsMidi10Connection = YesBandwidthUnrestricted</code>).</li>
+<li>Registers the id from <code>BuildUniqueEndpointId</code> (<code>"PADFORGE_MIDI_{instanceNum}_{12 hex}"</code>, unique per creation so a stranded endpoint can never collide with a fresh one) as creating, before the service can materialize the endpoint.</li>
+<li>Calls <code>_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)</code>, or throws <code>InvalidOperationException</code> when no backend is started. Both backends run the same steps under their own namespaces:<ol>
+<li><code>MidiDeclaredEndpointInfo</code> with the name, <code>ProductInstanceId</code> = the id, MIDI 1.0 protocol, static function blocks.</li>
+<li><code>MidiVirtualDeviceCreationConfig</code> with the slot description, and one <code>MidiFunctionBlock</code> (bidirectional, Group 0, <code>RepresentsMidi10Connection = YesBandwidthUnrestricted</code>).</li>
 <li><code>MidiSession.Create(deviceName)</code>. Throws if null.</li>
-<li>Creates virtual device via <code>MidiVirtualDeviceManager.CreateVirtualDevice(config)</code>. <code>SuppressHandledMessages = true</code>.</li>
-<li>Creates <code>MidiEndpointConnection</code> to the device's endpoint ID.</li>
-<li>Adds virtual device as message processing plugin.</li>
-<li>Opens connection. Throws if false.</li>
-<li>Sets <code>_connected = true</code>.</li>
-<li>Initializes <code>_lastCcValues</code> (filled with 64) and <code>_lastNotes</code>.</li>
+<li><code>MidiVirtualDeviceManager.CreateVirtualDevice(config)</code>, then <code>SuppressHandledMessages = true</code>.</li>
+<li>A <code>MidiEndpointConnection</code> to the device's endpoint ID.</li>
+<li>The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but <code>MidiMessageProcessingPluginAddResult.Succeeded</code>, as Microsoft's virtual device sample does. The older runtime's add returns nothing.</li>
+<li><code>Open()</code>. Throws if false.</li>
 </ol>
-<p><strong>Error handling:</strong> Steps 4–8 build locals. A failure tears them down through <code>TeardownLocalCreation</code> (disconnects the endpoint connection, disposes the session, drops the registry claim, schedules a janitor sweep) before re-throw. Prevents leaked MIDI sessions.</p>
+</li>
+<li>Commits <code>_endpoint</code>, sets <code>_connected = true</code>, marks the id ready, and initializes <code>_lastCcValues</code> (filled with 64) and <code>_lastNotes</code>, only while this attempt is still the current generation.</li>
+</ol>
+<p><strong>Error handling:</strong> a backend that fails partway disconnects and disposes what it built before re-throwing. <code>ConnectCore</code> then drops the registry claim and schedules a janitor sweep (<code>ReleaseEndpointClaim</code>). A superseded attempt tears its finished endpoint down through <code>TeardownLocalCreation</code> without touching the instance fields.</p>
 <h3 id="disconnect_2">Disconnect()<a class="headerlink" href="#disconnect_2" title="Permanent link">&para;</a></h3>
 <p>Returns early if not connected. Sequence:</p>
 <ol>
 <li>Sets <code>_connected = false</code> immediately (prevents sends during cleanup).</li>
 <li>Sends Note Off for held notes to prevent stuck notes in DAWs.</li>
 <li>Nulls <code>_lastNotes</code>.</li>
-<li>Disconnects endpoint, nulls <code>_connection</code>.</li>
-<li>Nulls <code>_virtualDevice</code>.</li>
-<li>Disposes and nulls <code>_session</code>.</li>
+<li><code>IMidiVirtualEndpoint.DisconnectConnection()</code>, then nulls <code>_endpoint</code>.</li>
+<li><code>IMidiVirtualEndpoint.CloseSession()</code>.</li>
 </ol>
+<p>Whatever the service does, the <code>finally</code> drops the registry claim and schedules a janitor sweep.</p>
 <h3 id="submitgamepadstategamepad-gp_1">SubmitGamepadState(Gamepad gp)<a class="headerlink" href="#submitgamepadstategamepad-gp_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SubmitGamepadState</span><span class="p">(</span><span class="n">Gamepad</span><span class="w"> </span><span class="n">gp</span><span class="p">)</span>
 </code></pre></div>
@@ -6501,7 +6498,7 @@
 <p>Sends MIDI messages from <code>MidiRawState</code>. Returns immediately if not connected. Only sends on value change.</p>
 <p><strong>CC messages:</strong> Iterates <code>min(state.CcValues.Length, _lastCcValues.Length, CcNumbers.Length)</code>. Changed CC values trigger <code>SendCC()</code>. Triple-min guards against mid-stream config changes.</p>
 <p><strong>Note messages:</strong> Same triple-min pattern. Changed notes trigger <code>SendNoteOn()</code> or <code>SendNoteOff()</code>.</p>
-<p><strong>Thread safety:</strong> <code>_connection</code> is read into a local before null-check and send, preventing races with <code>Disconnect()</code>.</p>
+<p><strong>Thread safety:</strong> <code>_endpoint</code> is read into a local before null-check and send, preventing races with <code>Disconnect()</code>.</p>
 <h3 id="midirawstate">MidiRawState<a class="headerlink" href="#midirawstate" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// In PadForge.Engine/Common/GamepadTypes.cs</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">MidiRawState</span>
@@ -6518,7 +6515,7 @@
 <h3 id="dispose_1">Dispose()<a class="headerlink" href="#dispose_1" title="Permanent link">&para;</a></h3>
 <p>Guarded by <code>_disposed</code>. Calls <code>Disconnect()</code>.</p>
 <h3 id="midi-message-helpers">MIDI Message Helpers<a class="headerlink" href="#midi-message-helpers" title="Permanent link">&para;</a></h3>
-<p>All messages are built as MIDI 1.0 UMP (Universal MIDI Packet) via <code>MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()</code> and sent via <code>_connection.SendSingleMessagePacket()</code>.</p>
+<p>All three helpers call <code>Send(Midi1Status, data1, data2)</code>, which hands the message to <code>IMidiVirtualEndpoint.Send</code>. The backend builds it as a MIDI 1.0 UMP (Universal MIDI Packet) with <code>MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()</code> on group 0 and sends it with <code>SendSingleMessagePacket()</code>. A throw drops that message, never the polling thread.</p>
 <table>
 <thead>
 <tr>
@@ -6550,20 +6547,20 @@
 <p>Thread-safe, double-checked locking on <code>_availLock</code>. Caches result in <code>_isAvailable</code>. Returns false at once while <code>SuppressForUninstall</code> holds the runtime down (<code>_runtimeSuppressed</code>), or after an earlier probe timed out (<code>_probeTimedOut</code>). The probe runs on <code>Task.Run</code>, bounded at 10 seconds. A timeout sets <code>_probeTimedOut</code> and returns false, so later creates fail fast instead of waiting again.</p>
 <ol>
 <li>Fast path: if <code>_isAvailable.HasValue</code>, returns cached value.</li>
-<li>Under lock: creates <code>MidiDesktopAppSdkInitializer.Create()</code>.</li>
-<li><code>InitializeSdkRuntime()</code>. Disposes and caches false on failure.</li>
-<li><code>EnsureServiceAvailable()</code>. Disposes and caches false on failure.</li>
-<li>Success: keeps <code>_initializer</code> alive (required for SDK lifetime), caches true.</li>
-<li>Any exception: caches false.</li>
+<li>Under lock: <code>s_backendFactory()</code>. In production <code>CreateBackend</code> asks <code>MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)</code> and returns a <code>MidiBackendInBox</code>, a <code>MidiBackendAppSdk</code>, or null.</li>
+<li><code>Start()</code> on the backend. The in-box backend calls the static <code>MidiApi.EnsureServiceAvailable()</code>. The older runtime's backend creates its <code>MidiDesktopAppSdkInitializer</code>, then calls <code>InitializeSdkRuntime()</code> and <code>EnsureServiceAvailable()</code>, disposing the initializer when either fails. A null backend or a false start caches false.</li>
+<li>Success: keeps the backend in <code>_backend</code>, caches true.</li>
+<li>Any exception: stops the backend, which releases an initializer a half-finished start may hold, and caches false.</li>
 </ol>
+<p><code>ActiveApi</code> reports the started backend's kind after a successful probe and <code>MidiApiKind.None</code> otherwise. <code>ProbeFailed</code> is true after a probe that found no working API, or timed out, until a reset. The Settings card reads both through <code>MidiApiSelection.ForCard</code>.</p>
 <h4 id="resetavailability">ResetAvailability()<a class="headerlink" href="#resetavailability" title="Permanent link">&para;</a></h4>
-<p>Resets cached availability so <code>IsAvailable()</code> re-evaluates. Clears <code>_probeTimedOut</code> and <code>_runtimeSuppressed</code>, disposes <code>_initializer</code> if present, sets <code>_isAvailable = null</code>. Call after installing MIDI Services.</p>
+<p>Resets cached availability so <code>IsAvailable()</code> re-evaluates. Clears <code>_probeTimedOut</code> and <code>_runtimeSuppressed</code>, stops and drops <code>_backend</code>, sets <code>_isAvailable = null</code>. The older runtime's uninstall calls it once the uninstaller exits, and <code>Connect()</code> calls it after a service restart.</p>
 <h4 id="shutdownbool-skipdispose-false">Shutdown(bool skipDispose = false)<a class="headerlink" href="#shutdownbool-skipdispose-false" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Shutdown</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">skipDispose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
 </code></pre></div>
-<p>Disposes the SDK initializer. Call on application exit.</p>
-<p><strong><code>skipDispose</code>:</strong> When true, abandons the initializer without <code>Dispose()</code>, for teardown while the service may already be mid-removal (app exit racing an external uninstall). <code>Dispose()</code> calls into the runtime and crashes if the service is being removed. Either way it resets <code>_isAvailable = null</code>.</p>
-<p>The in-app uninstall calls <code>SuppressForUninstall()</code> instead: it sets <code>_runtimeSuppressed</code> and calls <code>Shutdown(skipDispose: false)</code> while the service still exists, so the SDK releases its DLLs, and availability stays false until <code>ResetAvailability()</code>.</p>
+<p>Stops and drops the backend. Call on application exit. The in-box backend holds nothing to release.</p>
+<p><strong><code>skipDispose</code>:</strong> When true, the older runtime's backend abandons its initializer without <code>Dispose()</code>, for teardown while the service may already be mid-removal (app exit racing an external uninstall). <code>Dispose()</code> calls into the runtime and crashes if the service is being removed. Either way it resets <code>_isAvailable = null</code>.</p>
+<p>The in-app uninstall of the older runtime calls <code>SuppressForUninstall()</code> instead, unless the in-box API is the one in use: it sets <code>_runtimeSuppressed</code> and calls <code>Shutdown(skipDispose: false)</code> while the service still exists, so the runtime releases its DLLs, and availability stays false until <code>ResetAvailability()</code>.</p>
 <hr />
 <h2 id="keyboardmousevirtualcontroller">KeyboardMouseVirtualController<a class="headerlink" href="#keyboardmousevirtualcontroller" title="Permanent link">&para;</a></h2>
 <p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
@@ -6883,7 +6880,7 @@
 <li><a href="../../reference/engine-library/">Engine Library</a>: <code>IVirtualController</code> interface, <code>Gamepad</code>, <code>RawHidState</code>, <code>KbmRawState</code>, <code>MidiRawState</code>, <code>Vibration</code></li>
 <li><a href="../vr-controllers/">VR Controllers</a>: the user-facing side of the VR slot type</li>
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: HM SDK surface, OpenXInput filter, Step 5 lifecycle invariants, FFB through HM PID descriptors</li>
-<li><a href="../../reference/driver-installation-internals/">Driver Installation Internals</a>: HIDMaestro registration (no in-app uninstall) plus HidHide and Windows MIDI Services install / uninstall</li>
+<li><a href="../../reference/driver-installation-internals/">Driver Installation Internals</a>: HIDMaestro registration (no in-app uninstall), HidHide install / uninstall, and the older Windows MIDI Services runtime's uninstall</li>
 <li><a href="../../reference/settings-and-serialization/">Settings and Serialization</a>: <code>VirtualControllerType</code> (<code>[XmlEnum("Microsoft")]</code> / <code>[XmlEnum("Sony")]</code> aliases) and per-slot HM profile persistence</li>
 <li><a href="../../reference/build-and-publish/">Build and Publish</a>: HIDMaestro and HidHide embedded resources</li>
 </ul>

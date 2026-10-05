@@ -281,7 +281,7 @@ A third and fourth source live elsewhere: [Web Controller](../guides/web-control
 
 A connected MIDI keyboard, pad controller, or control surface shows up here as its own device card. Select it and the detail pane shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.
 
-MIDI input needs Windows 11 24H2 (build 26100) or later, the same Windows MIDI Services the MIDI virtual controller uses. See [MIDI Input](midi-input.md) for the full list of what maps.
+MIDI input needs Windows MIDI Services, the same API the MIDI virtual controller uses. It is part of Windows 11 25H2 from the late-November 2026 update, and on 24H2 it works where Microsoft's older runtime is already installed. See [MIDI Input](midi-input.md) for the full list of what maps.
 
 ---
 
