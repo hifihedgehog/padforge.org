@@ -97,16 +97,16 @@ The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayS
 
 ### Nintendo slots
 
-A Nintendo slot has two presets: Nintendo Switch Pro Controller and Nintendo Switch 2 Pro Controller. Switch Pro is the default. Each ships that controller's own report descriptor, so stick depth differs between them.
+A Nintendo slot has three presets: Nintendo Switch Pro Controller, Nintendo Switch 2 Pro Controller, and Nintendo Switch 2 Pro Controller: Full. Switch Pro is the default. Each ships its controller's own report descriptor, so stick depth differs between the two controllers. The two Switch 2 Pro presets share one.
 
 On Switch Pro the report DirectInput reads declares 16-bit stick axes, but HIDMaestro first packs each axis into the 12-bit value a physical Pro Controller sends, from 0x200 to 0xE00 around a 0x800 center, and scales it back up. Each stick axis carries about 3,073 positions, whether a game reads that report or the Pro Controller's own full-mode report. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.
 
-ZL and ZR are digital buttons on both presets, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
+ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
 
 | Preset | Sticks | Triggers |
 |----------|--------|----------|
 | Switch Pro | about 3,073 positions (12-bit packing) | 2 states (pressed or released) |
-| Switch 2 Pro | 4,096 positions (12-bit) | 2 states (pressed or released) |
+| Switch 2 Pro, either preset | 4,096 positions (12-bit) | 2 states (pressed or released) |
 
 Switch Pro reports its D-Pad as a POV hat with full 8-way output. See [POV hats](#pov-hats). Switch 2 Pro reports four separate direction buttons instead, which is what the real pad does, so it has no hat.
 
@@ -126,7 +126,7 @@ The deadzone shapes follow the geometry described by the [minimuino thumbstick-d
 
 Extended slots and the Switch Pro preset report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.
 
-The Switch 2 Pro preset has no hat. Its D-Pad is four buttons on the wire.
+Neither Switch 2 Pro preset has a hat. The D-Pad is four buttons on the wire.
 
 ---
 

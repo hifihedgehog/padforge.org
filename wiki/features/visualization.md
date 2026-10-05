@@ -164,7 +164,7 @@ A Valve pad has two trackpads and the preview draws both. The first finger rides
 
 ## Nintendo preview
 
-Nintendo slots get both views, like Xbox and PlayStation. A Nintendo slot runs the original Switch Pro Controller profile or the Switch 2 Pro Controller profile, and both draw the Switch 2 Pro mesh in 3D. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for the original, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.
+Nintendo slots get both views, like Xbox and PlayStation. A Nintendo slot runs the original Switch Pro Controller profile or one of the two Switch 2 Pro Controller profiles, and all three draw the Switch 2 Pro mesh in 3D. On an original Switch Pro the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for the original, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.
 
 ![Nintendo slot preview](../images/pad-nintendo-configbar.png)
 

@@ -79,11 +79,21 @@ For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full**. It presents a DualSho
 
 ### Nintendo
 
-HIDMaestro-backed. Two presets: **Nintendo Switch Pro Controller** (the default) and **Nintendo Switch 2 Pro Controller**. Pick one from the slot's preset dropdown.
+HIDMaestro-backed. Three presets: **Nintendo Switch Pro Controller** (the default), **Nintendo Switch 2 Pro Controller**, and **Nintendo Switch 2 Pro Controller: Full**. Pick one from the slot's preset dropdown.
 
-The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. The Switch 2 Pro preset carries 21, adding C, GL, and GR among others, on its own wire order. Neither has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on either. The slot deploys the preset as-is.
+The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Both Switch 2 Pro presets carry 21, adding C, GL, and GR among others, on their own wire order. None of the three has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on any of them. The slot deploys the preset as-is.
 
-On the Switch Pro preset, map a motion source on the slot, or a stick on the [Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll) rows, and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work. The Switch 2 Pro preset carries neither: its input report has no motion data, and HIDMaestro decodes no rumble for it. Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
+On the Switch Pro preset, map a motion source on the slot, or a stick on the [Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll) rows, and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work.
+
+The two Switch 2 Pro presets are one pad in two forms, and the program that reads it decides which to pick.
+
+**Nintendo Switch 2 Pro Controller** is a HID gamepad. DirectInput, Windows.Gaming.Input, browsers and every other program read its buttons and sticks. It carries neither motion nor rumble: its input report has no motion data, and HIDMaestro decodes no rumble for it.
+
+**Nintendo Switch 2 Pro Controller: Full** is the pad as it appears over USB, with the second interface a program has to start it through. Steam reads it, and so does a program whose SDL is built with libusb. They get the gyro and the accelerometer, from a motion source on the slot or from the Motion rows, and the rumble they send comes back to the mapped device and the Bass Shakers tab. Every other program sees a gamepad that never reports, which is what a real Switch 2 Pro Controller on a cable gives it on Windows. Like the default PlayStation preset, it rides HIDMaestro's USB transport, which installs the first time a slot needs it (see [Driver Management](driver-management.md)).
+
+HIDMaestro's release tests ran the Full preset against Steam and against PadForge's own SDL build. No game has been run on it from PadForge yet, and stock SDL3 has not been run against it.
+
+Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
 
 ![Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
 

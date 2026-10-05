@@ -480,7 +480,7 @@ public void RerouteVirtualControllersForReorder(
     VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)
 ```
 
-`InputManager.Step5.VirtualDevices.cs` line 3161. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
+`InputManager.Step5.VirtualDevices.cs` line 3165. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
 
 - **Same profile at V**: reuse the kernel VC in place. The pad-index pointer in `_virtualControllers[]` moves so the new pad-at-position-V feeds V's kernel slot, and `FeedbackPadIndex` is updated on the surviving VC so the rumble callback writes the right `VibrationStates[]` entry. No teardown.
 - **Different profile at V**: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.
@@ -720,7 +720,7 @@ var currentInstanceIds = new HashSet<uint>(joystickIds);
 For each SDL instance ID:
 1. Skip if in `_openedSdlInstanceIds` (already open) or `_suppressedSelfVirtualIds` (a rejected self-virtual)
 2. Create `SdlDeviceWrapper` and call `wrapper.Open(instanceId)`. Opens as gamepad if recognized, joystick otherwise. A failed open disposes the wrapper and skips the ID
-3. Self-readback guard: reject the device as a PadForge HIDMaestro virtual when its serial starts with `HM-CTL-`, when its device path contains `HIDMAESTRO` (case-insensitive), or when it has Sony VID 0x054C and `IsOnUsbipVhci` finds the usbip-win2 emulated host controller among its first eight PnP parents (a parent whose Hardware IDs contain `HIDMAESTRO`, the `ROOT\HIDMAESTRO_UDE` id HIDMaestro 1.4.3 and later adds to `ROOT\USB\0000`, or whose service is `usbip2_ude`). A rejected ID is logged, added to `_suppressedSelfVirtualIds`, and disposed
+3. Self-readback guard: reject the device as a PadForge HIDMaestro virtual when its serial starts with `HM-CTL-`, when its device path contains `HIDMAESTRO` (case-insensitive), or when it has Sony VID 0x054C or Nintendo VID 0x057E (`ChecksUsbipAncestry`) and `IsOnUsbipVhci` finds the usbip-win2 emulated host controller among its first eight PnP parents (a parent whose Hardware IDs contain `HIDMAESTRO`, the `ROOT\HIDMAESTRO_UDE` id HIDMaestro 1.4.3 and later adds to `ROOT\USB\0000`, or whose service is `usbip2_ude`). A rejected ID is logged, added to `_suppressedSelfVirtualIds`, and disposed
 4. `FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid, currentInstanceIds, wrapper.SerialNumber)`. Find existing or create new
 5. If the row's InstanceGuid differs from the wrapper's (a same-serial twin), call `wrapper.OverrideInstanceGuid(ud.InstanceGuid)`
 6. `ud.LoadFromSdlDevice(wrapper)`. Populate capabilities, name, VID/PID, and store the wrapper as `ud.Device`
@@ -2607,7 +2607,7 @@ else if (SlotControllerTypes[padIndex] is VirtualControllerType.Extended
             MotionSnapshots[padIndex], unchecked((uint)_deckFrameCounter++), _deckReportScratch);
         hmExt.SubmitRawReport(new ReadOnlySpan<byte>(_deckReportScratch, 0, valvePacker.Size));
     }
-    else if (ExtendedReportPacker.NeedsRawReport(layout))   // > 32 buttons or > 1 hat
+    else if (!hmExt.BuildsItsOwnReports && ExtendedReportPacker.NeedsRawReport(layout))   // > 32 buttons or > 1 hat, never a persona that builds its own reports
     {
         int packedLen = ExtendedReportPacker.Pack(
             CombinedRawHidStates[padIndex], layout, _extendedReportScratch);
@@ -2646,7 +2646,7 @@ Runs on the Pass 2 worker. The type, profile slug, and Extended build are captur
    - `CreateHMaestroController(VirtualControllerType.Xbox, profileId, padIndex, in build)` for Xbox slots
    - `CreateHMaestroController(VirtualControllerType.PlayStation, profileId, padIndex, in build)` for PlayStation slots
    - `CreateHMaestroController(VirtualControllerType.Extended, profileId, padIndex, in build)` for Extended slots. For every HM type it resolves the profile through `_hmaestroContext.GetProfile(profileId)`, falling back to `HMaestroProfileCatalog.GetProfileById` for synthetic entries like `padforge-custom`. On a customized Extended slot it applies product-string / VID/PID / layout / FFB overrides through `HMProfileBuilder` + `HidDescriptorBuilder`. It returns `new HMaestroVirtualController(_hmaestroContext, effectiveProfile, type, identityKey)`, where `identityKey` comes from `IdentityKeyForPad` and the pad's position in its group's order list
-   - `CreateHMaestroController(VirtualControllerType.Nintendo, profileId, padIndex, in build)` for Nintendo slots (`switch-pro` by default, or `switch2-pro-controller`, with no Customize)
+   - `CreateHMaestroController(VirtualControllerType.Nintendo, profileId, padIndex, in build)` for Nintendo slots (`switch-pro` by default, or `switch2-pro-controller` or `switch2-pro-controller-composite`, with no Customize)
    - `CreateMidiController(padIndex)`. Creates virtual MIDI endpoint with computed instance number
    - `KeyboardMouseVirtualController(padIndex)`
    - `HMaestroVRController()` for VR slots. Takes no pad index at construction. `RegisterFeedbackCallback` supplies it afterward, the same as every other type

@@ -3846,9 +3846,9 @@
 </table>
 <p>The 8-bit ceiling is the DualShock and DualSense formats themselves, so no PlayStation profile lifts it. If a game accepts a generic controller and you want 16-bit output, build an <a href="../controller-slots/">Extended slot</a> with the Custom profile instead. The trade is plain: the game sees a generic HID controller, and the PlayStation button labels go with the format.</p>
 <h3 id="nintendo-slots">Nintendo slots<a class="headerlink" href="#nintendo-slots" title="Permanent link">&para;</a></h3>
-<p>A Nintendo slot has two presets: Nintendo Switch Pro Controller and Nintendo Switch 2 Pro Controller. Switch Pro is the default. Each ships that controller's own report descriptor, so stick depth differs between them.</p>
+<p>A Nintendo slot has three presets: Nintendo Switch Pro Controller, Nintendo Switch 2 Pro Controller, and Nintendo Switch 2 Pro Controller: Full. Switch Pro is the default. Each ships its controller's own report descriptor, so stick depth differs between the two controllers. The two Switch 2 Pro presets share one.</p>
 <p>On Switch Pro the report DirectInput reads declares 16-bit stick axes, but HIDMaestro first packs each axis into the 12-bit value a physical Pro Controller sends, from 0x200 to 0xE00 around a 0x800 center, and scales it back up. Each stick axis carries about 3,073 positions, whether a game reads that report or the Pro Controller's own full-mode report. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.</p>
-<p>ZL and ZR are digital buttons on both presets, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
+<p>ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
 <table>
 <thead>
 <tr>
@@ -3864,7 +3864,7 @@
 <td>2 states (pressed or released)</td>
 </tr>
 <tr>
-<td>Switch 2 Pro</td>
+<td>Switch 2 Pro, either preset</td>
 <td>4,096 positions (12-bit)</td>
 <td>2 states (pressed or released)</td>
 </tr>
@@ -3879,7 +3879,7 @@
 <hr />
 <h2 id="pov-hats">POV hats<a class="headerlink" href="#pov-hats" title="Permanent link">&para;</a></h2>
 <p>Extended slots and the Switch Pro preset report their POV hat with full 8-way output, not a plain 4-way switch. All four cardinal directions and all four diagonals (Northeast, Southeast, Southwest, Northwest) come through, plus a centered rest position. Games that read a hat switch, like flight sims, see every diagonal.</p>
-<p>The Switch 2 Pro preset has no hat. Its D-Pad is four buttons on the wire.</p>
+<p>Neither Switch 2 Pro preset has a hat. The D-Pad is four buttons on the wire.</p>
 <hr />
 <h2 id="output-throughput">Output throughput<a class="headerlink" href="#output-throughput" title="Permanent link">&para;</a></h2>
 <p>Each virtual controller sends one full state report on every read where something changed. Every button, axis, and hat travels in that single report, so the report count does not grow with how many axes or buttons the slot has.</p>

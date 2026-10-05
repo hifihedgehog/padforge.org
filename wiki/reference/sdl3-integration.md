@@ -464,7 +464,7 @@ SDL_GetJoysticks() -> uint[] joystickIds
     |       Open() failed? -> Dispose wrapper, continue to next
     |
     |   2b. Self-readback guard: serial starts "HM-CTL-", path contains
-    |       "HIDMAESTRO", or a Sony device whose parent chain reaches the
+    |       "HIDMAESTRO", or a Sony or Nintendo device whose parent chain reaches the
     |       usbip-win2 host controller (a composite persona)?
     |       YES -> Dispose wrapper, add to _suppressedSelfVirtualIds, continue
     |
@@ -549,7 +549,7 @@ PadForge filters them at the SDL3 fork level. The fork's patched enumeration wal
 
 The previous in-engine filter (`IsHIDMaestroVirtualDevice` in `InputManager.Step1`) is gone. The engine no longer needs the per-cycle classification by device path, VID/PID, or active/expected count. The fork-side filter is upstream of every consumer (engine, `SDL_OpenJoystick`, `SDL_CloseJoystick`), so the rumble-killing close path that the in-engine filter used to guard against can't fire on HM devices.
 
-One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after `Open`: a serial starting `HM-CTL-`, a path containing `HIDMAESTRO`, or a Sony device whose parent chain reaches the usbip-win2 host controller (`IsOnUsbipVhci`, the route composite personas take) marks PadForge's own virtual. The wrapper is disposed and its instance ID goes into `_suppressedSelfVirtualIds`, so later passes skip it without reopening it.
+One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after `Open`: a serial starting `HM-CTL-`, a path containing `HIDMAESTRO`, or a Sony or Nintendo device whose parent chain reaches the usbip-win2 host controller (`IsOnUsbipVhci`, the route composite personas take) marks PadForge's own virtual. The wrapper is disposed and its instance ID goes into `_suppressedSelfVirtualIds`, so later passes skip it without reopening it.
 
 For the SDL3 fork patches, see PadForge's SDL3 fork branch `feat/hidmaestro-filter`. The OpenXInput fork carries its own complementary filter for the XInput API surface, documented in [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 

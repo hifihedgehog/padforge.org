@@ -26,7 +26,7 @@ HIDMaestro installs itself the first time PadForge creates a virtual controller 
 
 HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. They sit on the **Settings** page until you click **Install**. The runtime's **Install** shows only on a PC that needs it (see [Windows MIDI Services](#windows-midi-services)).
 
-Two more drivers install outside **Settings**, and only when something needs them. Pairing a [DualShock 3](../devices/dualshock-3.md), [PS Move](../devices/ps-move.md) or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named **Full**, the two Valve **Composite** profiles, and **Steam Controller (2026)**) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, **DualSense (PS5): Full**, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.
+Two more drivers install outside **Settings**, and only when something needs them. Pairing a [DualShock 3](../devices/dualshock-3.md), [PS Move](../devices/ps-move.md) or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named **Full**, **Nintendo Switch 2 Pro Controller: Full**, the two Valve **Composite** profiles, and **Steam Controller (2026)**) installs usbip-win2, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, **DualSense (PS5): Full**, is one of them. That install needs no prompt, and USB devices disconnect and reconnect once while Windows re-enumerates its USB root hubs.
 
 ---
 
@@ -81,11 +81,11 @@ PadForge always runs as administrator. The UAC prompt fires once per launch, whe
 
 One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro **device profile**. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.
 
-The **Nintendo** slot type carries two profiles: Switch Pro (the default) and Switch 2 Pro. Pick between them from the slot's preset dropdown. Neither can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering, motion passthrough (games read gyro and accelerometer from the virtual pad), and rumble. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
+The **Nintendo** slot type carries three profiles: Switch Pro (the default), Switch 2 Pro, and Switch 2 Pro: Full. Pick between them from the slot's preset dropdown. None can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering. Switch Pro and Switch 2 Pro: Full carry motion passthrough (games read gyro and accelerometer from the virtual pad) and rumble. The plain Switch 2 Pro profile carries neither, and [Controller Slots](controller-slots.md#nintendo) says which programs read which. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
 
 ### The profiles PadForge offers cover
 
-HIDMaestro ships 232 device profiles. PadForge's pickers offer the 134 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
+HIDMaestro ships 233 device profiles. PadForge's pickers offer the 135 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge

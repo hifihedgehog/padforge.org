@@ -3807,7 +3807,7 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge 5.0.0 ships HM 1.10.1 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.10.1.0), which embeds 232 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 134 of the 232 carry a captured HID descriptor, and PadForge's pickers offer those 134 (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>PadForge 5.0.0 ships HM 1.10.1, and pre-release builds after it ship HM 1.11.0 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.11.0.0), which embeds 233 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 135 of the 233 carry a captured HID descriptor, and PadForge's pickers offer those 135 (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
 <p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
 <table>
 <thead>
@@ -3821,7 +3821,7 @@
 <tr>
 <td>v1.3.18 (HM#33)</td>
 <td>Virtual Switch Pro profile and the IMU submission channel</td>
-<td><code>HMaestroVirtualController.cs:72</code> and <code>:1117</code></td>
+<td><code>HMaestroVirtualController.cs:72</code> and <code>:1170</code></td>
 </tr>
 <tr>
 <td>v1.3.21 (HM#37)</td>
@@ -3836,7 +3836,7 @@
 <tr>
 <td>v1.4.0 (HM#39)</td>
 <td>Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in)</td>
-<td><code>AudioPassthroughService.cs:1494</code>, <code>HMaestroVirtualController.cs:87</code></td>
+<td><code>AudioPassthroughService.cs:1494</code>, <code>HMaestroVirtualController.cs:89</code></td>
 </tr>
 <tr>
 <td>v1.4.1 (HM#41)</td>
@@ -3851,7 +3851,7 @@
 <tr>
 <td>v1.5.1 (HM#48)</td>
 <td>Second DS5 Edge paddle/Fn pair</td>
-<td><code>HMaestroVirtualController.cs:1789-1790</code></td>
+<td><code>HMaestroVirtualController.cs:1845-1846</code></td>
 </tr>
 <tr>
 <td>v1.6.0 (HM#32)</td>
@@ -3866,7 +3866,7 @@
 <tr>
 <td>v1.7.1 (HM#58)</td>
 <td>The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and <code>SubmitRawExtendedReport</code> is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing</td>
-<td><code>HMaestroVirtualController.cs:562</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:323</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
+<td><code>HMaestroVirtualController.cs:587</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:323</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
 </tr>
 <tr>
 <td>v1.7.2 (HM#59)</td>
@@ -3881,12 +3881,12 @@
 <tr>
 <td>v1.8.0 (HM#60)</td>
 <td>Durable identity: the device paths, the container id, and a composite persona's USB serial derive from an identity key PadForge passes per slot, so a pad comes back at the same paths after a restart, a reboot, or a driver upgrade (#395)</td>
-<td><code>HMaestroVirtualController.cs:160</code> (the identity key), <code>:321</code> (<code>CreateController(_profile, _identityKey)</code>)</td>
+<td><code>HMaestroVirtualController.cs:179</code> (the identity key), <code>:346</code> (<code>CreateController(_profile, _identityKey)</code>)</td>
 </tr>
 <tr>
 <td>v1.8.1 (HM#61)</td>
 <td>The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full"</td>
-<td><code>PadForge.App.csproj:294</code>, <code>InputManager.Step5.VirtualDevices.cs:2515</code></td>
+<td><code>PadForge.App.csproj:294</code>, <code>InputManager.Step5.VirtualDevices.cs:2519</code></td>
 </tr>
 <tr>
 <td>v1.9.0</td>
@@ -3906,12 +3906,17 @@
 <tr>
 <td>v1.10.0 (HM#64)</td>
 <td><code>dualshock-3-full</code>, the DualShock 3 (SIXAXIS): Full: the pad in the form Sony's sixaxis driver and DsHidMini's SXS mode present, with analog L2 and R2 and ten <code>HMGamepadState</code> pressure fields (discussion #476). Also the Bluetooth DualShock 4's report 0x11 at SDL's offsets, an identity motion calibration for the DualSense and DualShock 4 profiles, Bluetooth L2 and R2 bits that follow the trigger byte, Valve personas that repeat a raw consumer's own frame, and composite stream state read from the audio traffic when SET_INTERFACE never arrives</td>
-<td><code>HMaestroVirtualController.cs:832</code> (<code>WritePressure</code>), <code>InputManager.PressureRows.cs</code>. See <a href="../input-pipeline/#button-pressure">Button pressure</a></td>
+<td><code>HMaestroVirtualController.cs:857</code> (<code>WritePressure</code>), <code>InputManager.PressureRows.cs</code>. See <a href="../input-pipeline/#button-pressure">Button pressure</a></td>
 </tr>
 <tr>
 <td>v1.10.1 (HM#65)</td>
 <td>The plain <code>dualshock-3</code> profile decodes output report 0x01, the native pad's rumble and LED report, with the block <code>dualshock-3-full</code> carries, so a game's rumble on the DualShock 3 (SIXAXIS) preset reaches the controller</td>
 <td>No PadForge code: <code>HMaestroVirtualController.TryDualShock3Motors</code> keys on the decoded field names. Commit <code>5e325569</code> takes it</td>
+</tr>
+<tr>
+<td>v1.11.0 (HM#66)</td>
+<td><code>switch2-pro-controller-composite</code>, the Switch 2 Pro Controller as a two-interface USB/IP persona: HID on interface 0, and on interface 1 the bulk pair Steam and SDL start the pad through. It sends report 0x05 with the accelerometer and the gyro on its own 4 ms clock, decodes output report 0x02 into <code>leftMotor</code> and <code>rightMotor</code>, and refuses raw reports. Both Switch 2 Pro profiles' trigger axes now follow their <code>axisMap</code></td>
+<td><code>HMaestroProfileCatalog.cs:457</code> (<code>IsNintendoProfile</code>), <code>Switch2ProStateMap.cs</code>, <code>HMaestroVirtualController.cs:169</code> (<code>DeviceBuildsReports</code>). Commit <code>f1e3b6c7</code> takes it. See <a href="../../features/virtual-controllers/#switch-2-pro-state">Switch 2 Pro state</a></td>
 </tr>
 </tbody>
 </table>
@@ -3954,7 +3959,7 @@
 <tr>
 <td>Nintendo (<code>Nintendo = 5</code>)</td>
 <td>HM</td>
-<td>A virtual Switch Pro Controller (<code>switch-pro</code>, VID 057E, PID 2009, the Bluetooth wire shape, the default) or Switch 2 Pro Controller (<code>switch2-pro-controller</code>, VID 057E, PID 2069), picked from the catalog with no Customize. Rides the same raw-HID data path as Extended, with gyro passthrough over the HM v1.3.18 IMU channel and HOME LED control.</td>
+<td>A virtual Switch Pro Controller (<code>switch-pro</code>, VID 057E, PID 2009, the Bluetooth wire shape, the default) or Switch 2 Pro Controller (VID 057E, PID 2069) in one of two forms: <code>switch2-pro-controller</code>, a HID gamepad, or <code>switch2-pro-controller-composite</code>, the USB persona with motion that only Steam and SDL built with libusb read. Picked from the catalog with no Customize. Rides the same raw-HID data path as Extended, with gyro passthrough over the HM v1.3.18 IMU channel and HOME LED control.</td>
 </tr>
 <tr>
 <td>VR (<code>Vr = 6</code>)</td>
@@ -3969,7 +3974,7 @@
 <p>The relevant assembly is <code>HIDMaestro.Core</code> (bundled at <code>PadForge.App/Resources/HIDMaestro/HIDMaestro.Core.dll</code>). Three primary types:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// HMContext: process-wide entry point. One instance.</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 232 embedded profile JSONs (134 carry a descriptor)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 233 embedded profile JSONs (135 carry a descriptor)</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">context</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span><span class="w">          </span><span class="c1">// register HM with Windows (idempotent)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// HMProfile: handle to a profile (Xbox 360 wired, DualSense Edge, etc.).</span>
@@ -4018,7 +4023,7 @@
 <ul>
 <li>The serial starts with <code>HM-CTL-</code>.</li>
 <li>The device path contains <code>HIDMAESTRO</code>.</li>
-<li>The VID is Sony's <code>0x054C</code> and the path sits on a usbip-vhci node (<code>IsOnUsbipVhci</code>), which is the only discriminator a v1.4.0 composite persona carries, since a persona rides the real USB stack and has neither of the other two markers.</li>
+<li>The VID is Sony's <code>0x054C</code> or Nintendo's <code>0x057E</code> (<code>ChecksUsbipAncestry</code>, <code>InputManager.Step1.UsbipVhciGuard.cs:47</code>) and the path sits on a usbip-vhci node (<code>IsOnUsbipVhci</code>), which is the only discriminator a composite persona carries, since a persona rides the real USB stack and has neither of the other two markers. Nintendo joined with the Switch 2 Pro persona.</li>
 </ul>
 <p>Its coverage is genuinely narrow. SDL's HIDAPI drivers overwrite the hid-level <code>HM-CTL-&lt;n&gt;</code> serial with a fabricated MAC during their identity handshake, and non-Xbox virtuals' interface paths carry no <code>HIDMAESTRO</code> marker (which is exactly why the fork filter reads DEVPKEY hardware IDs instead). So the guard catches failed-handshake and serial-preserving cases only. The fork enumeration filter remains the primary defense.</p>
 <p>If you change HM's enumerator name, hardware ID, or ContainerID, all five surfaces (OpenXInput fork, SDL3 fork, <code>XboxImpulseHidWriter</code>, <code>HidHideController</code>, and Step 1's self-readback guard) need to be kept in sync. See <code>hidmaestro-fork-resync-recipe.md</code> in project memory.</p>
@@ -4109,7 +4114,8 @@
 <p>Two raw submit paths exist on <code>HMController</code>, and which one a frame takes decides which report id it leaves on.</p>
 <p><code>SubmitRawReport</code> takes data bytes. The driver prepends a report id, and the id it prepends is the descriptor's first input report id. That is the right answer for every Sony USB profile, whose descriptor leads with Report 0x01. It is the wrong answer for Valve's 2026 Steam Controller (<code>steam-controller-2</code>): that pad carries its lizard-mode mouse (report 0x40) and keyboard (0x41) on the same interface as its controller state (0x42), and the mouse comes first. PadForge's packer builds the full 54-byte on-wire frame with 0x42 at byte 0. Treated as data, the frame shifted one byte and went out re-headed as 0x40, so byte 1, the rolling sequence number, landed on the mouse's relative X at 250 Hz and creating the virtual controller sent the cursor tearing sideways until the slot was deleted (owner report, 2026-08-28).</p>
 <p>HM v1.7.1 (HM#58) fixed it on the driver side. A profile that declares an <code>extendedReport.reportId</code> and is <code>alwaysArmed</code> now emits a raw frame verbatim through the same extended path <code>SubmitState</code> uses. The driver infers the caller's convention from length: a frame the size of the declared input report already carries its id, one byte shorter is the data-only form and gets the id prepended. <code>SubmitRawExtendedReport</code> is the explicit form: the frame goes out verbatim whatever the profile declares.</p>
-<p>PadForge calls the explicit one. <code>HMaestroVirtualController.SubmitRawReport</code> (<code>HMaestroVirtualController.cs:562</code>) forwards to <code>SubmitRawExtendedReport</code> when <code>_extendedFrameCarriesItsOwnId</code> is set, and to <code>SubmitRawReport</code> otherwise. The flag is computed once in the constructor (<code>:284</code>): <code>ExtendedReport != null &amp;&amp; ExtendedReport.AlwaysArmed &amp;&amp; ExtendedReport.ReportIdByte != 0</code>. Saying it outright means the pairing cannot flip the day a packer size or a declared size moves by one, which HM's length inference would let happen in silence.</p>
+<p>PadForge calls the explicit one. <code>HMaestroVirtualController.SubmitRawReport</code> (<code>HMaestroVirtualController.cs:587</code>) forwards to <code>SubmitRawExtendedReport</code> when <code>_extendedFrameCarriesItsOwnId</code> is set, and to <code>SubmitRawReport</code> otherwise. The flag is computed once in the constructor (<code>:309</code>): <code>ExtendedReport != null &amp;&amp; ExtendedReport.AlwaysArmed &amp;&amp; ExtendedReport.ReportIdByte != 0</code>. Saying it outright means the pairing cannot flip the day a packer size or a declared size moves by one, which HM's length inference would let happen in silence.</p>
+<p>One persona takes neither path. <code>switch2-pro-controller-composite</code> builds every report on the device side, from the report its host selected and its own counters, and both raw submits throw <code>NotSupportedException</code> on it (HM#66). Its slot submits state alone. See <a href="../../features/virtual-controllers/#switch-2-pro-state">Switch 2 Pro state</a>.</p>
 <p>What stays on the PadForge side is a tripwire, never a gate. <code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>HMaestroProfileCatalog.cs:339</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. <code>PadForge.Tests/PointingReportProfileGuardTests.cs</code> uses it two ways: <code>PackerFramesCarryTheirOwnReportId</code> asserts every Valve packer's frame size equals its profile's <code>InputReportSize</code>, and <code>APointingLedPackerProfileTakesTheVerbatimPath</code> asserts that any pointing-led profile with a packer declares the always-armed report id that puts it on the verbatim path. Commit <code>581264e9</code> had dropped such profiles from the pickers and refused to build them on the Extended creation path. Commit <code>662e174a</code> reversed that the same day: withdrawing a working profile over a driver defect was not a call to make on the owner's behalf. Since 4.4.0 the 2026 Steam Controller is in the picker, <code>WithheldProfileIds</code> is empty, and no creation path refuses a profile.</p>
 <p>HM#58 also corrected the 2026 profile's rear-button pairing to SDL's. PadForge's packer already had it right (R4 on bit 7, R5 on bit 8, L4 and L5 on 17 and 18), so the packer did not change. The profile now names all four (<code>RightPaddle</code>, <code>RightPaddle2</code>, <code>LeftPaddle</code>, <code>LeftPaddle2</code>).</p>
 <hr />

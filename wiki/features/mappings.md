@@ -537,7 +537,7 @@ The [Gyro Recenter](../guides/macros.md#gyro-recenter) macro action levels a Spe
 
 The [DSU Motion Server](../reference/dsu-motion-server.md) sends the motion the virtual controller reports, stick turns included. Cemu and eden slowly subtract a held turn slower than about 20°/s as gyro drift, whether they read the virtual controller or the DSU server, so set **Start Speed** above that for slow held turns there.
 
-The **DualShock 3 (SIXAXIS)**, **Nintendo Switch 2 Pro Controller** and **Steam Deck Controller** presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4. The **DualShock 3 (SIXAXIS): Full** preset carries the accelerometer and the yaw gyro, the one gyro axis a DualShock 3 has. Its Motion Pitch and Roll rows in Speed mode carry a note too: they reach the game only as tilt, and only while no accelerometer feeds the Motion Accelerometer row.
+The **DualShock 3 (SIXAXIS)**, **Nintendo Switch 2 Pro Controller** and **Steam Deck Controller** presets have no motion in their reports. Their Motion rows say so in a note, and the DSU server still gets the motion on slots 1 to 4. The **Nintendo Switch 2 Pro Controller: Full** preset carries the gyro and the accelerometer. The **DualShock 3 (SIXAXIS): Full** preset carries the accelerometer and the yaw gyro, the one gyro axis a DualShock 3 has. Its Motion Pitch and Roll rows in Speed mode carry a note too: they reach the game only as tilt, and only while no accelerometer feeds the Motion Accelerometer row.
 
 ### Turn a stick into motion
 
@@ -606,7 +606,7 @@ Both buttons and axes translate. Pasting to the same controller type applies map
 A Nintendo slot's grid mirrors the Xbox and PlayStation arrangement: analogous controls in analogous positions.
 
 - Face buttons in positional order: **B**, **A**, **Y**, **X** (south, east, west, north, which is also raw index order).
-- **L** and **R**, then **Minus** and **Plus** where Back and Start sit, **Home** where Guide sits, and **Capture**. The Switch 2 Pro profile adds **C** after Capture, and **GL** / **GR** after the stick clicks.
+- **L** and **R**, then **Minus** and **Plus** where Back and Start sit, **Home** where Guide sits, and **Capture**. The two Switch 2 Pro profiles add **C** after Capture, and **GL** / **GR** after the stick clicks.
 - Stick clicks, the four D-pad directions, and **ZL** / **ZR** in the trigger rows' position. ZL and ZR are digital buttons on this controller, not analog triggers.
 - Left and right stick axes with the same labels the other gamepad grids use.
 - **Motion Gyro** and **Motion Accelerometer** passthrough rows at the tail, then **Motion Pitch**, **Motion Yaw**, and **Motion Roll**, same as the PlayStation grid.

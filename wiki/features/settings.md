@@ -208,7 +208,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 232 device profiles, of which PadForge offers the 134 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 233 device profiles, of which PadForge offers the 135 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
 | **Windows MIDI Services** | Gives each MIDI slot a port of its own and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. Without it, MIDI runs on the legacy MIDI API, where slots send to a port you pick. | On 24H2 or later before Windows carries the API, click **Install** on its card for the runtime. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 

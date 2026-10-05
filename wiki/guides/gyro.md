@@ -74,7 +74,7 @@ Off by default. The virtual controller hands the game a clean, calibrated sensor
 
 Check the box to route the rest of the Gyro tab's tuning through the motion the virtual controller reports: deadzone, horizontal and vertical sensitivity, smoothing, response curve, invert, and the reference-frame projection. The [engage gates](#engage-gates) come with it, so a slot with Easy Aim or an Aim Engage button set reports zero motion while the gate is closed. Useful when you want PadForge's curve and smoothing to land in a game that exposes only raw motion.
 
-The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and Switch 2 Pro), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.
+The virtual controllers that carry motion to the game are PlayStation slots (DualShock 4, DualSense), Nintendo slots (Switch Pro since 4.1.0, and the Switch 2 Pro: Full preset), and Extended slots on the Valve profiles (Steam Deck and both Steam Controllers). Xbox, MIDI, Keyboard + Mouse, and every other Extended profile have no motion channel.
 
 On those slots a controller with no motion sensor can send motion too. The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows on the Mappings tab turn a stick, a trigger, or buttons into the virtual controller's motion.
 

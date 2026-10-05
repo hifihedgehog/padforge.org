@@ -4657,7 +4657,7 @@
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    subgraph &quot;External Systems&quot;
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        SDL3[SDL3.dll&lt;br/&gt;Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;ships 232 profiles, PadForge offers the 134 with a captured descriptor&lt;br/&gt;+ native OpenVR driver for the VR slot]
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;ships 233 profiles, PadForge offers the 135 with a captured descriptor&lt;br/&gt;+ native OpenVR driver for the VR slot]
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        HH[HidHide Driver]
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WMS[Windows MIDI Services&lt;br/&gt;or legacy WinMM]
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
@@ -5001,7 +5001,7 @@
 <a id="__codelineno-1-242" name="__codelineno-1-242" href="#__codelineno-1-242"></a>    OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge&#39;s own XInput view
 <a id="__codelineno-1-243" name="__codelineno-1-243" href="#__codelineno-1-243"></a>    Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
 <a id="__codelineno-1-244" name="__codelineno-1-244" href="#__codelineno-1-244"></a>    Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll&#39;s Razer Sensa backend
-<a id="__codelineno-1-245" name="__codelineno-1-245" href="#__codelineno-1-245"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.10.1, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+<a id="__codelineno-1-245" name="__codelineno-1-245" href="#__codelineno-1-245"></a>    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.11.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
 <a id="__codelineno-1-246" name="__codelineno-1-246" href="#__codelineno-1-246"></a>    HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
 <a id="__codelineno-1-247" name="__codelineno-1-247" href="#__codelineno-1-247"></a>    HidHideArm64/                     # HidHide_ARM64.zip (the Microsoft-signed ARM64 driver) + nefconc.exe, embedded in both builds for ARM64 machines
 <a id="__codelineno-1-248" name="__codelineno-1-248" href="#__codelineno-1-248"></a>
@@ -5306,8 +5306,8 @@
 <td>HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side</td>
 </tr>
 <tr>
-<td>232 profiles in HIDMaestro's catalog</td>
-<td>HIDMaestro ships 232 profiles for the long tail of DirectInput devices, and PadForge offers the 134 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only</td>
+<td>233 profiles in HIDMaestro's catalog</td>
+<td>HIDMaestro ships 233 profiles for the long tail of DirectInput devices, and PadForge offers the 135 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only</td>
 </tr>
 <tr>
 <td>DualSense native</td>
@@ -5450,7 +5450,7 @@
 <tr>
 <td><code>InputManager.Step1.UsbipVhciGuard.cs</code></td>
 <td>Step 1</td>
-<td>Composite-persona self-readback guard: walks a Sony-VID device's PnP ancestry for the <code>ROOT\HIDMAESTRO_UDE</code> stamp so PadForge never ingests its own USB persona</td>
+<td>Composite-persona self-readback guard: walks a Sony or Nintendo device's PnP ancestry for the <code>ROOT\HIDMAESTRO_UDE</code> stamp so PadForge never ingests its own USB persona</td>
 </tr>
 <tr>
 <td><code>InputManager.Step2.UpdateInputStates.cs</code></td>

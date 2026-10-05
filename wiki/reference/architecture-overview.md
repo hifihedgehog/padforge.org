@@ -46,7 +46,7 @@ graph TB
     subgraph "External Systems"
         SDL3[SDL3.dll<br/>Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
         OXI[OpenXInput<br/>xinput1_4 shim]
-        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 232 profiles, PadForge offers the 134 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
+        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 233 profiles, PadForge offers the 135 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
         WMS[Windows MIDI Services<br/>or legacy WinMM]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
@@ -367,7 +367,7 @@ PadForge.App/
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.10.1, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.11.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
     HidHideArm64/                     # HidHide_ARM64.zip (the Microsoft-signed ARM64 driver) + nefconc.exe, embedded in both builds for ARM64 machines
 
@@ -668,7 +668,7 @@ Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from 
 | Advantage | Detail |
 |---|---|
 | One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
-| 232 profiles in HIDMaestro's catalog | HIDMaestro ships 232 profiles for the long tail of DirectInput devices, and PadForge offers the 134 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 2 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only |
+| 233 profiles in HIDMaestro's catalog | HIDMaestro ships 233 profiles for the long tail of DirectInput devices, and PadForge offers the 135 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), plus a profile builder for custom HID descriptors. vJoy was generic-only |
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360 and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
 | One marker to filter | Every HM device carries `HIDMAESTRO` in its path or hardware IDs (a composite persona on its emulated host controller), so one classifier filters them from SDL enumeration. v2's two drivers needed two filters and produced N² phantom controllers at edge cases |
@@ -778,7 +778,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
-| `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks a Sony-VID device's PnP ancestry for the `ROOT\HIDMAESTRO_UDE` stamp so PadForge never ingests its own USB persona |
+| `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks a Sony or Nintendo device's PnP ancestry for the `ROOT\HIDMAESTRO_UDE` stamp so PadForge never ingests its own USB persona |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Read `CustomInputState` per device, apply FFB from `VibrationStates[]` + audio bass |
 | `InputManager.Step3.MappingSetEval.cs` | Step 3 | Evaluate the per-VC MappingSet (rows, sources, combine modes, shift layers) into OutputState |
 | `InputManager.Step3.SteeringLockFeedback.cs` | Step 3 | At-lock steering feedback for the winding-stick / 2D steering path (#94) |
