@@ -498,7 +498,7 @@ The card names the API PadForge drives (`MidiApiSelection`), offers PadForge's b
 | Event | Description |
 |-------|-------------|
 | `InstallMidiRuntimeRequested` | Download and install PadForge's build of the runtime (`DriverInstaller.InstallMidiRuntime`). |
-| `UninstallMidiServicesRequested` | Uninstall the installed runtime (`DriverInstaller.UninstallMidiRuntime`). |
+| `UninstallMidiServicesRequested` | Uninstall the installed runtime (`DriverInstaller.UninstallMidiRuntime`). MainWindow asks first when the runtime is Microsoft's bundle. |
 
 ### Driver Status: SteamVR (#49)
 

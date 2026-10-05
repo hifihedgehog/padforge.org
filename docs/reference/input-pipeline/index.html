@@ -9544,12 +9544,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8319)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8330)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8378)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8389)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)</code> -&gt; set <code>PadIndex</code> -&gt; clear <code>LayerMask</code> unless <code>DestinationDeclaresLayer</code> -&gt; add</td>
 </tr>
 <tr>

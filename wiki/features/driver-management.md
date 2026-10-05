@@ -225,7 +225,7 @@ When a slot stops, PadForge sends a note off for each note it held and closes th
 
 ### Removing the runtime
 
-**Uninstall** shows while a runtime is installed. It removes PadForge's build, or Microsoft's runtime together with everything Microsoft's **Windows MIDI Services Runtime and Tools** setup installed beside it, the MIDI Settings app included. Microsoft no longer offers that setup for download. The API built into Windows stays.
+**Uninstall** shows while a runtime is installed. It removes PadForge's build, or Microsoft's runtime together with everything Microsoft's **Windows MIDI Services Runtime and Tools** setup installed beside it, the MIDI Settings app included. Microsoft no longer offers that setup for download, so PadForge asks before it removes it. The API built into Windows stays.
 
 1. If the card reads **App SDK Runtime**, delete or retype every MIDI slot on the Dashboard first. When it reads **Built into Windows** or **Legacy MIDI API**, MIDI slots run without the runtime and can stay.
 2. Open **Settings**. Scroll to **Windows MIDI Services**.
