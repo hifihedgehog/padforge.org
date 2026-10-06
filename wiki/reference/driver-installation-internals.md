@@ -757,6 +757,7 @@ Runtime device management (blacklisting, whitelisting, cloaking) communicates di
 | `SET_BLACKLIST` | `0x8001600C` | Write | Replace blacklisted device instance IDs |
 | `GET_ACTIVE` | `0x80016010` | Read | Get cloaking active state (1 byte) |
 | `SET_ACTIVE` | `0x80016014` | Write | Enable/disable cloaking (1 byte) |
+| `GET_WLINVERSE` | `0x80016018` | Read | Get the inverse application cloak flag (1 byte). HidHide 1.2 and later, and an older driver rejects it. |
 
 ### Buffer Format
 
@@ -775,6 +776,9 @@ static string DescribeReach(params string[] exeNames)       // Diagnostics snaps
 static bool GetActive()                                     // Cloaking enabled?
 static bool TryGetActive(out bool active)                   // The same read, false when the IOCTL failed
 static void SetActive(bool active)                          // Enable/disable cloaking
+static bool TryGetInverse(out bool inverse)                 // Inverse application cloak flag, false when the IOCTL failed
+static bool RemoveWhitelistEntries(IEnumerable<string> paths) // Take the named entries off the list and leave the rest
+static string CurrentProcessNativeImagePath()               // This process's image as \Device\HarddiskVolumeN\..., the form the driver records
 static void RemoveManagedDevices()                          // Remove only PadForge's entries
 static int AdoptExistingAsManaged()                         // Seed the managed set from the driver's list, -1 on a failed read
 static bool SyncManagedDevices(HashSet<string> desiredIds)  // Diff-based blacklist sync against the driver's own list
@@ -869,15 +873,34 @@ Every id the keep-out predicate removed is reported back through `keptOut` and l
 | `HIDHIDE keepout` | The keep-out set, when non-empty. |
 | `HIDHIDE dev` | Per device: VID:PID, the resolved instance id, the expansion, the sibling sweep, the sweep decision, and anything the keep-out held back. |
 | `HIDHIDE sync` | Desired count, added, removed, cloaking state, `write=REFUSED` on a refused `SET`, and the read-back verdict (`readback=ok`, `readback=FAILED`, or `readback=MISSING` with the ids). |
+| `HIDHIDE inverse application cloak is on` | The inverse flag is set, so PadForge took its own whitelist entries off and hides nothing. |
+| `HIDHIDE whitelist could not be read or written` | `SyncWhitelist` returned false: the driver's list did not read, or it refused the write, so PadForge may be missing from it. Counts as trouble. |
+| `HIDHIDE reach ok` | The self-check opened a hidden device, with its path. |
+| `HIDHIDE REFUSED` | The self-check was refused: the path, the Win32 error, how many entries PadForge took back, this process's native image path, and `listed=yes`, `no` or `unreadable` for that path on the whitelist at that moment. Listed and refused means the driver knows this process by another path or not at all. Not listed means the entry never landed. |
+| `HIDHIDE reach unknown` | No hidden HID interface answered the self-check, so it runs again on the next apply. |
 | `HIDHIDE apply unchanged` | The heartbeat, at most once a minute. |
 
-The block prints only when the desired set moved, or once a minute while the sync or the read-back reports trouble. `DevicesUpdated` fires on every device-list flip, and an idle bench flipped something every enumeration interval: in one owner trace 215 of 305 diag lines were this block, five seconds apart, all identical.
+The block prints when the desired set moved, when the self-check was refused in that apply, or once a minute while the sync, the read-back or the whitelist reports trouble. A refusal takes the hide back, so the set it leaves can equal the last one printed, and the move test alone would drop the `REFUSED` line. `DevicesUpdated` fires on every device-list flip, and an idle bench flipped something every enumeration interval: in one owner trace 215 of 305 diag lines were this block, five seconds apart, all identical.
 
 **Sibling sweep, scoped by serial.** The persisted `DevicePath` names the transport a pad was *last* seen on, so the first apply after a transport switch can hide the wrong node while the live one stays open to games. The sweep hides every present node of the record's VID/PID as well, and scopes the selection to the pad's own identity: `HidHideSerialScopes` reads a Bluetooth address out of the record's serial, and `SelectHidHideSweepNodes` keeps only present nodes reporting that same serial. A second pad of the same model is never touched, not even before it has a record of its own. Nodes with no readable serial, and records with no serial, fall back to the sole-present-record gate. `HidHideSweepDecision` writes which rule chose and which way the gate went, because `gate=off(same=N)` used to be silence, and silence could not be told from a sweep that found nothing.
 
 ### DOS Device Path Conversion
 
 Whitelist requires DOS device paths (`\Device\HarddiskVolumeN\...`), not regular paths (`C:\...`). `ToDosDevicePath()` converts via `QueryDosDeviceW`.
+
+The driver does not compare that conversion, though. It records each process by the image name its first load-image notification carries (HidHide `Logic.c` `OnSystemLoadImage`, `Config.c` `HidHideProcessIdRegister`) and matches the list against that name (`Config.c` `HidHideProcessIdCheckFullImageNameAgainstWhitelist`). The drive-letter conversion names a different path for the same file when PadForge's folder sits on a volume mounted inside another drive, on a SUBST drive, or behind a junction. `SyncWhitelist` therefore also lists `CurrentProcessNativeImagePath()`, which is `QueryFullProcessImageNameW` with `PROCESS_NAME_NATIVE`: the kernel's own name for the image.
+
+### Self-Access Check
+
+PadForge reads every device it hides, and SDL opens each HID device again on every enumeration and drops one it cannot open (hidapi `windows/hid.c` `hid_enumerate`, `open_device(path, FALSE)`). A device HidHide hides from PadForge itself therefore dies at the next device arrival. In discussion #484 a Wii Remote was hidden at 22:13:30.242 and SDL removed it at 30.982, while the slot's virtual controller was being created, and it stayed gone until it was paired again.
+
+HidHide refuses PadForge in three ways that a correct whitelist entry does not prevent. The process may be unrecorded: registration happens at a process's first image load after the driver loaded, and `HidHideProcessIdRegister` keeps the first name it sees, so a PadForge that was running when HidHide was installed is recorded under a DLL's path or not at all, and `Whitelisted` answers false for it until it restarts. The inverse flag may be set: `Whitelisted` returns the negation, so a listed program is the one refused. Or the recorded path may differ from every entry.
+
+`ApplyDeviceHiding` handles the second up front. With the flag set it removes PadForge's own entries, both forms, through `RemoveWhitelistEntries`, hides nothing, and shows `Status_HidHideInverse` once. It catches the rest by trying: after a sync that wrote something, or until a check has passed, `ProbeOwnHidHideReach` takes the hidden HID instance ids, finds each one's interface with `HidInterfaceOf`, and opens it with `TryOpenAsThisProcess`, which is SDL's enumeration open (no access rights, read and write shared, overlapped). The verdict belongs to the process, so the first interface that answers settles it. An open that works confirms the reach for the session. `ERROR_ACCESS_DENIED`, which is how HidHide completes a refused create (`Logic.c` `OnDeviceFileCreate`), clears the desired set, syncs it to take every entry back, latches `_hidHideRefusedPadForge` so later applies stand down for the life of the process, and shows `Status_HidHideRefusedPadForge`. Any other error, or no interface at all, decides nothing.
+
+Standing down and taking a hide back both unhide, so each releases a captured pen tablet before its write, through `PrepareTabletVisibilityChanges` with `hideNone` set, as every other unhide does.
+
+`HidHideSelfAccessTests` runs the real `ApplyDeviceHiding` against a fake control device through `IoSeam`, `InterfaceSeam` and `OpenSeam`, for the refused, allowed, unanswered and inverse cases, and reads the diagnostics ring after a mark of its own for the `REFUSED` and whitelist lines.
 
 ### Device Instance ID Conversion
 

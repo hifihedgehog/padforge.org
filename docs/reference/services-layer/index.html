@@ -3419,10 +3419,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#syncwhitelisthashsetstring-desiredwinpaths-private" class="md-nav__link">
+  <a href="#syncwhitelisthashsetstring-desiredwinpaths-string-nativeselfpath-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths) (private)
+        SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths, string nativeSelfPath) (private)
       
     </span>
   </a>
@@ -6527,10 +6527,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#syncwhitelisthashsetstring-desiredwinpaths-private" class="md-nav__link">
+  <a href="#syncwhitelisthashsetstring-desiredwinpaths-string-nativeselfpath-private" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths) (private)
+        SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths, string nativeSelfPath) (private)
       
     </span>
   </a>
@@ -8761,17 +8761,19 @@
 <h4 id="applydevicehiding-public"><code>ApplyDeviceHiding()</code> (public)<a class="headerlink" href="#applydevicehiding-public" title="Permanent link">&para;</a></h4>
 <p>Only acts if <code>EnableInputHiding</code> is on. Two mechanisms:</p>
 <p><strong>HidHide (driver-level):</strong>
-1. Builds whitelist (PadForge exe + user paths). <code>SyncWhitelist()</code> adds/removes only PadForge-managed entries.
-2. For each <code>UserDevice</code> with <code>HidHideEnabled</code>: converts <code>DevicePath</code> to HID instance ID (fallback: VID/PID lookup for synthetic paths like "XInput#0"). Caches resolved IDs for offline pre-emptive blacklisting.
-3. <code>HidHideController.SyncManagedDevices(desiredIds)</code>. Atomic diff-based sync.
-4. Activates cloaking if any devices are blacklisted.</p>
+1. Reads HidHide's inverse flag. With <strong>Inverse application cloak</strong> on, PadForge takes its own entries off the list, hides nothing, and shows <code>Status_HidHideInverse</code> once.
+2. Otherwise builds whitelist (PadForge exe + user paths). <code>SyncWhitelist()</code> adds/removes only PadForge-managed entries, and lists PadForge's native image path too. A list it cannot read or write is logged.
+3. For each <code>UserDevice</code> with <code>HidHideEnabled</code>: converts <code>DevicePath</code> to HID instance ID (fallback: VID/PID lookup for synthetic paths like "XInput#0"). Caches resolved IDs for offline pre-emptive blacklisting. Skipped while stood down: inverse mode, or HidHide refused PadForge earlier in the process.
+4. <code>HidHideController.SyncManagedDevices(desiredIds)</code>. Atomic diff-based sync.
+5. Activates cloaking if any devices are blacklisted.
+6. After a write, <code>ProbeOwnHidHideReach</code> opens one hidden HID interface the way SDL enumerates (#484). Refused, it takes every entry back, latches <code>_hidHideRefusedPadForge</code> for the process, and shows <code>Status_HidHideRefusedPadForge</code>. See <a href="../driver-installation-internals/#self-access-check">Self-Access Check</a>.</p>
 <p><strong>Input hooks (keyboard/mouse):</strong>
 1. For each device with <code>ConsumeInputEnabled</code> and a slot assignment: parses "Button {index}" descriptors to collect VKey codes or mouse button IDs.
 2. Creates/updates <code>InputHookManager</code> if inputs need suppressing. Otherwise stops and disposes it.</p>
 <h4 id="removedevicehidingbool-keepcloaks-false-public"><code>RemoveDeviceHiding(bool keepCloaks = false)</code> (public)<a class="headerlink" href="#removedevicehidingbool-keepcloaks-false-public" title="Permanent link">&para;</a></h4>
 <p>Calls <code>HidHideController.RemoveManagedDevices()</code> (best-effort), stops and disposes <code>InputHookManager</code>. With <code>keepCloaks: true</code> the HidHide blacklist removal and whitelist-tracking clear are skipped, so only the input hooks tear down.</p>
-<h4 id="syncwhitelisthashsetstring-desiredwinpaths-private"><code>SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths)</code> (private)<a class="headerlink" href="#syncwhitelisthashsetstring-desiredwinpaths-private" title="Permanent link">&para;</a></h4>
-<p>Converts Windows paths to DOS device paths. Only modifies PadForge-managed entries. Entries from HidHide Client or other tools are left untouched. Tracked via <code>_managedWhitelistDosPaths</code>.</p>
+<h4 id="syncwhitelisthashsetstring-desiredwinpaths-string-nativeselfpath-private"><code>SyncWhitelist(HashSet&lt;string&gt; desiredWinPaths, string nativeSelfPath)</code> (private)<a class="headerlink" href="#syncwhitelisthashsetstring-desiredwinpaths-string-nativeselfpath-private" title="Permanent link">&para;</a></h4>
+<p>Converts Windows paths to DOS device paths and adds <code>nativeSelfPath</code>, PadForge's image in the form the driver records, unconverted (<code>DesiredWhitelistEntries</code>). Only modifies PadForge-managed entries. Entries from HidHide Client or other tools are left untouched. Tracked via <code>_managedWhitelistDosPaths</code>. Returns false when the driver's list could not be read or the write was refused.</p>
 <h3 id="auto-idle">Auto-Idle<a class="headerlink" href="#auto-idle" title="Permanent link">&para;</a></h3>
 <h4 id="updateidlestate-private-30hz"><code>UpdateIdleState()</code> (private, 30Hz)<a class="headerlink" href="#updateidlestate-private-30hz" title="Permanent link">&para;</a></h4>
 <p>Sets <code>_inputManager.IsIdle</code>. A slot counts as active when it is created, enabled, and has an <strong>online</strong> mapped device, so a slot whose every assigned pad is asleep idles the engine instead of reading as "Forging". Two overrides keep the engine awake with no active slot: a Remote Link server with live connections, and a pending HM teardown inside the inactivity window. Idle mode skips input/mapping/output and sleeps at ~20 Hz, reducing CPU to ~0%. Device enumeration continues at a reduced rate, every 5000 ms against the running loop's <code>EnumerationIntervalMs</code> of 2000, so new controllers still appear on the Devices page.</p>

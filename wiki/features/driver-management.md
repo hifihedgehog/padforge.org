@@ -135,7 +135,9 @@ PadForge runs HidHide on its own. You do not need the HidHide Configuration Clie
 | Feature | Detail |
 |---|---|
 | **Per-device hiding** | Toggle **Hide from Games (HidHide)** on each device card ([Devices](devices.md) page). |
-| **Automatic whitelist** | PadForge adds itself so it can still read hidden controllers. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when **Keep Devices Cloaked Between Launches** is on. |
+| **Automatic whitelist** | PadForge adds itself so it can still read hidden controllers, under the native path Windows records for its executable as well as its drive-letter path. The entry stays in the driver's whitelist between sessions. Harmless, and it keeps hidden controllers readable when **Keep Devices Cloaked Between Launches** is on. |
+| **Self-check** | After hiding a controller, PadForge opens it once itself, the way it reopens every device on each scan. If HidHide refuses, PadForge takes every entry back, hides nothing until it restarts, and says so in the status bar, because a controller hidden from PadForge itself stops responding at the next scan. HidHide refuses a program it never saw start, such as a PadForge that was already running when HidHide was installed. |
+| **Inverse application cloak** | This HidHide option turns the whitelist into a list of programs that cannot see hidden devices, so PadForge's own entry would hide every controller from PadForge. While it is on, PadForge keeps itself off the list, hides nothing, and says so in the status bar. |
 | **Engine-aware** | By default, hiding holds only while the engine runs. Stop the engine or close PadForge and the controllers reappear. |
 | **Hides the whole device** | One toggle covers the device, not one interface. PadForge blacklists every HID interface under the controller's base container, the nodes between that interface and the base on classes HidHide filters, and the base container itself when it is one of those classes and all of its children are HID. XInput and WGI cannot then reach the pad through a sibling path. |
 | **Visible rows keep their interface** | A device PadForge lists as its own row with hiding off is left alone, and no other device's hide blocks a parent above it. A handheld whose built-in pad and touchpad are separate rows can hide one and keep the other. |
@@ -154,9 +156,9 @@ Other controller utilities (Steam Input, for example) need their own whitelist e
 
 1. Open **Settings**. Scroll to **HidHide Driver**.
 2. Click **Install**. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.
-3. No restart is needed. A controller that was already connected picks HidHide up the next time it connects, so reconnect it if hiding does not work right away.
+3. Restart PadForge once the install finishes. HidHide recognizes only programs that start after its driver loads, so the PadForge that ran the installer cannot read controllers it hides, and it hides nothing until it restarts. A controller that was already connected picks HidHide up the next time it connects, so reconnect it if hiding does not work right away.
 
-Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, and which rule the transport sweep used. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
+Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, which rule the transport sweep used, whether HidHide's whitelist could be read and written, and whether PadForge could still open a device it hid. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
 
 ### Uninstall steps
 
@@ -345,6 +347,8 @@ The slot guards read your saved slots, not what the engine is running, so they h
 | Problem | Fix |
 |---|---|
 | HidHide hides controllers from other apps | Add those apps to the whitelist on the **Settings** page (see [HidHide Whitelisted Applications](settings.md#hidhide-whitelisted-applications)). |
+| The status bar says HidHide blocked PadForge from a device it had hidden | Restart PadForge, which hides nothing until it restarts. HidHide does not recognize a PadForge that was already running when HidHide was installed. If the message returns after a restart, the diagnostics log names the device path, the Windows error HidHide answered with, and whether PadForge was on HidHide's whitelist at that moment. |
+| The status bar says HidHide's Inverse application cloak is on | PadForge hides no controllers while this HidHide option is on. With it on, HidHide hides devices only from the programs on its list, so it cannot hide a controller from a game that is not listed. |
 | Antivirus flags a driver installer | HIDMaestro and HidHide are open-source, signed drivers. Add an exception or pause real-time scanning during install. |
 
 ---

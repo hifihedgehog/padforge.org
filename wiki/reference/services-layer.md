@@ -645,10 +645,12 @@ When `_audioBassDetector != null`, reads `BassEnergy` and pushes to `padVm.Audio
 Only acts if `EnableInputHiding` is on. Two mechanisms:
 
 **HidHide (driver-level):**
-1. Builds whitelist (PadForge exe + user paths). `SyncWhitelist()` adds/removes only PadForge-managed entries.
-2. For each `UserDevice` with `HidHideEnabled`: converts `DevicePath` to HID instance ID (fallback: VID/PID lookup for synthetic paths like "XInput#0"). Caches resolved IDs for offline pre-emptive blacklisting.
-3. `HidHideController.SyncManagedDevices(desiredIds)`. Atomic diff-based sync.
-4. Activates cloaking if any devices are blacklisted.
+1. Reads HidHide's inverse flag. With **Inverse application cloak** on, PadForge takes its own entries off the list, hides nothing, and shows `Status_HidHideInverse` once.
+2. Otherwise builds whitelist (PadForge exe + user paths). `SyncWhitelist()` adds/removes only PadForge-managed entries, and lists PadForge's native image path too. A list it cannot read or write is logged.
+3. For each `UserDevice` with `HidHideEnabled`: converts `DevicePath` to HID instance ID (fallback: VID/PID lookup for synthetic paths like "XInput#0"). Caches resolved IDs for offline pre-emptive blacklisting. Skipped while stood down: inverse mode, or HidHide refused PadForge earlier in the process.
+4. `HidHideController.SyncManagedDevices(desiredIds)`. Atomic diff-based sync.
+5. Activates cloaking if any devices are blacklisted.
+6. After a write, `ProbeOwnHidHideReach` opens one hidden HID interface the way SDL enumerates (#484). Refused, it takes every entry back, latches `_hidHideRefusedPadForge` for the process, and shows `Status_HidHideRefusedPadForge`. See [Self-Access Check](driver-installation-internals.md#self-access-check).
 
 **Input hooks (keyboard/mouse):**
 1. For each device with `ConsumeInputEnabled` and a slot assignment: parses "Button {index}" descriptors to collect VKey codes or mouse button IDs.
@@ -658,9 +660,9 @@ Only acts if `EnableInputHiding` is on. Two mechanisms:
 
 Calls `HidHideController.RemoveManagedDevices()` (best-effort), stops and disposes `InputHookManager`. With `keepCloaks: true` the HidHide blacklist removal and whitelist-tracking clear are skipped, so only the input hooks tear down.
 
-#### `SyncWhitelist(HashSet<string> desiredWinPaths)` (private)
+#### `SyncWhitelist(HashSet<string> desiredWinPaths, string nativeSelfPath)` (private)
 
-Converts Windows paths to DOS device paths. Only modifies PadForge-managed entries. Entries from HidHide Client or other tools are left untouched. Tracked via `_managedWhitelistDosPaths`.
+Converts Windows paths to DOS device paths and adds `nativeSelfPath`, PadForge's image in the form the driver records, unconverted (`DesiredWhitelistEntries`). Only modifies PadForge-managed entries. Entries from HidHide Client or other tools are left untouched. Tracked via `_managedWhitelistDosPaths`. Returns false when the driver's list could not be read or the write was refused.
 
 ### Auto-Idle
 
