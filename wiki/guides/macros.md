@@ -87,7 +87,7 @@ When the trigger has a **Virtual Controller** axis, a **Threshold** slider appea
 A trigger can be a touchpad gesture or a mouse gesture instead of a button combo. You pick these from a list, not by recording. Recording deliberately skips gestures so a stray swipe cannot overwrite the combo.
 
 1. Open the **Add from List** dropdown under **Source**.
-2. The dropdown lists the slot's buttons, POV directions, stick and trigger axes, the touchpad click and finger contacts, gyro axes, and gestures, along with on/off sources such as NFC tags, voice phrases, and menu cells.
+2. The dropdown lists the slot's buttons, POV directions, stick and trigger axes, the touchpad click and finger contacts, gyro axes, and gestures, along with on/off sources such as NFC tags, voice phrases, menu cells, MIDI notes, CCs and encoder detents, and **IR Offscreen**. A MIDI CC fires from 64 by default, where a sustain pedal turns on.
 3. Pick the gesture you want. It joins the trigger the same as a recorded input.
 
 <!-- SCREENSHOT: macro-add-from-list -->

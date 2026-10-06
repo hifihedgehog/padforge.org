@@ -256,7 +256,7 @@ HIDMaestro v1.7.1 fixed it (HIDMaestro#58): a profile that declares an input rep
 
 #### Mapping grid
 
-Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from `MacroButtonNames.ValveRoleLabel` (`MacroItem.cs:7558`) over the family's wire table.
+Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from `MacroButtonNames.ValveRoleLabel` (`MacroItem.cs:7571`) over the family's wire table.
 
 Axes interleave as `[LX LY LT RX RY RT]`, which is what `ComputeAxisLayout` produces for two sticks and two analog triggers. The Nintendo families pack `[LX LY RX RY]`, having no analog triggers at all.
 

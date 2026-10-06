@@ -89,6 +89,8 @@ A vanished endpoint is marked offline, disposed, and has its mapped outputs neut
 
 `SourceCoercion` classifies any `"Midi "` descriptor as `SourceType.Midi` and `TryParseMidi` resolves the kind (note, CC, encoder up, encoder down, pitch bend) and index. Three reader branches consume `state.Midi`: `ReadAsBool` for button and POV targets (a CC past its per-source deadzone), `ReadAsBipolar` for axes (a CC as a centered slider), and `ReadAsUnipolar` for triggers. The per-source invert flag is applied on top.
 
+`ReadHardwareBoolDescriptor` reads MIDI as on/off for the Up and Down keys of an Incremental or Ramped source and the Invert on Hold mirror (`ReadMidiBool`): a note held, an encoder detent's 24 ms pulse, or a CC at `MidiCcOnValue` (64) and above, the value where MIDI's on/off controllers turn on and where the Button row's default threshold lands. Pitch bend reads false there. `IsMidiKeyDescriptor` names the same families for the Up and Down pickers and for `MacroItem.TryBuildTriggerEntry`, which turns them into descriptor trigger entries. The recorder takes a note, a detent or a CC for an Up, Down or modifier field, and never pitch bend.
+
 ---
 
 ## Distinct from the MIDI virtual output

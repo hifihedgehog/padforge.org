@@ -1382,7 +1382,7 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 |--------|-----------|-------------|
 | `StartRecording` | `void StartRecording(MappingItem mapping, int padIndex, Guid deviceGuid, bool neutralizeBaseline = false, bool negRecording = false)` | Starts input recording for a mapping row's primary source |
 | `StartRecordingExtraSource` | `void StartRecordingExtraSource(MappingItem parent, MappingSourceItem extraSource, int padIndex, bool neutralizeBaseline = false, bool negRecording = false)` | Cross-device recording for a multi-source ExtraSource row. First device to fire wins |
-| `StartRecordingExtraSourceParam` | `void StartRecordingExtraSourceParam(MappingItem parent, MappingSourceItem extraSource, int padIndex, ParamTarget target)` | Records a button descriptor into an ExtraSource's Up / Down / Modifier param field |
+| `StartRecordingExtraSourceParam` | `void StartRecordingExtraSourceParam(MappingItem parent, MappingSourceItem extraSource, int padIndex, ParamTarget target)` | Records an on/off input into an ExtraSource's Up / Down / Modifier param field: a button, a hat direction, a touchpad gesture, an analog key, or a MIDI note, encoder detent or CC. A param never records an axis or pitch bend: the param gate sits after the MIDI blocks and before the axis sweep, and the pitch-bend capture runs for a mapping row alone |
 | `StartRecordingFreeform` | `void StartRecordingFreeform(int padIndex, Action<string, string> onComplete)` | Recording that delivers `(deviceGuid, descriptor)` to a callback without writing a MappingItem (shift activator dialog) |
 | `CancelRecording` | `void CancelRecording()` | Cancels without assigning |
 | `Dispose` | `void Dispose()` | Cancels recording, disposes resources |

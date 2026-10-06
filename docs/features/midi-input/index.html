@@ -3599,6 +3599,7 @@
 </tbody>
 </table>
 <p>Notes are on/off. A note is on while it is held, and its velocity does not pass through as an analog value. A Control Change can act as an axis, a one-direction trigger, or a button past a threshold, picked the same way as any other axis source in <a href="../mappings/">Button and Axis Mappings</a>.</p>
+<p>Notes, CCs and encoder detents also work wherever PadForge takes an on/off input: the Up and Down keys of an Incremental or Ramp source, an Invert On Hold modifier, a shift-layer activator, and a <a href="../../guides/macros/">macro</a> trigger. A CC counts as on from 64, the point where MIDI's own on/off controllers, such as a sustain pedal on CC 64, turn on. Pitch bend has no off position and is not an on/off input.</p>
 <p>The whole MIDI namespace is always available: all 128 notes, all 128 CC numbers, and pitch bend. There is nothing to configure on the device first. A message means the same thing on any MIDI channel, so a note played on channel 1 and the same note on channel 10 map to one source.</p>
 <p><strong>Not mapped:</strong> channel pressure, polyphonic aftertouch, and program change. Endless-encoder support covers the binary-offset style (sometimes labeled "Relative 2"). Two's-complement encoders read as absolute jumps. A signed-bit encoder is misread: one direction fires the up button and the other reads as absolute jumps. Fast encoder spins are capped at about 28 steps per second.</p>
 <hr />

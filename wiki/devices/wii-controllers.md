@@ -103,7 +103,7 @@ When the camera loses sight of the sensor bar, near an edge of the screen or whe
 
 The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again.
 
-**IR Offscreen** reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button.
+**IR Offscreen** reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button, an Up or Down key of an Incremental or Ramp source, and a macro trigger.
 
 A **Pointer** tab appears when the assigned device has an IR camera. It holds two cards.
 

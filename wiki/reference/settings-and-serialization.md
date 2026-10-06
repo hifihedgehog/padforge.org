@@ -1258,7 +1258,7 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 | `DeadZone` | `int` | `50` | Per-source axis-to-button activation threshold, 0–100%. |
 | `GyroSensitivity` | `double` | `1.0` | Multiplier on the engine's calibrated gyro rate. Only affects sources whose descriptor starts with `"Gyro "`. |
 | `Sensitivity` | `double` | `1.0` | (#9, v4.1) Generic per-source multiplier for plain `Axis` / `Slider` descriptors (including the `"Gamepad ..."` stick and trigger aliases). Applied in `ReadAsBipolar`, `ReadAsUnipolar`, and the `ReadAsBool` axis-to-button threshold read, clamped after scaling. A persisted `0` reads as `1.0`. Mutually exclusive with the family-specific sensitivities above and below (one slider per source). |
-| `ParamUp` / `ParamDown` | `string` | `""` | Incremental and Ramped kinds: the button-like inputs that drive the value up / down, a touchpad or mouse gesture and a menu cell included. |
+| `ParamUp` / `ParamDown` | `string` | `""` | Incremental and Ramped kinds: the on/off inputs that drive the value up / down, a touchpad or mouse gesture, a menu cell, a MIDI note, CC or encoder detent, and `IR Offscreen` included. |
 | `ParamRate` | `double` | `0.5` | Incremental kind: units per second (full sweep takes 1 / Rate seconds). |
 | `ParamSticky` | `bool` | `true` | Incremental kind: hold last value when both released (vs snap to `ParamMin`). |
 | `ParamMin` / `ParamMax` | `double` | `0` / `1` | Incremental kind: clamp range. |

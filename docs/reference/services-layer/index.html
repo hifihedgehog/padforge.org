@@ -10058,7 +10058,7 @@
 <tr>
 <td><code>StartRecordingExtraSourceParam</code></td>
 <td><code>void StartRecordingExtraSourceParam(MappingItem parent, MappingSourceItem extraSource, int padIndex, ParamTarget target)</code></td>
-<td>Records a button descriptor into an ExtraSource's Up / Down / Modifier param field</td>
+<td>Records an on/off input into an ExtraSource's Up / Down / Modifier param field: a button, a hat direction, a touchpad gesture, an analog key, or a MIDI note, encoder detent or CC. A param never records an axis or pitch bend: the param gate sits after the MIDI blocks and before the axis sweep, and the pitch-bend capture runs for a mapping row alone</td>
 </tr>
 <tr>
 <td><code>StartRecordingFreeform</code></td>
