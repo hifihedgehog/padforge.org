@@ -640,7 +640,7 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 ### HidHide toggle grayed out or missing
 
-- **Grayed out**: HidHide is not installed. Install via [Driver Management](driver-management.md) and restart PadForge.
+- **Grayed out**: HidHide is not installed. Install it from [Driver Management](driver-management.md).
 - **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.
 
 ---
