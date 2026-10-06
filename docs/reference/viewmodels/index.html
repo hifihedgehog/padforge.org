@@ -13396,7 +13396,7 @@
 </table>
 <p>The slot's <code>MappingSet</code> (multi-source rows, shift layers and their activators, plus the menus, SOCD, Bass Shakers, and Keep Controller Awake configs) is not a <code>PadViewModel</code> property. It lives in <code>SettingsManager.SlotMappingSets[PadIndex]</code>, and the view model reads it through a private accessor. See <a href="../../features/mappings/">Button and Axis Mappings</a> and <a href="../../guides/shift-layers/">Shift Layers</a>.</p>
 <h3 id="slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302">Slot-Level Picker Lists and Mapping Picker Filter (#322, discussion #302)<a class="headerlink" href="#slot-level-picker-lists-and-mapping-picker-filter-322-discussion-302" title="Permanent link">&para;</a></h3>
-<p>Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. <code>ApplyMappingPickerFilter</code> filters all three lists, and <code>RebuildPickerDeviceFilterEntries</code> builds the popup from the device groups of all three, so a device the Motion rows alone offer still has a checkbox. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.</p>
+<p>Slot-wide cross-device choice lists, plus the one search box and device-visibility set applied as the filter of the shared views every picker on the slot binds. <code>ApplyMappingPickerFilter</code> filters all four lists, and <code>RebuildPickerDeviceFilterEntries</code> builds the popup from the device groups of the first three, so a device the Motion rows alone offer still has a checkbox. The key list holds no device the full list lacks. A view filter changes what a dropdown offers, never what a row's binding holds, so saved selections survive filtering.</p>
 <table>
 <thead>
 <tr>
@@ -13420,6 +13420,11 @@
 <td><code>SlotMotionAccelInputs</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
 <td>(#475) The Motion Accelerometer row's choices: <code>Motion Accel</code> and <code>Motion Accel L</code> per device.</td>
+</tr>
+<tr>
+<td><code>SlotKeyInputs</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code></td>
+<td>The Up and Down pickers' list: the entries of <code>SlotAvailableInputs</code> an Incremental or Ramp source reads as a key (<code>SourceKindRuntime.ReadsAsKey</code>), as the same instances. A stick, a trigger or another axis is in the full list and not in this one.</td>
 </tr>
 <tr>
 <td><code>SlotAvailableInputsView</code></td>
@@ -15713,7 +15718,12 @@
 <tr>
 <td><code>ParamInputs</code> / <code>ParamInputsView</code></td>
 <td><code>ObservableCollection&lt;InputChoice&gt;</code> / <code>ICollectionView</code></td>
-<td>(#475) The slot's list, <code>SlotAvailableInputs</code>, for the modifier and Up / Down pickers and <code>MappingSourceItem.ResolveParamChoice</code>. It differs from <code>AvailableInputs</code> only on the Motion Gyro and Motion Accelerometer rows, where an Invert On Hold modifier still needs a button. Set by <code>UseSharedParamInputs</code>, which collapses back to <code>AvailableInputs</code> when the two are the same list.</td>
+<td>(#475) The slot's list, <code>SlotAvailableInputs</code>, for the modifier picker and for <code>MappingSourceItem.ResolveParamChoice</code>, which resolves the modifier and both keys. It differs from <code>AvailableInputs</code> only on the Motion Gyro and Motion Accelerometer rows, where an Invert On Hold modifier still needs a button. Set by <code>UseSharedParamInputs</code>, which collapses back to <code>AvailableInputs</code> when the two are the same list.</td>
+</tr>
+<tr>
+<td><code>KeyInputs</code> / <code>KeyInputsView</code></td>
+<td><code>ObservableCollection&lt;InputChoice&gt;</code> / <code>ICollectionView</code></td>
+<td>The Up and Down pickers' list, <code>PadViewModel.SlotKeyInputs</code>, set by <code>UseSharedKeyInputs</code>. A row no slot has filled holds an empty list of its own. A key saved before the pickers were narrowed, a stick or a trigger, resolves from <code>ParamInputs</code> to an entry this list lacks, so its picker shows no selection. The saved descriptor stays: the picker's null write-back is ignored (#160), and a pick or the reset button replaces it.</td>
 </tr>
 <tr>
 <td><code>AvailableInputsView</code></td>

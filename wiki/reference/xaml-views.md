@@ -719,7 +719,7 @@ Grid (4 rows, x:Name="MappingDataGrid" at Row 3)
 - Row style: transparent background, retemplated with a #175 "rowfire" ember underline drawn at the cells' bottom edge. A plain row with no options collapses to a 26px mono compact line and expands to the full editor on click or selection.
 
 **Source Column ComboBox:**
-- `ItemsSource="{Binding AvailableInputsView}"`. Grouped `ICollectionView` over the row's `AvailableInputs` (per-device groups via `ComboBox.GroupStyle`). On the Motion Gyro and Motion Accelerometer rows that is the slot's list for the row's sensor (#475). The modifier and Up / Down pickers, in the row's detail strip and on extra-source chips, bind `DataContext.ParamInputsView`, the slot's full list.
+- `ItemsSource="{Binding AvailableInputsView}"`. Grouped `ICollectionView` over the row's `AvailableInputs` (per-device groups via `ComboBox.GroupStyle`). On the Motion Gyro and Motion Accelerometer rows that is the slot's list for the row's sensor (#475). The modifier pickers, in the row's detail strip and on extra-source chips, bind `DataContext.ParamInputsView`, the slot's full list. The Up and Down pickers beside them bind `DataContext.KeyInputsView`, the slot's inputs that read as a key.
 - `SelectedItem="{Binding SelectedInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"`.
 - `DisplayMemberPath="DisplayName"`.
 

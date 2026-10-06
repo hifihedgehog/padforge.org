@@ -7407,7 +7407,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>756e0f2fb1</code> (2026-10-03) for both architectures. 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>756e0f2fb1</code> (2026-10-03) for both architectures, and pre-release builds after it ship <code>ec35d0bda7</code> (2026-10-05). 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -7522,6 +7522,11 @@
 <td><code>SDL#36</code> (fork commit <code>756e0f2fb1</code>)</td>
 <td>A Wii Remote with a Classic Controller registers the remote's accelerometer, and the Motion Plus gyro when one is present. Enabling a sensor is what powers the IR camera, and the driver registered none for that configuration, so its four IR axes never moved</td>
 <td><code>SdlDeviceWrapper</code>, which enables every sensor a joystick registers. <code>ReadIrPointer</code> and the light gun (#485) then read the camera with a Classic Controller attached</td>
+</tr>
+<tr>
+<td><code>SDL#37</code> (fork commits <code>69dd3048b6</code>, <code>ec35d0bda7</code>)</td>
+<td>The wired Switch 2 search on Windows finds the controller's bulk interface in libusb's device list. It no longer takes a device whose serial string reads as another unit's, and with no serial on the HID side it skips a device whose serial a HIDMaestro virtual controller reports. Before, it fell back to the first device it had opened, which could be the Switch 2 Pro persona</td>
+<td>No PadForge code. It covers a real wired Switch 2 Pro Controller as an input beside a slot on the <code>switch2-pro-controller-composite</code> preset. Not run with either device</td>
 </tr>
 </tbody>
 </table>
