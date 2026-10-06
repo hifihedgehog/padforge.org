@@ -1262,7 +1262,9 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 | `ParamRate` | `double` | `0.5` | Incremental kind: units per second (full sweep takes 1 / Rate seconds). |
 | `ParamSticky` | `bool` | `true` | Incremental kind: hold last value when both released (vs snap to `ParamMin`). |
 | `ParamMin` / `ParamMax` | `double` | `0` / `1` | Incremental kind: clamp range. |
+| `ParamUpDeviceGuid` / `ParamDownDeviceGuid` | `string` | `null` | The controller each key reads: the device it was picked or recorded from, or `""` for any controller on the slot. No initializer, so a null stays out of the file, and a key saved before keys carried a controller loads as null and reads on the source's `DeviceGuid`. |
 | `ParamModifier` | `string` | `""` | InvertOnHold kind: descriptor of the button that flips the inner source while held. |
+| `ParamModifierDeviceGuid` | `string` | `null` | The controller the modifier reads, by the rules of `ParamUpDeviceGuid`. |
 | `ParamAttackTime` | `double` | `0.30` | Ramped kind: seconds to travel 0 to ±1 while the matching-direction key is held. 0 = instant. |
 | `ParamReleaseTime` | `double` | `0.30` | Ramped kind: seconds to travel ±1 back to 0 after release. 0 = instant. |
 | `ParamAutocenter` | `bool` | `true` | Ramped kind: releasing both keys ramps back toward zero (vs holding the last value). Gates the reverse speed-up. |

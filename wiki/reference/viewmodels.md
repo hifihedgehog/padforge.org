@@ -2212,6 +2212,7 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 | `ParamSticky` | `bool` | `true` | Incremental sticky hold. |
 | `ParamMin` / `ParamMax` | `double` | `0` / `1` | Incremental output bounds. |
 | `ParamModifier` | `string` | `""` | InvertOnHold modifier key descriptor. |
+| `ParamUpDeviceGuid` / `ParamDownDeviceGuid` / `ParamModifierDeviceGuid` | `string` | `null` | The controller each key reads, the domain fields of the same names. A pick or a recording sets it with the key (`SetParamKey`), and `ToDomain` saves none for an empty key. `ParamUpReadDevice` and its siblings answer the controller the engine reads, the source's own for a key with none. |
 | `ParamAttackTime` | `double` | `0.30` | Ramped attack seconds (#111). Clamped 0–5. |
 | `ParamReleaseTime` | `double` | `0.30` | Ramped release seconds (#111). Clamped 0–5. |
 | `ParamAutocenter` | `bool` | `true` | Ramped: release ramps back to zero (#111). |
@@ -2243,6 +2244,8 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 | `ToDomain()` | Builds a domain `Engine.Data.MappingSource` from the VM. |
 | `FromDomain(MappingSource)` | Static: populates a new VM from a domain source. |
 | `SyncSelectedInputFromState(IEnumerable<InputChoice>)` | Syncs the picker selection from the current `(DeviceGuid, Descriptor)` pair. |
+| `SetParamKey(ParamRecordTarget, string, string)` | Internal: lands a key and its controller together, a cleared key keeping none, then lets an Incremental or Ramp source follow its keys (`FollowKeysDevice`: the controller they share, or none). |
+| `AdoptLegacyKeyDevices()` | Internal: gives each key saved before keys carried a controller the controller of the entry its picker shows. The parent row calls it from `RefreshExtraSourceInputs`. `MappingItem.LoadPrimaryKind` holds it off (`LoadingKeys`) until the whole source is in, because the source's device lands before its keys. |
 
 `ParamRecordTarget` (enum): `Up`, `Down`, `Modifier`.
 

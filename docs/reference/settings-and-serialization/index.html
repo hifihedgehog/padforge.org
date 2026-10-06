@@ -8509,10 +8509,22 @@
 <td>Incremental kind: clamp range.</td>
 </tr>
 <tr>
+<td><code>ParamUpDeviceGuid</code> / <code>ParamDownDeviceGuid</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The controller each key reads: the device it was picked or recorded from, or <code>""</code> for any controller on the slot. No initializer, so a null stays out of the file, and a key saved before keys carried a controller loads as null and reads on the source's <code>DeviceGuid</code>.</td>
+</tr>
+<tr>
 <td><code>ParamModifier</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
 <td>InvertOnHold kind: descriptor of the button that flips the inner source while held.</td>
+</tr>
+<tr>
+<td><code>ParamModifierDeviceGuid</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The controller the modifier reads, by the rules of <code>ParamUpDeviceGuid</code>.</td>
 </tr>
 <tr>
 <td><code>ParamAttackTime</code></td>

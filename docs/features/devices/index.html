@@ -5640,6 +5640,7 @@
 <p>Suppresses only the specific keys or mouse buttons <a href="../mappings/">mapped</a> to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The toggle only shows for keyboards and mice.</p>
 <p>A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.</p>
 <p>Windows' low-level hooks do not say which keyboard or mouse sent an event. Consuming a key consumes it on every keyboard connected to this PC, and a consumed key reads as pressed on every keyboard's row, whichever keyboard pressed it. Mouse buttons work the same way across mice.</p>
+<p>An Up, Down or modifier key counts as mapped on the keyboard or mouse it was picked or recorded from.</p>
 <p>Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.</p>
 <h3 id="which-to-use">Which to use<a class="headerlink" href="#which-to-use" title="Permanent link">&para;</a></h3>
 <table>

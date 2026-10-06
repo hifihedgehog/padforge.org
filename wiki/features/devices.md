@@ -422,6 +422,8 @@ A mapped Numpad Enter is consumed like any other key. Earlier builds let it thro
 
 Windows' low-level hooks do not say which keyboard or mouse sent an event. Consuming a key consumes it on every keyboard connected to this PC, and a consumed key reads as pressed on every keyboard's row, whichever keyboard pressed it. Mouse buttons work the same way across mice.
 
+An Up, Down or modifier key counts as mapped on the keyboard or mouse it was picked or recorded from.
+
 Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
 
 ### Which to use

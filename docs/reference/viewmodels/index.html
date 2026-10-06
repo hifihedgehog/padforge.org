@@ -16495,6 +16495,12 @@
 <td>InvertOnHold modifier key descriptor.</td>
 </tr>
 <tr>
+<td><code>ParamUpDeviceGuid</code> / <code>ParamDownDeviceGuid</code> / <code>ParamModifierDeviceGuid</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The controller each key reads, the domain fields of the same names. A pick or a recording sets it with the key (<code>SetParamKey</code>), and <code>ToDomain</code> saves none for an empty key. <code>ParamUpReadDevice</code> and its siblings answer the controller the engine reads, the source's own for a key with none.</td>
+</tr>
+<tr>
 <td><code>ParamAttackTime</code></td>
 <td><code>double</code></td>
 <td><code>0.30</code></td>
@@ -16632,6 +16638,14 @@
 <tr>
 <td><code>SyncSelectedInputFromState(IEnumerable&lt;InputChoice&gt;)</code></td>
 <td>Syncs the picker selection from the current <code>(DeviceGuid, Descriptor)</code> pair.</td>
+</tr>
+<tr>
+<td><code>SetParamKey(ParamRecordTarget, string, string)</code></td>
+<td>Internal: lands a key and its controller together, a cleared key keeping none, then lets an Incremental or Ramp source follow its keys (<code>FollowKeysDevice</code>: the controller they share, or none).</td>
+</tr>
+<tr>
+<td><code>AdoptLegacyKeyDevices()</code></td>
+<td>Internal: gives each key saved before keys carried a controller the controller of the entry its picker shows. The parent row calls it from <code>RefreshExtraSourceInputs</code>. <code>MappingItem.LoadPrimaryKind</code> holds it off (<code>LoadingKeys</code>) until the whole source is in, because the source's device lands before its keys.</td>
 </tr>
 </tbody>
 </table>
