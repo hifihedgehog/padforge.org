@@ -9133,19 +9133,19 @@
 <td><code>HeadTrackingOpenXr</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Read the headset through an OpenXR runtime, independent of the other two inputs and of SteamVR. Mirrors to <code>HeadTrackingRuntime.OpenXrEnabled</code>.</td>
+<td>Read the headset through an OpenXR runtime, independent of the other two inputs and of SteamVR. Mirrors to <code>HeadTrackingRuntime.OpenXrEnabled</code>. Turning it on calls <code>RefreshOpenXrRuntimes()</code>.</td>
 </tr>
 <tr>
 <td><code>OpenXrRuntimes</code></td>
 <td><code>ObservableCollection&lt;OpenXrRuntimeChoice&gt;</code></td>
 <td>-</td>
-<td>Runtime picker items (<code>ManifestPath</code>, <code>Display</code>): the system default (empty path) first, then each installed runtime <code>OpenXrRuntimeCatalog.Discover()</code> finds. Built on first read and cached. A saved runtime that is no longer installed stays listed. <code>RefreshOpenXrRuntimes()</code> reloads it.</td>
+<td>Runtime picker items (<code>ManifestPath</code>, and <code>Display</code>, observable so an entry kept across a refresh takes a new caption): the system default (empty path) first, then each installed runtime <code>OpenXrRuntimeCatalog.Discover()</code> finds, read through the internal test seam <code>DiscoverOpenXrRuntimes</code>. Built on first read, never rebuilt from the getter. A saved runtime the registry no longer names stays listed under its manifest's file name. <code>RefreshOpenXrRuntimes()</code> rebuilds it.</td>
 </tr>
 <tr>
 <td><code>SelectedOpenXrRuntime</code></td>
 <td><code>OpenXrRuntimeChoice</code></td>
 <td>system default</td>
-<td>Reads and writes <code>HeadTrackingRuntime.OpenXrRuntimeManifest</code>. It changes the runtime this process uses, never the machine's active runtime.</td>
+<td>Reads and writes <code>HeadTrackingRuntime.OpenXrRuntimeManifest</code>. It changes the runtime this process uses, never the machine's active runtime. A null, which WPF writes when the box's entry leaves the list, and any write during a refresh are ignored.</td>
 </tr>
 <tr>
 <td><code>HeadTrackingRotationRange</code></td>
@@ -9221,11 +9221,11 @@
 <tbody>
 <tr>
 <td><code>RefreshOpenXrRuntimes()</code></td>
-<td>Reloads the runtime list, keeping the selection while it is still installed.</td>
+<td>Rebuilds the runtime list in place: an entry whose manifest path is still wanted keeps its instance and takes the fresh caption, so the bound selection rides through. The saved runtime stays listed. Runs when <code>HeadTrackingOpenXr</code> turns on, from <code>NotifyHeadTrackingRangesChanged()</code>, and on a language switch once the list exists.</td>
 </tr>
 <tr>
 <td><code>NotifyHeadTrackingRangesChanged()</code></td>
-<td>Re-raises the six per-axis ranges and the runtime selection after a settings load or Reset to Defaults writes the statics they read.</td>
+<td>Re-raises the six per-axis ranges and rebuilds the runtime list after a settings load or Reset to Defaults writes the statics they read. The rebuild lists a saved runtime the registry no longer names, which a list built before the load lacks.</td>
 </tr>
 </tbody>
 </table>

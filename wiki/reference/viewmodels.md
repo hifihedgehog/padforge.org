@@ -218,9 +218,9 @@ Three independent inputs feed the Head Tracker device row: a UDP listener on Ope
 | `HeadTrackingEnabled` | `bool` | `false` | The OpenTrack UDP input. Mirrors to `HeadTrackingRuntime.Enabled`. |
 | `HeadTrackingUdpPort` | `int` | `4242` | Port OpenTrack's "UDP over network" output sends to. Clamped to 1–65535. Mirrors to `HeadTrackingRuntime.UdpPort`. |
 | `HeadTrackingFreeTrack` | `bool` | `false` | The FreeTrack 2.0 shared-memory input, independent of UDP. Mirrors to `HeadTrackingRuntime.FreeTrackEnabled`. |
-| `HeadTrackingOpenXr` | `bool` | `false` | Read the headset through an OpenXR runtime, independent of the other two inputs and of SteamVR. Mirrors to `HeadTrackingRuntime.OpenXrEnabled`. |
-| `OpenXrRuntimes` | `ObservableCollection<OpenXrRuntimeChoice>` | - | Runtime picker items (`ManifestPath`, `Display`): the system default (empty path) first, then each installed runtime `OpenXrRuntimeCatalog.Discover()` finds. Built on first read and cached. A saved runtime that is no longer installed stays listed. `RefreshOpenXrRuntimes()` reloads it. |
-| `SelectedOpenXrRuntime` | `OpenXrRuntimeChoice` | system default | Reads and writes `HeadTrackingRuntime.OpenXrRuntimeManifest`. It changes the runtime this process uses, never the machine's active runtime. |
+| `HeadTrackingOpenXr` | `bool` | `false` | Read the headset through an OpenXR runtime, independent of the other two inputs and of SteamVR. Mirrors to `HeadTrackingRuntime.OpenXrEnabled`. Turning it on calls `RefreshOpenXrRuntimes()`. |
+| `OpenXrRuntimes` | `ObservableCollection<OpenXrRuntimeChoice>` | - | Runtime picker items (`ManifestPath`, and `Display`, observable so an entry kept across a refresh takes a new caption): the system default (empty path) first, then each installed runtime `OpenXrRuntimeCatalog.Discover()` finds, read through the internal test seam `DiscoverOpenXrRuntimes`. Built on first read, never rebuilt from the getter. A saved runtime the registry no longer names stays listed under its manifest's file name. `RefreshOpenXrRuntimes()` rebuilds it. |
+| `SelectedOpenXrRuntime` | `OpenXrRuntimeChoice` | system default | Reads and writes `HeadTrackingRuntime.OpenXrRuntimeManifest`. It changes the runtime this process uses, never the machine's active runtime. A null, which WPF writes when the box's entry leaves the list, and any write during a refresh are ignored. |
 | `HeadTrackingRotationRange` | `int` | `90` | Degrees of head rotation at full deflection for the rotation axes. Clamped to 1–180. |
 | `HeadTrackingTranslationRange` | `int` | `30` | Centimeters of head travel at full deflection for the translation axes. Clamped to 1–500. |
 | `HeadTrackingRangeYaw` / `Pitch` / `Roll` / `X` / `Y` / `Z` | `int` | `0` | Per-axis range pins (#403) over `HeadTrackingRuntime.SetAxisRange`. `0` follows the axis family's range. Rotation axes clamp to 180, translation axes to 500. |
@@ -238,8 +238,8 @@ Three independent inputs feed the Head Tracker device row: a UDP listener on Ope
 
 | Method | Description |
 |--------|-------------|
-| `RefreshOpenXrRuntimes()` | Reloads the runtime list, keeping the selection while it is still installed. |
-| `NotifyHeadTrackingRangesChanged()` | Re-raises the six per-axis ranges and the runtime selection after a settings load or Reset to Defaults writes the statics they read. |
+| `RefreshOpenXrRuntimes()` | Rebuilds the runtime list in place: an entry whose manifest path is still wanted keeps its instance and takes the fresh caption, so the bound selection rides through. The saved runtime stays listed. Runs when `HeadTrackingOpenXr` turns on, from `NotifyHeadTrackingRangesChanged()`, and on a language switch once the list exists. |
+| `NotifyHeadTrackingRangesChanged()` | Re-raises the six per-axis ranges and rebuilds the runtime list after a settings load or Reset to Defaults writes the statics they read. The rebuild lists a saved runtime the registry no longer names, which a list built before the load lacks. |
 
 ### Vendor Lighting and Haptic Mirrors
 

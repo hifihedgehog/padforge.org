@@ -505,7 +505,7 @@
                     </details>
                     <details class="detail">
                         <summary>A VR headset, without a VR game</summary>
-                        <div class="detail-body">OpenXR Headset Input reads your headset's pose into the same six axes, so a Quest or an Index drives a flat game's camera. PadForge talks to the runtime directly rather than through the Khronos loader, which lets it pick a runtime for itself without touching the machine's default and keeps other programs' API layers out of its process. The session runs without drawing anything and submits no frames, so no VR game has to be open. Per-Axis Range pins one axis on its own when neck rotation and leaning cover very different distances, and Set Neutral makes your current position the zero.</div>
+                        <div class="detail-body">OpenXR Headset Input reads a headset's pose into the same six axes. A Quest has to go through SteamVR's runtime, since Meta's cannot run the background session PadForge needs. So far the input has run only against SteamVR's runtime, with no headset attached. PadForge talks to the runtime directly rather than through the Khronos loader, which lets it pick a runtime for itself without touching the machine's default and keeps other programs' API layers out of its process. The session runs without drawing anything and submits no frames, so no VR game has to be open. Per-Axis Range pins one axis on its own when neck rotation and leaning cover very different distances, and Set Neutral makes your current position the zero.</div>
                     </details>
                     <details class="detail">
                         <summary>Your VR controllers as gamepads</summary>

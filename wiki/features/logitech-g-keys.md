@@ -77,7 +77,7 @@ A tap can begin and end between two of PadForge's polls, so a press is held asse
 
 This runs against Logitech's own library, and nothing here has been exercised against real Logitech hardware or software. The wire format comes from `LogitechGkeyLib.h` in the SDK, so the decoding is grounded, and the library search and shutdown follow [Mumble](https://github.com/mumble-voip/mumble)'s long-running implementation, but the library loading and calling back on a live machine is unverified.
 
-G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logitech has released no G-key SDK for G HUB. Its [developer page](https://www.logitechg.com/en-us/programs/partner-developer-lab) offers a Steering Wheel SDK and an LED Illumination SDK, and G HUB 2026.6 installs a wheel SDK and a Trueforce SDK and nothing for G-keys.
+G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logitech has released no G-key SDK for G HUB. Its [developer page](https://www.logitechg.com/en-us/programs/partner-developer-lab) offers a Steering Wheel SDK and an LED Illumination SDK. G HUB 2026.6 installs an LED SDK and lists a wheel SDK and a Trueforce SDK among its packages, and none of them is for G-keys.
 
 ---
 
