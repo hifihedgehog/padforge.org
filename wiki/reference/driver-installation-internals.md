@@ -163,10 +163,11 @@ Composite personas need one more driver. The seven profiles whose `backend` is `
 ```csharp
 private void EnsureHMaestroContext()
 {
-    if (_hmaestroContext != null || _hmaestroContextFailed) return;
+    if (_hmaestroContext != null || HmSetupHeld()) return;
     lock (_hmaestroContextLock)
     {
-        if (_hmaestroContext != null || _hmaestroContextFailed) return;
+        if (_hmaestroContext != null || HmSetupHeld()) return;
+        HMContext ctx = null;
         try
         {
             // Preflight: sweep leftover HM virtuals from prior sessions
@@ -176,22 +177,29 @@ private void EnsureHMaestroContext()
             // reference the old driver package.
             try { HMContext.RemoveAllVirtualControllers(preserveInstall: true); } catch { }
 
-            var ctx = new HMContext();
+            ctx = new HMContext();
             int n = ctx.LoadDefaultProfiles();
             ctx.InstallDriver();
             _hmaestroContext = ctx;
+            bool recovered = _hmaestroSetupFailedTick != 0;
+            Volatile.Write(ref _hmaestroSetupFailedTick, 0);
+            _cleanShutdownPerformed = false;
+            if (recovered) RaiseErrorResolved(HmSetupFailedMessage);
             // ... ProcessExit hook to purge VCs on ungraceful shutdown
         }
         catch (Exception ex)
         {
-            _hmaestroContextFailed = true;
-            RaiseError("Failed to initialize HIDMaestro.", ex);
+            try { ctx?.Dispose(); } catch { }
+            Volatile.Write(ref _hmaestroSetupFailedTick, Math.Max(1, Environment.TickCount64));
+            RaiseError(HmSetupFailedMessage, ex);   // "Failed to initialize HIDMaestro."
         }
     }
 }
 ```
 
 `InstallDriver()` is idempotent and safe to call every `Start()`. Elevation is required, supplied by `app.manifest`.
+
+A failed setup holds for five seconds (`HmSetupRetryHoldMs`), so the other slots of the same start fail fast instead of each running the setup again, since creates run one at a time. The next create after that runs it again. A slot whose create failed keeps its own latch, which only a change to that slot clears: turning it off and on, a type or profile change, or a device reconnect. A retry therefore follows the user's next change, or a slot created later, and never loops on its own. A failure used to set a flag that only an engine stop cleared. A successful retry raises `ErrorResolved`, and `InputService.ClearResolvedError` clears "Error: Failed to initialize HIDMaestro." from the status line while it is still the message shown. An engine stop resets the hold with the context (`DisposeHMaestroContextOnShutdown`).
 
 `preserveInstall: true` is load-bearing on every sweep. The preserving overload still evicts every stale device node, which is the only thing that blocks the install. The flag guards driver-package removal and the `HKLM\SOFTWARE\HIDMaestro` delete, and that key holds the VR driver's registration gate plus the `SteamVRPath` hint. Sweeping without it sent a VR slot back to re-extracting `driver_hidmaestro.dll` into a running `vrserver.exe` whenever a session mixed a VR slot with a conventional one, and cost the next launch a full deploy by discarding the manifest hash.
 
@@ -348,14 +356,14 @@ public static void InstallMidiRuntime()
 Runs on a worker thread through `RunDriverOperationAsync`.
 
 1. Stages under `%TEMP%\PadForge_MidiRuntime\<guid>`.
-2. When `IsVcRuntimeAtLeast(MidiRuntimeVcMinimum)` is false, downloads `https://aka.ms/vc14/vc_redist.x64.exe` and requires `IsSignedByMicrosoft`: WinVerifyTrust with `WINTRUST_ACTION_GENERIC_VERIFY_V2`, then a signer subject carrying `O=Microsoft Corporation`. It runs the redistributable elevated with `/install /quiet /norestart`, accepts exit codes 0, 3010, 1641 and 1638 (`IsVcRedistSuccess`), and checks the version again. A restart owed (3010 or 1641) with the old files still in place throws a message asking for a restart and a second **Install**.
+2. When `IsVcRuntimeAtLeast(MidiRuntimeVcMinimum)` is false, downloads `https://aka.ms/vc14/vc_redist.x64.exe` and requires `IsSignedByMicrosoft`: WinVerifyTrust with `WINTRUST_ACTION_GENERIC_VERIFY_V2`, then a signer subject carrying `O=Microsoft Corporation`. `InstallVcRuntime` runs the redistributable elevated with `/install /quiet /norestart`, accepts exit codes 0, 3010, 1641 and 1638 (`IsVcRedistSuccess`), and checks the version again. While it is still old, it runs `/repair /quiet /norestart` up to twice, five seconds apart (`VcRedistRuns`, `VcRepairPauseMs`). Windows Installer renames a DLL that programs have loaded and puts the new copy in its place, so a 3010 usually leaves the new runtime in place already. Only a program that holds the old file open without letting it be renamed makes Windows queue the new copy for the next startup. Another install of the version already registered plans nothing for its packages, while a repair reinstalls every file of an equal or older version (WiX 3.14 Burn, `engine/msiengine.cpp`, the engine inside Microsoft's redistributable). Burn refuses a later run only after starting a restart itself (`engine/apply.cpp`, `engine/core.cpp`), which `/norestart` rules out. When the runtime is still old after the repairs, the message depends on `PendingFileRenameOperations`: a queued replacement of a Visual C++ runtime DLL in System32 reads "A program holds the old Visual C++ runtime open, so Windows could not replace it. Close other programs and select Install again." Anything else reads "The Visual C++ runtime is still older than 14.51 after its installer ran."
 3. Downloads `PadForge-MIDI-Runtime-1.0.17-rc.4.25-x64.msi`, or `-arm64.msi` when `PlatformSupport.IsArm64Machine`, from `MidiRuntimeReleaseUrl`, and refuses it unless `Sha256Hex` equals `MidiRuntimeSha256X64` or `MidiRuntimeSha256Arm64`.
 4. Runs `msiexec /i <msi> /qn /norestart MSIRESTARTMANAGERCONTROL=Disable` through `RunMsiElevated`, which throws `InstallerFailedException` unless the exit code is 0, 3010 or 1641.
 5. Deletes the staging folder, unless an installer outlived its wait and may still be reading it.
 
 `IsVcRuntimeAtLeast` reads the System32 copy every process loads. `msvcp140.dll`, `msvcp140_atomic_wait.dll` and `vcruntime140.dll` must exist, plus `vcruntime140_1.dll` on an x64 machine, and the file version of `msvcp140.dll` must be at least 14.51. The runtime DLL was linked by MSVC 14.51, and Microsoft requires the installed redistributable to be at least as new as the build tools that made a binary ("Latest supported Visual C++ Redistributable downloads"). The x64 redistributable carries the ARM64 files too, and Microsoft's own MIDI bundle installed that one on both architectures.
 
-After a successful install, `MainWindow` calls `InputService.SwitchMidiApi()`: MIDI input and its session close, `ResetAvailability()` drops the legacy backend, and input enumerates again. The next probe starts the runtime, and Step 5 rebuilds each MIDI slot whose controller was made on another API (`MidiVirtualController.ApiKind`).
+After a successful install, `MainWindow` calls `InputService.SwitchMidiApi()`: MIDI input and its session close, `ResetAvailability()` drops the legacy backend, and input enumerates again. The next probe starts the runtime, and Step 5 rebuilds each MIDI slot whose controller was made on another API (`MidiVirtualController.ApiKind`) or before the reset (`CreatedGeneration` behind `Generation`).
 
 ### The runtime package
 
@@ -861,6 +869,22 @@ The gates are deliberate. An offline record is a memory, and letting one veto a 
 
 Every id the keep-out predicate removed is reported back through `keptOut` and lands in the apply's diag line.
 
+### Releasing a Controller Opened Before Its Hide
+
+HidHide decides access only when a handle is opened (`Logic.c` `OnDeviceFileCreate`), so a game, Steam or a launcher that opened a controller before PadForge hid it kept it. Windows will not remove a device while any handle stays open, and PadForge's own SDL handle is one, so disabling the device is refused. A hub port cycle (`IOCTL_USB_HUB_CYCLE_PORT`) is a surprise removal no handle can veto, the way HandheldCompanion releases a hidden pad (`IController.CyclePort`). The controller comes back through HidHide, where only whitelisted programs can open it.
+
+After an apply whose hide PadForge could reach and HidHide did not refuse, `InputService` hands the ids that apply added, tablets excluded, to `HiddenControllerRelease.Release`. Batches run on the thread pool one after another, so the apply never waits on the device tree. For each id, `HidHideController.FindUsbDeviceToCycle` walks from the node up to the first node whose service is a USB hub, and `PickUsbDeviceToCycle` decides on that chain:
+
+| Left alone when | Reason it logs |
+|---|---|
+| A node on the chain is Bluetooth (`BTHENUM\`, `BTHLEDEVICE\`, `BTHPS3BUS\`, `BTH\`). Dropping the link turns most pads off. | `Bluetooth` |
+| No hub on the chain, or the node below the hub is not `USB\` | `not on a USB port` |
+| The USB device is not the controller: another container, or inside the system container, which every built-in device shares, another `VID_xxxx&PID_yyyy` | `the USB device is not the controller` |
+| The USB device's subtree holds more than one XUSB or XboxComposite node, as on the Xbox 360 wireless receiver, whose every pad would drop | `the USB device carries more than one controller` |
+| The device arrived less than 5 s ago (`ReleaseArrivalGrace`, from `DEVPKEY_Device_LastArrivalDate`). Such a hide came from the arrival itself, before any program could open the device. | `connected moments ago` |
+
+Each USB device cycles once per batch and at most once per 30 s (`HiddenControllerRelease.CooldownMs`): its return arrives as a device change that runs the apply again, and a hide another program keeps taking away would otherwise cycle it in a loop. Two cycles in one batch run 500 ms apart, as HandheldCompanion spaces them. The cycle itself is `PnPDevice.GetDeviceByInstanceId(id, DeviceLocationFlags.Normal).ToUsbPnPDevice().CyclePort()` from Nefarius.Utilities.DeviceManagement.
+
 ### Apply Diagnostics
 
 `InputService.ApplyDeviceHiding` logs its whole decision through `SdlDiagLog`, every line prefixed `HIDHIDE`. The path used to be silent end to end, so a "the physical was not hidden" report could not be adjudicated from a trace, and a driver whose control device did not open skipped the block with nothing said while the Settings page read **Installed** off the MSI registry scan.
@@ -880,6 +904,10 @@ Every id the keep-out predicate removed is reported back through `keptOut` and l
 | `HIDHIDE REFUSED` | The self-check was refused: the path, the Win32 error, how many entries PadForge took back, this process's native image path, and `listed=yes`, `no` or `unreadable` for that path on the whitelist at that moment. Listed and refused means the driver knows this process by another path or not at all. Not listed means the entry never landed. |
 | `HIDHIDE reach unknown` | No hidden HID interface answered the self-check, so it runs again on the next apply. |
 | `HIDHIDE apply unchanged` | The heartbeat, at most once a minute. |
+| `HIDHIDE released` | A hidden controller's USB port was cycled, with the USB device id. |
+| `HIDHIDE release skipped` | A hidden HID collection whose USB device was left alone, with the reason from the release table. |
+| `HIDHIDE release held` | The USB device's port was cycled less than 30 s before. |
+| `HIDHIDE release failed` | The cycle threw, with the exception type and message. |
 
 The block prints when the desired set moved, when the self-check was refused in that apply, or once a minute while the sync, the read-back or the whitelist reports trouble. A refusal takes the hide back, so the set it leaves can equal the last one printed, and the move test alone would drop the `REFUSED` line. `DevicesUpdated` fires on every device-list flip, and an idle bench flipped something every enumeration interval: in one owner trace 215 of 305 diag lines were this block, five seconds apart, all identical.
 
@@ -942,7 +970,7 @@ Windows shows the UAC shield on the icon and prompts once when the process start
 | PadForge launch | `app.manifest` `requireAdministrator` | 1 (per launch, if UAC is enabled) |
 | `HMContext.InstallDriver()` (HM driver register) | App already elevated | 0 |
 | HidHide install/uninstall | x64: `msiexec` via `RunElevated`. ARM64: `nefconc.exe` via `Process.Start`. The child inherits PadForge's elevation either way | 0 |
-| MIDI runtime install | `vc_redist.x64.exe` when the Visual C++ runtime is too old, then `msiexec`, both via `RunElevated`. The child inherits PadForge's elevation | 0 |
+| MIDI runtime install | `vc_redist.x64.exe` when the Visual C++ runtime is too old, as an install and then up to two repairs while the old runtime stays, then `msiexec`, all via `RunElevated`. The child inherits PadForge's elevation | 0 |
 | MIDI runtime uninstall | Direct `Process.Start` of the bundle's cached uninstaller, or of `msiexec /x` for a runtime package (no `runas`, which throws `Win32Exception` on some already-elevated systems) | 0 |
 | SteamVR install | Direct `Process.Start` of `steamcmd.exe`, plus an HKLM write for the path hint | 0 |
 | SteamVR uninstall | `Directory.Delete` plus an HKLM value delete, both in-process | 0 |

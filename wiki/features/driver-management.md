@@ -196,7 +196,7 @@ Where neither runs, PadForge falls back to the **legacy MIDI API** (WinMM), whic
 1. Open **Settings**. Scroll to **Windows MIDI Services**.
 2. Click **Install**.
 
-PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to `C:\Program Files\PadForge MIDI Runtime`. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. If the redistributable needs a restart to finish, restart Windows and click **Install** again.
+PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to `C:\Program Files\PadForge MIDI Runtime`. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. When a program holds the old Visual C++ runtime open so Windows cannot swap in the new one, PadForge runs the redistributable again as a repair, twice at most, five seconds apart.
 
 ### The Settings card
 
@@ -205,11 +205,11 @@ PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from Gi
 | **Built into Windows** | Empty, or "Older runtime *version* is also installed and is no longer needed" | PadForge uses the API in Windows. |
 | **App SDK Runtime** | The runtime's version | PadForge uses the runtime, Microsoft's or PadForge's build. |
 | **Legacy MIDI API** | "Each MIDI slot sends to a port picked on the slot's page. MIDI input opens only devices assigned to a slot." | No Windows MIDI Services API runs, so PadForge uses the legacy API. |
-| **Not Running** | "The Windows MIDI service did not respond. Restarting Windows clears a stuck service." | The engine's check started nothing. |
+| **Not Running** | "The Windows MIDI service did not respond. PadForge restarts the service and checks again." | The engine's check started nothing. A second restart follows two minutes later if the first does not help. |
 
 The flame lights while any of them works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.
 
-In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no **Install**. Microsoft's [How to change the API mode](https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/) covers switching back. Restart PadForge afterward so it checks again.
+In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no **Install**. Microsoft's [How to change the API mode](https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/) covers switching back.
 
 ### The legacy MIDI API
 
@@ -319,12 +319,12 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 | Problem | Fix |
 |---|---|
-| Click **Install** and nothing happens | An earlier installer run may still be in progress, or the launch failed quietly. No UAC prompt is involved (PadForge already runs as administrator). Wait a few seconds and retry. If it still does nothing, restart PadForge and try again. |
-| Flame stays unlit after install | Retry. If it still fails, restart the PC and retry. |
-| HIDMaestro fails to install | An old ViGEmBus or vJoy install can leave leftovers behind. Remove them from **Windows Settings > Apps > Installed apps**, then restart PadForge. |
-| Windows MIDI Services **Install** stops and asks for a restart | The Visual C++ Redistributable needs a restart to finish. Restart Windows and click **Install** again. |
+| The status bar says Windows started the installer without letting PadForge follow it | The installer runs on its own. The card shows the result once it finishes. |
+| Flame stays unlit after install | The status bar names why the install failed, such as an installer's exit code. Click **Install** again. |
+| HIDMaestro fails to install | An old ViGEmBus or vJoy install can leave leftovers behind. Remove them from **Windows Settings > Apps > Installed apps**, then turn the slot off and on, and PadForge runs the setup again. |
+| Windows MIDI Services **Install** stops: "A program holds the old Visual C++ runtime open" | Windows could not replace the Visual C++ runtime while that program held it, and the two repair runs that followed could not replace it either. Close other programs and click **Install** again. |
 | Windows MIDI Services card reads **Legacy MIDI API** on Windows 11 25H2 | Windows has no API of its own until the late-November 2026 update. **Settings > System > About** in Windows shows the version, and Windows Update brings the update. Until then, click **Install** on the card. |
-| Windows MIDI Services card reads **Not Running** | The Windows MIDI service did not respond. Restart Windows, then PadForge. |
+| Windows MIDI Services card reads **Not Running** | The Windows MIDI service did not respond. PadForge restarts the service and checks again, and the card changes once MIDI answers. |
 
 ### Runtime issues
 
@@ -337,7 +337,7 @@ The slot guards read your saved slots, not what the engine is running, so they h
 | PadForge disappears when I uninstall the Windows MIDI Services runtime | Fixed in 4.3.0. Older builds were closed by Windows Restart Manager, which asks running programs to quit so an installer can reach files they hold open. PadForge now declines that request and stays up through the uninstall. |
 | UAC prompt on every launch | Expected. PadForge needs administrator rights to drive its drivers, so Windows asks at startup. Everything after that runs without a second prompt. |
 | Double input (every press counts twice) | Install HidHide. Turn on **Hide from Games (HidHide)** for the physical controller on the [Devices](devices.md) page. |
-| Double input still there after HidHide | Restart the game. Some games only detect controllers at launch. Reconnect the controller if the install was new, since a controller that was already connected picks HidHide up the next time it connects. |
+| Double input still there after HidHide | PadForge reconnects a hidden USB controller in Windows, so a game that opened it first loses it, and a controller connected before HidHide was installed picks HidHide up as it comes back. A Bluetooth controller, or a USB device that carries more than one controller, waits for its next connection: turn it off and on. Some games only detect controllers at launch, so restart the game if it still shows two. |
 | Virtual controller shows up but games do not see it | Restart the game once after PadForge is running. Some games and Steam only detect controllers at launch. |
 | HIDMaestro slot stuck on "Initializing" | Give it a few seconds. If it never finishes, check the inactivity timeout under **Settings**. A slot whose devices go offline drops its virtual controller after that timeout. The slot itself stays and comes back when the devices return. |
 

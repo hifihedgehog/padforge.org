@@ -6368,7 +6368,27 @@
 <tr>
 <td><code>_probeTimedOut</code></td>
 <td><code>bool</code> (volatile)</td>
-<td>Set when the bounded availability probe times out. Later checks return false until <code>ResetAvailability()</code></td>
+<td>Set when the bounded availability probe times out. Later checks return false until <code>ResetAvailability()</code>, which the recovery runs once it has restarted the service</td>
+</tr>
+<tr>
+<td><code>ProbeTimeoutMs</code></td>
+<td><code>int</code></td>
+<td>The probe's bound, 10 000 ms. Tests shorten it</td>
+</tr>
+<tr>
+<td><code>HungProbeReturnMs</code></td>
+<td><code>int</code></td>
+<td>How long the recovery waits for a hung probe to return after the service restart, 30 000 ms</td>
+</tr>
+<tr>
+<td><code>s_probeRecoveryRunning</code></td>
+<td><code>int</code></td>
+<td>1 while a hung-probe recovery runs, so a second hang starts no second one</td>
+</tr>
+<tr>
+<td><code>s_generation</code></td>
+<td><code>int</code></td>
+<td>Bumped by every <code>ResetAvailability()</code>. Read through <code>Generation</code></td>
 </tr>
 <tr>
 <td><code>_runtimeSuppressed</code></td>
@@ -6542,6 +6562,11 @@
 <td><code>MidiApiKind</code></td>
 <td>The API the endpoint was made with, set when <code>ConnectCore</code> commits. Step 5 rebuilds the slot when the probe settles on another API, as after the runtime install</td>
 </tr>
+<tr>
+<td><code>CreatedGeneration</code></td>
+<td><code>int</code></td>
+<td>The backend generation the endpoint was made in. Step 5 rebuilds the slot once it falls behind <code>Generation</code>, since the backend or the service the endpoint talks to is gone</td>
+</tr>
 </tbody>
 </table>
 <h3 id="constructor_1">Constructor<a class="headerlink" href="#constructor_1" title="Permanent link">&para;</a></h3>
@@ -6549,21 +6574,21 @@
 </code></pre></div>
 <p>Stores pad index, clamps channel to 0–15, stores 1-based instance number.</p>
 <h3 id="connect_2">Connect()<a class="headerlink" href="#connect_2" title="Permanent link">&para;</a></h3>
-<p>Returns early if already connected. <code>Connect()</code> is a bounded wrapper: <code>ConnectCore</code> runs on a <code>Task.Run</code> and the caller waits on a <code>ManualResetEventSlim</code> for <code>ConnectTimeoutMs</code> (15 seconds). On timeout it bumps <code>_creationGen</code> (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a <code>MidiEndpointJanitor</code> sweep, and on the first attempt runs <code>MidiServiceRecovery.TryRecoverOnce()</code> and retries once. <code>Disconnect()</code> carries the same bounded shape around <code>DisconnectCore</code> (8 seconds).</p>
+<p>Returns early if already connected. <code>Connect()</code> is a bounded wrapper: <code>ConnectCore</code> runs on a <code>Task.Run</code> and the caller waits on a <code>ManualResetEventSlim</code> for <code>ConnectTimeoutMs</code> (15 seconds). On timeout it bumps <code>_creationGen</code> (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a <code>MidiEndpointJanitor</code> sweep, and on the first attempt runs <code>MidiServiceRecovery.TryRecoverOnce()</code> and retries once. A refused session gets the same restart and retry: <code>MidiSessionUnavailableException</code> on the first attempt runs <code>TryRecoverOnce("the service refused a MIDI session")</code>, then <code>ResetAvailability()</code> and a fresh <code>IsAvailable()</code>, before the second attempt. The failed attempt has already released its endpoint claim. Inside the restart's 120-second cooldown the exception reaches the caller unchanged. <code>Disconnect()</code> carries the same bounded shape around <code>DisconnectCore</code> (8 seconds).</p>
 <p><code>ConnectCore</code> initialization sequence:</p>
 <ol>
 <li>Registers the id from <code>BuildUniqueEndpointId</code> (<code>"PADFORGE_MIDI_{instanceNum}_{12 hex}"</code>, unique per creation so a stranded endpoint can never collide with a fresh one) as creating, before the service can materialize the endpoint.</li>
 <li>Under the legacy API, calls <code>MidiBackendLegacy.OpenOutputPort(OutputPort)</code>: the saved name resolves to the port's current WinMM index, and <code>midiOutOpen</code> opens it with <code>CALLBACK_NULL</code> (RtMidi <code>MidiOutWinMM::openPort</code>). It throws <code>InvalidOperationException</code> naming the reason when no port is picked or another program holds it (<code>MMSYSERR_ALLOCATED</code>), and <code>MidiPortNotConnectedException</code>, a subclass, when the port is not connected. Step 5 retries a slot that failed that way once a port listing shows the port again (<a href="../../reference/input-pipeline/">Input Pipeline</a>). Otherwise calls <code>_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)</code>, or throws <code>InvalidOperationException</code> when no backend is started. Both Windows MIDI Services backends run the same steps under their own namespaces:<ol>
 <li><code>MidiDeclaredEndpointInfo</code> with the name, <code>ProductInstanceId</code> = the id, MIDI 1.0 protocol, static function blocks.</li>
 <li><code>MidiVirtualDeviceCreationConfig</code> with the slot description, and one <code>MidiFunctionBlock</code> (bidirectional, Group 0, <code>RepresentsMidi10Connection = YesBandwidthUnrestricted</code>).</li>
-<li><code>MidiSession.Create(deviceName)</code>. Throws if null.</li>
+<li><code>MidiSession.Create(deviceName)</code>. Throws <code>MidiSessionUnavailableException</code> if null, which both APIs return when the service is unavailable or not running (<code>MidiSession::Create</code> in <code>microsoft/MIDI</code>).</li>
 <li><code>MidiVirtualDeviceManager.CreateVirtualDevice(config)</code>, then <code>SuppressHandledMessages = true</code>.</li>
 <li>A <code>MidiEndpointConnection</code> to the device's endpoint ID.</li>
 <li>The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but <code>MidiMessageProcessingPluginAddResult.Succeeded</code>, as Microsoft's virtual device sample does. The App SDK runtime's add returns nothing.</li>
 <li><code>Open()</code>. Throws if false.</li>
 </ol>
 </li>
-<li>Commits <code>_endpoint</code> and <code>ApiKind</code>, sets <code>_connected = true</code>, marks the id ready, and initializes <code>_lastCcValues</code> (filled with 64) and <code>_lastNotes</code>, only while this attempt is still the current generation.</li>
+<li>Commits <code>_endpoint</code>, <code>ApiKind</code> and <code>CreatedGeneration</code> (read before the backend, so a reset between the two reads costs a rebuild instead of stamping a torn-down backend's endpoint as current), sets <code>_connected = true</code>, marks the id ready, and initializes <code>_lastCcValues</code> (filled with 64) and <code>_lastNotes</code>, only while this attempt is still the current generation.</li>
 </ol>
 <p><strong>Error handling:</strong> a backend that fails partway disconnects and disposes what it built before re-throwing. <code>ConnectCore</code> then drops the registry claim and schedules a janitor sweep (<code>ReleaseEndpointClaim</code>). A superseded attempt tears its finished endpoint down through <code>TeardownLocalCreation</code> without touching the instance fields.</p>
 <h3 id="disconnect_2">Disconnect()<a class="headerlink" href="#disconnect_2" title="Permanent link">&para;</a></h3>
@@ -6633,7 +6658,8 @@
 </table>
 <h3 id="static-availability-check">Static Availability Check<a class="headerlink" href="#static-availability-check" title="Permanent link">&para;</a></h3>
 <h4 id="isavailable-bool">IsAvailable() -&gt; bool<a class="headerlink" href="#isavailable-bool" title="Permanent link">&para;</a></h4>
-<p>Thread-safe, double-checked locking on <code>_availLock</code>. Caches result in <code>_isAvailable</code>. Returns false at once while <code>SuppressForUninstall</code> holds the runtime down (<code>_runtimeSuppressed</code>), or after an earlier probe timed out (<code>_probeTimedOut</code>). The probe runs on <code>Task.Run</code>, bounded at 10 seconds. A timeout sets <code>_probeTimedOut</code> and returns false, so later creates fail fast instead of waiting again.</p>
+<p>Thread-safe, double-checked locking on <code>_availLock</code>. Caches result in <code>_isAvailable</code>. Returns false at once while <code>SuppressForUninstall</code> holds the runtime down (<code>_runtimeSuppressed</code>), or after an earlier probe timed out (<code>_probeTimedOut</code>). The probe runs on <code>Task.Run</code>, bounded at <code>ProbeTimeoutMs</code> (10 seconds). A timeout sets <code>_probeTimedOut</code>, starts <code>RecoverFromHungProbe</code> off the calling thread, and returns false, so later creates fail fast instead of waiting again.</p>
+<p><code>RecoverFromHungProbe</code> gives a hung probe the restart a hung create gets. It runs <code>MidiServiceRecovery.TryRecoverOnce("the availability probe hung")</code>, waits up to <code>HungProbeReturnMs</code> for the hung probe to return against the restarted service, since that probe holds the lock <code>ResetAvailability()</code> takes, then resets and probes again, logging <code>MIDIRECOVER MIDI available again on {ActiveApi}</code>. When the restart is refused, as inside another restart's 120-second cooldown, or the new probe hangs too, a second attempt follows once the cooldown ends. It stops early when the probe resolved some other way or an uninstall holds the runtime down. Before this, a hung probe left the Settings card reading <strong>Not Running</strong> and every MIDI slot failing until a runtime was installed or removed.</p>
 <ol>
 <li>Fast path: if <code>_isAvailable.HasValue</code>, returns cached value.</li>
 <li>Under lock: <code>TryStart(s_backendFactory) ?? TryStart(s_legacyFactory)</code>. In production <code>CreateBackend</code> asks <code>MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)</code> and returns a <code>MidiBackendInBox</code>, a <code>MidiBackendAppSdk</code>, or null. <code>CreateLegacyBackend</code> returns a <code>MidiBackendLegacy</code>.</li>
@@ -6643,7 +6669,8 @@
 <p>A probe that hangs in the first backend never reaches the legacy one: the 10-second bound gives up on both, and on the new MIDI stack WinMM routes through the same service anyway.</p>
 <p><code>ActiveApi</code> reports the started backend's kind after a successful probe, <code>MidiApiKind.Legacy</code> included, and <code>MidiApiKind.None</code> otherwise. <code>ProbeFailed</code> is true after a probe that started nothing, or timed out, until a reset. The Settings card reads both through <code>MidiApiSelection.ForCard</code>.</p>
 <h4 id="resetavailability">ResetAvailability()<a class="headerlink" href="#resetavailability" title="Permanent link">&para;</a></h4>
-<p>Resets cached availability so <code>IsAvailable()</code> re-evaluates. Clears <code>_probeTimedOut</code> and <code>_runtimeSuppressed</code>, stops and drops <code>_backend</code>, sets <code>_isAvailable = null</code>. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through <code>InputService.SwitchMidiApi</code>, and <code>Connect()</code> after a service restart.</p>
+<p>Resets cached availability so <code>IsAvailable()</code> re-evaluates. Clears <code>_probeTimedOut</code> and <code>_runtimeSuppressed</code>, stops and drops <code>_backend</code>, sets <code>_isAvailable = null</code>, and bumps <code>Generation</code>. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through <code>InputService.SwitchMidiApi</code>, and every service restart PadForge performs: <code>Connect()</code> after a hung create or a refused session, and <code>RecoverFromHungProbe</code>.</p>
+<p>A controller made in an older generation talks to a backend or a service that is gone. Step 5 rebuilds its slot (<code>CreatedGeneration</code> behind <code>Generation</code>), and the next MIDI input sweep closes every input and the shared session and opens them again on the current backend (<a href="../../reference/midi-input-internals/">MIDI Input Internals</a>).</p>
 <h4 id="shutdownbool-skipdispose-false">Shutdown(bool skipDispose = false)<a class="headerlink" href="#shutdownbool-skipdispose-false" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Shutdown</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">skipDispose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">)</span>
 </code></pre></div>

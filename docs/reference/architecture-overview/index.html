@@ -5202,7 +5202,7 @@
 <li><code>HMaestroVRController.cs</code>. The VR slot type (#49). One <code>HMVRController</code> pipe drives both SteamVR hands. Haptic pulses arrive as (hand, amplitude, duration) and fan into the slot's <code>Vibration</code> entry with a decay timer, because the rumble path latches motor speeds until someone writes zero</li>
 <li><code>SonyHeadsetMotionDevice.cs</code> / <code>SonyHeadsetHid.cs</code> / <code>HeadTrackerHid.cs</code> / <code>HeadTrackerMath.cs</code>. Sony headset head tracker (WH-1000XM5 family) over Bluetooth Classic as an Android Head Tracker HID sensor collection, surfaced as a motion-only <code>ISdlInputDevice</code> (#188). <code>HeadTrackerMath</code> synthesizes an angular rate from consecutive rotation vectors when the descriptor reports rotation but no gyro usage</li>
 <li><code>AtToImpulseTranslator.cs</code>. Adaptive-trigger blocks a game writes to a virtual DualSense, translated to Xbox impulse-trigger output when the physical pad is an Xbox One+ (#271 item 3)</li>
-<li><code>MidiServiceRecovery.cs</code> / <code>MidiEndpointJanitor.cs</code>. One-shot recovery for a wedged <code>midisrv</code>, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death</li>
+<li><code>MidiServiceRecovery.cs</code> / <code>MidiEndpointJanitor.cs</code>. A <code>midisrv</code> restart, at most once every two minutes, for a hung create, a hung availability probe or a refused session, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death</li>
 <li><code>PlayStationEffectWriter.cs</code>. The former <code>SonyEffectWriter.cs</code>, renamed to match the PlayStation VC family naming</li>
 </ul>
 <p><strong>App <code>Common/</code></strong></p>
@@ -5861,9 +5861,9 @@
 </tr>
 <tr>
 <td><strong>Nefarius.Utilities.DeviceManagement</strong></td>
-<td>5.2.0</td>
+<td>6.1.0</td>
 <td>App</td>
-<td>Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116)</td>
+<td>Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) and for releasing a hidden USB controller</td>
 </tr>
 <tr>
 <td><strong>System.Management</strong></td>

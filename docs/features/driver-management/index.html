@@ -4523,7 +4523,7 @@
 <li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
 <li>Click <strong>Install</strong>.</li>
 </ol>
-<p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. If the redistributable needs a restart to finish, restart Windows and click <strong>Install</strong> again.</p>
+<p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. When a program holds the old Visual C++ runtime open so Windows cannot swap in the new one, PadForge runs the redistributable again as a repair, twice at most, five seconds apart.</p>
 <h3 id="the-settings-card">The Settings card<a class="headerlink" href="#the-settings-card" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4551,13 +4551,13 @@
 </tr>
 <tr>
 <td><strong>Not Running</strong></td>
-<td>"The Windows MIDI service did not respond. Restarting Windows clears a stuck service."</td>
-<td>The engine's check started nothing.</td>
+<td>"The Windows MIDI service did not respond. PadForge restarts the service and checks again."</td>
+<td>The engine's check started nothing. A second restart follows two minutes later if the first does not help.</td>
 </tr>
 </tbody>
 </table>
 <p>The flame lights while any of them works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.</p>
-<p>In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no <strong>Install</strong>. Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back. Restart PadForge afterward so it checks again.</p>
+<p>In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no <strong>Install</strong>. Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back.</p>
 <h3 id="the-legacy-midi-api">The legacy MIDI API<a class="headerlink" href="#the-legacy-midi-api" title="Permanent link">&para;</a></h3>
 <p>The legacy API cannot create a port for a MIDI slot, so each slot sends to a port that already exists: a MIDI interface, a synth, or a loopback driver that another program reads.</p>
 <ul>
@@ -4731,20 +4731,20 @@
 </thead>
 <tbody>
 <tr>
-<td>Click <strong>Install</strong> and nothing happens</td>
-<td>An earlier installer run may still be in progress, or the launch failed quietly. No UAC prompt is involved (PadForge already runs as administrator). Wait a few seconds and retry. If it still does nothing, restart PadForge and try again.</td>
+<td>The status bar says Windows started the installer without letting PadForge follow it</td>
+<td>The installer runs on its own. The card shows the result once it finishes.</td>
 </tr>
 <tr>
 <td>Flame stays unlit after install</td>
-<td>Retry. If it still fails, restart the PC and retry.</td>
+<td>The status bar names why the install failed, such as an installer's exit code. Click <strong>Install</strong> again.</td>
 </tr>
 <tr>
 <td>HIDMaestro fails to install</td>
-<td>An old ViGEmBus or vJoy install can leave leftovers behind. Remove them from <strong>Windows Settings &gt; Apps &gt; Installed apps</strong>, then restart PadForge.</td>
+<td>An old ViGEmBus or vJoy install can leave leftovers behind. Remove them from <strong>Windows Settings &gt; Apps &gt; Installed apps</strong>, then turn the slot off and on, and PadForge runs the setup again.</td>
 </tr>
 <tr>
-<td>Windows MIDI Services <strong>Install</strong> stops and asks for a restart</td>
-<td>The Visual C++ Redistributable needs a restart to finish. Restart Windows and click <strong>Install</strong> again.</td>
+<td>Windows MIDI Services <strong>Install</strong> stops: "A program holds the old Visual C++ runtime open"</td>
+<td>Windows could not replace the Visual C++ runtime while that program held it, and the two repair runs that followed could not replace it either. Close other programs and click <strong>Install</strong> again.</td>
 </tr>
 <tr>
 <td>Windows MIDI Services card reads <strong>Legacy MIDI API</strong> on Windows 11 25H2</td>
@@ -4752,7 +4752,7 @@
 </tr>
 <tr>
 <td>Windows MIDI Services card reads <strong>Not Running</strong></td>
-<td>The Windows MIDI service did not respond. Restart Windows, then PadForge.</td>
+<td>The Windows MIDI service did not respond. PadForge restarts the service and checks again, and the card changes once MIDI answers.</td>
 </tr>
 </tbody>
 </table>
@@ -4795,7 +4795,7 @@
 </tr>
 <tr>
 <td>Double input still there after HidHide</td>
-<td>Restart the game. Some games only detect controllers at launch. Reconnect the controller if the install was new, since a controller that was already connected picks HidHide up the next time it connects.</td>
+<td>PadForge reconnects a hidden USB controller in Windows, so a game that opened it first loses it, and a controller connected before HidHide was installed picks HidHide up as it comes back. A Bluetooth controller, or a USB device that carries more than one controller, waits for its next connection: turn it off and on. Some games only detect controllers at launch, so restart the game if it still shows two.</td>
 </tr>
 <tr>
 <td>Virtual controller shows up but games do not see it</td>

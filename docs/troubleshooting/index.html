@@ -4752,10 +4752,9 @@
 <ol>
 <li>Try a different USB port. Use one directly on the computer, not a hub.</li>
 <li>Try a different cable. Some cables are charge-only.</li>
-<li>Restart PadForge. Some devices need a fresh launch.</li>
 <li>Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.</li>
 <li>For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.</li>
-<li>If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while <strong>"Hide Devices from Games"</strong> is on in <a href="../features/settings/">Settings</a>, so turn that toggle on if it is off and let PadForge manage hiding. If the status bar says HidHide blocked PadForge from a device it had hidden, restart PadForge. PadForge takes such a hide back and hides nothing until it restarts, and HidHide does not recognize a PadForge that was already running when HidHide was installed.</li>
+<li>If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while <strong>"Hide Devices from Games"</strong> is on in <a href="../features/settings/">Settings</a>, so turn that toggle on if it is off and let PadForge manage hiding. If the status bar says HidHide blocked PadForge from a device it had hidden, PadForge took that hide back, so the device keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes.</li>
 <li>Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.</li>
 <li>A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click <strong>Pair</strong> on the <a href="../features/devices/">Devices</a> page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.</li>
 </ol>
@@ -4774,7 +4773,7 @@
 <h2 id="virtual-controller-not-appearing-in-games">Virtual Controller Not Appearing in Games<a class="headerlink" href="#virtual-controller-not-appearing-in-games" title="Permanent link">&para;</a></h2>
 <p><strong>A slot is created and a device assigned, but games do not detect the virtual controller.</strong></p>
 <ol>
-<li>Xbox, PlayStation, Nintendo, and Extended output need <strong>HIDMaestro</strong>, which installs itself the first time a slot creates a virtual controller. There is nothing to install from <a href="../features/settings/">Settings</a>. If no virtual controller appears, restart PadForge so the engine tries the setup again.</li>
+<li>Xbox, PlayStation, Nintendo, and Extended output need <strong>HIDMaestro</strong>, which installs itself the first time a slot creates a virtual controller. There is nothing to install from <a href="../features/settings/">Settings</a>. If no virtual controller appears, turn the slot off and on, and PadForge runs the setup again.</li>
 <li>MIDI output runs on <strong>Windows MIDI Services</strong> or, without it, the legacy MIDI API. Its card on <a href="../features/settings/">Settings</a> says which one runs. Under the legacy API a MIDI slot needs an <strong>Output Port</strong> picked on its page.</li>
 <li>Confirm the slot is enabled. The flame on its Dashboard card should be lit, ember while its virtual controller runs. An outline flame means the slot is disabled.</li>
 <li>Confirm the engine is running. The Dashboard shows <strong>Forging</strong> beside a lit ember flame. <strong>Idle</strong> means the engine runs with no slot active, and <strong>Stopped</strong> means it is off.</li>
@@ -4786,7 +4785,7 @@
 <h2 id="nintendo-slot-not-seen-by-a-game">Nintendo Slot Not Seen by a Game<a class="headerlink" href="#nintendo-slot-not-seen-by-a-game" title="Permanent link">&para;</a></h2>
 <p><strong>A Nintendo virtual controller is active but the game does not react to it.</strong></p>
 <ol>
-<li>The Nintendo output rides <strong>HIDMaestro</strong>, the same driver as Xbox, PlayStation, and Extended. It installs itself the first time a slot creates a virtual controller. If no virtual controller appears, restart PadForge so the engine tries the setup again.</li>
+<li>The Nintendo output rides <strong>HIDMaestro</strong>, the same driver as Xbox, PlayStation, and Extended. It installs itself the first time a slot creates a virtual controller. If no virtual controller appears, turn the slot off and on, and PadForge runs the setup again.</li>
 <li>Games see the slot as the picked Nintendo profile, a <strong>Nintendo Switch Pro Controller</strong> or a <strong>Nintendo Switch 2 Pro Controller</strong>. XInput-only games never read either one. Use an Xbox slot for those.</li>
 <li>Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.</li>
 <li>Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.</li>
@@ -4802,9 +4801,9 @@
 <li>Enable <strong>"Hide Devices from Games"</strong> on the <a href="../features/settings/">Settings</a> page.</li>
 <li>On the <a href="../features/devices/">Devices</a> page, enable <strong>"Hide from Games (HidHide)"</strong> per device.</li>
 <li>PadForge always whitelists itself, so it keeps seeing hidden devices. Add other apps (emulators, tools) that need a hidden device under <strong>Whitelisted Applications</strong> on <a href="../features/settings/">Settings</a>.</li>
-<li>Restart the game after changing HidHide settings. HidHide blocks only programs that open the controller after the hide lands. A program that already had it open keeps it until the controller reconnects.</li>
+<li>HidHide blocks only programs that open the controller after the hide lands. When PadForge hides a USB controller that was already connected, it reconnects it in Windows, so a game that had it open loses it. A Bluetooth controller, or a USB device that carries more than one controller such as the Xbox 360 wireless receiver, stays with a game that opened it first until it reconnects. Turn it off and on, or restart the game.</li>
 <li>Check the game's controller settings. Disable the physical controller and keep the virtual one.</li>
-<li>If using Steam, start PadForge before Steam, or unplug and reconnect the controller once PadForge is running. Steam opens controllers when it starts and holds them, so a pad connected before PadForge hid it stays visible to Steam under its real name, and Steam Input reads it alongside the virtual one. If Steam usually starts first, turn on <strong>Keep Devices Cloaked Between Launches</strong> in <a href="../features/settings/">Settings</a>. Otherwise disable Steam Input for the game or close Steam entirely.</li>
+<li>If using Steam: Steam opens controllers when it starts and holds them, so a pad it opened before PadForge hid it stays visible to Steam under its real name, and Steam Input reads it alongside the virtual one. PadForge reconnects a USB pad when it hides it, which takes the pad away from Steam. A Bluetooth pad stays with Steam until it reconnects, so start PadForge before Steam, or turn the pad off and on once PadForge is running. If Steam usually starts first, turn on <strong>Keep Devices Cloaked Between Launches</strong> in <a href="../features/settings/">Settings</a>. Otherwise disable Steam Input for the game or close Steam entirely.</li>
 <li>BLE controllers (e.g., Xbox via Bluetooth) are properly hidden by HidHide on current PadForge builds. If peek-through still happens, check that the per-device <strong>"Hide from Games (HidHide)"</strong> toggle is on and that <strong>"Hide Devices from Games"</strong> is enabled in the HidHide section of <a href="../features/settings/">Settings</a>.</li>
 </ol>
 <hr />
@@ -4853,7 +4852,7 @@
 <li>Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Canceling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.</li>
 <li>The HIDMaestro card on the <a href="../features/settings/">Settings</a> page always reads "Installed", because the driver ships inside PadForge. It does not confirm that the driver registered.</li>
 <li>Check <code>joy.cpl</code> (Win+R &gt; <code>joy.cpl</code>). If empty, create an Extended slot on the Dashboard first.</li>
-<li>Restart PadForge. A failed HIDMaestro setup is tried again the next time the engine starts.</li>
+<li>A failed HIDMaestro setup leaves "Error: Failed to initialize HIDMaestro." in the status bar. It runs again when you turn the slot off and on, change its type or profile, or reconnect its controller, and the message clears once it succeeds.</li>
 <li>If a slot stays stuck on "Initializing," check the <strong>Inactivity Timeout</strong> in <a href="../features/settings/">Settings</a>. After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.</li>
 </ol>
 <hr />
@@ -4872,8 +4871,8 @@
 <p><strong>The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".</strong></p>
 <ol>
 <li>Open <a href="../features/settings/">Settings</a> and read the <strong>Windows MIDI Services</strong> card.</li>
-<li><strong>Not Running</strong> means no MIDI API started, the legacy one included, because the Windows MIDI service did not respond. Restart Windows, then PadForge.</li>
-<li>"Failed to create MIDI session" means the API started but cannot reach the service. Restart the service or reboot.</li>
+<li><strong>Not Running</strong> means no MIDI API started, the legacy one included, because the Windows MIDI service did not respond. PadForge restarts the service and checks again, and the card changes once MIDI answers. When that restart does not help, PadForge tries once more two minutes later.</li>
+<li>"Failed to create MIDI session" means the API started but the service refused a session. PadForge restarts the service and creates the slot again. It restarts the service at most once every two minutes, so if the message stays, turn the slot off and on after that.</li>
 </ol>
 <p>Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Legacy API mode, or no runtime installed), the card reads <strong>Legacy MIDI API</strong> and the MIDI button works.</p>
 <hr />
@@ -5301,7 +5300,7 @@
 <ol>
 <li>Update to 4.4.0. The built-in controller is a USB composite device whose XInput node is an interface under the composite parent, and earlier builds never blacklisted the nodes between the HID child and the parent. 4.4.0 hides every interface of the device that HidHide can filter, the XInput node included. The Xbox 360 wireless receiver has the same shape.</li>
 <li>An interface that shows on the <a href="../features/devices/">Devices</a> page as its own row, such as the touchpad, follows its own <strong>Hide from Games (HidHide)</strong> checkbox. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.</li>
-<li>A program that opened the pad before the entry landed keeps it until the pad reconnects. A built-in pad never reconnects, so a game or launcher started before you hid the pad keeps seeing it. Turn on <strong>Keep Devices Cloaked Between Launches</strong> in <a href="../features/settings/">Settings</a> and reboot once, so the entry is in place before anything opens the pad.</li>
+<li>A program that opened the pad before the entry landed keeps it until the pad reconnects. A built-in pad never reconnects by itself, so PadForge reconnects it in Windows when it hides it, and a game or launcher started first loses it. A USB device that carries a second controller is left alone. To have the pad hidden from the moment Windows starts, turn on <strong>Keep Devices Cloaked Between Launches</strong> in <a href="../features/settings/">Settings</a>.</li>
 <li><strong>Hide Devices from Games</strong> in <a href="../features/settings/">Settings</a> is the master switch. With it off, no per-device checkbox does anything.</li>
 <li>Add any emulator or tool that must still see the physical pad under <strong>Whitelisted Applications</strong> in <a href="../features/settings/">Settings</a>. PadForge whitelists itself.</li>
 </ol>
@@ -5371,7 +5370,7 @@
 </tr>
 <tr>
 <td>No virtual controller in game</td>
-<td>HIDMaestro installs itself. Restart PadForge. A MIDI slot on the legacy MIDI API needs an Output Port picked</td>
+<td>HIDMaestro installs itself. Turn the slot off and on to run a failed setup again. A MIDI slot on the legacy MIDI API needs an Output Port picked</td>
 </tr>
 <tr>
 <td>Nintendo slot not in game</td>
@@ -5411,7 +5410,7 @@
 </tr>
 <tr>
 <td>Extended controller not in joy.cpl</td>
-<td>Accept UAC, create an Extended slot, restart PadForge</td>
+<td>Create an Extended slot. Turn it off and on to run a failed HIDMaestro setup again</td>
 </tr>
 <tr>
 <td>Extended FFB silent</td>
@@ -5579,7 +5578,7 @@
 </tr>
 <tr>
 <td>Handheld XInput pad still visible after hiding</td>
-<td>4.4.0 hides composite interfaces. Keep Devices Cloaked Between Launches, reboot once</td>
+<td>4.4.0 hides composite interfaces. PadForge reconnects the pad when it hides it, so launchers lose it</td>
 </tr>
 <tr>
 <td>Dual-connected DualSense silent over USB</td>

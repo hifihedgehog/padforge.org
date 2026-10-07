@@ -695,7 +695,11 @@ Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, whic
 | Field | Type | Description |
 |---|---|---|
 | `_isAvailable` | `bool?` | Cached availability check result (nullable for first-check detection) |
-| `_probeTimedOut` | `bool` (volatile) | Set when the bounded availability probe times out. Later checks return false until `ResetAvailability()` |
+| `_probeTimedOut` | `bool` (volatile) | Set when the bounded availability probe times out. Later checks return false until `ResetAvailability()`, which the recovery runs once it has restarted the service |
+| `ProbeTimeoutMs` | `int` | The probe's bound, 10 000 ms. Tests shorten it |
+| `HungProbeReturnMs` | `int` | How long the recovery waits for a hung probe to return after the service restart, 30 000 ms |
+| `s_probeRecoveryRunning` | `int` | 1 while a hung-probe recovery runs, so a second hang starts no second one |
+| `s_generation` | `int` | Bumped by every `ResetAvailability()`. Read through `Generation` |
 | `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the runtime during its uninstall. Cleared by `ResetAvailability()` |
 | `_availLock` | `object` | Lock protecting availability check (readonly) |
 | `s_liveEndpoints` | `ConcurrentDictionary<string, long>` | Per-process registry of endpoint ids this process created: creating, ready, or abandoned-at-tick. The janitor keys off it instead of guessing from names |
@@ -746,6 +750,7 @@ Same gamepad detection as the HM-backed slots (`CapType == InputDeviceType.Gamep
 | `IsConnected` | `bool` | Read from `_connected` |
 | `FeedbackPadIndex` | `int` | Slot index for feedback routing (unused. MIDI has no rumble) |
 | `ApiKind` | `MidiApiKind` | The API the endpoint was made with, set when `ConnectCore` commits. Step 5 rebuilds the slot when the probe settles on another API, as after the runtime install |
+| `CreatedGeneration` | `int` | The backend generation the endpoint was made in. Step 5 rebuilds the slot once it falls behind `Generation`, since the backend or the service the endpoint talks to is gone |
 
 ### Constructor
 
@@ -757,7 +762,7 @@ Stores pad index, clamps channel to 0–15, stores 1-based instance number.
 
 ### Connect()
 
-Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCore` runs on a `Task.Run` and the caller waits on a `ManualResetEventSlim` for `ConnectTimeoutMs` (15 seconds). On timeout it bumps `_creationGen` (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a `MidiEndpointJanitor` sweep, and on the first attempt runs `MidiServiceRecovery.TryRecoverOnce()` and retries once. `Disconnect()` carries the same bounded shape around `DisconnectCore` (8 seconds).
+Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCore` runs on a `Task.Run` and the caller waits on a `ManualResetEventSlim` for `ConnectTimeoutMs` (15 seconds). On timeout it bumps `_creationGen` (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a `MidiEndpointJanitor` sweep, and on the first attempt runs `MidiServiceRecovery.TryRecoverOnce()` and retries once. A refused session gets the same restart and retry: `MidiSessionUnavailableException` on the first attempt runs `TryRecoverOnce("the service refused a MIDI session")`, then `ResetAvailability()` and a fresh `IsAvailable()`, before the second attempt. The failed attempt has already released its endpoint claim. Inside the restart's 120-second cooldown the exception reaches the caller unchanged. `Disconnect()` carries the same bounded shape around `DisconnectCore` (8 seconds).
 
 `ConnectCore` initialization sequence:
 
@@ -765,12 +770,12 @@ Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCo
 2. Under the legacy API, calls `MidiBackendLegacy.OpenOutputPort(OutputPort)`: the saved name resolves to the port's current WinMM index, and `midiOutOpen` opens it with `CALLBACK_NULL` (RtMidi `MidiOutWinMM::openPort`). It throws `InvalidOperationException` naming the reason when no port is picked or another program holds it (`MMSYSERR_ALLOCATED`), and `MidiPortNotConnectedException`, a subclass, when the port is not connected. Step 5 retries a slot that failed that way once a port listing shows the port again ([Input Pipeline](../reference/input-pipeline.md)). Otherwise calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both Windows MIDI Services backends run the same steps under their own namespaces:
     1. `MidiDeclaredEndpointInfo` with the name, `ProductInstanceId` = the id, MIDI 1.0 protocol, static function blocks.
     2. `MidiVirtualDeviceCreationConfig` with the slot description, and one `MidiFunctionBlock` (bidirectional, Group 0, `RepresentsMidi10Connection = YesBandwidthUnrestricted`).
-    3. `MidiSession.Create(deviceName)`. Throws if null.
+    3. `MidiSession.Create(deviceName)`. Throws `MidiSessionUnavailableException` if null, which both APIs return when the service is unavailable or not running (`MidiSession::Create` in `microsoft/MIDI`).
     4. `MidiVirtualDeviceManager.CreateVirtualDevice(config)`, then `SuppressHandledMessages = true`.
     5. A `MidiEndpointConnection` to the device's endpoint ID.
     6. The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but `MidiMessageProcessingPluginAddResult.Succeeded`, as Microsoft's virtual device sample does. The App SDK runtime's add returns nothing.
     7. `Open()`. Throws if false.
-3. Commits `_endpoint` and `ApiKind`, sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
+3. Commits `_endpoint`, `ApiKind` and `CreatedGeneration` (read before the backend, so a reset between the two reads costs a rebuild instead of stamping a torn-down backend's endpoint as current), sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
 
 **Error handling:** a backend that fails partway disconnects and disposes what it built before re-throwing. `ConnectCore` then drops the registry claim and schedules a janitor sweep (`ReleaseEndpointClaim`). A superseded attempt tears its finished endpoint down through `TeardownLocalCreation` without touching the instance fields.
 
@@ -847,7 +852,9 @@ All three helpers call `Send(Midi1Status, data1, data2)`, which hands the messag
 
 #### IsAvailable() -> bool
 
-Thread-safe, double-checked locking on `_availLock`. Caches result in `_isAvailable`. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), or after an earlier probe timed out (`_probeTimedOut`). The probe runs on `Task.Run`, bounded at 10 seconds. A timeout sets `_probeTimedOut` and returns false, so later creates fail fast instead of waiting again.
+Thread-safe, double-checked locking on `_availLock`. Caches result in `_isAvailable`. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), or after an earlier probe timed out (`_probeTimedOut`). The probe runs on `Task.Run`, bounded at `ProbeTimeoutMs` (10 seconds). A timeout sets `_probeTimedOut`, starts `RecoverFromHungProbe` off the calling thread, and returns false, so later creates fail fast instead of waiting again.
+
+`RecoverFromHungProbe` gives a hung probe the restart a hung create gets. It runs `MidiServiceRecovery.TryRecoverOnce("the availability probe hung")`, waits up to `HungProbeReturnMs` for the hung probe to return against the restarted service, since that probe holds the lock `ResetAvailability()` takes, then resets and probes again, logging `MIDIRECOVER MIDI available again on {ActiveApi}`. When the restart is refused, as inside another restart's 120-second cooldown, or the new probe hangs too, a second attempt follows once the cooldown ends. It stops early when the probe resolved some other way or an uninstall holds the runtime down. Before this, a hung probe left the Settings card reading **Not Running** and every MIDI slot failing until a runtime was installed or removed.
 
 1. Fast path: if `_isAvailable.HasValue`, returns cached value.
 2. Under lock: `TryStart(s_backendFactory) ?? TryStart(s_legacyFactory)`. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null. `CreateLegacyBackend` returns a `MidiBackendLegacy`.
@@ -860,7 +867,9 @@ A probe that hangs in the first backend never reaches the legacy one: the 10-sec
 
 #### ResetAvailability()
 
-Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through `InputService.SwitchMidiApi`, and `Connect()` after a service restart.
+Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`, and bumps `Generation`. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through `InputService.SwitchMidiApi`, and every service restart PadForge performs: `Connect()` after a hung create or a refused session, and `RecoverFromHungProbe`.
+
+A controller made in an older generation talks to a backend or a service that is gone. Step 5 rebuilds its slot (`CreatedGeneration` behind `Generation`), and the next MIDI input sweep closes every input and the shared session and opens them again on the current backend ([MIDI Input Internals](../reference/midi-input-internals.md)).
 
 #### Shutdown(bool skipDispose = false)
 

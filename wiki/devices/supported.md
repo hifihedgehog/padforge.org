@@ -749,7 +749,7 @@ as a generic joystick.
 | **DualShock 3** | Motion, pressure-sensitive buttons, pairing over USB | [DualShock 3](dualshock-3.md) |
 | **PlayStation Move, Navigation** | Gyro, accelerometer, the lit sphere, analog trigger and d-pad pressure | [PlayStation Move](ps-move.md) |
 | **Switch Pro, Switch 2 Pro** | Gyro, accelerometer and rumble. On the original Switch Pro, also the HOME LED and the NFC tag reader | [Lighting](../features/lighting.md), [NFC Tags](../features/nfc-tags.md) |
-| **Joy-Con, Joy-Con 2** | Per-half motion, HD Rumble, the right Joy-Con IR camera brightness, the Joy-Con 2 optical mouse, combined-pair motion | [Wii Controllers](wii-controllers.md) |
+| **Joy-Con, Joy-Con 2** | Per-half motion, HD Rumble, the right Joy-Con IR camera brightness, the Joy-Con 2 optical mouse, combined-pair motion. Joy-Con 2 clones such as the NYXI Hyperion 3 over Bluetooth: buttons, stick and accelerometer. They have no gyroscope | [Wii Controllers](wii-controllers.md) |
 | **Wii Remote, Nunchuk, Classic, Wii U Pro** | Motion, Motion Plus, the IR pointer, the extension port, the speaker | [Wii Controllers](wii-controllers.md) |
 | **Wii Balance Board** | Total weight and lean on both axes | [Wii Controllers](wii-controllers.md) |
 | **Steam Controller (2015), Steam Controller 2026, Steam Deck** | Trackpads, gyro, haptics, and the 2026 pad's PCM haptic stream. The Steam Deck and the Steam Controller 2026 are also virtual-controller personas, each with its own 2D and 3D body | [Touchpad](../features/touchpad.md), [Virtual Controllers](../features/virtual-controllers.md) |

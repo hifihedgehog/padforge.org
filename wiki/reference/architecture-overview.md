@@ -580,7 +580,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - `HMaestroVRController.cs`. The VR slot type (#49). One `HMVRController` pipe drives both SteamVR hands. Haptic pulses arrive as (hand, amplitude, duration) and fan into the slot's `Vibration` entry with a decay timer, because the rumble path latches motor speeds until someone writes zero
 - `SonyHeadsetMotionDevice.cs` / `SonyHeadsetHid.cs` / `HeadTrackerHid.cs` / `HeadTrackerMath.cs`. Sony headset head tracker (WH-1000XM5 family) over Bluetooth Classic as an Android Head Tracker HID sensor collection, surfaced as a motion-only `ISdlInputDevice` (#188). `HeadTrackerMath` synthesizes an angular rate from consecutive rotation vectors when the descriptor reports rotation but no gyro usage
 - `AtToImpulseTranslator.cs`. Adaptive-trigger blocks a game writes to a virtual DualSense, translated to Xbox impulse-trigger output when the physical pad is an Xbox One+ (#271 item 3)
-- `MidiServiceRecovery.cs` / `MidiEndpointJanitor.cs`. One-shot recovery for a wedged `midisrv`, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death
+- `MidiServiceRecovery.cs` / `MidiEndpointJanitor.cs`. A `midisrv` restart, at most once every two minutes, for a hung create, a hung availability probe or a refused session, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death
 - `PlayStationEffectWriter.cs`. The former `SonyEffectWriter.cs`, renamed to match the PlayStation VC family naming
 
 **App `Common/`**
@@ -1055,7 +1055,7 @@ Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio pa
 | **Microsoft.Windows.CsWinRT** | 2.2.0 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
 | **NAudio.Wasapi** | 2.2.1 | App | WASAPI loopback capture for bass-driven rumble, plus the WASAPI capture and render behind Bass Shakers, macro sounds, controller audio, haptic tones, and voice macros |
-| **Nefarius.Utilities.DeviceManagement** | 5.2.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) |
+| **Nefarius.Utilities.DeviceManagement** | 6.1.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) and for releasing a hidden USB controller |
 | **System.Management** | 10.0.11 | App | ACPI-WMI event subscriptions for handheld hidden buttons and their learner (#343) |
 | **System.Speech** | 10.0.0 | App | SAPI recognizer session for voice macros (#317) |
 | **Vosk** | 0.3.38 | App | Offline voice-macro recognizer (Apache-2.0). Phrase-list grammar with an `[unk]` bucket |

@@ -3417,6 +3417,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#releasing-a-controller-opened-before-its-hide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Releasing a Controller Opened Before Its Hide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#apply-diagnostics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4972,6 +4983,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#releasing-a-controller-opened-before-its-hide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Releasing a Controller Opened Before Its Hide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#apply-diagnostics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5344,34 +5366,41 @@
 <p><code>InputManager.Step5.VirtualDevices.cs</code> owns the HM lifecycle:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureHMaestroContext</span><span class="p">()</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">_hmaestroContextFailed</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">HmSetupHeld</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">_hmaestroContextLock</span><span class="p">)</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">_hmaestroContextFailed</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="k">try</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="p">{</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">            </span><span class="c1">// Preflight: sweep leftover HM virtuals from prior sessions</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="c1">// (crash / forced kill / ungraceful exit). Without this,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">            </span><span class="c1">// InstallDriver&#39;s RemoveOldDriverPackages step fails with</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">            </span><span class="c1">// &quot;device using INF&quot; because stale device nodes still</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="c1">// reference the old driver package.</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HMContext</span><span class="p">.</span><span class="n">RemoveAllVirtualControllers</span><span class="p">(</span><span class="n">preserveInstall</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">            </span><span class="n">ctx</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">            </span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">;</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">            </span><span class="c1">// ... ProcessExit hook to purge VCs on ungraceful shutdown</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="p">{</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">            </span><span class="n">_hmaestroContextFailed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">            </span><span class="n">RaiseError</span><span class="p">(</span><span class="s">&quot;Failed to initialize HIDMaestro.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">HmSetupHeld</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="n">HMContext</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="k">try</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">            </span><span class="c1">// Preflight: sweep leftover HM virtuals from prior sessions</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">            </span><span class="c1">// (crash / forced kill / ungraceful exit). Without this,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">            </span><span class="c1">// InstallDriver&#39;s RemoveOldDriverPackages step fails with</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">            </span><span class="c1">// &quot;device using INF&quot; because stale device nodes still</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">            </span><span class="c1">// reference the old driver package.</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HMContext</span><span class="p">.</span><span class="n">RemoveAllVirtualControllers</span><span class="p">(</span><span class="n">preserveInstall</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">            </span><span class="n">ctx</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">            </span><span class="n">_hmaestroContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="p">;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">            </span><span class="kt">bool</span><span class="w"> </span><span class="n">recovered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_hmaestroSetupFailedTick</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">            </span><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">_hmaestroSetupFailedTick</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">            </span><span class="n">_cleanShutdownPerformed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">recovered</span><span class="p">)</span><span class="w"> </span><span class="n">RaiseErrorResolved</span><span class="p">(</span><span class="n">HmSetupFailedMessage</span><span class="p">);</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">            </span><span class="c1">// ... ProcessExit hook to purge VCs on ungraceful shutdown</span>
 <a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="p">}</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ctx</span><span class="o">?.</span><span class="n">Dispose</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">            </span><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">_hmaestroSetupFailedTick</span><span class="p">,</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">TickCount64</span><span class="p">));</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">            </span><span class="n">RaiseError</span><span class="p">(</span><span class="n">HmSetupFailedMessage</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span><span class="w">   </span><span class="c1">// &quot;Failed to initialize HIDMaestro.&quot;</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>InstallDriver()</code> is idempotent and safe to call every <code>Start()</code>. Elevation is required, supplied by <code>app.manifest</code>.</p>
+<p>A failed setup holds for five seconds (<code>HmSetupRetryHoldMs</code>), so the other slots of the same start fail fast instead of each running the setup again, since creates run one at a time. The next create after that runs it again. A slot whose create failed keeps its own latch, which only a change to that slot clears: turning it off and on, a type or profile change, or a device reconnect. A retry therefore follows the user's next change, or a slot created later, and never loops on its own. A failure used to set a flag that only an engine stop cleared. A successful retry raises <code>ErrorResolved</code>, and <code>InputService.ClearResolvedError</code> clears "Error: Failed to initialize HIDMaestro." from the status line while it is still the message shown. An engine stop resets the hold with the context (<code>DisposeHMaestroContextOnShutdown</code>).</p>
 <p><code>preserveInstall: true</code> is load-bearing on every sweep. The preserving overload still evicts every stale device node, which is the only thing that blocks the install. The flag guards driver-package removal and the <code>HKLM\SOFTWARE\HIDMaestro</code> delete, and that key holds the VR driver's registration gate plus the <code>SteamVRPath</code> hint. Sweeping without it sent a VR slot back to re-extracting <code>driver_hidmaestro.dll</code> into a running <code>vrserver.exe</code> whenever a session mixed a VR slot with a conventional one, and cost the next launch a full deploy by discarding the manifest hash.</p>
 <h3 id="settings-page-surface">Settings page surface<a class="headerlink" href="#settings-page-surface" title="Permanent link">&para;</a></h3>
 <p>The HIDMaestro card in <code>SettingsPage.xaml</code> shows a fixed, always-lit Ember flame (a <code>Path</code> styled <code>LivenessFlameBase</code>, <code>Fill="{DynamicResource EmberBrush}"</code>, with a static <code>#FF6B2C</code> <code>DropShadowEffect</code>), the localized "Installed" text beside it, and the SDK assembly version below. The version string is bound to <code>HIDMaestroVersion</code>, computed once at startup by <code>SettingsViewModel.GetEmbeddedHidMaestroVersion()</code> (a view-model method, not markup):</p>
@@ -5573,13 +5602,13 @@
 <p>Runs on a worker thread through <code>RunDriverOperationAsync</code>.</p>
 <ol>
 <li>Stages under <code>%TEMP%\PadForge_MidiRuntime\&lt;guid&gt;</code>.</li>
-<li>When <code>IsVcRuntimeAtLeast(MidiRuntimeVcMinimum)</code> is false, downloads <code>https://aka.ms/vc14/vc_redist.x64.exe</code> and requires <code>IsSignedByMicrosoft</code>: WinVerifyTrust with <code>WINTRUST_ACTION_GENERIC_VERIFY_V2</code>, then a signer subject carrying <code>O=Microsoft Corporation</code>. It runs the redistributable elevated with <code>/install /quiet /norestart</code>, accepts exit codes 0, 3010, 1641 and 1638 (<code>IsVcRedistSuccess</code>), and checks the version again. A restart owed (3010 or 1641) with the old files still in place throws a message asking for a restart and a second <strong>Install</strong>.</li>
+<li>When <code>IsVcRuntimeAtLeast(MidiRuntimeVcMinimum)</code> is false, downloads <code>https://aka.ms/vc14/vc_redist.x64.exe</code> and requires <code>IsSignedByMicrosoft</code>: WinVerifyTrust with <code>WINTRUST_ACTION_GENERIC_VERIFY_V2</code>, then a signer subject carrying <code>O=Microsoft Corporation</code>. <code>InstallVcRuntime</code> runs the redistributable elevated with <code>/install /quiet /norestart</code>, accepts exit codes 0, 3010, 1641 and 1638 (<code>IsVcRedistSuccess</code>), and checks the version again. While it is still old, it runs <code>/repair /quiet /norestart</code> up to twice, five seconds apart (<code>VcRedistRuns</code>, <code>VcRepairPauseMs</code>). Windows Installer renames a DLL that programs have loaded and puts the new copy in its place, so a 3010 usually leaves the new runtime in place already. Only a program that holds the old file open without letting it be renamed makes Windows queue the new copy for the next startup. Another install of the version already registered plans nothing for its packages, while a repair reinstalls every file of an equal or older version (WiX 3.14 Burn, <code>engine/msiengine.cpp</code>, the engine inside Microsoft's redistributable). Burn refuses a later run only after starting a restart itself (<code>engine/apply.cpp</code>, <code>engine/core.cpp</code>), which <code>/norestart</code> rules out. When the runtime is still old after the repairs, the message depends on <code>PendingFileRenameOperations</code>: a queued replacement of a Visual C++ runtime DLL in System32 reads "A program holds the old Visual C++ runtime open, so Windows could not replace it. Close other programs and select Install again." Anything else reads "The Visual C++ runtime is still older than 14.51 after its installer ran."</li>
 <li>Downloads <code>PadForge-MIDI-Runtime-1.0.17-rc.4.25-x64.msi</code>, or <code>-arm64.msi</code> when <code>PlatformSupport.IsArm64Machine</code>, from <code>MidiRuntimeReleaseUrl</code>, and refuses it unless <code>Sha256Hex</code> equals <code>MidiRuntimeSha256X64</code> or <code>MidiRuntimeSha256Arm64</code>.</li>
 <li>Runs <code>msiexec /i &lt;msi&gt; /qn /norestart MSIRESTARTMANAGERCONTROL=Disable</code> through <code>RunMsiElevated</code>, which throws <code>InstallerFailedException</code> unless the exit code is 0, 3010 or 1641.</li>
 <li>Deletes the staging folder, unless an installer outlived its wait and may still be reading it.</li>
 </ol>
 <p><code>IsVcRuntimeAtLeast</code> reads the System32 copy every process loads. <code>msvcp140.dll</code>, <code>msvcp140_atomic_wait.dll</code> and <code>vcruntime140.dll</code> must exist, plus <code>vcruntime140_1.dll</code> on an x64 machine, and the file version of <code>msvcp140.dll</code> must be at least 14.51. The runtime DLL was linked by MSVC 14.51, and Microsoft requires the installed redistributable to be at least as new as the build tools that made a binary ("Latest supported Visual C++ Redistributable downloads"). The x64 redistributable carries the ARM64 files too, and Microsoft's own MIDI bundle installed that one on both architectures.</p>
-<p>After a successful install, <code>MainWindow</code> calls <code>InputService.SwitchMidiApi()</code>: MIDI input and its session close, <code>ResetAvailability()</code> drops the legacy backend, and input enumerates again. The next probe starts the runtime, and Step 5 rebuilds each MIDI slot whose controller was made on another API (<code>MidiVirtualController.ApiKind</code>).</p>
+<p>After a successful install, <code>MainWindow</code> calls <code>InputService.SwitchMidiApi()</code>: MIDI input and its session close, <code>ResetAvailability()</code> drops the legacy backend, and input enumerates again. The next probe starts the runtime, and Step 5 rebuilds each MIDI slot whose controller was made on another API (<code>MidiVirtualController.ApiKind</code>) or before the reset (<code>CreatedGeneration</code> behind <code>Generation</code>).</p>
 <h3 id="the-runtime-package">The runtime package<a class="headerlink" href="#the-runtime-package" title="Permanent link">&para;</a></h3>
 <p>The MSI is built from <code>installer/PadForgeMidiRuntime.wxs</code> in the runtime's repository, derived from Microsoft's <code>src/app-sdk/sdk-runtime-installer/sdk-package/WindowsMidiServicesSdkRedist.wxs</code>. It installs <code>Microsoft.Windows.Devices.Midi2.dll</code>, self-registered through its own <code>DllRegisterServer</code> as in Microsoft's package, with its <code>.winmd</code> and <code>.pri</code>, <code>LICENSE.txt</code> and <code>THIRD-PARTY-NOTICES.txt</code>, to <code>C:\Program Files\PadForge MIDI Runtime</code>, and writes the <code>Installed</code> value above. It leaves out the PDB, the diagnostic tools such as <code>mididiag.exe</code> and <code>midifixreg.exe</code>, and the log-collection scripts that Microsoft's package carries. Two launch conditions guard it. It will not install while Microsoft's runtime package is present, since both would own the one <code>Installed</code> value, and it will not install without <code>msvcp140.dll</code> 14.51 or later. <code>build/build.ps1</code> rebuilds both MSIs from <code>microsoft/MIDI</code> <code>rc-4</code> (commit <code>d1d274a6</code>), x64 and Arm64X.</p>
 <h3 id="uninstallmidiruntime">UninstallMidiRuntime()<a class="headerlink" href="#uninstallmidiruntime" title="Permanent link">&para;</a></h3>
@@ -6103,6 +6132,40 @@
 <p><code>InputService.BuildHidHideKeepOut</code> builds the set once per apply from the device snapshot. Every row with <strong>Hide from Games</strong> off, that is online, and whose <code>DevicePath</code> resolves to a real HID instance ID contributes <code>HidHideController.ChainInstanceIds(id)</code>: its own HID node plus its same-container ancestors. The expansion of any other record then skips those nodes, and never blocks a base container while one of its HID children is kept out, since blocking the parent would hide that row too.</p>
 <p>The gates are deliberate. An offline record is a memory, and letting one veto a live pad's sweep would reopen the transport-switch double input. Synthetic paths (<code>XInput#N</code>, <code>web://</code>, <code>overlay://</code>) resolve to no HID node and contribute nothing. Interfaces PadForge does not show as rows at all stay with the pad, exactly as before.</p>
 <p>Every id the keep-out predicate removed is reported back through <code>keptOut</code> and lands in the apply's diag line.</p>
+<h3 id="releasing-a-controller-opened-before-its-hide">Releasing a Controller Opened Before Its Hide<a class="headerlink" href="#releasing-a-controller-opened-before-its-hide" title="Permanent link">&para;</a></h3>
+<p>HidHide decides access only when a handle is opened (<code>Logic.c</code> <code>OnDeviceFileCreate</code>), so a game, Steam or a launcher that opened a controller before PadForge hid it kept it. Windows will not remove a device while any handle stays open, and PadForge's own SDL handle is one, so disabling the device is refused. A hub port cycle (<code>IOCTL_USB_HUB_CYCLE_PORT</code>) is a surprise removal no handle can veto, the way HandheldCompanion releases a hidden pad (<code>IController.CyclePort</code>). The controller comes back through HidHide, where only whitelisted programs can open it.</p>
+<p>After an apply whose hide PadForge could reach and HidHide did not refuse, <code>InputService</code> hands the ids that apply added, tablets excluded, to <code>HiddenControllerRelease.Release</code>. Batches run on the thread pool one after another, so the apply never waits on the device tree. For each id, <code>HidHideController.FindUsbDeviceToCycle</code> walks from the node up to the first node whose service is a USB hub, and <code>PickUsbDeviceToCycle</code> decides on that chain:</p>
+<table>
+<thead>
+<tr>
+<th>Left alone when</th>
+<th>Reason it logs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A node on the chain is Bluetooth (<code>BTHENUM\</code>, <code>BTHLEDEVICE\</code>, <code>BTHPS3BUS\</code>, <code>BTH\</code>). Dropping the link turns most pads off.</td>
+<td><code>Bluetooth</code></td>
+</tr>
+<tr>
+<td>No hub on the chain, or the node below the hub is not <code>USB\</code></td>
+<td><code>not on a USB port</code></td>
+</tr>
+<tr>
+<td>The USB device is not the controller: another container, or inside the system container, which every built-in device shares, another <code>VID_xxxx&amp;PID_yyyy</code></td>
+<td><code>the USB device is not the controller</code></td>
+</tr>
+<tr>
+<td>The USB device's subtree holds more than one XUSB or XboxComposite node, as on the Xbox 360 wireless receiver, whose every pad would drop</td>
+<td><code>the USB device carries more than one controller</code></td>
+</tr>
+<tr>
+<td>The device arrived less than 5 s ago (<code>ReleaseArrivalGrace</code>, from <code>DEVPKEY_Device_LastArrivalDate</code>). Such a hide came from the arrival itself, before any program could open the device.</td>
+<td><code>connected moments ago</code></td>
+</tr>
+</tbody>
+</table>
+<p>Each USB device cycles once per batch and at most once per 30 s (<code>HiddenControllerRelease.CooldownMs</code>): its return arrives as a device change that runs the apply again, and a hide another program keeps taking away would otherwise cycle it in a loop. Two cycles in one batch run 500 ms apart, as HandheldCompanion spaces them. The cycle itself is <code>PnPDevice.GetDeviceByInstanceId(id, DeviceLocationFlags.Normal).ToUsbPnPDevice().CyclePort()</code> from Nefarius.Utilities.DeviceManagement.</p>
 <h3 id="apply-diagnostics">Apply Diagnostics<a class="headerlink" href="#apply-diagnostics" title="Permanent link">&para;</a></h3>
 <p><code>InputService.ApplyDeviceHiding</code> logs its whole decision through <code>SdlDiagLog</code>, every line prefixed <code>HIDHIDE</code>. The path used to be silent end to end, so a "the physical was not hidden" report could not be adjudicated from a trace, and a driver whose control device did not open skipped the block with nothing said while the Settings page read <strong>Installed</strong> off the MSI registry scan.</p>
 <table>
@@ -6164,6 +6227,22 @@
 <tr>
 <td><code>HIDHIDE apply unchanged</code></td>
 <td>The heartbeat, at most once a minute.</td>
+</tr>
+<tr>
+<td><code>HIDHIDE released</code></td>
+<td>A hidden controller's USB port was cycled, with the USB device id.</td>
+</tr>
+<tr>
+<td><code>HIDHIDE release skipped</code></td>
+<td>A hidden HID collection whose USB device was left alone, with the reason from the release table.</td>
+</tr>
+<tr>
+<td><code>HIDHIDE release held</code></td>
+<td>The USB device's port was cycled less than 30 s before.</td>
+</tr>
+<tr>
+<td><code>HIDHIDE release failed</code></td>
+<td>The cycle threw, with the exception type and message.</td>
 </tr>
 </tbody>
 </table>
@@ -6244,7 +6323,7 @@
 </tr>
 <tr>
 <td>MIDI runtime install</td>
-<td><code>vc_redist.x64.exe</code> when the Visual C++ runtime is too old, then <code>msiexec</code>, both via <code>RunElevated</code>. The child inherits PadForge's elevation</td>
+<td><code>vc_redist.x64.exe</code> when the Visual C++ runtime is too old, as an install and then up to two repairs while the old runtime stays, then <code>msiexec</code>, all via <code>RunElevated</code>. The child inherits PadForge's elevation</td>
 <td>0</td>
 </tr>
 <tr>
