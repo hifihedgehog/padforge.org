@@ -28,6 +28,7 @@ graph TD
         MOVE[UpdateMovePlayerNumber<br/>#277 PS Move sphere player LED]
         RA[UpdateRumbleAudioLane<br/>#236 rumble-to-audio publish]
         SN[UpdateSensaLane<br/>#374 Sensa HD amplitude publish]
+        MH[UpdateMouseHapticsLane<br/>#494 haptic mouse amplitude publish]
         WAIT[Drift-compensated<br/>hybrid sleep/spin-wait]
 
         SDL --> BPF
@@ -49,7 +50,8 @@ graph TD
         DS3 --> MOVE
         MOVE --> RA
         RA --> SN
-        SN --> WAIT
+        SN --> MH
+        MH --> WAIT
         WAIT -->|next cycle| SDL
     end
 
@@ -306,7 +308,7 @@ public void Stop()
 3. Calls `AudioPassthroughService.ClosePersonaOwner`, which retires the composite-persona audio feeds this run owns
 4. Calls `SoundMacroService.StopAll()`, which releases the macro-sound WASAPI clients, then `AudioPassthroughService.Shutdown()`
 5. Calls `WiiSpeakerService.Shutdown()` and `HapticToneService.Shutdown()`. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in `EnsureStarted` at engine start
-6. Calls `RumbleAudioService.SilenceAll()` then `StopAll()`. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside `SoundMacroService.StopAll`, which also runs on every profile apply and would otherwise silence the shakers on every profile switch
+6. Calls `RumbleAudioService.SilenceAll()` then `StopAll()`. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside `SoundMacroService.StopAll`, which also runs on every profile apply and would otherwise silence the shakers on every profile switch. `MouseHapticsService.Silence()` follows, the same edge for the haptic mouse lane (#494)
 7. Increments `_runGeneration`. A polling or mouse-injector loop that outlives its join exits on the stale stamp at its next check. The polling loop's `finally` still runs then, and releases the macro latches only while no newer run has started (`ReleaseLatchesOnExit`): a later stamp is `Start()`'s, whose loop owns the latch sets and releases what this run left before its first frame (`ReleaseInheritedLatches`), and a release here raced it and sent ups for the keys it held. A retired iteration still finishes the steps it was in beside the new run
 8. Joins the polling thread with a 3-second timeout. A timeout is logged and teardown continues
 9. Signals `MouseWorkSignal` to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout
@@ -395,13 +397,16 @@ UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), 
 UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
   |                              for the Sensa HD haptics worker (#374)
   v
+UpdateMouseHapticsLane()      -- the same reduction for the haptic mouse worker (#494)
+  |
+  v
 Frequency measurement (~1/second)
   |
   v
 Drift-compensated hybrid sleep/spin-wait
 ```
 
-Each iteration first checks the idle gate (`BeginIdlePoll()`) and then focus suspend (`ApplyFocusSuspension()`), both described below. Step 2 through Step 5 run inside `EnterMenuPublication()`, the `MenuPublicationSync` gate, so a radial or touch menu never observes a half-written frame. After `UpdateSensaLane()` a stall watchdog writes a `STALL` line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a `HEARTBEAT` line every 10 s.
+Each iteration first checks the idle gate (`BeginIdlePoll()`) and then focus suspend (`ApplyFocusSuspension()`), both described below. Step 2 through Step 5 run inside `EnterMenuPublication()`, the `MenuPublicationSync` gate, so a radial or touch menu never observes a half-written frame. After `UpdateMouseHapticsLane()` a stall watchdog writes a `STALL` line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a `HEARTBEAT` line every 10 s.
 
 **Poll-frame gate:**
 
@@ -451,7 +456,7 @@ Safety mechanisms:
 **Idle mode:**
 
 When `IsIdle` is true, the loop enters low-power mode. `InputService.UpdateIdleState` sets it when no created, enabled slot has an online assigned device, no Remote Link peer is connected, and (with the inactivity timeout above zero) no created, enabled slot still holds a virtual controller:
-- Calls `RumbleAudioService.SilenceAll()` every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it
+- Calls `RumbleAudioService.SilenceAll()` and `MouseHapticsService.Silence()` every iteration. Neither the #236 feedback lane nor the #494 haptic mouse lane runs in idle, so idle entry is an explicit silence edge and every iteration republishes it
 - Pumps `SDL_UpdateJoysticks()`
 - Runs `UpdateDevices()` every 5 seconds (instead of 2) so new controllers still appear on the Devices page
 - Runs `UpdateInputStates()` for Devices page raw input preview
@@ -465,7 +470,7 @@ When `IsIdle` is true, the loop enters low-power mode. `InputService.UpdateIdleS
 
 **Focus suspend:**
 
-The engine half of the "Continue Polling When Window Loses Focus" setting. When `SuspendWhenBackground` is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (`NeutralizeCombinedOutputs`, which also clears `CombinedMotionRows` and `CombinedPressureStates` and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs `UpdateVirtualDevices()` at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from `_idle`, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.
+The engine half of the "Continue Polling When Window Loses Focus" setting. When `SuspendWhenBackground` is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (`NeutralizeCombinedOutputs`, which also clears `CombinedMotionRows` and `CombinedPressureStates` and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 and #494 silence edges and still runs `UpdateVirtualDevices()` at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from `_idle`, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.
 
 **Sleep guard:** Every 5 seconds of active polling, calls `SetThreadExecutionState(ES_CONTINUOUS)` to clear execution-state flags SDL may re-assert, so the PC can still sleep.
 

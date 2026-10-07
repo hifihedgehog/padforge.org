@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://padforge.org/docs/start/first-controller/">
+        <link rel="canonical" href="https://padforge.org/docs/reference/mouse-haptics-internals/">
       
       
-        <link rel="prev" href="../installation/">
+        <link rel="prev" href="../sensa-haptics-internals/">
       
       
-        <link rel="next" href="../five-minute-remap/">
+        <link rel="next" href="../vr-controllers-internals/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Your First Controller - PadForge Documentation</title>
+        <title>Haptic Mice Internals - PadForge Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#your-first-controller" class="md-skip">
+        <a href="#haptic-mice-internals" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Your First Controller
+              Haptic Mice Internals
             
           </span>
         </div>
@@ -239,13 +239,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
           
   
   
@@ -348,11 +346,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../reference/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -441,8 +441,6 @@
       
   
   
-    
-  
   
   
     
@@ -462,23 +460,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../start/" class="md-nav__link ">
               
   
   
@@ -496,13 +491,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -522,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../start/installation/" class="md-nav__link">
         
   
   
@@ -547,37 +542,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Your First Controller
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../start/first-controller/" class="md-nav__link">
         
   
   
@@ -593,92 +561,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-create-the-virtual-controller" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Create the virtual controller
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-plug-in-your-pad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Plug in your pad
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-assign-it-to-the-slot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Assign it to the slot
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-see-it-working" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. See it working
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-launch-a-game" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Launch a game
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Where to go next
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -691,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../five-minute-remap/" class="md-nav__link">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
         
   
   
@@ -2412,6 +2294,8 @@
       
   
   
+    
+  
   
   
     
@@ -2495,20 +2379,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../reference/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -2526,13 +2413,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2552,7 +2439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/architecture-overview/" class="md-nav__link">
+      <a href="../architecture-overview/" class="md-nav__link">
         
   
   
@@ -2580,7 +2467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/input-pipeline/" class="md-nav__link">
+      <a href="../input-pipeline/" class="md-nav__link">
         
   
   
@@ -2608,7 +2495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/engine-library/" class="md-nav__link">
+      <a href="../engine-library/" class="md-nav__link">
         
   
   
@@ -2636,7 +2523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/services-layer/" class="md-nav__link">
+      <a href="../services-layer/" class="md-nav__link">
         
   
   
@@ -2664,7 +2551,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/viewmodels/" class="md-nav__link">
+      <a href="../viewmodels/" class="md-nav__link">
         
   
   
@@ -2692,7 +2579,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/xaml-views/" class="md-nav__link">
+      <a href="../xaml-views/" class="md-nav__link">
         
   
   
@@ -2720,7 +2607,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/settings-and-serialization/" class="md-nav__link">
+      <a href="../settings-and-serialization/" class="md-nav__link">
         
   
   
@@ -2748,7 +2635,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/sdl3-integration/" class="md-nav__link">
+      <a href="../sdl3-integration/" class="md-nav__link">
         
   
   
@@ -2776,7 +2663,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/hidmaestro-deep-dive/" class="md-nav__link">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
         
   
   
@@ -2804,7 +2691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/driver-installation-internals/" class="md-nav__link">
+      <a href="../driver-installation-internals/" class="md-nav__link">
         
   
   
@@ -2832,7 +2719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/updates-internals/" class="md-nav__link">
+      <a href="../updates-internals/" class="md-nav__link">
         
   
   
@@ -2860,7 +2747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-motion-server/" class="md-nav__link">
+      <a href="../dsu-motion-server/" class="md-nav__link">
         
   
   
@@ -2888,7 +2775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/dsu-protocol/" class="md-nav__link">
+      <a href="../dsu-protocol/" class="md-nav__link">
         
   
   
@@ -2916,7 +2803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/remote-link-internals/" class="md-nav__link">
+      <a href="../remote-link-internals/" class="md-nav__link">
         
   
   
@@ -2944,7 +2831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/external-control-internals/" class="md-nav__link">
+      <a href="../external-control-internals/" class="md-nav__link">
         
   
   
@@ -2972,7 +2859,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/steam-workshop-import-internals/" class="md-nav__link">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
         
   
   
@@ -3000,7 +2887,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/controller-audio-internals/" class="md-nav__link">
+      <a href="../controller-audio-internals/" class="md-nav__link">
         
   
   
@@ -3028,7 +2915,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/steam-controller-haptics-internals/" class="md-nav__link">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
         
   
   
@@ -3056,7 +2943,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
         
   
   
@@ -3084,7 +2971,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/sensa-haptics-internals/" class="md-nav__link">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
         
   
   
@@ -3109,10 +2996,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/mouse-haptics-internals/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -3128,6 +3042,136 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-feed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The feed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#strength-shaping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Strength shaping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hid-0x19b0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HID++ 0x19B0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gamesense" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GameSense
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worker-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchsense" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSense
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ownership-and-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ownership and persistence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diag-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diag lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3140,7 +3184,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/vr-controllers-internals/" class="md-nav__link">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
   
@@ -3168,7 +3212,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/headset-motion-internals/" class="md-nav__link">
+      <a href="../headset-motion-internals/" class="md-nav__link">
         
   
   
@@ -3196,7 +3240,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/head-tracking-internals/" class="md-nav__link">
+      <a href="../head-tracking-internals/" class="md-nav__link">
         
   
   
@@ -3224,7 +3268,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/openxr-input-internals/" class="md-nav__link">
+      <a href="../openxr-input-internals/" class="md-nav__link">
         
   
   
@@ -3252,7 +3296,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wheel-ffb-internals/" class="md-nav__link">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
         
   
   
@@ -3280,7 +3324,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/midi-input-internals/" class="md-nav__link">
+      <a href="../midi-input-internals/" class="md-nav__link">
         
   
   
@@ -3308,7 +3352,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/logitech-g-keys-internals/" class="md-nav__link">
+      <a href="../logitech-g-keys-internals/" class="md-nav__link">
         
   
   
@@ -3336,7 +3380,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/analog-keyboards-internals/" class="md-nav__link">
+      <a href="../analog-keyboards-internals/" class="md-nav__link">
         
   
   
@@ -3364,7 +3408,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/bliss-box-internals/" class="md-nav__link">
+      <a href="../bliss-box-internals/" class="md-nav__link">
         
   
   
@@ -3392,7 +3436,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
   
@@ -3420,7 +3464,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/handheld-buttons-internals/" class="md-nav__link">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
         
   
   
@@ -3448,7 +3492,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/2d-overlay-system/" class="md-nav__link">
+      <a href="../2d-overlay-system/" class="md-nav__link">
         
   
   
@@ -3476,7 +3520,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/3d-model-system/" class="md-nav__link">
+      <a href="../3d-model-system/" class="md-nav__link">
         
   
   
@@ -3504,7 +3548,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/build-and-publish/" class="md-nav__link">
+      <a href="../build-and-publish/" class="md-nav__link">
         
   
   
@@ -3559,10 +3603,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-create-the-virtual-controller" class="md-nav__link">
+  <a href="#the-feed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Create the virtual controller
+        The feed
       
     </span>
   </a>
@@ -3570,10 +3614,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-plug-in-your-pad" class="md-nav__link">
+  <a href="#strength-shaping" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Plug in your pad
+        Strength shaping
       
     </span>
   </a>
@@ -3581,10 +3625,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-assign-it-to-the-slot" class="md-nav__link">
+  <a href="#hid-0x19b0" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Assign it to the slot
+        HID++ 0x19B0
       
     </span>
   </a>
@@ -3592,10 +3636,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-see-it-working" class="md-nav__link">
+  <a href="#discovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. See it working
+        Discovery
       
     </span>
   </a>
@@ -3603,10 +3647,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-launch-a-game" class="md-nav__link">
+  <a href="#gamesense" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Launch a game
+        GameSense
       
     </span>
   </a>
@@ -3614,10 +3658,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#where-to-go-next" class="md-nav__link">
+  <a href="#worker-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Where to go next
+        Worker lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchsense" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSense
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ownership-and-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ownership and persistence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diag-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diag lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
       
     </span>
   </a>
@@ -3641,64 +3729,243 @@
 
 
 
-<h1 id="your-first-controller">Your First Controller<a class="headerlink" href="#your-first-controller" title="Permanent link">&para;</a></h1>
-<p><em>From a fresh install to a game seeing a virtual pad. About five minutes,
-and nothing here assumes prior knowledge.</em></p>
-<p>You need PadForge installed and running. If it is not,
-<a href="../installation/">Installation</a> covers that in two minutes.</p>
+<h1 id="haptic-mice-internals">Haptic Mice: Internals<a class="headerlink" href="#haptic-mice-internals" title="Permanent link">&para;</a></h1>
+<p><em>How controller rumble reaches an MX Master 4 over HID++ and a Rival mouse through GameSense: the feed and its silence edges, the strength shaper, the HID++ 0x19B0 frames, discovery, the GameSense client, the worker, and why TouchSense mice stay out.</em></p>
+<p>The user-facing page is <a href="../../features/haptic-mice/">Haptic Mice</a>. This one is for whoever has to change the code.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.App/Services/MouseHapticsService.cs</code></td>
+<td>The worker, the publish surface, <code>MouseRumbleShaper</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HidppHaptics.cs</code></td>
+<td><code>HidppHapticProtocol</code>, <code>HidppChannel</code>, <code>HidppHapticProbe</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/GameSenseTactile.cs</code></td>
+<td>The GameSense client</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs</code></td>
+<td><code>UpdateMouseHapticsLane</code>, the per-tick feed</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.cs</code></td>
+<td>The call site after <code>UpdateSensaLane</code>, and the three silence edges</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/InputService.cs</code></td>
+<td><code>StartMouseHapticsIfEnabled</code>, <code>StopMouseHapticsService</code>, <code>MouseHapticsStatusText</code></td>
+</tr>
+<tr>
+<td><code>PadForge.Tests/MouseHapticsTests.cs</code></td>
+<td>A scripted HID++ mouse, a local GameSense server, and an opt-in live probe</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="1-create-the-virtual-controller">1. Create the virtual controller<a class="headerlink" href="#1-create-the-virtual-controller" title="Permanent link">&para;</a></h2>
-<p>On the <a href="../../features/dashboard/">Dashboard</a>, click the <strong>Add Controller</strong>
-card in the <strong>Virtual Controllers</strong> section. It follows the last controller
-card, and on a fresh install it is the only card there. The same popup opens
-from the <strong>Add Controller</strong> card in the sidebar's controller section.</p>
-<p>Pick <strong>Xbox</strong>. Almost every PC game with controller support reads
-Xbox-style input natively, so it is what to pick when you do not know what
-to pick. The other types are there when you need them: PlayStation for
-ports with Circle and Cross prompts, Nintendo for games with Switch
-prompts (a virtual Switch Pro or Switch 2 Pro Controller), Extended for
-sim titles that read DirectInput, Keyboard + Mouse, MIDI, and VR for a
-SteamVR hand pair.</p>
-<p><img alt="The Add Controller popup" src="../../images/add-controller-popup.png" /></p>
-<p>Adding the slot installs nothing yet. The first time you assign a pad to
-an Xbox, PlayStation, Nintendo, or Extended slot (step 3), PadForge installs
-the HIDMaestro driver automatically. There is no button to click, and the
-startup UAC prompt already covered it.</p>
-<h2 id="2-plug-in-your-pad">2. Plug in your pad<a class="headerlink" href="#2-plug-in-your-pad" title="Permanent link">&para;</a></h2>
-<p>Connect the physical controller you want to use, wired or Bluetooth. Open
-the <strong><a href="../../features/devices/">Devices</a></strong> page. A card for the pad appears
-the moment Windows sees it, with its name, type, and capabilities on the
-card.</p>
-<h2 id="3-assign-it-to-the-slot">3. Assign it to the slot<a class="headerlink" href="#3-assign-it-to-the-slot" title="Permanent link">&para;</a></h2>
-<p>Click the pad's card to select it, then under <strong>Virtual Controller
-Assignment</strong> in the detail pane click the slot pill for the controller you
-created in step 1. A slot badge appears on the card, and the physical pad
-now routes through that virtual controller.</p>
-<p>Because your pad is a recognized gamepad, PadForge fills in the default
-mapping on assignment: sticks, triggers, buttons, and D-pad, all
-pre-assigned to their standard positions. The slot is already playable.</p>
-<h2 id="4-see-it-working">4. See it working<a class="headerlink" href="#4-see-it-working" title="Permanent link">&para;</a></h2>
-<p>Back on the Dashboard, click the slot's card to open its configuration,
-then open the <strong>Mappings</strong> tab. Press buttons and move sticks on your pad.
-The <strong>Value</strong> column updates in real time, and what you see there is
-exactly what the game gets.</p>
-<h2 id="5-launch-a-game">5. Launch a game<a class="headerlink" href="#5-launch-a-game" title="Permanent link">&para;</a></h2>
-<p>Start any game with controller support. It sees a standard Xbox pad.</p>
-<p>One thing can go wrong here: if the game reacts twice to every press, it
-is seeing both your physical pad and the virtual one. Install <strong>HidHide</strong>
-from the <a href="../../features/settings/">Settings</a> page, then on the
-<a href="../../features/devices/">Devices</a> page select your pad and tick <strong>Hide from
-Games (HidHide)</strong> under <strong>Input Hiding</strong> in the detail pane. Pads assigned
-after HidHide is installed get that box ticked automatically. If you do not
-see double input, you do not need it.</p>
+<h2 id="the-feed">The feed<a class="headerlink" href="#the-feed" title="Permanent link">&para;</a></h2>
+<p><code>UpdateMouseHapticsLane</code> is a declared sibling of <code>UpdateSensaLane</code> and runs right after it in the poll loop. Behind <code>MouseHapticsService.PublisherArmed</code> (one volatile read while the feature is off) it max-merges each slot's VC inbound pack with the live <code>VibrationStates</code> through <code>LfeOutputState.MaxMerge</code>, takes the loudest of the four voices across every slot with <code>PackToAmplitude</code>, and publishes it with one volatile write. A fix to one lane's rumble authority belongs in both.</p>
+<p>The lane runs only inside the non-idle loop, so the engine silences it on the three paths that skip it, each beside the rumble-audio lane's <code>SilenceAll</code>: engine stop, every idle iteration, and focus suspend. <code>MouseHapticsService.Silence()</code> zeroes the published amplitude, so a mouse never keeps buzzing on the last value.</p>
 <hr />
-<h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
+<h2 id="strength-shaping">Strength shaping<a class="headerlink" href="#strength-shaping" title="Permanent link">&para;</a></h2>
+<p><code>MouseRumbleShaper</code> turns the amplitude into a level with hysteresis, shared by both transports.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Rises at</th>
+<th>Falls below</th>
+<th>MX Master 4 waveform, then fallbacks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1, light</td>
+<td>0.05</td>
+<td>0.03</td>
+<td>subtle collision (4), damp (3), sharp (2)</td>
+</tr>
+<tr>
+<td>2, medium</td>
+<td>0.33</td>
+<td>0.30</td>
+<td>damp collision (3), subtle (4), sharp (2)</td>
+</tr>
+<tr>
+<td>3, strong</td>
+<td>0.66</td>
+<td>0.63</td>
+<td>sharp collision (2), damp (3), subtle (4)</td>
+</tr>
+</tbody>
+</table>
+<p>The first waveform the mouse's mask lists wins. A mouse that lists none of the three is dropped at discovery, with a diag line. The MX Master 4's repeat interval is <code>250 - 170 * t</code> ms, where <code>t</code> runs from 0 at an amplitude of 0.05 to 1 at full strength. The 80 ms floor is the cooldown mxhaptics (an MX Master 4 Minecraft mod, cloned) ships for its impact events, and LiveHaptics plays one waveform per scroll notch with no cooldown.</p>
+<hr />
+<h2 id="hid-0x19b0">HID++ 0x19B0<a class="headerlink" href="#hid-0x19b0" title="Permanent link">&para;</a></h2>
+<p>Logitech has not published the feature. Three implementations agree on it: Solaar (<code>hidpp20_constants.py</code> HapticWaveForms, <code>settings_templates.py</code> HapticLevel and PlayHapticWaveForm), OpenLogi's x19b0 reference, cross-checked against an MX Master 4, and LiveHaptics (<code>HidppDevice.cpp</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Request</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, getCapabilities</td>
+<td>none</td>
+<td>Payload bytes 4 to 7: the supported-waveform mask, big-endian, bit N for waveform N</td>
+</tr>
+<tr>
+<td>1, getConfiguration</td>
+<td>none</td>
+<td>Byte 0 bit 0: enabled. Byte 1: intensity, 0 to 100</td>
+</tr>
+<tr>
+<td>2, setConfiguration</td>
+<td>enabled, intensity</td>
+<td>Never sent. The user's setting in Options+ stays theirs</td>
+</tr>
+<tr>
+<td>4, play</td>
+<td>waveform, 0, 0</td>
+<td>An empty acknowledgment, not read</td>
+</tr>
+</tbody>
+</table>
+<p>LiveHaptics sends 100 after the waveform byte. Solaar and OpenLogi send zero, and this follows them. The waveform IDs are Solaar's table, which runs in the same order as the list in Logitech's Actions SDK documentation: sharp state change 0, damp state change 1, sharp collision 2, damp collision 3, subtle collision 4, and on to ringing at 14.</p>
+<p>Every frame is a 20-byte long report: <code>11</code>, the device index, the feature index, the function in the high nibble with software ID <code>0C</code> in the low one, then up to 16 parameter bytes. Windows splits HID++ short and long reports into separate collections, and OpenRGB (<code>LogitechHIDPP20Controller.cpp</code> SendStandard) opens only the long one on Windows and sends every frame long. Its detector table puts a receiver's and a Bluetooth mouse's HID++ collection on usage page <code>FF00</code> usage 2. PadForge enumerates exactly those: vendor <code>046D</code>, page <code>FF00</code>, usage 2, a 20-byte input report, through <code>VendorHidRuntime.Enumerate</code>.</p>
+<p>Software ID <code>0C</code> is claimed by no tool in Solaar's table (OpenRGB <code>07</code>, LGSTrayEx <code>0A</code>, Solaar <code>0B</code>, G HUB <code>0D</code>, firmware <code>0F</code>) and not used by LiveHaptics (<code>01</code>), so an answer meant for Logi Options+ never reads as PadForge's.</p>
+<p><code>HidppChannel</code> opens the collection shared through <code>VendorHidReader</code> and writes through <code>RawHidOutput.Write</code>. One request is in flight at a time. A report answers it when it echoes the device index, the feature index and the function byte. A HID++ 2.0 error carries <code>FF</code> where the feature index goes, then the request's feature index, function byte and error code. A busy error (<code>08</code>) is retried once after 50 ms, as OpenRGB's retry policy does. The answer window is 300 ms, or 700 ms on a Bluetooth path (one that carries the HID service UUID <code>00001812-...</code>), OpenRGB's first-contact and Bluetooth budgets.</p>
+<hr />
+<h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h2>
+<p><code>HidppHapticProbe.Probe</code> asks each collection Root.getFeature(0x19B0):</p>
+<ol>
+<li>Device index <code>FF</code> first. An answer means the collection is the device itself, on Bluetooth or a cable, and slots 1 to 6 are never asked. A Bluetooth path is always the device itself.</li>
+<li>Otherwise slots 1 to 6, a receiver's paired devices. Once a slot answers, <code>FF</code> is never asked again.</li>
+<li>A slot that answers without the feature, or with a HID++ 2.0 error, is settled for as long as the path is present. A slot with the feature is described: the mask, the configuration, and the name through feature 0x0005, read the way Solaar's <code>get_name</code> does (function 0 for the length, function 1 at each offset for the next 16 bytes, UTF-8). Without a mask nothing can be chosen, so a failed capabilities read counts as a miss.</li>
+<li>A slot that does not answer is asked again after 5, then 10, then 15 seconds.</li>
+</ol>
+<p>A receiver answers an empty slot, a sleeping device and the <code>FF</code> index with HID++ 1.0 errors, and those are short reports that arrive on the other collection, so here they read as timeouts. The opt-in live test showed that shape on a Lightspeed receiver: error <code>01</code> (invalid sub-ID) for <code>FF</code> and <code>08</code> (unknown device) for every slot, all on the short collection, while its answer to the pairing-name register (<code>83 B5</code>, sub <code>40</code>, slot 1's stored name) arrived on the long one, the positive control for the channel.</p>
+<p>The worker scans every 5 seconds while it has no Logitech target, and every 30 seconds otherwise, but only when nothing plays or rumble has been quiet for a second, so a probe never delays a pulse. Every 30 seconds in a quiet second it also reads each found device's configuration: an answer refreshes the feedback flag in the status, and silence takes the device off the list and reopens its slot. A failed play write drops the whole path, closes its channel and forgets its answers.</p>
+<hr />
+<h2 id="gamesense">GameSense<a class="headerlink" href="#gamesense" title="Permanent link">&para;</a></h2>
+<p><code>GameSenseTactile</code> follows SteelSeries' gamesense-sdk documentation (cloned):</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Call</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Find the server</td>
+<td><code>coreProps.json</code></td>
+<td>The <code>address</code> key of <code>%PROGRAMDATA%\SteelSeries\SteelSeries Engine 3\coreProps.json</code>. No file means GG is not running</td>
+</tr>
+<tr>
+<td>Name the game</td>
+<td><code>POST /game_metadata</code></td>
+<td><code>PADFORGE</code>, displayed as PadForge</td>
+</tr>
+<tr>
+<td>Bind the event</td>
+<td><code>POST /bind_game_event</code></td>
+<td><code>RUMBLE</code>, 0 to 100, one <code>tactile</code> handler on zone <code>one</code>, mode <code>vibrate</code></td>
+</tr>
+<tr>
+<td>Change the level</td>
+<td><code>POST /game_event</code></td>
+<td>Only on a level change, since a handler runs on a new value. Values 0, 17, 50 and 84, one inside each range</td>
+</tr>
+<tr>
+<td>Keep it alive</td>
+<td><code>POST /game_heartbeat</code></td>
+<td>Every 10 seconds while rumble holds. GameSense deactivates a game after 15 seconds without events</td>
+</tr>
+<tr>
+<td>Stop</td>
+<td><code>POST /game_event</code> 0, then <code>POST /stop_game</code></td>
+<td>When the service stops. <code>stop_game</code> hands the devices back to GG at once</td>
+</tr>
+</tbody>
+</table>
+<p>The handler's pattern ranges pick a custom pulse (<code>length-ms</code> 30, 55 or 80) and its rate ranges repeat it (5, 7 or 10 times a second) until the value changes. Value 0 has an empty pattern and no rate. Each pulse ends before its next repeat starts, which answers the tactile doc's warning that vibrations take time and can queue up. Every call is synchronous on the worker with a 500 ms timeout. A failed call disconnects, and the worker reads <code>coreProps.json</code> again 15 seconds later, so a GG restart on a new port is picked up.</p>
+<hr />
+<h2 id="worker-lifecycle">Worker lifecycle<a class="headerlink" href="#worker-lifecycle" title="Permanent link">&para;</a></h2>
+<p>The worker copies <code>SensaHapticsService</code>: it swaps itself into <code>s_lastWorker</code>, joins a live predecessor for up to 10 seconds (the Sensa lane's F10 rule), and quits without arming on the deadline. Then it arms the publisher and loops every 10 ms:</p>
+<ol>
+<li>Read the amplitude and update the level and the quiet clock.</li>
+<li>Scan for Logitech devices and connect GameSense when due and allowed.</li>
+<li>Check the found devices when due and quiet.</li>
+<li>Play each Logitech device whose interval is up. Silence resets the interval.</li>
+<li>Post the GameSense level or heartbeat.</li>
+<li>Report the target list when it changed, tracked by a version counter so nothing is built per tick.</li>
+</ol>
+<p>The <code>finally</code> disarms the publisher, zeroes the amplitude, closes every channel, closes GameSense and reports Stopped. <code>Stop</code> joins 3 seconds, so a worker inside a long scan can outlive its service, and the next worker's join covers that.</p>
+<hr />
+<h2 id="touchsense">TouchSense<a class="headerlink" href="#touchsense" title="Permanent link">&para;</a></h2>
+<p>The iFeel protocol is documented by two independent 2002 drivers, both cloned: mgrdcm's BeOS tool sends a 7-byte SET_REPORT (Output, report ID 0) <code>11 0A &lt;strength&gt; &lt;delay&gt; 00 &lt;count&gt; 00</code>, and Joshua Bobruk's Linux <code>ifeel.c</code> sends the same bytes on the interrupt OUT endpoint. Neither uses a report ID, and HID 1.11 says a device without report IDs has a single report, so the buzz report sits in the mouse's own collection.</p>
+<p>Microsoft's table of top-level collections opened for system use lists mice as exclusive. A probe sent an output report through a zero-access handle to two exclusive keyboard collections (an ITE controller and a Logitech receiver): both failed with ERROR_INVALID_FUNCTION, elevated and not, while the same receiver's vendor HID++ collection accepted the same call in the same run. A read/write open of the exclusive collections fails with ERROR_ACCESS_DENIED. Only a kernel driver reaches the report, and iFeelPixel's download page records that "Logitech has discontinued TouchSense Mouse drivers support for 64bits OS".</p>
+<hr />
+<h2 id="ownership-and-persistence">Ownership and persistence<a class="headerlink" href="#ownership-and-persistence" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Leg</th>
+<th>Where</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Global</td>
+<td><code>AppSettingsData.EnableMouseHaptics</code>, <code>bool</code></td>
+<td>Default false</td>
+</tr>
+<tr>
+<td>Profile</td>
+<td><code>ProfileData.EnableMouseHaptics</code>, <code>bool?</code></td>
+<td>Null is no opinion. Authored on a user change while a named profile is active, applied on a switch, refreshed on save, never snapshotted</td>
+</tr>
+</tbody>
+</table>
+<p><code>DashboardViewModel.EnableMouseHaptics</code> and <code>MouseHapticsStatus</code> back the card. <code>MainWindow</code> autosaves on the toggle, <code>CanResetSetting</code> lists it, and <code>InputService</code> starts or stops the service on its <code>PropertyChanged</code>.</p>
+<hr />
+<h2 id="diag-lines">Diag lines<a class="headerlink" href="#diag-lines" title="Permanent link">&para;</a></h2>
+<p>All prefixed <code>MOUSEHAPTICS</code>:</p>
 <ul>
-<li><a href="../five-minute-remap/">A Five-Minute Remap</a> changes your first binding.</li>
-<li>The <a href="../../guides/">Guides</a> each walk one task end to end, from
-  gyro aiming to using your phone as a controller.</li>
-<li>The <a href="../../features/">Features</a> pages document every control on
-  every tab.</li>
+<li><code>start?</code> with the toggle, the engine and the live service, on every start request.</li>
+<li><code>found</code> with the name, device index, feature index, mask and feedback flag.</li>
+<li><code>lists no collision waveform</code> for a device that cannot play rumble.</li>
+<li><code>stopped answering</code> for a device that missed a check.</li>
+<li><code>write failed, dropping</code> with the path.</li>
+<li><code>GameSense bound</code> and <code>GameSense stopped answering</code>.</li>
+<li><code>predecessor join timed out</code> and <code>worker fault</code>.</li>
+</ul>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p><code>MouseHapticsTests</code> runs alone in its collection, since the amplitude and the armed flag are process statics and an engine test's idle edge silences them.</p>
+<ul>
+<li>The feed: the pack reduction matches Sensa's, and publish clamps.</li>
+<li>The shaper: the level thresholds and hysteresis, the interval's range, the waveform fallbacks.</li>
+<li>HID++: byte-exact frames, reply matching against other software IDs, devices and report sizes, the big-endian mask, the Bluetooth window.</li>
+<li>Discovery against a scripted channel: a mouse behind a receiver, a Bluetooth mouse, a silent path, a device without the feature, a dead write, a missing capabilities answer, the 5, 10 and 15 second backoff, Solaar's name read.</li>
+<li>The service: discovery, waveform by level, pulse spacing, silence, a feedback-off mouse, a mouse with no collision, a failed write and recovery, the predecessor join and its deadline, and GameSense end to end.</li>
+<li>GameSense against a local server: the address read, the handler's JSON, change-only posts, the heartbeat, stop, a refusal and a server that goes away.</li>
+<li>Source pins for the lane, the three silence edges, the settings legs and the card, and every locale's strings.</li>
+<li><code>Live_ProbesTheRealHidppCollections</code>, which runs only with <code>PADFORGE_LIVE_HIDPP=1</code> and probes this machine's HID++ collections read-only, with the pairing-name read as its positive control.</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>
@@ -3739,7 +4006,7 @@ see double input, you do not need it.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation">
+          <a href="../sensa-haptics-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Sensa Haptics Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3749,20 +4016,20 @@ see double input, you do not need it.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Installation
+                Sensa Haptics Internals
               </div>
             </div>
           </a>
         
         
           
-          <a href="../five-minute-remap/" class="md-footer__link md-footer__link--next" aria-label="Next: A Five-Minute Remap">
+          <a href="../vr-controllers-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Virtual VR Controllers Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                A Five-Minute Remap
+                Virtual VR Controllers Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

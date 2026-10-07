@@ -253,6 +253,8 @@ Three optional vendor bridges, each an enable plus a status string that null-coa
 | `LightsyncStatus` | `string` | `"Stopped"` | LIGHTSYNC mirror status. |
 | `EnableSensaHaptics` | `bool` | `false` | Razer Sensa HD rumble translation (#374). |
 | `SensaStatus` | `string` | `"Stopped"` | Sensa translation status. |
+| `EnableMouseHaptics` | `bool` | `false` | Rumble on haptic mice (#494). |
+| `MouseHapticsStatus` | `string` | `"Stopped"` | Haptic mouse status: the mice rumble goes to, or the search. |
 
 ### Web Controller Server
 

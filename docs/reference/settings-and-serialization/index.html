@@ -1052,6 +1052,8 @@
       
         
       
+        
+      
     
     
     
@@ -1457,6 +1459,34 @@
     
   
     Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/haptic-mice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice
   
 
     
@@ -2273,6 +2303,8 @@
       
         
           
+        
+      
         
       
         
@@ -4239,6 +4271,34 @@
     
   
     Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mouse-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice Internals
   
 
     
@@ -9246,6 +9306,13 @@
 <td>(v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: <code>ProfileData.EnableSensaHaptics</code>.</td>
 </tr>
 <tr>
+<td><code>EnableMouseHaptics</code></td>
+<td><code>bool</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>false</code></td>
+<td>(#494) Rumble on haptic mice, the global leg. Per-profile leg: <code>ProfileData.EnableMouseHaptics</code>.</td>
+</tr>
+<tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code></td>
@@ -10849,22 +10916,23 @@
 <a id="__codelineno-27-93" name="__codelineno-27-93" href="#__codelineno-27-93"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableChromaLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-27-94" name="__codelineno-27-94" href="#__codelineno-27-94"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableLightsyncLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-27-95" name="__codelineno-27-95" href="#__codelineno-27-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableSensaHaptics</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-96" name="__codelineno-27-96" href="#__codelineno-27-96"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTracking</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// UDP input</span>
-<a id="__codelineno-27-97" name="__codelineno-27-97" href="#__codelineno-27-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTrackingFreeTrack</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// FreeTrack input</span>
-<a id="__codelineno-27-98" name="__codelineno-27-98" href="#__codelineno-27-98"></a><span class="w">    </span><span class="c1">// False on profiles saved before the two inputs split. Load converts them once.</span>
-<a id="__codelineno-27-99" name="__codelineno-27-99" href="#__codelineno-27-99"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HeadTrackingIndependentInputs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-100" name="__codelineno-27-100" href="#__codelineno-27-100"></a>
-<a id="__codelineno-27-101" name="__codelineno-27-101" href="#__codelineno-27-101"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
-<a id="__codelineno-27-102" name="__codelineno-27-102" href="#__codelineno-27-102"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-103" name="__codelineno-27-103" href="#__codelineno-27-103"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-104" name="__codelineno-27-104" href="#__codelineno-27-104"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-105" name="__codelineno-27-105" href="#__codelineno-27-105"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
-<a id="__codelineno-27-106" name="__codelineno-27-106" href="#__codelineno-27-106"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
-<a id="__codelineno-27-107" name="__codelineno-27-107" href="#__codelineno-27-107"></a>
-<a id="__codelineno-27-108" name="__codelineno-27-108" href="#__codelineno-27-108"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
-<a id="__codelineno-27-109" name="__codelineno-27-109" href="#__codelineno-27-109"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
-<a id="__codelineno-27-110" name="__codelineno-27-110" href="#__codelineno-27-110"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-111" name="__codelineno-27-111" href="#__codelineno-27-111"></a><span class="p">}</span>
+<a id="__codelineno-27-96" name="__codelineno-27-96" href="#__codelineno-27-96"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableMouseHaptics</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-97" name="__codelineno-27-97" href="#__codelineno-27-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTracking</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// UDP input</span>
+<a id="__codelineno-27-98" name="__codelineno-27-98" href="#__codelineno-27-98"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTrackingFreeTrack</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// FreeTrack input</span>
+<a id="__codelineno-27-99" name="__codelineno-27-99" href="#__codelineno-27-99"></a><span class="w">    </span><span class="c1">// False on profiles saved before the two inputs split. Load converts them once.</span>
+<a id="__codelineno-27-100" name="__codelineno-27-100" href="#__codelineno-27-100"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HeadTrackingIndependentInputs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-101" name="__codelineno-27-101" href="#__codelineno-27-101"></a>
+<a id="__codelineno-27-102" name="__codelineno-27-102" href="#__codelineno-27-102"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
+<a id="__codelineno-27-103" name="__codelineno-27-103" href="#__codelineno-27-103"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-104" name="__codelineno-27-104" href="#__codelineno-27-104"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-105" name="__codelineno-27-105" href="#__codelineno-27-105"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-106" name="__codelineno-27-106" href="#__codelineno-27-106"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<a id="__codelineno-27-107" name="__codelineno-27-107" href="#__codelineno-27-107"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
+<a id="__codelineno-27-108" name="__codelineno-27-108" href="#__codelineno-27-108"></a>
+<a id="__codelineno-27-109" name="__codelineno-27-109" href="#__codelineno-27-109"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
+<a id="__codelineno-27-110" name="__codelineno-27-110" href="#__codelineno-27-110"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
+<a id="__codelineno-27-111" name="__codelineno-27-111" href="#__codelineno-27-111"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-112" name="__codelineno-27-112" href="#__codelineno-27-112"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -11024,6 +11092,11 @@
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
 <td>(v4.4, #374) Razer Sensa HD haptics translation, same contract.</td>
+</tr>
+<tr>
+<td><code>EnableMouseHaptics</code></td>
+<td><code>bool?</code></td>
+<td>(#494) Rumble on haptic mice, same contract.</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>

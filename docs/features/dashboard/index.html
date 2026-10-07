@@ -1054,6 +1054,8 @@
       
         
       
+        
+      
     
     
     
@@ -1365,6 +1367,17 @@
     <span class="md-ellipsis">
       
         Razer Sensa HD Haptics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haptic-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haptic Mice
       
     </span>
   </a>
@@ -1736,6 +1749,34 @@
     
   
     Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../haptic-mice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice
   
 
     
@@ -2620,6 +2661,8 @@
       
         
       
+        
+      
     
     
     
@@ -3221,6 +3264,34 @@
     
   
     Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/mouse-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice Internals
   
 
     
@@ -3854,6 +3925,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#haptic-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haptic Mice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3951,6 +4033,10 @@
 <td>Translate controller rumble into <a href="../lightbar-mirrors/#razer-sensa-hd-haptics">Razer Sensa HD haptics</a>.</td>
 </tr>
 <tr>
+<td><strong>Haptic Mice</strong></td>
+<td>Play controller rumble on <a href="../haptic-mice/">haptic mice</a>: the Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710.</td>
+</tr>
+<tr>
 <td><strong>Overlays</strong></td>
 <td>On-screen indicators: the <a href="../../guides/menus/">menu</a> ring or grid, the shift layer flyout, and profile switch announcements.</td>
 </tr>
@@ -3961,7 +4047,7 @@
 </tbody>
 </table>
 <p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the <a href="../settings/">Settings</a> page. See <a href="../driver-management/">Driver Management</a>.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, Razer Sensa HD Haptics, and Haptic Mice are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -4334,6 +4420,10 @@
 <p>Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 Pro, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, <strong>Send Rumble to Sensa HD Haptics</strong>, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. A Wolverine V3 Pro also has to be in PC mode with firmware v2.02 or later, and plays no Sensa haptics in Xbox mode. The status reads <em>Razer Sensa runtime not found. Retrying.</em> until the runtime answers, then <em>Streaming rumble to Sensa HD Haptics</em>. The ARM64 build reads <em>Not Available on ARM64</em>: Razer ships no ARM64 engine, so nothing starts there.</p>
 <p>See <a href="../lightbar-mirrors/#razer-sensa-hd-haptics">Lightbar Mirrors and Sensa Haptics</a> for the translation and its limits.</p>
 <hr />
+<h2 id="haptic-mice">Haptic Mice<a class="headerlink" href="#haptic-mice" title="Permanent link">&para;</a></h2>
+<p>Plays controller rumble on mice with a vibration motor: the Logitech MX Master 4 over its Logi Bolt receiver or Bluetooth, and the SteelSeries Rival 500, 700 and 710 through SteelSeries GG. One checkbox, <strong>Send Rumble to Haptic Mice</strong>, off by default. The status names each mouse it plays on, as in <em>Sending rumble to MX Master 4</em>, adds <em>(haptic feedback is off in Logi Options+)</em> when the mouse's own haptics are off, and reads <em>No haptic mouse found. Retrying.</em> until one answers. Logitech's iFeel and the other TouchSense mice cannot vibrate on 64-bit Windows.</p>
+<p>See <a href="../haptic-mice/">Haptic Mice</a> for how rumble becomes waveforms and pulses, and its limits.</p>
+<hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
 <p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
 <table>
@@ -4401,6 +4491,7 @@
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 <li><a href="../head-tracking/">Head Tracking</a>: OpenTrack setup for the Head Tracking section.</li>
 <li><a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>: the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.</li>
+<li><a href="../haptic-mice/">Haptic Mice</a>: rumble on the MX Master 4 and the SteelSeries Rival 500, 700 and 710.</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

@@ -273,6 +273,8 @@ ScrollViewer
             │      └─ Logitech LIGHTSYNC (EnableLightsyncLightbar, LightsyncStatus, #382)
             ├─ "Razer Sensa HD Haptics" section (E877 glyph, #374)
             │   └─ CardBorder: Enable toggle (EnableSensaHaptics), SensaStatus, footer
+            ├─ "Haptic Mice" section (E962 glyph, #494)
+            │   └─ CardBorder: Enable toggle (EnableMouseHaptics), MouseHapticsStatus, footer
             ├─ "Overlays" section (E700 glyph)
             │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
             │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
@@ -314,6 +316,7 @@ ScrollViewer
 | `EnableChromaLightbar` / `ChromaStatus` | `DashboardViewModel` | Razer Chroma mirror row (#373) |
 | `EnableLightsyncLightbar` / `LightsyncStatus` | `DashboardViewModel` | Logitech LIGHTSYNC mirror row (#382) |
 | `EnableSensaHaptics` / `SensaStatus` | `DashboardViewModel` | Razer Sensa HD haptics translation (#374) |
+| `EnableMouseHaptics` / `MouseHapticsStatus` | `DashboardViewModel` | Rumble on haptic mice (#494) |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
 | `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
 
@@ -2165,7 +2168,7 @@ The engine-state indicator in the status bar uses the same flame with DataTrigge
 <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
 ```
 
-Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `E774` globe, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning, and the section and card glyphs named on this page: `E702` Pair, `E707` Compass Yaw, `E716` Community Configs, `E767` volume, `E77B` Head Tracking, `E781` Lightbar Mirrors, `E7F8` Handheld PC Buttons, `E815` Grip, `E83F` Battery Alerts, `E877` Sensa haptics and the rumble chip, `E8DE` Assignment Prompts, `E969` Remote Link, `E99A` Tilt, `E9E9` Gyro Sensitivity, `EB9F` Icon Packages, `EFA5` touchpad chip, `F0AD` Constant Force, `F1CB` Gyro Response, `F272` Gyro Calibration. `EC05` (broadcast) and `ED5D` (driver) left with the Dashboard's driver status strip and appear nowhere in the app.
+Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `E774` globe, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning, and the section and card glyphs named on this page: `E702` Pair, `E707` Compass Yaw, `E716` Community Configs, `E767` volume, `E77B` Head Tracking, `E781` Lightbar Mirrors, `E7F8` Handheld PC Buttons, `E815` Grip, `E83F` Battery Alerts, `E877` Sensa haptics and the rumble chip, `E8DE` Assignment Prompts, `E962` Haptic Mice, `E969` Remote Link, `E99A` Tilt, `E9E9` Gyro Sensitivity, `EB9F` Icon Packages, `EFA5` touchpad chip, `F0AD` Constant Force, `F1CB` Gyro Response, `F272` Gyro Calibration. `EC05` (broadcast) and `ED5D` (driver) left with the Dashboard's driver status strip and appear nowhere in the app.
 
 ### WPF UI NumberBox
 

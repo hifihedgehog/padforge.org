@@ -38,6 +38,7 @@ Nothing here is required reading for using the app.
 | [Controller Audio Internals](controller-audio-internals.md) | Speaker and haptic audio paths |
 | [Steam Controller Haptics Internals](steam-controller-haptics-internals.md) | The 2026 pad's PCM actuator stream and the tone lane it falls back to |
 | [Sensa Haptics Internals](sensa-haptics-internals.md) | Controller rumble as a Razer Sensa HD effect through Interhaptics |
+| [Haptic Mice Internals](mouse-haptics-internals.md) | Controller rumble on an MX Master 4 over HID++ 0x19B0 and on a Rival mouse through GameSense |
 | [Lightbar Mirrors Internals](lightbar-mirrors-internals.md) | A game's lightbar write out to Razer Chroma and Logitech LIGHTSYNC |
 | [Virtual VR Controllers Internals](vr-controllers-internals.md) | One slot, a SteamVR hand pair, and the haptic return path |
 | [OpenXR Input Internals](openxr-input-internals.md) | Talking to the OpenXR runtime directly, the headless session, and the three interaction profiles |

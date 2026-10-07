@@ -1052,6 +1052,8 @@
       
         
       
+        
+      
     
     
     
@@ -1457,6 +1459,34 @@
     
   
     Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/haptic-mice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice
   
 
     
@@ -2273,6 +2303,8 @@
       
         
           
+        
+      
         
       
         
@@ -4597,6 +4629,34 @@
     
   
     Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mouse-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice Internals
   
 
     
@@ -7016,13 +7076,15 @@
 <a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>            │      └─ Logitech LIGHTSYNC (EnableLightsyncLightbar, LightsyncStatus, #382)
 <a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>            ├─ &quot;Razer Sensa HD Haptics&quot; section (E877 glyph, #374)
 <a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>            │   └─ CardBorder: Enable toggle (EnableSensaHaptics), SensaStatus, footer
-<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>            ├─ &quot;Overlays&quot; section (E700 glyph)
-<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
-<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
-<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>            └─ &quot;Touchpad Overlay&quot; section (EDA4 glyph)
-<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
-<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>                   NumberBox + reset, reset-position button, status flame +
-<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>                   TouchpadOverlayStatus
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>            ├─ &quot;Haptic Mice&quot; section (E962 glyph, #494)
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>            │   └─ CardBorder: Enable toggle (EnableMouseHaptics), MouseHapticsStatus, footer
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>            ├─ &quot;Overlays&quot; section (E700 glyph)
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>            └─ &quot;Touchpad Overlay&quot; section (EDA4 glyph)
+<a id="__codelineno-1-68" name="__codelineno-1-68" href="#__codelineno-1-68"></a>                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+<a id="__codelineno-1-69" name="__codelineno-1-69" href="#__codelineno-1-69"></a>                   NumberBox + reset, reset-position button, status flame +
+<a id="__codelineno-1-70" name="__codelineno-1-70" href="#__codelineno-1-70"></a>                   TouchpadOverlayStatus
 </code></pre></div>
 <h3 id="key-bindings">Key Bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h3>
 <table>
@@ -7173,6 +7235,11 @@
 <td><code>EnableSensaHaptics</code> / <code>SensaStatus</code></td>
 <td><code>DashboardViewModel</code></td>
 <td>Razer Sensa HD haptics translation (#374)</td>
+</tr>
+<tr>
+<td><code>EnableMouseHaptics</code> / <code>MouseHapticsStatus</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Rumble on haptic mice (#494)</td>
 </tr>
 <tr>
 <td><code>EnableMenuOverlay</code> / <code>EnableShiftLayerFlyout</code> / <code>EnableProfileOverlay</code></td>
@@ -10671,7 +10738,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p><code>Segoe MDL2 Assets</code> font glyphs instead of image resources:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">&lt;TextBlock</span><span class="w"> </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE713;&quot;</span><span class="w"> </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span><span class="w"> </span><span class="na">FontSize=</span><span class="s">&quot;20&quot;</span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>Codes used: <code>E713</code> settings, <code>E790</code> personalization, <code>E9F5</code> processing, <code>E737</code> star, <code>ED1A</code> shield, <code>E7FC</code> gamepad, <code>E8A5</code> save, <code>E9D9</code> bug, <code>E8F1</code> group, <code>E8B7</code> library, <code>E8B9</code> photo, <code>F158</code> 3D, <code>E946</code> info, <code>E772</code> devices, <code>E7E8</code> power, <code>E740</code> full screen, <code>E710</code> add, <code>E711</code> close, <code>E72A</code> forward, <code>E72C</code> undo, <code>E700</code> global nav (hamburger), <code>E8D6</code> music, <code>EC4F</code> MIDI, <code>E961</code> keyboard, <code>E774</code> globe, <code>EDA4</code> touchpad, <code>F119</code> VR headset, <code>F2B7</code> language, <code>E8C8</code> copy, <code>E8D7</code> document, <code>E7C3</code> page, <code>E74C</code> checkmark, <code>E71B</code> link, <code>E75C</code> clear, <code>E74D</code> delete, <code>F404</code> home, <code>E7BA</code> warning, and the section and card glyphs named on this page: <code>E702</code> Pair, <code>E707</code> Compass Yaw, <code>E716</code> Community Configs, <code>E767</code> volume, <code>E77B</code> Head Tracking, <code>E781</code> Lightbar Mirrors, <code>E7F8</code> Handheld PC Buttons, <code>E815</code> Grip, <code>E83F</code> Battery Alerts, <code>E877</code> Sensa haptics and the rumble chip, <code>E8DE</code> Assignment Prompts, <code>E969</code> Remote Link, <code>E99A</code> Tilt, <code>E9E9</code> Gyro Sensitivity, <code>EB9F</code> Icon Packages, <code>EFA5</code> touchpad chip, <code>F0AD</code> Constant Force, <code>F1CB</code> Gyro Response, <code>F272</code> Gyro Calibration. <code>EC05</code> (broadcast) and <code>ED5D</code> (driver) left with the Dashboard's driver status strip and appear nowhere in the app.</p>
+<p>Codes used: <code>E713</code> settings, <code>E790</code> personalization, <code>E9F5</code> processing, <code>E737</code> star, <code>ED1A</code> shield, <code>E7FC</code> gamepad, <code>E8A5</code> save, <code>E9D9</code> bug, <code>E8F1</code> group, <code>E8B7</code> library, <code>E8B9</code> photo, <code>F158</code> 3D, <code>E946</code> info, <code>E772</code> devices, <code>E7E8</code> power, <code>E740</code> full screen, <code>E710</code> add, <code>E711</code> close, <code>E72A</code> forward, <code>E72C</code> undo, <code>E700</code> global nav (hamburger), <code>E8D6</code> music, <code>EC4F</code> MIDI, <code>E961</code> keyboard, <code>E774</code> globe, <code>EDA4</code> touchpad, <code>F119</code> VR headset, <code>F2B7</code> language, <code>E8C8</code> copy, <code>E8D7</code> document, <code>E7C3</code> page, <code>E74C</code> checkmark, <code>E71B</code> link, <code>E75C</code> clear, <code>E74D</code> delete, <code>F404</code> home, <code>E7BA</code> warning, and the section and card glyphs named on this page: <code>E702</code> Pair, <code>E707</code> Compass Yaw, <code>E716</code> Community Configs, <code>E767</code> volume, <code>E77B</code> Head Tracking, <code>E781</code> Lightbar Mirrors, <code>E7F8</code> Handheld PC Buttons, <code>E815</code> Grip, <code>E83F</code> Battery Alerts, <code>E877</code> Sensa haptics and the rumble chip, <code>E8DE</code> Assignment Prompts, <code>E962</code> Haptic Mice, <code>E969</code> Remote Link, <code>E99A</code> Tilt, <code>E9E9</code> Gyro Sensitivity, <code>EB9F</code> Icon Packages, <code>EFA5</code> touchpad chip, <code>F0AD</code> Constant Force, <code>F1CB</code> Gyro Response, <code>F272</code> Gyro Calibration. <code>EC05</code> (broadcast) and <code>ED5D</code> (driver) left with the Dashboard's driver status strip and appear nowhere in the app.</p>
 <h3 id="wpf-ui-numberbox">WPF UI NumberBox<a class="headerlink" href="#wpf-ui-numberbox" title="Permanent link">&para;</a></h3>
 <p>Numeric input with inline spin buttons:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">&lt;ui:NumberBox</span><span class="w"> </span><span class="na">Value=</span><span class="s">&quot;{Binding PollingRateMs, Mode=TwoWay}&quot;</span>

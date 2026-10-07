@@ -764,6 +764,7 @@ as a generic joystick.
 | **NFC readers** | Registered tags as button sources | [NFC Tags](../features/nfc-tags.md) |
 | **Keyboards and mice** | Every key, button, wheel and motion axis, per device | [Mappings](../features/mappings.md) |
 | **Logitech G-key keyboards and mice** | The G-keys and the extra mouse buttons as their own device row, read through Logitech's G-key SDK | [Logitech G-Keys](../features/logitech-g-keys.md) |
+| **Haptic mice: Logitech MX Master 4, SteelSeries Rival 500, 700 and 710** | Controller rumble, played on the mouse's vibration motor | [Haptic Mice](../features/haptic-mice.md) |
 | **Precision touchpads** | Multi-touch contacts, gestures, per-pad settings | [Touchpad](../features/touchpad.md) |
 | **Pens and drawing tablets** | Pen contact as a touchpad finger, plus pressure and pen buttons when the tablet reports them | [Drawing tablets](../features/touchpad.md#drawing-tablets) |
 | **Trackballs** | Motion with momentum | [Input Precision](../features/input-precision.md) |

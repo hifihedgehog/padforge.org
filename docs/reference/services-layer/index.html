@@ -1052,6 +1052,8 @@
       
         
       
+        
+      
     
     
     
@@ -1457,6 +1459,34 @@
     
   
     Lightbar Mirrors and Sensa Haptics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/haptic-mice/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice
   
 
     
@@ -2273,6 +2303,8 @@
       
         
           
+        
+      
         
       
         
@@ -5240,6 +5272,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../mouse-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Haptic Mice Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -8033,6 +8093,10 @@
 <td>Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). Detail on <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a></td>
 </tr>
 <tr>
+<td><code>MouseHapticsService</code></td>
+<td>Plays rumble on haptic mice: the MX Master 4 over HID++ and SteelSeries Rival mice through GameSense (#494). Detail on <a href="../mouse-haptics-internals/">Haptic Mice Internals</a></td>
+</tr>
+<tr>
 <td><code>RemoteAssignmentService</code></td>
 <td>Applies a paired Remote Link peer's authenticated slot-assignment requests on the UI dispatcher, refused unless that peer's trust entry allows remote assignments. Detail on <a href="../remote-link-internals/">Remote Link Internals</a></td>
 </tr>
@@ -8325,7 +8389,7 @@
 <li><strong>Start the self-healing sink workers</strong>, unconditionally (cheap when nothing is configured): <code>RumbleAudioService.EnsureStarted()</code> (#236), <code>WiiSpeakerService.EnsureStarted()</code>, <code>HapticToneService.EnsureStarted()</code>. A one-shot <code>Reconcile()</code> on <code>AudioPassthroughService</code>, <code>WiiSpeakerService</code> and <code>HapticToneService</code> runs between them, and only when some device already has <code>AudioPassthroughEnabled</code>, so the audio threads stay off for users who never turn a mirror on.</li>
 <li><strong>Subscribe to ViewModel changes</strong>. <code>SettingsViewModel.PropertyChanged</code>, <code>DashboardViewModel.PropertyChanged</code>, and the touchpad-gesture provider / applier hooks on <code>SettingsService</code>.</li>
 <li><strong>Create ForegroundMonitorService</strong>. Subscribes <code>ProfileSwitchRequired</code> to <code>OnAutoProfileSwitchRequired</code>.</li>
-<li><strong>Start the opt-in side services</strong>, each behind its own setting: <code>StartExternalControlIfEnabled()</code> (#366), <code>StartChromaIfEnabled()</code> (#373), <code>StartLightsyncIfEnabled()</code> (#382), <code>StartSensaIfEnabled()</code> (#374).</li>
+<li><strong>Start the opt-in side services</strong>, each behind its own setting: <code>StartExternalControlIfEnabled()</code> (#366), <code>StartChromaIfEnabled()</code> (#373), <code>StartLightsyncIfEnabled()</code> (#382), <code>StartSensaIfEnabled()</code> (#374), <code>StartMouseHapticsIfEnabled()</code> (#494).</li>
 <li><strong>Capture default profile snapshot</strong>. Uses <code>PendingDefaultSnapshot</code> (from prior XML) or creates one via <code>SnapshotCurrentProfile()</code>.</li>
 <li><strong>Start engine</strong>. <code>_inputManager.Start()</code> launches the polling thread.</li>
 <li><strong>Start subsystems</strong>. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.</li>
@@ -8342,7 +8406,7 @@
 <li>On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's <code>IsInputActive</code> and each pad's pipeline liveness flags, unsubscribes <code>SettingsViewModel.PropertyChanged</code> and <code>DashboardViewModel.PropertyChanged</code>, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.</li>
 <li>Leaves the constructor-only handlers subscribed on purpose: <code>Devices.PropertyChanged</code> and the per-pad <code>SelectedDeviceChanged</code> / <code>MappingsRebuilt</code> / <code>LayerChanging</code> / <code>LayerActivated</code>. <code>Start()</code> never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.</li>
 <li>Unsubscribes <code>ForegroundMonitorService.ProfileSwitchRequired</code> and drops the instance.</li>
-<li>Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa), then the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
+<li>Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa, haptic mice), then the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
 <li>Calls <code>RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)</code>, so the persistent-cloaks setting is honored on shutdown while a mid-session <code>EnableInputHiding</code> toggle still decloaks immediately.</li>
 <li>Unsubscribes all four source registries (<code>NfcTagRegistry.RegistryChanged</code>, <code>VoicePhraseRegistry.RegistryChanged</code>, <code>HandheldButtonRegistry.RegistryChanged</code> and <code>.ActivityChanged</code>) and the engine events, drops the per-pad device-config and assign-offer handlers, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>. <code>UpdateHeadTrackingStatus()</code> is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.</li>
 <li>Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.</li>
@@ -8549,6 +8613,10 @@
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td>Starts or stops the Razer Sensa HD haptics service (#374)</td>
+</tr>
+<tr>
+<td><code>EnableMouseHaptics</code></td>
+<td>Starts or stops the haptic mouse service (#494)</td>
 </tr>
 <tr>
 <td><code>EnableWebController</code></td>
