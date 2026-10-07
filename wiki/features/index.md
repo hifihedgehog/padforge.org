@@ -70,6 +70,5 @@ when that device has the matching hardware.
 | [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
 | [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
 | [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) | A slot's lightbar color sent on to Razer Chroma and Logitech LIGHTSYNC gear, and its rumble to Razer Sensa HD haptics |
-| [Haptic Mice](haptic-mice.md) | Controller rumble played on the Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 |
 
 *Last updated for PadForge 5.0.0.*

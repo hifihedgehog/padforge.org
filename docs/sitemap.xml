@@ -81,10 +81,6 @@
          <lastmod>2026-10-07</lastmod>
     </url>
     <url>
-         <loc>https://padforge.org/docs/features/haptic-mice/</loc>
-         <lastmod>2026-10-07</lastmod>
-    </url>
-    <url>
          <loc>https://padforge.org/docs/features/head-tracking/</loc>
          <lastmod>2026-10-07</lastmod>
     </url>
@@ -294,10 +290,6 @@
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/midi-input-internals/</loc>
-         <lastmod>2026-10-07</lastmod>
-    </url>
-    <url>
-         <loc>https://padforge.org/docs/reference/mouse-haptics-internals/</loc>
          <lastmod>2026-10-07</lastmod>
     </url>
     <url>

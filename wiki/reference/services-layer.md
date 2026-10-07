@@ -36,7 +36,6 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `LightsyncLightbarService` | The same mirror into Logitech LIGHTSYNC (#382). Detail on [Lightbar Mirrors Internals](lightbar-mirrors-internals.md) |
 | `LogiLedEngineNative` | The registry-loader shim that finds and binds Logitech's LED engine DLL for that service |
 | `SensaHapticsService` | Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). Detail on [Sensa Haptics Internals](sensa-haptics-internals.md) |
-| `MouseHapticsService` | Plays rumble on haptic mice: the MX Master 4 over HID++ and SteelSeries Rival mice through GameSense (#494). Detail on [Haptic Mice Internals](mouse-haptics-internals.md) |
 | `RemoteAssignmentService` | Applies a paired Remote Link peer's authenticated slot-assignment requests on the UI dispatcher, refused unless that peer's trust entry allows remote assignments. Detail on [Remote Link Internals](remote-link-internals.md) |
 | `UpdateService` | In-app updates (#457): the release check, the download and its SHA-256 check, the record of an install waiting for the next launch, the handover to the helper that swaps the exe, and the cleanup. Detail on [Updates Internals](updates-internals.md) |
 | `UpdateController` | The Settings > Updates card (#457): the check timer, Check Now, Install and Restart, the background download, and every status line. UI thread only. Detail on [Updates Internals](updates-internals.md) |
@@ -258,7 +257,7 @@ Startup sequence:
 10. **Start the self-healing sink workers**, unconditionally (cheap when nothing is configured): `RumbleAudioService.EnsureStarted()` (#236), `WiiSpeakerService.EnsureStarted()`, `HapticToneService.EnsureStarted()`. A one-shot `Reconcile()` on `AudioPassthroughService`, `WiiSpeakerService` and `HapticToneService` runs between them, and only when some device already has `AudioPassthroughEnabled`, so the audio threads stay off for users who never turn a mirror on.
 11. **Subscribe to ViewModel changes**. `SettingsViewModel.PropertyChanged`, `DashboardViewModel.PropertyChanged`, and the touchpad-gesture provider / applier hooks on `SettingsService`.
 12. **Create ForegroundMonitorService**. Subscribes `ProfileSwitchRequired` to `OnAutoProfileSwitchRequired`.
-13. **Start the opt-in side services**, each behind its own setting: `StartExternalControlIfEnabled()` (#366), `StartChromaIfEnabled()` (#373), `StartLightsyncIfEnabled()` (#382), `StartSensaIfEnabled()` (#374), `StartMouseHapticsIfEnabled()` (#494).
+13. **Start the opt-in side services**, each behind its own setting: `StartExternalControlIfEnabled()` (#366), `StartChromaIfEnabled()` (#373), `StartLightsyncIfEnabled()` (#382), `StartSensaIfEnabled()` (#374).
 14. **Capture default profile snapshot**. Uses `PendingDefaultSnapshot` (from prior XML) or creates one via `SnapshotCurrentProfile()`.
 15. **Start engine**. `_inputManager.Start()` launches the polling thread.
 16. **Start subsystems**. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.
@@ -276,7 +275,7 @@ Raw Input enumeration is not part of this sequence. Keyboards, mice, and consume
 2. On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's `IsInputActive` and each pad's pipeline liveness flags, unsubscribes `SettingsViewModel.PropertyChanged` and `DashboardViewModel.PropertyChanged`, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.
 3. Leaves the constructor-only handlers subscribed on purpose: `Devices.PropertyChanged` and the per-pad `SelectedDeviceChanged` / `MappingsRebuilt` / `LayerChanging` / `LayerActivated`. `Start()` never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.
 4. Unsubscribes `ForegroundMonitorService.ProfileSwitchRequired` and drops the instance.
-5. Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa, haptic mice), then the DSU server, the web controller server, Remote Link, and the audio bass detector.
+5. Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa), then the DSU server, the web controller server, Remote Link, and the audio bass detector.
 6. Calls `RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)`, so the persistent-cloaks setting is honored on shutdown while a mid-session `EnableInputHiding` toggle still decloaks immediately.
 7. Unsubscribes all four source registries (`NfcTagRegistry.RegistryChanged`, `VoicePhraseRegistry.RegistryChanged`, `HandheldButtonRegistry.RegistryChanged` and `.ActivityChanged`) and the engine events, drops the per-pad device-config and assign-offer handlers, calls `_inputManager.Stop()` and `_inputManager.Dispose()`, then nulls every static provider it wired in `Start()`, disarms the Switch NFC and Joy-Con IR hints, and disposes `CursorControlService`. `UpdateHeadTrackingStatus()` is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.
 8. Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.
@@ -441,7 +440,6 @@ Propagates `DashboardViewModel` changes:
 | `EnableChromaLightbar` | Starts or stops the Razer Chroma lightbar mirror (#373) |
 | `EnableLightsyncLightbar` | Starts or stops the Logitech LIGHTSYNC lightbar mirror (#382) |
 | `EnableSensaHaptics` | Starts or stops the Razer Sensa HD haptics service (#374) |
-| `EnableMouseHaptics` | Starts or stops the haptic mouse service (#494) |
 | `EnableWebController` | Starts or stops web controller server |
 | `WebControllerPort`, `EnableWebControllerPlainHttp`, `WebControllerPlainHttpPort`, `WebControllerPlainHttpLocalOnly` | Restarts web controller server if enabled |
 | `WebControllerAccessCode` | Hands the new code to the running server, which drops every session that joined through the plain address, then refreshes the card's plain address and QR code |

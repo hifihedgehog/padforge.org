@@ -101,7 +101,6 @@ nav:
       - Impulse Triggers: features/impulse-triggers.md
       - Lighting: features/lighting.md
       - Lightbar Mirrors and Sensa Haptics: features/lightbar-mirrors.md
-      - Haptic Mice: features/haptic-mice.md
       - Controller Audio: features/controller-audio.md
       - Bass Shakers: features/bass-shakers.md
       - Wheels: features/wheel.md
@@ -151,7 +150,6 @@ nav:
       - Steam Controller Haptics Internals: reference/steam-controller-haptics-internals.md
       - Lightbar Mirrors Internals: reference/lightbar-mirrors-internals.md
       - Sensa Haptics Internals: reference/sensa-haptics-internals.md
-      - Haptic Mice Internals: reference/mouse-haptics-internals.md
       - Virtual VR Controllers Internals: reference/vr-controllers-internals.md
       - Headset Head Tracking Internals: reference/headset-motion-internals.md
       - Head Tracking Internals: reference/head-tracking-internals.md

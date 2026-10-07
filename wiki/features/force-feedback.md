@@ -38,7 +38,7 @@ Games never talk to your physical controller directly.
 
 PadForge applies this on every polling cycle, 1,000 times a second at the default polling rate. DualSense and DualShock 4 pads take it in their combined effect update, about 30 times a second.
 
-The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md). It can play on a haptic mouse too, an MX Master 4 or a SteelSeries Rival 500, 700 or 710. See [Haptic Mice](haptic-mice.md).
+The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
 
 ### Multi-slot rumble
 

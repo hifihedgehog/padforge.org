@@ -1052,8 +1052,6 @@
       
         
       
-        
-      
     
     
     
@@ -1459,34 +1457,6 @@
     
   
     Lightbar Mirrors and Sensa Haptics
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../features/haptic-mice/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Haptic Mice
   
 
     
@@ -2303,8 +2273,6 @@
       
         
           
-        
-      
         
       
         
@@ -4511,34 +4479,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../mouse-haptics-internals/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Haptic Mice Internals
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../vr-controllers-internals/" class="md-nav__link">
         
   
@@ -6464,54 +6404,52 @@
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        MOVE[UpdateMovePlayerNumber&lt;br/&gt;#277 PS Move sphere player LED]
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        RA[UpdateRumbleAudioLane&lt;br/&gt;#236 rumble-to-audio publish]
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        SN[UpdateSensaLane&lt;br/&gt;#374 Sensa HD amplitude publish]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        MH[UpdateMouseHapticsLane&lt;br/&gt;#494 haptic mouse amplitude publish]
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        SDL --&gt; BPF
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        BPF --&gt;|every 2s or first cycle| S1
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        BPF --&gt;|skip if not due| FLY
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        S1 --&gt; FLY
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        FLY --&gt; S2
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        S2 --&gt; RL
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        RL --&gt; ENG
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        ENG --&gt; MS
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        MS --&gt; S3
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        S3 --&gt; S4
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        S4 --&gt; S4b
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        S4b --&gt; MR
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        MR --&gt; DSU
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        DSU --&gt; S5
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        S5 --&gt; S6
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        S6 --&gt; DS3
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        DS3 --&gt; MOVE
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        MOVE --&gt; RA
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        RA --&gt; SN
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        SN --&gt; MH
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        MH --&gt; WAIT
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        WAIT --&gt;|next cycle| SDL
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    end
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    subgraph &quot;UI Thread (30Hz)&quot;
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        UI_READ[Read RetrievedOutputStates]
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    end
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    end
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    S6 -.-&gt;|struct copy| UI_READ
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    VIB -.-&gt;|motor values| S2
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S3 fill:#f3e5f5
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    style S4 fill:#f3e5f5
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    style S4b fill:#fff3e0
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    style S5 fill:#e8f5e9
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    style S6 fill:#e8f5e9
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        SDL --&gt; BPF
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        BPF --&gt;|every 2s or first cycle| S1
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        BPF --&gt;|skip if not due| FLY
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        S1 --&gt; FLY
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        FLY --&gt; S2
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        S2 --&gt; RL
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        RL --&gt; ENG
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        ENG --&gt; MS
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        MS --&gt; S3
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        S3 --&gt; S4
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        S4 --&gt; S4b
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        S4b --&gt; MR
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        MR --&gt; DSU
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        DSU --&gt; S5
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        S5 --&gt; S6
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        S6 --&gt; DS3
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        DS3 --&gt; MOVE
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        MOVE --&gt; RA
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        RA --&gt; SN
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        SN --&gt; WAIT
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WAIT --&gt;|next cycle| SDL
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    end
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    subgraph &quot;UI Thread (30Hz)&quot;
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        UI_READ[Read RetrievedOutputStates]
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    end
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    end
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    S6 -.-&gt;|struct copy| UI_READ
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    VIB -.-&gt;|motor values| S2
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S3 fill:#f3e5f5
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S4 fill:#f3e5f5
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S4b fill:#fff3e0
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    style S5 fill:#e8f5e9
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    style S6 fill:#e8f5e9
 </code></pre></div>
 <p>The pipeline is a <code>partial class InputManager</code> split across twenty files:</p>
 <table>
@@ -7082,7 +7020,7 @@
 <li>Calls <code>AudioPassthroughService.ClosePersonaOwner</code>, which retires the composite-persona audio feeds this run owns</li>
 <li>Calls <code>SoundMacroService.StopAll()</code>, which releases the macro-sound WASAPI clients, then <code>AudioPassthroughService.Shutdown()</code></li>
 <li>Calls <code>WiiSpeakerService.Shutdown()</code> and <code>HapticToneService.Shutdown()</code>. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in <code>EnsureStarted</code> at engine start</li>
-<li>Calls <code>RumbleAudioService.SilenceAll()</code> then <code>StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch. <code>MouseHapticsService.Silence()</code> follows, the same edge for the haptic mouse lane (#494)</li>
+<li>Calls <code>RumbleAudioService.SilenceAll()</code> then <code>StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch</li>
 <li>Increments <code>_runGeneration</code>. A polling or mouse-injector loop that outlives its join exits on the stale stamp at its next check. The polling loop's <code>finally</code> still runs then, and releases the macro latches only while no newer run has started (<code>ReleaseLatchesOnExit</code>): a later stamp is <code>Start()</code>'s, whose loop owns the latch sets and releases what this run left before its first frame (<code>ReleaseInheritedLatches</code>), and a release here raced it and sent ups for the keys it held. A retired iteration still finishes the steps it was in beside the new run</li>
 <li>Joins the polling thread with a 3-second timeout. A timeout is logged and teardown continues</li>
 <li>Signals <code>MouseWorkSignal</code> to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout</li>
@@ -7164,15 +7102,12 @@
 <a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
 <a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |                              for the Sensa HD haptics worker (#374)
 <a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>  v
-<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>UpdateMouseHapticsLane()      -- the same reduction for the haptic mouse worker (#494)
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Frequency measurement (~1/second)
 <a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a>  |
 <a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a>  v
-<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>Frequency measurement (~1/second)
-<a id="__codelineno-10-67" name="__codelineno-10-67" href="#__codelineno-10-67"></a>  |
-<a id="__codelineno-10-68" name="__codelineno-10-68" href="#__codelineno-10-68"></a>  v
-<a id="__codelineno-10-69" name="__codelineno-10-69" href="#__codelineno-10-69"></a>Drift-compensated hybrid sleep/spin-wait
+<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
-<p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateMouseHapticsLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
+<p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateSensaLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
 <p><strong>Poll-frame gate:</strong></p>
 <p><code>SourceCoercion.BeginPollFrame(int)</code> (<code>SourceCoercion.cs</code> line 785) is called once per active cycle with the loop's run token, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2096). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only. <code>InputManager.Start</code> registers each run before it starts the loop's thread (<code>SourceCoercion.BeginPollRun</code>) and hands the loop the token, which <code>BeginPollFrame</code> checks under the lock the registration takes. A loop Stop retired after a stalled join advances no frame once its replacement has started, and the registration ends the old loop's claim to be the poll thread. An IR pointer forget makes its poll-thread check and its immediate clear under the same lock. The same boundary applies the IR pointer forgets other threads asked for (<a href="../wii-controllers-internals/">Wii Controllers Internals</a>).</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
@@ -7227,7 +7162,7 @@
 - <code>adjustedTarget</code> floors at <code>targetTicks / 4</code> to prevent negative or near-zero waits</p>
 <p><strong>Idle mode:</strong></p>
 <p>When <code>IsIdle</code> is true, the loop enters low-power mode. <code>InputService.UpdateIdleState</code> sets it when no created, enabled slot has an online assigned device, no Remote Link peer is connected, and (with the inactivity timeout above zero) no created, enabled slot still holds a virtual controller:
-- Calls <code>RumbleAudioService.SilenceAll()</code> and <code>MouseHapticsService.Silence()</code> every iteration. Neither the #236 feedback lane nor the #494 haptic mouse lane runs in idle, so idle entry is an explicit silence edge and every iteration republishes it
+- Calls <code>RumbleAudioService.SilenceAll()</code> every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it
 - Pumps <code>SDL_UpdateJoysticks()</code>
 - Runs <code>UpdateDevices()</code> every 5 seconds (instead of 2) so new controllers still appear on the Devices page
 - Runs <code>UpdateInputStates()</code> for Devices page raw input preview
@@ -7239,7 +7174,7 @@
 - Reports <code>CurrentFrequency = 0</code>
 - Sets <code>firstCycle = true</code> and resets the drift state on every idle iteration, so the first active cycle enumerates at once and does not burst</p>
 <p><strong>Focus suspend:</strong></p>
-<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>, which also clears <code>CombinedMotionRows</code> and <code>CombinedPressureStates</code> and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 and #494 silence edges and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
+<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>, which also clears <code>CombinedMotionRows</code> and <code>CombinedPressureStates</code> and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
 <p><strong>Sleep guard:</strong> Every 5 seconds of active polling, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>

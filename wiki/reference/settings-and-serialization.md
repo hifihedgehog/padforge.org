@@ -1400,7 +1400,6 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
 | `EnableChromaLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable `ProfileData.EnableChromaLightbar` is null. |
 | `EnableSensaHaptics` | `bool` | `[XmlElement]` | `false` | (v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: `ProfileData.EnableSensaHaptics`. |
-| `EnableMouseHaptics` | `bool` | `[XmlElement]` | `false` | (#494) Rumble on haptic mice, the global leg. Per-profile leg: `ProfileData.EnableMouseHaptics`. |
 | `EnableLightsyncLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: `ProfileData.EnableLightsyncLightbar`. |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
@@ -2032,7 +2031,6 @@ public class ProfileData
     [XmlElement] public bool? EnableChromaLightbar { get; set; }
     [XmlElement] public bool? EnableLightsyncLightbar { get; set; }
     [XmlElement] public bool? EnableSensaHaptics { get; set; }
-    [XmlElement] public bool? EnableMouseHaptics { get; set; }
     [XmlElement] public bool? EnableHeadTracking { get; set; }          // UDP input
     [XmlElement] public bool? EnableHeadTrackingFreeTrack { get; set; } // FreeTrack input
     // False on profiles saved before the two inputs split. Load converts them once.
@@ -2083,7 +2081,6 @@ public class ProfileData
 | `EnableChromaLightbar` | `bool?` | (v4.4, #373) The profile's leg of the Razer Chroma lightbar mirror. `null` = no opinion, the global `AppSettings.EnableChromaLightbar` stands, and every profile saved before the field reads as `null`. A plain `bool` here read as `false` in every pre-existing profile and the first profile switch turned the mirror off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. |
 | `EnableLightsyncLightbar` | `bool?` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, same nullable authored contract. |
 | `EnableSensaHaptics` | `bool?` | (v4.4, #374) Razer Sensa HD haptics translation, same contract. |
-| `EnableMouseHaptics` | `bool?` | (#494) Rumble on haptic mice, same contract. |
 | `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input, same contract. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |
