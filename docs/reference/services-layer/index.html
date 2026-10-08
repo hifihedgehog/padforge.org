@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -3385,6 +3385,56 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#peripheral-outputs-lifecycle-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral Outputs Lifecycle (#494)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Peripheral Outputs Lifecycle (#494)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startperipheraloutputs-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StartPeripheralOutputs() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stopperipheraloutputs-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StopPeripheralOutputs() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#onperipheralcapabilitieschanged-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OnPeripheralCapabilitiesChanged() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#device-hiding" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5184,14 +5234,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -6481,6 +6531,56 @@
     <span class="md-ellipsis">
       
         Audio rumble level meter update (in UiTimer_Tick)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#peripheral-outputs-lifecycle-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral Outputs Lifecycle (#494)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Peripheral Outputs Lifecycle (#494)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startperipheraloutputs-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StartPeripheralOutputs() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stopperipheraloutputs-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StopPeripheralOutputs() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#onperipheralcapabilitieschanged-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OnPeripheralCapabilitiesChanged() (private)
       
     </span>
   </a>
@@ -8017,20 +8117,20 @@
 <td>Named-pipe profile control for launchers and scripts (#366). Detail on <a href="../external-control-internals/">External Control Internals</a></td>
 </tr>
 <tr>
-<td><code>ChromaLightbarService</code></td>
-<td>Mirrors a virtual Sony pad's lightbar into Razer Chroma (#373). Detail on <a href="../lightbar-mirrors-internals/">Lightbar Mirrors Internals</a></td>
-</tr>
-<tr>
-<td><code>LightsyncLightbarService</code></td>
-<td>The same mirror into Logitech LIGHTSYNC (#382). Detail on <a href="../lightbar-mirrors-internals/">Lightbar Mirrors Internals</a></td>
+<td><code>GameSenseClient</code></td>
+<td>The client for the GameSense server inside SteelSeries GG (#494). One PADFORGE game carries the rumble event the tactile Rival mice play and a color event per device type (mouse, keyboard, headset). The peripheral host's GameSense worker makes every call. Detail on <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a></td>
 </tr>
 <tr>
 <td><code>LogiLedEngineNative</code></td>
-<td>The registry-loader shim that finds and binds Logitech's LED engine DLL for that service</td>
+<td>The registry-loader shim that finds and binds the LED engine G HUB or Logitech Gaming Software installs, for the peripheral host's LED SDK worker (<code>LedSdkBackend</code>, #494). Its process check (<code>lghub_agent</code>, <code>lgs</code>, <code>LCore</code>) also tells the linker whether that software runs</td>
 </tr>
 <tr>
 <td><code>SensaHapticsService</code></td>
-<td>Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). Detail on <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a></td>
+<td>Streams the Razer Sensa row's rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). The peripheral host runs it only while that row is assigned to a virtual controller (#494). Detail on <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a></td>
+</tr>
+<tr>
+<td><code>PeripheralSwitchMigration</code></td>
+<td>Turns three retired Dashboard switches into assignments of the vendor rows that replaced them (#494): the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and Razer Sensa (#374). <a href="#peripheral-outputs-lifecycle-494">Below</a></td>
 </tr>
 <tr>
 <td><code>RemoteAssignmentService</code></td>
@@ -8117,6 +8217,7 @@
 <li><a href="#dsu-server-lifecycle">DSU Server Lifecycle</a></li>
 <li><a href="#web-controller-server-lifecycle">Web Controller Server Lifecycle</a></li>
 <li><a href="#audio-bass-detector-lifecycle">Audio Bass Detector Lifecycle</a></li>
+<li><a href="#peripheral-outputs-lifecycle-494">Peripheral Outputs Lifecycle (#494)</a></li>
 <li><a href="#device-hiding">Device Hiding</a></li>
 <li><a href="#auto-idle">Auto-Idle</a></li>
 <li><a href="#profile-switching">Profile Switching</a></li>
@@ -8260,7 +8361,7 @@
 <td><strong>Subsystem threads</strong></td>
 <td>Various</td>
 <td>Varies</td>
-<td>DSU server (UDP), Web controller (HTTP/WebSocket), Audio bass detector (WASAPI), HidHide controller</td>
+<td>DSU server (UDP), Web controller (HTTP/WebSocket), Audio bass detector (WASAPI), HidHide controller, the peripheral host's link thread and output workers (#494)</td>
 </tr>
 </tbody>
 </table>
@@ -8325,7 +8426,7 @@
 <li><strong>Start the self-healing sink workers</strong>, unconditionally (cheap when nothing is configured): <code>RumbleAudioService.EnsureStarted()</code> (#236), <code>WiiSpeakerService.EnsureStarted()</code>, <code>HapticToneService.EnsureStarted()</code>. A one-shot <code>Reconcile()</code> on <code>AudioPassthroughService</code>, <code>WiiSpeakerService</code> and <code>HapticToneService</code> runs between them, and only when some device already has <code>AudioPassthroughEnabled</code>, so the audio threads stay off for users who never turn a mirror on.</li>
 <li><strong>Subscribe to ViewModel changes</strong>. <code>SettingsViewModel.PropertyChanged</code>, <code>DashboardViewModel.PropertyChanged</code>, and the touchpad-gesture provider / applier hooks on <code>SettingsService</code>.</li>
 <li><strong>Create ForegroundMonitorService</strong>. Subscribes <code>ProfileSwitchRequired</code> to <code>OnAutoProfileSwitchRequired</code>.</li>
-<li><strong>Start the opt-in side services</strong>, each behind its own setting: <code>StartExternalControlIfEnabled()</code> (#366), <code>StartChromaIfEnabled()</code> (#373), <code>StartLightsyncIfEnabled()</code> (#382), <code>StartSensaIfEnabled()</code> (#374).</li>
+<li><strong>Start the side services</strong>. <code>StartExternalControlIfEnabled()</code> (#366) runs behind its setting. <code>StartPeripheralOutputs()</code> (#494) has no setting: the peripheral host runs with the engine, and every peripheral output follows assignment. The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) mirrors and the Razer Sensa switch (#374) became its vendor rows. See <a href="#peripheral-outputs-lifecycle-494">Peripheral Outputs Lifecycle</a>.</li>
 <li><strong>Capture default profile snapshot</strong>. Uses <code>PendingDefaultSnapshot</code> (from prior XML) or creates one via <code>SnapshotCurrentProfile()</code>.</li>
 <li><strong>Start engine</strong>. <code>_inputManager.Start()</code> launches the polling thread.</li>
 <li><strong>Start subsystems</strong>. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.</li>
@@ -8342,7 +8443,7 @@
 <li>On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's <code>IsInputActive</code> and each pad's pipeline liveness flags, unsubscribes <code>SettingsViewModel.PropertyChanged</code> and <code>DashboardViewModel.PropertyChanged</code>, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.</li>
 <li>Leaves the constructor-only handlers subscribed on purpose: <code>Devices.PropertyChanged</code> and the per-pad <code>SelectedDeviceChanged</code> / <code>MappingsRebuilt</code> / <code>LayerChanging</code> / <code>LayerActivated</code>. <code>Start()</code> never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.</li>
 <li>Unsubscribes <code>ForegroundMonitorService.ProfileSwitchRequired</code> and drops the instance.</li>
-<li>Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa), then the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
+<li>Stops external control and the peripheral host (<code>StopPeripheralOutputs</code>), then the DSU server, the web controller server, Remote Link, and the audio bass detector.</li>
 <li>Calls <code>RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)</code>, so the persistent-cloaks setting is honored on shutdown while a mid-session <code>EnableInputHiding</code> toggle still decloaks immediately.</li>
 <li>Unsubscribes all four source registries (<code>NfcTagRegistry.RegistryChanged</code>, <code>VoicePhraseRegistry.RegistryChanged</code>, <code>HandheldButtonRegistry.RegistryChanged</code> and <code>.ActivityChanged</code>) and the engine events, drops the per-pad device-config and assign-offer handlers, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>. <code>UpdateHeadTrackingStatus()</code> is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.</li>
 <li>Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.</li>
@@ -8539,18 +8640,6 @@
 <td>Restarts DSU server if enabled</td>
 </tr>
 <tr>
-<td><code>EnableChromaLightbar</code></td>
-<td>Starts or stops the Razer Chroma lightbar mirror (#373)</td>
-</tr>
-<tr>
-<td><code>EnableLightsyncLightbar</code></td>
-<td>Starts or stops the Logitech LIGHTSYNC lightbar mirror (#382)</td>
-</tr>
-<tr>
-<td><code>EnableSensaHaptics</code></td>
-<td>Starts or stops the Razer Sensa HD haptics service (#374)</td>
-</tr>
-<tr>
 <td><code>EnableWebController</code></td>
 <td>Starts or stops web controller server</td>
 </tr>
@@ -8592,7 +8681,7 @@
 <tbody>
 <tr>
 <td><code>OnDevicesUpdated</code></td>
-<td><code>SyncDevicesList()</code>, <code>RefreshVoiceObjects()</code>, <code>UpdatePadDeviceInfo()</code>, <code>EvaluateAssignOffers()</code> (after the rosters, so "slot has devices" reads this walk's truth), a <code>BuildDeviceRegistrySignature()</code> diff that calls <code>MarkDirty()</code> only when the registry actually changed, <code>ApplyDeviceHiding()</code>, <code>ReseedPlayerIdentities(applySonyDispatchers: false)</code> (#191), <code>ApplyGuideLeds()</code> (#209), then a re-attach + <code>ReApplyUserEffects()</code> pass over every HM VC plus <code>ReApplyNonHmUserEffects()</code>, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose</td>
+<td><code>_peripheralHost?.Nudge()</code> (#494, so the link pass runs at once for a device that came or went), <code>SyncDevicesList()</code>, <code>RefreshVoiceObjects()</code>, <code>UpdatePadDeviceInfo()</code>, <code>EvaluateAssignOffers()</code> (after the rosters, so "slot has devices" reads this walk's truth), a <code>BuildDeviceRegistrySignature()</code> diff that calls <code>MarkDirty()</code> only when the registry actually changed, <code>ApplyDeviceHiding()</code>, <code>ReseedPlayerIdentities(applySonyDispatchers: false)</code> (#191), <code>ApplyGuideLeds()</code> (#209), then a re-attach + <code>ReApplyUserEffects()</code> pass over every HM VC plus <code>ReApplyNonHmUserEffects()</code>, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose</td>
 </tr>
 <tr>
 <td><code>OnTabletCaptureChanged</code></td>
@@ -8757,6 +8846,17 @@
 <p>Clears <code>_inputManager.AudioBassDetector</code>, disposes detector, zeros all pad level meters.</p>
 <h4 id="audio-rumble-level-meter-update-in-uitimer_tick">Audio rumble level meter update (in UiTimer_Tick)<a class="headerlink" href="#audio-rumble-level-meter-update-in-uitimer_tick" title="Permanent link">&para;</a></h4>
 <p>When <code>_audioBassDetector != null</code>, reads <code>BassEnergy</code> and pushes to <code>padVm.AudioRumbleLevelMeter</code> for each created slot with <code>AudioRumbleEnabled</code>.</p>
+<h3 id="peripheral-outputs-lifecycle-494">Peripheral Outputs Lifecycle (#494)<a class="headerlink" href="#peripheral-outputs-lifecycle-494" title="Permanent link">&para;</a></h3>
+<p>A mouse, keyboard or vendor row assigned to a virtual controller is an output device of that controller, with its own Lighting tab when PadForge can light it and its own Force Feedback tab when it can rumble. <code>PeripheralOutputHost</code> (<code>PeripheralOutputHost.cs</code> line 21) runs that subsystem for as long as the engine runs. It replaced <code>ChromaLightbarService</code>, <code>LightsyncLightbarService</code> and the Sensa switch's service lifecycle, and no peripheral output has a Dashboard setting anymore. Detail on <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
+<h4 id="startperipheraloutputs-private"><code>StartPeripheralOutputs()</code> (private)<a class="headerlink" href="#startperipheraloutputs-private" title="Permanent link">&para;</a></h4>
+<p><code>InputService.cs</code> line 10212, step 13 of <code>Start()</code>. Returns when there is no engine or a host already runs. It builds the host, hands it <code>SlotHasController</code> (<code>InputManager.HasVirtualControllerAt</code>, <code>InputManager.Step5.VirtualDevices.cs</code> line 3126) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes <code>CapabilitiesChanged</code>, and starts it.</p>
+<p><code>PeripheralOutputHost.Start</code> (line 72) starts the HID++, GameSense, Razer Chroma and LED SDK workers and the <code>PeripheralLink</code> thread. That thread reads which vendor software is present every 5 s (<code>PresenceMs</code>) and runs a link pass every 500 ms (<code>LinkMs</code>): it ties each online vendor row, and each online Logitech, Razer or SteelSeries mouse or keyboard on this PC, to its output paths, drops the lighting claims of devices no longer assigned to their slot, and keeps each row's recorded outputs current. The GameSense, Chroma and LED SDK workers reach the vendor's software only while something assigned uses it. The HID++ worker scans the Logitech HID++ collections on its own, and plays or lights only a unit a linked row asks for. <code>SensaLifecycle</code> (line 289) runs the <code>SensaHapticsService</code> worker only while the Razer Sensa row is assigned to a virtual controller, and starts a worker that ended on its own again after 30 s (<code>SensaRestartMs</code>).</p>
+<h4 id="stopperipheraloutputs-private"><code>StopPeripheralOutputs()</code> (private)<a class="headerlink" href="#stopperipheraloutputs-private" title="Permanent link">&para;</a></h4>
+<p><code>InputService.cs</code> line 10223, step 5 of <code>Stop()</code>. Unsubscribes and disposes the host. <code>PeripheralOutputHost.Stop</code> (line 92) joins the link thread, stops the Sensa, LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.</p>
+<h4 id="onperipheralcapabilitieschanged-private"><code>OnPeripheralCapabilitiesChanged()</code> (private)<a class="headerlink" href="#onperipheralcapabilitieschanged-private" title="Permanent link">&para;</a></h4>
+<p><code>InputService.cs</code> line 10235. Raised from the link thread when a row's recorded outputs (<code>UserDevice.PeripheralOutputs</code>) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.</p>
+<p><code>OnDevicesUpdated</code> nudges the host, so the link pass runs at once for a device that came or went rather than at the next 500 ms tick. <code>PanicQuiesceOutputs</code> (line 12975) waits up to 250 ms for the GameSense worker to tell GG that a tactile Rival is silent (<code>WaitForSilence</code>), then hands every Logitech unit lit straight over HID++ back to its own effect (<code>ReleaseLightingNow</code>). <code>IsShareableDevice</code> (line 11706) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.</p>
+<p>The Dashboard switches the vendor rows replaced are read once at load. <code>LoadFromFile</code> runs <code>PeripheralSwitchMigration</code> (<code>PeripheralSwitchMigration.cs</code> line 38) at <code>SettingsService.cs</code> line 538, and <code>ProfileTransfer.Import</code> runs it at <code>ProfileTransfer.cs</code> line 150. <a href="../settings-and-serialization/">Settings and Serialization</a> has the rules.</p>
 <h3 id="device-hiding">Device Hiding<a class="headerlink" href="#device-hiding" title="Permanent link">&para;</a></h3>
 <h4 id="applydevicehiding-public"><code>ApplyDeviceHiding()</code> (public)<a class="headerlink" href="#applydevicehiding-public" title="Permanent link">&para;</a></h4>
 <p>Only acts if <code>EnableInputHiding</code> is on. Two mechanisms:</p>
@@ -8796,7 +8896,7 @@
 <li><strong>Slot orders</strong>. <code>SlotOrders.RebuildFromCurrentTopology</code> rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.</li>
 <li><strong>Extended, MIDI and KB+M configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile has one), and the KB+M slot's <code>Surfaces</code> (#408) and <code>SocdMode</code> / <code>SocdPairs</code> (#205).</li>
 <li><strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.</li>
-<li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> starts or stops the mirrors a profile has an opinion about. A null leg leaves the global value alone.</li>
+<li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> (<code>SettingsService.cs</code> line 4235) applies the head-tracking opinions a profile carries, <code>EnableHeadTracking</code> and <code>EnableHeadTrackingFreeTrack</code>. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.</li>
 <li><strong>Server and overlay settings</strong>. DSU and web controller enable and port (ports validated to 1024-65535), plus <code>EnableTouchpadOverlay</code>, <code>EnableMenuOverlay</code>, <code>EnableShiftLayerFlyout</code>, <code>EnableProfileOverlay</code> and the touchpad overlay's monitor, position, size and opacity.</li>
 <li><strong>Rebuilds UI</strong>. Applies the profile's slot appearances, then <code>UpdatePadDeviceInfo()</code>, reloads PadSettings, refreshes mapping rows per pad through <code>RefreshMappingsToViewModel</code> and <code>PopulateAvailableInputs</code>, then <code>SyncDevicesList()</code>. The whole reconciliation runs under <code>VmMappingsStale = true</code> in a <code>try</code> / <code>finally</code>. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.</li>
 </ol>
@@ -8869,7 +8969,7 @@
 <td><code>UserEffectsDispatcher.TestRumbleTargetGuidProvider</code>, wired in <code>Start()</code> and nulled in <code>Stop()</code>. A non-empty target also nulls <code>overrides.RumbleRight</code> / <code>RumbleLeft</code> so external-writer rumble mirroring cannot beat the user's test</td>
 </tr>
 <tr>
-<td>SDL physical rumble</td>
+<td>Physical rumble in Step 2, haptic mice, keyboards and the Razer Sensa row included (#494)</td>
 <td><code>InputManager.Step2.UpdateInputStates.cs</code></td>
 </tr>
 <tr>
@@ -8964,7 +9064,7 @@
 <tr>
 <td><code>IdentifyDevice</code></td>
 <td><code>void IdentifyDevice(Guid instanceGuid)</code></td>
-<td>Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the <code>SendTestRumble</code> lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (<code>RemoteLinkOutputRouter.ShipIdentify</code>)</td>
+<td>Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the <code>SendTestRumble</code> lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (<code>RemoteLinkOutputRouter.ShipIdentify</code>). A haptic mouse or keyboard takes the train as levels through <code>PeripheralOutputs.SetMotors</code>, under its output gate (#494)</td>
 </tr>
 <tr>
 <td><code>TestBatteryNotification</code></td>
@@ -9174,7 +9274,7 @@
 <tr>
 <td><code>PanicQuiesceOutputs</code></td>
 <td><code>void PanicQuiesceOutputs()</code></td>
-<td>Zeros rumble and stops haptic tones on abnormal exit</td>
+<td>On abnormal exit: zeros rumble, waits up to 250 ms for GG to stop a tactile Rival, hands Logitech units lit over HID++ back to their own effect (#494), stops haptic tones, and silences the Bass Shakers</td>
 </tr>
 <tr>
 <td><code>PurgeStaleHidHideCloaks</code></td>
@@ -9419,6 +9519,7 @@
 <li><strong>PadSetting linking</strong>: finds PadSetting by checksum and clones it. Cloning is critical. Without it, devices sharing a checksum would share one object.</li>
 <li>Purges only the empty legacy orphans: a UserSetting parked at <code>MapTo == -1</code> with no PadSetting (<code>IsEmptyLegacyOrphan</code>). A parked row that carries a PadSetting survives, because <code>ApplyProfile</code> parks unassigned devices that way (#404).</li>
 <li>Calls <code>LoadOrMigrateSlotMappingSets()</code>, <code>LoadAppSettings()</code>, <code>LoadPadSettings()</code>, <code>LoadMacros()</code>, <code>LoadProfiles()</code>, then <code>MaskMappingSetsForUncreatedSlots()</code> and <code>EnsureMotionRowsForAllSlots()</code>.</li>
+<li>Runs <code>PeripheralSwitchMigration.Run</code> (#494), which turns the retired Chroma, LIGHTSYNC and Sensa switches into vendor-row assignments. When it changed anything, <code>Initialize()</code> and <code>Reload()</code> mark the file dirty after their own clear, so the result is saved once.</li>
 </ol>
 <h4 id="loadappsettingsappsettingsdata-private"><code>LoadAppSettings(AppSettingsData)</code> (private)<a class="headerlink" href="#loadappsettingsappsettingsdata-private" title="Permanent link">&para;</a></h4>
 <p>Pushes to SettingsViewModel: <code>AutoStartEngine</code>, <code>MinimizeToTray</code>, <code>CloseToTray</code>, <code>AlwaysShowTrayIcon</code>, the three update switches (#457, see <a href="../updates-internals/">Updates Internals</a>), <code>StartMinimized</code>, <code>StartAtLogin</code>, <code>EnablePollingOnFocusLoss</code>, <code>PollingRateMs</code>, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings. It also seeds the machine-scoped web controller custom layouts with <code>WebCustomLayoutStore.LoadFrom(appSettings.WebCustomLayoutsJson)</code> (#296), which <code>BuildAppSettings</code> writes back from <code>WebCustomLayoutStore.Json</code>.</p>
@@ -10989,14 +11090,15 @@
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>  |     |-- LoadProfileShortcuts(), window placement restore, sidebar + dashboard rebuild
 <a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>  |     |-- if (Settings.AutoStartEngine) InputService.Start()
 <a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>  |     |     |-- EnsureStarted: RumbleAudioService / WiiSpeakerService / HapticToneService
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>  |     |     |-- InputManager.Start()          [launches polling thread]
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>  |     |     |-- StartDsuServerIfEnabled()
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>  |     |     |-- StartWebServerIfEnabled()
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>  |     |     |-- StartRemoteLinkIfEnabled()
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>  |     |     |-- SyncAudioBassDetector()
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>  |     |     |-- ApplyDeviceHiding()
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>  |     |     |-- UI timer starts (30Hz)
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>  |     |-- new UpdateController(...).Start()   [the Updates card&#39;s timer, #457]
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>  |     |     |-- StartPeripheralOutputs()      [peripheral host and its workers, #494]
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>  |     |     |-- InputManager.Start()          [launches polling thread]
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>  |     |     |-- StartDsuServerIfEnabled()
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>  |     |     |-- StartWebServerIfEnabled()
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>  |     |     |-- StartRemoteLinkIfEnabled()
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>  |     |     |-- SyncAudioBassDetector()
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>  |     |     |-- ApplyDeviceHiding()
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>  |     |     |-- UI timer starts (30Hz)
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>  |     |-- new UpdateController(...).Start()   [the Updates card&#39;s timer, #457]
 </code></pre></div>
 <p>The update steps are detailed on <a href="../updates-internals/">Updates Internals</a>.</p>
 <h3 id="shutdown-sequence">Shutdown Sequence<a class="headerlink" href="#shutdown-sequence" title="Permanent link">&para;</a></h3>
@@ -11015,14 +11117,15 @@
 <a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>  |     |-- RecorderService.Dispose()
 <a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>  |     |-- InputService.Dispose() -&gt; Stop()
 <a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>  |     |     |-- UI timer stops, overlays close, ViewModel events unsubscribed
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>  |     |     |-- StopDsuServer() / StopWebServer() / StopRemoteLink()
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>  |     |     |-- StopAudioBassDetector()
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>  |     |     |-- RemoveDeviceHiding(keepCloaks: KeepHidHideCloaksBetweenLaunches)
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>  |     |     |-- InputManager.Stop() + Dispose()
-<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>  |     |     |     |-- AwaitPendingLifecycleTasks, DestroyAllVirtualControllers,
-<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>  |     |     |         DisposeHMaestroContextOnShutdown
-<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>  |     |-- MidiInputRuntime.Shutdown(), MidiVirtualController.Shutdown()
-<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>  |-- _shutdownComplete = true, Close()
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>  |     |     |-- StopPeripheralOutputs()       [#494]
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>  |     |     |-- StopDsuServer() / StopWebServer() / StopRemoteLink()
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>  |     |     |-- StopAudioBassDetector()
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>  |     |     |-- RemoveDeviceHiding(keepCloaks: KeepHidHideCloaksBetweenLaunches)
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>  |     |     |-- InputManager.Stop() + Dispose()
+<a id="__codelineno-13-20" name="__codelineno-13-20" href="#__codelineno-13-20"></a>  |     |     |     |-- AwaitPendingLifecycleTasks, DestroyAllVirtualControllers,
+<a id="__codelineno-13-21" name="__codelineno-13-21" href="#__codelineno-13-21"></a>  |     |     |         DisposeHMaestroContextOnShutdown
+<a id="__codelineno-13-22" name="__codelineno-13-22" href="#__codelineno-13-22"></a>  |     |-- MidiInputRuntime.Shutdown(), MidiVirtualController.Shutdown()
+<a id="__codelineno-13-23" name="__codelineno-13-23" href="#__codelineno-13-23"></a>  |-- _shutdownComplete = true, Close()
 </code></pre></div>
 <h3 id="device-connected-flow">Device Connected Flow<a class="headerlink" href="#device-connected-flow" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>InputManager.UpdateDevices()              [polling thread, every 2s; 5s while idle]
@@ -11074,6 +11177,7 @@
 <li><a href="../xaml-views/">XAML Views</a>: <code>MainWindow.xaml.cs</code> wires services to ViewModels</li>
 <li><a href="../engine-library/">Engine Library</a>: <code>Gamepad</code>, <code>CustomInputState</code>, <code>UserDevice</code>, <code>UserSetting</code></li>
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> lifecycle managed by <code>InputService</code></li>
+<li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: the peripheral host, its workers and the vendor rows that <code>InputService</code> starts with the engine</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

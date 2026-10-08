@@ -24,6 +24,7 @@ graph TB
         HMP[HM lifecycle thread pool<br/>Create / Destroy off polling thread]
         ABD[AudioBassDetector<br/>WASAPI loopback . IIR filter]
         RAS[RumbleAudioService<br/>Bass Shakers . WASAPI render]
+        PH[PeripheralOutputHost #494<br/>HID++ . Chroma . LED SDK . GameSense . Sensa workers]
     end
 
     subgraph "Virtual Controllers"
@@ -53,6 +54,7 @@ graph TB
         DSU_CLIENT[DSU Clients<br/>Cemu / Dolphin / Yuzu / Ryujinx]
         BROWSER[Web Browsers<br/>Phone / tablet]
         PEER[Remote Link Peers<br/>Paired PadForge PCs, LAN or internet relay]
+        VEND[Peripheral vendors<br/>Razer Synapse . Logitech G HUB . SteelSeries GG<br/>Logitech HID++ devices]
     end
 
     UI --> VM
@@ -62,6 +64,9 @@ graph TB
     IS --> ABD
     IS --> DS
     IS --> FMS
+    IS --> PH
+    IM -.->|levels, claims| PH
+    PH -.->|REST, LED SDK, GameSense, HID++| VEND
     RS --> IM
     IM --> HMP
     IM --> KBM
@@ -173,7 +178,7 @@ PadForge.App/
       HMaestroFfbDescriptor.cs        # HID PID output report ids the FFB decoder dispatches on (HM's AddPidFfbBlock emits the descriptor itself)
       HMaestroFfbDecoder.cs           # Decodes raw HM feedback packets into Vibration / FFB state
       SonyReportPackers.cs            # DS4 / DualSense Report 0x01 input passthrough packers
-      UserEffectsDispatcher.cs        # Per-Sony-slot sole writer of effect packets (rumble + lightbar + AT + mic LED)
+      UserEffectsDispatcher.cs        # Per-slot sole writer of Sony effect packets (rumble + lightbar + AT + mic LED), and the color of each lit mouse, keyboard and vendor row on the slot (#494)
       PlayStationEffectWriter.cs      # Low-level PlayStation effect packet write helper called by the dispatcher
       TouchpadPulseService.cs         # Sony-side swipe-haptic pulse delivery: 80 ms bursts max-combined into the dispatcher's rumble bytes (#219)
       DualSensePassthroughDispatcher.cs # Per-slot worker forwarding game-driven DS5 effect output reports (AT)
@@ -239,7 +244,7 @@ PadForge.App/
     ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot's MappingSet (#61)
     MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot's MappingSet, write-through like the mapping grid (#9)
     MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts, legacy output port
-    DeviceSlotConfig.cs               # Per-slot PlayStation output config (Adaptive Triggers + Lighting tabs)
+    DeviceSlotConfig.cs               # Per-slot, per-device output config (Adaptive Triggers + Lighting tabs, a mouse's or keyboard's Control This Device’s Lighting switch, #494)
     KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
     ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
     StickConfigItem.cs                # Thumbstick deadzone / anti-deadzone / linear config
@@ -365,7 +370,7 @@ PadForge.App/
     VisualCpp/x64/                    # msvcp140.dll, vcruntime140.dll, vcruntime140_1.dll: SDL3.dll's C++ runtime, bundled so no redistributable install is needed
     Vosk/arm64/libvosk.dll            # ARM64 Vosk recognizer, built by tools/build-libvosk-arm64.sh (the x64 build takes the Vosk package's own)
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
-    Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService (#374)
+    Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService, the Razer Sensa row's worker (#374, #494)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
     HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.11.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
@@ -557,7 +562,7 @@ The `Common/Input/`, `Services/`, `Engine/Data/`, and `Engine/RemoteLink/` trees
 
 - `Haptics/` (`HapticToneEncoder`, `HapticToneReducer`, `WiiSpeakerAdpcm`, and since 4.4.0 `TritonPcmEncoder` for the 2026 Steam Controller's native PCM haptics, #381). Since 4.1.0: `Menus/` (`MenuDefinitionEntry`, `MenuEvaluator`, `MenuSelectionMath`) and `Touchpad/SwipeHapticsEvaluator.cs`. The `RemoteLink/` subtree is listed in full above.
 
-New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, and `LogitechGKeys = 37` under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
+New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, `LogitechGKeys = 37`, `AnalogKeyboard = 38`, `WebMenus = 39`, and the vendor rows' `PeripheralLighting = 40` and `PeripheralHaptics = 41` (#494) under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
 
 ### Since 4.1.0
 
@@ -617,6 +622,37 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 
 - `Common/SpaceMouseDecoder.cs`, `Common/GamepadObjectNames.cs`, `Common/SyntheticInstanceId.cs`
 - `RemoteLink/`. The #294 internet lane, listed in full in the tree above: `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, `IrohRelayClient`, `LinkCode`. Direct punch first, iroh relay as the guaranteed fallback
+
+### Peripheral outputs (#494)
+
+A mouse, keyboard or vendor row assigned to a virtual controller is an output device of that controller, the way a DualSense is. It takes the controller's lighting through its own Lighting tab when PadForge can light it, and its rumble through its own Force Feedback tab when it can rumble. This subsystem replaced the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirror services and the Razer Sensa switch (#374), and none of it has a Dashboard setting. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+
+**App `Common/Input/Peripherals/`**
+
+- `PeripheralOutputs.cs`. The hub: the link table, each row's haptic level, each lighting claim and the ruling between claims, the Set Chroma Color assertions, the backend states. Every setter is lock-free or takes only the hub's own leaf state
+- `PeripheralLinker.cs`. Vendor software presence, read from the registry, files and process names, and the pure rules that tie a row to its output paths
+- `PeripheralOutputHost.cs`. Runs with the engine: the link pass every 500 ms, claim pruning, the workers' lifetimes, and the Razer Sensa worker while its row is assigned
+- `PeripheralOutputRow.cs`. The Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, synthetic devices with no inputs
+- `PeripheralLightingColor.cs` / `GameLightbarCapture.cs`. One device's color for one slot under the game's lightbar, and that lightbar as a DualShock 4 or DualSense virtual controller receives it
+- `PeripheralRouteText.cs`. The line the Lighting and Force Feedback tabs show: where the output goes, and why it does not show
+- `PeripheralProductIds.cs`. Product IDs that name a Razer or SteelSeries device's kind
+- `HidppBackend.cs` / `HidppUnits.cs`. The Logitech HID++ worker: unit discovery, receiver pairing tables, feature 0x8070 lighting, battery reads, and feature 0x19B0 waveforms
+- `ChromaBackend.cs` / `LedSdkBackend.cs` / `GameSenseBackend.cs`. The Razer Chroma REST, Logitech LED SDK and SteelSeries GameSense workers
+
+**App `Common/Input/`**
+
+- `InputManager.PeripheralRows.cs`. Step 1's phase 1m, which opens and retires the vendor rows
+- `HidppHaptics.cs`. The HID++ 2.0 frames for the haptic feature 0x19B0
+- `HapticRumbleShaper.cs`. Rumble strength to a waveform and a repeat interval, for devices that play fixed waveforms
+
+**App `Services/`**
+
+- `GameSenseClient.cs`. The client for the GameSense server in SteelSeries GG: one PADFORGE game with a tactile rumble event and a color event per device type
+- `LogiLedEngineNative.cs`. Finds and binds the LED engine G HUB or Logitech Gaming Software installs, so PadForge ships nothing of Logitech's
+- `SensaHapticsService.cs`. The Razer Sensa row's worker, through the bundled Interhaptics engine
+- `PeripheralSwitchMigration.cs`. Turns the retired switches into vendor-row assignments, once per file
+
+`ChromaLightbarService.cs` and `LightsyncLightbarService.cs` are gone.
 
 ### PadForge.SteamWorkshop
 
@@ -770,7 +806,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## InputManager Partial Class Split
 
-`InputManager` is a `partial class` split across 20 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
+`InputManager` is a `partial class` split across 21 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
 
 | File | Stage | Responsibility |
 |---|---|---|
@@ -778,6 +814,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
+| `InputManager.PeripheralRows.cs` | Step 1 | Peripheral outputs (#494), Phase 1m: the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, each open while its vendor's software is installed |
 | `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks a Sony or Nintendo device's PnP ancestry for the `ROOT\HIDMAESTRO_UDE` stamp so PadForge never ingests its own USB persona |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Read `CustomInputState` per device, apply FFB from `VibrationStates[]` + audio bass |
 | `InputManager.Step3.MappingSetEval.cs` | Step 3 | Evaluate the per-VC MappingSet (rows, sources, combine modes, shift layers) into OutputState |
@@ -801,7 +838,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Eleven documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
+Twelve documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
 
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
@@ -926,6 +963,10 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 `RumbleAudioService` (issue #236) renders each slot's inbound game feedback as low-frequency sine tones. Players are keyed by audio endpoint, not by slot: every slot routed to one endpoint shares a single NAudio `WasapiOut` (shared mode, event-sync, 30 ms buffers), one sample clock, and one composite limiter. Each `WasapiOut` runs its own render thread, and a 5-second reconcile `Timer` resolves configured endpoints and prunes dead players. The poll loop's `UpdateRumbleAudioLane` publishes a packed four-voice `LfeOutputState` long per slot each tick (`Volatile.Write`). `RumbleAudioSampleProvider` reads it on the render thread (`Volatile.Read`). Silence is an explicit edge, never an inference from callback inactivity: idle entry, engine stop, and slot delete publish it synchronously. A configured-but-unresolved endpoint fails closed (no fallback device).
 
+### 12. Peripheral Outputs (PeripheralOutputHost, with the engine)
+
+`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s and runs the link pass every 500 ms, and four workers: the `PeripheralHidpp` and `PeripheralGameSense` threads and the Razer Chroma and Logitech LED SDK loops on the thread pool. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
+
 ### Thread Safety Summary
 
 | Shared State | Writer | Reader | Sync |
@@ -946,6 +987,9 @@ Injected mouse movement is processed synchronously: it traverses every process's
 | `_pendingMouseDx` / `_pendingMouseDy` | Engine (Step 4b), KBM VC | Mouse Injector thread | `Interlocked.Add` / `Exchange` |
 | `RemotePeerDevice` state | Remote Link UDP loop | Engine (Step 2) | `_stateLock` (double-buffered) |
 | `RumbleAudioService` voice packs | Engine (poll lane) | WASAPI render thread | Volatile long (four packed voices) |
+| `PeripheralOutputs` link table (#494) | `PeripheralLink` thread | Engine (Step 2), effects dispatchers, peripheral workers, UI | Immutable table swapped whole (`Volatile.Write`) |
+| `PeripheralOutputs` haptic levels | Engine (Step 2), Remote Link relay, Identify | HID++, GameSense and Sensa workers | Leaf lock per row on write, volatile bits on read |
+| `PeripheralOutputs` lighting claims | Effects dispatchers | Chroma, LED SDK, GameSense and HID++ workers, the Pad page's route line | `ConcurrentDictionary`, leaf lock per claim |
 
 ---
 
@@ -1038,10 +1082,14 @@ Step 2: ApplyForceFeedback() (engine thread)
   │  Routes by source-pad VID/PID to the per-family writer:
   │    Sony (DS4/DualSense) → UserEffectsDispatcher (sole writer, SDL skipped)
   │    Xbox One+ (One/Elite/Series) → XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
+  │    Haptic mice and keyboards, the Razer Sensa row → PeripheralOutputs level, played by
+  │      the HID++, GameSense or Interhaptics worker (sole writer, SDL skipped, #494)
   │    Everything else → SDL_RumbleJoystick or SDL haptic effects
 ```
 
 Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio path (#236): once per tick the poll loop's `UpdateRumbleAudioLane` publishes each slot's packed voice state to `RumbleAudioService`, which renders it as low-frequency tones on the configured audio endpoint (the "Bass Shakers" tab).
+
+Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual controller records the lightbar color a game writes (`GameLightbarCapture`). The slot's `UserEffectsDispatcher` turns each lit mouse's, keyboard's or vendor row's Lighting tab mode into a color under that game color, and stores it in `PeripheralOutputs` as the slot's claim on the device. The HID++, Razer Chroma, Logitech LED SDK and SteelSeries GameSense workers paint the claim that rules each device or shared path: a device's own claim beats a vendor row, then the smaller displayed player number wins. See [Input Pipeline](input-pipeline.md#peripheral-outputs-494).
 
 ---
 
@@ -1074,9 +1122,11 @@ Native libraries folded into `PadForge.exe` and extracted at first launch to the
 | `libusb-1.0.dll` | SDL3's HIDAPI backend | WinUSB access for the Switch 2 Pro Controller. `Resources/SDL3/x64/` |
 | `msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll` | `SDL3.dll` | The C++ runtime SDL3.dll imports (its Elite paddle reader is C++), bundled so no redistributable install is needed. `vcruntime140_1.dll` is x64 only. `Resources/VisualCpp/x64/` |
 | `xinput1_4.dll` | SDL3's XInput backend, `BluetoothLinkHelper` | OpenXInput fork. Single-file-embedded. `App.OnStartup` calls `SetDllDirectory` on the extraction directory, so the loader resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view. `Resources/OpenXInput/x64/` |
-| `HAR.dll` | `SensaHapticsService` (#374) | Interhaptics engine, P/Invoked lazily, so a missing DLL degrades to a diagnostics line. `Resources/Interhaptics/x64/` |
+| `HAR.dll` | `SensaHapticsService` (#374), the Razer Sensa row's worker (#494) | Interhaptics engine, P/Invoked lazily, so a missing DLL degrades to a diagnostics line. `Resources/Interhaptics/x64/` |
 | `Interhaptics.RazerProvider.dll` | `HAR.dll` | The Razer Sensa backend `HAR.dll` loads. `Resources/Interhaptics/x64/` |
 | `libvosk.dll` + `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | x64: added by the Vosk 0.3.38 package's own targets file, not by the csproj, and the three MinGW DLLs are what that `libvosk.dll` links against. ARM64: a `<Content>` item, `Resources/Vosk/arm64/libvosk.dll`, built by `tools/build-libvosk-arm64.sh` with its runtime linked in, so it has no companions |
+
+The Logitech LED engine is not in the bundle. `LogiLedEngineNative` loads the one G HUB or Logitech Gaming Software registers under its `ServerBinary` key (#494). The Razer Chroma and SteelSeries GameSense paths are HTTP calls to servers Razer Synapse and SteelSeries GG run, so they load no library at all.
 
 ---
 
@@ -1187,6 +1237,7 @@ WPF updates all bound text when `ChangeCulture()` fires `PropertyChanged`.
 | `InputService` | `Services/InputService.cs` | Singleton | UI–engine bridge, 30Hz timer, macro recording, DSU/web lifecycle |
 | `SettingsService` | `Services/SettingsService.cs` | Singleton | XML persistence, auto-save, profile CRUD, ViewModel sync |
 | `DeviceService` | `Services/DeviceService.cs` | Singleton | Device list sync, HidHide whitelist management |
+| `PeripheralOutputs` | `Common/Input/Peripherals/PeripheralOutputs.cs` | Static | Peripheral output hub (#494): link table, haptic levels, lighting claims, Set Chroma Color, backend states |
 
 ---
 
@@ -1251,6 +1302,7 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface, thread-pool lifecycle, OpenXInput shim, bubble-down cascade
 - [SDL3 Integration](sdl3-integration.md): SDL3 P/Invoke, device enumeration, state reading, haptic
 - [Build and Publish](build-and-publish.md): Build commands, publish configuration, CI/CD
+- [Peripheral Outputs Internals](peripheral-outputs-internals.md): Mice, keyboards and vendor rows as output devices of a virtual controller
 
 ---
 

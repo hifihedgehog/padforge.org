@@ -466,23 +466,23 @@ Good for map pings, minimap clicks, and menu buttons that always live at the sam
 
 ### Set Lightbar Color
 
-Push an RGB color to every Sony pad on the slot as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.
+Push an RGB color to the slot's lights as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.
 
 Two hold modes:
 
 - **Reactive (Fade).** Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.
 - **Sticky (Hold).** Hold the color at full brightness until a **Clear Lightbar Override** action or a fresh override replaces it. Good for armed / disarmed markers.
 
-It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.
+It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars, the PS Move sphere, and the mice, keyboards and vendor rows the slot lights from their [Lighting](../features/lighting.md#mice-keyboards-and-vendor-rows) tabs.
 
 ### Set Chroma Color
 
 <!-- SCREENSHOT: macro-set-chroma-color -->
 ![The Set Chroma Color action editor with its Duration and color](../images/macro-set-chroma-color.png)
 
-Paints every Razer Chroma device one color for the action's **Duration**. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the [Razer Chroma lightbar mirror](../features/lightbar-mirrors.md#razer-chroma) is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.
+Paints one color for the action's **Duration** on the Razer mice, keyboards and keypads assigned to the macro's virtual controller, and on every other Razer device of the same kind, since Razer Synapse lights each kind of device all at once. With the **Razer Chroma** row assigned to that virtual controller, it paints every Razer device. The color wins over every virtual controller's [Lighting](../features/lighting.md) tab, whether or not a device's **Control This Device’s Lighting** is on. When the action ends, each device goes back to the color a Lighting tab or a vendor row sets, or to Synapse. On a virtual controller with no Razer device and no Razer Chroma row assigned, the action paints nothing. It needs Razer Synapse running.
 
-To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.
+To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin. When macros on two virtual controllers paint the same kind of Razer device, the smaller player number wins.
 
 ### Show Dreamcast Screen
 
@@ -502,7 +502,7 @@ Drop any active macro lightbar override on the slot. The base mode and Input Rea
 
 ### Set Lightbar Mode
 
-Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot renders the new mode with its own palette and decay settings.
+Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot, and every mouse, keyboard or vendor row the slot lights, renders the new mode with its own palette and decay settings.
 
 ### Cycle Lightbar Modes
 
@@ -515,7 +515,7 @@ Drive the slot's physical rumble from a macro. Per-motor strength from 0 to 100 
 - **Reactive (Fade).** Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.
 - **Sticky (Hold).** Hold at full strength until a **Stop Rumble** action runs. Good for armed states and click-and-hold sustain.
 
-Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand.
+Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand, and the haptic mice and Razer Sensa row assigned to it.
 
 ### Stop Rumble
 

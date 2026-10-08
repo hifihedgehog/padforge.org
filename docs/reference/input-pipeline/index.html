@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -2849,6 +2849,45 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#peripheral-outputs-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral Outputs (#494)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Peripheral Outputs (#494)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idle-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3656,6 +3695,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#consumetriggerbuttons" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4423,14 +4473,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -5252,6 +5302,45 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#peripheral-outputs-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral Outputs (#494)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Peripheral Outputs (#494)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rumble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#idle-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6059,6 +6148,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#consumetriggerbuttons" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6388,7 +6488,7 @@
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        SDL[SDL_UpdateJoysticks]
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        BPF[SourceCoercion.BeginPollFrame]
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        FLY[FlydigiReprobeTick&lt;br/&gt;#395]
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        S1[Step 1: UpdateDevices&lt;br/&gt;SDL enumerate + Raw Input + tablets + PTP&lt;br/&gt;MIDI / NFC / mic / headset phases&lt;br/&gt;handheld buttons + head tracker + G-keys&lt;br/&gt;HM self-readback guard]
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        S1[Step 1: UpdateDevices&lt;br/&gt;SDL enumerate + Raw Input + tablets + PTP&lt;br/&gt;MIDI / NFC / mic / headset phases&lt;br/&gt;handheld buttons + head tracker + G-keys&lt;br/&gt;vendor rows #494&lt;br/&gt;HM self-readback guard]
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        S2[Step 2: UpdateInputStates&lt;br/&gt;SDL read axes/buttons/POV&lt;br/&gt;Gesture + menu ticks&lt;br/&gt;Force feedback + audio bass]
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        RL[RemoteLinkPollTick&lt;br/&gt;#138 per-device delta accumulate]
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        ENG[Engage settles&lt;br/&gt;gyro / trigger-route / haptic-mirror #185]
@@ -6403,55 +6503,53 @@
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        DS3[UpdateDs3PlayerNumber&lt;br/&gt;#191 bridged-DS3 player LED]
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        MOVE[UpdateMovePlayerNumber&lt;br/&gt;#277 PS Move sphere player LED]
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        RA[UpdateRumbleAudioLane&lt;br/&gt;#236 rumble-to-audio publish]
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        SN[UpdateSensaLane&lt;br/&gt;#374 Sensa HD amplitude publish]
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        SDL --&gt; BPF
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        BPF --&gt;|every 2s or first cycle| S1
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        BPF --&gt;|skip if not due| FLY
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        S1 --&gt; FLY
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        FLY --&gt; S2
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        S2 --&gt; RL
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        RL --&gt; ENG
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        ENG --&gt; MS
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        MS --&gt; S3
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        S3 --&gt; S4
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        S4 --&gt; S4b
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        S4b --&gt; MR
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        MR --&gt; DSU
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        DSU --&gt; S5
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        S5 --&gt; S6
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        S6 --&gt; DS3
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        DS3 --&gt; MOVE
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        MOVE --&gt; RA
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        RA --&gt; SN
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        SN --&gt; WAIT
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        WAIT --&gt;|next cycle| SDL
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    end
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    subgraph &quot;UI Thread (30Hz)&quot;
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        UI_READ[Read RetrievedOutputStates]
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    end
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    end
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    S6 -.-&gt;|struct copy| UI_READ
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    VIB -.-&gt;|motor values| S2
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S3 fill:#f3e5f5
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S4 fill:#f3e5f5
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S4b fill:#fff3e0
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    style S5 fill:#e8f5e9
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    style S6 fill:#e8f5e9
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        WAIT[Drift-compensated&lt;br/&gt;hybrid sleep/spin-wait]
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        SDL --&gt; BPF
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        BPF --&gt;|every 2s or first cycle| S1
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        BPF --&gt;|skip if not due| FLY
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        S1 --&gt; FLY
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        FLY --&gt; S2
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        S2 --&gt; RL
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        RL --&gt; ENG
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        ENG --&gt; MS
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        MS --&gt; S3
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        S3 --&gt; S4
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        S4 --&gt; S4b
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        S4b --&gt; MR
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        MR --&gt; DSU
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        DSU --&gt; S5
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        S5 --&gt; S6
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        S6 --&gt; DS3
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        DS3 --&gt; MOVE
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        MOVE --&gt; RA
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        RA --&gt; WAIT
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        WAIT --&gt;|next cycle| SDL
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    end
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    subgraph &quot;UI Thread (30Hz)&quot;
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        UI_READ[Read RetrievedOutputStates]
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        UI_WRITE[Write MacroSnapshots&lt;br/&gt;SlotControllerTypes&lt;br/&gt;SlotCustomLayouts + SlotRawHidSurface + SlotExtended*]
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    end
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    subgraph &quot;HIDMaestro Callback Thread&quot;
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        VIB[OutputReceived / OutputDecoded&lt;br/&gt;VR HapticReceived&lt;br/&gt;write VibrationStates]
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    end
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    S6 -.-&gt;|struct copy| UI_READ
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    UI_WRITE -.-&gt;|atomic ref/value| S4b
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    UI_WRITE -.-&gt;|atomic scalars, SlotCustomLayouts struct copy| S5
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    VIB -.-&gt;|motor values| S2
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    style S3 fill:#f3e5f5
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    style S4 fill:#f3e5f5
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    style S4b fill:#fff3e0
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    style S5 fill:#e8f5e9
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    style S6 fill:#e8f5e9
 </code></pre></div>
-<p>The pipeline is a <code>partial class InputManager</code> split across twenty files:</p>
+<p>The pipeline is a <code>partial class InputManager</code> split across twenty-one files:</p>
 <table>
 <thead>
 <tr>
@@ -6480,6 +6578,11 @@
 <td><code>InputManager.BlissBox.cs</code></td>
 <td>Step 1</td>
 <td>Phase 1l (#469): one API sidecar per online Bliss-Box row while Read Bliss-Box Adapters is on. A change of the switch brings the pass forward to the next poll cycle, and motor hand-offs that a busy output gate or a refused SDL stop deferred are retried every 100 ms</td>
+</tr>
+<tr>
+<td><code>InputManager.PeripheralRows.cs</code></td>
+<td>Step 1</td>
+<td>Phase 1m (#494): the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa vendor rows, each open while its vendor's software is installed. See <a href="#step-1-updatedevices">Step 1</a></td>
 </tr>
 <tr>
 <td><code>InputManager.Step1.UsbipVhciGuard.cs</code></td>
@@ -7020,13 +7123,13 @@
 <li>Calls <code>AudioPassthroughService.ClosePersonaOwner</code>, which retires the composite-persona audio feeds this run owns</li>
 <li>Calls <code>SoundMacroService.StopAll()</code>, which releases the macro-sound WASAPI clients, then <code>AudioPassthroughService.Shutdown()</code></li>
 <li>Calls <code>WiiSpeakerService.Shutdown()</code> and <code>HapticToneService.Shutdown()</code>. Both streams die with the engine, not with a profile apply, because their suppression latch clears only in <code>EnsureStarted</code> at engine start</li>
-<li>Calls <code>RumbleAudioService.SilenceAll()</code> then <code>StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch</li>
+<li>Calls <code>RumbleAudioService.SilenceAll()</code>, then <code>PeripheralOutputs.SilenceHaptics()</code> (the same edge for haptic mice, keyboards and the Razer Sensa row, #494), then <code>RumbleAudioService.StopAll()</code>. Engine stop is an explicit #236 silence edge, and the renderer dies here rather than inside <code>SoundMacroService.StopAll</code>, which also runs on every profile apply and would otherwise silence the shakers on every profile switch</li>
 <li>Increments <code>_runGeneration</code>. A polling or mouse-injector loop that outlives its join exits on the stale stamp at its next check. The polling loop's <code>finally</code> still runs then, and releases the macro latches only while no newer run has started (<code>ReleaseLatchesOnExit</code>): a later stamp is <code>Start()</code>'s, whose loop owns the latch sets and releases what this run left before its first frame (<code>ReleaseInheritedLatches</code>), and a release here raced it and sent ups for the keys it held. A retired iteration still finishes the steps it was in beside the new run</li>
 <li>Joins the polling thread with a 3-second timeout. A timeout is logged and teardown continues</li>
 <li>Signals <code>MouseWorkSignal</code> to unpark an idle injector, then joins the mouse-injector thread with a 1-second timeout</li>
 <li>Stops <code>RawInputListener</code></li>
 <li>Stops and disposes <code>_ptpReader</code>, then calls <code>StopTabletReader()</code></li>
-<li>Calls <code>StopAllForceFeedback()</code>. Best-effort stop on all devices</li>
+<li>Calls <code>StopAllForceFeedback()</code>. Best-effort stop on all devices. It zeroes every haptic peripheral level first, then stops each row's level again under that row's output gate, so a level a writer decided before the sweep cannot land after it (#494)</li>
 <li>Calls <code>AwaitPendingLifecycleTasks()</code>. Waits (bounded, 30 s) for in-flight HM connect/dispose tasks so a late connect can't orphan a controller in the kernel device tree</li>
 <li>Calls <code>DestroyAllVirtualControllers()</code>. Disconnects and disposes all VCs</li>
 <li>Clears every <code>_slotInitializing</code> flag so post-stop reads return false</li>
@@ -7099,17 +7202,15 @@
 <a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a>UpdateRumbleAudioLane()       -- publish per-slot rumble-to-audio packs (#236), after Step 5 so a
 <a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a>  |                              slot destroyed this tick publishes zeros the same tick
 <a id="__codelineno-10-59" name="__codelineno-10-59" href="#__codelineno-10-59"></a>  v
-<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>UpdateSensaLane()             -- publish the max feedback voice across all slots, 0..1,
-<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |                              for the Sensa HD haptics worker (#374)
+<a id="__codelineno-10-60" name="__codelineno-10-60" href="#__codelineno-10-60"></a>Frequency measurement (~1/second)
+<a id="__codelineno-10-61" name="__codelineno-10-61" href="#__codelineno-10-61"></a>  |
 <a id="__codelineno-10-62" name="__codelineno-10-62" href="#__codelineno-10-62"></a>  v
-<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Frequency measurement (~1/second)
-<a id="__codelineno-10-64" name="__codelineno-10-64" href="#__codelineno-10-64"></a>  |
-<a id="__codelineno-10-65" name="__codelineno-10-65" href="#__codelineno-10-65"></a>  v
-<a id="__codelineno-10-66" name="__codelineno-10-66" href="#__codelineno-10-66"></a>Drift-compensated hybrid sleep/spin-wait
+<a id="__codelineno-10-63" name="__codelineno-10-63" href="#__codelineno-10-63"></a>Drift-compensated hybrid sleep/spin-wait
 </code></pre></div>
-<p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateSensaLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
+<p>Each iteration first checks the idle gate (<code>BeginIdlePoll()</code>) and then focus suspend (<code>ApplyFocusSuspension()</code>), both described below. Step 2 through Step 5 run inside <code>EnterMenuPublication()</code>, the <code>MenuPublicationSync</code> gate, so a radial or touch menu never observes a half-written frame. After <code>UpdateRumbleAudioLane()</code> a stall watchdog writes a <code>STALL</code> line to the diagnostics ring when the SDL pump or enumeration takes 25 ms or more, or the cycle 50 ms or more, and a <code>HEARTBEAT</code> line every 10 s.</p>
+<p>The poll-wide <code>UpdateSensaLane</code> is gone (#494). The Razer Sensa row is a device now, and Step 2 gives it the rumble of the virtual controllers it is assigned to, through its own Force Feedback settings, like a haptic mouse (see <a href="#peripheral-outputs-494">Peripheral Outputs</a>).</p>
 <p><strong>Poll-frame gate:</strong></p>
-<p><code>SourceCoercion.BeginPollFrame(int)</code> (<code>SourceCoercion.cs</code> line 785) is called once per active cycle with the loop's run token, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2096). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only. <code>InputManager.Start</code> registers each run before it starts the loop's thread (<code>SourceCoercion.BeginPollRun</code>) and hands the loop the token, which <code>BeginPollFrame</code> checks under the lock the registration takes. A loop Stop retired after a stalled join advances no frame once its replacement has started, and the registration ends the old loop's claim to be the poll thread. An IR pointer forget makes its poll-thread check and its immediate clear under the same lock. The same boundary applies the IR pointer forgets other threads asked for (<a href="../wii-controllers-internals/">Wii Controllers Internals</a>).</p>
+<p><code>SourceCoercion.BeginPollFrame(int)</code> (<code>SourceCoercion.cs</code> line 785) is called once per active cycle with the loop's run token, right after <code>SDL_UpdateJoysticks()</code> and before Step 1 (<code>InputManager.cs</code> line 2108). The idle branch does not call it. It increments a shared <code>_pollFrameSeq</code> counter that gates every state-carrying evaluator cache in <code>SourceCoercion</code>: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against <code>_pollFrameSeq</code> and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only. <code>InputManager.Start</code> registers each run before it starts the loop's thread (<code>SourceCoercion.BeginPollRun</code>) and hands the loop the token, which <code>BeginPollFrame</code> checks under the lock the registration takes. A loop Stop retired after a stalled join advances no frame once its replacement has started, and the registration ends the old loop's claim to be the poll thread. An IR pointer forget makes its poll-thread check and its immediate clear under the same lock. The same boundary applies the IR pointer forgets other threads asked for (<a href="../wii-controllers-internals/">Wii Controllers Internals</a>).</p>
 <p><strong>3-Tier Polling Sleep Strategy:</strong></p>
 <p>The polling loop uses a tiered sleep strategy, falling through to the next tier if the preferred timer is unavailable:</p>
 <table>
@@ -7162,7 +7263,7 @@
 - <code>adjustedTarget</code> floors at <code>targetTicks / 4</code> to prevent negative or near-zero waits</p>
 <p><strong>Idle mode:</strong></p>
 <p>When <code>IsIdle</code> is true, the loop enters low-power mode. <code>InputService.UpdateIdleState</code> sets it when no created, enabled slot has an online assigned device, no Remote Link peer is connected, and (with the inactivity timeout above zero) no created, enabled slot still holds a virtual controller:
-- Calls <code>RumbleAudioService.SilenceAll()</code> every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it
+- Calls <code>RumbleAudioService.SilenceAll()</code> every iteration. The #236 feedback lane does not run in idle, so idle entry is an explicit silence edge and every iteration republishes it. Haptic peripherals (#494) take no such edge: Step 2 runs in idle and writes their level as it writes SDL rumble
 - Pumps <code>SDL_UpdateJoysticks()</code>
 - Runs <code>UpdateDevices()</code> every 5 seconds (instead of 2) so new controllers still appear on the Devices page
 - Runs <code>UpdateInputStates()</code> for Devices page raw input preview
@@ -7174,15 +7275,15 @@
 - Reports <code>CurrentFrequency = 0</code>
 - Sets <code>firstCycle = true</code> and resets the drift state on every idle iteration, so the first active cycle enumerates at once and does not burst</p>
 <p><strong>Focus suspend:</strong></p>
-<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>, which also clears <code>CombinedMotionRows</code> and <code>CombinedPressureStates</code> and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
+<p>The engine half of the "Continue Polling When Window Loses Focus" setting. When <code>SuspendWhenBackground</code> is set (the user unchecked the box) and the host window is not foreground, the loop suspends instead of polling: on the entry edge it zeros every combined surface (<code>NeutralizeCombinedOutputs</code>, which also clears <code>CombinedMotionRows</code> and <code>CombinedPressureStates</code> and asks each motion model to restart its clock), submits once, and releases latched macro keys, so the game left behind is not stuck holding whatever was pressed when focus moved. Each suspended iteration republishes the #236 silence edge and calls <code>PeripheralOutputs.SilenceHaptics(keepRelayed: true)</code>, which zeroes every haptic peripheral level except one a Remote Link peer drives, as a peer-driven SDL rumble keeps playing (#494). It still runs <code>UpdateVirtualDevices()</code> at the loop's ~10 Hz so create/dispose gates and both watchdogs keep advancing on neutral state. Suspension stops the engine driving inputs. It does not stop the lifecycle machinery. Distinct from <code>_idle</code>, which engages when nothing is active. Focus suspend engages because things are active and the user wants them off while away.</p>
 <p><strong>Sleep guard:</strong> Every 5 seconds of active polling, calls <code>SetThreadExecutionState(ES_CONTINUOUS)</code> to clear execution-state flags SDL may re-assert, so the PC can still sleep.</p>
 <h3 id="slot-reorder">Slot Reorder<a class="headerlink" href="#slot-reorder" title="Permanent link">&para;</a></h3>
 <p>Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in <code>InputManager</code> swaps <code>SlotControllerTypes[]</code>, <code>VibrationStates[]</code>, or the <code>Combined*States</code> arrays between pad indices, and there is no <code>SwapSlots</code> / <code>SwapSlotData</code> method on <code>InputManager</code>.</p>
-<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 18906), <code>MoveSlot(int, int)</code> (line 18908), and <code>MoveSlotToGroupTail(int)</code> (line 18955). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
+<p>The UI-facing reorder verbs live on <code>InputService</code>: <code>SwapSlots(int, int)</code> (<code>InputService.cs</code> line 19050), <code>MoveSlot(int, int)</code> (line 19083), and <code>MoveSlotToGroupTail(int)</code> (line 19130). <code>SwapSlots</code> and <code>MoveSlot</code> mutate <code>SettingsManager.SlotOrders</code> for the new visual order, then route through <code>InputService.RebuildKernelOrderAfterReorder</code> to the sole <code>InputManager</code> reorder entry point. <code>MoveSlotToGroupTail</code> changes only the group order (see below):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step5.VirtualDevices.cs</code> line 3165. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
+<p><code>InputManager.Step5.VirtualDevices.cs</code> line 3172. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
 <ul>
 <li><strong>Same profile at V</strong>: reuse the kernel VC in place. The pad-index pointer in <code>_virtualControllers[]</code> moves so the new pad-at-position-V feeds V's kernel slot, and <code>FeedbackPadIndex</code> is updated on the surviving VC so the rumble callback writes the right <code>VibrationStates[]</code> entry. No teardown.</li>
 <li><strong>Different profile at V</strong>: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.</li>
@@ -7192,8 +7293,8 @@
 <h3 id="motion-snapshots">Motion Snapshots<a class="headerlink" href="#motion-snapshots" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateMotionSnapshots</span><span class="p">()</span>
 </code></pre></div>
-<p>Called after Step 2 (<code>InputManager.cs</code> line 2125). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into <code>Ds5StatusBytes</code> (#433).</p>
-<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, <code>BuildMotionRowCandidates</code> (<code>InputManager.cs</code> line 3687) returns no rows and the channel sends nothing. Otherwise <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3921) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
+<p>Called after Step 2 (<code>InputManager.cs</code> line 2137). Iterates all 16 pad slots. A slot with <code>!SlotCreated</code> clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into <code>BatteryPercents</code> / <code>BatteryCharging</code>, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into <code>Ds5StatusBytes</code> (#433).</p>
+<p><strong>Source resolution.</strong> The gyro channel and the accel channel resolve <strong>separately</strong> from the slot's <code>MappingSet</code> rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, <code>BuildMotionRowCandidates</code> (<code>InputManager.cs</code> line 3706) returns no rows and the channel sends nothing. Otherwise <code>ReconcileMappedMotion</code> (<code>InputManager.cs</code> line 3944) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, <code>ReconcileMotionRow</code> reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's <code>CombineMode</code>: largest magnitude by default, or Sum, Average, or a Custom expression:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">gyro</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_motionHasGyroRow</span><span class="p">[</span><span class="n">padIndex</span><span class="p">]</span>
 <a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="n">ReconcileMappedMotion</span><span class="p">(</span><span class="n">ms</span><span class="p">,</span><span class="w"> </span><span class="n">MappingSetMigrator</span><span class="p">.</span><span class="n">MotionGyroTarget</span><span class="p">,</span>
 <a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">        </span><span class="n">requireGyro</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">timestampUs</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
@@ -7279,7 +7380,7 @@
 <h3 id="idisposable">IDisposable<a class="headerlink" href="#idisposable" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Dispose</span><span class="p">()</span>
 </code></pre></div>
-<p>Returns at once if already disposed. Otherwise calls <code>Stop()</code>, then shuts down the NFC readers, microphone devices, headset motion inputs, handheld inputs, head-tracker inputs, and Logitech G-key inputs (after the poll loop stops, before <code>ShutdownSdl()</code> tears down the device list their retire paths walk), then calls <code>ShutdownSdl()</code>, clears the gyro tilt states, and marks the instance disposed. The finalizer calls <code>Dispose()</code> as a safety net. The normal path calls <code>GC.SuppressFinalize</code>.</p>
+<p>Returns at once if already disposed. Otherwise calls <code>Stop()</code>, then shuts down the NFC readers, microphone devices, headset motion inputs, handheld inputs, head-tracker inputs, Logitech G-key inputs, the vendor peripheral rows (<code>ShutdownPeripheralRows</code>, #494) and the analog keyboard inputs (after the poll loop stops, before <code>ShutdownSdl()</code> tears down the device list their retire paths walk), then calls <code>ShutdownSdl()</code>, clears the gyro tilt and gyro simulation states, and marks the instance disposed. The finalizer calls <code>Dispose()</code> as a safety net. The normal path calls <code>GC.SuppressFinalize</code>.</p>
 <h3 id="win32-pinvoke">Win32 P/Invoke<a class="headerlink" href="#win32-pinvoke" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1">// Timer resolution</span>
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="na">[DllImport(&quot;winmm.dll&quot;, ExactSpelling = true)]</span>
@@ -7331,7 +7432,7 @@
 <hr />
 <h2 id="step-1-updatedevices">Step 1: UpdateDevices<a class="headerlink" href="#step-1-updatedevices" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>InputManager.Step1.UpdateDevices.cs</code></p>
-<p>Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires <code>DevicesUpdated</code> on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (<code>InputManager.Step1.UpdateDevices.cs</code> lines 115-584):</p>
+<p>Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires <code>DevicesUpdated</code> on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (<code>InputManager.Step1.UpdateDevices.cs</code> lines 115-587):</p>
 <table>
 <thead>
 <tr>
@@ -7389,6 +7490,10 @@
 <td>Logitech G-keys (#454)</td>
 </tr>
 <tr>
+<td>1m</td>
+<td>Vendor rows for peripheral outputs: Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa (#494)</td>
+</tr>
+<tr>
 <td>1k</td>
 <td>Analog keyboards (#468)</td>
 </tr>
@@ -7402,7 +7507,7 @@
 </tr>
 </tbody>
 </table>
-<p>The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, <code>FlydigiServiceWatch.Refresh()</code> flags a change when Flydigi's Space Station service starts or stops (#395).</p>
+<p>The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j, and 1m, retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, <code>FlydigiServiceWatch.Refresh()</code> flags a change when Flydigi's Space Station service starts or stops (#395).</p>
 <p>Phases 1e through 1j share one shape: an <code>_opened*</code> dictionary keyed by the source's stable id (a single device field in 1h, 1i, and 1j), an open that runs through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>, a vanished-entry sweep that marks offline and neutralizes mapped outputs, and a <code>Shutdown*</code> method that suppresses the phase for the rest of the session. The shared <code>NfcReaderService</code> monitor is a separate object with its own lifecycle (started lazily from phase 1f, retried about every 5 s while the Smart Card service is absent), but each visible reader still becomes an <code>NfcReaderDevice</code> registered here like any other source.</p>
 <p>Phases 1g and 1h split their work by cost. Blocking I/O (feature-report qualification, vendor HID enumeration, the sensor-stack probe) runs on a worker. The poll thread only registers what the worker finished and retires what vanished. Phase 1i needs no worker: a UDP bind and a file mapping do not block, and the OpenXR source starts its own thread, so the poll thread runs the whole lifecycle itself. Retiring the row does wait, up to 50 ms for the UDP receive thread and up to 2 s for the OpenXR thread. Phase 1j follows the 1i shape.</p>
 <h3 id="method-signature">Method Signature<a class="headerlink" href="#method-signature" title="Permanent link">&para;</a></h3>
@@ -7538,8 +7643,8 @@
 <p><strong>Phase 1c: Enumerate mice</strong> via <code>EnumerateMice(mice)</code></p>
 <p>Same pattern as keyboards using <code>SdlMouseWrapper</code>, with one extra skip: a mouse whose device path already belongs to an online row (one the touchpad phase redirected to handle zero) is not reopened.</p>
 <p><strong>Enumerate Consumer Controls</strong> via <code>EnumerateConsumerControls()</code></p>
-<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> lines 249 and 255). <code>EnumerateConsumerControls</code> (lines 1449-1487) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
-<p><code>FindOnlineDeviceByHandle</code> (line 3832) resolves a Raw Input handle back to its <code>UserDevice</code> by testing <code>RawInputHandle</code> on each raw-input wrapper kind. <code>ConsumerControlWrapper</code> was missing from that list, so <code>PruneOrphanedHandles</code> found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising <code>DevicesUpdated</code> and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.</p>
+<p>Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in <code>_cachedConsumerControls</code> and consumed in <code>UpdateDevices</code> (<code>InputManager.Step1.UpdateDevices.cs</code> lines 249 and 255). <code>EnumerateConsumerControls</code> (lines 1458-1496) mirrors <code>EnumerateKeyboards</code>: for each new handle not in <code>_openedConsumerHandles</code>, it opens a <code>ConsumerControlWrapper</code>, runs <code>FindOrCreateUserDevice</code>, calls <code>ud.LoadFromConsumerDevice(wrapper)</code>, and marks the device online. <code>DetectDisconnectedHandles(_openedConsumerHandles, ...)</code> marks removed collections offline.</p>
+<p><code>FindOnlineDeviceByHandle</code> (line 3923) resolves a Raw Input handle back to its <code>UserDevice</code> by testing <code>RawInputHandle</code> on each raw-input wrapper kind. <code>ConsumerControlWrapper</code> was missing from that list, so <code>PruneOrphanedHandles</code> found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising <code>DevicesUpdated</code> and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.</p>
 <p><strong>Tablet phase</strong> via <code>UpdateTabletDevices(ref changed)</code> (<code>InputManager.Tablets.cs</code>)</p>
 <p><code>WindowsTabletReader</code> runs its own reader thread and skips HIDMaestro instances. This pass mirrors each attached tablet into a row through <code>FindOrCreateUserDevice(device.InstanceGuid)</code>, <code>LoadFromExternalDevice</code>, and <code>IsOnline = true</code>, and marks a vanished tablet offline and neutralizes its mapped outputs.</p>
 <p><strong>Phase 1e: Enumerate MIDI inputs</strong> via <code>UpdateMidiInputDevices()</code></p>
@@ -7561,6 +7666,8 @@
 <p>The row is torn down on three conditions: every input going off, the user removing it or either OpenXR controller row from the Devices page (the NFC recreate pattern), and a config change, detected by comparing the device's <code>ConfigVersion</code> against <code>HeadTrackingRuntime.Version</code>. The next pass rebuilds it in the last two cases. The config check is how a port change, an input toggle, or a new OpenXR runtime choice takes effect without an app restart.</p>
 <p><strong>Phase 1j: Logitech G-keys</strong> via <code>UpdateLogitechGKeysDevice()</code> (#454)</p>
 <p>One row while <code>LogitechGKeysRuntime.Enabled</code> is on. It opens even when the G-key SDK is absent, so the Devices list can say why the keys are quiet. The row is rebuilt when the user removes it, when <code>LogitechGKeysRuntime.Version</code> moves, and every 5 s while the SDK is not running. The poll thread runs the whole lifecycle, and <code>ShutdownLogitechGKeysInputs</code> suppresses the phase. See <a href="../logitech-g-keys-internals/">Logitech G-Keys Internals</a>.</p>
+<p><strong>Phase 1m: Vendor rows</strong> via <code>UpdatePeripheralRows()</code> (#494, <code>InputManager.PeripheralRows.cs</code> line 34)</p>
+<p>One row per vendor whose software stands behind it (<code>PeripheralRowWanted</code>, line 20): Razer Chroma while Razer Synapse is installed, Logitech LIGHTSYNC while G HUB or Logitech Gaming Software registers its LED engine, SteelSeries GG while GG is installed, and Razer Sensa while Synapse is installed and this build can load the Interhaptics engine. The phase reads <code>PeripheralOutputs.Presence</code>, which the peripheral host fills from the registry, files and process names every 5 s, so the poll thread does no I/O here. Each row is a <code>PeripheralOutputRow</code> (<code>PeripheralOutputRow.cs</code> line 44), a synthetic <code>ISdlInputDevice</code> with no inputs, a fixed path such as <code>razerchroma://local</code>, an id hashed from a fixed string, and the device type <code>PeripheralLighting</code> (40) or, for the Sensa row, <code>PeripheralHaptics</code> (41). A row opens through <code>FindOrCreateUserDevice</code>, <code>LoadFromExternalDevice</code> and <code>IsOnline = true</code>, retires when its software goes, and comes back on the next pass after the user removes it, the G-keys row's recreate pattern. <code>RetirePeripheralRow</code> (line 77) stops the row's haptic level and releases its lighting claims, both keyed on the id because the record may already be gone, then marks the record offline and neutralizes its mapped outputs. <code>ShutdownPeripheralRows</code> (line 96) suppresses the phase and retires every row.</p>
 <p><strong>Phase 2: Detect disconnected joystick devices (debounced)</strong></p>
 <p>Iterates <code>_openedSdlInstanceIds</code>. Three signals suggest a device is gone: the row's <code>ud.Device</code> is null, <code>ud.Device.IsAttached</code> is false, or the SDL ID no longer appears in <code>SDL_GetJoysticks</code> (the belt-and-suspenders case for SDL keeping a stale <code>JoystickID</code> after the kernel device is gone, HIDMaestro#11).</p>
 <p>Any one signal starts a countdown in <code>_sdlDisconnectCandidateSince</code>, and the device is marked offline only if the condition holds for the full <code>SdlDisconnectDebounceMs</code> window (2000 ms). That rides out the xinputhid slot-assignment transients a HIDMaestro virtual's creation induces on a coexisting physical Xbox, which resolve in tens to low hundreds of milliseconds, so the physical pad's SDL handle survives and its Devices-page preview keeps moving. A real unplug or pair-drop stays missing past the window and surfaces with only the debounce latency added.</p>
@@ -7758,9 +7865,9 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 </code></pre></div>
 <p>Applies rumble to a physical device based on vibration data from games via HIDMaestro.</p>
 <p><strong>Pre-conditions:</strong>
-- <code>ud.ForceFeedbackState != null</code> (device has FFB tracking)
+- <code>ud.ForceFeedbackState != null</code> (device has FFB tracking). A haptic mouse, keyboard or the Razer Sensa row (#494) reports no SDL rumble, so loading it makes no cache. <code>ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes one on the poll thread when <code>PeripheralOutputs.TakesHaptics(ud)</code> holds, and zeroes the row's stored level first, since a new cache starts from zero
 - <code>OutputsQuiesced</code> is false (the abnormal-exit quiesce, discussion #179)
-- Xbox One+ impulse pads and the Padix PSX/USB converter need <code>ud.Device != null</code>. Vendor wheels and pedals need no device handle. Every other device needs <code>ud.Device != null</code> and <code>HasRumble || HasHaptic</code></p>
+- Xbox One+ impulse pads, the Padix PSX/USB converter, a Bliss-Box port and a haptic peripheral need <code>ud.Device != null</code>. Vendor wheels and pedals need no device handle. Every other device needs <code>ud.Device != null</code> and <code>HasRumble || HasHaptic</code></p>
 <p>A device with no slot left takes a separate branch: it gets one final zero on the tick its last slot goes (#402), unless a Remote Link peer holds its output.</p>
 <p><strong>Multi-slot vibration combination:</strong></p>
 <p>A physical device can map to multiple VC slots. Each slot's vibration runs through this device's own chain for that slot, and the results combine via <code>max()</code> per motor:</p>
@@ -7793,16 +7900,26 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 3. Scales <code>detector.MotorValue</code> by <code>AudioRumbleLeftMotor</code> / <code>AudioRumbleRightMotor</code> percentages
 4. Combines with game vibration via <code>max()</code>. Audio rumble fills gaps without overriding native game FFB</p>
 <p><code>ScaleRumbleForDevice</code> only consumes <code>MotorValue</code>. Calling <code>DecayIfSilent</code> or the setters there would multiply the decay rate across devices and race the WASAPI callback.</p>
-<p><strong>Output:</strong> <code>ApplyForceFeedback(ud)</code> early-routes by source-pad VID/PID before any SDL call. Sony pads (DualShock 4 / DualSense) get skipped here entirely. <code>UserEffectsDispatcher</code> writes the Sony effect packet (rumble, lightbar, adaptive triggers, mic LED) on its own 33 ms per-slot timer, and <code>ApplyForceFeedback</code> never sends these pads SDL rumble. On a slot running a virtual DualSense, <code>DualSensePassthroughDispatcher</code> also forwards the game's own effect reports (USB 0x02, Bluetooth 0x31) to the physical DualSense, and the dispatcher zeroes its rumble bytes for that pad while the game drives rumble. Xbox One+ pads (Xbox One / Elite / Series) are diverted to <code>XboxImpulseHidWriter.Write</code>, which scales each motor to 0..100 (value / 655) and writes one 9-byte report (<code>03 0F LT RT LM RM FF 00 EB</code>) with <code>WriteFile</code> to the pad's XUSB device interface, the one matching SDL's <code>XInput#N</code> path. SDL rumble is also skipped on this family, so SDL's stop never reaches these pads: the engine's stop and the crash quiesce send a pad left at a level a zero through the same writer (<code>StopAllForceFeedback</code>). The Padix PSX/USB converter (#440) gets the same sole-writer treatment through <code>PadixConverterRawHidWriter</code>: a 9-byte report whose byte 1 switches the small motor and byte 2 sets the big motor's level (0, or <code>0x7F</code> plus half the level). Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by <code>IsLogitechWheel</code> / <code>IsFanatecWheel</code> / <code>IsThrustmasterWheel</code> / <code>IsFanatecPedal</code>) are diverted to their native vendor writers, which re-encode the decoded force into each vendor's own HID protocol and drive rotation range, auto-center, and RPM LEDs. See <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>.</p>
+<p><strong>Output:</strong> <code>ApplyForceFeedback(ud)</code> early-routes by source-pad VID/PID before any SDL call. Sony pads (DualShock 4 / DualSense) get skipped here entirely. <code>UserEffectsDispatcher</code> writes the Sony effect packet (rumble, lightbar, adaptive triggers, mic LED) on its own 33 ms per-slot timer, and <code>ApplyForceFeedback</code> never sends these pads SDL rumble. On a slot running a virtual DualSense, <code>DualSensePassthroughDispatcher</code> also forwards the game's own effect reports (USB 0x02, Bluetooth 0x31) to the physical DualSense, and the dispatcher zeroes its rumble bytes for that pad while the game drives rumble. Xbox One+ pads (Xbox One / Elite / Series) are diverted to <code>XboxImpulseHidWriter.Write</code>, which scales each motor to 0..100 (value / 655) and writes one 9-byte report (<code>03 0F LT RT LM RM FF 00 EB</code>) with <code>WriteFile</code> to the pad's XUSB device interface, the one matching SDL's <code>XInput#N</code> path. SDL rumble is also skipped on this family, so SDL's stop never reaches these pads: the engine's stop and the crash quiesce send a pad left at a level a zero through the same writer (<code>StopAllForceFeedback</code>). The Padix PSX/USB converter (#440) gets the same sole-writer treatment through <code>PadixConverterRawHidWriter</code>: a 9-byte report whose byte 1 switches the small motor and byte 2 sets the big motor's level (0, or <code>0x7F</code> plus half the level). Logitech, Fanatec, and Thrustmaster wheels and pedals (gated by <code>IsLogitechWheel</code> / <code>IsFanatecWheel</code> / <code>IsThrustmasterWheel</code> / <code>IsFanatecPedal</code>) are diverted to their native vendor writers, which re-encode the decoded force into each vendor's own HID protocol and drive rotation range, auto-center, and RPM LEDs. See <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>. A haptic mouse, keyboard or the Razer Sensa row is a sole writer too, the Bliss-Box shape: Step 2 records its level and a peripheral backend plays it (see <a href="#peripheral-outputs-494">Peripheral Outputs</a>).</p>
 <p>A Remote Link <code>peer://</code> device (#138) ships its combined vibration, or the semantic wheel frame for a vendor wheel, to the PC that owns it instead of writing locally. A local write is skipped when the device's <code>OutputSync</code> gate is contended or a remote peer holds the device's output lease.</p>
 <p>Everything else falls through to the standard scratch-vibration handoff:
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="n">ud</span><span class="p">.</span><span class="n">ForceFeedbackState</span><span class="p">.</span><span class="n">SetDeviceForces</span><span class="p">(</span><span class="n">ud</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">Device</span><span class="p">,</span><span class="w"> </span><span class="n">firstPadSetting</span><span class="p">,</span><span class="w"> </span><span class="n">_combinedVibration</span><span class="p">);</span>
 </code></pre></div></p>
 <p><code>ForceFeedbackState.SetDeviceForces</code> then picks <code>SDL_RumbleJoystick</code> (with <code>uint.MaxValue</code> duration + change-detection) for the scalar-rumble path, or SDL haptic effects (LeftRight &gt; Sine &gt; Constant) when the device has an open haptic handle. PadForge opens one for every SDL haptic device except a rumble-capable pad whose haptic interface offers LeftRight. A device with trigger motors also gets <code>SDL_RumbleGamepadTriggers</code>, and a device without them can fold the trigger channels into its body motors (<code>TriggerRumbleFold</code>). The directional-haptic branch handles HID PID joysticks / wheels.</p>
 <p><strong>Sony dispatcher keepalive:</strong> Step 2 also walks the created slots to keep each Sony <code>UserEffectsDispatcher</code>'s 33 ms timer running while anything needs its per-tick write: game or test rumble (main or impulse-trigger motors), an active macro rumble override, a steering at-lock trigger pulse (#94), a live touchpad swipe-haptic burst (<code>TouchpadPulseService.IsSlotActive(padIndex)</code>, #219), steering-angle rumble with a nonzero steering frame, audio rumble on the motors or the triggers, or an enabled constant force or constant trigger force with a nonzero value. Config facts come from a snapshot refreshed every 250 ms (<code>RefreshSonyPokeCfg</code>). A second pass pokes each slot with the OR across its Sony share group, so the owner slot of a pad on several slots keeps writing while any of them needs it. The swipe-haptic poke matters on an otherwise idle slot: the burst rides the dispatcher's rumble bytes, so a parked timer would silently drop it.</p>
+<h3 id="peripheral-outputs-494">Peripheral Outputs (#494)<a class="headerlink" href="#peripheral-outputs-494" title="Permanent link">&para;</a></h3>
+<p>A mouse, keyboard or vendor row assigned to a virtual controller takes that controller's rumble when it can rumble, and its lighting when PadForge can light it, the way a DualSense does. The pipeline hands each output to <code>PeripheralOutputs</code> (<code>PeripheralOutputs.cs</code> line 160), a static hub whose setters take no lock beyond their own leaf state, and the peripheral host's workers make every device and vendor call, so the poll thread never waits on a vendor's software. The workers and the vendor rows are on <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
+<h4 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h4>
+<p><code>isPeripheralHaptic</code> is <code>PeripheralOutputs.TakesHaptics(ud)</code> (line 186): a row with a haptic path now, or one whose record says it has one while its device sleeps. Such a row runs the per-slot chain above like any device, so its own Force Feedback settings scale the slot's rumble, then takes the sole-writer branch (<code>InputManager.Step2.UpdateInputStates.cs</code> line 1234). Trigger Rumble Fold applies as on SDL's path, since none of these devices has trigger motors. A level that differs from the snapshot goes to <code>PeripheralOutputs.SetMotors</code> (line 303), which keeps the stronger motor as one 0 to 1 level, and the first nonzero level wakes the HID++ worker at once. The level is kept whether or not a path answers now, so a device that wakes plays what the game holds, and a stop sent while it slept is never lost. A row with no slot left gets one final zero, unless a Remote Link peer holds it, and a row that goes offline, retires or is removed is zeroed at once. Over Remote Link, the PC that owns a haptic mouse or keyboard advertises rumble for it, so the other PC's row ships the slot's rumble back like any forwarded pad, and the owner hands the relayed level to <code>SetMotors</code> marked as relayed. The vendor rows are never shared.</p>
+<p>Three workers play it. A Logitech unit with HID++ feature 0x19B0, such as the MX Master 4, plays one fixed waveform per pulse: <code>HapticRumbleShaper</code> picks subtle, damp or sharp collision for three strength levels with hysteresis, and the repeat interval shortens from 250 ms at the faintest to 80 ms at full strength. The tactile Rival 500, 700 and 710 play through the GameSense tactile handler in SteelSeries GG, which drives every tactile Rival at once, so the Rival on the virtual controller with the smallest displayed player number sets the level. The Razer Sensa row streams its level into the Interhaptics engine.</p>
+<p>Step 2 writes no level on three edges, so each zeroes the levels itself through <code>PeripheralOutputs.SilenceHaptics</code> (line 352): engine stop, the crash quiesce, and focus suspend, which keeps a level a Remote Link peer drives. A row zeroed this way owes a resend (<code>ConsumeResend</code>), so the level a game still asks for comes back the moment Step 2 writes again. Idle is no such edge, since Step 2 runs there.</p>
+<h4 id="lighting">Lighting<a class="headerlink" href="#lighting" title="Permanent link">&para;</a></h4>
+<p>The slot's <code>UserEffectsDispatcher</code> colors each lit mouse, keyboard and vendor row assigned to the slot, with no Sony report written for them. <code>IsLitPeripheral</code> (<code>UserEffectsDispatcher.cs</code> line 1770) takes a row whose record says it has lighting or that a lighting path links now. <code>LightPeripheral</code> (line 1786) releases this slot's claim when the device's config is missing or, for a mouse or keyboard, its Control This Device’s Lighting switch (<code>PeripheralLightingEnabled</code>) is off. Otherwise <code>PeripheralLightingColor.Resolve</code> (<code>PeripheralLightingColor.cs</code> line 21) takes the DualSense's order: a lightbar the game wrote to the slot's virtual controller within the last 1.5 s wins, a device left at the Player Number default keeps the game's last color until the game has been silent for 15 s, and anything else runs the Lighting tab's mode through <code>Ds4EffectSynthesizer.ResolveLightbarRgb</code> with this slot's own player number. Battery mode reads a Logitech unit's HID++ charge (<code>PeripheralOutputs.BatteryOf</code>), and holds the full-charge color for any other device. The color goes to <code>PeripheralOutputs.SetLighting</code> (line 411) as this slot's claim on the device.</p>
+<p>Each claim belongs to one device on one slot. Where several claims meet on a device or a shared path, <code>PeripheralOutputs.Rules</code> (line 531) decides: a device's own claim beats a vendor row, then the smaller displayed player number wins, then the lower slot. A device leaving the slot, going offline or having its switch turned off releases the slot's claim, and the peripheral link pass drops the claims of devices no longer assigned and of slots with neither a live dispatcher (<code>HasLiveDispatcher</code>, <code>UserEffectsDispatcher.cs</code> line 1206) nor a virtual controller.</p>
+<p>The game's color comes from <code>GameLightbarCapture</code> (<code>GameLightbarCapture.cs</code> line 137). A DualShock 4 or DualSense virtual controller's output reader checks each frame's declared length and checksum. A trusted frame whose validity flag marks a lightbar write records the decoded <code>lightbar</code> color, and any other trusted frame notes that the game is still there. <code>GraceMs</code> (1500, line 141) and <code>LapseMs</code> (15000, line 145) time the record, and it moves with its controller through a reorder. A dispatcher computes colors only when it runs, so a new game color, the end of the grace window, the lapse, a controller leaving the slot, a charge change and a new link each ask the slot's dispatcher for a pass over its lit peripherals alone (<code>RequestPeripheralRefresh</code>, line 1111). One such pass runs at a time on the thread pool, at most once per 33 ms animation tick. A mouse or keyboard whose switch is off keeps no animation timer running (<code>LightingDriven</code>, line 1305).</p>
 <h3 id="idle-detection">Idle Detection<a class="headerlink" href="#idle-detection" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/IdleInputDetector.cs</code></p>
-<p>Step 2 feeds the #162 idle-disconnect countdown. <code>UpdateIdleDisconnect</code> (called from <code>UpdateInputStates</code> for each device) asks <code>IdleInputDetector</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> 471-473) whether the device counts as idle this poll. It skips the test when <code>IdleDisconnectSeconds</code> is 0 and on the first tick of a new connection:</p>
+<p>Step 2 feeds the #162 idle-disconnect countdown. <code>UpdateIdleDisconnect</code> (called from <code>UpdateInputStates</code> for each device) asks <code>IdleInputDetector</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> 487-489) whether the device counts as idle this poll. It skips the test when <code>IdleDisconnectSeconds</code> is 0 and on the first tick of a new connection:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kt">bool</span><span class="w"> </span><span class="n">idle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">CapType</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">InputDeviceType</span><span class="p">.</span><span class="n">Gamepad</span>
 <a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">    </span><span class="o">?</span><span class="w"> </span><span class="n">IdleInputDetector</span><span class="p">.</span><span class="n">IsGamepadIdle</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">OldInputState</span><span class="p">)</span>
 <a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="n">IdleInputDetector</span><span class="p">.</span><span class="n">IsUnchanged</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">OldInputState</span><span class="p">);</span>
@@ -7828,7 +7945,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <h2 id="trigger-rumble-routing">Trigger Rumble Routing<a class="headerlink" href="#trigger-rumble-routing" title="Permanent link">&para;</a></h2>
 <p><em>What this section covers: how a slot's main-motor rumble (the left/right vibration a game sends through XInput) gets copied or moved onto the two trigger feedback channels, Xbox impulse triggers and the DualSense adaptive-trigger (AT) Vibration, per issue #102.</em></p>
 <p>Routing sits on the force-feedback write path, not the input-mapping path. It reads each device's own post-gain main-motor amplitudes for each slot the device is on, the values Step 2's <a href="#force-feedback">Force Feedback</a> already resolved, and injects a derived value into the trigger output. The math lives in <code>InputManager.cs</code> (<code>UpdateTriggerRouteEngageStates</code>, <code>FindRouteCell</code>, <code>ParseRouteSource</code>, <code>RouteSideActive</code>, <code>ParseRouteScale</code>, <code>ApplyTriggerRouting</code>, <code>RouteMain</code>, <code>MarkRedirect</code>, <code>SettleRouteActivator</code>, <code>ApplyTriggerRoutingForSony</code>, <code>GetTriggerRouteMainRedirect</code>). Step 2's physical write applies it for every non-Sony device in <code>InputManager.Step2.UpdateInputStates.cs</code>, so a Redirect also silences a generic pad's main motors. The routed LT/RT reaches an Xbox pad's impulse triggers through <code>XboxImpulseHidWriter</code>, <code>SDL_RumbleGamepadTriggers</code> on another device with trigger motors, or the body motors when <code>TriggerRumbleFold</code> is on. On Sony pads, <code>InputService.SlotImpulseTriggerForDeviceProvider</code> carries the routed amplitude to a DualSense's AT Vibration, and <code>SlotRumbleForDeviceProvider</code> applies the Redirect silencing on DualShock 4 and DualSense alike. Both feed <code>UserEffectsDispatcher</code>.</p>
-<p>State settles once per poll. <code>PollingLoop(int generation, int pollRun)</code> calls <code>UpdateTriggerRouteEngageStates()</code> at <code>InputManager.cs</code> line 2123, after <code>UpdateInputStates()</code>, the Remote Link poll tick, and <code>UpdateGyroEngageStates()</code>. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.</p>
+<p>State settles once per poll. <code>PollingLoop(int generation, int pollRun)</code> calls <code>UpdateTriggerRouteEngageStates()</code> at <code>InputManager.cs</code> line 2135, after <code>UpdateInputStates()</code>, the Remote Link poll tick, and <code>UpdateGyroEngageStates()</code>. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.</p>
 <h3 id="route-source">Route Source<a class="headerlink" href="#route-source" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="nf">ParseRouteSource</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">switch</span>
 <a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="p">{</span>
@@ -7908,7 +8025,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <h3 id="per-tick-settle-updatetriggerrouteengagestates">Per-Tick Settle: UpdateTriggerRouteEngageStates<a class="headerlink" href="#per-tick-settle-updatetriggerrouteengagestates" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">UpdateTriggerRouteEngageStates</span><span class="p">()</span>
 </code></pre></div>
-<p>Runs once per poll across all 16 slots (<code>InputManager.cs</code> 2251-2361). The route lives on each device's own PadSetting, so the runtime keys it per (slot, device). A <code>TriggerRouteCell</code> holds one device's config plus its engaged and edge state.</p>
+<p>Runs once per poll across all 16 slots (<code>InputManager.cs</code> 2732-2842). The route lives on each device's own PadSetting, so the runtime keys it per (slot, device). A <code>TriggerRouteCell</code> holds one device's config plus its engaged and edge state.</p>
 <ol>
 <li>(4 Hz, <code>_triggerRouteCfgRefreshTick</code>, 250 ms, mirroring <code>UpdateHapticMirrorEngageStates</code>) For each created slot, under <code>UserSettings.SyncRoot</code>, every UserSetting mapped to the slot whose left or right side passes <code>RouteSideActive</code> gets a cell from <code>_routeCells</code>, keyed by (slot, InstanceGuid) so its engaged and edge state survive the refresh. The cell takes the per-side source byte (<code>ParseRouteSource</code>, zeroed when that side fails <code>RouteSideActive</code>), scale (<code>ParseRouteScale</code>), Redirect flag, and activator descriptor / device / mode. The slot publishes its cells as <code>_triggerRouteCfg[slot]</code>, or null when none is active. A cell missing from the new snapshot is disengaged, its edge state cleared, and dropped.</li>
 <li>(per poll) A null row clears <code>TriggerRouteEngagedLeft/Right[slot]</code> and continues. Otherwise each cell settles each side's activator with <code>SettleRouteActivator</code>, then ANDs it with the source-active flag: <code>cell.EngagedLeft = srcL &amp;&amp; leftSettled</code>. The activator is settled <strong>unconditionally</strong> (its edge state must advance even when the source is <code>None</code>) and gated afterward.</li>
@@ -7950,7 +8067,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyTriggerRouting</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainL</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainR</span><span class="p">,</span>
 <a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedLeft</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedRight</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">)</span>
 </code></pre></div>
-<p>Given one device's post-gain main-motor amplitudes on a slot, it emits the routed trigger amplitudes plus flags for which main motors to silence (<code>InputManager.cs</code> 2406-2430). It reads only that device's route cell (<code>FindRouteCell(slot, device)</code>). For each engaged side it calls <code>RouteMain(source, scale, mainL, mainR)</code> and, when Redirect is set, <code>MarkRedirect</code>:</p>
+<p>Given one device's post-gain main-motor amplitudes on a slot, it emits the routed trigger amplitudes plus flags for which main motors to silence (<code>InputManager.cs</code> 2887-2911). It reads only that device's route cell (<code>FindRouteCell(slot, device)</code>). For each engaged side it calls <code>RouteMain(source, scale, mainL, mainR)</code> and, when Redirect is set, <code>MarkRedirect</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="nf">RouteMain</span><span class="p">(</span><span class="kt">byte</span><span class="w"> </span><span class="n">source</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">scale</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainL</span><span class="p">,</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">mainR</span><span class="p">)</span>
 <a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="p">{</span>
 <a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">source</span><span class="w"> </span><span class="k">switch</span>
@@ -7978,7 +8095,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 </code></pre></div>
 <p><code>MacroTriggerRumbleOverrides[slot]</code> (a <code>MacroRumbleOverride</code>, populated by the Rumble Trigger Override macro action in Step 4b) is independent of the route activator, so it contributes even when both routing sides are disengaged. It max-combines the same way <code>MacroRumbleOverride</code> layers onto the main motors.</p>
 <h3 id="xbox-physical-write">Xbox Physical Write<a class="headerlink" href="#xbox-physical-write" title="Permanent link">&para;</a></h3>
-<p>In Step 2's physical-write path (<code>InputManager.Step2.UpdateInputStates.cs</code> 897-917), after the main motors are scaled per device and before the impulse motors are:</p>
+<p>In Step 2's physical-write path (<code>InputManager.Step2.UpdateInputStates.cs</code> 945-970), after the main motors are scaled per device and before the impulse motors are:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="n">ApplyTriggerRouting</span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">ud</span><span class="p">.</span><span class="n">InstanceGuid</span><span class="p">,</span><span class="w"> </span><span class="n">scaledL</span><span class="p">,</span><span class="w"> </span><span class="n">scaledR</span><span class="p">,</span>
 <a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedLT</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">ushort</span><span class="w"> </span><span class="n">routedRT</span><span class="p">,</span>
 <a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="w">    </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">);</span>
@@ -7988,7 +8105,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">routedLT</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedLT</span><span class="p">)</span><span class="w"> </span><span class="n">combinedLT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routedLT</span><span class="p">;</span><span class="w">   </span><span class="c1">// routed layers onto the</span>
 <a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">routedRT</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">combinedRT</span><span class="p">)</span><span class="w"> </span><span class="n">combinedRT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routedRT</span><span class="p">;</span><span class="w">    </span><span class="c1">// impulse-trigger output</span>
 </code></pre></div>
-<p>The routed amplitude layers onto the impulse-trigger output via <code>max()</code>, and the Redirect flags silence the physical main motors. A second call at 1662, in <code>ComputeFinalVibrationStates</code>, mirrors the same math for the motor meters (the Force Feedback tab and the Controller preview), so the meter reflects what the Scale slider is being tuned against.</p>
+<p>The routed amplitude layers onto the impulse-trigger output via <code>max()</code>, and the Redirect flags silence the physical main motors. A second call at line 1775, in <code>ComputeFinalVibrationStates</code>, mirrors the same math for the motor meters (the Force Feedback tab and the Controller preview), so the meter reflects what the Scale slider is being tuned against.</p>
 <h3 id="sony-write">Sony Write<a class="headerlink" href="#sony-write" title="Permanent link">&para;</a></h3>
 <p>DS4 / DualSense output belongs to <code>UserEffectsDispatcher</code>, which runs on its own 33 ms per-slot timer (the virtual-DualSense passthrough in <a href="#force-feedback">Force Feedback</a> is the one other writer). Two <code>InputManager</code> entry points serve it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="k">internal</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyTriggerRoutingForSony</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="n">PadSetting</span><span class="w"> </span><span class="n">devicePs</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span>
@@ -7996,8 +8113,8 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>
 <a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a><span class="k">internal</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">GetTriggerRouteMainRedirect</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainL</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">zeroMainR</span><span class="p">)</span>
 </code></pre></div>
-<p><code>ApplyTriggerRoutingForSony</code> (<code>InputManager.cs</code> 2465-2477) takes caller-owned scratch <code>Vibration</code> instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (<code>ResolveUserRumble</code>, which is <code>MacroRumbleOverride.Merge</code> plus the steering-angle rumble merge, then <code>ConstantForceEvaluator.Resolve</code>, then <code>ScaleRumbleForDevice</code>), runs <code>ApplyTriggerRouting</code> for that device, and max-combines the routed amplitudes into the caller's <code>triggerL</code> / <code>triggerR</code>. <code>GetTriggerRouteMainRedirect</code> reports whether that device's engaged Redirect routing should silence each main motor on the physical Sony pad, DualShock 4 included. The game-facing virtual-controller state is left untouched.</p>
-<p>The dispatcher reaches <code>ApplyTriggerRoutingForSony</code> through <code>InputService.SlotImpulseTriggerForDeviceProvider</code> (<code>InputService.cs</code> 1151-1237) and <code>GetTriggerRouteMainRedirect</code> through <code>SlotRumbleForDeviceProvider</code> (986-1121). The impulse provider deliberately carries <strong>no output-VC gate</strong>. It walks every UserSetting row for the device across all slots (honoring each slot's <code>TestRumbleTargetGuid</code>), runs the constant-trigger / scale / routing chain per row, and max-combines the results. It falls back to the padIndex-only path, with a null PadSetting and no route of its own, only when the device has no assignment rows at all:</p>
+<p><code>ApplyTriggerRoutingForSony</code> (<code>InputManager.cs</code> 2946-2958) takes caller-owned scratch <code>Vibration</code> instances to stay off the input thread's buffers. It rebuilds the main-motor amplitude the same way the Sony main-rumble provider does (<code>ResolveUserRumble</code>, which is <code>MacroRumbleOverride.Merge</code> plus the steering-angle rumble merge, then <code>ConstantForceEvaluator.Resolve</code>, then <code>ScaleRumbleForDevice</code>), runs <code>ApplyTriggerRouting</code> for that device, and max-combines the routed amplitudes into the caller's <code>triggerL</code> / <code>triggerR</code>. <code>GetTriggerRouteMainRedirect</code> reports whether that device's engaged Redirect routing should silence each main motor on the physical Sony pad, DualShock 4 included. The game-facing virtual-controller state is left untouched.</p>
+<p>The dispatcher reaches <code>ApplyTriggerRoutingForSony</code> through <code>InputService.SlotImpulseTriggerForDeviceProvider</code> (<code>InputService.cs</code> 1166-1252) and <code>GetTriggerRouteMainRedirect</code> through <code>SlotRumbleForDeviceProvider</code> (1001-1136). The impulse provider deliberately carries <strong>no output-VC gate</strong>. It walks every UserSetting row for the device across all slots (honoring each slot's <code>TestRumbleTargetGuid</code>), runs the constant-trigger / scale / routing chain per row, and max-combines the results. It falls back to the padIndex-only path, with a null PadSetting and no route of its own, only when the device has no assignment rows at all:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="n">UserEffectsDispatcher</span><span class="p">.</span><span class="n">SlotImpulseTriggerForDeviceProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">deviceGuid</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
 <a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="p">{</span>
 <a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="w">    </span><span class="kt">ushort</span><span class="w"> </span><span class="n">maxL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">maxR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">anyRow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">sawRow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
@@ -8490,7 +8607,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </table>
 <p><code>TogglePressLevel</code> is <code>SourceCoercion.EffectiveThresholdPercent(src, 50) / 100</code>: the source's own <code>DeadZone</code> when one is set, otherwise half travel.</p>
 <p>State lives in <code>_toggleState</code>, keyed <code>(slot, target, layer, srcIdx)</code>, an empty layer reading as Base, so a same-target row on another shift layer keeps a latch of its own. The accumulators keep <code>(slot, target, srcIdx)</code>. The latch flips on the rising edge of a press, the rule the macro Toggle (<code>MacroTriggerMode.Toggle</code> in <code>InputManager.Step4b.EvaluateMacros.cs</code>) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and <code>FlippedThisFrame</code> allows one flip per frame. <code>BuildCustomContribsForButton</code> reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (<code>InputManager.Step3.MappingSetEval.cs</code> line 4198). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. <code>Clear</code>, <code>ResetForSlot</code>, and <code>ResetForRow</code> drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.</p>
-<p><code>SourceEvaluator.IsDescriptorKind</code> names Direct, Toggle and Rapid Trigger as the kinds that read their own descriptor. <code>IsUnmappedDirect</code> counts a blank Toggle or Rapid Trigger as a blank position. <code>MappingItem.IsPrimaryDescriptor</code> keeps the Source picker and the Record button on a Toggle or Rapid Trigger row. The save and load paths route either primary through the descriptor branch with its kind (<code>MappingSourceItem.DescriptorKind</code>), a Rapid Trigger one with its <code>ParamRapidTriggerDistance</code>, and the legacy merge keeps an any-device Toggle or Rapid Trigger row as authored, as it does an any-device Direct row (<code>SettingsService.cs</code> line 2116).</p>
+<p><code>SourceEvaluator.IsDescriptorKind</code> names Direct, Toggle and Rapid Trigger as the kinds that read their own descriptor. <code>IsUnmappedDirect</code> counts a blank Toggle or Rapid Trigger as a blank position. <code>MappingItem.IsPrimaryDescriptor</code> keeps the Source picker and the Record button on a Toggle or Rapid Trigger row. The save and load paths route either primary through the descriptor branch with its kind (<code>MappingSourceItem.DescriptorKind</code>), a Rapid Trigger one with its <code>ParamRapidTriggerDistance</code>, and the legacy merge keeps an any-device Toggle or Rapid Trigger row as authored, as it does an any-device Direct row (<code>SettingsService.cs</code> line 2149).</p>
 <h4 id="tickrapidtrigger-rapid-trigger-482">TickRapidTrigger: Rapid Trigger (#482)<a class="headerlink" href="#tickrapidtrigger-rapid-trigger-482" title="Permanent link">&para;</a></h4>
 <p><code>SourceKindRuntime.TickRapidTrigger</code> (<code>SourceKindRuntime.cs</code> line 493) runs libhmk's Rapid Trigger state machine (<code>matrix_scan</code> in <code>src/matrix.c</code>, the non-continuous mode, where the actuation point is also the reset point) over a source's Direct read. The evaluator passes three values:</p>
 <table>
@@ -8533,8 +8650,8 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p>Each tick also updates a per-row at-lock state machine (Enter/Exit edges + saturation magnitude). After the bipolar writes, <code>InputManager.Step3.SteeringLockFeedback</code> reads those edges and fires the opt-in feedback channels (rumble, impulse, lightbar, adaptive-trigger resistance). See <a href="../../guides/steering/">Steering</a>.</p>
 <p>The steering math is original C# written from the geometry described in JoyShockMapper (<code>src/JoyShock.cpp</code>, <code>src/main.cpp</code>). No GPL code is incorporated.</p>
 <h3 id="motion-shake">Motion Shake<a class="headerlink" href="#motion-shake" title="Permanent link">&para;</a></h3>
-<p>Two descriptors read an accelerometer shake as a source (#364): <code>"Motion Shake"</code> on the body sensor and <code>"Motion Shake L"</code> on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on <code>SourceCoercion</code> (<code>SourceCoercion.cs</code> lines 2508 and 2506), with <code>IsMotionShakeDescriptor</code> / <code>IsMotionShakeAuxDescriptor</code> as the predicates.</p>
-<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14432), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
+<p>Two descriptors read an accelerometer shake as a source (#364): <code>"Motion Shake"</code> on the body sensor and <code>"Motion Shake L"</code> on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on <code>SourceCoercion</code> (<code>SourceCoercion.cs</code> lines 2508 and 2513), with <code>IsMotionShakeDescriptor</code> / <code>IsMotionShakeAuxDescriptor</code> as the predicates.</p>
+<p>The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (<code>InputService.UpdateShakeState</code>, <code>InputService.cs</code> line 14556), and handed to the engine through <code>SourceCoercion.ShakeEnvelopeProvider</code> / <code>ShakeEnvelopeProviderAux</code>. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (<code>InputCommon</code> <code>Force.cpp</code>, <code>Shake::Shake</code>), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.</p>
 <p><code>ReadShakeEnvelope</code> (<code>SourceCoercion.cs</code> line 2538) applies the per-source sensitivity and clamps to <code>[0, 1]</code>. The envelope is unsigned by nature, so <code>HalfAxis</code> and <code>Invert</code> have nothing to point at and are not applied. Per target class:</p>
 <table>
 <thead>
@@ -9452,10 +9569,15 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-77-69" name="__codelineno-77-69" href="#__codelineno-77-69"></a><span class="w">                               </span><span class="c1">// is a decaying heartbeat, so a macro that dies mid-hold</span>
 <a id="__codelineno-77-70" name="__codelineno-77-70" href="#__codelineno-77-70"></a><span class="w">                               </span><span class="c1">// closes it about 100 ms later instead of latching on</span>
 <a id="__codelineno-77-71" name="__codelineno-77-71" href="#__codelineno-77-71"></a><span class="w">    </span><span class="c1">// Appended in 4.4.0</span>
-<a id="__codelineno-77-72" name="__codelineno-77-72" href="#__codelineno-77-72"></a><span class="w">    </span><span class="n">SwitchLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">55</span><span class="w">           </span><span class="c1">// Switch the slot&#39;s engaged shift layer (#377). One-shot,</span>
+<a id="__codelineno-77-72" name="__codelineno-77-72" href="#__codelineno-77-72"></a><span class="w">    </span><span class="n">SwitchLayer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">55</span><span class="p">,</span><span class="w">          </span><span class="c1">// Switch the slot&#39;s engaged shift layer (#377). One-shot,</span>
 <a id="__codelineno-77-73" name="__codelineno-77-73" href="#__codelineno-77-73"></a><span class="w">                               </span><span class="c1">// writes the shift runtime&#39;s CustomLayer override with the</span>
 <a id="__codelineno-77-74" name="__codelineno-77-74" href="#__codelineno-77-74"></a><span class="w">                               </span><span class="c1">// Latch activator&#39;s own lock-and-version discipline</span>
-<a id="__codelineno-77-75" name="__codelineno-77-75" href="#__codelineno-77-75"></a><span class="p">}</span>
+<a id="__codelineno-77-75" name="__codelineno-77-75" href="#__codelineno-77-75"></a><span class="w">    </span><span class="c1">// Appended in 5.0.0</span>
+<a id="__codelineno-77-76" name="__codelineno-77-76" href="#__codelineno-77-76"></a><span class="w">    </span><span class="n">SetChromaColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">56</span><span class="p">,</span><span class="w">       </span><span class="c1">// Paint the Razer devices assigned to the macro&#39;s slot one</span>
+<a id="__codelineno-77-77" name="__codelineno-77-77" href="#__codelineno-77-77"></a><span class="w">                               </span><span class="c1">// color while the action runs (#468, #494). See below</span>
+<a id="__codelineno-77-78" name="__codelineno-77-78" href="#__codelineno-77-78"></a><span class="w">    </span><span class="n">ShowDreamcastScreen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">57</span><span class="w">   </span><span class="c1">// Play one to eight pictures on the VMU of each Dreamcast pad</span>
+<a id="__codelineno-77-79" name="__codelineno-77-79" href="#__codelineno-77-79"></a><span class="w">                               </span><span class="c1">// in a Bliss-Box port that feeds the slot (#469). One-shot</span>
+<a id="__codelineno-77-80" name="__codelineno-77-80" href="#__codelineno-77-80"></a><span class="p">}</span>
 </code></pre></div>
 <p>The cursor actions, the rumble/trigger overrides, the sound actions, and the lightbar / pointer / gyro-engage actions each have their own execution path documented in the sections above and in <a href="../../features/mappings/">Button and Axis Mappings</a>.</p>
 <h3 id="action-execution-architecture">Action Execution Architecture<a class="headerlink" href="#action-execution-architecture" title="Permanent link">&para;</a></h3>
@@ -9497,7 +9619,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <p><em>Covers the JSON clipboard format and deep-copy roundtrip behind macro Copy/Paste/Duplicate (#112), the three cursor-write macro actions (#108/#109/#110), and the slot fire-guard that keeps a copied macro from firing off a foreign device.</em></p>
 <p>The macro QOL work (#112) moved copy, paste, and duplicate onto a shared serialize/rebuild pair, and #108/#109/#110 added three macro actions that drive the desktop cursor through the same <code>CursorControlService</code> that feeds the Mouse Position sources.</p>
 <h4 id="macro-clipboard-codec-112">Macro clipboard codec (#112)<a class="headerlink" href="#macro-clipboard-codec-112" title="Permanent link">&para;</a></h4>
-<p>Copy and paste cross the Windows clipboard as JSON. The envelope is defined in <code>SettingsService.cs</code> (~5085):</p>
+<p>Copy and paste cross the Windows clipboard as JSON. The envelope is defined in <code>SettingsService.cs</code> (line 5336):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="k">public</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MacroClipboardEnvelope</span>
 <a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a><span class="p">{</span>
 <a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">      </span><span class="c1">// &quot;PadForgeMacro&quot;</span>
@@ -9549,12 +9671,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8336)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8333)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8395)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8392)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)</code> -&gt; set <code>PadIndex</code> -&gt; clear <code>LayerMask</code> unless <code>DestinationDeclaresLayer</code> -&gt; add</td>
 </tr>
 <tr>
@@ -9566,7 +9688,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </table>
 <p><code>LoadMacroFromData</code> rebinds only the display side to the destination: button naming (<code>ButtonStyle</code>), the custom-button width, and the raw profile id. Trigger and action button values travel verbatim, so an Xbox-slot macro copied into an Extended slot keeps its Xbox bitmask and reads as inert until it is re-bound.</p>
 <h4 id="cursor-write-macro-actions-108-109-110">Cursor-write macro actions (#108 / #109 / #110)<a class="headerlink" href="#cursor-write-macro-actions-108-109-110" title="Permanent link">&para;</a></h4>
-<p>Three <code>MacroActionType</code> members (#108/#109/#110) drive the desktop cursor through <code>CursorControlService</code>, and <code>MoveMouseToScreenPosition</code> (#9) is a fourth (<code>MoveCursorTo</code>, one <code>SetCursorPos</code> per fire). They are handled in <code>ExecuteSequentialAction</code> (the standard-slot path, <code>InputManager.Step4b.EvaluateMacros.cs</code> cases from line 3189) and mirrored in <code>ExecuteSequentialActionRaw</code> (the custom-Extended path, cases from line 5382), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (<code>_currentMacroSlotRestricted</code>, #138), it calls into <code>CursorControlService.Active</code> (the running service, null while the engine is stopped), then <code>AdvanceAction(macro)</code>, so with an <code>OnPress</code> trigger it fires once per press.</p>
+<p>Three <code>MacroActionType</code> members (#108/#109/#110) drive the desktop cursor through <code>CursorControlService</code>, and <code>MoveMouseToScreenPosition</code> (#9) is a fourth (<code>MoveCursorTo</code>, one <code>SetCursorPos</code> per fire). They are handled in <code>ExecuteSequentialAction</code> (the standard-slot path, <code>InputManager.Step4b.EvaluateMacros.cs</code> cases from line 3229) and mirrored in <code>ExecuteSequentialActionRaw</code> (the custom-Extended path, cases from line 5423), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (<code>_currentMacroSlotRestricted</code>, #138), it calls into <code>CursorControlService.Active</code> (the running service, null while the engine is stopped), then <code>AdvanceAction(macro)</code>, so with an <code>OnPress</code> trigger it fires once per press.</p>
 <table>
 <thead>
 <tr>
@@ -9602,14 +9724,14 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </ol>
 <p>Because the pin/clamp writes and the source sample run on this one thread in that fixed order, the value <code>ReadTunedMouseCursor</code> later reads for a Mouse Position source is always the post-write position. The pin/clamp toggles from the macro evaluator only flip a <code>volatile</code> enable flag and publish config (released before the flag is set), so the timer never reads a half-set target. <code>RecenterCursor</code> and <code>MoveCursorTo</code> are the exceptions: each is a one-shot <code>SetCursorPos</code> issued from the engine thread with no ongoing enforcement, and the next tick (&lt;=5 ms later) re-samples so the recentered axes report 0. See <a href="../../features/mappings/">Button and Axis Mappings</a> for the Mouse Position X/Y sources these actions pair with.</p>
 <h4 id="slot-device-fire-guard-findslotdevicebyinstanceguid">Slot device fire-guard (<code>FindSlotDeviceByInstanceGuid</code>)<a class="headerlink" href="#slot-device-fire-guard-findslotdevicebyinstanceguid" title="Permanent link">&para;</a></h4>
-<p>A macro must fire only from a device assigned to its own slot. <code>FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)</code> (<code>InputManager.Step4b.EvaluateMacros.cs:1856</code>) enforces this with two checks before returning a device:</p>
+<p>A macro must fire only from a device assigned to its own slot. <code>FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)</code> (<code>InputManager.Step4b.EvaluateMacros.cs:1857</code>) enforces this with two checks before returning a device:</p>
 <ol>
 <li><code>SettingsManager.FindSettingByInstanceGuidAndSlot(instanceGuid, slotIndex)</code> must be non-null, confirming the device is assigned to this macro's slot.</li>
 <li><code>FindOnlineDeviceByInstanceGuid(instanceGuid)</code> must find the device in <code>UserDevices</code>. It matches on GUID alone, so the trigger checks then require <code>IsOnline</code> and a live <code>InputState</code> with a <code>Buttons</code> / <code>Povs</code> array.</li>
 </ol>
 <p><code>Guid.Empty</code> short-circuits to <code>null</code>. Both raw-trigger checks route every device lookup through this guard: <code>CheckRawButtonTrigger</code> uses it on each <code>MacroItem.GetTriggerInputEntries()</code> entry (the multi-device path) and on the legacy <code>TriggerDeviceGuid</code> single-device fallback, and <code>CheckRawPovTrigger</code> does the same for POV entries. Without it, a macro copied (via the codec above) into a slot that does not hold its trigger device would still fire from that foreign device on another slot's controller (#112).</p>
 <h3 id="switch-layer">Switch Layer<a class="headerlink" href="#switch-layer" title="Permanent link">&para;</a></h3>
-<p><code>MacroActionType.SwitchLayer</code> (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: <code>ExecuteSequentialAction</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code>, case at line 3106) for standard slots and <code>ExecuteSequentialActionRaw</code> (case at line 5617) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with <code>CurrentActionIndex</code> frozen. Both cases call <code>AdvanceAction(macro)</code>, so the action is one-shot per fire.</p>
+<p><code>MacroActionType.SwitchLayer</code> (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: <code>ExecuteSequentialAction</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code>, case at line 3146) for standard slots and <code>ExecuteSequentialActionRaw</code> (case at line 5658) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with <code>CurrentActionIndex</code> frozen. Both cases call <code>AdvanceAction(macro)</code>, so the action is one-shot per fire.</p>
 <p>The work happens in <code>ApplyMacroLayerSwitch(slotIndex, mask)</code> (<code>InputManager.Step3.MappingSetEval.cs</code> line 1221), which lives with the shift runtime rather than with the macro engine. The slot is always the macro's own <code>PadIndex</code>, the #254 per-layer macro scope identity:</p>
 <ul>
 <li><strong>The mask is validated inside the operation.</strong> A mask no <code>ShiftActivator</code> on the slot's <code>MappingSet</code> declares is a no-op, so an action left behind by a layer rename or delete goes inert instead of engaging a rowless layer.</li>
@@ -9618,6 +9740,9 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 </ul>
 <p>The runtime is created on demand, the same as in <code>ResolveActiveLayerMask</code>, because a macro can fire before the resolver's first pass over the slot has built it.</p>
 <p>Combined with the #254 per-layer macro scope, the same physical button can jump to a different layer per engaged layer, which is the action-set-layer graph shape. The activator-side twin is <a href="#the-shiftactivator-dto"><code>HostLayerMask</code></a>.</p>
+<h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
+<p><code>MacroActionType.SetChromaColor</code> (#468) has the <code>AxisHold</code> duration shape. Both evaluators run it on every frame it is current (<code>ExecuteSequentialAction</code>, case at <code>InputManager.Step4b.EvaluateMacros.cs</code> line 2949, and <code>ExecuteSequentialActionRaw</code>, case at line 5295) and advance once <code>DurationMs</code> passes. The case sends nothing itself. <code>NoteChromaColor</code> (line 2828) records the color in <code>_frameChroma</code>, one packed <code>0x00RRGGBB</code> entry per slot, so two macros current in one frame leave the last one evaluated. <code>FlushChromaColors</code> (line 2837) runs at the end of <code>EvaluateSlotMacros</code> and of <code>EvaluateSlotMacrosExtended</code> (the calls at lines 925 and 4921) and hands each recorded color to <code>MacroChromaSink</code> once, which is <code>PeripheralOutputs.AssertChromaMacro</code> (#494, <code>PeripheralOutputs.cs</code> line 596).</p>
+<p>The assertion stamps the slot's color with the tick and wakes the Chroma worker only for a new color, or for the first frame after a gap longer than <code>MacroAssertWindowMs</code> (120 ms, line 580). The worker paints the Chroma categories of the Razer devices assigned to the macro's slot, every category when the Razer Chroma row is, over any Lighting-tab claim and whether or not those tabs control the devices. Chroma addresses categories, so every other Razer device of those kinds takes the color too. The color lapses 120 ms after the last assertion and the categories go back to their claims or to Synapse. When two slots' macros paint one category, the smaller displayed player number wins. See <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
 <h3 id="consumetriggerbuttons">ConsumeTriggerButtons<a class="headerlink" href="#consumetriggerbuttons" title="Permanent link">&para;</a></h3>
 <p>When <code>macro.ConsumeTriggerButtons</code> is true (the default), each macro adds its trigger bits to a per-pass mask while the consume condition holds: trigger active and the macro executing, the raw button held for <code>Toggle</code>, and trigger active or executing for <code>ShortPress</code>. After the walk the evaluator strips the mask once and re-asserts every bit a macro wrote this pass:
 - For standard slots: <code>gp.Buttons = (gp.Buttons &amp; ~consumed) | _macroPassOutputButtons</code>, for Xbox-bitmask triggers
@@ -10062,8 +10187,14 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tr>
 <td><strong>HIDMaestro callbacks</strong> (SDK threads: <code>HMOutputReader_{index}</code> per controller, <code>HMVRController.HapticLoop</code> for VR)</td>
 <td>Game rumble and FFB feedback</td>
-<td><code>VibrationStates[padIndex]</code>: body motors, impulse-trigger motors, PID FFB fields</td>
+<td><code>VibrationStates[padIndex]</code>: body motors, impulse-trigger motors, PID FFB fields. A Sony virtual's reader also records the game's lightbar (<code>GameLightbar</code>, #494)</td>
 <td>(none)</td>
+</tr>
+<tr>
+<td><strong>Peripheral host</strong> (<code>PeripheralLink</code>, <code>PeripheralHidpp</code>, <code>PeripheralGameSense</code> and <code>SensaHaptics</code> threads, Chroma and LED SDK tasks, #494)</td>
+<td>Link device rows to vendor paths, play levels, paint colors</td>
+<td>The link table (swapped whole), backend states, <code>UserDevice.PeripheralOutputs</code></td>
+<td>Haptic levels from Step 2, lighting claims from the effects dispatchers, Set Chroma Color assertions from Step 4b</td>
 </tr>
 </tbody>
 </table>
@@ -10127,7 +10258,14 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-93-47" name="__codelineno-93-47" href="#__codelineno-93-47"></a>            - Sony (DS4/DualSense): UserEffectsDispatcher (sole writer, SDL skipped)
 <a id="__codelineno-93-48" name="__codelineno-93-48" href="#__codelineno-93-48"></a>            - Xbox One+ (One/Elite/Series): XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
 <a id="__codelineno-93-49" name="__codelineno-93-49" href="#__codelineno-93-49"></a>            - Logitech / Fanatec / Thrustmaster wheels, Fanatec pedals, Padix converters: vendor raw HID writers (SDL skipped)
-<a id="__codelineno-93-50" name="__codelineno-93-50" href="#__codelineno-93-50"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
+<a id="__codelineno-93-50" name="__codelineno-93-50" href="#__codelineno-93-50"></a>            - Haptic mice and keyboards, the Razer Sensa row: PeripheralOutputs.SetMotors, played by the
+<a id="__codelineno-93-51" name="__codelineno-93-51" href="#__codelineno-93-51"></a>              HID++, GameSense or Interhaptics worker (SDL skipped, #494)
+<a id="__codelineno-93-52" name="__codelineno-93-52" href="#__codelineno-93-52"></a>            - Everything else: SDL_RumbleJoystick / SDL haptic effects
+<a id="__codelineno-93-53" name="__codelineno-93-53" href="#__codelineno-93-53"></a>
+<a id="__codelineno-93-54" name="__codelineno-93-54" href="#__codelineno-93-54"></a>    &lt;--- Lighting path for mice, keyboards and vendor rows (#494) ---&gt;
+<a id="__codelineno-93-55" name="__codelineno-93-55" href="#__codelineno-93-55"></a>Game writes a DS4 / DualSense lightbar  -&gt;  HMController.OutputDecoded  -&gt;  GameLightbarCapture[slot]
+<a id="__codelineno-93-56" name="__codelineno-93-56" href="#__codelineno-93-56"></a>    -&gt;  the slot&#39;s UserEffectsDispatcher: LightPeripheral (Lighting tab mode under the game&#39;s color)
+<a id="__codelineno-93-57" name="__codelineno-93-57" href="#__codelineno-93-57"></a>    -&gt;  PeripheralOutputs.SetLighting claim  -&gt;  HID++, Chroma, LED SDK or GameSense worker
 </code></pre></div>
 <hr />
 <h2 id="key-types-reference">Key Types Reference<a class="headerlink" href="#key-types-reference" title="Permanent link">&para;</a></h2>
@@ -10253,6 +10391,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <li><a href="../sdl3-integration/">SDL3 Integration</a>: SDL3 P/Invoke, <code>SdlDeviceWrapper</code>, sensor reading, haptic</li>
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>SettingsManager</code> slot arrays, <code>PadSetting</code> mapping descriptors</li>
 <li><a href="../dsu-protocol/">DSU Protocol Implementation</a>: <code>DsuMotionServer</code> broadcast called after Step 2</li>
+<li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: The workers behind Step 2's haptic peripherals, the dispatcher's peripheral lighting and Set Chroma Color</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

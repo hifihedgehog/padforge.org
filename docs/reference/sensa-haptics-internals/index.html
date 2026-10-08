@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/reference/sensa-haptics-internals/">
       
       
-        <link rel="prev" href="../lightbar-mirrors-internals/">
+        <link rel="prev" href="../peripheral-outputs-internals/">
       
       
         <link rel="next" href="../vr-controllers-internals/">
@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -2911,14 +2911,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -3010,6 +3010,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-razer-sensa-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Razer Sensa row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bindings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3051,13 +3062,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Worker lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-host-runs-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The host runs it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#rumble-to-haptic" class="md-nav__link">
+  <a href="#the-rows-level" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rumble to haptic
+        The row's level
       
     </span>
   </a>
@@ -3065,10 +3093,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ownership-and-persistence" class="md-nav__link">
+  <a href="#the-status-line" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ownership and persistence
+        The status line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#persistence-and-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence and migration
       
     </span>
   </a>
@@ -3543,6 +3582,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-razer-sensa-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Razer Sensa row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#bindings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3584,13 +3634,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Worker lifecycle">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-host-runs-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The host runs it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#rumble-to-haptic" class="md-nav__link">
+  <a href="#the-rows-level" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rumble to haptic
+        The row's level
       
     </span>
   </a>
@@ -3598,10 +3665,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ownership-and-persistence" class="md-nav__link">
+  <a href="#the-status-line" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ownership and persistence
+        The status line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#persistence-and-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Persistence and migration
       
     </span>
   </a>
@@ -3648,8 +3726,8 @@
 
 
 <h1 id="sensa-haptics-internals">Sensa Haptics: Internals<a class="headerlink" href="#sensa-haptics-internals" title="Permanent link">&para;</a></h1>
-<p><em>How controller rumble becomes a Razer Sensa HD effect: the Interhaptics bindings, the provider bring-up and its retry sentinel, the worker lifecycle, and the rumble lane that feeds it.</em></p>
-<p>The user-facing page is <a href="../../features/lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>. This one is for whoever has to change the code.</p>
+<p><em>How a virtual controller's rumble becomes a Razer Sensa HD effect: the Razer Sensa row, the Interhaptics bindings, the provider bring-up and its retry sentinel, the worker and the host that runs it, and the level Step 2 hands it.</em></p>
+<p>The user-facing page is <a href="../../features/peripherals/">Mice, Keyboards and Vendor Rows</a>. This one is for whoever has to change the code. The row runs through the hub and the link pass that the haptic mice and the lighting rows use, and its level is kept the way a haptic mouse's is. <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a> covers both.</p>
 <table>
 <thead>
 <tr>
@@ -3660,19 +3738,39 @@
 <tbody>
 <tr>
 <td><code>PadForge.App/Services/SensaHapticsService.cs</code></td>
-<td>The bindings, the worker, the publish surface</td>
+<td>The bindings and the worker</td>
 </tr>
 <tr>
-<td><code>PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs</code></td>
-<td><code>UpdateSensaLane</code>, the per-tick feed</td>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputRow.cs</code></td>
+<td>The Razer Sensa row</td>
 </tr>
 <tr>
-<td><code>PadForge.App/Common/Input/InputManager.cs</code></td>
-<td>The call site, after <code>UpdateRumbleAudioLane</code> in the poll loop</td>
+<td><code>PadForge.App/Common/Input/InputManager.PeripheralRows.cs</code></td>
+<td>Step 1 phase 1m: the row opens and retires</td>
 </tr>
 <tr>
-<td><code>PadForge.App/Services/InputService.cs</code></td>
-<td><code>StartSensaIfEnabled</code>, <code>StopSensaService</code>, status marshaling</td>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralLinker.cs</code></td>
+<td>Presence, and the row's <code>Interhaptics</code> path</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputHost.cs</code></td>
+<td><code>SensaLifecycle</code>: the worker runs while the row is assigned</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputs.cs</code></td>
+<td>The row's level and the backend state</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step2.UpdateInputStates.cs</code></td>
+<td><code>ApplyForceFeedback</code>, which sets the level</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralRouteText.cs</code></td>
+<td>The Force Feedback tab's line</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/PeripheralSwitchMigration.cs</code></td>
+<td>The retired Dashboard switch becomes an assignment</td>
 </tr>
 <tr>
 <td><code>PadForge.App/PadForge.App.csproj</code></td>
@@ -3686,12 +3784,20 @@
 <td><code>PadForge.Tests/SensaHapticsTests.cs</code></td>
 <td>The bench, which runs the real engine</td>
 </tr>
+<tr>
+<td><code>PadForge.Tests/PeripheralOutputsTests.cs</code></td>
+<td>The row, its level, its route line and the migration</td>
+</tr>
 </tbody>
 </table>
 <hr />
 <h2 id="why-the-engine-layer">Why the engine layer<a class="headerlink" href="#why-the-engine-layer" title="Permanent link">&para;</a></h2>
 <p>Razer's game-facing surface (the WYVRN SDK) plays only pre-authored named clips and carries no amplitude channel. One layer down is public: the Interhaptics Core SDK, whose parametric API takes an amplitude at runtime. The shipping Unity integration, <code>WyvrnOfficial/Interhaptics_Unity_CoreSDK</code>, carries the proven call order, and the bring-up and per-tick calls here mirror it function for function. Teardown differs: Unity's quit path cleans the providers, clears the active and inactive events, then quits, while this worker calls <code>StopAllEvents</code>, <code>ProviderClean</code>, and <code>Quit</code>. The Unity reference makes every call from one thread, and so does this worker.</p>
 <p>The two DLLs are vendored from that repository's <code>Runtime/Plugins/x64</code>, the same pair every Unity title embedding the SDK redistributes. They ship unmodified inside the executable under the Wyvrn EULA (see the README's third-party section). The csproj includes them as <code>Content</code> with <code>Link</code> so they land beside the executable, conditioned on the files existing, and the service P/Invokes them lazily so a missing pair degrades to a diag line.</p>
+<hr />
+<h2 id="the-razer-sensa-row">The Razer Sensa row<a class="headerlink" href="#the-razer-sensa-row" title="Permanent link">&para;</a></h2>
+<p>The engine targets body parts, never one device, so one row stands for every Sensa HD device at once. <code>PeripheralOutputRow</code> (<code>PeripheralOutputRow.cs</code> line 44) with kind <code>RazerSensa</code> is a device with no inputs: name Razer Sensa, path <code>razersensa://local</code>, vendor ID <code>0x5046</code>, product ID <code>0x5345</code>, device type <code>PeripheralHaptics</code>, and an id hashed from <code>pfrazersensa</code> (<code>PeripheralOutputRow.IdentityFor</code> (<code>PeripheralOutputRow.cs</code> line 91)), so an assignment of it survives across sessions.</p>
+<p>Step 1's phase 1m opens the row while <code>InputManager.PeripheralRowWanted</code> (<code>InputManager.PeripheralRows.cs</code> line 20) holds: Synapse's Chroma runtime is installed and the process is x64 (<code>PlatformSupport.SensaAvailable</code>). <code>PeripheralLinker.Build</code> (<code>PeripheralLinker.cs</code> line 149) gives it the one <code>Interhaptics</code> path, <code>sensa</code>, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback tab a gamepad gets, with the controller's rumble reaching it through its own settings.</p>
 <hr />
 <h2 id="bindings">Bindings<a class="headerlink" href="#bindings" title="Permanent link">&para;</a></h2>
 <p>The <code>Har</code> class mirrors <code>HAR.Native.cs</code> from the Unity SDK verbatim: same names, same signatures, default marshaling. The DLL name is <code>HAR</code>.</p>
@@ -3785,7 +3891,7 @@
 </code></pre></div>
 <hr />
 <h2 id="call-order">Call order<a class="headerlink" href="#call-order" title="Permanent link">&para;</a></h2>
-<p>The worker follows the Unity integration's <code>HapticDeviceManager</code> and <code>HAR.PlayParametricHapticEffect</code>:</p>
+<p>The worker (<code>SensaHapticsService.Worker</code> (<code>SensaHapticsService.cs</code> line 218)) follows the Unity integration's <code>HapticDeviceManager</code> and <code>HAR.PlayParametricHapticEffect</code>:</p>
 <table>
 <thead>
 <tr>
@@ -3808,7 +3914,7 @@
 </tr>
 <tr>
 <td>4. Per tick</td>
-<td>Read the published amplitude. If it changed, <code>SetEventIntensity(id, amp)</code>. Then <code>ComputeAllEvents(clock.Elapsed.TotalSeconds)</code>, and only when the provider is up and <code>ProviderIsPresent()</code> is true, <code>ProviderRenderHaptics()</code>. Sleep <code>tickMs</code>.</td>
+<td>Read the row's level. If it changed, <code>SetEventIntensity(id, amp)</code>. Then <code>ComputeAllEvents(clock.Elapsed.TotalSeconds)</code>, and only when the provider is up and <code>ProviderIsPresent()</code> is true, <code>ProviderRenderHaptics()</code>. Sleep <code>tickMs</code>.</td>
 </tr>
 <tr>
 <td>5. Teardown</td>
@@ -3822,114 +3928,80 @@
 <p>The provider is retried every <code>retryMs</code> (default 30000) while it is down. The sentinel is seeded one full interval in the past:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">long</span><span class="w"> </span><span class="n">lastProviderTry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">TickCount64</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">_retryMs</span><span class="p">;</span>
 </code></pre></div>
-<p>The original code seeded <code>long.MinValue</code>. <code>TickCount64 - long.MinValue</code> overflows negative, the <code>&gt;= _retryMs</code> test never passed, and the retry block silently never entered while the worker looked healthy in its tick loop. A live stack dump found it after log lines only bracketed the hang. <code>ProviderInitAttempts</code> counts every attempt, so the first attempt is a tested fact: <code>SensaHapticsTests.Service_ArmsPublisherAndDegradesWithoutRuntime</code> asserts it is at least one. No test times the 30-second interval.</p>
+<p>The original code seeded <code>long.MinValue</code>. <code>TickCount64 - long.MinValue</code> overflows negative, the <code>&gt;= _retryMs</code> test never passed, and the retry block silently never entered while the worker looked healthy in its tick loop. A live stack dump found it after log lines only bracketed the hang. <code>ProviderInitAttempts</code> counts every attempt, so the first attempt is a tested fact: <code>SensaHapticsTests.Service_StartsTheEngineAndDegradesWithoutRuntime</code> asserts it is at least one. No test times the 30-second interval.</p>
 <p><code>BeforeProviderInit</code> is an internal static hook that runs on the worker immediately before <code>ProviderInit</code>, so a test can hold a worker inside the bring-up window.</p>
 <p>On success the worker reports <code>Active</code>. The provider stays up for the life of the worker. There is no liveness probe against Synapse after that.</p>
 <hr />
 <h2 id="worker-lifecycle">Worker lifecycle<a class="headerlink" href="#worker-lifecycle" title="Permanent link">&para;</a></h2>
-<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>Start</code> is a no-op while <code>_thread</code> is set. In a process that cannot load the engine (<code>PlatformSupport.SensaAvailable</code> is true only for x64), <code>Start</code> reports <code>Unsupported</code> on the caller's thread and starts no worker. <code>Stop</code> sets <code>_stop</code>, joins for 3000 ms, and nulls <code>_thread</code> regardless, so a worker still inside <code>ProviderInit</code> can outlive its service.</p>
-<p>That outliving worker is the predecessor-join rule. Its <code>finally</code> disarms the publisher, zeroes the amplitude, and calls <code>Har.Quit</code>, and if it ran under the next instance's engine it would tear that engine down. So every worker's first act is:</p>
+<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>SensaHapticsService.Start</code> (<code>SensaHapticsService.cs</code> line 192) is a no-op while <code>_thread</code> is set. In a process that cannot load the engine (<code>PlatformSupport.SensaAvailable</code> is true only for x64), <code>Start</code> reports <code>Unsupported</code> on the caller's thread and starts no worker. <code>SensaHapticsService.Stop</code> (<code>SensaHapticsService.cs</code> line 205) sets <code>_stop</code>, joins for 3000 ms, and nulls <code>_thread</code> regardless, so a worker still inside <code>ProviderInit</code> can outlive its service.</p>
+<p>That outliving worker is the predecessor-join rule. Its <code>finally</code> stops the engine's events, cleans the provider and calls <code>Har.Quit</code>, and if it ran under the next instance's engine it would tear that engine down. So every worker's first act is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Interlocked</span><span class="p">.</span><span class="n">Exchange</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_lastWorker</span><span class="p">,</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">);</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="p">.</span><span class="n">IsAlive</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">prev</span><span class="p">.</span><span class="n">Join</span><span class="p">(</span><span class="n">_predecessorJoinMs</span><span class="p">))</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">{</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_lastWorker</span><span class="p">,</span><span class="w"> </span><span class="n">prev</span><span class="p">,</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">);</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">PadForge</span><span class="p">.</span><span class="n">Engine</span><span class="p">.</span><span class="n">SdlDiagLog</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="s">$&quot;SENSA predecessor join timed out after {_predecessorJoinMs} ms, worker quitting without arming&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="s">$&quot;SENSA predecessor join timed out after {_predecessorJoinMs} ms, worker quitting&quot;</span><span class="p">);</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="c1">// finally reports Stopped.</span>
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_publisherArmed</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">_engineStarted</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 </code></pre></div>
-<p>The predecessor's teardown lands before the successor arms and inits, never after. <code>s_lastWorker</code> is static because the publisher flag it protects is.</p>
-<p>The join is bounded at 10 seconds (<code>DefaultPredecessorJoinMs</code>). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without arming, because arming over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's <code>finally</code> would then disarm the publisher underneath it. An unbounded join blocked every later worker and leaked one thread per enable.</p>
-<p><code>SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor</code> holds a worker in <code>BeforeProviderInit</code>, stops it, starts a second service, and asserts the second worker waits for the first to exit. <code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code> keeps the first worker parked past a shortened deadline and asserts the second quits without a provider attempt and reports <code>Stopped</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Static</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>s_amplitudeBits</code></td>
-<td>The published amplitude, 0..1, as float bits</td>
-</tr>
-<tr>
-<td><code>s_publisherArmed</code></td>
-<td>Nonzero while a worker runs</td>
-</tr>
-<tr>
-<td><code>s_lastWorker</code></td>
-<td>The most recent worker thread</td>
-</tr>
-</tbody>
-</table>
+<p>The predecessor's teardown lands before the successor inits, never after. <code>SensaHapticsService.s_lastWorker</code> (<code>SensaHapticsService.cs</code> line 119) is static because the engine it protects is process-wide.</p>
+<p>The join is bounded at 10 seconds (<code>DefaultPredecessorJoinMs</code>). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without starting its engine, because starting over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's <code>Har.Quit</code> would tear the engine down underneath it. An unbounded join blocked every later worker and leaked one thread per start.</p>
+<p><code>SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor</code> holds a worker in <code>BeforeProviderInit</code>, stops it, starts a second service, and asserts the second worker waits for the first to exit. <code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code> keeps the first worker parked past a shortened deadline and asserts the second quits without starting its engine or making a provider attempt, and reports <code>Stopped</code>.</p>
 <p>The <code>finally</code> runs on every exit path, faults included (<code>SENSA worker fault: {type}</code>), and reports <code>Stopped</code> last.</p>
+<h3 id="the-host-runs-it">The host runs it<a class="headerlink" href="#the-host-runs-it" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralOutputHost.SensaLifecycle</code> (<code>PeripheralOutputHost.cs</code> line 289) decides when a worker exists. It runs on every link pass, every 500 ms or sooner when devices change:</p>
+<ul>
+<li>The row is linked (online, with its <code>sensa</code> path), it is assigned (<code>SettingsManager.SlotOrders.GetIdentityPlayerNumber</code> answers above 0), and no worker runs: the host creates a service, subscribes its report, starts it, and logs <code>PERIPHERAL Sensa worker started (row assigned)</code>.</li>
+<li>A worker whose thread ended on its own while the row stays assigned, because <code>HAR.dll</code> did not load, <code>AddParametricEffect</code> failed, or a straggling predecessor kept the slot, is stopped and started again after <code>SensaRestartMs</code> (30000), the worker's own provider retry, so a missing engine does not spin. The state reads <code>Waiting</code> meanwhile, and the host logs <code>PERIPHERAL Sensa worker ended on its own, starting again later</code>.</li>
+<li>The row leaves its last virtual controller, or goes offline: the host stops the worker (<code>PERIPHERAL Sensa worker stopped (row unassigned)</code>), which stops the engine's events and releases the provider, and the state goes to <code>Idle</code>.</li>
+</ul>
+<p>Only the current worker reports. The report closure drops a state from a service the host has already replaced, and the host unsubscribes it before it disposes a worker, so a stopped worker's last word never lands after its successor's. The closure maps <code>Active</code> to <code>BackendState.Connected</code> and every other state to <code>Waiting</code> through <code>PeripheralOutputs.SetBackendState</code> (<code>PeripheralOutputs.cs</code> line 254).</p>
 <hr />
-<h2 id="rumble-to-haptic">Rumble to haptic<a class="headerlink" href="#rumble-to-haptic" title="Permanent link">&para;</a></h2>
-<p><code>InputManager.UpdateSensaLane</code> runs once per poll tick inside the non-idle loop, right after <code>UpdateRumbleAudioLane</code>, and after <code>UpdateVirtualDevices</code> so a slot destroyed this tick publishes zero the same tick. Its first line is the cheap exit:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">PadForge</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">SensaHapticsService</span><span class="p">.</span><span class="n">PublisherArmed</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
-</code></pre></div>
-<p>For every slot up to <code>MaxPads</code> it takes the slot's inbound rumble pack (<code>GetInboundRumblePack</code>) and max-merges it with the live <code>VibrationStates[slot]</code> through <code>LfeOutputState.MaxMerge</code>, the same authority the rumble-to-audio lane reads, so test rumble counts. The pack is four <code>ushort</code> voices:</p>
+<h2 id="the-rows-level">The row's level<a class="headerlink" href="#the-rows-level" title="Permanent link">&para;</a></h2>
+<p>Step 2 writes the level. The row is a haptic peripheral (<code>PeripheralOutputs.TakesHaptics</code> (<code>PeripheralOutputs.cs</code> line 186)), so <code>InputManager.ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes its force-feedback cache on first use, runs each slot's rumble through the row's own Force Feedback settings on that slot, takes the strongest across the slots it is on, and folds trigger rumble into the motors. On a change it hands the result to <code>PeripheralOutputs.SetMotors</code> (<code>PeripheralOutputs.cs</code> line 303), which stores the stronger motor over 65535. The engine's silence edges (stop, focus suspend and the crash quiesce) zero the level through <code>PeripheralOutputs.SilenceHaptics</code> (<code>PeripheralOutputs.cs</code> line 352), and the next Step 2 pass sends again the level a game still asks for.</p>
+<p>The worker reads it through <code>SensaHapticsService.RowAmplitude</code> (<code>SensaHapticsService.cs</code> line 150), which is <code>PeripheralOutputs.AmplitudeOf</code> for the row's id, every <code>tickMs</code> (default 16), clamps it to 0..1, and calls <code>SetEventIntensity</code> only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.</p>
+<hr />
+<h2 id="the-status-line">The status line<a class="headerlink" href="#the-status-line" title="Permanent link">&para;</a></h2>
+<p>The Force Feedback tab's line comes from <code>PeripheralRouteText.Haptics</code> (<code>PeripheralRouteText.cs</code> line 20):</p>
 <table>
 <thead>
 <tr>
-<th>Bits</th>
-<th>Voice</th>
+<th>Condition</th>
+<th>Line</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0-15</td>
-<td>Left motor</td>
+<td>The row has its path and the state is not <code>Waiting</code></td>
+<td><code>Pad_ForceFeedback_RouteSensa</code>: "Rumble plays on your Razer Sensa HD devices through Razer Synapse."</td>
 </tr>
 <tr>
-<td>16-31</td>
-<td>Right motor</td>
+<td>The row has its path and the state is <code>Waiting</code></td>
+<td><code>Pad_ForceFeedback_RouteSensaWaiting</code>: "Waiting for Sensa HD Haptics in Razer Synapse 4. Set the device’s Haptic Source to Sensa HD Games in Synapse."</td>
 </tr>
 <tr>
-<td>32-47</td>
-<td>Left trigger motor</td>
+<td>The row's record says haptics and the row has no path, in an x64 process</td>
+<td><code>Pad_ForceFeedback_RouteSensaWaiting</code></td>
 </tr>
 <tr>
-<td>48-63</td>
-<td>Right trigger motor</td>
-</tr>
-</tbody>
-</table>
-<p><code>PackToAmplitude</code> returns the loudest voice divided by 65535. The lane keeps the maximum across slots and calls <code>PublishAmplitude</code>, which clamps to 0..1 and stores the float bits with one volatile write. <code>SensaHapticsTests.PackToAmplitude_TakesTheLoudestVoice</code> pins the first. <code>PublishAmplitude_Clamps</code> only shows that publishing out-of-range values does not throw, since nothing outside the worker reads the stored bits.</p>
-<p>The worker reads the bits every <code>tickMs</code> (default 16) and calls <code>SetEventIntensity</code> only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.</p>
-<hr />
-<h2 id="ownership-and-persistence">Ownership and persistence<a class="headerlink" href="#ownership-and-persistence" title="Permanent link">&para;</a></h2>
-<p><code>InputService.StartSensaIfEnabled</code> runs at engine start and on toggle-on, returning when the toggle is off, <code>_inputManager</code> is null, or a service is live. <code>StopSensaService</code> disposes the service at engine stop and on toggle-off, and writes <code>Common_Stopped</code> to <code>SensaStatus</code>. <code>StateChanged</code> is marshaled through <code>_dispatcher.BeginInvoke</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Enum</th>
-<th>Dashboard string</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>SensaServiceState.Active</code></td>
-<td><code>Dashboard_SensaActive</code></td>
-</tr>
-<tr>
-<td><code>SensaServiceState.WaitingForRuntime</code></td>
-<td><code>Dashboard_SensaWaiting</code></td>
-</tr>
-<tr>
-<td><code>SensaServiceState.Stopped</code></td>
-<td><code>Common_Stopped</code></td>
-</tr>
-<tr>
-<td><code>SensaServiceState.Unsupported</code></td>
+<td>The same in an ARM64 process</td>
 <td><code>Common_NotAvailableOnArm64</code></td>
 </tr>
 </tbody>
 </table>
-<p>Persistence follows the lightbar mirrors leg for leg: <code>AppSettings.EnableSensaHaptics</code> (global <code>bool</code>, default false), <code>ProfileData.EnableSensaHaptics</code> (<code>bool?</code>, null = no opinion, applied by <code>SettingsService.ApplyProfileServiceToggles</code>, authored by <code>OnDashboardServiceToggleChanged</code>), and the <code>MainWindow</code> Dashboard autosave allowlist. See <a href="../lightbar-mirrors-internals/#ownership-and-persistence">Lightbar Mirrors Internals</a> for the rule and its test.</p>
+<p><code>SensaServiceState</code> (<code>SensaHapticsService.cs</code> line 10) keeps its four values, <code>Stopped</code>, <code>WaitingForRuntime</code>, <code>Active</code> and <code>Unsupported</code>, and the host folds them into the backend state as above. An ARM64 process never opens the row, so its line comes from the record alone.</p>
+<hr />
+<h2 id="persistence-and-migration">Persistence and migration<a class="headerlink" href="#persistence-and-migration" title="Permanent link">&para;</a></h2>
+<p>There is no switch. The row is a device like any other: its assignments and its Force Feedback settings per virtual controller persist with the settings and ride profiles as entries.</p>
+<p>The Dashboard's Razer Sensa section and its switch are gone. <code>AppSettingsData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6704) and the profile's <code>bool?</code> opinion, <code>ProfileData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7675), are read once by <code>PeripheralSwitchMigration</code> and never written, since <code>ShouldSerializeEnableSensaHaptics</code> returns false on both. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists the switch, and <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns one that was on into an assignment of the Razer Sensa row:</p>
+<ul>
+<li>In the live settings when the active profile's opinion, else the global value, was on.</li>
+<li>In the default profile's stored state, while a named profile is active, and in each stored profile, each by its own opinion, else the global value.</li>
+<li>In a profile file exported before #494 and imported on its own (<code>PeripheralSwitchMigration.MigrateImported</code> (<code>PeripheralSwitchMigration.cs</code> line 63)), by its own opinion.</li>
+</ul>
+<p>The row goes to the first created virtual controller in display order, the slot with the smallest displayed player number (<code>PeripheralSwitchMigration.FirstDisplayedSlot</code> (<code>PeripheralSwitchMigration.cs</code> line 70)). A topology with no created slot gets nothing. The row's record is created offline when the file has none (<code>PeripheralSwitchMigration.NewRowRecord</code> (<code>PeripheralSwitchMigration.cs</code> line 170)), so the assignment exists before the row first opens. Every opinion is cleared once read, so the migration runs once per file. Where the engine cannot load, the switch is not <code>Available</code>: nothing is assigned and the switch only clears.</p>
 <hr />
 <h2 id="diag-lines">Diag lines<a class="headerlink" href="#diag-lines" title="Permanent link">&para;</a></h2>
 <table>
@@ -3941,11 +4013,19 @@
 </thead>
 <tbody>
 <tr>
-<td><code>SENSA start? enabled=... engine=... live=...</code></td>
-<td>Every start attempt</td>
+<td><code>PERIPHERAL Sensa worker started (row assigned)</code></td>
+<td>The host started a worker</td>
 </tr>
 <tr>
-<td><code>SENSA predecessor join timed out after {n} ms, worker quitting without arming</code></td>
+<td><code>PERIPHERAL Sensa worker stopped (row unassigned)</code></td>
+<td>The row left its last virtual controller</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Sensa worker ended on its own, starting again later</code></td>
+<td>The worker ended while the row stayed assigned</td>
+</tr>
+<tr>
+<td><code>SENSA predecessor join timed out after {n} ms, worker quitting</code></td>
 <td>The predecessor join hit its deadline</td>
 </tr>
 <tr>
@@ -3980,6 +4060,14 @@
 <td><code>SENSA worker fault: {exception type}</code></td>
 <td>Any unhandled exception in the worker</td>
 </tr>
+<tr>
+<td><code>CFG #494 migrated a global switch: RazerSensa row assigned to slot {n}</code></td>
+<td>The migration assigned the row in the live settings</td>
+</tr>
+<tr>
+<td><code>CFG #494 migrated a profile switch: RazerSensa row assigned to slot {n} in '{profile}'</code></td>
+<td>The migration assigned the row in a stored or imported profile</td>
+</tr>
 </tbody>
 </table>
 <hr />
@@ -4006,16 +4094,8 @@
 <td>The provider calls do not throw, with or without Synapse. When <code>ProviderInit</code> succeeds, <code>ProviderClean</code> returns true</td>
 </tr>
 <tr>
-<td><code>PackToAmplitude_TakesTheLoudestVoice</code></td>
-<td>The four-voice max</td>
-</tr>
-<tr>
-<td><code>PublishAmplitude_Clamps</code></td>
-<td>Publishing out-of-range values does not throw. No assertion reads the stored value</td>
-</tr>
-<tr>
-<td><code>Service_ArmsPublisherAndDegradesWithoutRuntime</code></td>
-<td>Publisher armed while running, a state reported before <code>Stopped</code> (<code>WaitingForRuntime</code> on a bench without Synapse), at least one provider attempt</td>
+<td><code>Service_StartsTheEngineAndDegradesWithoutRuntime</code></td>
+<td>The engine starts, a state is reported before <code>Stopped</code> (<code>WaitingForRuntime</code> on a bench without Synapse), and at least one provider attempt is made, with the level from an injected source</td>
 </tr>
 <tr>
 <td><code>Service_ReportsUnsupportedAndStartsNoWorkerWhereTheEngineCannotLoad</code></td>
@@ -4027,11 +4107,54 @@
 </tr>
 <tr>
 <td><code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code></td>
-<td>The bounded join: the successor quits without arming</td>
+<td>The bounded join: the successor quits without starting its engine</td>
 </tr>
 <tr>
-<td><code>FeedAndSiblingContracts</code></td>
-<td>The Step 5 call site and the persistence legs</td>
+<td><code>TheWorkerStreamsTheRowsLevel_AndTheGlobalSwitchIsGone</code></td>
+<td>Source pins: the worker reads the row's level, the Step 5 lane and the Dashboard card are gone, the switch's two legs are read-only, and the host runs the worker only while the row is assigned</td>
+</tr>
+<tr>
+<td><code>TheKoreanStringsSpellHaptic</code></td>
+<td>The Korean Sensa strings spell haptic the way every other Korean string does</td>
+</tr>
+</tbody>
+</table>
+<p><code>PeripheralOutputsTests.cs</code> covers the row's side:</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>What it proves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PeripheralLinkingTests.TheSensaRowTakesInterhapticsOnlyWhereTheEngineRuns</code></td>
+<td>The row's <code>sensa</code> path, and none without the engine</td>
+</tr>
+<tr>
+<td><code>PeripheralLinkingTests.TheSensaRowOpensOnlyWithSynapseAndTheEngine</code></td>
+<td>Phase 1m's condition</td>
+</tr>
+<tr>
+<td><code>PeripheralLinkingTests.TheVendorRowsKeepTheirIdentities_AndTheirTypeFollowsTheirOutput</code></td>
+<td>The row's id, product GUID and device type</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsFacadeTests.TheSensaWorkerStreamsItsRowsLevel</code></td>
+<td><code>RowAmplitude</code> reads what <code>SetMotors</code> stored</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsFacadeTests.TheForceFeedbackLineNamesTheDeviceItsRowReaches</code></td>
+<td>The Sensa lines, the ARM64 one included</td>
+</tr>
+<tr>
+<td><code>PeripheralSwitchMigrationTests</code></td>
+<td>The switch's migration: the ruling slot, each profile's own value, the live settings, the default topology, a row this PC cannot open, imported profiles</td>
+</tr>
+<tr>
+<td><code>PeripheralWiringTests.Step2HandsAHapticRowItsLevel_TheSoleWriterWay</code>, <code>EverySilenceEdgeSilencesThePeripheralsToo</code></td>
+<td>Step 2's branch and the silence edges, by source</td>
 </tr>
 </tbody>
 </table>
@@ -4075,7 +4198,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../lightbar-mirrors-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Lightbar Mirrors Internals">
+          <a href="../peripheral-outputs-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Peripheral Outputs Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4085,7 +4208,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Lightbar Mirrors Internals
+                Peripheral Outputs Internals
               </div>
             </div>
           </a>

@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -3863,6 +3863,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#retired-vendor-switches-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retired Vendor Switches (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4203,14 +4214,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -5906,6 +5917,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#retired-vendor-switches-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retired Vendor Switches (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5951,6 +5973,7 @@
 <p><strong>v4.3.2 additions.</strong> <code>UserDevice</code> gains the sparse position arrays <code>CapButtonIndices</code> / <code>CapAxisIndices</code> (discussion #344), and <code>LoadFromDevice</code> gates the effective axis count on <code>SupportedAxisIndices</code> when the wrapper produced one. <code>PadSetting</code> gains the clipboard-only <code>SlotSetExtrasJson</code> / <code>SlotMacrosJson</code> payloads (<code>__SlotSetExtras</code> / <code>__SlotMacros</code>), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. <code>AppSettingsData</code> gains <code>DiagnosticsLoggingEnabled</code> (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.</p>
 <p><strong>v4.4.0 additions.</strong> <code>ProfileData</code> gains <code>PollingRateOverrideMs</code> (#365, <code>0</code> = follow the global knob) and four nullable legs, <code>EnableChromaLightbar</code> (#373), <code>EnableLightsyncLightbar</code> (#382), <code>EnableSensaHaptics</code> (#374), and <code>EnableHeadTracking</code> (#355), where <code>null</code> = no opinion. Every one of the five is authored, never snapshotted, and every profile saved before the field reads as no opinion. <code>AppSettingsData</code> gains their global legs (<code>EnableChromaLightbar</code>, <code>EnableSensaHaptics</code>, <code>EnableLightsyncLightbar</code>, the <code>HeadTracking*</code> quintet), <code>EnableExternalControl</code> (#366), the handheld trio <code>HandheldButtons</code> / <code>HandheldMachineKey</code> / <code>HandheldButtonsEnabled</code> (#353), <code>IconPackages</code> (#390), and the assignment-prompt pair <code>AssignOfferNewDevice</code> / <code>AssignOfferEmptySlot</code>. <code>UserDevice</code> gains <code>QuickChargeEnabled</code> (#372). <code>PadSetting</code> gains <code>MotionGrip</code> (#392), taking the checksum's gyro group to 43. <code>MenuItemDefinition</code> gains <code>MacroName</code> (#390). <code>DeviceSlotConfigData</code> gains <code>AudioTritonLowPassHz</code> (#381, default 250).</p>
 <p><strong>v4.5.3 additions.</strong> <code>AppSettingsData</code> gains the in-app update switches <code>CheckForUpdatesAutomatically</code> (default true), <code>InstallUpdatesAutomatically</code> and <code>IncludePreReleaseUpdates</code> (#457). <code>UpdateService</code> reads all three straight from <code>PadForge.xml</code> at startup, before the settings service loads. See <a href="../updates-internals/">Updates Internals</a>.</p>
+<p><strong>Peripheral outputs (#494).</strong> The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and the Razer Sensa switch (#374) left the Dashboard. Their global legs on <code>AppSettingsData</code> and their nullable legs on <code>ProfileData</code> are read once at load by <code>PeripheralSwitchMigration</code> and never written again, since each <code>ShouldSerialize</code> method returns false. A switch that was on becomes an assignment of the vendor row that replaced it (see <a href="#retired-vendor-switches-494">Retired Vendor Switches</a>). <code>UserDevice</code> gains <code>PeripheralOutputs</code>, the haptic and lighting outputs found for a mouse, keyboard or vendor row. <code>DeviceSlotConfigData</code> gains <code>PeripheralLightingEnabled</code>, the Lighting tab's Control This Device’s Lighting switch, off by default. <code>InputDeviceType</code> gains <code>PeripheralLighting</code> (40) and <code>PeripheralHaptics</code> (41), the device types of the vendor rows.</p>
 </blockquote>
 <hr />
 <p>This page is a developer reference for PadForge's settings persistence.</p>
@@ -5979,20 +6002,22 @@
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        L6 --&gt; L7[LoadPadSettings&lt;br/&gt;deadzones · curves · ranges · mappings]
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        L7 --&gt; L8[LoadMacros&lt;br/&gt;reconstruct from serialized data]
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        L8 --&gt; L9[LoadProfiles&lt;br/&gt;Default profile · restore active profile topology]
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    end
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    style S1 fill:#e1f5fe
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    style S2 fill:#e1f5fe
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    style S3 fill:#fff3e0
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    style S9 fill:#e8f5e9
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    style S10 fill:#e8f5e9
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    style L1 fill:#f3e5f5
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    style L2 fill:#f3e5f5
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    style L4 fill:#fff3e0
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    style L9 fill:#e8f5e9
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        L9 --&gt; L10[PeripheralSwitchMigration #494&lt;br/&gt;retired vendor switches become row assignments]
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    end
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    style S1 fill:#e1f5fe
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    style S2 fill:#e1f5fe
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    style S3 fill:#fff3e0
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    style S9 fill:#e8f5e9
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    style S10 fill:#e8f5e9
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    style L1 fill:#f3e5f5
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    style L2 fill:#f3e5f5
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    style L4 fill:#fff3e0
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    style L9 fill:#e8f5e9
 </code></pre></div>
 <p><strong>Source files:</strong>
 - <code>PadForge.App/Services/SettingsService.cs</code>. XML load/save, serialization DTOs
+- <code>PadForge.App/Services/PeripheralSwitchMigration.cs</code>. (#494) The one-time migration of the retired vendor switches into vendor-row assignments
 - <code>PadForge.App/Common/SettingsManager.cs</code>. Thread-safe collections, slot management
 - <code>PadForge.Engine/Data/PadSetting.cs</code>. Mapping configuration model
 - <code>PadForge.Engine/Data/UserDevice.cs</code>. Physical device record
@@ -6499,7 +6524,7 @@
 <td><code>CapType</code></td>
 <td><code>int</code></td>
 <td><code>&lt;CapType&gt;</code></td>
-<td><code>InputDeviceType</code> static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys). 18–25 match DirectInput. 26–37 are PadForge extensions.</td>
+<td><code>InputDeviceType</code> static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics). 18–25 match DirectInput. 26–41 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles.</td>
 </tr>
 <tr>
 <td><code>HasGyro</code></td>
@@ -6554,6 +6579,12 @@
 <td><code>bool</code></td>
 <td><code>&lt;HasRumbleTriggers&gt;</code></td>
 <td>Has impulse-trigger motors (Xbox One / Elite / Series). Driven by <code>SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN</code>.</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs</code></td>
+<td><code>int</code></td>
+<td><code>&lt;PeripheralOutputs&gt;</code></td>
+<td>(#494) The outputs the peripheral link pass found for a mouse, keyboard or vendor row through its vendor's channel: bit 0 haptics, bit 1 lighting (<code>UserDevice.cs</code> line 489). Persisted so the row's Force Feedback and Lighting tabs stay up while the device sleeps or is unplugged, as a gamepad's do. A Logitech row keeps the bits it had until the HID++ worker's first scan, and while a device slot in its container has yet to answer. <code>0</code> on configs predating it and on every other row.</td>
 </tr>
 <tr>
 <td><code>DeviceObjects</code></td>
@@ -6814,6 +6845,11 @@
 <td><code>HasForceFeedback</code></td>
 <td><code>bool</code></td>
 <td><code>ActuatorCount &gt; 0 \|\| Device.HasRumble \|\| Device.HasHaptic</code></td>
+</tr>
+<tr>
+<td><code>HasPeripheralHaptics</code> / <code>HasPeripheralLighting</code></td>
+<td><code>bool</code></td>
+<td>(#494) Bit 0 / bit 1 of <code>PeripheralOutputs</code>.</td>
 </tr>
 <tr>
 <td><code>ResolvedName</code></td>
@@ -9234,23 +9270,23 @@
 <tr>
 <td><code>EnableChromaLightbar</code></td>
 <td><code>bool</code></td>
-<td><code>[XmlElement]</code></td>
+<td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable <code>ProfileData.EnableChromaLightbar</code> is null.</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6697).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
-<td><code>[XmlElement]</code></td>
+<td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: <code>ProfileData.EnableSensaHaptics</code>.</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6704).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
-<td><code>[XmlElement]</code></td>
+<td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: <code>ProfileData.EnableLightsyncLightbar</code>.</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6712).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -9509,7 +9545,7 @@
 <td><code>DeviceSlotConfigData[]</code></td>
 <td><code>[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]</code></td>
 <td><code>null</code></td>
-<td>Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type. Renamed from <code>PlayStationConfigs</code> / <code>PlayStationSlotConfigData</code> in v4.</td>
+<td>Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type, a lit mouse, keyboard or vendor row included (#494). Its <code>PeripheralLightingEnabled</code> attribute is the Lighting tab's Control This Device’s Lighting switch, and a config written before #494 reads it as off. Renamed from <code>PlayStationConfigs</code> / <code>PlayStationSlotConfigData</code> in v4.</td>
 </tr>
 <tr>
 <td><code>LegacyDeviceSlotConfigs</code></td>
@@ -10845,26 +10881,29 @@
 <a id="__codelineno-27-89" name="__codelineno-27-89" href="#__codelineno-27-89"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableShiftLayerFlyout</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
 <a id="__codelineno-27-90" name="__codelineno-27-90" href="#__codelineno-27-90"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">EnableProfileOverlay</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
 <a id="__codelineno-27-91" name="__codelineno-27-91" href="#__codelineno-27-91"></a>
-<a id="__codelineno-27-92" name="__codelineno-27-92" href="#__codelineno-27-92"></a><span class="w">    </span><span class="c1">// Nullable, authored legs of the global service toggles. null = no opinion.</span>
-<a id="__codelineno-27-93" name="__codelineno-27-93" href="#__codelineno-27-93"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableChromaLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-94" name="__codelineno-27-94" href="#__codelineno-27-94"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableLightsyncLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-95" name="__codelineno-27-95" href="#__codelineno-27-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableSensaHaptics</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-96" name="__codelineno-27-96" href="#__codelineno-27-96"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTracking</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// UDP input</span>
-<a id="__codelineno-27-97" name="__codelineno-27-97" href="#__codelineno-27-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTrackingFreeTrack</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// FreeTrack input</span>
-<a id="__codelineno-27-98" name="__codelineno-27-98" href="#__codelineno-27-98"></a><span class="w">    </span><span class="c1">// False on profiles saved before the two inputs split. Load converts them once.</span>
-<a id="__codelineno-27-99" name="__codelineno-27-99" href="#__codelineno-27-99"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HeadTrackingIndependentInputs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-100" name="__codelineno-27-100" href="#__codelineno-27-100"></a>
-<a id="__codelineno-27-101" name="__codelineno-27-101" href="#__codelineno-27-101"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
-<a id="__codelineno-27-102" name="__codelineno-27-102" href="#__codelineno-27-102"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-103" name="__codelineno-27-103" href="#__codelineno-27-103"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-104" name="__codelineno-27-104" href="#__codelineno-27-104"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-<a id="__codelineno-27-105" name="__codelineno-27-105" href="#__codelineno-27-105"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
-<a id="__codelineno-27-106" name="__codelineno-27-106" href="#__codelineno-27-106"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
-<a id="__codelineno-27-107" name="__codelineno-27-107" href="#__codelineno-27-107"></a>
-<a id="__codelineno-27-108" name="__codelineno-27-108" href="#__codelineno-27-108"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
-<a id="__codelineno-27-109" name="__codelineno-27-109" href="#__codelineno-27-109"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
-<a id="__codelineno-27-110" name="__codelineno-27-110" href="#__codelineno-27-110"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<a id="__codelineno-27-111" name="__codelineno-27-111" href="#__codelineno-27-111"></a><span class="p">}</span>
+<a id="__codelineno-27-92" name="__codelineno-27-92" href="#__codelineno-27-92"></a><span class="w">    </span><span class="c1">// #494: the retired vendor switches&#39; opinions. Read once by</span>
+<a id="__codelineno-27-93" name="__codelineno-27-93" href="#__codelineno-27-93"></a><span class="w">    </span><span class="c1">// PeripheralSwitchMigration, cleared, and never written again</span>
+<a id="__codelineno-27-94" name="__codelineno-27-94" href="#__codelineno-27-94"></a><span class="w">    </span><span class="c1">// (each ShouldSerialize method returns false).</span>
+<a id="__codelineno-27-95" name="__codelineno-27-95" href="#__codelineno-27-95"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableChromaLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-96" name="__codelineno-27-96" href="#__codelineno-27-96"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableLightsyncLightbar</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-97" name="__codelineno-27-97" href="#__codelineno-27-97"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableSensaHaptics</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-98" name="__codelineno-27-98" href="#__codelineno-27-98"></a><span class="w">    </span><span class="c1">// Nullable, authored legs of the global service toggles. null = no opinion.</span>
+<a id="__codelineno-27-99" name="__codelineno-27-99" href="#__codelineno-27-99"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTracking</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">          </span><span class="c1">// UDP input</span>
+<a id="__codelineno-27-100" name="__codelineno-27-100" href="#__codelineno-27-100"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool?</span><span class="w"> </span><span class="n">EnableHeadTrackingFreeTrack</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// FreeTrack input</span>
+<a id="__codelineno-27-101" name="__codelineno-27-101" href="#__codelineno-27-101"></a><span class="w">    </span><span class="c1">// False on profiles saved before the two inputs split. Load converts them once.</span>
+<a id="__codelineno-27-102" name="__codelineno-27-102" href="#__codelineno-27-102"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">HeadTrackingIndependentInputs</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-103" name="__codelineno-27-103" href="#__codelineno-27-103"></a>
+<a id="__codelineno-27-104" name="__codelineno-27-104" href="#__codelineno-27-104"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayOpacity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.25</span><span class="p">;</span>
+<a id="__codelineno-27-105" name="__codelineno-27-105" href="#__codelineno-27-105"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TouchpadOverlayMonitor</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-106" name="__codelineno-27-106" href="#__codelineno-27-106"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayLeft</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-107" name="__codelineno-27-107" href="#__codelineno-27-107"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayTop</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-27-108" name="__codelineno-27-108" href="#__codelineno-27-108"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayWidth</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<a id="__codelineno-27-109" name="__codelineno-27-109" href="#__codelineno-27-109"></a><span class="w">    </span><span class="na">[XmlElement]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">TouchpadOverlayHeight</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
+<a id="__codelineno-27-110" name="__codelineno-27-110" href="#__codelineno-27-110"></a>
+<a id="__codelineno-27-111" name="__codelineno-27-111" href="#__codelineno-27-111"></a><span class="w">    </span><span class="c1">// v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.</span>
+<a id="__codelineno-27-112" name="__codelineno-27-112" href="#__codelineno-27-112"></a><span class="w">    </span><span class="na">[XmlElement(&quot;SteamWorkshopSource&quot;)]</span>
+<a id="__codelineno-27-113" name="__codelineno-27-113" href="#__codelineno-27-113"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">SteamWorkshopSource</span><span class="w"> </span><span class="n">WorkshopSource</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-27-114" name="__codelineno-27-114" href="#__codelineno-27-114"></a><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -10953,7 +10992,7 @@
 <tr>
 <td><code>DeviceSlotConfigs</code></td>
 <td><code>DeviceSlotConfigData[]</code></td>
-<td>Per-(slot, device) config (adaptive triggers, lighting, audio, tone filter). XML <code>&lt;ProfileDeviceSlotConfigs&gt;&lt;Config/&gt;</code>. Renamed from <code>ProfilePlayStationConfigs</code> in v4. The legacy spelling loads read-only via <code>LegacyDeviceSlotConfigs</code>.</td>
+<td>Per-(slot, device) config (adaptive triggers, lighting, audio, tone filter), a lit mouse's or keyboard's Control This Device’s Lighting switch (<code>PeripheralLightingEnabled</code>, #494) included. XML <code>&lt;ProfileDeviceSlotConfigs&gt;&lt;Config/&gt;</code>. Renamed from <code>ProfilePlayStationConfigs</code> in v4. The legacy spelling loads read-only via <code>LegacyDeviceSlotConfigs</code>.</td>
 </tr>
 <tr>
 <td><code>KbmConfigs</code></td>
@@ -11011,24 +11050,14 @@
 <td>(v4.2) Profile-switch overlay enable state. Default <code>true</code>.</td>
 </tr>
 <tr>
-<td><code>EnableChromaLightbar</code></td>
+<td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373) The profile's leg of the Razer Chroma lightbar mirror. <code>null</code> = no opinion, the global <code>AppSettings.EnableChromaLightbar</code> stands, and every profile saved before the field reads as <code>null</code>. A plain <code>bool</code> here read as <code>false</code> in every pre-existing profile and the first profile switch turned the mirror off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion.</td>
-</tr>
-<tr>
-<td><code>EnableLightsyncLightbar</code></td>
-<td><code>bool?</code></td>
-<td>(v4.4, #382) Logitech LIGHTSYNC lightbar mirror, same nullable authored contract.</td>
-</tr>
-<tr>
-<td><code>EnableSensaHaptics</code></td>
-<td><code>bool?</code></td>
-<td>(v4.4, #374) Razer Sensa HD haptics translation, same contract.</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7663, 7669 and 7676).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #355) The OpenTrack UDP input, same contract. The port, the OpenXR input, and the ranges stay global.</td>
+<td>(v4.4, #355) The OpenTrack UDP input. <code>null</code> = no opinion, the global <code>AppSettings.HeadTrackingEnabled</code> stands, and every profile saved before the field reads as <code>null</code>. A plain <code>bool</code> here would read as <code>false</code> in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global.</td>
 </tr>
 <tr>
 <td><code>EnableHeadTrackingFreeTrack</code></td>
@@ -11725,6 +11754,12 @@
 <a id="__codelineno-40-69" name="__codelineno-40-69" href="#__codelineno-40-69"></a>    |  Authored sets at uncreated slot indices are replaced with empty ones,
 <a id="__codelineno-40-70" name="__codelineno-40-70" href="#__codelineno-40-70"></a>    |  judged against the topology LoadProfiles left. Then motion rows are
 <a id="__codelineno-40-71" name="__codelineno-40-71" href="#__codelineno-40-71"></a>    |  backfilled for motion-capable slots
+<a id="__codelineno-40-72" name="__codelineno-40-72" href="#__codelineno-40-72"></a>    |
+<a id="__codelineno-40-73" name="__codelineno-40-73" href="#__codelineno-40-73"></a>    v  Step 10: PeripheralSwitchMigration.Run (#494)
+<a id="__codelineno-40-74" name="__codelineno-40-74" href="#__codelineno-40-74"></a>    |  The retired Chroma, LIGHTSYNC and Sensa switches become vendor-row
+<a id="__codelineno-40-75" name="__codelineno-40-75" href="#__codelineno-40-75"></a>    |  assignments, against the topology LoadProfiles left. A change sets
+<a id="__codelineno-40-76" name="__codelineno-40-76" href="#__codelineno-40-76"></a>    |  _peripheralSwitchesMigratedOnLoad, and Initialize() / Reload() mark
+<a id="__codelineno-40-77" name="__codelineno-40-77" href="#__codelineno-40-77"></a>    |  the file dirty after their own clear, so the result is saved once
 </code></pre></div>
 <p><strong>Critical load order:</strong> <code>SlotCreated</code> must load before <code>OutputType</code>. Setting <code>OutputType</code> fires <code>PropertyChanged</code> which calls <code>RefreshNavControllerItems()</code> which reads <code>SlotCreated[]</code>. Wrong order causes a double-rebuild crash.</p>
 <p><strong>CloneDeep during load is critical:</strong> Without cloning, devices sharing a checksum would share one <code>PadSetting</code> instance. Changing one device's deadzone would silently corrupt the other's.</p>
@@ -11846,6 +11881,41 @@
 <p>Old profiles without topology (<code>SlotCreated == null</code>) skip topology application during switch. Previous slot layout is preserved.</p>
 <h3 id="orphaned-usersettings">Orphaned UserSettings<a class="headerlink" href="#orphaned-usersettings" title="Permanent link">&para;</a></h3>
 <p>On load, <code>RemoveAll(IsEmptyLegacyOrphan)</code> purges the entries older versions left at <code>MapTo == -1</code> with no PadSetting. A parked row that still carries a PadSetting survives, because <code>ApplyProfile</code> parks every device the incoming profile does not assign that way and keeps its mappings (#404).</p>
+<h3 id="retired-vendor-switches-494">Retired Vendor Switches (#494)<a class="headerlink" href="#retired-vendor-switches-494" title="Permanent link">&para;</a></h3>
+<p>The Razer Chroma and Logitech LIGHTSYNC lightbar mirrors and the Razer Sensa switch were Dashboard toggles with a global value and a nullable opinion per profile. Their outputs are vendor rows now, assigned to a virtual controller like any device. <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns a switch that was on into an assignment of its row:</p>
+<table>
+<thead>
+<tr>
+<th>Switch</th>
+<th>Row</th>
+<th>Slot the row goes to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnableChromaLightbar</code> (#373)</td>
+<td>Razer Chroma</td>
+<td>The first created PlayStation slot in display order whose controller is a DualSense or a DualShock 4, the two whose output reports carry the lightbar the mirror showed. A slot with no profile id counts as the PlayStation default, a DualSense</td>
+</tr>
+<tr>
+<td><code>EnableLightsyncLightbar</code> (#382)</td>
+<td>Logitech LIGHTSYNC</td>
+<td>The same slot</td>
+</tr>
+<tr>
+<td><code>EnableSensaHaptics</code> (#374)</td>
+<td>Razer Sensa</td>
+<td>The first created slot in display order, the one that shows the smallest player number</td>
+</tr>
+</tbody>
+</table>
+<p>It runs in three places:</p>
+<ul>
+<li>In the live settings, from the active profile's opinion or else the global value. <code>AssignLive</code> (line 223) adds the row's record, offline, when the file has none, and assigns it to the live slot with the setting a drag-and-drop gives.</li>
+<li>In every stored profile, and in the default's stored state while a named profile is active, from the profile's opinion or else the global value. <code>AddToProfile</code> (line 261) adds a <code>ProfileEntry</code> on the slot that profile's own topology and saved order pick, with a default <code>PadSetting</code> for that slot's controller type.</li>
+<li>In an imported profile file, from its own opinion alone, since the file carries no global value. <code>ProfileTransfer.Import</code> calls <code>MigrateImported</code> (line 63).</li>
+</ul>
+<p>Each profile's opinion is cleared once read, and the switches are never written again, so the migration runs once per file. A topology without the slot a row needs gets no assignment, as the old lane had nothing to read there either. A build that cannot load the Interhaptics engine (<code>PlatformSupport.SensaAvailable</code> is false on ARM64) only clears the Sensa switch. A migrated lighting row starts at Player Number, so it shows the game's lightbar as the mirror did, and the controller's player color while no game writes one.</p>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
@@ -11855,6 +11925,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a>: How <code>SettingsManager</code> slot arrays and <code>PadSetting</code> drive the mapping engine</li>
 <li><a href="../viewmodels/">ViewModels</a>: ViewModel properties synced from <code>SettingsManager</code> by <code>SettingsService</code></li>
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: Per-slot <code>VirtualControllerType</code> and Extended/MIDI config serialization</li>
+<li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: The vendor rows and the outputs <code>UserDevice.PeripheralOutputs</code> records</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

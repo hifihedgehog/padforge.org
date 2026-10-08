@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -2911,14 +2911,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -3736,6 +3736,7 @@
 </tbody>
 </table>
 <p>The app side is <code>PadForge.App/Common/Input/</code>: <code>AnalogKeyboardHid.cs</code> (enumeration and the HID channel), <code>AnalogKeyboardDevice.cs</code> (the device row and its reader thread), <code>AnalogKeyboardRuntime.cs</code> (the Settings mirror and the per-row key lists), and the analog keyboard phase of <code>InputManager.Step1.UpdateDevices.cs</code>. The key depths reach mappings through <code>CustomInputState.AnalogKeys</code> and the <code>Analog Key N</code> descriptor in <code>SourceCoercion</code>.</p>
+<p>Assigned to a virtual controller, the analog row of a Razer or SteelSeries board lights through the same Chroma category or GameSense device type as the board's own keyboard row (#494), and gets the same Lighting tab. A Set Chroma Color macro reaches a Razer board when only its analog row is assigned. The Huntsman V3 models missing from the OpenRazer list in <code>PeripheralProductIds</code> light as Chroma keyboards through <code>AnalogKeyboardCatalog.IsRazerHuntsmanV3</code>. See <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
 <hr />
 <h2 id="from-collection-to-row">From collection to row<a class="headerlink" href="#from-collection-to-row" title="Permanent link">&para;</a></h2>
 <ol>

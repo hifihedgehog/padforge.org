@@ -1,6 +1,6 @@
 # Force Feedback
 
-*Pass game rumble through to your pad, route DirectInput force feedback to wheels and sticks, drive extra rumble from your system audio, and play the rumble stream through bass shakers.*
+*Pass game rumble through to your pad or haptic mouse, route DirectInput force feedback to wheels and sticks, drive extra rumble from your system audio, and play the rumble stream through bass shakers.*
 
 ![Force feedback settings with motor strength sliders and test button](../images/pad-forcefeedback.png)
 
@@ -8,7 +8,7 @@ The Force Feedback tab is **per pad per slot**. Every physical pad mapped to the
 
 See [Impulse Triggers](impulse-triggers.md) for trigger-motor effects.
 
-The tab appears on every slot type, including Keyboard + Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller). Select a keyboard or mouse in the dropdown and the tab hides until you pick a controller again. Keyboard + Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
+The tab appears on every slot type, including Keyboard + Mouse and MIDI, while the selected assigned device is a controller-class device (gamepad, joystick, wheel, flight, or first-person controller), a haptic mouse, or the Razer Sensa row. Select any other keyboard or mouse in the dropdown and the tab hides until you pick one of those again. Keyboard + Mouse and MIDI slots do not send rumble upstream to games, but Audio Rumble still feeds into the same combined-vibration buffer routed to whichever physical device is mapped. Test Rumble fires haptics on the currently selected device only, so you can verify one pad without buzzing the others.
 
 To also play the game's rumble through speakers or a tactile transducer, see [Bass Shakers](#bass-shakers) below. The controller's motors keep running. That tab lives at the slot level and has its own settings.
 
@@ -38,7 +38,7 @@ Games never talk to your physical controller directly.
 
 PadForge applies this on every polling cycle, 1,000 times a second at the default polling rate. DualSense and DualShock 4 pads take it in their combined effect update, about 30 times a second.
 
-The same slot rumble can also drive a Razer Sensa HD device from the Dashboard. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
+The same slot rumble reaches a haptic mouse or the Razer Sensa row assigned to the slot. See [Haptic mice and the Razer Sensa row](#haptic-mice-and-the-razer-sensa-row).
 
 ### Multi-slot rumble
 
@@ -166,6 +166,44 @@ When the physical device you mapped is a DualShock 4, DualSense, or DualSense Ed
 ### PlayStation pads through a Padix converter
 
 PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Force Feedback tab appears for the converter whether or not that package is installed.
+
+---
+
+## Haptic mice and the Razer Sensa row
+
+A haptic mouse assigned to a virtual controller takes that controller's rumble through this tab, the way a gamepad does, with its own settings on each virtual controller. The Razer Sensa row does the same for Razer Sensa HD devices. Each plays a single strength, taken from the stronger of the two motors. None has trigger motors, so **Fold Trigger Rumble into Main Motors** shows for them.
+
+| Device | How the rumble plays | Needs |
+|---|---|---|
+| **Logitech MX Master 4** | Logitech's own haptic waveforms, sent straight to the mouse over HID++ | No Logitech software |
+| **SteelSeries Rival 500, 700 and 710** | The tactile handler in SteelSeries GG | SteelSeries GG |
+| **Razer Sensa HD devices**, such as the Wolverine V3 Pro, Kraken V4 Pro and Freyja | The **Razer Sensa** row on the Devices page, through the Interhaptics engine inside PadForge | Razer Synapse 4 with Sensa HD Haptics, and the x64 build |
+
+On the mice, rumble strength picks one of three levels: a mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.
+
+SteelSeries GG drives every tactile Rival at once, so the Rival on the virtual controller with the smallest player number sets their rumble. The motor stops as soon as no Rival is assigned. Two seconds after PadForge stops using GG, GG gets its devices back.
+
+In the x64 build, the Razer Sensa row appears on the [Devices](devices.md) page once Razer Synapse is installed. Assign it to a virtual controller like any device. PadForge runs the Sensa engine only while the row is assigned. In Synapse, set the device's Haptic Source to Sensa HD Games. Earlier versions sent rumble to Sensa HD devices from a Dashboard toggle. A toggle that was on now assigns the Razer Sensa row to the virtual controller with the smallest player number, if there is one.
+
+A haptic mouse shared over [Remote Link](../guides/remote-link.md) takes rumble from the other PC's virtual controllers too. The Razer Sensa row is not shared.
+
+Mice built on Immersion TouchSense, such as the Logitech iFeel, take no rumble. Their vibration report goes to the mouse's own HID collection, which Windows keeps to itself.
+
+A line at the top of the tab says where the rumble goes:
+
+| Line | When it shows |
+|---|---|
+| *Rumble plays on {0} as haptic pulses, sent straight to the device. Stronger rumble picks a stronger pulse and repeats it faster.* | A Logitech haptic mouse, with its name in place of `{0}`. |
+| *Haptic feedback is turned off for {0} in Logi Options+, so it plays nothing until you turn it back on there.* | The mouse's own haptic feedback is off. |
+| *This device has not answered yet. Its rumble plays once it wakes up.* | The Logitech mouse is asleep or unplugged. |
+| *Rumble plays through the tactile handler in SteelSeries GG.* | GG answers, and this Rival sets the rumble. |
+| *SteelSeries GG drives every tactile Rival at once, so the one on Virtual Controller {0} sets their rumble.* | Another Rival, on the virtual controller numbered `{0}`, sets the rumble. |
+| *Waiting for SteelSeries GG. Rumble plays once GG runs.* | GG does not answer. |
+| *Rumble plays on your Razer Sensa HD devices through Razer Synapse.* | Synapse's Sensa runtime answers. |
+| *Waiting for Sensa HD Haptics in Razer Synapse 4. Set the device’s Haptic Source to Sensa HD Games in Synapse.* | Synapse's Sensa runtime does not answer. |
+| *Not Available on ARM64* | A Razer Sensa row in the ARM64 build, from settings the x64 build saved. |
+
+See [Mice, Keyboards and Vendor Rows](peripherals.md) for the vendor rows and the lighting these devices take.
 
 ---
 
@@ -330,6 +368,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 | Audio rumble not working | Confirm audio plays through your default output. Check the Level meter. Raise sensitivity if it barely moves. |
 | Audio rumble too aggressive | Lower sensitivity or drop the bass cutoff. |
 | No sound from bass shakers | Check the routing toggle, the status line under the Output Device picker, Master Gain, and each voice's enable. Confirm the game rumbles at all on the Motor Activity bars. |
+| Haptic mouse or Sensa device stays still | Read the line at the top of its Force Feedback tab. It says when the mouse is asleep, when its haptic feedback is off in Logi Options+, and when SteelSeries GG or Razer Synapse does not answer. |
 | Wheel FFB feels wrong | Use an Extended output slot, not Xbox or PlayStation. |
 | Condition effects feel weak | Raise Overall Gain. Condition effects scale with it. |
 
@@ -346,6 +385,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 - [Impulse Triggers](impulse-triggers.md): trigger-motor passthrough, audio bass on triggers, constant trigger force.
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.
 - [Devices](devices.md): check rumble and haptic capability per device.
+- [Mice, Keyboards and Vendor Rows](peripherals.md): rumble and lighting on the mice, keyboards and vendor rows assigned to a virtual controller.
 - [Troubleshooting](../troubleshooting.md): wider help with rumble issues.
 
 ---

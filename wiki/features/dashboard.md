@@ -9,7 +9,7 @@
 
 ## Sections
 
-Ten sections, stacked top to bottom: the engine and its slots, then a **Services** header, then input services, output services, and overlays.
+Eight sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, and the overlays.
 
 | Section | Purpose |
 |---------|---------|
@@ -19,14 +19,12 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
 | **Head Tracking** | A head pose from [OpenTrack](head-tracking.md) or from a [VR headset](vr-controller-input.md) as six mappable axes. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
-| **Lightbar Mirrors** | Forward a virtual PlayStation pad's lightbar color to [Razer Chroma and Logitech LIGHTSYNC](lightbar-mirrors.md) devices. |
-| **Razer Sensa HD Haptics** | Translate controller rumble into [Razer Sensa HD haptics](lightbar-mirrors.md#razer-sensa-hd-haptics). |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
 
 ---
 
@@ -189,27 +187,6 @@ See [DSU Motion Server](../reference/dsu-motion-server.md) for full details.
 
 ---
 
-## Lightbar Mirrors
-
-Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works. One section, two rows, each with its own checkbox and status line. Both are off by default.
-
-| Row | Checkbox | Description |
-|-----|----------|-------------|
-| **Razer Chroma** | **Mirror Lightbar to Razer Chroma** | Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads *Razer Synapse not detected. Retrying.* until Synapse answers, then *Connected to Razer Chroma*. |
-| **Logitech LIGHTSYNC** | **Mirror Lightbar to Logitech LIGHTSYNC** | Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads *Logitech G HUB not detected. Retrying.* until the engine answers, then *Connected to Logitech LIGHTSYNC*. |
-
-See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md) for what feeds them and their limits.
-
----
-
-## Razer Sensa HD Haptics
-
-Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 Pro, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, **Send Rumble to Sensa HD Haptics**, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. A Wolverine V3 Pro also has to be in PC mode with firmware v2.02 or later, and plays no Sensa haptics in Xbox mode. The status reads *Razer Sensa runtime not found. Retrying.* until the runtime answers, then *Streaming rumble to Sensa HD Haptics*. The ARM64 build reads *Not Available on ARM64*: Razer ships no ARM64 engine, so nothing starts there.
-
-See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md#razer-sensa-hd-haptics) for the translation and its limits.
-
----
-
 ## Overlays
 
 The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.
@@ -248,7 +225,6 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 - [Web Controller](../guides/web-controller.md): browser-based virtual controller.
 - [Menus](../guides/menus.md): the radial and touch menus the Menu Overlay draws.
 - [Head Tracking](head-tracking.md): OpenTrack setup for the Head Tracking section.
-- [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md): the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.
 
 ---
 

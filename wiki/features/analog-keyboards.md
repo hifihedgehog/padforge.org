@@ -96,9 +96,11 @@ Analog keys appear in a macro's **Add from List** dropdown under the keyboard, a
 
 ### Set Chroma Color
 
-**Set Chroma Color**, in the **Lightbar & LEDs** group, paints every Razer Chroma device one color while the action runs. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the [Razer Chroma lightbar mirror](lightbar-mirrors.md#razer-chroma) is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.
+**Set Chroma Color**, in the **Lightbar & LEDs** group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every [Lighting](lighting.md) tab, and when the action ends the lighting goes back to the color a Lighting tab or a vendor row sets, or to Razer Synapse. It needs Synapse running.
 
 To hold a color for as long as the key is held, set the macro to **While Held** with **Until Release** and give the action a long **Duration**. When two macros paint at once, the one lower in the list wins. Put a full-press macro below its soft-press twin and the keys turn the full-press color at the bottom of the press and back to the soft-press color on the way up.
+
+Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the Lighting tab the keyboard's own row gets. See [Mice, Keyboards and Vendor Rows](peripherals.md).
 
 ---
 

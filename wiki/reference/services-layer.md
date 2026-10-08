@@ -32,10 +32,10 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `LegacyBaseMappingProjection` | Writes a slot's Base-layer rows into the layerless descriptor fields of every assigned device's `PadSetting`. Called from `SettingsService.UpdatePadSettingsFromViewModels` |
 | `SlotAppearancePersistence` | Captures and applies the per-slot 3D preview appearance (`SlotModel3DAppearances`), and rebuilds it from the legacy per-`PadSetting` maps for files saved before the move |
 | `ExternalControlService` | Named-pipe profile control for launchers and scripts (#366). Detail on [External Control Internals](external-control-internals.md) |
-| `ChromaLightbarService` | Mirrors a virtual Sony pad's lightbar into Razer Chroma (#373). Detail on [Lightbar Mirrors Internals](lightbar-mirrors-internals.md) |
-| `LightsyncLightbarService` | The same mirror into Logitech LIGHTSYNC (#382). Detail on [Lightbar Mirrors Internals](lightbar-mirrors-internals.md) |
-| `LogiLedEngineNative` | The registry-loader shim that finds and binds Logitech's LED engine DLL for that service |
-| `SensaHapticsService` | Streams rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). Detail on [Sensa Haptics Internals](sensa-haptics-internals.md) |
+| `GameSenseClient` | The client for the GameSense server inside SteelSeries GG (#494). One PADFORGE game carries the rumble event the tactile Rival mice play and a color event per device type (mouse, keyboard, headset). The peripheral host's GameSense worker makes every call. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md) |
+| `LogiLedEngineNative` | The registry-loader shim that finds and binds the LED engine G HUB or Logitech Gaming Software installs, for the peripheral host's LED SDK worker (`LedSdkBackend`, #494). Its process check (`lghub_agent`, `lgs`, `LCore`) also tells the linker whether that software runs |
+| `SensaHapticsService` | Streams the Razer Sensa row's rumble into Razer Sensa HD haptics through the Interhaptics engine (#374). The peripheral host runs it only while that row is assigned to a virtual controller (#494). Detail on [Sensa Haptics Internals](sensa-haptics-internals.md) |
+| `PeripheralSwitchMigration` | Turns three retired Dashboard switches into assignments of the vendor rows that replaced them (#494): the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and Razer Sensa (#374). [Below](#peripheral-outputs-lifecycle-494) |
 | `RemoteAssignmentService` | Applies a paired Remote Link peer's authenticated slot-assignment requests on the UI dispatcher, refused unless that peer's trust entry allows remote assignments. Detail on [Remote Link Internals](remote-link-internals.md) |
 | `UpdateService` | In-app updates (#457): the release check, the download and its SHA-256 check, the record of an install waiting for the next launch, the handover to the helper that swaps the exe, and the cleanup. Detail on [Updates Internals](updates-internals.md) |
 | `UpdateController` | The Settings > Updates card (#457): the check timer, Check Now, Install and Restart, the background download, and every status line. UI thread only. Detail on [Updates Internals](updates-internals.md) |
@@ -109,6 +109,7 @@ graph TB
   - [DSU Server Lifecycle](#dsu-server-lifecycle)
   - [Web Controller Server Lifecycle](#web-controller-server-lifecycle)
   - [Audio Bass Detector Lifecycle](#audio-bass-detector-lifecycle)
+  - [Peripheral Outputs Lifecycle (#494)](#peripheral-outputs-lifecycle-494)
   - [Device Hiding](#device-hiding)
   - [Auto-Idle](#auto-idle)
   - [Profile Switching](#profile-switching)
@@ -205,7 +206,7 @@ PadForge uses three primary threads. Knowing which thread owns what prevents rac
 |--------|-------|------|------------------|
 | **UI thread** (WPF Dispatcher) | MainWindow | 30 Hz timer | All ViewModel property writes, device list sync, dashboard updates, macro recording, profile switching, settings forwarding |
 | **Polling thread** | InputManager | ~1000 Hz | SDL input read, mapping, deadzone processing, virtual controller output, rumble, DSU broadcast |
-| **Subsystem threads** | Various | Varies | DSU server (UDP), Web controller (HTTP/WebSocket), Audio bass detector (WASAPI), HidHide controller |
+| **Subsystem threads** | Various | Varies | DSU server (UDP), Web controller (HTTP/WebSocket), Audio bass detector (WASAPI), HidHide controller, the peripheral host's link thread and output workers (#494) |
 
 ### Thread-safety conventions
 
@@ -257,7 +258,7 @@ Startup sequence:
 10. **Start the self-healing sink workers**, unconditionally (cheap when nothing is configured): `RumbleAudioService.EnsureStarted()` (#236), `WiiSpeakerService.EnsureStarted()`, `HapticToneService.EnsureStarted()`. A one-shot `Reconcile()` on `AudioPassthroughService`, `WiiSpeakerService` and `HapticToneService` runs between them, and only when some device already has `AudioPassthroughEnabled`, so the audio threads stay off for users who never turn a mirror on.
 11. **Subscribe to ViewModel changes**. `SettingsViewModel.PropertyChanged`, `DashboardViewModel.PropertyChanged`, and the touchpad-gesture provider / applier hooks on `SettingsService`.
 12. **Create ForegroundMonitorService**. Subscribes `ProfileSwitchRequired` to `OnAutoProfileSwitchRequired`.
-13. **Start the opt-in side services**, each behind its own setting: `StartExternalControlIfEnabled()` (#366), `StartChromaIfEnabled()` (#373), `StartLightsyncIfEnabled()` (#382), `StartSensaIfEnabled()` (#374).
+13. **Start the side services**. `StartExternalControlIfEnabled()` (#366) runs behind its setting. `StartPeripheralOutputs()` (#494) has no setting: the peripheral host runs with the engine, and every peripheral output follows assignment. The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) mirrors and the Razer Sensa switch (#374) became its vendor rows. See [Peripheral Outputs Lifecycle](#peripheral-outputs-lifecycle-494).
 14. **Capture default profile snapshot**. Uses `PendingDefaultSnapshot` (from prior XML) or creates one via `SnapshotCurrentProfile()`.
 15. **Start engine**. `_inputManager.Start()` launches the polling thread.
 16. **Start subsystems**. DSU, web controller, Remote Link, touchpad overlay, and the audio bass detector, each conditional on its Dashboard setting.
@@ -275,7 +276,7 @@ Raw Input enumeration is not part of this sequence. Keyboards, mice, and consume
 2. On the dispatcher: stops the UI timer and unsubscribes its Tick, clears every mapping row's `IsInputActive` and each pad's pipeline liveness flags, unsubscribes `SettingsViewModel.PropertyChanged` and `DashboardViewModel.PropertyChanged`, and closes the touchpad, VC-toggle, shift-layer, and menu overlay windows.
 3. Leaves the constructor-only handlers subscribed on purpose: `Devices.PropertyChanged` and the per-pad `SelectedDeviceChanged` / `MappingsRebuilt` / `LayerChanging` / `LayerActivated`. `Start()` never re-adds them, so tearing them down on an engine stop would break device selection and mapping rebuilds until the app restarts.
 4. Unsubscribes `ForegroundMonitorService.ProfileSwitchRequired` and drops the instance.
-5. Stops the opt-in side services (external control, Chroma, LIGHTSYNC, Sensa), then the DSU server, the web controller server, Remote Link, and the audio bass detector.
+5. Stops external control and the peripheral host (`StopPeripheralOutputs`), then the DSU server, the web controller server, Remote Link, and the audio bass detector.
 6. Calls `RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)`, so the persistent-cloaks setting is honored on shutdown while a mid-session `EnableInputHiding` toggle still decloaks immediately.
 7. Unsubscribes all four source registries (`NfcTagRegistry.RegistryChanged`, `VoicePhraseRegistry.RegistryChanged`, `HandheldButtonRegistry.RegistryChanged` and `.ActivityChanged`) and the engine events, drops the per-pad device-config and assign-offer handlers, calls `_inputManager.Stop()` and `_inputManager.Dispose()`, then nulls every static provider it wired in `Start()`, disarms the Switch NFC and Joy-Con IR hints, and disposes `CursorControlService`. `UpdateHeadTrackingStatus()` is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.
 8. Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.
@@ -437,9 +438,6 @@ Propagates `DashboardViewModel` changes:
 |----------|--------|
 | `EnableDsuMotionServer` | Starts or stops DSU server |
 | `DsuMotionServerPort` | Restarts DSU server if enabled |
-| `EnableChromaLightbar` | Starts or stops the Razer Chroma lightbar mirror (#373) |
-| `EnableLightsyncLightbar` | Starts or stops the Logitech LIGHTSYNC lightbar mirror (#382) |
-| `EnableSensaHaptics` | Starts or stops the Razer Sensa HD haptics service (#374) |
 | `EnableWebController` | Starts or stops web controller server |
 | `WebControllerPort`, `EnableWebControllerPlainHttp`, `WebControllerPlainHttpPort`, `WebControllerPlainHttpLocalOnly` | Restarts web controller server if enabled |
 | `WebControllerAccessCode` | Hands the new code to the running server, which drops every session that joined through the plain address, then refreshes the card's plain address and QR code |
@@ -454,7 +452,7 @@ All fire on the **polling thread** and are marshalled to UI via `Dispatcher.Begi
 
 | Handler | Action |
 |---------|--------|
-| `OnDevicesUpdated` | `SyncDevicesList()`, `RefreshVoiceObjects()`, `UpdatePadDeviceInfo()`, `EvaluateAssignOffers()` (after the rosters, so "slot has devices" reads this walk's truth), a `BuildDeviceRegistrySignature()` diff that calls `MarkDirty()` only when the registry actually changed, `ApplyDeviceHiding()`, `ReseedPlayerIdentities(applySonyDispatchers: false)` (#191), `ApplyGuideLeds()` (#209), then a re-attach + `ReApplyUserEffects()` pass over every HM VC plus `ReApplyNonHmUserEffects()`, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose |
+| `OnDevicesUpdated` | `_peripheralHost?.Nudge()` (#494, so the link pass runs at once for a device that came or went), `SyncDevicesList()`, `RefreshVoiceObjects()`, `UpdatePadDeviceInfo()`, `EvaluateAssignOffers()` (after the rosters, so "slot has devices" reads this walk's truth), a `BuildDeviceRegistrySignature()` diff that calls `MarkDirty()` only when the registry actually changed, `ApplyDeviceHiding()`, `ReseedPlayerIdentities(applySonyDispatchers: false)` (#191), `ApplyGuideLeds()` (#209), then a re-attach + `ReApplyUserEffects()` pass over every HM VC plus `ReApplyNonHmUserEffects()`, repeated on a delayed burst at 250 / 750 / 1500 / 3000 / 6000 / 12000 / 15000 ms so SDL's PS5 player-default lightbar writes lose |
 | `OnTabletCaptureChanged` | Updates the Devices row's tablet capture state and reports a failed capture. A rolled-back capture turns the tablet's HidHide toggle off and re-applies hiding |
 | `OnFrequencyUpdated` | No-op (frequency read on next UI tick) |
 | `OnErrorOccurred` | `_mainVm.SetStatus(..., persist: true)` |
@@ -638,6 +636,28 @@ Clears `_inputManager.AudioBassDetector`, disposes detector, zeros all pad level
 
 When `_audioBassDetector != null`, reads `BassEnergy` and pushes to `padVm.AudioRumbleLevelMeter` for each created slot with `AudioRumbleEnabled`.
 
+### Peripheral Outputs Lifecycle (#494)
+
+A mouse, keyboard or vendor row assigned to a virtual controller is an output device of that controller, with its own Lighting tab when PadForge can light it and its own Force Feedback tab when it can rumble. `PeripheralOutputHost` (`PeripheralOutputHost.cs` line 21) runs that subsystem for as long as the engine runs. It replaced `ChromaLightbarService`, `LightsyncLightbarService` and the Sensa switch's service lifecycle, and no peripheral output has a Dashboard setting anymore. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+
+#### `StartPeripheralOutputs()` (private)
+
+`InputService.cs` line 10212, step 13 of `Start()`. Returns when there is no engine or a host already runs. It builds the host, hands it `SlotHasController` (`InputManager.HasVirtualControllerAt`, `InputManager.Step5.VirtualDevices.cs` line 3126) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes `CapabilitiesChanged`, and starts it.
+
+`PeripheralOutputHost.Start` (line 72) starts the HID++, GameSense, Razer Chroma and LED SDK workers and the `PeripheralLink` thread. That thread reads which vendor software is present every 5 s (`PresenceMs`) and runs a link pass every 500 ms (`LinkMs`): it ties each online vendor row, and each online Logitech, Razer or SteelSeries mouse or keyboard on this PC, to its output paths, drops the lighting claims of devices no longer assigned to their slot, and keeps each row's recorded outputs current. The GameSense, Chroma and LED SDK workers reach the vendor's software only while something assigned uses it. The HID++ worker scans the Logitech HID++ collections on its own, and plays or lights only a unit a linked row asks for. `SensaLifecycle` (line 289) runs the `SensaHapticsService` worker only while the Razer Sensa row is assigned to a virtual controller, and starts a worker that ended on its own again after 30 s (`SensaRestartMs`).
+
+#### `StopPeripheralOutputs()` (private)
+
+`InputService.cs` line 10223, step 5 of `Stop()`. Unsubscribes and disposes the host. `PeripheralOutputHost.Stop` (line 92) joins the link thread, stops the Sensa, LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.
+
+#### `OnPeripheralCapabilitiesChanged()` (private)
+
+`InputService.cs` line 10235. Raised from the link thread when a row's recorded outputs (`UserDevice.PeripheralOutputs`) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.
+
+`OnDevicesUpdated` nudges the host, so the link pass runs at once for a device that came or went rather than at the next 500 ms tick. `PanicQuiesceOutputs` (line 12975) waits up to 250 ms for the GameSense worker to tell GG that a tactile Rival is silent (`WaitForSilence`), then hands every Logitech unit lit straight over HID++ back to its own effect (`ReleaseLightingNow`). `IsShareableDevice` (line 11706) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.
+
+The Dashboard switches the vendor rows replaced are read once at load. `LoadFromFile` runs `PeripheralSwitchMigration` (`PeripheralSwitchMigration.cs` line 38) at `SettingsService.cs` line 538, and `ProfileTransfer.Import` runs it at `ProfileTransfer.cs` line 150. [Settings and Serialization](settings-and-serialization.md) has the rules.
+
 ### Device Hiding
 
 #### `ApplyDeviceHiding()` (public)
@@ -693,7 +713,7 @@ Restores a profile, in this order:
 7. **Slot orders**. `SlotOrders.RebuildFromCurrentTopology` rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.
 8. **Extended, MIDI and KB+M configs**. Restores per-slot Extended config (`Customize` toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile has one), and the KB+M slot's `Surfaces` (#408) and `SocdMode` / `SocdPairs` (#205).
 9. **Macros**. When `profile.Macros` is non-null, replaces the live macro set via `LoadMacros(profile.Macros)`. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.
-10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` starts or stops the mirrors a profile has an opinion about. A null leg leaves the global value alone.
+10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` (`SettingsService.cs` line 4235) applies the head-tracking opinions a profile carries, `EnableHeadTracking` and `EnableHeadTrackingFreeTrack`. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.
 11. **Server and overlay settings**. DSU and web controller enable and port (ports validated to 1024-65535), plus `EnableTouchpadOverlay`, `EnableMenuOverlay`, `EnableShiftLayerFlyout`, `EnableProfileOverlay` and the touchpad overlay's monitor, position, size and opacity.
 12. **Rebuilds UI**. Applies the profile's slot appearances, then `UpdatePadDeviceInfo()`, reloads PadSettings, refreshes mapping rows per pad through `RefreshMappingsToViewModel` and `PopulateAvailableInputs`, then `SyncDevicesList()`. The whole reconciliation runs under `VmMappingsStale = true` in a `try` / `finally`. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.
 
@@ -797,7 +817,7 @@ When `deviceGuid` is non-null **and not `Guid.Empty`**, the call also stores the
 | Consumer | Where |
 |----------|-------|
 | The Sony effects dispatcher | `UserEffectsDispatcher.TestRumbleTargetGuidProvider`, wired in `Start()` and nulled in `Stop()`. A non-empty target also nulls `overrides.RumbleRight` / `RumbleLeft` so external-writer rumble mirroring cannot beat the user's test |
-| SDL physical rumble | `InputManager.Step2.UpdateInputStates.cs` |
+| Physical rumble in Step 2, haptic mice, keyboards and the Razer Sensa row included (#494) | `InputManager.Step2.UpdateInputStates.cs` |
 | Steering-lock feedback | `InputManager.Step3.SteeringLockFeedback.cs` |
 
 The gate is `target == Guid.Empty || ud.InstanceGuid == target`, so per-device effects on the Impulse Triggers / Force Feedback / Adaptive Triggers / Lighting tabs only fire on the selected pad.
@@ -834,7 +854,7 @@ The profile-switch flyout is gated differently: `ShowProfileSwitchOverlay` runs 
 | `SendTestRumble` | `void SendTestRumble(int padIndex, Guid? deviceGuid)` | Sends brief test rumble (both motors 65535) |
 | `SendTestRumble` | `void SendTestRumble(int padIndex, Guid? deviceGuid, bool left, bool right)` | Sends selective test rumble |
 | `SendTestImpulseTrigger` | `void SendTestImpulseTrigger(int padIndex, Guid? deviceGuid, bool left, bool right)` | Test pulse on the impulse-trigger motors (#74) |
-| `IdentifyDevice` | `void IdentifyDevice(Guid instanceGuid)` | Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the `SendTestRumble` lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (`RemoteLinkOutputRouter.ShipIdentify`) |
+| `IdentifyDevice` | `void IdentifyDevice(Guid instanceGuid)` | Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the `SendTestRumble` lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (`RemoteLinkOutputRouter.ShipIdentify`). A haptic mouse or keyboard takes the train as levels through `PeripheralOutputs.SetMotors`, under its output gate (#494) |
 | `TestBatteryNotification` | `void TestBatteryNotification()` | Pushes a synthetic low-battery event through the real delivery pipeline (tray balloon, status line, identify buzz) without draining a pad (#293). Leaves the edge state untouched |
 | `BatteryEdgeDecision` | `static (bool Fire, bool Notified) BatteryEdgeDecision(bool hadState, int lastPct, bool notified, int pct, bool charging, int threshold)` | The pure low-battery edge rule (#293). Fires only on a crossing to at-or-below the threshold, never while charging. Charging or a rise past threshold+5 re-arms |
 | `AssignOfferDecision` | `static bool AssignOfferDecision(...)` | The pure assign-offer rule, sibling of `BatteryEdgeDecision`. Decides whether a newly seen online device raises the slot's assign offer |
@@ -876,7 +896,7 @@ The profile-switch flyout is gated differently: `ShowProfileSwitchOverlay` runs 
 | `StopExpressionVariableRecording` | `void StopExpressionVariableRecording()` | Stops a per-variable recording session |
 | `RefreshAvailableInputsForSlot` | `void RefreshAvailableInputsForSlot(PadViewModel padVm)` | Rebuilds a slot's mapping input choices after an assignment change |
 | `SetBalanceTare` | `void SetBalanceTare(Guid deviceGuid)` | Captures the Wii Balance Board's current weight as the tare zero (#146) |
-| `PanicQuiesceOutputs` | `void PanicQuiesceOutputs()` | Zeros rumble and stops haptic tones on abnormal exit |
+| `PanicQuiesceOutputs` | `void PanicQuiesceOutputs()` | On abnormal exit: zeros rumble, waits up to 250 ms for GG to stop a tactile Rival, hands Logitech units lit over HID++ back to their own effect (#494), stops haptic tones, and silences the Bass Shakers |
 | `PurgeStaleHidHideCloaks` | `void PurgeStaleHidHideCloaks()` | Clears every HidHide blacklist entry (Reset to Defaults) |
 | `ClearGyroAutoCalibLatch` | `void ClearGyroAutoCalibLatch(Guid instanceGuid, int slot)` | Re-arms auto-calibration for a (device, slot) pair, clearing both the dedup latch and the retry-attempts ledger under `UserDevices.SyncRoot` |
 | `IsHmVcAt` | `bool IsHmVcAt(int padIndex)` | Whether the slot currently has an HM virtual controller |
@@ -1017,6 +1037,7 @@ Search order (all relative to `AppDomain.CurrentDomain.BaseDirectory`):
 3. **PadSetting linking**: finds PadSetting by checksum and clones it. Cloning is critical. Without it, devices sharing a checksum would share one object.
 4. Purges only the empty legacy orphans: a UserSetting parked at `MapTo == -1` with no PadSetting (`IsEmptyLegacyOrphan`). A parked row that carries a PadSetting survives, because `ApplyProfile` parks unassigned devices that way (#404).
 5. Calls `LoadOrMigrateSlotMappingSets()`, `LoadAppSettings()`, `LoadPadSettings()`, `LoadMacros()`, `LoadProfiles()`, then `MaskMappingSetsForUncreatedSlots()` and `EnsureMotionRowsForAllSlots()`.
+6. Runs `PeripheralSwitchMigration.Run` (#494), which turns the retired Chroma, LIGHTSYNC and Sensa switches into vendor-row assignments. When it changed anything, `Initialize()` and `Reload()` mark the file dirty after their own clear, so the result is saved once.
 
 #### `LoadAppSettings(AppSettingsData)` (private)
 
@@ -1806,6 +1827,7 @@ App.OnStartup
   |     |-- LoadProfileShortcuts(), window placement restore, sidebar + dashboard rebuild
   |     |-- if (Settings.AutoStartEngine) InputService.Start()
   |     |     |-- EnsureStarted: RumbleAudioService / WiiSpeakerService / HapticToneService
+  |     |     |-- StartPeripheralOutputs()      [peripheral host and its workers, #494]
   |     |     |-- InputManager.Start()          [launches polling thread]
   |     |     |-- StartDsuServerIfEnabled()
   |     |     |-- StartWebServerIfEnabled()
@@ -1837,6 +1859,7 @@ MainWindow.OnClosing
   |     |-- RecorderService.Dispose()
   |     |-- InputService.Dispose() -> Stop()
   |     |     |-- UI timer stops, overlays close, ViewModel events unsubscribed
+  |     |     |-- StopPeripheralOutputs()       [#494]
   |     |     |-- StopDsuServer() / StopWebServer() / StopRemoteLink()
   |     |     |-- StopAudioBassDetector()
   |     |     |-- RemoveDeviceHiding(keepCloaks: KeepHidHideCloaksBetweenLaunches)
@@ -1910,6 +1933,7 @@ User clicks Record button
 - [XAML Views](xaml-views.md): `MainWindow.xaml.cs` wires services to ViewModels
 - [Engine Library](engine-library.md): `Gamepad`, `CustomInputState`, `UserDevice`, `UserSetting`
 - [DSU Protocol Implementation](dsu-protocol.md): `DsuMotionServer` lifecycle managed by `InputService`
+- [Peripheral Outputs Internals](peripheral-outputs-internals.md): the peripheral host, its workers and the vendor rows that `InputService` starts with the engine
 
 ---
 

@@ -1449,14 +1449,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -2790,17 +2790,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#vendor-lighting-and-haptic-mirrors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Vendor Lighting and Haptic Mirrors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#web-controller-server" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5069,6 +5058,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#peripheral-lighting-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral lighting (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#audio-to-lightbar-55" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5530,14 +5530,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -6216,17 +6216,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#vendor-lighting-and-haptic-mirrors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Vendor Lighting and Haptic Mirrors
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#web-controller-server" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -8495,6 +8484,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#peripheral-lighting-494" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Peripheral lighting (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#audio-to-lightbar-55" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -8601,6 +8601,7 @@
 <p><strong>v4.2:</strong> The VR output type (#49) lands as <code>VirtualControllerType.Vr</code> (6), with a <code>VrControllerIcon</code> sidebar entry, a <code>VrOutputSnapshot</code>, and a SteamVR row in both driver-status surfaces (<code>DashboardViewModel.IsSteamVrInstalled</code>, plus the install / uninstall pair on <code>SettingsViewModel</code>). The pad page grows two slot-tier tabs: Bass Shakers at index 16 and Output at index 17 (SOCD plus Keep Controller Awake). <code>DeviceSlotConfig</code> gains headphone-jack volume, the DualSense audio-output path, and persona haptics, with <code>MacroActionType.HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> (52 / 53) driving the volume. Sony headset head trackers get their own device class (<code>HeadsetMotion</code>, #188). <code>RawHidState</code> replaced the old <code>ExtendedRawState</code>, so the Extended snapshot is now <code>RawHidOutputSnapshot</code>.</p>
 <p><strong>v4.3:</strong> The mapping picker gains one shared per-slot choice list plus a search box and device-visibility filter (#322 / discussion #302), both on <code>PadViewModel</code>. Voice macros (#317) add the <code>"Microphone"</code> device class, the Voice Macros preview on <code>DevicesViewModel</code>, <code>DeviceRowViewModel.ShowManageVoicePhrases</code>, and <code>MacroActionType.VoiceListenWhileHeld</code> (54). <code>MacroAction</code> grows the pressure-scaled turbo block (#290). <code>StickConfigItem</code> grows stick trackball momentum (#291), the touchpad partial grows the shared momentum knobs, and <code>PadViewModel</code> grows the Gyro Tilt envelope (#292). The Dashboard's web-controller card gains a URL and QR (#296), its SteamVR row goes tiered (#287), and Settings gains the low-battery notification trio (#293).</p>
 <p><strong>v4.4:</strong> Head tracking moves from <code>SettingsViewModel</code> to <code>DashboardViewModel</code>, which also gains the Razer Chroma (#373), Logitech LIGHTSYNC (#382) and Razer Sensa (#374) enable-plus-status pairs. The Dashboard's driver-status strip is gone, leaving three bare installed flags and the full cards on Settings. <code>DeviceRowViewModel</code> gains <code>ShowQuickCharge</code> (#372), and <code>IsInternalVirtual</code> grows the <code>handheld://</code>, <code>sensor://</code> and <code>headtrack://</code> schemes. <code>PadViewModel</code> gains the <code>ExtendedConfig</code> reseed on a profile switch, the Grip option list and <code>IsLoadingPadSetting</code> (#392), the grouped <code>MacroTypeCatalog</code> picker, menu macro cells and <code>.pficons</code> icon packages (#390). The Profiles page gains external control (#366) and the per-profile polling override (#365).</p>
+<p><strong>Peripheral outputs (#494):</strong> <code>DashboardViewModel</code> loses the Razer Chroma, Logitech LIGHTSYNC and Razer Sensa enable-plus-status pairs. Those outputs are vendor rows on the Devices page now, assigned to a virtual controller like any device, and each row's tab names where its output goes. <code>DeviceSlotConfig</code> gains <code>PeripheralLightingEnabled</code>, the Lighting tab's Control This Device’s Lighting switch for a mouse or keyboard. <code>DeviceRowViewModel</code> gains the <code>"PeripheralLighting"</code> and <code>"PeripheralHaptics"</code> type keys. <code>MacroActionType.SetChromaColor</code> paints the Razer devices assigned to its macro's virtual controller.</p>
 </blockquote>
 <hr />
 <p>All ViewModels live in <code>PadForge.App/ViewModels/</code> (<code>PadForge.ViewModels</code> namespace). Built on <a href="https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/">CommunityToolkit.Mvvm</a> (<code>ObservableObject</code>, <code>RelayCommand</code>).</p>
@@ -9226,56 +9227,6 @@
 <tr>
 <td><code>NotifyHeadTrackingRangesChanged()</code></td>
 <td>Re-raises the six per-axis ranges and rebuilds the runtime list after a settings load or Reset to Defaults writes the statics they read. The rebuild lists a saved runtime the registry no longer names, which a list built before the load lacks.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="vendor-lighting-and-haptic-mirrors">Vendor Lighting and Haptic Mirrors<a class="headerlink" href="#vendor-lighting-and-haptic-mirrors" title="Permanent link">&para;</a></h3>
-<p>Three optional vendor bridges, each an enable plus a status string that null-coalesces to <code>"Stopped"</code>. All three landed on the Dashboard on 2026-09-02.</p>
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>EnableChromaLightbar</code></td>
-<td><code>bool</code></td>
-<td><code>false</code></td>
-<td>Razer Chroma lightbar mirror (#373).</td>
-</tr>
-<tr>
-<td><code>ChromaStatus</code></td>
-<td><code>string</code></td>
-<td><code>"Stopped"</code></td>
-<td>Chroma mirror status.</td>
-</tr>
-<tr>
-<td><code>EnableLightsyncLightbar</code></td>
-<td><code>bool</code></td>
-<td><code>false</code></td>
-<td>Logitech LIGHTSYNC lightbar mirror (#382).</td>
-</tr>
-<tr>
-<td><code>LightsyncStatus</code></td>
-<td><code>string</code></td>
-<td><code>"Stopped"</code></td>
-<td>LIGHTSYNC mirror status.</td>
-</tr>
-<tr>
-<td><code>EnableSensaHaptics</code></td>
-<td><code>bool</code></td>
-<td><code>false</code></td>
-<td>Razer Sensa HD rumble translation (#374).</td>
-</tr>
-<tr>
-<td><code>SensaStatus</code></td>
-<td><code>string</code></td>
-<td><code>"Stopped"</code></td>
-<td>Sensa translation status.</td>
 </tr>
 </tbody>
 </table>
@@ -12545,7 +12496,7 @@
 <tr>
 <td><code>DeviceTypeKey</code></td>
 <td><code>string</code></td>
-<td>English type key: <code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HeadsetMotion"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, <code>"LogitechGKeys"</code>. Anything else falls back to the generic "Device" label. The setter notifies every derived property that reads the key. A row is constructed before the key is known, so one missing from that list evaluates once against the empty string and its binding never updates (#315).</td>
+<td>English type key: <code>"Gamepad"</code>, <code>"Joystick"</code>, <code>"Wheel"</code>, <code>"FlightStick"</code>, <code>"FirstPerson"</code>, <code>"Supplemental"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HeadsetMotion"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, <code>"LogitechGKeys"</code>, <code>"AnalogKeyboard"</code>, <code>"WebMenus"</code>, and the vendor rows' <code>"PeripheralLighting"</code> and <code>"PeripheralHaptics"</code> (#494, labeled "Lighting" and "Haptics"). Anything else falls back to the generic "Device" label. The setter notifies every derived property that reads the key. A row is constructed before the key is known, so one missing from that list evaluates once against the empty string and its binding never updates (#315).</td>
 </tr>
 <tr>
 <td><code>DeviceType</code></td>
@@ -12755,7 +12706,7 @@
 <tr>
 <td><code>ShowSubmitMapping</code></td>
 <td><code>bool</code></td>
-<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"HeadsetMotion"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, and <code>"LogitechGKeys"</code>.</td>
+<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"HeadsetMotion"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, <code>"LogitechGKeys"</code>, <code>"AnalogKeyboard"</code>, <code>"WebMenus"</code>, <code>"PeripheralLighting"</code>, and <code>"PeripheralHaptics"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -12949,7 +12900,7 @@
 </tbody>
 </table>
 <h3 id="per-slot-device-lighting-adaptive-trigger-configuration">Per-(Slot, Device) Lighting / Adaptive Trigger Configuration<a class="headerlink" href="#per-slot-device-lighting-adaptive-trigger-configuration" title="Permanent link">&para;</a></h3>
-<p>Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. See <a href="#deviceslotconfig">DeviceSlotConfig</a>.</p>
+<p>Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. A lit mouse, keyboard or vendor row (#494) gets its own config here too, whose <code>PeripheralLightingEnabled</code> decides whether this slot lights a mouse or keyboard at all. See <a href="#deviceslotconfig">DeviceSlotConfig</a>.</p>
 <table>
 <thead>
 <tr>
@@ -15373,7 +15324,7 @@
 <td><code>SelectedConfigTab</code></td>
 <td><code>int</code></td>
 <td><code>0</code></td>
-<td>Always-visible: 0=Preview (the <code>TabController</code> RadioButton, <code>Tag="0"</code>, binds <code>Pad_Tab_Preview</code> = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers, 5=Force Feedback. Visibility-gated on the active source device's capability flags: 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (HasLightbar), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio (<code>AudioTabIndex</code>), 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2: 15=Menus (#9, always visible), 16=Bass Shakers (<code>BassShakersTabIndex</code>, gated on <code>RumbleAudioTabVisible</code>), 17=Output (<code>OutputTabIndex</code>, gated on <code>OutputTabVisible</code>). Tag values match the <code>RadioButton.Tag</code> strings on the PadPage tab strip. Entering 12 re-derives the sound-macro list and the mirror endpoints. Entering 16 re-enumerates render endpoints and re-seeds the voice rows. A gate that closes under the current selection evicts it back to tab 0.</td>
+<td>Always-visible: 0=Preview (the <code>TabController</code> RadioButton, <code>Tag="0"</code>, binds <code>Pad_Tab_Preview</code> = "Preview"), 1=Macros, 2=Mappings, 3=Sticks, 4=Triggers. Visibility-gated on the active source device's capability flags: 5=Force Feedback (a stick-class device, or a haptic mouse, keyboard or the Razer Sensa row, #494), 6=Adaptive Triggers (HasAdaptiveTriggers), 7=Lighting (a lightbar, a Guide or HOME LED, or a lit mouse, keyboard or vendor row, #494), 8=Gyro (HasGyro), 9=Impulse Triggers (HasRumbleTriggers), 10=Touchpad (HasTouchpad), 11=Wheel, 12=Audio (<code>AudioTabIndex</code>), 13=Pointer (IR-capable Wii Remote, #146), 14=Mouse (source device is a mouse, #200). Slot-scope like tabs 0–2: 15=Menus (#9, always visible), 16=Bass Shakers (<code>BassShakersTabIndex</code>, gated on <code>RumbleAudioTabVisible</code>), 17=Output (<code>OutputTabIndex</code>, gated on <code>OutputTabVisible</code>). Tag values match the <code>RadioButton.Tag</code> strings on the PadPage tab strip. Entering 12 re-derives the sound-macro list and the mirror endpoints. Entering 16 re-enumerates render endpoints and re-seeds the voice rows. A gate that closes under the current selection evicts it back to tab 0.</td>
 </tr>
 </tbody>
 </table>
@@ -17579,7 +17530,7 @@
 <p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253. Shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
 <p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
-<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317), <code>SwitchLayer</code> (55, #377). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. <code>SwitchLayer</code> is one-shot: it writes the shift runtime's <code>CustomLayer</code> override under the Latch activator's own lock-and-version discipline, so the layer stays engaged until another switch, a Latch or Cycle transition, or a profile switch. Its parameter is <code>MacroAction.SwitchLayerMask</code> (default <code>"Base"</code>) and its gate is <code>IsSwitchLayerType</code>. The append-only rule is stated in code beside the enum.</p>
+<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317), <code>SwitchLayer</code> (55, #377), <code>SetChromaColor</code> (56, #468), <code>ShowDreamcastScreen</code> (57, #469). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. <code>SwitchLayer</code> is one-shot: it writes the shift runtime's <code>CustomLayer</code> override under the Latch activator's own lock-and-version discipline, so the layer stays engaged until another switch, a Latch or Cycle transition, or a profile switch. Its parameter is <code>MacroAction.SwitchLayerMask</code> (default <code>"Base"</code>) and its gate is <code>IsSwitchLayerType</code>. <code>SetChromaColor</code> has the <code>AxisHold</code> duration shape: Step 4b asserts its color (<code>LightbarR</code>, <code>LightbarG</code>, <code>LightbarB</code>) for the macro's slot on every frame the action is current, through <code>PeripheralOutputs.AssertChromaMacro</code> (#494). The Chroma worker paints the categories of the Razer devices assigned to that slot, every category when the Razer Chroma row is, over every Lighting tab, and lets go within 120 ms of the action ending. Two macros current in one frame resolve to the last one evaluated. Its gate is <code>IsSetChromaColorType</code>. The append-only rule is stated in code beside the enum.</p>
 <p>The editor's type picker is grouped, not a flat list of these members. See <code>MacroTypeCatalog</code> under <a href="#macros">PadViewModel's Macros section</a>.</p>
 <p><strong>MacroDisconnectTarget</strong> (#162): <code>TriggeringDevice</code> (0), <code>SpecificDevice</code> (1), <code>SlotDevices</code> (2), <code>AllDevices</code> (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.</p>
 <p><strong>MacroLightbarHoldMode:</strong> <code>Reactive</code>, <code>Sticky</code> (v3.1)</p>
@@ -19394,7 +19345,7 @@
 <hr />
 <h2 id="deviceslotconfig">DeviceSlotConfig<a class="headerlink" href="#deviceslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>DeviceSlotConfig.cs</code></p>
-<p>Per-(slot, device) output configuration. Renamed from <code>PlayStationSlotConfig</code> in commit <code>3fd97c89</code>. It is not PlayStation-only. Drives the Adaptive Triggers and Lighting tabs. Held per physical device on a slot (<code>PadViewModel.PerDeviceSlotConfigs</code>), so two devices on one slot each carry their own config. Parallel to <code>ExtendedSlotConfig</code> and <code>MidiSlotConfig</code>: <code>ObservableObject</code> with a paired <code>[XmlAttribute]</code> data record.</p>
+<p>Per-(slot, device) output configuration. Renamed from <code>PlayStationSlotConfig</code> in commit <code>3fd97c89</code>. It is not PlayStation-only. Drives the Adaptive Triggers and Lighting tabs, the Lighting tab of a lit mouse, keyboard or vendor row included (#494). Held per physical device on a slot (<code>PadViewModel.PerDeviceSlotConfigs</code>), so two devices on one slot each carry their own config. Parallel to <code>ExtendedSlotConfig</code> and <code>MidiSlotConfig</code>: <code>ObservableObject</code> with a paired <code>[XmlAttribute]</code> data record.</p>
 <h3 id="adaptive-triggers-per-trigger">Adaptive Triggers (per trigger)<a class="headerlink" href="#adaptive-triggers-per-trigger" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -19983,6 +19934,26 @@
 </tr>
 </tbody>
 </table>
+<h3 id="peripheral-lighting-494">Peripheral lighting (#494)<a class="headerlink" href="#peripheral-lighting-494" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PeripheralLightingEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The Lighting tab's Control This Device’s Lighting switch (<code>DeviceSlotConfig.cs</code> line 1003). On, this virtual controller lights a mouse or keyboard with the modes above, and the slot's effects dispatcher holds a lighting claim on the device. Off, the dispatcher releases this slot's claim, so the color comes from another virtual controller that lights the device, a vendor row, another device of its kind on a shared path, or the device's own software. A Set Chroma Color macro on this virtual controller still paints a Razer device. Off by default, so assigning a keyboard for its keys never repaints it. The vendor lighting rows ignore it, since lighting is all they carry. A change re-checks the dispatcher's animation timer.</td>
+</tr>
+</tbody>
+</table>
+<p><code>ResetPeripheralLightingEnabledCommand</code> turns it back off.</p>
 <h3 id="audio-to-lightbar-55">Audio-to-lightbar (#55)<a class="headerlink" href="#audio-to-lightbar-55" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -20064,7 +20035,7 @@
 <p><strong>MicLedDeviceItem:</strong> <code>Id</code> (CoreAudio endpoint string), <code>Display</code> (label, prefixed <code>[In]</code> / <code>[Out]</code>).</p>
 <p><strong>LightbarPaletteEntry</strong> (<code>ObservableObject</code>): <code>R</code>, <code>G</code>, <code>B</code> (byte), <code>Hex</code> (two-way <code>"RRGGBB"</code> shim, <code>[XmlIgnore]</code>).</p>
 <h3 id="deviceslotconfigdata">DeviceSlotConfigData<a class="headerlink" href="#deviceslotconfigdata" title="Permanent link">&para;</a></h3>
-<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>TouchpadSyntheticPressure</code> = false, <code>TouchpadSyntheticTouchPercent</code> = 50, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>AudioTritonLowPassHz</code> = 250, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>AudioCrossfeedLevel</code> = 0, <code>AudioCrossfeedCutHz</code> = 700, <code>AudioCrossfeedFeedDb</code> = 4.5, <code>AudioEqEnabled</code> = false, <code>AudioEqBands</code> = "", <code>AudioEqPreampDb</code> = 0, <code>AudioLimiterEnabled</code> = true, <code>AudioLimiterCeiling</code> = 98, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
+<p>Serializable DTO. All scalar properties are <code>[XmlAttribute]</code>. The two palettes are <code>[XmlArray]</code>. Key defaults: <code>LeftEndPosition</code>/<code>RightEndPosition</code> = 255, <code>LeftStrength</code>/<code>RightStrength</code> = 200, <code>LeftFrequency</code>/<code>RightFrequency</code> = 10, <code>LightbarBlue</code> = 0xFF, <code>AudioMirrorEngageMode</code> = "Always", <code>AudioMirrorEngageReleaseMs</code> = 500, <code>AudioToneFilterMode</code> = "Off", <code>AudioToneLimitHz</code> = 800, <code>TouchpadSyntheticPressure</code> = false, <code>TouchpadSyntheticTouchPercent</code> = 50, <code>AudioPersonaHapticsEnabled</code> = false, <code>AudioPersonaHapticsGain</code> = 100, <code>AudioTritonLowPassHz</code> = 250, <code>HeadphoneVolume</code> = 100 (a missing attribute on legacy XML keeps the initializer, so old configs load at full volume, the pre-feature effective behavior), <code>Ds5AudioBufferLength</code> = 48, <code>AudioOutputPath</code> = Automatic, <code>AudioCrossfeedLevel</code> = 0, <code>AudioCrossfeedCutHz</code> = 700, <code>AudioCrossfeedFeedDb</code> = 4.5, <code>AudioEqEnabled</code> = false, <code>AudioEqBands</code> = "", <code>AudioEqPreampDb</code> = 0, <code>AudioLimiterEnabled</code> = true, <code>AudioLimiterCeiling</code> = 98, <code>GuideLedMode</code> = DeviceDefault, <code>GuideLedBrightness</code> = 100, <code>PeripheralLightingEnabled</code> = false (#494: a config saved before the switch leaves every mouse and keyboard to its own software), <code>LightbarMode</code> = Off (the DTO default, migrated to PlayerNumber via <code>LightingRev</code>), <code>PlayerLedMode</code> = Off (likewise). It also carries a <code>DeviceGuid</code> (per-device key, empty = a legacy slot-level entry the loader fans out) and <code>LightingRev</code> (schema revision: 0 predates the PlayerNumber default and triggers the Off→PlayerNumber lift on load). <code>LightbarPaletteEntryData</code> is the palette element (<code>R</code>, <code>G</code>, <code>B</code> byte attributes).</p>
 <hr />
 <h2 id="kbmslotconfig">KbmSlotConfig<a class="headerlink" href="#kbmslotconfig" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>KbmSlotConfig.cs</code></p>

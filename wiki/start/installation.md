@@ -41,7 +41,7 @@ A few features wait on their vendors, because an ARM64 program can load ARM64 li
 | VR headset and controllers through SteamVR | Not available. PadForge loads SteamVR's win64 library |
 | Logitech LIGHTSYNC, OpenXR headset input | Only if the vendor's software installs an ARM64 engine or runtime |
 
-The Sensa status on the Dashboard reads **Not Available on ARM64** in the ARM64 build.
+The ARM64 build never adds the Razer Sensa row to the Devices page.
 
 The ARM64 build has not run on ARM64 hardware yet.
 

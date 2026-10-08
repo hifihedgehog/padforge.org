@@ -1350,28 +1350,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lightbar-mirrors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lightbar Mirrors
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#razer-sensa-hd-haptics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Razer Sensa HD Haptics
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1728,14 +1706,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors/" class="md-nav__link">
+      <a href="../peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -3185,14 +3163,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../../reference/peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -3832,28 +3810,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lightbar-mirrors" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lightbar Mirrors
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#razer-sensa-hd-haptics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Razer Sensa HD Haptics
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3909,7 +3865,7 @@
 <p><img alt="Dashboard overview showing engine status, virtual controllers, and services" src="../../images/dashboard.png" /></p>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
-<p>Ten sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then input services, output services, and overlays.</p>
+<p>Eight sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then the input services, the Motion Server, and the overlays.</p>
 <table>
 <thead>
 <tr>
@@ -3943,14 +3899,6 @@
 <td><a href="../../reference/dsu-motion-server/">DSU/Cemuhook</a> gyro broadcasting for emulators.</td>
 </tr>
 <tr>
-<td><strong>Lightbar Mirrors</strong></td>
-<td>Forward a virtual PlayStation pad's lightbar color to <a href="../lightbar-mirrors/">Razer Chroma and Logitech LIGHTSYNC</a> devices.</td>
-</tr>
-<tr>
-<td><strong>Razer Sensa HD Haptics</strong></td>
-<td>Translate controller rumble into <a href="../lightbar-mirrors/#razer-sensa-hd-haptics">Razer Sensa HD haptics</a>.</td>
-</tr>
-<tr>
 <td><strong>Overlays</strong></td>
 <td>On-screen indicators: the <a href="../../guides/menus/">menu</a> ring or grid, the shift layer flyout, and profile switch announcements.</td>
 </tr>
@@ -3961,7 +3909,7 @@
 </tbody>
 </table>
 <p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the <a href="../settings/">Settings</a> page. See <a href="../driver-management/">Driver Management</a>.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles, the two Lightbar Mirrors, and Razer Sensa HD Haptics are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -4305,35 +4253,6 @@
 <p>The DSU protocol caps at 4 slots, so only the first 4 virtual controllers broadcast motion data.</p>
 <p>See <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for full details.</p>
 <hr />
-<h2 id="lightbar-mirrors">Lightbar Mirrors<a class="headerlink" href="#lightbar-mirrors" title="Permanent link">&para;</a></h2>
-<p>Forwards the lightbar color a game sets on a virtual PlayStation controller to RGB peripherals. The color comes from the virtual pad, so any physical controller works. One section, two rows, each with its own checkbox and status line. Both are off by default.</p>
-<table>
-<thead>
-<tr>
-<th>Row</th>
-<th>Checkbox</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Razer Chroma</strong></td>
-<td><strong>Mirror Lightbar to Razer Chroma</strong></td>
-<td>Mirrors to every Chroma device category through Razer Synapse with Chroma Connect. PadForge appears in Synapse's Connect tab. The status reads <em>Razer Synapse not detected. Retrying.</em> until Synapse answers, then <em>Connected to Razer Chroma</em>.</td>
-</tr>
-<tr>
-<td><strong>Logitech LIGHTSYNC</strong></td>
-<td><strong>Mirror Lightbar to Logitech LIGHTSYNC</strong></td>
-<td>Mirrors to LIGHTSYNC devices through Logitech G HUB or Logitech Gaming Software. The status reads <em>Logitech G HUB not detected. Retrying.</em> until the engine answers, then <em>Connected to Logitech LIGHTSYNC</em>.</td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a> for what feeds them and their limits.</p>
-<hr />
-<h2 id="razer-sensa-hd-haptics">Razer Sensa HD Haptics<a class="headerlink" href="#razer-sensa-hd-haptics" title="Permanent link">&para;</a></h2>
-<p>Translates controller rumble into Razer Sensa HD haptics, so Sensa devices such as the Wolverine V3 Pro, the Kraken V4 Pro, and the Freyja shake with your games. One checkbox, <strong>Send Rumble to Sensa HD Haptics</strong>, off by default. Requires Razer Synapse 4 with Sensa HD Haptics, with the device's Haptic Source set to Sensa HD Games in Synapse. A Wolverine V3 Pro also has to be in PC mode with firmware v2.02 or later, and plays no Sensa haptics in Xbox mode. The status reads <em>Razer Sensa runtime not found. Retrying.</em> until the runtime answers, then <em>Streaming rumble to Sensa HD Haptics</em>. The ARM64 build reads <em>Not Available on ARM64</em>: Razer ships no ARM64 engine, so nothing starts there.</p>
-<p>See <a href="../lightbar-mirrors/#razer-sensa-hd-haptics">Lightbar Mirrors and Sensa Haptics</a> for the translation and its limits.</p>
-<hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
 <p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
 <table>
@@ -4400,7 +4319,6 @@
 <li><a href="../../guides/web-controller/">Web Controller</a>: browser-based virtual controller.</li>
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 <li><a href="../head-tracking/">Head Tracking</a>: OpenTrack setup for the Head Tracking section.</li>
-<li><a href="../lightbar-mirrors/">Lightbar Mirrors and Sensa Haptics</a>: the Razer Chroma, Logitech LIGHTSYNC, and Sensa HD sections.</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.0.0.</em></p>

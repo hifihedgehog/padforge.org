@@ -1,0 +1,5944 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/peripheral-outputs-internals/">
+      
+      
+        <link rel="prev" href="../steam-controller-haptics-internals/">
+      
+      
+        <link rel="next" href="../sensa-haptics-internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Peripheral Outputs Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#peripheral-outputs-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Peripheral Outputs Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/first-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Five-Minute Remap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/starter-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start from a starter profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/peripherals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mice, Keyboards and Vendor Rows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/voice-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/handheld-buttons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/logitech-g-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bliss-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/head-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controller-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VR Controller Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/supported/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/ps-move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PlayStation Move
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/spacemouse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpaceMouse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Peripheral Outputs Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Peripheral Outputs Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vendor-rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vendor rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-paths-and-the-link-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output paths and the link table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-recorded-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The recorded outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#presence-and-linking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presence and linking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Presence and linking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-linker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The linker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-link-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The link pass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claims-and-the-ruling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claims and the ruling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lighting-from-the-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lighting from the slot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lighting from the slot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-peripheral-lane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The peripheral lane
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-games-lightbar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The game's lightbar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hid-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The HID++ backend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The HID++ backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collections-and-the-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collections and the channel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-crash-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The crash path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-led-sdk-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The LED SDK backend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The LED SDK backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-loader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The loader
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#types-and-zones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types and zones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#painting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Painting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generations-and-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generations and orphans
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-chroma-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Chroma backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-gamesense-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GameSense backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haptics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haptics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Haptics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#silence-edges-and-the-other-writers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Silence edges and the other writers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hid-0x19b0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HID++ 0x19B0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-gamesense-tactile-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GameSense tactile path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#razer-sensa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razer Sensa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#touchsense-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSense mice
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-route-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The route line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tabs-and-the-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tabs and the switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-of-the-dashboard-switches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration of the Dashboard switches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arm64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARM64
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diag-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diag lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openxr-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenXR Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logitech-g-keys-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bliss-box-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vendor-rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vendor rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-paths-and-the-link-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output paths and the link table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-recorded-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The recorded outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#presence-and-linking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presence and linking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Presence and linking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#presence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Presence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-linker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The linker
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-link-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The link pass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claims-and-the-ruling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claims and the ruling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lighting-from-the-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lighting from the slot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Lighting from the slot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The color
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-peripheral-lane" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The peripheral lane
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-games-lightbar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The game's lightbar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-hid-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The HID++ backend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The HID++ backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#collections-and-the-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collections and the channel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direct-lighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Direct lighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-crash-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The crash path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-led-sdk-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The LED SDK backend
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The LED SDK backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-loader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The loader
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#types-and-zones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Types and zones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#painting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Painting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generations-and-orphans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generations and orphans
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-chroma-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Chroma backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-gamesense-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GameSense backend
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#haptics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Haptics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Haptics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The level
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#silence-edges-and-the-other-writers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Silence edges and the other writers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hid-0x19b0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HID++ 0x19B0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-gamesense-tactile-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GameSense tactile path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#razer-sensa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razer Sensa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Link
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#touchsense-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSense mice
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-chroma-color" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Chroma Color
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-route-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The route line
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-tabs-and-the-switch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tabs and the switch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-of-the-dashboard-switches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration of the Dashboard switches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Threads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arm64" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ARM64
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diag-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diag lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="peripheral-outputs-internals">Peripheral Outputs Internals<a class="headerlink" href="#peripheral-outputs-internals" title="Permanent link">&para;</a></h1>
+<p><em>How a mouse, keyboard or vendor row assigned to a virtual controller takes that controller's lighting and rumble: the link table, the claims and their ruling, the four lighting backends, the haptic paths, Set Chroma Color, the route line, and the migration of the retired Dashboard switches.</em></p>
+<p>The user-facing page is <a href="../../features/peripherals/">Mice, Keyboards and Vendor Rows</a>. This one is for whoever has to change the code. The Razer Sensa worker has its own page, <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputs.cs</code></td>
+<td>The hub: the link table, haptic levels, lighting claims and their ruling, Set Chroma Color, backend states</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralLinker.cs</code></td>
+<td>Vendor software presence, and the pure rules that link rows to output paths</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputHost.cs</code></td>
+<td>The link pass, claim pruning, the backends' lifetimes, the Sensa worker's lifecycle</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputRow.cs</code></td>
+<td>The four vendor rows</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralProductIds.cs</code></td>
+<td>Product IDs that name a Razer or SteelSeries device's kind</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralLightingColor.cs</code></td>
+<td>One device's color for one slot</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/GameLightbarCapture.cs</code></td>
+<td>The game's lightbar, per virtual controller</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/PeripheralRouteText.cs</code></td>
+<td>The route line on the Lighting and Force Feedback tabs</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/HidppBackend.cs</code>, <code>HidppUnits.cs</code></td>
+<td>The HID++ worker, unit discovery, receiver pairing tables, the 0x8070 frames, the battery decode</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/LedSdkBackend.cs</code></td>
+<td>The Logitech LED SDK worker</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/ChromaBackend.cs</code></td>
+<td>The Razer Chroma REST worker</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/GameSenseBackend.cs</code></td>
+<td>The SteelSeries GameSense worker</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HidppHaptics.cs</code></td>
+<td>The HID++ 0x19B0 frames, the HID++ channel, the per-path probe state</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/HapticRumbleShaper.cs</code></td>
+<td>Rumble strength to a waveform level and a repeat interval</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/UserEffectsDispatcher.cs</code></td>
+<td>The peripheral lane: each slot's claims on its lit devices</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.PeripheralRows.cs</code></td>
+<td>Step 1 phase 1m: the vendor rows open and retire</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step2.UpdateInputStates.cs</code></td>
+<td><code>ApplyForceFeedback</code>'s haptic-peripheral branch</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.Step4b.EvaluateMacros.cs</code></td>
+<td>Set Chroma Color in both macro loops</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/GameSenseClient.cs</code></td>
+<td>The GameSense HTTP calls</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/LogiLedEngineNative.cs</code></td>
+<td>The LED SDK engine loader</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/SensaHapticsService.cs</code></td>
+<td>The Interhaptics worker</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/PeripheralSwitchMigration.cs</code></td>
+<td>The retired Dashboard switches become assignments</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/InputService.cs</code></td>
+<td>The host's start and stop, the crash path, the Remote Link legs</td>
+</tr>
+<tr>
+<td><code>PadForge.App/ViewModels/DeviceSlotConfig.cs</code></td>
+<td><code>PeripheralLightingEnabled</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/PadPage.xaml</code>, <code>PadPage.xaml.cs</code></td>
+<td>The tabs and their route lines</td>
+</tr>
+<tr>
+<td><code>PadForge.Tests/PeripheralOutputsTests.cs</code>, <code>PeripheralLightingTests.cs</code>, <code>LedSdkBackendTests.cs</code>, <code>ChromaBackendTests.cs</code>, <code>SetChromaColorMacroTests.cs</code>, <code>HidppHapticsTests.cs</code></td>
+<td>The benches</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-model">The model<a class="headerlink" href="#the-model" title="Permanent link">&para;</a></h2>
+<p>A peripheral is a device row that shows a virtual controller's output on top of whatever input it has. Two kinds exist.</p>
+<p>Device rows are the online mice, keyboards and analog keyboard rows (<code>PeripheralLinker.IsLinkable</code> (<code>PeripheralLinker.cs</code> line 264)) of three vendors: Logitech <code>0x046D</code>, Razer <code>0x1532</code> and SteelSeries <code>0x1038</code>. A row another PC forwards over Remote Link is left out, since that PC plays its outputs.</p>
+<p>Vendor rows stand for a vendor's software: they reach every device it lights or rumbles, the ones PadForge does not read included.</p>
+<h3 id="vendor-rows">Vendor rows<a class="headerlink" href="#vendor-rows" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralOutputRow</code> (<code>PeripheralOutputRow.cs</code> line 44) is a synthetic <code>ISdlInputDevice</code> with no inputs, in the shape of <code>LogitechGKeysDevice</code>: a fixed path, an id hashed from a fixed string, vendor ID <code>0x5046</code> ("PF"), and a two-letter product ID per kind.</p>
+<table>
+<thead>
+<tr>
+<th><code>PeripheralRowKind</code></th>
+<th>Name</th>
+<th>Path</th>
+<th>Product ID</th>
+<th>Device type</th>
+<th>Opens while</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RazerChroma</code></td>
+<td>Razer Chroma</td>
+<td><code>razerchroma://local</code></td>
+<td><code>0x4348</code> ("CH")</td>
+<td><code>PeripheralLighting</code> (40)</td>
+<td>Synapse's Chroma runtime is installed</td>
+</tr>
+<tr>
+<td><code>LogitechLightsync</code></td>
+<td>Logitech LIGHTSYNC</td>
+<td><code>logilightsync://local</code></td>
+<td><code>0x4C53</code> ("LS")</td>
+<td><code>PeripheralLighting</code></td>
+<td>A Logitech LED engine is registered</td>
+</tr>
+<tr>
+<td><code>RazerSensa</code></td>
+<td>Razer Sensa</td>
+<td><code>razersensa://local</code></td>
+<td><code>0x5345</code> ("SE")</td>
+<td><code>PeripheralHaptics</code> (41)</td>
+<td>Synapse's Chroma runtime is installed and the process is x64</td>
+</tr>
+<tr>
+<td><code>SteelSeriesGG</code></td>
+<td>SteelSeries GG</td>
+<td><code>steelseriesgg://local</code></td>
+<td><code>0x5347</code> ("SG")</td>
+<td><code>PeripheralLighting</code></td>
+<td>GG is installed</td>
+</tr>
+</tbody>
+</table>
+<p>The enum (<code>PeripheralRowKind</code> (<code>PeripheralOutputRow.cs</code> line 12)) is append-only. Its values are never saved, but <code>PeripheralOutputRow.IdentityFor</code> (<code>PeripheralOutputRow.cs</code> line 91) hashes <code>pfrazerchroma</code>, <code>pflogilightsync</code>, <code>pfrazersensa</code> and <code>pfsteelseriesgg</code> into the rows' <code>InstanceGuid</code>s, which assignments and profiles store. The migration can assign a row that has never opened, so the id comes from the kind alone. Neither device type answers an any-device mapping source (<code>InputDeviceType.AnswersAnyDeviceSources</code> (<code>InputTypes.cs</code> line 160)), and the Devices page names them Lighting and Haptics.</p>
+<p><code>InputManager.UpdatePeripheralRows</code> (<code>InputManager.PeripheralRows.cs</code> line 34) is Step 1's phase 1m. It opens a row while <code>InputManager.PeripheralRowWanted</code> (<code>InputManager.PeripheralRows.cs</code> line 20) finds its software, retires it when the software goes, and opens it again on the next pass after the user removes it from the Devices page, the G-keys row's recreate pattern. The row does no I/O, so the poll thread runs all of this. <code>InputManager.RetirePeripheralRow</code> (<code>InputManager.PeripheralRows.cs</code> line 77) stops the row's haptic level and releases its lighting claims by id, since its record may already be gone.</p>
+<h3 id="output-paths-and-the-link-table">Output paths and the link table<a class="headerlink" href="#output-paths-and-the-link-table" title="Permanent link">&para;</a></h3>
+<p><code>OutputPath</code> (<code>PeripheralOutputs.cs</code> line 50) is a family and a key. Only a <code>HidppUnit</code> path reaches a single device. Every other family addresses a device class the vendor's software resolves, so <code>OutputPath.Shared</code> (<code>PeripheralOutputs.cs</code> line 54) is true for it.</p>
+<table>
+<thead>
+<tr>
+<th><code>OutputFamily</code></th>
+<th>Keys</th>
+<th>Reaches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HidppUnit</code></td>
+<td>The HID++ collection's path and the device index</td>
+<td>One Logitech device</td>
+</tr>
+<tr>
+<td><code>ChromaCategory</code></td>
+<td><code>keyboard</code>, <code>mouse</code>, <code>headset</code>, <code>mousepad</code>, <code>keypad</code>, <code>chromalink</code></td>
+<td>Every Razer device of the category</td>
+</tr>
+<tr>
+<td><code>LedSdkType</code></td>
+<td><code>device</code>, <code>keyboard</code>, <code>mouse</code>, <code>mousemat</code>, <code>headset</code>, <code>speaker</code></td>
+<td>Every Logitech device of the type that G HUB or LGS lights</td>
+</tr>
+<tr>
+<td><code>GameSenseColor</code></td>
+<td><code>mouse</code>, <code>keyboard</code>, <code>headset</code></td>
+<td>Every SteelSeries device of the type</td>
+</tr>
+<tr>
+<td><code>GameSenseTactile</code></td>
+<td><code>tactile</code></td>
+<td>Every tactile Rival</td>
+</tr>
+<tr>
+<td><code>Interhaptics</code></td>
+<td><code>sensa</code></td>
+<td>Every Sensa HD device</td>
+</tr>
+</tbody>
+</table>
+<p><code>DeviceLinks</code> (<code>PeripheralOutputs.cs</code> line 58) holds one row's paths: <code>Lighting</code>, <code>Haptics</code>, the keys of the HID++ units it matched, and <code>CatchAll</code>, true for a vendor row. <code>DeviceLinks.HidppUnits</code> (<code>PeripheralOutputs.cs</code> line 67) lists the matched units whatever path lights the row, so Battery mode reads a Logitech device's charge while G HUB lights it.</p>
+<p><code>LinkTable</code> (<code>PeripheralOutputs.cs</code> line 82) is an immutable snapshot of every row's paths, indexed <code>ByDevice</code> and <code>ByPath</code>. The link pass swaps it whole through <code>PeripheralOutputs.PublishLinks</code> (<code>PeripheralOutputs.cs</code> line 171), which bumps <code>LinkVersion</code> and raises <code>LinksChanged</code>, so a reader never sees half a pass. <code>LinkTable.SameAs</code> (<code>PeripheralOutputs.cs</code> line 116) compares two tables row by row, paths, <code>CatchAll</code> and units included, so a pass publishes only a change.</p>
+<h3 id="the-recorded-outputs">The recorded outputs<a class="headerlink" href="#the-recorded-outputs" title="Permanent link">&para;</a></h3>
+<p><code>UserDevice.PeripheralOutputs</code> (<code>UserDevice.cs</code> line 489) saves the bits of <code>PeripheralOutputKinds</code> (<code>PeripheralOutputs.cs</code> line 12) on the device record: 1 for haptics, 2 for lighting. The record keeps a row's Force Feedback and Lighting tabs up while the device sleeps or is unplugged, as a gamepad's tabs stay. Every haptic writer keys on <code>PeripheralOutputs.TakesHaptics</code> (<code>PeripheralOutputs.cs</code> line 186), the record's bit or a haptic path now, so a sleeping device keeps taking its level and plays the current one when it wakes.</p>
+<hr />
+<h2 id="presence-and-linking">Presence and linking<a class="headerlink" href="#presence-and-linking" title="Permanent link">&para;</a></h2>
+<h3 id="presence">Presence<a class="headerlink" href="#presence" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralPresence.Read</code> (<code>PeripheralLinker.cs</code> line 29) finds which vendor software is there from the registry, files and process names, and never by opening an SDK, so an unassigned device costs nothing.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>True when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LogitechLedSdk</code></td>
+<td>The default value of <code>HKLM\SOFTWARE\Classes\CLSID\{a6519e67-7632-4375-afdf-caa889744403}\ServerBinary</code> names a file that exists</td>
+</tr>
+<tr>
+<td><code>LogitechGHubRunning</code></td>
+<td>A process named <code>lghub_agent</code>, <code>lgs</code> or <code>LCore</code> runs (<code>LogiLedEngineNative.RunningHost</code> (<code>LogiLedEngineNative.cs</code> line 86)). The last two are Logitech Gaming Software's hosts</td>
+</tr>
+<tr>
+<td><code>LogitechGamingSoftware</code></td>
+<td>An init-only member beside the positional ones (<code>PeripheralLinker.cs</code> line 22): the host found is <code>lgs</code> or <code>LCore</code>, not <code>lghub_agent</code>. The Lighting tab then names Logitech Gaming Software as the program lighting Logitech devices</td>
+</tr>
+<tr>
+<td><code>RazerSynapse</code></td>
+<td><code>RzChromaSDK64.dll</code> is in the system directory, or <code>HKLM\SOFTWARE\Razer Chroma SDK</code> exists</td>
+</tr>
+<tr>
+<td><code>SteelSeriesGG</code></td>
+<td>GG's <code>coreProps.json</code> exists, or <code>Program Files\SteelSeries\GG</code> does</td>
+</tr>
+<tr>
+<td><code>SensaPlatform</code></td>
+<td><code>PlatformSupport.SensaAvailable</code>: the process is x64</td>
+</tr>
+</tbody>
+</table>
+<p>The host reads it at start and every <code>PresenceMs</code> (5000) on its link thread, and stores it in <code>PeripheralOutputs.Presence</code> (<code>PeripheralOutputs.cs</code> line 213), which raises <code>StatusChanged</code> on a change.</p>
+<h3 id="the-linker">The linker<a class="headerlink" href="#the-linker" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralLinker.Build</code> (<code>PeripheralLinker.cs</code> line 149) is pure: rows, the HID++ snapshot and presence in, a <code>LinkTable</code> out. A row that gets no path is left out of the table.</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Haptic paths</th>
+<th>Lighting paths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Razer Sensa row</td>
+<td><code>sensa</code>, with <code>SensaPlatform</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td>Razer Chroma row</td>
+<td>none</td>
+<td>All six Chroma categories, with <code>RazerSynapse</code></td>
+</tr>
+<tr>
+<td>Logitech LIGHTSYNC row</td>
+<td>none</td>
+<td>All six LED SDK paths, with <code>LogitechLedSdk</code></td>
+</tr>
+<tr>
+<td>SteelSeries GG row</td>
+<td>none</td>
+<td>The three GameSense color types, with <code>SteelSeriesGG</code></td>
+</tr>
+<tr>
+<td>Logitech device</td>
+<td>Each matched unit that has haptics</td>
+<td>Each matched unit with an RGB feature: while G HUB or LGS runs, its LED SDK type when the LED SDK is registered. Otherwise the unit itself, when it is lit directly</td>
+</tr>
+<tr>
+<td>Razer device</td>
+<td>none</td>
+<td>Its Chroma category, with <code>RazerSynapse</code></td>
+</tr>
+<tr>
+<td>SteelSeries device</td>
+<td><code>tactile</code> for a tactile Rival, with <code>SteelSeriesGG</code></td>
+<td>Its GameSense type, <code>keyboard</code> or <code>mouse</code>, with <code>SteelSeriesGG</code></td>
+</tr>
+</tbody>
+</table>
+<p>The direct path is feature 0x8070 alone: <code>HidppUnit.DirectRgb</code> (<code>HidppUnits.cs</code> line 62) needs that feature and at least one static zone. A Logitech device that lists 0x8071, 0x8081 or 0x8080, with or without 0x8070, takes a lighting path through the LED SDK only.</p>
+<p>A mouse reports a keyboard collection for keys bound to keystrokes, and a keyboard reports a mouse collection for keys bound to clicks, so Windows can list two rows for one device, and a row's own kind can name the wrong category. <code>PeripheralProductIds.LightsAsKeyboard</code> (<code>PeripheralProductIds.cs</code> line 78) decides by product ID where a list holds it: every <code>USB_PID</code> in openrazer's <code>mouse.py</code> and <code>keyboards.py</code>, the Aerox, Rival and Sensei detectors in OpenRGB's <code>SteelSeriesControllerDetect.cpp</code> with every <code>product_id</code> in rivalcfg's devices, and that file's Apex detectors. A device the lists lack goes by its row's kind. <code>PeripheralLinker.RazerCategory</code> (<code>PeripheralLinker.cs</code> line 236) sends the keypads (the Nostromo and the Tartarus and Orbweaver families, openrazer <code>keyboards.py:74-273</code>) to <code>keypad</code>, and the Huntsman V3 boards openrazer does not list yet to <code>keyboard</code> through <code>AnalogKeyboardCatalog.IsRazerHuntsmanV3</code>. Every row of one device therefore lights as that device.</p>
+<p>The tactile Rivals are the Rival 500, 700 and 710 (gamesense-sdk <code>standard-zones.md:49-52</code>), by rivalcfg's product IDs <code>0x170E</code>, <code>0x1700</code> and <code>0x1730</code> (<code>rival500.py:22</code>, <code>rival700.py:21</code> and <code>27</code>), which the linker keeps in <code>PeripheralLinker.RivalTactilePids</code> (<code>PeripheralLinker.cs</code> line 114). A Rival's keyboard collection is the Rival as well, so it takes the mouse color type and the tactile path.</p>
+<p>A mouse or keyboard row is one Raw Input interface, and the device's HID++ channel is another collection of the same physical device. <code>PeripheralLinker.Matches</code> (<code>PeripheralLinker.cs</code> line 275) pairs them by container ID: on the bench's LIGHTSPEED receiver the mouse (<code>MI_00</code>), keyboard and consumer (<code>MI_01</code>) and HID++ (<code>MI_02</code>) collections all report one. A receiver gives one mouse row and one keyboard row however many devices are paired to it, so a receiver's unit goes to the row of its own kind, from feature 0x0005's device type. A unit on device index <code>0xFF</code>, wired or Bluetooth, is the device itself and alone in its container, so it goes to every row of the device when it is a mouse or keyboard kind, and a remote or presenter there stays out. A unit that gave no type goes to every row in its container. <code>PeripheralLinker.LedSdkTypeOf</code> (<code>PeripheralLinker.cs</code> line 249) names a unit's LED SDK type by its own kind, else by its row's.</p>
+<p><code>PeripheralLinker.Capabilities</code> (<code>PeripheralLinker.cs</code> line 288) is what a row records: the kinds its links found, plus the kinds it had while it is still being looked for. A Logitech device row is still being looked for before the HID++ worker's first scan and while its container has a slot left to ask, so a mouse asleep at launch keeps its tabs.</p>
+<hr />
+<h2 id="the-link-pass">The link pass<a class="headerlink" href="#the-link-pass" title="Permanent link">&para;</a></h2>
+<p><code>PeripheralOutputHost</code> (<code>PeripheralOutputHost.cs</code> line 21) runs while the engine runs. <code>InputService.StartPeripheralOutputs</code> (<code>InputService.cs</code> line 10212) creates it at engine start, hands it <code>SlotHasController</code> (the input manager's <code>HasVirtualControllerAt</code>), subscribes to <code>CapabilitiesChanged</code>, and starts it. <code>InputService.StopPeripheralOutputs</code> (<code>InputService.cs</code> line 10223) disposes it at engine stop. There is no global switch. Every output follows assignment, the way a gamepad's does.</p>
+<p><code>PeripheralOutputHost.Start</code> (<code>PeripheralOutputHost.cs</code> line 72) starts the HID++, GameSense, Chroma and LED SDK workers, reads presence, and starts the <code>PeripheralLink</code> thread. The HID++ worker scans Logitech's HID++ collections from the start, since the linker needs its units. The other backends reach their vendor only while an assigned device or row uses a path they serve. <code>PeripheralOutputHost.Loop</code> (<code>PeripheralOutputHost.cs</code> line 112) reads presence every <code>PresenceMs</code>, runs one link pass and one Sensa lifecycle check, and waits <code>LinkMs</code> (500) on an event that <code>PeripheralOutputHost.Nudge</code> (<code>PeripheralOutputHost.cs</code> line 87) sets. The HID++ worker's <code>SnapshotChanged</code> and <code>InputService.OnDevicesUpdated</code> (<code>InputService.cs</code> line 9609) nudge it, so a device that comes or goes is linked at once.</p>
+<p><code>PeripheralOutputHost.Link</code> (<code>PeripheralOutputHost.cs</code> line 147), one pass:</p>
+<ol>
+<li>Read presence and the HID++ snapshot, note whether any unit's charge changed (<code>PeripheralOutputHost.ChargesChanged</code> (<code>PeripheralOutputHost.cs</code> line 266)), and publish the snapshot as <code>PeripheralOutputs.Hidpp</code>.</li>
+<li>Under the device list's lock, take each online vendor row and each linkable device row of the three vendors. A forwarded row is skipped.</li>
+<li>Outside that lock, look up each device row's container ID (<code>AudioPassthroughService.DevicePathContainerId</code>), cached per path, since each lookup is a kernel round trip. The path was taken under the lock by <code>PeripheralOutputHost.ContainerPath</code> (<code>PeripheralOutputHost.cs</code> line 142): the row's device path, or for an analog keyboard row, whose device path is a synthetic <code>analogkb://</code> key, the HID collection the row reads, so a Logitech analog keyboard reaches its HID++ unit.</li>
+<li>Build the table.</li>
+<li>Prune the lighting claims (below), reading the assignments under the settings lock, never nested inside the device lock.</li>
+<li>Write each row's recorded outputs. They land before the table, so a tab that refreshes on the new table reads the record that goes with it.</li>
+<li>Publish the table when it changed, with a <code>PERIPHERAL links:</code> diag line, or raise <code>StatusChanged</code> when only a record moved.</li>
+<li>Raise <code>CapabilitiesChanged</code> when a record moved. <code>InputService.OnPeripheralCapabilitiesChanged</code> (<code>InputService.cs</code> line 10235) marks the settings dirty and resyncs the Devices page, whose rumble chip reads the record.</li>
+<li>Ask the dispatchers for a peripheral refresh: every slot, lit or not, after a relink, so a new path reaches a slot whose last pass lit nothing, or the lit slots after a charge changed, for Battery mode.</li>
+</ol>
+<p><code>PeripheralOutputs.PruneClaims</code> (<code>PeripheralOutputs.cs</code> line 480) drops every claim whose (device, slot) is no longer an assignment, and every claim on a slot that is not live. A slot is live while it has a live effects dispatcher (<code>UserEffectsDispatcher.HasLiveDispatcher</code> (<code>UserEffectsDispatcher.cs</code> line 1206)) or still holds a virtual controller (<code>SlotHasController</code>). Unassigning a device runs no pass on its old slot's dispatcher, and a slot whose controller went away has no dispatcher at all, so without the prune a claim would hold its device on a color nobody sets. A reorder moves the controllers first and rebuilds the slots' dispatchers one at a time afterward. The controller test keeps a slot's claims through that rebuild, so its devices are never handed back and taken again. The dispatcher's own disposal releases nothing for the same reason.</p>
+<p><code>PeripheralOutputHost.Stop</code> (<code>PeripheralOutputHost.cs</code> line 92) stops the Sensa worker and every backend, clears every claim, and publishes an empty table and an empty HID++ snapshot, so nothing claimed carries into the next engine start.</p>
+<hr />
+<h2 id="claims-and-the-ruling">Claims and the ruling<a class="headerlink" href="#claims-and-the-ruling" title="Permanent link">&para;</a></h2>
+<p>Lighting is claimed per (device, slot). One dictionary, <code>PeripheralOutputs.s_claims</code> (<code>PeripheralOutputs.cs</code> line 390), maps each pair to the slot's displayed player number and the color. A mouse on two virtual controllers holds one claim from each, and the ruling picks between them the way it picks between two devices on a shared path, so two dispatchers never take turns repainting it.</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PeripheralOutputs.SetLighting</code> (<code>PeripheralOutputs.cs</code> line 411)</td>
+<td>Adds or updates the claim. Any change bumps <code>LightingVersion</code> and raises <code>LightingChanged</code>, which wakes the HID++, LED SDK and Chroma workers. <code>ClaimsChanged</code> fires only when a claim starts or its player number changes</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs.ReleaseLighting</code> (<code>PeripheralOutputs.cs</code> line 443)</td>
+<td>Drops one slot's claim. The same device's claim from another slot stays</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs.ReleaseSlot</code> (<code>PeripheralOutputs.cs</code> line 452)</td>
+<td>Drops every claim a slot holds</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs.ReleaseDevice</code> (<code>PeripheralOutputs.cs</code> line 464)</td>
+<td>Drops every claim on a device that went offline, retired or was removed</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs.PruneClaims</code> (<code>PeripheralOutputs.cs</code> line 480)</td>
+<td>The link pass's prune</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputs.ClearClaims</code> (<code>PeripheralOutputs.cs</code> line 497)</td>
+<td>The host's stop</td>
+</tr>
+</tbody>
+</table>
+<p><code>ClaimsChanged</code> never fires for a color alone, so a tab naming the controller that rules a shared path follows it without redrawing at animation speed.</p>
+<p><code>PeripheralOutputs.Rules</code> (<code>PeripheralOutputs.cs</code> line 531) is the ruling, pure so it is testable. Claimant <code>a</code> rules claimant <code>b</code> by the first of these that differs:</p>
+<ol>
+<li>A device's own claim beats a vendor row's, whatever the numbers.</li>
+<li>The smaller displayed player number. A claim with none (0 or less) reads as <code>int.MaxValue</code>, so it never beats a numbered one.</li>
+<li>The lower slot index.</li>
+<li>The lower device id, so the answer never flips between two equal claims, such as two rows of one device on one slot.</li>
+</ol>
+<p><code>PeripheralOutputs.TryResolveColor</code> (<code>PeripheralOutputs.cs</code> line 545) returns false when the path is not in the table or nothing claims it, which is a backend's cue to hand the device back to its own software. It counts only a claim whose row links that path, and it returns the ruling claim with the color, for a tab that names the controller whose color shows. The smallest displayed player number is the precedence <code>InputService.ApplyGuideLeds</code> gives the Steam Controller's process-wide home LED.</p>
+<p>The haptic backends have no claims to read a player number from. <code>PeripheralOutputs.TryResolveHapticRuler</code> (<code>PeripheralOutputs.cs</code> line 704) runs the same <code>Rules</code> over the devices linked to a shared haptic path, ranked by <code>PeripheralOutputs.HapticRulingPlayer</code> (<code>PeripheralOutputs.cs</code> line 691): the device's smallest displayed player number among its assignments (<code>SettingsManager.SlotOrders.GetIdentityPlayerNumber</code>), else <code>PeerDrivenPlayer</code> (1000) when a Remote Link peer wrote its rumble last, else 0, which never rules. A Rival a linked PC drives therefore ranks after every controller on this PC.</p>
+<hr />
+<h2 id="lighting-from-the-slot">Lighting from the slot<a class="headerlink" href="#lighting-from-the-slot" title="Permanent link">&para;</a></h2>
+<p>The slot's effects dispatcher, which already lights a DualSense, lights the slot's mice, keyboards and vendor rows too. <code>UserEffectsDispatcher.DispatchSnapshot</code> (<code>UserEffectsDispatcher.cs</code> line 1819) walks the slot's assigned devices under the device list's lock. A device that is not a DualSense or DualShock 4 and that <code>UserEffectsDispatcher.IsLitPeripheral</code> (<code>UserEffectsDispatcher.cs</code> line 1770) accepts, by its record or a lighting path now, goes to <code>UserEffectsDispatcher.LightPeripheral</code> (<code>UserEffectsDispatcher.cs</code> line 1786) instead of an effect report. An offline one releases this slot's claim.</p>
+<p><code>LightPeripheral</code> takes the device's own config for the slot, else the slot's anchor config. With no config at all, or for a device row whose <code>PeripheralLightingEnabled</code> is off, it releases this slot's claim, and this controller no longer lights the device. A vendor row ignores the switch, since lighting is all it carries. Otherwise the color comes from <code>PeripheralLightingColor.Resolve</code> (<code>PeripheralLightingColor.cs</code> line 21) with the slot's game lightbar, the audio peak scaled by the device's own sensitivity, the input-reactive pulse, and the charge from <code>PeripheralOutputs.BatteryOf</code> (<code>PeripheralOutputs.cs</code> line 669), or 100 when it is unknown, which holds Battery mode at its full-charge color. The color goes to <code>SetLighting</code>, ranked by the slot's displayed player number (<code>GetGlobalSlotNumber</code>, or the slot index plus one for a slot in no order list). Every call there is a leaf. The I/O belongs to the backends, because the poll thread needs this lock every cycle.</p>
+<h3 id="the-color">The color<a class="headerlink" href="#the-color" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralLightingColor.Resolve</code> keeps the DualSense's order (<code>Ds5EffectSynthesizer.BuildFields</code>):</p>
+<ol>
+<li>A lightbar the game wrote within the grace window wins over every setting, a macro color included.</li>
+<li>Past the window, a device left at the defaults keeps the game's last color: Player Number, no input-reactive overlay, no live macro lightbar override. That is the stand-down the DualSense makes so a game that sets the bar once is not overwritten 1.5 seconds later (#191).</li>
+<li>Anything else goes through <code>Ds4EffectSynthesizer.ResolveLightbarRgb</code>, the color core every lit device shares, so the whole mode set works: Player Number, Static, Breathing, Strobe, Rainbow, Color Cycle, Battery, the six audio modes, the input-reactive overlay and the macro lightbar override.</li>
+</ol>
+<p>Player Number shows this slot's own player color, since each slot holds its own claim and the ruling picks the claim from the smallest displayed number. The Sony lane's lowest-raw-index owner rule is not used here, because it can disagree with the displayed numbers.</p>
+<p><code>UserEffectsDispatcher.OnAssignmentSetObserved</code> (<code>UserEffectsDispatcher.cs</code> line 530) releases the claim of a device that left the slot and, except on a new dispatcher's first look, forgets the slot's game color, the DualSense mirror's rule for an assignment change. A reorder rebuilds a slot's dispatcher after moving its controller's game color there, which is why the first look keeps it.</p>
+<p><code>UserEffectsDispatcher.LightingDriven</code> (<code>UserEffectsDispatcher.cs</code> line 1305) decides whether a device's config keeps the slot's animation timer running. A device with a lighting path drives it when it is a vendor row or its switch is on. A peripheral with no path now, asleep or offline or with its vendor's software closed, follows what the slot's last pass saw: an online mouse or keyboard follows its switch, and a vendor row or an offline device drives nothing. Every other device keeps the old rule. <code>UserEffectsDispatcher.OnConfigChanged</code> (<code>UserEffectsDispatcher.cs</code> line 1209) checks the timer again when the switch flips.</p>
+<h3 id="the-peripheral-lane">The peripheral lane<a class="headerlink" href="#the-peripheral-lane" title="Permanent link">&para;</a></h3>
+<p>Some of what a peripheral shows changes outside its slot: the game's lightbar, a charge, a new path. <code>UserEffectsDispatcher.RequestPeripheralRefresh</code> (<code>UserEffectsDispatcher.cs</code> line 1111) asks the slot's dispatcher for a pass over its lit peripherals alone. A slot that lit nothing last pass costs nothing, unless the request says <code>evenUnlit</code>. One refresh runs at a time on the thread pool, at most once per animation tick (33 ms), and requests that arrive while it runs fold into one more. <code>UserEffectsDispatcher.RunPeripheralRefresh</code> (<code>UserEffectsDispatcher.cs</code> line 1132) calls <code>DispatchSnapshot(peripheralsOnly: true)</code>, which writes no Sony effect report and no web pad or PS Move color. A game that animates its lightbar every frame reaches the peripherals at the dispatcher's own cadence, and the HIDMaestro output reader that reports the color never waits. <code>UserEffectsDispatcher.RequestPeripheralRefreshAll</code> (<code>UserEffectsDispatcher.cs</code> line 1163) asks every slot.</p>
+<hr />
+<h2 id="the-games-lightbar">The game's lightbar<a class="headerlink" href="#the-games-lightbar" title="Permanent link">&para;</a></h2>
+<p><code>GameLightbar</code> (<code>GameLightbarCapture.cs</code> line 22) is the color a game writes to one virtual PlayStation controller. Each <code>HMaestroVirtualController</code> owns one, so the color moves with the controller when a reorder retargets it, the way its inbound rumble pack does.</p>
+<p>The <code>OutputDecoded</code> handler that <code>HMaestroVirtualController.RegisterFeedbackCallback</code> (<code>HMaestroVirtualController.cs</code> line 1297) installs feeds it from the controller's output reader thread. Only a frame the trust gate accepts counts: the declared report length and a valid checksum (<code>HMaestroVirtualController.SonyFrameValid</code> (<code>HMaestroVirtualController.cs</code> line 1911)). The profile codec decodes a <code>lightbar</code> rgb24 field for the DualSense and the DualShock 4 alike, and the family's validity bit says whether this write carries it: <code>validFlag1 &amp; 0x04</code> on a DualSense or DualSense Edge, <code>validFlag0 &amp; 0x02</code> on a DualShock 4 (SDL's <code>k_EPS4EffectLED</code>). A valid write goes to <code>GameLightbar.Capture</code> (<code>GameLightbarCapture.cs</code> line 38). Any other trusted frame goes to <code>GameLightbar.NoteFrame</code> (<code>GameLightbarCapture.cs</code> line 53), which says the game is still there. The Chroma and LIGHTSYNC mirrors this replaced read the field before the gate, so a corrupt Bluetooth frame could paint a keyboard.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>When</th>
+<th>What a lit device shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Fresh</code></td>
+<td>Within <code>GraceMs</code> (1500) of the last write</td>
+<td>The game's color, over every setting</td>
+</tr>
+<tr>
+<td><code>Held</code></td>
+<td>Past the grace window while the game still sends trusted frames</td>
+<td>The game's last color on a device left at the defaults, its own mode otherwise</td>
+</tr>
+<tr>
+<td><code>None</code></td>
+<td>No write yet, cleared, or <code>LapseMs</code> (15000) after the later of the last write and the last trusted frame</td>
+<td>Its own mode</td>
+</tr>
+</tbody>
+</table>
+<p><code>GraceMs</code> is the DualSense mirror's <code>ExternalSubsystemGraceMs</code> and <code>LapseMs</code> its <code>ExternalClaimLapseMs</code>. The next <code>NoteFrame</code> clears a lapsed record rather than reviving it, so a second game that never writes the bar does not bring back the first game's color. <code>Capture</code> returns true on a new color or on a write after the grace window closed, and the reader thread then queues the slot's refresh (<code>GameLightbarCapture.NotifyChanged</code> (<code>GameLightbarCapture.cs</code> line 208)).</p>
+<p><code>GameLightbarCapture</code> (<code>GameLightbarCapture.cs</code> line 137) maps slots to sources. <code>HMaestroVirtualController.PrepareDeviceEffectsForPublication</code> (<code>HMaestroVirtualController.cs</code> line 456) publishes a Sony controller's source once it wins its slot, <code>HMaestroVirtualController.RetargetToPad</code> (<code>HMaestroVirtualController.cs</code> line 534) moves it, and <code>HMaestroVirtualController.UnregisterFeedback</code> (<code>HMaestroVirtualController.cs</code> line 1289) and <code>HMaestroVirtualController.Disconnect</code> (<code>HMaestroVirtualController.cs</code> line 398) withdraw it. <code>GameLightbarCapture.Withdraw</code> (<code>GameLightbarCapture.cs</code> line 167) clears a slot only while it still holds that source, so in a two-pad swap the controller that already took the other's place keeps it. A dispatcher computes colors only when it runs, and a slot whose devices are not animated may not run again for a long time, so a timer every <code>WatchMs</code> (250) runs while any controller is registered and asks for a refresh when a slot's phase moves to <code>Held</code> or <code>None</code>. The capture reports <code>Fresh</code> itself.</p>
+<hr />
+<h2 id="the-hid-backend">The HID++ backend<a class="headerlink" href="#the-hid-backend" title="Permanent link">&para;</a></h2>
+<p><code>HidppBackend</code> (<code>HidppBackend.cs</code> line 67) is one <code>PeripheralHidpp</code> thread that owns every HID++ collection, so a probe, a haptic pulse and a color never interleave on one channel.</p>
+<h3 id="collections-and-the-channel">Collections and the channel<a class="headerlink" href="#collections-and-the-channel" title="Permanent link">&para;</a></h3>
+<p><code>HidppBackend.IsHidppLong</code> (<code>HidppBackend.cs</code> line 169) takes Logitech's vendor ID, a 20-byte input report, and usage page <code>0xFF00</code> usage 2 (mice and receivers) or <code>0xFF43</code> usage <code>0x0602</code> (keyboards), from OpenRGB <code>LogitechControllerDetect.cpp:162-166</code> and <code>574-587</code>. <code>HidppChannel</code> (<code>HidppHaptics.cs</code> line 231) opens that collection shared and reads it on a <code>VendorHidReader</code> thread, so Logi Options+ and other HID++ clients keep their own reports, and writes through <code>RawHidOutput.Write</code>. Every frame on the long collection is a long report, because Windows splits HID++ short and long reports into two collections and the long one rejects 7-byte writes, which is why OpenRGB forces long frames on Windows (<code>LogitechHIDPP20Controller.cpp</code> SendStandard).</p>
+<p>One request is in flight at a time, the worker's. <code>HidppChannel.Request</code> (<code>HidppHaptics.cs</code> line 345) retries a HID++ 2.0 busy answer (<code>0x08</code>) once after 50 ms, OpenRGB's retry on busy. HID++ 1.0's <code>0x08</code> is <code>UNKNOWN_DEVICE</code> and is never retried. The answer window is 300 ms, or 700 ms on a Bluetooth path, one whose interface path carries the HID service UUID <code>00001812-0000-1000-8000-00805f9b34fb</code>, OpenRGB's first-contact and Bluetooth budgets.</p>
+<h3 id="the-loop">The loop<a class="headerlink" href="#the-loop" title="Permanent link">&para;</a></h3>
+<p><code>HidppBackend.Worker</code> (<code>HidppBackend.cs</code> line 201) plays haptics, paints lighting, then scans when a scan is due and no unit is playing rumble, so a probe never delays a pulse. A check runs every <code>CheckMs</code> (30000) once nothing has played for <code>QuietMs</code> (1000). The wait between passes is <code>ActiveTickMs</code> (10) while any unit is linked for rumble and <code>IdleTickMs</code> (100) otherwise, and <code>HapticsChanged</code> and <code>LightingChanged</code> cut it short.</p>
+<h3 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h3>
+<p><code>HidppBackend.Scan</code> (<code>HidppBackend.cs</code> line 475) enumerates the vendor collections, drops paths that vanished, and keeps a <code>HidppPathState</code> per path, so a scan asks again only what is still open. A receiver known by its product ID (<code>HidppReceiverProtocol.KindOf</code> (<code>HidppUnits.cs</code> line 203): Bolt <code>0xC548</code>, and the Unifying and LIGHTSPEED receivers from Solaar's <code>base_usb.py:149-178</code>) has its pairing table read at every scan, so a device paired since the last scan is found. The table is HID++ 1.0 long register <code>0x2B5</code> (request <code>0x83B5</code>, Solaar <code>hidpp10.py:56-60</code>), one record per slot, at sub-register <code>0x20</code> plus the slot minus one on Unifying and LIGHTSPEED and <code>0x50</code> plus the slot on Bolt (Solaar <code>receiver.py:266-276</code> and <code>502-503</code>). The request goes out short on the receiver's short collection (usage 1), found by OpenRGB's path key (<code>HidppReceiverProtocol.ShortSibling</code> (<code>HidppUnits.cs</code> line 241)), and the record comes back long on the collection the worker already reads. <code>HidppUnitProbe.ReadPairing</code> (<code>HidppUnits.cs</code> line 363) takes a record as a paired device, asleep or not, and an error as an empty slot only when the same read errs twice, since another program reading the register at that moment could hand this read its error. An unanswered read stops the pass, and after <code>PairingGiveUp</code> (3) such passes in a row the table is not read again.</p>
+<p><code>HidppUnitProbe.Probe</code> (<code>HidppUnits.cs</code> line 287) then asks the slots: device index <code>0xFF</code> first on a path that is not a known receiver, then receiver slots 1 to 6 unless <code>0xFF</code> answered. A Bluetooth path is the device itself and has no slots. A slot is alive once Root answers for feature 0x0005. A receiver's HID++ 1.0 <code>INVALID_SUB_ID</code> for a slot means its device speaks only HID++ 1.0, and the slot settles. Any other HID++ 1.0 error, a busy answer, or no answer at all backs off 5, then 10, then 15 seconds. <code>HidppUnitProbe.Describe</code> (<code>HidppUnits.cs</code> line 492) reads the rest of a live unit:</p>
+<ul>
+<li>The device type, feature 0x0005 function 2, by Solaar's table (<code>hidpp20_constants.py:251-260</code>): 0 keyboard, 1 remote, 2 numpad, 3 mouse, 4 touchpad, 5 trackball, 6 presenter, 7 receiver. Then the name, read the way Solaar's <code>get_name</code> reads it.</li>
+<li>The 0x19B0 capabilities and configuration (below).</li>
+<li>The RGB feature: the first of 0x8071, 0x8081, 0x8080 and 0x8070, in that order, that the device has. For 0x8070, <code>HidppUnitProbe.StaticZones</code> (<code>HidppUnits.cs</code> line 582) walks the zones and keeps those that list the static effect, found by scanning for effect ID <code>0x0001</code>, never by a fixed index, which differs between models.</li>
+<li>The battery feature, 0x1004 before 0x1000.</li>
+</ul>
+<p>A request that decides an output and goes unanswered marks the unit incomplete. Its slot backs off and is asked again in full, rather than keeping a device whose zones or type are missing. A unit with neither haptics nor an RGB feature is not kept, since a charge alone feeds only a lit device.</p>
+<p>After a scan, the next one comes in <code>FirstScanMs</code> (5000) while some slot still waits for its device, else in <code>RescanMs</code> (30000). <code>HidppBackend.Check</code> (<code>HidppBackend.cs</code> line 585) asks each found unit something cheap: its 0x19B0 configuration, or Root's lookup of 0x0005 for a unit without haptics. A unit that answers refreshes its feedback flag and its charge. One that does not went to sleep or away: it leaves the list, its slot reopens, and the next scan comes within 5 seconds. A failed write drops the whole path.</p>
+<p><code>HidppSnapshot</code> (<code>HidppBackend.cs</code> line 10) publishes the units, the containers with a slot still open (<code>PendingContainers</code>), and <code>Scanned</code>, false until the first scan ran, so nothing the worker has not looked for reads as missing.</p>
+<h3 id="direct-lighting">Direct lighting<a class="headerlink" href="#direct-lighting" title="Permanent link">&para;</a></h3>
+<p><code>HidppBackend.PaintLighting</code> (<code>HidppBackend.cs</code> line 260) paints each unit lit directly, a zone-only 0x8070 device whose claim is a single SetSWControl (OpenRGB <code>LogitechHIDPP20Controller.cpp:4038-4065</code>). The linker gives these paths only while neither G HUB nor LGS runs, since either software drives the same devices through the LED SDK.</p>
+<ul>
+<li>When the path is linked and <code>TryResolveColor</code> finds a color, the first color takes the lighting from the device's own effect with SetSWControl <code>[01 01]</code> (function 8, <code>HidppUnitProtocol.SetSwControl</code> (<code>HidppUnits.cs</code> line 126)). Each zone then gets the static effect in that color (function 3, <code>HidppUnitProtocol.SetStaticColor</code> (<code>HidppUnits.cs</code> line 116)): the zone, the static effect's index, R, G, B, and <code>0x02</code>, OpenRGB's fixed-color marker, or <code>0x00</code> for black (<code>LogitechHIDPP20Controller.cpp:5647-5663</code>). The persist byte stays 0, so nothing is saved to the device's memory.</li>
+<li>The claim and the color go out again every <code>ReassertMs</code> (5000) on their own clock, whatever the colors are doing, because a device back from sleep boots its onboard profile and drops the claim without a word (OpenRGB ReclaimSWControl, <code>LogitechHIDPP20Controller.cpp:6102-6110</code>). A changed color repaints at most every <code>PaintMs</code> (33).</li>
+<li>When nothing claims the path any more, SetSWControl <code>[00 00]</code> hands the lighting back (OpenRGB <code>LogitechHIDPP20Controller.cpp:3935-3946</code> and <code>4058-4078</code>, Solaar <code>settings_templates.py:3204-3293</code>).</li>
+</ul>
+<p>The worker's <code>finally</code> hands every claimed unit back before it closes the channel, so stopping the engine leaves no mouse frozen on the last color.</p>
+<h3 id="the-crash-path">The crash path<a class="headerlink" href="#the-crash-path" title="Permanent link">&para;</a></h3>
+<p>A crash dialog keeps the process alive, and the worker with it, and a worker left running would claim the device again on its next reassert. <code>HidppBackend.NoteClaimed</code> (<code>HidppBackend.cs</code> line 350) records a unit before its claim goes out, so no moment exists in which a device is claimed and the hand-back does not know it. <code>HidppBackend.ReleaseClaimedNow</code> (<code>HidppBackend.cs</code> line 386) stops the worker first and waits <code>PanicJoinMs</code> (250) for it to hand back on its own channel, OpenRGB's teardown order (its sender stops before SetSWControl(0, 0), <code>LogitechHIDPP20Controller.cpp:3843-3856</code>). A stopping worker claims nothing more. Each unit still recorded goes back through <code>RawHidOutput.WriteOnce</code>, which opens its own handle with a 200 ms timeout. <code>InputService.PanicQuiesceOutputs</code> (<code>InputService.cs</code> line 12975) calls it through <code>PeripheralOutputHost.ReleaseLightingNow</code> (<code>PeripheralOutputHost.cs</code> line 339), after the GameSense wait. Chroma and GameSense end their sessions on their own timeouts, and the LED SDK goes with the process.</p>
+<h3 id="battery">Battery<a class="headerlink" href="#battery" title="Permanent link">&para;</a></h3>
+<p><code>HidppUnitProtocol.BatteryPercent</code> (<code>HidppUnits.cs</code> line 136) decodes as Solaar does (<code>hidpp20.py:2191-2265</code>). 0x1004 function 1 gives a percent, or when that is 0 a level: 8 full at 90, 4 good at 50, 2 low at 20, 1 critical at 5, anything else 0 (<code>common.py:652-657</code>). 0x1000 function 0 gives a percent, and 0 means unknown. The charge is read at discovery and with each check. <code>PeripheralOutputs.BatteryOf</code> reads the first unit in the row's <code>HidppUnits</code> that reports one, whatever path lights the row. Razer and SteelSeries software report no charge here, so those rows read as unknown.</p>
+<hr />
+<h2 id="the-led-sdk-backend">The LED SDK backend<a class="headerlink" href="#the-led-sdk-backend" title="Permanent link">&para;</a></h2>
+<h3 id="the-loader">The loader<a class="headerlink" href="#the-loader" title="Permanent link">&para;</a></h3>
+<p><code>LogiLedEngineNative</code> (<code>LogiLedEngineNative.cs</code> line 33) replicates the <code>LogitechLedEnginesWrapper.dll</code> shim from managed code, so PadForge redistributes nothing of Logitech's. <code>LogiLedEngineNative.TryLoad</code> (<code>LogiLedEngineNative.cs</code> line 100) reads the default value of <code>ServerBinaryKey</code>, the wrapper's only embedded wide string and the key Aurora and Artemis read from HKLM's 64-bit view. It checks that the file's description is <code>Logitech Gaming LED SDK</code> (Aurora <code>LgsInstallationUtils.cs:48-64</code>), loads it with <code>LoadLibraryExW</code> and <code>LOAD_WITH_ALTERED_SEARCH_PATH</code> so the engine's own directory joins its dependency resolution, and resolves the undecorated cdecl <code>LogiLed*</code> exports:</p>
+<table>
+<thead>
+<tr>
+<th>Export</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LogiLedInit</code>, <code>LogiLedSetLighting</code>, <code>LogiLedShutdown</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>LogiLedInitWithName</code></td>
+<td>no. Called with the ANSI string <code>"PadForge"</code>, <code>LogiLedInit</code> otherwise</td>
+</tr>
+<tr>
+<td><code>LogiLedSetTargetDevice</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>LogiLedSaveCurrentLighting</code>, <code>LogiLedRestoreLighting</code></td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>LogiLedSetLightingForTargetZone</code></td>
+<td>no. The 9.00 header's zone call (logitech-led-sdk-rs <code>bindings-x86_64.rs:354</code>, RGB.NET <code>_LogitechGSDK.cs:146</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Old engines carry 13 exports, so each optional one degrades on its own. Returns are one-byte C++ <code>bool</code>, marshaled as <code>byte</code>. <code>LogiLedEngineNative.Unload</code> (<code>LogiLedEngineNative.cs</code> line 225) nulls every delegate before <code>FreeLibrary</code>, so a stray call lands on a null check instead of a freed code page. <code>ILogiLedNative</code> (<code>LedSdkBackend.cs</code> line 16) is the seam the bench scripts.</p>
+<h3 id="types-and-zones">Types and zones<a class="headerlink" href="#types-and-zones" title="Permanent link">&para;</a></h3>
+<p><code>LedSdkBackend.TypeOf</code> (<code>LedSdkBackend.cs</code> line 139) maps a path key to <code>LogiLed::DeviceType</code> (logitech-led-sdk-rs <code>bindings-x86_64.rs:136-142</code>) and the zones written for it:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Device type</th>
+<th>Zones</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keyboard</code></td>
+<td>0</td>
+<td>5, and the per-key call</td>
+<td>RGB.NET's G213, <code>LogitechDeviceProvider.cs:99</code></td>
+</tr>
+<tr>
+<td><code>mouse</code></td>
+<td>3</td>
+<td>3</td>
+<td>Aurora <code>LogitechDevice.cs:104-123</code></td>
+</tr>
+<tr>
+<td><code>mousemat</code></td>
+<td>4</td>
+<td>1</td>
+<td>Aurora</td>
+</tr>
+<tr>
+<td><code>headset</code></td>
+<td>8</td>
+<td>4</td>
+<td>Aurora</td>
+</tr>
+<tr>
+<td><code>speaker</code></td>
+<td>14</td>
+<td>4</td>
+<td>Aurora</td>
+</tr>
+<tr>
+<td><code>device</code></td>
+<td>none</td>
+<td>One <code>LogiLedSetLighting</code> on the RGB and monochrome targets</td>
+<td><code>LogitechGamingLEDSDK.pdf</code> p. 23, RGB.NET <code>LogitechPerDeviceUpdateQueue.cs:34-37</code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>device</code> path lights the Logitech devices with no zones, the manual's G710+, G600, G510, G110, G19, G105, G300, G11, G13 and G15 (<code>LogitechGamingLEDSDK.pdf</code> pp. 9-18). Only the LIGHTSYNC row takes it, as the lightbar mirror lit them. <code>PeripheralLinker.LedSdkTypes</code> (<code>PeripheralLinker.cs</code> line 135) puts it first in paint order.</p>
+<h3 id="painting">Painting<a class="headerlink" href="#painting" title="Permanent link">&para;</a></h3>
+<p><code>LedSdkBackend.Paint</code> (<code>LedSdkBackend.cs</code> line 370) sends whole percent per channel, rounded (<code>LedSdkBackend.ToPercent</code> (<code>LedSdkBackend.cs</code> line 198)). The target mask is sticky process-global state, so each call that narrows it puts it back:</p>
+<ul>
+<li><code>device</code>: <code>SetTarget(3)</code> (<code>MONOCHROME</code> and <code>RGB</code>), <code>SetLighting</code>, <code>SetTarget(7)</code>. Per-key boards ignore that mask.</li>
+<li><code>keyboard</code>, when the engine has the target call: <code>SetTarget(4)</code> (<code>PERKEY_RGB</code>) and <code>SetLighting</code>, since a per-key board answers only the whole-board call on its own target. Without the target call <code>SetLighting</code> would reach every device (<code>LogitechGamingLEDSDK.pdf</code> p. 23), so it is never sent that way.</li>
+<li>Every zoned type: <code>SetTarget(7)</code>, then one <code>LogiLedSetLightingForTargetZone</code> per zone, as RGB.NET sets the mask before every zone batch (<code>LogitechZoneUpdateQueue.cs</code>).</li>
+</ul>
+<p>The whole-device call reaches zonal devices too. As in Aurora, which sends it before the zone calls on every update (<code>LogitechDevice.cs:94-124</code>), every claimed type after it in a pass goes out again.</p>
+<p><code>LedSdkBackend.CanPaint</code> (<code>LedSdkBackend.cs</code> line 277): the whole devices need the target call, a keyboard either call, and every other type the zone call. A session for types the engine cannot paint would paint nothing and fail every liveness round, so the engine goes back unopened until the claimed types change. <code>LedSdkBackend.PublishPaintable</code> (<code>LedSdkBackend.cs</code> line 292) stores the paths the loaded engine can paint in <code>PeripheralOutputs.LedSdkPaintable</code> (<code>PeripheralOutputs.cs</code> line 241). A load that fails while the software runs stores an empty list (<code>LedSdkBackend.PublishNone</code> (<code>LedSdkBackend.cs</code> line 301)), an x64 engine in the ARM64 build among the causes. The list is null before any load, while no Logitech software runs and once nothing is claimed, and the Lighting tab names a type outside it instead of a route.</p>
+<h3 id="the-session">The session<a class="headerlink" href="#the-session" title="Permanent link">&para;</a></h3>
+<p><code>LedSdkBackend.LoopAsync</code> (<code>LedSdkBackend.cs</code> line 404) runs on a thread-pool task and makes every native call itself. Every reference serializes SDK calls, and the Rust binding wraps the whole API in a process mutex.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What happens</th>
+<th>Timing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Orphan wait</td>
+<td>A previous worker still inside the SDK is waited for</td>
+<td>up to <code>DefaultOrphanWaitMs</code>, 15000</td>
+</tr>
+<tr>
+<td>Nothing claimed</td>
+<td>No engine is loaded. <code>Idle</code>, no paintable list</td>
+<td>polled every 100 ms</td>
+</tr>
+<tr>
+<td>Presence</td>
+<td><code>SoftwarePresent</code>, else <code>Waiting</code> and no paintable list</td>
+<td>retried every 30000</td>
+</tr>
+<tr>
+<td>Presence settle</td>
+<td>The first time it finds the host, and after an absence or a reinitialization, wait before touching the engine. Init right after G HUB starts succeeds and does nothing (Aurora waits 5 s)</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>Load</td>
+<td><code>TryLoad</code>, then <code>PublishPaintable</code>. A failed load publishes an empty list and reports <code>Waiting</code>. When no claimed type is paintable: unload, <code>Waiting</code>, and wait for the claimed types to change</td>
+<td>retry 30000 on failure</td>
+</tr>
+<tr>
+<td>Init</td>
+<td><code>InitWithName("PadForge")</code>, else <code>Init</code>. A refusal unloads and retries</td>
+<td>retry 30000</td>
+</tr>
+<tr>
+<td>Open</td>
+<td>Wait, <code>SetTarget(7)</code>, <code>SaveCurrent</code>, <code>Connected</code></td>
+<td>100 (Aurora's settle)</td>
+</tr>
+<tr>
+<td>Stream</td>
+<td>Each poll: a type nobody claims any more gets the saved lighting back (<code>Restore</code>), and every remaining type is painted again over it. Between liveness rounds only a changed color goes out. Every <code>LivenessMs</code> (5000) every claimed type goes out</td>
+<td>polled every 100 ms</td>
+</tr>
+<tr>
+<td>Fail streak</td>
+<td>Three liveness rounds in a row in which no call took end the session, which reinitializes after the retry</td>
+<td></td>
+</tr>
+<tr>
+<td>Teardown</td>
+<td><code>Teardown</code>: <code>RestoreAndShutdown</code> (restore first, the RGB.NET dispose shape) unless a newer worker already loaded the engine, then <code>Unload</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>A set color needs no keep-alive, but a dead G HUB shows only as failing calls, which the liveness round surfaces while the colors hold still. The manual gives two reasons a call answers false, a session never initialized and a lost connection to Logitech's software (<code>LogitechGamingLEDSDK.pdf</code>, <code>LogiLedSetLightingForTargetZone</code>). It says nothing about a type with no device behind it, so a type that fails alone is recorded as sent, waits for its next color or round, and never ends the session.</p>
+<h3 id="generations-and-orphans">Generations and orphans<a class="headerlink" href="#generations-and-orphans" title="Permanent link">&para;</a></h3>
+<p><code>LedSdkBackend.Start</code> (<code>LedSdkBackend.cs</code> line 201) increments <code>s_generation</code>, and a worker whose generation is no longer the newest (<code>LedSdkBackend.Superseded</code> (<code>LedSdkBackend.cs</code> line 236)) drops its state reports and loads nothing more. <code>LedSdkBackend.Stop</code> (<code>LedSdkBackend.cs</code> line 211) cancels and waits 3000 ms. A worker still inside a native call is parked in <code>s_orphan</code>, and the next worker waits for it before loading the engine, for up to <code>DefaultOrphanWaitMs</code>, past the 14 seconds an Artemis-launched G HUB cold start takes, so two workers never overlap inside the SDK. <code>LedSdkBackend.MarkLoader</code> (<code>LedSdkBackend.cs</code> line 326) and <code>LedSdkBackend.Teardown</code> (<code>LedSdkBackend.cs</code> line 341) both take <code>s_sdkGate</code>, bounded by <code>GateWaitMs</code> (3000). An orphan that finishes before a newer worker loads the engine still restores and shuts down its own session. One that finishes after leaves the SDK to the newer session and only frees its module handle.</p>
+<hr />
+<h2 id="the-chroma-backend">The Chroma backend<a class="headerlink" href="#the-chroma-backend" title="Permanent link">&para;</a></h2>
+<p><code>ChromaBackend</code> (<code>ChromaBackend.cs</code> line 49) talks to the Chroma REST server Synapse hosts at <code>ChromaBackend.DefaultEndpoint</code> (<code>ChromaBackend.cs</code> line 53), <code>http://localhost:54235</code>. The official Chroma REST docs and chroma-sdk/Colore (<code>RestApi.cs</code>) agree on every field. The endpoint is injectable because the production port is machine-global, and a test that talked to it would reach a real Synapse.</p>
+<p><code>ChromaBackend.Wanted</code> (<code>ChromaBackend.cs</code> line 157) gives each category's color in the order the init lists them (Colore <code>Rest/RestApi.cs</code>, the official REST docs): a live Set Chroma Color first (below), else <code>TryResolveColor</code> on the category. A Razer device claims its own category while Control This Device’s Lighting is on for its controller, the Razer Chroma row claims all six and rules the ones no device claims, and the smallest displayed player number rules a category two controllers claim.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Call</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open</td>
+<td><code>POST {endpoint}/razer/chromasdk</code> with <code>ChromaBackend.InitBody</code> (<code>ChromaBackend.cs</code> line 137)</td>
+<td>The app-info JSON Synapse shows in its Connect tab: title <code>PadForge</code>, a description, an author, <code>device_supported</code> listing only the categories wanted now, and category <code>application</code>. The answer's <code>uri</code> names the session</td>
+</tr>
+<tr>
+<td>Heartbeat</td>
+<td><code>PUT {uri}/heartbeat</code>, no body</td>
+<td>Every second, Colore's interval and its no-data overload (<code>RestClient.cs:107</code>). A session dies after 15 seconds without a command. A non-success status ends the session</td>
+</tr>
+<tr>
+<td>Effect</td>
+<td><code>PUT {uri}/{category}</code> with <code>{"effect":"CHROMA_STATIC","param":{"color":N}}</code></td>
+<td>Applies at once. Only a changed color goes out per category. <code>N</code> is BGR, <code>R + (G &lt;&lt; 8) + (B &lt;&lt; 16)</code> (<code>ChromaBackend.ToBgr</code> (<code>ChromaBackend.cs</code> line 131))</td>
+</tr>
+<tr>
+<td>Close</td>
+<td><code>DELETE {uri}</code></td>
+<td>Bounded to a second. Ends the session, which hands the lighting back to Synapse</td>
+</tr>
+</tbody>
+</table>
+<p>The session lists only the categories something wants, and it is opened again when that set changes, so a category nothing claims stays Synapse's. The docs do not say whether Synapse leaves alone a category a session lists and never paints. With nothing wanted, the worker holds no session and reports <code>Idle</code>.</p>
+<p>The server answers HTTP 200 with a <code>result</code> integer even when it rejects an effect, so <code>ChromaBackend.SendStaticAsync</code> (<code>ChromaBackend.cs</code> line 356) reads the body, as Colore checks that field after every effect call (<code>Rest/RestApi.cs</code> SetEffectAsync). <code>ChromaBackend.TryReadResult</code> (<code>ChromaBackend.cs</code> line 385) needs a JSON object with a numeric <code>result</code>. 0 and 1167 are accepted, 1167 being <code>ResultDeviceNotConnected</code>, a category with no device behind it (Colore <code>Data/Result.cs</code>). Anything else leaves the category's last color unrecorded, so the next poll retries it, and a rejection is logged when it differs from the last one logged.</p>
+<p>URIs are joined by string concatenation, because the session URI has no trailing slash and <code>new Uri(base, relative)</code> would replace its last segment. <code>HttpClient</code> reports its own 5000 ms timeout as a <code>TaskCanceledException</code>. The init's catch for a cancellation takes only a stop (<code>when (ct.IsCancellationRequested)</code>), so a slow Synapse stays on the 30-second retry path as <code>Waiting</code>. <code>LightingChanged</code> and <code>ChromaMacroChanged</code> wake the 100 ms poll. <code>ChromaBackend.Stop</code> (<code>ChromaBackend.cs</code> line 108) cancels, waits 3 seconds, and then lets a worker parked in a REST call finish on its own, since the session it ends is its own.</p>
+<hr />
+<h2 id="the-gamesense-backend">The GameSense backend<a class="headerlink" href="#the-gamesense-backend" title="Permanent link">&para;</a></h2>
+<p><code>GameSenseBackend</code> (<code>GameSenseBackend.cs</code> line 28) is one <code>PeripheralGameSense</code> thread on a 20 ms tick. <code>GameSenseClient</code> (<code>GameSenseClient.cs</code> line 47) makes its HTTP calls, synchronous with a 500 ms timeout, since a local engine answers in milliseconds. Every rule in the client is from SteelSeries/gamesense-sdk. Rumble and colors share one game, <code>PADFORGE</code>, displayed as PadForge.</p>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>When</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read <code>coreProps.json</code></td>
+<td>Each connect</td>
+<td>The <code>address</code> key of <code>%PROGRAMDATA%\SteelSeries\SteelSeries Engine 3\coreProps.json</code>. No file means GG is not running</td>
+</tr>
+<tr>
+<td><code>POST /game_metadata</code>, <code>POST /bind_game_event</code></td>
+<td>Connect</td>
+<td>The game, then <code>RUMBLE</code> (0 to 100) with one <code>tactile</code> handler on zone <code>one</code>, mode <code>vibrate</code></td>
+</tr>
+<tr>
+<td><code>POST /remove_game_event</code></td>
+<td>Connect</td>
+<td>Every color event a dropped session or a dead process left bound, so a type nobody claims stays GG's</td>
+</tr>
+<tr>
+<td><code>POST /game_event</code></td>
+<td>A rumble level change</td>
+<td><code>RUMBLE</code> at 0, 17, 50 or 84, one value inside each range (<code>GameSenseClient.LevelValue</code> (<code>GameSenseClient.cs</code> line 142))</td>
+</tr>
+<tr>
+<td><code>POST /bind_game_event</code>, <code>POST /game_event</code></td>
+<td>A color type newly claimed, or its color changed</td>
+<td><code>COLOR_MOUSE</code>, <code>COLOR_KEYBOARD</code> or <code>COLOR_HEADSET</code> with <code>value_optional</code> and one <code>context-color</code> handler per zone reading the frame key <code>color</code>, then the color in the event's frame</td>
+</tr>
+<tr>
+<td><code>POST /remove_game_event</code></td>
+<td>A type stops being claimed</td>
+<td>GG lights that type again</td>
+</tr>
+<tr>
+<td><code>POST /game_heartbeat</code></td>
+<td>Every 10 seconds while rumble or a color holds</td>
+<td>GameSense deactivates a game after 15 seconds without events</td>
+</tr>
+<tr>
+<td><code>POST /game_event</code> 0, <code>POST /remove_game_event</code>, <code>POST /stop_game</code></td>
+<td><code>GameSenseClient.Close</code> (<code>GameSenseClient.cs</code> line 261)</td>
+<td>Silences the motor, drops the color events, and hands the devices back to GG</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>RUMBLE</code> binding, <code>GameSenseClient.BindBody</code> (<code>GameSenseClient.cs</code> line 69), gives each value range a custom pulse, 30 ms for 1 to 33, 55 ms for 34 to 66 and 80 ms for 67 to 100, and a rate that repeats it 5, 7 or 10 times a second until the value changes. Each pulse ends before its next repeat starts, which answers the tactile doc's warning that vibrations take time and can queue up. Value 0 plays nothing and repeats nothing. <code>GameSenseClient.ColorZones</code> (<code>GameSenseClient.cs</code> line 91) follows <code>standard-zones.md:86-110</code> and <code>208-238</code>: the mouse's <code>wheel</code>, <code>logo</code> and <code>base</code>, the keyboard's <code>main-keyboard</code>, <code>function-keys</code>, <code>keypad</code>, <code>number-keys</code> and <code>macro-keys</code> plus <code>rgb-per-key-zones</code> <code>all</code> for a per-key board, and the headset's <code>earcups</code>. GameSense has no mousepad type: the QcK Prism pads answer only its zone-count types (<code>standard-zones.md:29</code> and <code>37</code>), which no row binds. The fourth general type, <code>indicator</code>, is a single status light and stays out.</p>
+<p><code>GameSenseBackend.Worker</code> (<code>GameSenseBackend.cs</code> line 113), each tick:</p>
+<ol>
+<li>Every <code>RulerMs</code> (250), work out the ruling Rival on the tactile path through <code>TryResolveHapticRuler</code>. The tactile handler drives every tactile Rival at once (<code>standard-zones.md:3</code>, "a device category"), so the Rival on the virtual controller with the smallest displayed player number sets the level for all of them.</li>
+<li>Resolve each claimed color type (<code>GameSenseBackend.Colors</code> (<code>GameSenseBackend.cs</code> line 90)).</li>
+<li>With no ruling Rival and no color, post level 0 and remove every color event at once, since GG repeats a level's pulse until the value changes and a Rival that just left its controller would buzz on. After <code>ReleaseMs</code> (2000) of nothing claimed, <code>Close</code>, so a reassignment does not churn the registration.</li>
+<li>Otherwise, shape the ruler's level (<code>HapticRumbleShaper.Level</code>), connect when due, render the level, and set the colors at most every <code>ColorMs</code> (50), or at once when the claimed types change. A refused or failed connect, or a call that stops answering, disconnects, and the next try comes after <code>RetryMs</code> (15000).</li>
+</ol>
+<p>The crash path calls <code>GameSenseBackend.WaitForSilence</code> (<code>GameSenseBackend.cs</code> line 224) after the engine's quiesce zeroed every level. GG repeats a pulse at its rate until the value changes (<code>json-handlers-tactile.md:187-195</code>) or the game goes 15 seconds without an event (<code>sending-game-events.md:83</code>), so a process that died first would leave a Rival buzzing that long. <code>PanicQuiesceOutputs</code> waits up to 250 ms for the worker to post the zero, the way the Bliss-Box stop waits in <code>InputManager.QuiesceOutputs</code>.</p>
+<hr />
+<h2 id="haptics">Haptics<a class="headerlink" href="#haptics" title="Permanent link">&para;</a></h2>
+<h3 id="the-level">The level<a class="headerlink" href="#the-level" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralOutputs.SetMotors</code> (<code>PeripheralOutputs.cs</code> line 303) stores a row's combined level as float bits: the stronger motor over 65535, since every backend plays one waveform or one intensity. A zero goes through <code>PeripheralOutputs.StopHaptics</code> (<code>PeripheralOutputs.cs</code> line 324). The first nonzero level after silence raises <code>HapticsChanged</code>, which wakes the HID++ worker so the first pulse of new rumble plays at once. The level is kept whether or not a path is linked now. A backend plays only a linked path, so a device that wakes plays the level the game holds, and a stop sent while it slept is never lost. <code>PeripheralOutputs.AmplitudeOf</code> (<code>PeripheralOutputs.cs</code> line 335) reads it.</p>
+<p><code>PeripheralOutputs.IsHapticPeripheral</code> (<code>PeripheralOutputs.cs</code> line 193) adds to <code>TakesHaptics</code> a mouse or keyboard a linked PC forwards with rumble. It opens the Force Feedback tab and the Devices page's rumble chip (<code>InputService.PopulateDeviceRow</code> (<code>InputService.cs</code> line 14159)), and the chip is Identify's button.</p>
+<h3 id="step-2">Step 2<a class="headerlink" href="#step-2" title="Permanent link">&para;</a></h3>
+<p><code>InputManager.ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) treats a haptic peripheral the way it treats a Bliss-Box port: a sole writer that records a level and hands it to a worker.</p>
+<ul>
+<li>A haptic mouse or keyboard, or the Sensa row, reports no SDL rumble, so loading it made no <code>ForceFeedbackState</code>. The poll thread makes one on first use, after <code>StopHaptics</code>, since a new cache starts from zero and a level kept from before the row was removed and found again would otherwise play on.</li>
+<li><code>isPeripheralHaptic</code> joins the Xbox impulse, Padix and Bliss-Box paths past the SDL rumble gate, and like them it needs <code>ud.Device</code>.</li>
+<li>On every slot the row is on, the level goes through the chain a gamepad's does: game rumble, macro rumble, constant force, and the row's own Force Feedback settings for that slot. The slots combine by maximum.</li>
+<li>The <code>isPeripheralHaptic</code> branch (<code>InputManager.Step2.UpdateInputStates.cs</code> line 1234) folds trigger rumble into the motors (<code>ForceFeedbackState.FoldTriggersForDirectWriter</code>), since no peripheral has trigger motors. When <code>PeripheralOutputs.ConsumeResend</code> (<code>PeripheralOutputs.cs</code> line 367) says a silence edge owes the row a resend, the branch marks the snapshot failed. It calls <code>SetMotors</code> only when <code>TryRecordMotorSnapshot</code> reports a change.</li>
+<li>When the row's last slot goes, it sends a zero once through <code>SetMotors</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 850), under the row's output gate and the Remote Link guards.</li>
+</ul>
+<h3 id="silence-edges-and-the-other-writers">Silence edges and the other writers<a class="headerlink" href="#silence-edges-and-the-other-writers" title="Permanent link">&para;</a></h3>
+<p><code>PeripheralOutputs.SilenceHaptics</code> (<code>PeripheralOutputs.cs</code> line 352) zeroes every level and marks each row that was playing as owed one resend, so a level a game still asks for comes back the moment Step 2 runs again instead of reading as unchanged. It runs where Step 2 does not:</p>
+<table>
+<thead>
+<tr>
+<th>Edge</th>
+<th>Site</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Engine stop</td>
+<td><code>InputManager.Stop</code> (<code>InputManager.cs</code> line 1810)</td>
+</tr>
+<tr>
+<td>Crash quiesce</td>
+<td><code>InputManager.StopAllForceFeedback</code> (<code>InputManager.cs</code> line 2325), which also stops each row's level under its output gate, so a level the poll thread or Identify decided under the gate cannot land after the sweep</td>
+</tr>
+<tr>
+<td>Focus suspend</td>
+<td><code>InputManager.ApplyFocusSuspension</code> (<code>InputManager.cs</code> line 3838), with <code>keepRelayed: true</code>: a level a Remote Link peer drives keeps playing, as a peer-driven SDL rumble does, since the relay still writes while the engine is suspended and a peer sends a steady level only once</td>
+</tr>
+</tbody>
+</table>
+<p>Idle is no edge. Step 2 runs there and writes the level itself.</p>
+<p>The other writers: <code>InputManager.MarkDeviceOffline</code> (<code>InputManager.Step1.UpdateDevices.cs</code> line 1167) and <code>SettingsManager.RemoveDevice</code> (<code>SettingsManager.cs</code> line 487) stop a row's level and release its claims. Identify's pulse train (<code>InputService.IdentifyDevice</code> (<code>InputService.cs</code> line 15962)) sets the level under the row's gate with the quiesce checked again, and ends at the level the snapshot holds. Steering-angle rumble accepts a haptic peripheral (<code>InputManager.SupportsSteeringAngleRumble</code> (<code>InputManager.SteeringAngleRumble.cs</code> line 51)).</p>
+<h3 id="hid-0x19b0">HID++ 0x19B0<a class="headerlink" href="#hid-0x19b0" title="Permanent link">&para;</a></h3>
+<p>Logitech has not published the haptic feature. Three implementations agree on it: Solaar (<code>hidpp20_constants.py</code> HapticWaveForms, <code>settings_templates.py</code> HapticLevel and PlayHapticWaveForm), OpenLogi's x19b0 reference, and LiveHaptics (<code>HidppDevice.cpp</code>). <code>HidppHapticProtocol</code> (<code>HidppHaptics.cs</code> line 28) follows them.</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Request</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0, getCapabilities</td>
+<td>none</td>
+<td>Payload bytes 4 to 7: the supported-waveform mask, big-endian, bit N for waveform N</td>
+</tr>
+<tr>
+<td>1, getConfiguration</td>
+<td>none</td>
+<td>Byte 0 bit 0: feedback enabled. Byte 1: intensity, 0 to 100</td>
+</tr>
+<tr>
+<td>4, play</td>
+<td>waveform, 0, 0</td>
+<td>Not read</td>
+</tr>
+</tbody>
+</table>
+<p>LiveHaptics sends 100 after the waveform byte. Solaar and OpenLogi send zero, and so does PadForge. No setConfiguration is ever sent, so the intensity and the on/off switch in Logi Options+ stay the user's. A frame (<code>HidppHapticProtocol.Frame</code> (<code>HidppHaptics.cs</code> line 77)) is report ID <code>0x11</code>, the device index, the feature index, the function in the high nibble with software ID <code>0x0C</code> in the low one, and up to 16 parameter bytes. <code>0x0C</code> is none of the IDs Solaar's table lists for other tools (OpenRGB <code>0x07</code>, LGSTrayEx <code>0x0A</code>, Solaar <code>0x0B</code>, G HUB <code>0x0D</code>, the firmware <code>0x0F</code>) and not LiveHaptics' <code>0x01</code>, so an answer meant for Logi Options+ never reads as PadForge's.</p>
+<p><code>HidppBackend.PlayHaptics</code> (<code>HidppBackend.cs</code> line 416) plays each haptic unit a linked row asks for, at the strongest level when two rows link it. <code>HapticRumbleShaper</code> (<code>HapticRumbleShaper.cs</code> line 14) turns the amplitude into pulses:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Rises at</th>
+<th>Falls below</th>
+<th>Waveform, then fallbacks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.05</td>
+<td>0.03</td>
+<td>subtle collision (4), damp collision (3), sharp collision (2)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.33</td>
+<td>0.30</td>
+<td>damp collision (3), subtle collision (4), sharp collision (2)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.66</td>
+<td>0.63</td>
+<td>sharp collision (2), damp collision (3), subtle collision (4)</td>
+</tr>
+</tbody>
+</table>
+<p>The hysteresis keeps rumble that hovers on a boundary from flipping the level every tick. <code>HapticRumbleShaper.Waveform</code> (<code>HapticRumbleShaper.cs</code> line 45) takes the first of the level's waveforms the unit's mask lists, and <code>HidppUnit.HasHaptics</code> (<code>HidppUnits.cs</code> line 55) requires at least one of the three. <code>HapticRumbleShaper.IntervalMs</code> (<code>HapticRumbleShaper.cs</code> line 35) runs linearly from 250 ms at an amplitude of 0.05 to 80 ms at full strength, the cooldown mxhaptics ships for its impact events. Silence resets a unit's interval, so the first pulse of new rumble plays at once. Logitech's Actions SDK describes the sharp collision as a "High-intensity impact simulation", the damp collision as a "Medium-intensity impact with gradual decay" and the subtle collision as "Low-intensity feedback for light contact events". No model list gates the path. Any Logitech device that lists 0x19B0 and one of the three waveforms takes it, the MX Master 4 among them.</p>
+<p>The configuration's enable bit, read at discovery and with each check, feeds the Force Feedback tab's line for a unit whose feedback is off in Logi Options+.</p>
+<h3 id="the-gamesense-tactile-path">The GameSense tactile path<a class="headerlink" href="#the-gamesense-tactile-path" title="Permanent link">&para;</a></h3>
+<p>A tactile Rival's level reaches GG through the GameSense worker above. Every tactile Rival plays the ruling Rival's level. The motor stops at the first ruler check (<code>RulerMs</code>, 250) that finds no Rival assigned, and GG gets the mice back <code>ReleaseMs</code> (2000) after nothing at all is claimed, colors included.</p>
+<h3 id="razer-sensa">Razer Sensa<a class="headerlink" href="#razer-sensa" title="Permanent link">&para;</a></h3>
+<p>The Sensa row's level reaches the Interhaptics engine through <code>SensaHapticsService</code>, which reads <code>PeripheralOutputs.AmplitudeOf</code> for the row's id. <code>PeripheralOutputHost.SensaLifecycle</code> (<code>PeripheralOutputHost.cs</code> line 289) runs the worker only while the row is linked and assigned to a virtual controller, and starts a worker that ended on its own again after <code>SensaRestartMs</code> (30000), so a missing <code>HAR.dll</code> does not spin. <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a> covers the engine, the worker and the row.</p>
+<h3 id="remote-link">Remote Link<a class="headerlink" href="#remote-link" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The owner advertises rumble for a haptic mouse or keyboard. <code>InputService.BuildExposedDevices</code> (<code>InputService.cs</code> line 11518) sets <code>HasRumble</code> from the device or the row's recorded haptics bit, so the capability does not flap while the device sleeps. A consumer registers a device again when its rumble flag changes (<code>LinkServer.ReconcileRemoteDevices</code> (<code>LinkServer.cs</code> line 2162)).</li>
+<li>On the consumer, the forwarded mouse shows its Force Feedback tab through <code>IsHapticPeripheral</code>, and Step 2 ships its level back to the owner as it does for any forwarded device. The host never links a forwarded device to this PC's vendor channels.</li>
+<li>On the owner, <code>InputService.ApplyRemoteOutput</code> (<code>InputService.cs</code> line 11903) pays a resend a silence edge owed, records the relayed motors, and calls <code>SetMotors</code> with <code>relayed: true</code>.</li>
+<li>Vendor rows are not shared. <code>InputService.IsShareableDevice</code> (<code>InputService.cs</code> line 11706) refuses a <code>PeripheralOutputRow</code>, since it stands for this PC's vendor software and has no input.</li>
+</ul>
+<h3 id="touchsense-mice">TouchSense mice<a class="headerlink" href="#touchsense-mice" title="Permanent link">&para;</a></h3>
+<p>Logitech iFeel mice and other mice built on Immersion TouchSense have no path. Their vibration command is a 7-byte output report, <code>11 0A &lt;strength&gt; &lt;delay&gt; 00 &lt;count&gt; 00</code> in a BeOS iFeel tool (<code>ifeel-beos.cpp:25</code>) and the same bytes in the Linux ifeel driver (<code>ifeel.c:73</code>), with no report ID, so it belongs to the mouse's own top-level collection. Windows opens mouse collections for exclusive system use (Microsoft's table of top-level collections opened by Windows for system use), so a user-mode program cannot open one to write that report.</p>
+<hr />
+<h2 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h2>
+<p>The macro action (#468), <code>MacroActionType.SetChromaColor</code> (<code>MacroItem.cs</code> line 6634), paints while it is current, the AxisHold duration shape.</p>
+<ol>
+<li><code>InputManager.ExecuteSequentialAction</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 2857) and its extended twin <code>InputManager.ExecuteSequentialActionRaw</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 5189) call <code>InputManager.NoteChromaColor</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 2828) with the macro's slot and color on every frame the action is current. Several macros current in one frame leave the last one evaluated, which is how a full-press macro listed below its soft-press twin wins at the bottom of the press.</li>
+<li><code>InputManager.EvaluateSlotMacros</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 463) and <code>InputManager.EvaluateSlotMacrosExtended</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 4499) end with <code>InputManager.FlushChromaColors</code> (<code>InputManager.Step4b.EvaluateMacros.cs</code> line 2837), which hands each slot's color for the frame to <code>MacroChromaSink</code> once, so a reader never sees the color flip between two macros within a frame. Each macro pass sends one color per controller.</li>
+<li>The sink is <code>PeripheralOutputs.AssertChromaMacro</code> (<code>PeripheralOutputs.cs</code> line 596). It packs the tick shifted left 24 bits with the color into one <code>long</code> per slot, so one atomic read gives a matching pair. A first assertion, a new color, or one after the window lapsed raises <code>PeripheralOutputs.ChromaMacroChanged</code> (<code>PeripheralOutputs.cs</code> line 589), which wakes the Chroma worker alone. A held color asserted every frame raises nothing.</li>
+<li><code>PeripheralOutputs.TryGetChromaMacro</code> (<code>PeripheralOutputs.cs</code> line 619) reads a slot's color while its latest assertion is within <code>PeripheralOutputs.MacroAssertWindowMs</code> (<code>PeripheralOutputs.cs</code> line 580), 120 ms. The action asserts on every poll, a millisecond apart, so the window measures only the gap after the action ends.</li>
+</ol>
+<p><code>ChromaBackend.Wanted</code> (<code>ChromaBackend.cs</code> line 157) applies it. For each slot with a live macro, <code>PeripheralOutputs.DevicesOnSlot</code> (<code>PeripheralOutputs.cs</code> line 631) lists the devices assigned there, and every Chroma category linked to one of them takes the macro's color: the categories of the slot's Razer devices, which reaches every other Razer device of those kinds, or all six when the Razer Chroma row is on the slot. Links do not depend on the Lighting tab's switch, so the macro paints whether or not those tabs control the devices, over every claim on the category. Between two controllers' macros on one category, the smaller <code>PeripheralOutputs.DisplayedSlotNumber</code> (<code>PeripheralOutputs.cs</code> line 647) wins. A macro on a slot with no Razer device of a category leaves that category alone.</p>
+<hr />
+<h2 id="the-route-line">The route line<a class="headerlink" href="#the-route-line" title="Permanent link">&para;</a></h2>
+<p><code>PeripheralRouteText</code> (<code>PeripheralRouteText.cs</code> line 16) builds the ember line on the Force Feedback and Lighting tabs, on the UI thread, from the link table, the backend states and the HID++ units. It replaced the Dashboard status lines the global switches carried. <code>PadPage.SyncTabVisibility</code> (<code>PadPage.xaml.cs</code> line 374) fills both lines. The page runs it again on <code>LinksChanged</code>, <code>StatusChanged</code> and <code>ClaimsChanged</code>, one sync per burst (<code>PadPage.OnPeripheralOutputsChanged</code> (<code>PadPage.xaml.cs</code> line 138)).</p>
+<p><code>PeripheralRouteText.Haptics</code> (<code>PeripheralRouteText.cs</code> line 20), for the Force Feedback tab:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>String</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No haptic path, the Sensa row whose record has haptics, an x64 process</td>
+<td><code>Pad_ForceFeedback_RouteSensaWaiting</code></td>
+</tr>
+<tr>
+<td>No haptic path, the Sensa row whose record has haptics, an ARM64 process</td>
+<td><code>Common_NotAvailableOnArm64</code></td>
+</tr>
+<tr>
+<td>No haptic path, a Logitech row whose record has haptics</td>
+<td><code>Pad_ForceFeedback_RouteHidppAsleep</code></td>
+</tr>
+<tr>
+<td>A HID++ unit whose feedback is off</td>
+<td><code>Pad_ForceFeedback_RouteHidppFeedbackOff</code>, with the unit's name</td>
+</tr>
+<tr>
+<td>A HID++ unit</td>
+<td><code>Pad_ForceFeedback_RouteHidpp</code>, with the unit's name</td>
+</tr>
+<tr>
+<td>The tactile path while GG does not answer</td>
+<td><code>Pad_ForceFeedback_RouteGameSenseWaiting</code></td>
+</tr>
+<tr>
+<td>The tactile path, ruled by another Rival on a controller of this PC</td>
+<td><code>Pad_ForceFeedback_RouteGameSenseShared</code>, with that controller's number</td>
+</tr>
+<tr>
+<td>The tactile path otherwise</td>
+<td><code>Pad_ForceFeedback_RouteGameSense</code></td>
+</tr>
+<tr>
+<td>The Sensa path while the backend state is <code>Waiting</code></td>
+<td><code>Pad_ForceFeedback_RouteSensaWaiting</code></td>
+</tr>
+<tr>
+<td>The Sensa path otherwise</td>
+<td><code>Pad_ForceFeedback_RouteSensa</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>PeripheralRouteText.Lighting</code> (<code>PeripheralRouteText.cs</code> line 108), for the Lighting tab, takes the slot and <code>lightsHere</code>: true for a vendor row, else the device's Control This Device’s Lighting switch on this slot. A device this controller leaves alone shows only who else lights it, never a route of its own. The path is the row's first lighting path, and the app is the vendor software behind a shared family (<code>PeripheralRouteText.LightingApp</code> (<code>PeripheralRouteText.cs</code> line 74)): Razer Synapse, Logitech G HUB (Logitech Gaming Software while <code>PeripheralPresence.LogitechGamingSoftware</code> holds) or SteelSeries GG. The first condition that holds picks the line. <code>PeripheralRouteText.CannotLight</code> (<code>PeripheralRouteText.cs</code> line 185) gives <code>Common_NotAvailableOnArm64</code> for an empty paintable list in the ARM64 build, and <code>Pad_Lighting_RouteCannotLight</code> otherwise.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Condition</th>
+<th>String</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>No lighting path, and this controller lights a Logitech row whose record has lighting</td>
+<td><code>Pad_Lighting_RouteAsleep</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>The Logitech LIGHTSYNC row while <code>LedSdkPaintable</code> is an empty list</td>
+<td><code>CannotLight</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>A vendor row whose software does not answer</td>
+<td><code>Pad_Lighting_RouteVendorRowWaiting</code>, with the app and the row's examples</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A vendor row that rules none of its paths here while the same row on another controller rules one</td>
+<td><code>Pad_Lighting_RouteOtherController</code>, with that controller's number</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Any other vendor row</td>
+<td><code>Pad_Lighting_RouteVendorRow</code>, with the app and the row's examples</td>
+</tr>
+<tr>
+<td>6</td>
+<td>An LED SDK type outside <code>LedSdkPaintable</code></td>
+<td><code>CannotLight</code> when this controller lights it, else no line</td>
+</tr>
+<tr>
+<td>7</td>
+<td>The app does not answer</td>
+<td><code>Pad_Lighting_RouteWaiting</code> when this controller lights it, else no line</td>
+</tr>
+<tr>
+<td>8</td>
+<td>A vendor row rules the path</td>
+<td><code>Pad_Lighting_RouteSharedVendorRow</code>, with the app, the row's name and its controller's number</td>
+</tr>
+<tr>
+<td>9</td>
+<td>The same device on another controller rules it, or another row of the device on another controller rules its direct path</td>
+<td><code>Pad_Lighting_RouteOtherController</code> when this controller lights it, else <code>Pad_Lighting_RouteOtherControllerOnly</code>, with that controller's number</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Another row of the same directly lit device on this controller rules it</td>
+<td><code>Pad_Lighting_RouteOtherRow</code> when this controller lights it, else <code>Pad_Lighting_RouteOtherRowOnly</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Another device on a shared path rules it</td>
+<td><code>Pad_Lighting_RouteShared</code>, with the app and that device's controller number</td>
+</tr>
+<tr>
+<td>12</td>
+<td>This controller does not light it</td>
+<td>no line</td>
+</tr>
+<tr>
+<td>13</td>
+<td>A HID++ unit</td>
+<td><code>Pad_Lighting_RouteDirect</code>, with the unit's name</td>
+</tr>
+<tr>
+<td>14</td>
+<td>A shared path</td>
+<td><code>Pad_Lighting_RouteThrough</code>, with the app</td>
+</tr>
+</tbody>
+</table>
+<p>Rows 7 to 10 apply only to a ruling claim with a player number. The examples a vendor row names (<code>PeripheralRouteText.VendorRowExamples</code> (<code>PeripheralRouteText.cs</code> line 87)) are what its software lights that PadForge does not read: <code>Pad_Lighting_VendorRowExamples_Chroma</code>, <code>_LedSdk</code> and <code>_GameSense</code>. SteelSeries GG binds no mousepad type, so its row names headsets alone.</p>
+<hr />
+<h2 id="the-tabs-and-the-switch">The tabs and the switch<a class="headerlink" href="#the-tabs-and-the-switch" title="Permanent link">&para;</a></h2>
+<p><code>PadPage.SyncTabVisibility</code> (<code>PadPage.xaml.cs</code> line 374) gives a device that <code>IsHapticPeripheral</code> accepts the Force Feedback tab and its route line (<code>PeripheralHapticsRoute</code>). A device with lighting by record or path and no Sony lightbar of its own gets the Lighting tab with the lightbar's mode card and <code>PeripheralLightingPanel</code>, without the DualShock 4 or DualSense art. The panel's Control This Device’s Lighting check box binds <code>DeviceConfig.PeripheralLightingEnabled</code> and hides for a vendor row, whose device type is <code>PeripheralLighting</code>.</p>
+<p><code>DeviceSlotConfig.PeripheralLightingEnabled</code> (<code>DeviceSlotConfig.cs</code> line 1003) is per (virtual controller, device) and off by default, so assigning a keyboard for its keys never repaints it. It is saved with the device's slot config, counts as a configuration on its own (<code>SettingsService.IsDeviceConfigConfigured</code> (<code>SettingsService.cs</code> line 2857)), and has a reset button.</p>
+<hr />
+<h2 id="migration-of-the-dashboard-switches">Migration of the Dashboard switches<a class="headerlink" href="#migration-of-the-dashboard-switches" title="Permanent link">&para;</a></h2>
+<p>The Dashboard's Lightbar Mirrors section, with its Razer Chroma (#373) and Logitech LIGHTSYNC (#382) toggles, and its Razer Sensa section (#374) are gone, along with <code>ChromaLightbarService</code> and <code>LightsyncLightbarService</code>. <code>PeripheralSwitchMigration</code> (<code>PeripheralSwitchMigration.cs</code> line 38) turns each switch that was on into an assignment of the row that replaced it.</p>
+<p>Each switch had a global value and a nullable per-profile opinion, and profiles own their device assignments. <code>AppSettingsData.EnableChromaLightbar</code> (<code>SettingsService.cs</code> line 6696), <code>EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6704) and <code>EnableLightsyncLightbar</code> (<code>SettingsService.cs</code> line 6712), and their <code>bool?</code> twins <code>ProfileData.EnableChromaLightbar</code> (<code>SettingsService.cs</code> line 7662), <code>EnableLightsyncLightbar</code> (<code>SettingsService.cs</code> line 7668) and <code>EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7675), are read once and never written: each <code>ShouldSerialize</code> method returns false. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists them. The Sensa switch is <code>Available</code> only where <code>PlatformSupport.SensaAvailable</code> holds, so on ARM64 it assigns nothing and only clears.</p>
+<p><code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193):</p>
+<ul>
+<li>The live settings take the active profile's opinion, else the global value. A switch that was on calls <code>PeripheralSwitchMigration.AssignLive</code> (<code>PeripheralSwitchMigration.cs</code> line 223), which creates the row's record offline when the file has none (<code>PeripheralSwitchMigration.NewRowRecord</code> (<code>PeripheralSwitchMigration.cs</code> line 170), outputs bit set), assigns it to the live slot <code>SettingsService.LiveRulingSlot</code> (<code>SettingsService.cs</code> line 569) names, and gives it the setting a drag onto that slot gives.</li>
+<li>The default profile's stored state, while a named profile is active, and every stored profile take their own opinion, else the global value. A switch that was on adds an entry for the row on that profile's slot (<code>PeripheralSwitchMigration.AddToProfile</code> (<code>PeripheralSwitchMigration.cs</code> line 261)) with a default setting for the slot's controller type.</li>
+<li>Every opinion is cleared once read, and the switches are never written again, so the migration runs once per file.</li>
+</ul>
+<p>The slot comes from <code>PeripheralSwitchMigration.RulingSlot</code> (<code>PeripheralSwitchMigration.cs</code> line 153):</p>
+<table>
+<thead>
+<tr>
+<th>Row</th>
+<th>Slot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Razer Chroma, Logitech LIGHTSYNC</td>
+<td>The first created PlayStation slot in display order whose controller is a DualSense or DualShock 4 (<code>PeripheralSwitchMigration.FirstLightbarSlot</code> (<code>PeripheralSwitchMigration.cs</code> line 140)), since the mirrors showed only a lightbar color a game wrote to one of those. <code>PeripheralSwitchMigration.DecodesLightbar</code> (<code>PeripheralSwitchMigration.cs</code> line 130) takes a profile id that starts with <code>dualsense</code> or <code>dualshock-4</code>, or none, the PlayStation default, a DualSense</td>
+</tr>
+<tr>
+<td>Razer Sensa</td>
+<td>The first created slot in the group order the Dashboard walks (<code>PeripheralSwitchMigration.FirstDisplayedSlot</code> (<code>PeripheralSwitchMigration.cs</code> line 70)), the slot that shows the smallest player number</td>
+</tr>
+</tbody>
+</table>
+<p>A topology without the controller a row needs gets nothing. A stored profile's order is rebuilt the way applying the profile rebuilds the live one (<code>PeripheralSwitchMigration.DisplayOrder</code> (<code>PeripheralSwitchMigration.cs</code> line 94)): its saved order's created slots of the group, then the group's other created slots in ascending index. A migrated lighting row starts at Player Number, so it shows the game's lightbar as the mirror did, and the controller's player color while no game writes one.</p>
+<p><code>SettingsService.LoadFromFile</code> (<code>SettingsService.cs</code> line 244) runs the migration after <code>LoadProfiles</code>, the ghost-mapping guard and the motion backfill, since only from there on is the live topology the active profile's. A change sets <code>_peripheralSwitchesMigratedOnLoad</code>. <code>SettingsService.Initialize</code> (<code>SettingsService.cs</code> line 177) and <code>SettingsService.Reload</code> (<code>SettingsService.cs</code> line 5789) clear the dirty flag after a load and then mark the settings dirty again for it, so the migrated file is saved. <code>ProfileTransfer.Import</code> (<code>ProfileTransfer.cs</code> line 131) runs <code>PeripheralSwitchMigration.MigrateImported</code> (<code>PeripheralSwitchMigration.cs</code> line 63) on a profile file exported before #494, which carries opinions and no global value. Each assignment writes a <code>CFG #494 migrated ...</code> diag line.</p>
+<hr />
+<h2 id="threads">Threads<a class="headerlink" href="#threads" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Thread</th>
+<th>Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Poll thread</td>
+<td>Phase 1m's rows, Step 2's <code>SetMotors</code>, Set Chroma Color's assertions</td>
+</tr>
+<tr>
+<td>The effects dispatchers (their timer, config changes, the peripheral refresh)</td>
+<td><code>SetLighting</code> and the releases, under the device lock</td>
+</tr>
+<tr>
+<td>HIDMaestro output reader</td>
+<td><code>GameLightbar.Capture</code> and <code>NoteFrame</code></td>
+</tr>
+<tr>
+<td><code>PeripheralLink</code></td>
+<td>Presence, the link pass, the prune, the Sensa lifecycle</td>
+</tr>
+<tr>
+<td><code>PeripheralHidpp</code></td>
+<td>Every HID++ request and write but the crash path's hand-back. Answers arrive on each collection's <code>VendorHidReader</code> thread</td>
+</tr>
+<tr>
+<td><code>PeripheralGameSense</code></td>
+<td>Every GameSense call</td>
+</tr>
+<tr>
+<td>Thread-pool tasks</td>
+<td>Every Chroma REST call, every LED SDK native call</td>
+</tr>
+<tr>
+<td><code>SensaHaptics</code></td>
+<td>Every Interhaptics call</td>
+</tr>
+<tr>
+<td>UI thread</td>
+<td>The route lines, marshaled from <code>LinksChanged</code>, <code>StatusChanged</code> and <code>ClaimsChanged</code></td>
+</tr>
+</tbody>
+</table>
+<p>Every setter on <code>PeripheralOutputs</code> is lock-free or takes only that class's own leaf state, so the poll thread and the dispatchers never wait on a backend's I/O. <code>PeripheralOutputs.SetBackendState</code> (<code>PeripheralOutputs.cs</code> line 254) raises <code>StatusChanged</code> only on a change. The events fire on any thread, and their owners marshal.</p>
+<hr />
+<h2 id="arm64">ARM64<a class="headerlink" href="#arm64" title="Permanent link">&para;</a></h2>
+<p>The Sensa row never opens in an ARM64 process: phase 1m and the linker both need <code>SensaPlatform</code>, and the migration only clears the Sensa switch. The LED SDK path loads whatever engine <code>ServerBinary</code> names, and an ARM64 process loads ARM64 libraries only, so that path works only where Logitech installs an ARM64 engine. The HID++, Chroma and GameSense paths are HID reports and local HTTP, with nothing native to load.</p>
+<hr />
+<h2 id="diag-lines">Diag lines<a class="headerlink" href="#diag-lines" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Line</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PERIPHERAL links: {rows} row(s), {paths} path(s)</code></td>
+<td>A link pass published a new table</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL link pass fault: {type}</code></td>
+<td>A link pass threw</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Sensa worker started (row assigned)</code></td>
+<td>The Sensa row was assigned</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Sensa worker stopped (row unassigned)</code></td>
+<td>It left its last controller</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Sensa worker ended on its own, starting again later</code></td>
+<td>The worker ended while the row stayed assigned</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ found '{name}' index=... type=... haptic=... mask=... rgb=... zones=... battery=... charge=...</code></td>
+<td>A unit was found</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ '{name}' index=... has no haptics or RGB</code></td>
+<td>A unit has nothing to offer</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ '{name}' lighting claimed</code></td>
+<td>A unit's lighting was claimed, the first time or after a hand-back</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ '{name}' lighting handed back</code></td>
+<td><code>[00 00]</code> went out</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ '{name}' stopped answering</code></td>
+<td>A check found it asleep or gone</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ write failed, dropping {path}</code></td>
+<td>A collection went away</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL HID++ worker fault: {type}</code></td>
+<td>The worker threw</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK session open</code></td>
+<td>A session opened</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK handed back</code></td>
+<td>A session ended</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK load failed: {detail}</code></td>
+<td><code>TryLoad</code> failed</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK engine cannot paint any claimed type</code></td>
+<td>The engine lacks the calls the claimed types need</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK calls failing, reinitializing</code></td>
+<td>The third failed liveness round</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK stop timed out after {n} ms, worker orphaned inside the SDK</code></td>
+<td><code>Stop</code> timed out</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK waiting for the orphaned worker of the previous session to leave the SDK</code></td>
+<td>A new worker found a live orphan</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL LED SDK worker fault: {type}</code></td>
+<td>The worker threw</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma session for {categories}</code></td>
+<td>A session opened</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma waiting for Synapse</code></td>
+<td>The init failed</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma session lost</code></td>
+<td>A heartbeat or a call failed</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma handed back</code></td>
+<td>Nothing is wanted any more</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma effect rejected: {category ...}, retrying on the next poll</code></td>
+<td>A rejection that differs from the last one logged</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Chroma worker fault: {type}</code></td>
+<td>The worker threw</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL GameSense bound</code></td>
+<td>A connect succeeded</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL GameSense stopped answering</code></td>
+<td>A call failed</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL GameSense handed back</code></td>
+<td><code>stop_game</code> went out</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL GameSense worker fault: {type}</code></td>
+<td>The worker threw</td>
+</tr>
+<tr>
+<td><code>CFG #494 migrated a global switch: {kind} row assigned to slot {n}</code></td>
+<td>The live settings took a row</td>
+</tr>
+<tr>
+<td><code>CFG #494 migrated a profile switch: {kind} row assigned to slot {n} in '{profile}'</code></td>
+<td>A stored or imported profile took a row</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p>The facade's levels, claims and links are process-wide, so the classes that touch them share the <code>PeripheralOutputStatics</code> collection and run with nothing else.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Test class</th>
+<th>What it pins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>PeripheralLinkingTests</code></td>
+<td>The ruling order, a claim with no player number, the shared-path flag, the table's indexes and comparison, unit-to-row matching, the Rival and Sensa paths, the recorded outputs, the vendor rows' identities and device types, phase 1m's Sensa condition</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>HidppUnitProbeTests</code></td>
+<td>Zones found by scanning for the static effect, 0x8071 preferred, the battery order and decode, the receiver's pairing table, incomplete units asked again, HID++ 1.0 errors, the long collections the worker opens</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>PeripheralOutputsFacadeTests</code></td>
+<td>A level kept without a path, the stronger motor, the silence edge and its resend, a relayed level through focus suspend, the haptic ruler, the Force Feedback route line, the Sensa row's level</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>HidppBackendTests</code></td>
+<td>The worker plays only a linked unit, stops, drops a failed path, reads a Bolt pairing table and asks only paired slots</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>GameSenseBackendTests</code></td>
+<td>The ruling Rival's level plays, the motor stops at once, GG gets the mice back after the release delay, the crash wait sees the zero</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>PeripheralSwitchMigrationTests</code></td>
+<td>The ruling slot, one entry per profile, each profile's own value, the live settings, the default topology, a row this PC cannot open, imported profiles, the lightbar slot, rebuilt orders</td>
+</tr>
+<tr>
+<td><code>PeripheralOutputsTests.cs</code></td>
+<td><code>PeripheralWiringTests</code></td>
+<td>Source pins: Step 2's branch, every silence edge, the other writers, the Remote Link legs, the records before the table, the crash path's GameSense wait, the save after a migration on load</td>
+</tr>
+<tr>
+<td><code>PeripheralLightingTests.cs</code></td>
+<td><code>PeripheralLightingTests</code></td>
+<td>Claims and the ruling, pruning, <code>ClaimsChanged</code>, the macro window and its wake, the charge, the linker's lighting rules, the route line, the game's lightbar phases and its trust gate, the DualSense order, the dispatcher lane and its timer, the HID++ claim, reassert and crash hand-back, GameSense colors, the switch's persistence, the mirror switches' migration</td>
+</tr>
+<tr>
+<td><code>LedSdkBackendTests.cs</code></td>
+<td><code>LedSdkBackendTests</code></td>
+<td>A scripted <code>ILogiLedNative</code>: no load with nothing claimed, the session's call order, the whole-device call first and every type over it, engines without the target or zone call, the restore when a type leaves, the fail streak, a type that fails alone, a refused init, orphans</td>
+</tr>
+<tr>
+<td><code>ChromaBackendTests.cs</code></td>
+<td><code>ChromaBackendTests</code></td>
+<td>The BGR integer and the init body, the result codes, the wanted categories, the Chroma row filling the rest, Set Chroma Color's precedence and window</td>
+</tr>
+<tr>
+<td><code>SetChromaColorMacroTests.cs</code></td>
+<td><code>SetChromaColorMacroTests</code></td>
+<td>The assertion's slot, both macro loops asserting every frame, the last macro of a frame heard once, the duration, persistence, the editor</td>
+</tr>
+<tr>
+<td><code>HidppHapticsTests.cs</code></td>
+<td><code>HidppHapticsTests</code></td>
+<td>The shaper's thresholds, interval and fallbacks, the frames and reply matching, the probe against scripted channels, the GameSense client against a local server, and <code>Live_ProbesTheRealHidppCollections</code>, which runs only with <code>PADFORGE_LIVE_HIDPP=1</code></td>
+</tr>
+<tr>
+<td><code>SensaHapticsTests.cs</code></td>
+<td><code>SensaHapticsTests</code></td>
+<td>The real Interhaptics engine, on <a href="../sensa-haptics-internals/">Sensa Haptics Internals</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../sensa-haptics-internals/">Sensa Haptics Internals</a>: the Interhaptics engine behind the Razer Sensa row.</li>
+<li><a href="../logitech-g-keys-internals/">Logitech G-Keys Internals</a>: the other Logitech library PadForge loads.</li>
+<li><a href="../remote-link-internals/">Remote Link Internals</a></li>
+<li><a href="../input-pipeline/">Input Pipeline</a></li>
+<li><a href="../../features/lighting/">Lighting</a> and <a href="../../features/force-feedback/">Force Feedback</a>: the tabs a lit or haptic peripheral shares with a gamepad.</li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 5.0.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../steam-controller-haptics-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Steam Controller Haptics Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Steam Controller Haptics Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../sensa-haptics-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Sensa Haptics Internals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Sensa Haptics Internals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <nav class="product-footer-nav md-grid" aria-label="Site sections">
+    <a href="/">Home</a><a href="/press/">Press</a><a href="/specs.html">Specifications</a><a href="/docs/">Documentation</a>
+  </nav>
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

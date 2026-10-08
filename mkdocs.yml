@@ -100,7 +100,7 @@ nav:
       - Adaptive Triggers: features/adaptive-triggers.md
       - Impulse Triggers: features/impulse-triggers.md
       - Lighting: features/lighting.md
-      - Lightbar Mirrors and Sensa Haptics: features/lightbar-mirrors.md
+      - Mice, Keyboards and Vendor Rows: features/peripherals.md
       - Controller Audio: features/controller-audio.md
       - Bass Shakers: features/bass-shakers.md
       - Wheels: features/wheel.md
@@ -148,7 +148,7 @@ nav:
       - Steam Workshop Import Internals: reference/steam-workshop-import-internals.md
       - Controller Audio Internals: reference/controller-audio-internals.md
       - Steam Controller Haptics Internals: reference/steam-controller-haptics-internals.md
-      - Lightbar Mirrors Internals: reference/lightbar-mirrors-internals.md
+      - Peripheral Outputs Internals: reference/peripheral-outputs-internals.md
       - Sensa Haptics Internals: reference/sensa-haptics-internals.md
       - Virtual VR Controllers Internals: reference/vr-controllers-internals.md
       - Headset Head Tracking Internals: reference/headset-motion-internals.md

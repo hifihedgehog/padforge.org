@@ -21,6 +21,8 @@ The engine side lives in `PadForge.Engine/Common/AnalogKeyboard/`:
 
 The app side is `PadForge.App/Common/Input/`: `AnalogKeyboardHid.cs` (enumeration and the HID channel), `AnalogKeyboardDevice.cs` (the device row and its reader thread), `AnalogKeyboardRuntime.cs` (the Settings mirror and the per-row key lists), and the analog keyboard phase of `InputManager.Step1.UpdateDevices.cs`. The key depths reach mappings through `CustomInputState.AnalogKeys` and the `Analog Key N` descriptor in `SourceCoercion`.
 
+Assigned to a virtual controller, the analog row of a Razer or SteelSeries board lights through the same Chroma category or GameSense device type as the board's own keyboard row (#494), and gets the same Lighting tab. A Set Chroma Color macro reaches a Razer board when only its analog row is assigned. The Huntsman V3 models missing from the OpenRazer list in `PeripheralProductIds` light as Chroma keyboards through `AnalogKeyboardCatalog.IsRazerHuntsmanV3`. See [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+
 ---
 
 ## From collection to row

@@ -108,7 +108,7 @@ Test coverage is uneven. The decode, the button map and the pulse have real beha
 ## Related pages
 
 - [Logitech G-Keys](../features/logitech-g-keys.md)
-- [Lightbar Mirrors Internals](lightbar-mirrors-internals.md): the other Logitech SDK PadForge loads.
+- [Peripheral Outputs Internals](peripheral-outputs-internals.md): the other Logitech SDK PadForge loads, the LED SDK, and the HID++ lighting and haptics it drives without one.
 - [Handheld PC Buttons Internals](handheld-buttons-internals.md): the row shape this one copies.
 - [Input Pipeline](input-pipeline.md)
 

@@ -85,7 +85,7 @@ G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logite
 
 - [Settings](settings.md): the Input Engine card.
 - [Devices](devices.md): the Logitech G-Keys row.
-- [Lightbar Mirrors](lightbar-mirrors.md): LIGHTSYNC lighting, the other Logitech SDK PadForge loads.
+- [Mice, Keyboards and Vendor Rows](peripherals.md): Logitech keyboard and mouse lighting from a virtual controller, through the LED SDK (the other Logitech SDK PadForge loads) while Logitech Gaming Software or G HUB runs.
 - [Logitech G-Keys Internals](../reference/logitech-g-keys-internals.md): the event word, the library search, and the lifecycle, for whoever has to change the code.
 
 ---

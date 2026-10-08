@@ -1454,14 +1454,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../lightbar-mirrors/" class="md-nav__link">
+      <a href="../peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -3119,14 +3119,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../../reference/peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -3913,8 +3913,9 @@
 <h3 id="keys-as-macro-triggers">Keys as macro triggers<a class="headerlink" href="#keys-as-macro-triggers" title="Permanent link">&para;</a></h3>
 <p>Analog keys appear in a macro's <strong>Add from List</strong> dropdown under the keyboard, and <strong>Record Trigger</strong> picks up a key pressed past half travel. Each key entry on the trigger has its own <strong>Deadzone</strong>, the depth it fires at, so two macros on one key can be a soft press and a full press. See <a href="../../guides/macros/#trigger-input-types">Macros</a>.</p>
 <h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
-<p><strong>Set Chroma Color</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, paints every Razer Chroma device one color while the action runs. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the <a href="../lightbar-mirrors/#razer-chroma">Razer Chroma lightbar mirror</a> is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.</p>
+<p><strong>Set Chroma Color</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every <a href="../lighting/">Lighting</a> tab, and when the action ends the lighting goes back to the color a Lighting tab or a vendor row sets, or to Razer Synapse. It needs Synapse running.</p>
 <p>To hold a color for as long as the key is held, set the macro to <strong>While Held</strong> with <strong>Until Release</strong> and give the action a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins. Put a full-press macro below its soft-press twin and the keys turn the full-press color at the bottom of the press and back to the soft-press color on the way up.</p>
+<p>Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the Lighting tab the keyboard's own row gets. See <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>.</p>
 <hr />
 <h2 id="supported-keyboards">Supported keyboards<a class="headerlink" href="#supported-keyboards" title="Permanent link">&para;</a></h2>
 <p>PadForge reads every keyboard below. The families and how each one is read are in <a href="../../reference/analog-keyboards-internals/">Analog Keyboards Internals</a>.</p>

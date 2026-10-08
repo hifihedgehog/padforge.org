@@ -1,6 +1,6 @@
 # Lighting
 
-*Lightbar control for DualSense and DualShock 4 with fourteen base modes and three per-press Input Reactive overlays, the player and mute LEDs on DualSense, and the Guide button LED on Xbox, 2015 Steam Controller, and Switch pads.*
+*Lightbar control for DualSense and DualShock 4 with fourteen base modes and three per-press Input Reactive overlays, the player and mute LEDs on DualSense, the Guide button LED on Xbox, 2015 Steam Controller, and Switch pads, and the same modes on the mice, keyboards and vendor rows assigned to a virtual controller.*
 
 <!-- SCREENSHOT: pad-lighting -->
 ![Lighting tab with mode picker and audio-band cards](../images/pad-lighting.png)
@@ -16,6 +16,7 @@ The Lighting tab appears for these devices:
 - Microsoft Xbox One, Elite, and Series pads, for the Guide button LED only
 - A 2015 Steam Controller, for the Home button LED only
 - A Switch Pro Controller or right Joy-Con (alone, in a pair, or in the charging grip), for the HOME button LED only
+- A Razer, SteelSeries or Logitech mouse or keyboard that PadForge can light, analog keyboard rows included, and the Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG rows on the Devices page
 
 On a Sony pad it controls:
 
@@ -28,7 +29,9 @@ On a Sony pad it controls:
 
 On a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME LED, the tab shows only the Guide button LED card. The lightbar controls stay hidden.
 
-The tab is per pad per slot. Pick a different physical device in the assigned-devices dropdown and the tab re-binds to that device's config. Two Sony pads on the same slot can carry different modes, palettes, and overlay variants. Macro lightbar actions stay slot-level. They fan out across every Sony pad on the slot, each rendering with its own per-device settings.
+On a mouse, keyboard or vendor row, the tab shows the lightbar mode card and a line naming where the colors go. A mouse or keyboard also gets a checkbox that lets this virtual controller light it. See [Mice, keyboards and vendor rows](#mice-keyboards-and-vendor-rows) below.
+
+The tab is per pad per slot. Pick a different physical device in the assigned-devices dropdown and the tab re-binds to that device's config. Two Sony pads on the same slot can carry different modes, palettes, and overlay variants. Macro lightbar actions stay slot-level. They fan out across every Sony pad on the slot and every mouse, keyboard or vendor row the slot lights, each rendering with its own per-device settings.
 
 ### Priority chain
 
@@ -204,9 +207,21 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
-## Mirroring the game's color to other RGB gear
+## Mice, keyboards and vendor rows
 
-The color a game writes to a virtual DualShock 4 or DualSense can also light Razer Chroma and Logitech LIGHTSYNC devices, and the game's rumble can drive Razer Sensa HD haptics. All three are Dashboard toggles, off by default, and they read the virtual pad the game paints rather than anything on this tab. See [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md).
+A mouse or keyboard assigned to a virtual controller takes that controller's lighting through its own Lighting tab, the way a DualSense does, once **Control This Device’s Lighting** is on. Razer devices light through Razer Synapse and SteelSeries devices through SteelSeries GG. Logitech devices light through Logitech G HUB or Logitech Gaming Software while either runs, and models whose only RGB feature is HID++ 0x8070 (zone lighting) take their colors straight over HID++ while neither runs. The Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG rows light what PadForge does not read, such as headsets and mousepads, and any mouse or keyboard of their brand that no virtual controller lights on its own. See [Mice, Keyboards and Vendor Rows](peripherals.md) for each path and what it needs.
+
+The tab carries the same mode card, with every base mode and the Input Reactive overlay, set for this virtual controller alone. The macro lightbar actions reach the device too. The tab has no controller art, indicator LEDs card or Guide button LED card.
+
+**Control This Device’s Lighting** sits above the mode card and is off by default, so assigning a keyboard for its keys never repaints it. Off, this virtual controller leaves the device alone. A vendor row, or another device of its kind lit through the same software, can still set its color, and a [Set Chroma Color](../guides/macros.md#set-chroma-color) macro on this virtual controller still paints a Razer device. The vendor rows have no such checkbox, since lighting is all they carry.
+
+On a DualShock 4 or DualSense virtual controller, the game's lightbar wins for 1.5 seconds after each write. A device left at Player Number with the overlay off keeps the game's last color until 15 seconds pass with no output from the game, and then the player color returns. When two virtual controllers light one device, the one with the smaller player number sets its color.
+
+Battery mode reads a Logitech device's charge over HID++, whichever path lights it. Razer and SteelSeries devices and the vendor rows report no charge to PadForge, so Battery holds them at the Full Battery color.
+
+A line above the mode card says where the colors go, such as *Colors go through Razer Synapse.* When the colors do not show, it says why: the vendor's software is not running, a Logitech device has not answered yet, another virtual controller or another row of the same device sets the color, another device or a vendor row sets it for every device of its kind, or the Logitech LED engine on this PC cannot light that kind of device.
+
+Earlier versions mirrored a game's lightbar to Razer Chroma and Logitech LIGHTSYNC from two Dashboard toggles. A toggle that was on now assigns its row to the first DualSense or DualShock 4 virtual controller, if there is one.
 
 ---
 
@@ -223,8 +238,8 @@ The color a game writes to a virtual DualShock 4 or DualSense can also light Raz
 
 - [Force Feedback](force-feedback.md): rumble and audio bass body rumble (the audio capture is shared with the lightbar's Audio modes).
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger effects on the same physical pads that drive the lightbar.
-- [Macros](../guides/macros.md): the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, and Set Guide LED Brightness macro action types.
-- [Lightbar Mirrors and Sensa Haptics](lightbar-mirrors.md): the game's lightbar color on Razer Chroma and Logitech LIGHTSYNC gear.
+- [Macros](../guides/macros.md): the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, and Set Chroma Color macro action types.
+- [Mice, Keyboards and Vendor Rows](peripherals.md): each lighting path for a mouse, keyboard or vendor row, and what it needs.
 
 ---
 

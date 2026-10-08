@@ -20,6 +20,8 @@
 
 > **v4.5.3 additions.** `AppSettingsData` gains the in-app update switches `CheckForUpdatesAutomatically` (default true), `InstallUpdatesAutomatically` and `IncludePreReleaseUpdates` (#457). `UpdateService` reads all three straight from `PadForge.xml` at startup, before the settings service loads. See [Updates Internals](updates-internals.md).
 
+> **Peripheral outputs (#494).** The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and the Razer Sensa switch (#374) left the Dashboard. Their global legs on `AppSettingsData` and their nullable legs on `ProfileData` are read once at load by `PeripheralSwitchMigration` and never written again, since each `ShouldSerialize` method returns false. A switch that was on becomes an assignment of the vendor row that replaced it (see [Retired Vendor Switches](#retired-vendor-switches-494)). `UserDevice` gains `PeripheralOutputs`, the haptic and lighting outputs found for a mouse, keyboard or vendor row. `DeviceSlotConfigData` gains `PeripheralLightingEnabled`, the Lighting tab's Control This Device’s Lighting switch, off by default. `InputDeviceType` gains `PeripheralLighting` (40) and `PeripheralHaptics` (41), the device types of the vendor rows.
+
 ---
 
 This page is a developer reference for PadForge's settings persistence.
@@ -50,6 +52,7 @@ flowchart TD
         L6 --> L7[LoadPadSettings<br/>deadzones · curves · ranges · mappings]
         L7 --> L8[LoadMacros<br/>reconstruct from serialized data]
         L8 --> L9[LoadProfiles<br/>Default profile · restore active profile topology]
+        L9 --> L10[PeripheralSwitchMigration #494<br/>retired vendor switches become row assignments]
     end
 
     style S1 fill:#e1f5fe
@@ -65,6 +68,7 @@ flowchart TD
 
 **Source files:**
 - `PadForge.App/Services/SettingsService.cs`. XML load/save, serialization DTOs
+- `PadForge.App/Services/PeripheralSwitchMigration.cs`. (#494) The one-time migration of the retired vendor switches into vendor-row assignments
 - `PadForge.App/Common/SettingsManager.cs`. Thread-safe collections, slot management
 - `PadForge.Engine/Data/PadSetting.cs`. Mapping configuration model
 - `PadForge.Engine/Data/UserDevice.cs`. Physical device record
@@ -478,7 +482,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapAxisIndices` | `int[]` | `<CapAxisIndices>` | (v4.3.2) Axis twin of `CapButtonIndices`: the populated axis positions (a Move Navigation fills three of the first six and seven of the ten extras). Null/empty = dense fallback. |
 | `HasExtraGenericAxes` | `bool` | `<HasExtraGenericAxes>` | (#193) Device carries raw axes past the standard six that should surface as generic "Axis N" sources. Not derivable from the counts: it excludes devices whose extras are already sensor sources. |
 | `CapPovCount` | `int` | `<CapPovCount>` | POV hat count. |
-| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys). 18–25 match DirectInput. 26–37 are PadForge extensions. |
+| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics). 18–25 match DirectInput. 26–41 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles. |
 | `HasGyro` | `bool` | `<HasGyro>` | Has gyroscope (DualSense, Switch Pro, DS4, Switch 2 Pro, Steam Controller, Steam Deck). |
 | `HasAccel` | `bool` | `<HasAccel>` | Has accelerometer. |
 | `HasAccelAux` | `bool` | `<HasAccelAux>` | (#199) Has an auxiliary (left-side) accelerometer: the Nunchuk's own sensor, or the left half of a combined Joy-Con pair. Mirrors `ISdlInputDevice.HasAccelAux`. |
@@ -488,6 +492,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapTouchpadFingerCounts` | `int[]` | `<CapTouchpadFingerCounts>` | Per-touchpad simultaneous-contact count, index-aligned with the touchpad index. Persisted so the picker offers only the fingers each pad supports offline. Null/empty on older configs. Callers fall back to two fingers. |
 | `CapTouchpadPressure` / `CapTouchpadClick` | `bool?` | `<CapTouchpadPressure>` / `<CapTouchpadClick>` | Whether the device's touchpads report pressure and click, from the wrapper. Written only when known. Null = inferred: `SupportsTouchpadPressure` / `SupportsTouchpadClick` read it as supported except on a tablet or an offline touchpad-class record. |
 | `HasRumbleTriggers` | `bool` | `<HasRumbleTriggers>` | Has impulse-trigger motors (Xbox One / Elite / Series). Driven by `SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN`. |
+| `PeripheralOutputs` | `int` | `<PeripheralOutputs>` | (#494) The outputs the peripheral link pass found for a mouse, keyboard or vendor row through its vendor's channel: bit 0 haptics, bit 1 lighting (`UserDevice.cs` line 489). Persisted so the row's Force Feedback and Lighting tabs stay up while the device sleeps or is unplugged, as a gamepad's do. A Logitech row keeps the bits it had until the HID++ worker's first scan, and while a device slot in its container has yet to answer. `0` on configs predating it and on every other row. |
 | `DeviceObjects` | `DeviceObjectItem[]` | `<DeviceObjects>` | Axis/button/hat metadata. Populated in Step 1 and persisted so mapping dropdowns remain populated when devices are offline. |
 
 ### Serializable Metadata
@@ -547,6 +552,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `HasVoicePhrases` | `bool` | `VendorId == 0x054C` and `ProdId` is 0x0CE6 or 0x0DF2 (DualSense / Edge, embedded microphone). Gates the voice phrase sources on the pad (#317). |
 | `IsTablet` | `bool` | `CapType == InputDeviceType.Tablet` |
 | `HasForceFeedback` | `bool` | `ActuatorCount > 0 \|\| Device.HasRumble \|\| Device.HasHaptic` |
+| `HasPeripheralHaptics` / `HasPeripheralLighting` | `bool` | (#494) Bit 0 / bit 1 of `PeripheralOutputs`. |
 | `ResolvedName` | `string` | `DisplayName` > `InstanceName` > `ProductName` > "(Unknown Device)" |
 | `StatusText` | `string` | "Disabled", "Online", or "Offline" |
 
@@ -1398,9 +1404,9 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
-| `EnableChromaLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #373) Razer Chroma lightbar mirror, the global leg. Stands when the active profile's nullable `ProfileData.EnableChromaLightbar` is null. |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]` | `false` | (v4.4, #374) Razer Sensa HD haptics translation, the global leg. Per-profile leg: `ProfileData.EnableSensaHaptics`. |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]` | `false` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, the global leg. Per-profile leg: `ProfileData.EnableLightsyncLightbar`. |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6697). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6704). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6712). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -1437,7 +1443,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `DjiRemoteHosts` | `string[]` | `[XmlArray][XmlArrayItem("Host")]` | `null` | DJI RC and RC 2 remotes added by address in the pairing dialog (hifihedgehog/SDL#33 Part 6), `a.b.c.d:port` keys handed to SDL as `SDL_JOYSTICK_DJI_REMOTE_TCP_HOSTS`. |
 | `UsioLayout` | `string` | `[XmlElement]` | `null` | The Namco USIO's layout (hifihedgehog/SDL#33 Part 14): `"tekken"`, or null for the fork's default, Taiko. |
 | `ExtendedConfigs` | `ExtendedSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot Extended config (Customize toggle, axis/trigger/POV/button counts, HIDMaestro OEM/product overrides) |
-| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
+| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type, a lit mouse, keyboard or vendor row included (#494). Its `PeripheralLightingEnabled` attribute is the Lighting tab's Control This Device’s Lighting switch, and a config written before #494 reads it as off. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
 | `LegacyDeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("PlayStationConfigs")][XmlArrayItem("Config")]` | `null` | Read-only pre-v4 spelling. `MigrateLegacySchema()` moves it into `DeviceSlotConfigs` on load. `ShouldSerializeLegacyDeviceSlotConfigs()` returns false so it never re-serializes. |
 | `UserProfiles` | `UserProfileData[]` | `[XmlArray][XmlArrayItem("Profile")]` | `null` | User-imported HIDMaestro profile JSONs (captured via HMDeviceExtractor). Appear in the Extended dropdown alongside the catalog. |
 | `MidiConfigs` | `MidiSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot MIDI config (channel, CC/note ranges, velocity, legacy output port) |
@@ -2027,10 +2033,13 @@ public class ProfileData
     [XmlElement] public bool EnableShiftLayerFlyout { get; set; } = true;
     [XmlElement] public bool EnableProfileOverlay { get; set; } = true;
 
-    // Nullable, authored legs of the global service toggles. null = no opinion.
+    // #494: the retired vendor switches' opinions. Read once by
+    // PeripheralSwitchMigration, cleared, and never written again
+    // (each ShouldSerialize method returns false).
     [XmlElement] public bool? EnableChromaLightbar { get; set; }
     [XmlElement] public bool? EnableLightsyncLightbar { get; set; }
     [XmlElement] public bool? EnableSensaHaptics { get; set; }
+    // Nullable, authored legs of the global service toggles. null = no opinion.
     [XmlElement] public bool? EnableHeadTracking { get; set; }          // UDP input
     [XmlElement] public bool? EnableHeadTrackingFreeTrack { get; set; } // FreeTrack input
     // False on profiles saved before the two inputs split. Load converts them once.
@@ -2066,7 +2075,7 @@ public class ProfileData
 | `SlotModel3DAppearances` | `string[]` | Per-slot 3D preview appearance, XML `<ProfileSlotModel3DAppearances><Appearance/>`. Null on older profiles, which resolve their appearance from the legacy `PadSetting.Model3DAppearances` map on load (`SlotAppearancePersistence.ResolveProfile`). |
 | `ExtendedConfigs` | `ExtendedSlotConfigData[]` | Extended slot configs for this profile |
 | `MidiConfigs` | `MidiSlotConfigData[]` | MIDI configs for this profile |
-| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | Per-(slot, device) config (adaptive triggers, lighting, audio, tone filter). XML `<ProfileDeviceSlotConfigs><Config/>`. Renamed from `ProfilePlayStationConfigs` in v4. The legacy spelling loads read-only via `LegacyDeviceSlotConfigs`. |
+| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | Per-(slot, device) config (adaptive triggers, lighting, audio, tone filter), a lit mouse's or keyboard's Control This Device’s Lighting switch (`PeripheralLightingEnabled`, #494) included. XML `<ProfileDeviceSlotConfigs><Config/>`. Renamed from `ProfilePlayStationConfigs` in v4. The legacy spelling loads read-only via `LegacyDeviceSlotConfigs`. |
 | `KbmConfigs` | `KbmSlotConfigData[]` | (#205) Per-slot KB+M surfaces and SOCD / Snap-Tap config. XML `<ProfileKbmConfigs><KbmConfig/>`. |
 | `TouchpadGestures` | `TouchpadCustomGesture[]` | (v3.3) Per-profile custom touchpad gestures. XML `<TouchpadGestures><Gesture/>`. Null on profiles predating v3.3. |
 | `XboxSlotOrder` / `PlayStationSlotOrder` / `NintendoSlotOrder` / `ExtendedSlotOrder` / `KeyboardMouseSlotOrder` / `MidiSlotOrder` / `VrSlotOrder` | `int[]` | Per-group visual slot order at profile-save time. Null on profiles predating per-group ordering. The Xbox array's XML name is `ProfileMicrosoftSlotOrder` for v2 back-compat. |
@@ -2078,10 +2087,8 @@ public class ProfileData
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
-| `EnableChromaLightbar` | `bool?` | (v4.4, #373) The profile's leg of the Razer Chroma lightbar mirror. `null` = no opinion, the global `AppSettings.EnableChromaLightbar` stands, and every profile saved before the field reads as `null`. A plain `bool` here read as `false` in every pre-existing profile and the first profile switch turned the mirror off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. |
-| `EnableLightsyncLightbar` | `bool?` | (v4.4, #382) Logitech LIGHTSYNC lightbar mirror, same nullable authored contract. |
-| `EnableSensaHaptics` | `bool?` | (v4.4, #374) Razer Sensa HD haptics translation, same contract. |
-| `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input, same contract. The port, the OpenXR input, and the ranges stay global. |
+| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7663, 7669 and 7676). |
+| `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |
 | `TouchpadOverlayOpacity` | `double` | (v3.2) 0.0–1.0. Default 0.25. |
@@ -2539,6 +2546,12 @@ LoadFromFile(filePath)
     |  Authored sets at uncreated slot indices are replaced with empty ones,
     |  judged against the topology LoadProfiles left. Then motion rows are
     |  backfilled for motion-capable slots
+    |
+    v  Step 10: PeripheralSwitchMigration.Run (#494)
+    |  The retired Chroma, LIGHTSYNC and Sensa switches become vendor-row
+    |  assignments, against the topology LoadProfiles left. A change sets
+    |  _peripheralSwitchesMigratedOnLoad, and Initialize() / Reload() mark
+    |  the file dirty after their own clear, so the result is saved once
 ```
 
 **Critical load order:** `SlotCreated` must load before `OutputType`. Setting `OutputType` fires `PropertyChanged` which calls `RefreshNavControllerItems()` which reads `SlotCreated[]`. Wrong order causes a double-rebuild crash.
@@ -2650,6 +2663,24 @@ Old profiles without topology (`SlotCreated == null`) skip topology application 
 
 On load, `RemoveAll(IsEmptyLegacyOrphan)` purges the entries older versions left at `MapTo == -1` with no PadSetting. A parked row that still carries a PadSetting survives, because `ApplyProfile` parks every device the incoming profile does not assign that way and keeps its mappings (#404).
 
+### Retired Vendor Switches (#494)
+
+The Razer Chroma and Logitech LIGHTSYNC lightbar mirrors and the Razer Sensa switch were Dashboard toggles with a global value and a nullable opinion per profile. Their outputs are vendor rows now, assigned to a virtual controller like any device. `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns a switch that was on into an assignment of its row:
+
+| Switch | Row | Slot the row goes to |
+|---|---|---|
+| `EnableChromaLightbar` (#373) | Razer Chroma | The first created PlayStation slot in display order whose controller is a DualSense or a DualShock 4, the two whose output reports carry the lightbar the mirror showed. A slot with no profile id counts as the PlayStation default, a DualSense |
+| `EnableLightsyncLightbar` (#382) | Logitech LIGHTSYNC | The same slot |
+| `EnableSensaHaptics` (#374) | Razer Sensa | The first created slot in display order, the one that shows the smallest player number |
+
+It runs in three places:
+
+- In the live settings, from the active profile's opinion or else the global value. `AssignLive` (line 223) adds the row's record, offline, when the file has none, and assigns it to the live slot with the setting a drag-and-drop gives.
+- In every stored profile, and in the default's stored state while a named profile is active, from the profile's opinion or else the global value. `AddToProfile` (line 261) adds a `ProfileEntry` on the slot that profile's own topology and saved order pick, with a default `PadSetting` for that slot's controller type.
+- In an imported profile file, from its own opinion alone, since the file carries no global value. `ProfileTransfer.Import` calls `MigrateImported` (line 63).
+
+Each profile's opinion is cleared once read, and the switches are never written again, so the migration runs once per file. A topology without the slot a row needs gets no assignment, as the old lane had nothing to read there either. A build that cannot load the Interhaptics engine (`PlatformSupport.SensaAvailable` is false on ARM64) only clears the Sensa switch. A migrated lighting row starts at Player Number, so it shows the game's lightbar as the mirror did, and the controller's player color while no game writes one.
+
 ---
 
 ## See Also
@@ -2660,6 +2691,7 @@ On load, `RemoveAll(IsEmptyLegacyOrphan)` purges the entries older versions left
 - [Input Pipeline](input-pipeline.md): How `SettingsManager` slot arrays and `PadSetting` drive the mapping engine
 - [ViewModels](viewmodels.md): ViewModel properties synced from `SettingsManager` by `SettingsService`
 - [Virtual Controllers](../features/virtual-controllers.md): Per-slot `VirtualControllerType` and Extended/MIDI config serialization
+- [Peripheral Outputs Internals](peripheral-outputs-internals.md): The vendor rows and the outputs `UserDevice.PeripheralOutputs` records
 
 ---
 

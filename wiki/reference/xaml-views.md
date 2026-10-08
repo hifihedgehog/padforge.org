@@ -266,13 +266,6 @@ ScrollViewer
             │      source line, footer
             ├─ "Motion Server" section (E7AD glyph, DSU)
             │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-            ├─ "Lightbar Mirrors" section (E781 glyph)
-            │   └─ CardBorder holding two divider-separated rows that forward the same
-            │      virtual-pad lightbar color, each with its own strings and status line
-            │      ├─ Razer Chroma (EnableChromaLightbar, ChromaStatus, #373)
-            │      └─ Logitech LIGHTSYNC (EnableLightsyncLightbar, LightsyncStatus, #382)
-            ├─ "Razer Sensa HD Haptics" section (E877 glyph, #374)
-            │   └─ CardBorder: Enable toggle (EnableSensaHaptics), SensaStatus, footer
             ├─ "Overlays" section (E700 glyph)
             │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
             │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
@@ -281,6 +274,8 @@ ScrollViewer
                    NumberBox + reset, reset-position button, status flame +
                    TouchpadOverlayStatus
 ```
+
+The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their outputs are the vendor rows on the Devices page, which a virtual controller drives through the Pad page's [Lighting](#lighting-tab-tab-7-peripheral-rows-494) and Force Feedback tabs like any device.
 
 ### Key Bindings
 
@@ -311,9 +306,6 @@ ScrollViewer
 | `HeadTrackingRangeYaw` / `Pitch` / `Roll` / `X` / `Y` / `Z` | `DashboardViewModel` | Per-axis range NumberBoxes, 0-180 for the rotation axes and 0-500 for the translation axes. 0 follows the family range |
 | `HeadTrackingRecenterCommand` | `DashboardViewModel` | Set Neutral button |
 | `HeadTrackingStatus` | `DashboardViewModel` | Which of the three head-tracking sources is live, or why none is |
-| `EnableChromaLightbar` / `ChromaStatus` | `DashboardViewModel` | Razer Chroma mirror row (#373) |
-| `EnableLightsyncLightbar` / `LightsyncStatus` | `DashboardViewModel` | Logitech LIGHTSYNC mirror row (#382) |
-| `EnableSensaHaptics` / `SensaStatus` | `DashboardViewModel` | Razer Sensa HD haptics translation (#374) |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
 | `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
 
@@ -433,7 +425,8 @@ Grid (3 rows)
 │   │   ├─ RadioButton "Wheel" (Tag=11, x:Name="TabWheel", gated on wheel VID/PID)
 │   │   ├─ RadioButton "Impulse Triggers" (Tag=9, x:Name="TabImpulseTriggers", gated on hasRumbleTriggers)
 │   │   ├─ RadioButton "Adaptive Triggers" (Tag=6, x:Name="TabAdaptiveTriggers", gated on hasAdaptiveTriggers)
-│   │   ├─ RadioButton "Lighting" (Tag=7, x:Name="TabLighting", gated on hasLightbar || hasGuideLed)
+│   │   ├─ RadioButton "Lighting" (Tag=7, x:Name="TabLighting", gated on hasLightbar || hasGuideLed
+│   │   │    || hasPeripheralLighting, #494)
 │   │   ├─ RadioButton "Gyro" (Tag=8, x:Name="TabGyro", gated on any motion sensor, #392)
 │   │   ├─ RadioButton "Touchpad" (Tag=10, x:Name="TabTouchpad", gated on hasTouchpad)
 │   │   ├─ RadioButton "Audio" (Tag=12, x:Name="TabAudio", gated on hasAudio)
@@ -483,10 +476,10 @@ Sticks and Triggers are hidden by output type. The capability tabs follow the se
 | Menus | Visible | Visible | Visible | always (slot scope, #9) |
 | Sticks | Visible | Visible (Mouse X/Y + Scroll) | **Hidden** | always within Xbox/PS/Nintendo/Extended |
 | Triggers | Visible | **Hidden** | **Hidden** | hidden on an Extended or Nintendo slot whose profile declares no analog triggers (`ExtendedConfig.TriggerCount == 0`, the Switch Pro's digital ZL/ZR), visible otherwise |
-| Force Feedback | Visible if `hasForceFeedback` | Same gate | Same gate | selected device's CapType is stick-class (Gamepad / Joystick / Driving / Flight / FirstPerson). Hidden for keyboard / mouse / touchpad / MIDI even on an Xbox/PS/Extended slot |
+| Force Feedback | Visible if `hasForceFeedback` | Same gate | Same gate | selected device's CapType is stick-class (Gamepad / Joystick / Driving / Flight / FirstPerson), or the device is a haptic mouse, keyboard or the Razer Sensa row (`PeripheralOutputs.IsHapticPeripheral`, #494). Hidden for every other keyboard, mouse, touchpad and MIDI device, even on an Xbox/PS/Extended slot |
 | Impulse Triggers | Visible if `hasImpulseTriggers` | Same gate | Same gate | source device has impulse-trigger motors (Xbox One / One S / Elite / Elite Series 2 / Series X\|S, Microsoft VID). Xbox 360 and DualSense excluded |
 | Adaptive Triggers | Visible if `hasAdaptiveTriggers` | Same gate | Same gate | source device is a DualSense or DualSense Edge |
-| Lighting | Visible if `hasLightbar \|\| hasGuideLed` | Same gate | Same gate | a lightbar (DS4 / DualSense family, the PS Move sphere, or a web controller drawing a DS4 / DualSense) shows the lightbar cards. A Guide/HOME-button LED shows only the `GuideLedCard`: a first-party GIP Xbox pad (One / Elite / Series) on SDL's XInput path, whose LED command works over USB only, or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip) |
+| Lighting | Visible if `hasLightbar \|\| hasGuideLed \|\| hasPeripheralLighting` | Same gate | Same gate | a lightbar (DS4 / DualSense family, the PS Move sphere, or a web controller drawing a DS4 / DualSense) shows the lightbar cards. A mouse, keyboard or vendor lighting row that a lighting path links, or whose record says it has lighting (`UserDevice.HasPeripheralLighting`), shows the mode card and the peripheral panel (#494). A Guide/HOME-button LED shows only the `GuideLedCard`: a first-party GIP Xbox pad (One / Elite / Series) on SDL's XInput path, whose LED command works over USB only, or the 2015 Steam Controller (#209), plus the Switch home-LED population (#226: Pro Controller, right Joy-Con, Joy-Con pair, charging grip) |
 | Gyro | Visible if `hasGyro` | Same gate | Same gate | source device has any motion sensor (`ud.HasGyro \|\| ud.HasAccel`). On an accelerometer-only device the tab shows with its five gyro-rate cards collapsed (#392) |
 | Pointer | Visible if `hasIrPointer` | Same gate | Same gate | source device is an IR-capable Wii Remote (#146) |
 | Touchpad | Visible if `hasTouchpad` | Same gate | Same gate | source device has a touchpad (DualSense family, DS4, Steam Controller) |
@@ -496,7 +489,7 @@ Sticks and Triggers are hidden by output type. The capability tabs follow the se
 
 VR slots (#49) hide both Sticks and Triggers: the `Vr` lane reads none of the stick or trigger tuning keys those tabs edit.
 
-Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16, Output 17. Bass Shakers (4.1.0, #236, AutomationId `BassShakersTab`) is slot-tier and gates on SLOT TYPE, not device capability: visible via `RumbleAudioTabVisible` for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. Output (#270 follow-up, AutomationId `OutputTab`) is slot-tier too and carries the SOCD and Keep Controller Awake cards. `OutputTabVisible` is false only for MIDI and VR slots, which have no output-behavior surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place.
+Tag numbers: Preview 0, Macros 1, Mappings 2, Sticks 3, Triggers 4, Force Feedback 5, Adaptive Triggers 6, Lighting 7, Gyro 8, Impulse Triggers 9, Touchpad 10, Wheel 11, Audio 12, Pointer 13, Mouse 14, Menus 15, Bass Shakers 16, Output 17. Bass Shakers (4.1.0, #236, AutomationId `BassShakersTab`) is slot-tier and gates on SLOT TYPE, not device capability: visible via `RumbleAudioTabVisible` for Xbox, PlayStation, and Nintendo slots plus Extended slots with a force-feedback surface. Output (#270 follow-up, AutomationId `OutputTab`) is slot-tier too and carries the SOCD and Keep Controller Awake cards. `OutputTabVisible` is false only for MIDI and VR slots, which have no output-behavior surface. The Audio tab was speaker-only before 3.6.0. It now shows for any haptic-tone pad as well. The Lighting tab used to be lightbar-only. It now also raises for a device with only a Guide/HOME-button LED (#209, and since #226 the Switch home-LED devices: Pro Controller, right Joy-Con, Joy-Con pair, charging grip): the lightbar cards (`LightbarModeCard`, `LightingLightbarSubtitle`, `LightingPlayerIdleHint`) collapse and the `GuideLedCard` brightness control takes their place. Since #494 it also raises for a lit mouse, keyboard or vendor row: `LightbarModeCard` stays, the DualShock 4 / DualSense preview art (`LightbarPreviewPanel`) and the two lightbar hints collapse, and `PeripheralLightingPanel` shows (see [below](#lighting-tab-tab-7-peripheral-rows-494)).
 
 If the selected tab is hidden, the view auto-switches to Preview (index 0). `SyncTabVisibility()` toggles the device-tier capability tabs from the selected device's capabilities, and also drives the motor activity bars (`MotorBarsGrid`).
 
@@ -547,7 +540,8 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 
 | Handler | Trigger | Action |
 |---------|---------|--------|
-| `PadPage_Loaded` | UserControl.Loaded | Calls `ApplyViewMode`, `SyncTabStripSelection`, `SyncExtendedConfigBar`, `SyncMidiConfigBar`, the lightbar and audio hex-box syncs, subscribes the sound and icon package registries, refreshes both package lists, and syncs the Bass Shakers meter timer |
+| `PadPage_Loaded` | UserControl.Loaded | Calls `ApplyViewMode`, `SyncTabStripSelection`, `SyncExtendedConfigBar`, `SyncMidiConfigBar`, the lightbar and audio hex-box syncs, subscribes the sound and icon package registries, refreshes both package lists, syncs the Bass Shakers meter timer, and subscribes `PeripheralOutputs.LinksChanged`, `StatusChanged` and `ClaimsChanged` (#494). `PadPage_Unloaded` drops those subscriptions |
+| `OnPeripheralOutputsChanged` | `PeripheralOutputs` events, on the thread that raised them | Queues one `SyncTabVisibility()` on the dispatcher per burst (`_peripheralSyncQueued`), so a device that gains or loses an output, a path that starts or stops answering, or a claim that changes rank redraws the Force Feedback and Lighting tabs (#494) |
 | `OnDataContextChanged` | DataContextChanged | Unsubscribes old VM, subscribes new VM PropertyChanged, resyncs all |
 | `ViewModeToggle_Click` | Button.Click | Toggles `SettingsViewModel.Use2DControllerView`, calls `ApplyViewMode` |
 | `TabBtn_Click` | RadioButton.Click | Sets `vm.SelectedConfigTab` from `Tag` |
@@ -857,7 +851,11 @@ ScrollViewer
 ```
 ScrollViewer
   └─ StackPanel
-      ├─ "Force Feedback" page header (E877) + "Force Feedback / Rumble / Haptics" card header + "Reset All" button
+      ├─ "Force Feedback" page header (E877) + subtitle
+      ├─ PeripheralHapticsRoute (ember TextBlock, collapsed unless the selected device is a haptic
+      │   mouse, keyboard or the Razer Sensa row, #494): where its rumble goes and whether that
+      │   path answers, from PeripheralRouteText.Haptics
+      ├─ "Force Feedback / Rumble / Haptics" card header + "Reset All" button
       ├─ Overall Gain slider (0-100%, ForceOverallGain)
       ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
       ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
@@ -890,6 +888,46 @@ ScrollViewer
 ```
 
 All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Grayed out when off.
+
+`PeripheralHapticsRoute` takes its sentence from the `Pad_ForceFeedback_Route*` strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads `Common_NotAvailableOnArm64`, since that build cannot load the Interhaptics engine.
+
+### Lighting Tab (Tab 7). Peripheral Rows (#494)
+
+A mouse, keyboard or vendor lighting row assigned to the slot gets the Lighting tab a DualSense gets, with the same modes. `SyncTabVisibility()` sets `hasPeripheralLighting` when the selected device has no lightbar and a lighting path links it (`PeripheralOutputs.HasLighting`) or its record says it has one (`UserDevice.HasPeripheralLighting`), so the tab stays up while the device sleeps.
+
+```
+StackPanel
+  ├─ "Lighting" page header (E781)
+  ├─ LightingLightbarSubtitle + LightingPlayerIdleHint (lightbar devices only)
+  ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
+  │   ├─ Pad_Lighting_PeripheralSubtitle
+  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row, which lighting is all it carries)
+  │   │   ├─ CheckBox "Control This Device’s Lighting" (DeviceConfig.PeripheralLightingEnabled,
+  │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
+  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
+  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
+  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
+  ├─ LightbarModeCard (the lightbar's mode picker and cards. Its LightbarPreviewPanel,
+  │    the DualShock 4 / DualSense art, collapses for these rows)
+  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
+```
+
+`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere)` (`PeripheralRouteText.cs` line 108), where `lightsHere` is true for a vendor row and otherwise follows the switch. Its sentence comes from the `Pad_Lighting_Route*` strings:
+
+| Key | When |
+|---|---|
+| `RouteDirect` | This controller lights a Logitech unit straight over HID++, named in the line |
+| `RouteThrough` | This controller lights the device through the vendor's software, named in the line |
+| `RouteAsleep` | A Logitech device the record says has lighting has not answered yet |
+| `RouteWaiting` | The vendor's software is not answering yet |
+| `RouteCannotLight` | The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads `Common_NotAvailableOnArm64`) |
+| `RouteShared` | Another device of this kind, on the virtual controller the line names, sets the shared path's color |
+| `RouteSharedVendorRow` | A vendor row, on the virtual controller the line names, sets the shared path's color |
+| `RouteOtherController` / `RouteOtherControllerOnly` | The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The `Only` form shows while this controller's switch is off |
+| `RouteOtherRow` / `RouteOtherRowOnly` | Another row of the same HID++ device on this controller holds the unit |
+| `RouteVendorRow` / `RouteVendorRowWaiting` | A vendor row's own line: what its software lights that no assigned device claims, with examples (`Pad_Lighting_VendorRowExamples_*`), or that the software is not answering yet |
+
+With the switch off, the line names only who else lights the device, never a route of its own. `SyncTabVisibility()` runs again on `PeripheralOutputs` changes (`OnPeripheralOutputsChanged`), when the `DeviceConfig` anchor swaps to another device's config, and when `PeripheralLightingEnabled` changes, so the line follows the switch even for a device that is offline.
 
 ### Gyro Tab (Tab 8). Detailed
 
@@ -2165,7 +2203,7 @@ The engine-state indicator in the status bar uses the same flame with DataTrigge
 <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="20"/>
 ```
 
-Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `E774` globe, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning, and the section and card glyphs named on this page: `E702` Pair, `E707` Compass Yaw, `E716` Community Configs, `E767` volume, `E77B` Head Tracking, `E781` Lightbar Mirrors, `E7F8` Handheld PC Buttons, `E815` Grip, `E83F` Battery Alerts, `E877` Sensa haptics and the rumble chip, `E8DE` Assignment Prompts, `E969` Remote Link, `E99A` Tilt, `E9E9` Gyro Sensitivity, `EB9F` Icon Packages, `EFA5` touchpad chip, `F0AD` Constant Force, `F1CB` Gyro Response, `F272` Gyro Calibration. `EC05` (broadcast) and `ED5D` (driver) left with the Dashboard's driver status strip and appear nowhere in the app.
+Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` star, `ED1A` shield, `E7FC` gamepad, `E8A5` save, `E9D9` bug, `E8F1` group, `E8B7` library, `E8B9` photo, `F158` 3D, `E946` info, `E772` devices, `E7E8` power, `E740` full screen, `E710` add, `E711` close, `E72A` forward, `E72C` undo, `E700` global nav (hamburger), `E8D6` music, `EC4F` MIDI, `E961` keyboard, `E774` globe, `EDA4` touchpad, `F119` VR headset, `F2B7` language, `E8C8` copy, `E8D7` document, `E7C3` page, `E74C` checkmark, `E71B` link, `E75C` clear, `E74D` delete, `F404` home, `E7BA` warning, and the section and card glyphs named on this page: `E702` Pair, `E707` Compass Yaw, `E716` Community Configs, `E767` volume, `E77B` Head Tracking, `E781` Lighting and the Lighting vendor rows, `E7F8` Handheld PC Buttons, `E815` Grip, `E83F` Battery Alerts, `E877` Force Feedback, the rumble chip and the Haptics vendor row, `E8DE` Assignment Prompts, `E969` Remote Link, `E99A` Tilt, `E9E9` Gyro Sensitivity, `EB9F` Icon Packages, `EFA5` touchpad chip, `F0AD` Constant Force, `F1CB` Gyro Response, `F272` Gyro Calibration. `EC05` (broadcast) and `ED5D` (driver) left with the Dashboard's driver status strip and appear nowhere in the app.
 
 ### WPF UI NumberBox
 
@@ -2317,6 +2355,7 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 - [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView`, `KBMPreviewView`, `MidiPreviewView`, `VRPreviewView`
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
+- [Peripheral Outputs Internals](peripheral-outputs-internals.md): The links, claims and backend states the Lighting and Force Feedback route lines read
 - [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by `HMaestroVirtualController`, VR by `HMaestroVRController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, and a VR button (`F119` glyph, AutomationId `AddVrBtn`, capacity via `MaxVrSlots` = 1) at the tail, the `VirtualControllerGroups.InOrder` visual order.
 - [Driver Installation Internals](driver-installation-internals.md): HidHide install/uninstall and the Windows MIDI Services runtime's install and uninstall, triggered from `SettingsPage` (HIDMaestro is embedded. OpenXInput's `xinput1_4.dll` unpacks into the single-file extraction directory under `%TEMP%\.net\PadForge`, which `App.OnStartup` adds to the DLL search path)
 

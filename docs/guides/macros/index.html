@@ -2510,14 +2510,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../features/lightbar-mirrors/" class="md-nav__link">
+      <a href="../../features/peripherals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors and Sensa Haptics
+    Mice, Keyboards and Vendor Rows
   
 
     
@@ -3967,14 +3967,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/lightbar-mirrors-internals/" class="md-nav__link">
+      <a href="../../reference/peripheral-outputs-internals/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Lightbar Mirrors Internals
+    Peripheral Outputs Internals
   
 
     
@@ -6036,18 +6036,18 @@
 </ul>
 <p>Good for map pings, minimap clicks, and menu buttons that always live at the same spot. Community configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> use this action for their cursor-warp bindings.</p>
 <h3 id="set-lightbar-color">Set Lightbar Color<a class="headerlink" href="#set-lightbar-color" title="Permanent link">&para;</a></h3>
-<p>Push an RGB color to every Sony pad on the slot as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.</p>
+<p>Push an RGB color to the slot's lights as a temporary override. The override beats the base lightbar mode and the Input Reactive overlay. Game-driven writes still win at the packet level.</p>
 <p>Two hold modes:</p>
 <ul>
 <li><strong>Reactive (Fade).</strong> Run at full brightness, then fade to black over the Fade window. Good for damage flashes and kill confirms.</li>
 <li><strong>Sticky (Hold).</strong> Hold the color at full brightness until a <strong>Clear Lightbar Override</strong> action or a fresh override replaces it. Good for armed / disarmed markers.</li>
 </ul>
-<p>It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars and the PS Move sphere.</p>
+<p>It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars, the PS Move sphere, and the mice, keyboards and vendor rows the slot lights from their <a href="../../features/lighting/#mice-keyboards-and-vendor-rows">Lighting</a> tabs.</p>
 <h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
 <!-- SCREENSHOT: macro-set-chroma-color -->
 <p><img alt="The Set Chroma Color action editor with its Duration and color" src="../../images/macro-set-chroma-color.png" /></p>
-<p>Paints every Razer Chroma device one color for the action's <strong>Duration</strong>. Afterward the lighting goes back to Razer Synapse, or to the mirrored lightbar color when the <a href="../../features/lightbar-mirrors/#razer-chroma">Razer Chroma lightbar mirror</a> is on and a game has set one. It needs Synapse running, and it works whether or not the mirror is on. While a macro paints, its color wins over the mirror's.</p>
-<p>To hold the color for as long as the trigger is held, use <strong>While Held</strong> with <strong>Until Release</strong> and a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin.</p>
+<p>Paints one color for the action's <strong>Duration</strong> on the Razer mice, keyboards and keypads assigned to the macro's virtual controller, and on every other Razer device of the same kind, since Razer Synapse lights each kind of device all at once. With the <strong>Razer Chroma</strong> row assigned to that virtual controller, it paints every Razer device. The color wins over every virtual controller's <a href="../../features/lighting/">Lighting</a> tab, whether or not a device's <strong>Control This Device’s Lighting</strong> is on. When the action ends, each device goes back to the color a Lighting tab or a vendor row sets, or to Synapse. On a virtual controller with no Razer device and no Razer Chroma row assigned, the action paints nothing. It needs Razer Synapse running.</p>
+<p>To hold the color for as long as the trigger is held, use <strong>While Held</strong> with <strong>Until Release</strong> and a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin. When macros on two virtual controllers paint the same kind of Razer device, the smaller player number wins.</p>
 <h3 id="show-dreamcast-screen">Show Dreamcast Screen<a class="headerlink" href="#show-dreamcast-screen" title="Permanent link">&para;</a></h3>
 <p>Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port whose controller is assigned to the macro's slot, then returns each port to its own screen setting. The action fires once and the macro moves on while the pictures play.</p>
 <table>
@@ -6076,7 +6076,7 @@
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
 <p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
 <h3 id="set-lightbar-mode">Set Lightbar Mode<a class="headerlink" href="#set-lightbar-mode" title="Permanent link">&para;</a></h3>
-<p>Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot renders the new mode with its own palette and decay settings.</p>
+<p>Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot, and every mouse, keyboard or vendor row the slot lights, renders the new mode with its own palette and decay settings.</p>
 <h3 id="cycle-lightbar-modes">Cycle Lightbar Modes<a class="headerlink" href="#cycle-lightbar-modes" title="Permanent link">&para;</a></h3>
 <p>Step through an ordered list of base lightbar modes. Each fire advances one step. The list wraps at the end.</p>
 <h3 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h3>
@@ -6085,7 +6085,7 @@
 <li><strong>Reactive (Fade).</strong> Run at full strength across the Hold window, then fade to zero across the Fade window. Good for hit / shoot / confirm pulses.</li>
 <li><strong>Sticky (Hold).</strong> Hold at full strength until a <strong>Stop Rumble</strong> action runs. Good for armed states and click-and-hold sustain.</li>
 </ul>
-<p>Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand.</p>
+<p>Macro rumble combines with game rumble by taking the stronger of the two, so macro feedback always reaches the motors. It drives every rumble-capable pad on the slot, whatever the brand, and the haptic mice and Razer Sensa row assigned to it.</p>
 <h3 id="stop-rumble">Stop Rumble<a class="headerlink" href="#stop-rumble" title="Permanent link">&para;</a></h3>
 <p>End any active macro rumble override on the slot, no matter which motor was running. Pair this with a Sticky Rumble action to give the macro a clean release.</p>
 <h3 id="rumble-trigger-override">Rumble Trigger Override<a class="headerlink" href="#rumble-trigger-override" title="Permanent link">&para;</a></h3>
