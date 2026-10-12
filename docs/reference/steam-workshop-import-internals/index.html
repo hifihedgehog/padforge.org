@@ -4438,7 +4438,7 @@
 </tr>
 </tbody>
 </table>
-<p>The assembly targets <code>net10.0-windows</code>, references <code>PadForge.Engine</code>, and carries a single direct NuGet dependency: <code>SteamKit2</code> 3.4.0 (LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.</p>
+<p>The assembly targets <code>net10.0-windows</code>, references <code>PadForge.Engine</code>, and carries a single direct NuGet dependency: <code>SteamKit2</code> 3.4.0 (LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.</p>
 <hr />
 <h2 id="the-opt-in-gate">The opt-in gate<a class="headerlink" href="#the-opt-in-gate" title="Permanent link">&para;</a></h2>
 <p><code>ISteamWorkshopGate</code> exposes one member, <code>IsCommunityConfigLookupEnabled</code>. <code>DelegateSteamWorkshopGate</code> adapts a <code>Func&lt;bool&gt;</code> (the app passes <code>() =&gt; settings.EnableCommunityConfigLookup</code>). <code>SteamWorkshopGuard.EnsureEnabled</code> throws <code>InvalidOperationException</code> ("Community config lookup is disabled in PadForge settings...") when the gate is off.</p>

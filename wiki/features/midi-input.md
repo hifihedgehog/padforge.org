@@ -54,7 +54,7 @@ Under the legacy MIDI API, assign the device to a slot before step 3. That API o
 
 MIDI input rides Windows MIDI Services, the same stack the MIDI virtual controller uses. It is part of **Windows 11 25H2 from the late-November 2026 update**, and on 24H2 or later PadForge installs its runtime from **Settings**. See [Driver Management](driver-management.md#windows-midi-services).
 
-Without Windows MIDI Services, MIDI input runs on the legacy MIDI API, on any Windows. It reads notes, CC and pitch bend from MIDI 1.0 devices, and opens a port only while a slot has the device assigned: on Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds none that nothing uses. A device under the legacy API is a separate entry from the same device under Windows MIDI Services, so its slot assignments do not carry over between the two.
+Without Windows MIDI Services, MIDI input runs on the legacy MIDI API, on any Windows. It reads notes, CC and pitch bend from MIDI 1.0 devices, and opens a port only while a slot has the device assigned, on this PC or on a Remote Link peer: on Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds none that nothing uses. A device under the legacy API is a separate entry from the same device under Windows MIDI Services, so its slot assignments do not carry over between the two.
 
 Under Windows MIDI Services, PadForge's own MIDI virtual controllers show up in the MIDI input list on purpose, so you can test mapping without a hardware keyboard by routing one to the other on the same PC.
 

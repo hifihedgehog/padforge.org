@@ -48,7 +48,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 | **Delay** | Milliseconds the activator must stay held before the layer reacts. For **Hold**, a debounce. For **Toggle**, **Latch**, and **Sticky**, a long-press threshold: the layer flips once when the hold crosses this time, and a shorter tap does nothing. `0` reacts instantly. |
 | **Auto-Cancel After Inactivity** | **Toggle** mode only. While the layer is toggled on, it switches itself off after this many milliseconds with none of the layer's own mapped inputs active. The timer starts when the layer engages and restarts on every layer input. On a keyboard and mouse slot, a layer's gyro or touchpad mouse row counts while it moves the cursor or a finger rests in the part of the pad the row reads, and a flick stick row while it turns or its stick is held past the flick threshold. A pointer row counts while it aims: a Wii Remote while it sees the sensor bar, a touchpad pointer while a finger is on its part of the pad. `0` keeps the layer on until you toggle it off yourself. |
 | **Fire on Release** | Waits until the button is let go before the activator fires. With a **Delay** set, the press must last that long for the release to count. Appears only for **Toggle**, **Latch**, **Cycle**, and **Sticky (One-Shot)**. Hold reacts on both edges by nature and No Button has no input, so neither shows it. |
-| **Also Fire Activator's Own Mapping** | Off by default. On lets the activator input drive its own row alongside the layer change. |
+| **Also Fire Activator's Own Mapping** | Off by default. On lets the activator input drive its own row alongside the layer change. Off holds the input back from every reader in a row: a source on it reads released, an Up or Down key on it reads released, and an Invert on Hold modifier on it inverts nothing. A D-pad direction is held back from the combined D-pad row too. |
 | **Inherit Unmapped Targets from Base** | Off by default. On = overlay with fallthrough. Off = replace. |
 
 ---
@@ -98,6 +98,7 @@ Next and Previous drive one shared cursor, so they read as forward and backward 
 
 - A press that opens with the slot on the right layer keeps counting until it releases, even when the layer changes under it.
 - A press that opens on the wrong layer stays dead until it releases, even if the slot reaches the right layer mid-hold. Its button's rows on the engaged layer fire as normal.
+- A menu cell committed by leaving a layer counts as pressed on that layer, so an activator set to that layer whose input is the cell fires, though the layer has just ended.
 - A Cycle activator's **Previous Button** carries the same check on its own.
 - **Any Layer** is the default, and every layer made before this setting existed behaves that way.
 - Deleting the named layer leaves the condition inert. The dialog keeps showing the old name rather than quietly widening the activator to every layer.

@@ -195,7 +195,7 @@ HIDMaestro ships inside the executable as a managed SDK, so it never had an inst
 | Property | Type | Description |
 |----------|------|-------------|
 | `IsHidHideInstalled` | `bool` | HidHide installed. Written by the status refresh. No Dashboard surface currently reads it. |
-| `IsMidiAvailable` | `bool` | A MIDI API started, Windows MIDI Services or the legacy one, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_RequiresMidiServices` tooltip when false. |
+| `IsMidiAvailable` | `bool` | A MIDI API started, Windows MIDI Services or the legacy one, the same answer the Settings card shows. A slot card's MIDI type button shows a "no" cursor and the `Main_MIDI_NotRunning` tooltip when false. |
 | `IsSteamVrInstalled` | `bool` | SteamVR installed, which gates the VR slot type (#49). A slot card's VR type button shows a "no" cursor and the `Main_VR_RequiresSteamVR` tooltip when false. The tiered SteamVR status row (#287) lives on the Settings card, which reads the live statics itself. |
 
 ### DSU Motion Server
@@ -473,16 +473,19 @@ The card names the API PadForge drives (`MidiApiSelection`), offers PadForge's b
 | `CanInstallMidiRuntime` | `bool` | The card offers the runtime (`MidiApiSelection.CanOfferRuntimeInstall`). Shows the Install button. |
 | `IsMidiRuntimeInstalled` | `bool` | The App SDK runtime is installed, Microsoft's or PadForge's (`DriverInstaller.IsMidiRuntimeInstalled`). Shows the Uninstall button. |
 | `MidiRuntimeVersion` | `string` | The runtime's version, from its DLL (`DriverInstaller.GetMidiRuntimeVersion`). |
-| `MidiApiNotStarted` | `bool` | The probe started no API, the legacy one included, or timed out on a stuck service. |
+| `MidiApiNotStarted` | `bool` | The probe started no API, the legacy one included, or timed out on a stuck service. Also true while MIDI is held released for the runtime's uninstall. |
+| `MidiNotRunningReason` | `MidiNotRunningReason` (internal) | Why nothing runs while `MidiApiNotStarted` holds: `ServiceDidNotRespond`, `DriverDidNotRespond` (a classic MIDI driver, which no service restart reaches) or `Uninstalling`. Written from `MidiVirtualController.NotRunningReason`. Notifies the card text. |
+| `MidiInBoxFailure` | `int` (internal) | The HRESULT of an in-box API that Windows registers and that failed to activate, or 0. The legacy API runs in its place. Written from `MidiVirtualController.InBoxActivationFailure`. Notifies the card text. |
+| `MidiUninstallerRunning` | `bool` (internal) | A runtime uninstaller PadForge started has not exited (`MidiRuntimeSwitch.UninstallerRunning`). Re-evaluates `UninstallMidiServicesCommand`. |
 | `IsMidiAvailable` | `bool` | Computed: `ActiveMidiApi != None`. Lights the card's flame. |
 | `MidiServicesStatusText` | `string` | Computed: `Settings_MidiStatusInBox` ("Built into Windows"), `Settings_MidiStatusRuntime` ("App SDK Runtime"), `Settings_MidiStatusLegacy` ("Legacy MIDI API"), `Settings_MidiStatusNotRunning` ("Not Running") or `Settings_MidiStatusUnavailable` ("Not Available"). |
-| `MidiServicesDetailText` | `string` | Computed: under the in-box API, empty, or `Settings_MidiOlderRuntime_Format` when a runtime is also installed. Under the runtime, its version. Under the legacy API, `Settings_MidiLegacy`. Otherwise `Settings_MidiNotRunning` when the probe failed, else empty. |
+| `MidiServicesDetailText` | `string` | Computed: under the in-box API, empty, or `Settings_MidiOlderRuntime_Format` when a runtime is also installed. Under the runtime, its version. Under the legacy API, `Settings_MidiLegacy`, or `Settings_MidiInBoxFailed_Format` with the HRESULT when `MidiInBoxFailure` is set. Otherwise empty unless `MidiApiNotStarted`, and then by `MidiNotRunningReason`: `Settings_MidiNotRunning`, `Settings_MidiNotRunningDriver` or `Settings_MidiUninstallRunning`. |
 | `MidiDetailIsVersion` | `bool` | Computed: the detail line is the runtime's version, which the card sets in the telemetry face. |
 
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
 | `InstallMidiRuntimeCommand` | `CanInstallMidiRuntime` | Raises `InstallMidiRuntimeRequested`. |
-| `UninstallMidiServicesCommand` | `IsMidiRuntimeInstalled && !(ActiveMidiApi == AppSdk && HasAnyMidiSlots())` | Raises `UninstallMidiServicesRequested`. Under the in-box or the legacy API, MIDI slots do not hold the runtime. |
+| `UninstallMidiServicesCommand` | `IsMidiRuntimeInstalled && !MidiUninstallerRunning && !(ActiveMidiApi == AppSdk && HasAnyMidiSlots())` | Raises `UninstallMidiServicesRequested`. Under the in-box or the legacy API, MIDI slots do not hold the runtime. Unavailable while an uninstaller PadForge started still runs. |
 
 | Event | Description |
 |-------|-------------|
@@ -1146,13 +1149,13 @@ Battery indicator on the device row. Sourced from SDL by InputService's slow lan
 | `ForceRawJoystickMode` | `bool` | `false` | Bypass SDL gamepad remapping. Read raw joystick indices. |
 | `IsHidHideAvailable` | `bool` | `false` | HidHide installed (controls toggle IsEnabled). |
 | `ShowConsumeToggle` | `bool` | - | Computed: real keyboards and mice only (`(Keyboard or Mouse) && !IsInternalVirtual`). Consumption suppresses the source at the raw/descriptor layer, which only exists for a real Windows HID device. |
-| `IsInternalVirtual` | `bool` | - | Computed: true for PadForge-internal virtual sources, identified by a URI-scheme `DevicePath` instead of a real Windows HID path. Eleven schemes: `web://`, `overlay://`, `midi://`, `peer://`, `nfc://`, `mic://`, `handheld://`, `sensor://`, `headtrack://`, `openxr://`, `logigkeys://`. Those cover web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, PC/SC readers, WASAPI microphone endpoints, the handheld hidden-buttons row, the machine's own sensor row, the head tracker, the OpenXR hand-controller rows, and the Logitech G-Keys row. HidHide cannot blacklist a non-HID path, so the "Hide from games" toggle hides itself for these. |
+| `IsInternalVirtual` | `bool` | - | Computed: true for PadForge-internal virtual sources, identified by a URI-scheme `DevicePath` instead of a real Windows HID path. Sixteen schemes: `web://`, `overlay://`, `midi://`, `peer://`, `nfc://`, `mic://`, `handheld://`, `sensor://`, `headtrack://`, `openxr://`, `logigkeys://`, `analogkb://`, `razerchroma://`, `logilightsync://`, `steelseriesgg://`, `razersensa://`. Those cover web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, PC/SC readers, WASAPI microphone endpoints, the handheld hidden-buttons row, the machine's own sensor row, the head tracker, the OpenXR hand-controller rows, the Logitech G-Keys row, the analog keyboard rows, and the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows. HidHide cannot blacklist a non-HID path, so the "Hide from games" toggle hides itself for these. |
 | `IsAggregate` | `bool` | - | Computed: an `aggregate://` merged row (All Keyboards, All Mice, All Touchpads, All Consumer Controls). It has no HID instance of its own. |
 | `ShowHidHideToggle` | `bool` | - | Computed: `!IsInternalVirtual && !IsAggregate`. Gates the "Hide from games" checkbox. |
 | `ShowInputHidingSection` | `bool` | - | Computed: `ShowHidHideToggle \|\| ShowConsumeToggle`. Drives the Input Hiding section visibility, heading included. |
-| `ShowInputModeSection` | `bool` | - | Computed: `IsGamepad && !IsInternalVirtual`. Drives the Input Mode (Force Raw Joystick) section visibility. |
+| `ShowInputModeSection` | `bool` | - | Computed: `_forceRawJoystickMode \|\| (IsGamepad && !IsInternalVirtual)`. Drives the Input Mode (Force Raw Joystick) section visibility. A row whose flag is on shows the section whatever its type or path, so the checkbox can turn it off. |
 | `ShowInputModeOrHidingSection` | `bool` | - | Computed: union of the two above. Gates the separator between Slot Assignment and the hiding/mode sections so a virtual device doesn't leave a dangling divider. |
-| `ShowRawInputDivider` | `bool` | - | Computed: `ShowPowerSection \|\| !ShowInputModeOrHidingSection`. Two dividers bracket the Power section, so exactly one of them has to survive whatever the device has. Left unconditional, the lower one doubled up on any device with an Input Mode or Hiding section but no Power section. Made to follow the Power section alone, an NFC reader or a microphone would get no rule at all. |
+| `ShowRawInputDivider` | `bool` | - | Computed: `ShowPowerSection \|\| ShowGunCalibration \|\| !ShowInputModeOrHidingSection`. Two dividers bracket the Power section, so exactly one of them has to survive whatever the device has. Left unconditional, the lower one doubled up on any device with an Input Mode or Hiding section but no Power section. Made to follow the Power section alone, an NFC reader or a microphone would get no rule at all. |
 
 ### Device Path
 
@@ -2053,7 +2056,7 @@ Single mapping row linking a physical input to an output target in the Pad page 
 | Command | Description |
 |---------|-------------|
 | `ToggleRecordCommand` | Toggles recording. Raises `StartRecordingRequested` or `StopRecordingRequested`. |
-| `ClearCommand` | Clears the source and neg descriptor, resets `IsInverted` / `IsHalfAxis` / `IsBidirectional`, puts `MappingDeadZone` back to 50, blanks `PrimarySourceDeviceGuid` and `PrimarySourceDeviceLabel`, wipes the primary kind holder's `ParamUp` / `ParamDown` / `ParamModifier` and forces its `Kind` to `"Direct"`, then re-syncs the selected input from the descriptor. |
+| `ClearCommand` | Clears the source and neg descriptor, resets `IsInverted` / `IsHalfAxis` / `IsBidirectional`, puts `MappingDeadZone` back to 50, blanks `PrimarySourceDeviceGuid` and `PrimarySourceDeviceLabel`, wipes the primary kind holder's `ParamUp` / `ParamDown` / `ParamModifier` and forces its `Kind` to `"Direct"` and blanks its `DeviceGuid` and `DeviceLabel`, then re-syncs the selected input from the descriptor. |
 | `ResetGyroSensitivityCommand`, `ResetMouseCursorSensitivityCommand`, `ResetIrPointerSensitivityCommand`, `ResetSensitivityCommand`, `ResetParamAccelCommand` | Per-control resets for the primary-source knobs above. |
 
 | Event | Description |
@@ -2154,11 +2157,12 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Toggle`, `RapidTrigger`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. |
+| `Kind` | `string` | `"Direct"` | Source kind: `Direct`, `Toggle`, `RapidTrigger`, `Incremental`, `InvertOnHold`, `Ramped`. Notifies the `Is*Kind` computed flags. A change to Incremental or Ramp outside a load drops `Invert`, unless it comes from the other of those two kinds, and puts the source on the controller its Up and Down keys share (`FollowKeysDevice`). A change to InvertOnHold outside a load puts it on the controller its modifier names, and a change to a kind that reads the Descriptor puts it back on the Descriptor's (`RestoreDescriptorController`). |
 | `IsIncrementalKind` / `IsInvertOnHoldKind` / `IsRampedKind` / `IsToggleKind` / `IsRapidTriggerKind` | `bool` | - | Computed per-kind flags. |
 | `DescriptorKind` | `string` (internal) | - | Computed: the kind a row's primary saves as, `Toggle` or `RapidTrigger` when set, else `Direct`. Every path that rebuilds a primary into a source reads it. |
 | `UsesUpDownKeys` | `bool` | - | Computed: Incremental or Ramped (authored via an Up/Down key pair). |
-| `IsKindDescriptorless` | `bool` | - | Computed: kinds where the main Descriptor/flags are unused (Incremental, InvertOnHold, Ramped). |
+| `IsKindDescriptorless` | `bool` | - | Computed: the kinds that leave the source's `Descriptor`, `HalfAxis` and `DeadZone` unread (Incremental, InvertOnHold, Ramped). The grid collapses those controls and `Invert` with them. `Invert` is not unread: the engine applies it to an Incremental source and to a Ramp source on an axis, so a source that comes to one of those two kinds from any other kind in the editor drops it, while a switch between Incremental and Ramp keeps it, and one saved with it on shows it (`IsKeyInvertShown`). |
+| `IsKeyInvertShown` | `bool` | - | Computed: `UsesUpDownKeys && Invert`. An Incremental or Ramp source saved with `Invert` on shows a checkbox for it, the control that turns it off. Unchecked, the checkbox goes with it. A row's primary shows the same checkbox in its own strip, bound to the primary kind holder's `Invert`. |
 | `HasAnyBoundFeed` | `bool` | - | Computed: whether any input feeds this source, per kind. Mirrors the engine's SourceEvaluator dispatch. |
 
 `KindOptions` (static) is the culture-cached list of `KindChoice { Value, Name }` for the Kind dropdown, keeping backend identifiers out of the UI. `KindChoices`, the extra-source chip's instance list, drops Rapid Trigger while `IsRapidTriggerOffered` is false: the source's input has no press depth, or its row cannot take the mode (`ParentTargetTakesRapidTrigger`, #482). Picking an input without depth sets a Rapid Trigger source back to Direct, and `EnforceRapidTriggerGate` does the same when the parent row pushes a target that cannot take it.
@@ -2171,6 +2175,7 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 | `DeviceLabel` | `string` | `""` | Friendly device name, shown inline below the per-source picker. |
 | `DisplayDeviceLabel` | `string` | - | Computed device label honoring the "(Any device)" contract: a concrete-guid source prefers `SelectedInput.DeviceLabel` (recovers the friendly name when the stored label wasn't hydrated), an empty-guid source keeps its own label and never borrows a concrete device from a descriptor-only picker fallback. Read by the grid subtitle, the annotation overlays, and the pipeline-chip tooltip. |
 | `Descriptor` | `string` | `""` | Input descriptor. Notifies the source-class flags below. |
+| `DescriptorDeviceGuid` | `string` | - | Computed: what `ToDomain` saves as the controller the kept Descriptor was picked on, the domain field of the same name. The remembered controller while the kind leaves the Descriptor unread and the source sits on another device, `null` otherwise. `FromDomain` takes a saved one back. |
 | `SelectedInput` | `InputChoice` | `null` | Cross-device picker selection. Setting it writes `DeviceGuid`, `DeviceLabel`, and `Descriptor` in one shot. |
 | `IsGyroSource` / `IsMouseCursorSource` / `IsIrPointerSource` / `IsMouseMotionSource` | `bool` | - | Computed from the descriptor prefix. Gate the matching per-source sensitivity sliders. `IsGyroSource` excludes the gravity-tilt family (#292). |
 | `IsGyroLeanSource` | `bool` | - | Computed: the gravity-lean pair (`"Gyro Lean X"` / `"Gyro Lean Y"`, #292). Gates the lean row's dial, which binds `Sensitivity`, the field `ReadGyroLean` scales by. |
@@ -2233,8 +2238,8 @@ One source row within a multi-source `MappingItem` (#61). Represents a single `E
 | `ToDomain()` | Builds a domain `Engine.Data.MappingSource` from the VM. |
 | `FromDomain(MappingSource)` | Static: populates a new VM from a domain source. |
 | `SyncSelectedInputFromState(IEnumerable<InputChoice>)` | Syncs the picker selection from the current `(DeviceGuid, Descriptor)` pair. |
-| `SetParamKey(ParamRecordTarget, string, string)` | Internal: lands a key and its controller together, a cleared key keeping none, then lets an Incremental or Ramp source follow its keys (`FollowKeysDevice`: the controller they share, or none). |
-| `AdoptLegacyKeyDevices()` | Internal: gives each key saved before keys carried a controller the controller of the entry its picker shows. The parent row calls it from `RefreshExtraSourceInputs`. `MappingItem.LoadPrimaryKind` holds it off (`LoadingKeys`) until the whole source is in, because the source's device lands before its keys. |
+| `SetParamKey(ParamRecordTarget, string, string)` | Internal: lands a key and its controller together, a cleared key keeping none, then lets the source follow the keys its kind reads (`FollowKeysDevice`: for Incremental or Ramp the controller its Up and Down keys share, or none, for InvertOnHold the controller its modifier names). A key saved without a controller, the modifier included, is first given the source's. The source remembers the controller and name its Descriptor was picked on when it first follows its keys away, and a switch back to a kind that reads the Descriptor restores them (`RestoreDescriptorController`). `FollowKeysDevice` has two more callers: `AdoptLegacyKeyDevices`, and the `Kind` setter when the kind becomes Incremental or Ramp with keys already in. |
+| `AdoptLegacyKeyDevices()` | Internal: gives each key saved before keys carried a controller the controller of the entry its picker shows, and only from a list that carries the source's own controller (`ListCarriesOwnController`). The parent row calls it from `RefreshExtraSourceInputs`, outside a row load (`BeginLoadRow` to `EndLoadRow`), so the list rebuilt after the rows decides. `MappingItem.LoadPrimaryKind` holds it off (`LoadingKeys`) until the whole source is in, because the source's device lands before its keys. `LoadingKeys` holds the `Kind` setter's follow off too: `LoadPrimaryKind` sets the kind last, and the source stays on the device it was saved on. |
 
 `ParamRecordTarget` (enum): `Up`, `Down`, `Modifier`.
 
@@ -3038,7 +3043,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.10.1 ships 232 profiles in 32 vendor folders, and PadForge's pickers offer the 134 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.11.0 ships 233 profiles in 32 vendor folders, and PadForge's pickers offer the 135 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 
@@ -3079,14 +3084,17 @@ Per-slot MIDI output configuration: CC/note counts, starting numbers, channel, v
 | `StartCc` | `int` | `1` | 0–127 | Starting CC number. Re-clamps `CcCount`. |
 | `NoteCount` | `int` | `11` | 0–`128 - StartNote` | Note output count. |
 | `StartNote` | `int` | `60` | 0–127 | Starting note number. Re-clamps `NoteCount`. |
-| `Velocity` | `byte` | `127` | 0–127 | Note velocity for button presses. |
-| `OutputPort` | `string` | `""` | A port name | The output port the slot sends to under the legacy MIDI API, by the name the slot's port picker shows. Empty until the user picks one. The Windows MIDI Services APIs create the slot's own port and ignore it. |
+| `Velocity` | `byte` | `127` | 1–127 | Note velocity for button presses. A 0 reads as 1, because a Note On with velocity 0 is a Note Off. |
+| `OutputPort` | `string` | `""` | A port name | The output port the slot sends to under the legacy MIDI API, by the name the slot's port picker shows. Empty for **None**, and until the user picks one. The Windows MIDI Services APIs create the slot's own port and ignore it. |
+| `OutputPortChosen` | `bool` | `false` | - | Whether `OutputPort`, **None** included, is a choice for the profile in use: picked or reset in the slot's port picker, or applied from a snapshot that carries one. |
+| `OutputPortSnapshot` | `string` | - | - | Computed: the port as a snapshot records it. `OutputPort` while `OutputPortChosen`, else `null`. |
 
 | Method | Description |
 |--------|-------------|
 | `GetCcNumbers()` | Returns `int[]` of sequential CC numbers from `StartCc`. |
 | `GetNoteNumbers()` | Returns `int[]` of sequential note numbers from `StartNote`. |
-| `ResetToDefaults()` | Resets every field in place, starts before counts so the count clamps see the default starts. Clears `OutputPort`. |
+| `ChooseOutputPort(string)` | Makes a port the slot's port as the user's choice: sets `OutputPort`, empty for **None**, and `OutputPortChosen`. |
+| `ResetToDefaults()` | Resets every field in place, starts before counts so the count clamps see the default starts. Clears `OutputPort` and `OutputPortChosen`. |
 
 ### MidiSlotConfigData
 
@@ -3103,7 +3111,7 @@ Serializable DTO. All properties have `[XmlAttribute]`.
 | `Velocity` | `byte` | `127` |
 | `OutputPort` | `string` | `null` |
 
-`OutputPort` is written only when it is set (`ShouldSerializeOutputPort`). `ApplyOutputPortTo(MidiSlotConfig)` copies it onto a live config only when it is set, so a snapshot saved before a port was picked keeps the slot's current port.
+`OutputPort` is written whenever the snapshot records a choice, **None** as an empty attribute, and left out when it records none (`ShouldSerializeOutputPort`). `ApplyOutputPortTo(MidiSlotConfig)` applies a recorded choice through `ChooseOutputPort`. A snapshot with no choice keeps the slot's current port and clears `OutputPortChosen`, so a snapshot saved before a port was picked keeps the slot's port.
 
 ---
 

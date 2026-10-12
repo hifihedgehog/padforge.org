@@ -36,7 +36,7 @@ This is the developer-side companion to [Steam Workshop Config Import](../guides
 | `PadForge.Engine/Menus/MenuDefinitionEntry.cs` (+ `MenuEvaluator.cs`, `MenuSelectionMath.cs`) | The menu model translated menus land on. See [Menus](../guides/menus.md) and the engine pages. |
 | `PadForge.SteamWorkshop.Tests/` | Parser, client, cache, and translation tests: `TranslationEdgeTests`, the v2-v7 per-wave suites (`WaveOneA`, `WaveTwoA`, `WaveThree`, `WaveFour`, `WaveFourB`, `WaveFourC`), the v8-v26 topic suites (group-axis inversion, curve channel, deadzone geometry, gap closure, stick direction and swipe-scroll, audit two, sentinel preset cycle, menu cell labels, ratchet/delay/haptic, release activator and wheel, vocabulary census, the three mass-sweep rounds), and 30 golden fixtures. |
 
-The assembly targets `net10.0-windows`, references `PadForge.Engine`, and carries a single direct NuGet dependency: `SteamKit2` 3.4.0 (LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.
+The assembly targets `net10.0-windows`, references `PadForge.Engine`, and carries a single direct NuGet dependency: `SteamKit2` 3.4.0 (LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only). protobuf-net (3.2.56) and ZstdSharp.Port (0.8.7) arrive transitively through it.
 
 ---
 

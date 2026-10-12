@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 232 device profiles, and PadForge offers the 134 that carry a captured HID descriptor.
+PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 233 device profiles, and PadForge offers the 135 that carry a captured HID descriptor.
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read

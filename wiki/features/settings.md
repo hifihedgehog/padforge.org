@@ -198,7 +198,7 @@ Four driver cards. Each card has an ember flame beside its status text (lit when
 
 - **HidHide Driver** card: Install and Uninstall buttons.
 - **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.
-- **Windows MIDI Services** card: the API PadForge uses (**Built into Windows**, **App SDK Runtime** with the runtime's version, or **Legacy MIDI API**), or **Not Running** with the reason. **Install** shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. **Uninstall** shows while a runtime is installed. See [Driver Management](driver-management.md#windows-midi-services).
+- **Windows MIDI Services** card: the API PadForge uses (**Built into Windows**, **App SDK Runtime** with the runtime's version, or **Legacy MIDI API**), or **Not Running** with the reason: the Windows MIDI service did not respond, a MIDI driver did not respond, or the runtime's uninstaller is still running. Under **Legacy MIDI API** the card names the error when the API built into Windows is registered but did not start. A Windows MIDI Services API that did not start when PadForge first checked is taken later, once it starts, with nothing restarted. **Install** shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. **Uninstall** shows while a runtime is installed. See [Driver Management](driver-management.md#windows-midi-services).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
 PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.
@@ -285,9 +285,9 @@ When a [slot](controller-slots.md) outputs **MIDI**, its config bar shows:
 | **Start CC** | Base CC number (0-127). Axis CCs count up from here. |
 | **Note Count** | Number of Note outputs. How many buttons send Note messages. Clamped so the highest note stays within range, so the max is 128 minus **Start Note** (128 only when Start Note is 0). |
 | **Start Note** | Base note (0-127, 60 = Middle C). Button notes count up from here. |
-| **Velocity** | Note On velocity (0-127). Higher = louder. |
+| **Velocity** | Note On velocity (1-127). Higher = louder. |
 
-PadForge creates one virtual MIDI device per slot. No port to pick. Different slots can target different channels.
+Under Windows MIDI Services, PadForge creates one virtual MIDI device per slot, with no port to pick. Under the legacy MIDI API the bar adds **Output Port**, and the slot sends to the existing port picked there. Different slots can target different channels.
 
 ---
 

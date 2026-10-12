@@ -4958,6 +4958,11 @@
 <td>WPF builds on Windows only. An x64 machine builds both the x64 and the ARM64 exe</td>
 </tr>
 <tr>
+<td>Clone folder</td>
+<td>About 125 characters or fewer</td>
+<td>The build runs <code>cswinrt.exe</code>, which cannot write past Windows' 259-character path limit. The App project refuses a deeper clone with a message (<code>RefuseCsWinRTPathPastLimit</code>)</td>
+</tr>
+<tr>
 <td>Visual Studio (optional)</td>
 <td>2022+</td>
 <td>Not required. Its own MSBuild runs on .NET Framework, which lacks the Brotli the art packer needs, so build with the <code>dotnet</code> CLI</td>
@@ -5223,7 +5228,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">&lt;Compile</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\SharedVersion.cs&quot;</span><span class="w"> </span><span class="na">Link=</span><span class="s">&quot;Properties\SharedVersion.cs&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
 <p><code>SharedVersion.cs</code> carries <code>AssemblyVersion</code> and <code>AssemblyFileVersion</code>. The assemblies cannot drift apart because they compile against the same file. <code>Properties/AssemblyInfo.cs</code> in the App and the Engine carries the other assembly metadata (title, copyright, COM GUID, and theme info in the App). The SteamWorkshop one carries only <code>InternalsVisibleTo</code>. None of them carries version attributes. Every project sets <code>&lt;GenerateAssemblyInfo&gt;false&lt;/GenerateAssemblyInfo&gt;</code> so the build does not regenerate either file.</p>
-<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.4.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>4.5.3.0</code>.</p>
+<p><strong>Important:</strong> Edit <code>SharedVersion.cs</code> to bump the version. Never re-introduce <code>AssemblyVersion</code> to <code>Properties/AssemblyInfo.cs</code>. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., <code>v4.4.0</code>) as the user-facing version, but the binary's <code>AssemblyVersion</code> should match. The current shared version is <code>5.0.0.0</code>.</p>
 <h3 id="build-identity">Build Identity<a class="headerlink" href="#build-identity" title="Permanent link">&para;</a></h3>
 <p>Every build between two releases carries the same version, so the App also stamps the commit it was built from. The <code>StampBuildIdentity</code> target in the App csproj runs before <code>CoreCompile</code>, reads <code>git</code>, and writes <code>PadForgeBuildIdentity.g.cs</code> into the intermediate folder with three <code>AssemblyMetadata</code> attributes: the commit count (<code>PadForgeBuildNumber</code>), the seven-character hash (<code>PadForgeCommit</code>) and the full hash (<code>PadForgeCommitSha</code>). It stamps them only in a full, non-shallow clone of this repository whose <code>HEAD</code> holds <code>PadForge.App/PadForge.App.csproj</code>. A shallow clone, a tree with no git, or a checkout nested inside another repository stamps nothing. The target clears the three properties before it reads git, so a <code>/p:</code> override on the command line does not reach the exe.</p>
 <p><code>BuildIdentity.Display</code> turns the stamp into the text the Diagnostics card's App Version shows, for example <code>4.5.3 (r3682@176208e)</code>, or the version alone when nothing was stamped. The in-app updater orders dev builds by the commit count. See <a href="../updates-internals/#build-identity">Updates Internals</a>.</p>
@@ -5307,7 +5312,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>HIDMaestro.Core</code> (the virtual controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. The shipped DLL reports file version <code>1.9.0.0</code>, and the csproj comment naming the shipped build says v1.9.0. That comment is hand-maintained, so when the two disagree the DLL's own file version is the authority.</p>
+<p><code>HIDMaestro.Core</code> (the virtual controller client) is a project <code>&lt;Reference&gt;</code> with a <code>HintPath</code> into <code>Resources/HIDMaestro/</code>, not a NuGet package. The shipped DLL reports file version <code>1.11.0.0</code>. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.</p>
 <p>The App also holds <code>&lt;ProjectReference&gt;</code>s to <code>PadForge.Engine</code> and <code>PadForge.SteamWorkshop</code>.</p>
 <h3 id="padforgesteamworkshop">PadForge.SteamWorkshop<a class="headerlink" href="#padforgesteamworkshop" title="Permanent link">&para;</a></h3>
 <table>
@@ -5322,7 +5327,7 @@
 <tr>
 <td><strong>SteamKit2</strong></td>
 <td>3.4.0</td>
-<td>Steam protocol client (LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases</td>
+<td>Steam protocol client (LGPL-2.1: its license.txt grants 2.1 or any later version, its package metadata says LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases</td>
 </tr>
 </tbody>
 </table>
@@ -6139,6 +6144,11 @@ Carbon set whole and bring only their own shell texture.</p>
 <td>MIDI package not found</td>
 <td><code>nuget.config</code> missing or <code>nuget-local/</code> folder missing</td>
 <td>Ensure both are present at solution root</td>
+</tr>
+<tr>
+<td><code>Build refused: cswinrt.exe cannot write past Windows' 259-character path limit</code></td>
+<td>The clone sits in a folder longer than about 125 characters, which puts C#/WinRT's output folder past the 210 characters its longest generated file allows (<code>RefuseCsWinRTPathPastLimit</code>). Without that check <code>cswinrt.exe</code> drops the files past the limit, or exits with code -1073740791 and no mention of the path</td>
+<td>Clone PadForge into a shorter folder, such as <code>C:\src\PadForge</code></td>
 </tr>
 <tr>
 <td>Missing WPF types</td>

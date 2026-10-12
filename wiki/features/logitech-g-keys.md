@@ -43,7 +43,7 @@ Under the checkbox is a line saying exactly which of seven situations the machin
 | *Found the G-key SDK and could not load it.* | Usually an architecture mismatch or a damaged install. |
 | *That library is not the G-key SDK this expects.* | Something else is registered under the SDK's key. |
 | *The G-key SDK refused to start. Logitech Gaming Software is usually not running.* | Start Logitech Gaming Software. |
-| *Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent.* | Do both, then press a G-key. |
+| *Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent. A G600 or G300 mouse also has to be out of on-board mode.* | Do both, take a G600 or G300 out of on-board mode, then press a G-key. |
 | *Running, {0} key events* | Working, with the count in place of `{0}`. It rises as you press keys. |
 
 The line is empty while the feature is off.

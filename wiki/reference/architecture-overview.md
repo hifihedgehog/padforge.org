@@ -162,7 +162,7 @@ PadForge.App/
       AudioBassDetector.cs            # WASAPI loopback capture + 8th-order IIR bass extraction
       InputManager.cs                 # Core partial class: fields, Start/Stop, PollingLoop, IDisposable
       InputManager.Step1.UpdateDevices.cs       # Device enumeration (SDL3 + Raw Input)
-      InputManager.Step1.UsbipVhciGuard.cs      # PnP-ancestry check that keeps PadForge's own composite USB persona out of Step 1
+      InputManager.Step1.UsbipVhciGuard.cs      # Self-readback guard: the test Step 1 runs on each device it opens (SelfVirtualSuppressions.PassOver), with the PnP-ancestry walk that keeps PadForge's own composite USB persona out
       InputManager.Step2.UpdateInputStates.cs   # Input state reading + force feedback
       InputManager.Step3.MappingSetEval.cs      # Per-VC MappingSet evaluation (rows, sources, combine modes, shift layers)
       InputManager.Step3.SteeringLockFeedback.cs # At-lock steering feedback for winding-stick / 2D steering (#94)
@@ -195,6 +195,7 @@ PadForge.App/
       MidiVirtualController.cs        # IVirtualController for MIDI: its own Windows MIDI Services port, or a picked port through WinMM
       MidiApiSelection.cs             # Picks the in-box Windows.Devices.Midi2 or the App SDK runtime, and predicts the API for the Settings card
       MidiBackend*.cs                 # IMidiBackend and its three implementations: in-box, App SDK runtime, legacy WinMM (MidiBackendLegacy)
+      MidiRuntimeSwitch.cs            # The Settings card's runtime install and uninstall as MIDI sees them: the release before the uninstaller runs, its end once the uninstaller exits, and the switch onto a runtime whose install finished late
       KeyboardMouseVirtualController.cs # IVirtualController for Win32 SendInput (KB+Mouse)
       InputExceptionEventArgs.cs      # Event args wrapping an Exception raised on the polling thread
       MirrorDsp.cs                    # Controller-audio DSP chain for the DualSense speaker/jack mirror: crossfeed, parametric EQ, limiter, AutoEq import (#347)
@@ -574,7 +575,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - **Radial / touch menus (#9 B-17)**. `Engine/Menus/` (definition model on the slot's `MappingSet`), `InputManager.MenuRuntime.cs` (per-(slot, device, menu) hover-commit runtime), `MenuEditorItem.cs` (Menus tab VM), `MenuOverlayWindow.xaml(.cs)` (click-through HUD)
 - **Mouse-gesture Custom activation (#216)**. A sixth gesture-activation session armed by a recorded cross-device input (keyboard key, gamepad button, wheel pedal) held while gesturing
 - **Switch HOME LED (#226)**. `SwitchHomeLedSetter.cs`, the third #209 Guide LED lane (see the writer list above)
-- **Nintendo virtual controllers (#215/#246)**. `VirtualControllerType.Nintendo`, a fourth HM-backed slot family. A console-family face like Xbox / PlayStation (own group, icon, Nintendo button lettering) riding the Extended raw-HID data path on a catalog profile (`switch-pro` by default, with the Switch 2 Pro's `switch2-pro-controller` also in the picker). No Customize surface: the slot always deploys the catalog profile as-is
+- **Nintendo virtual controllers (#215/#246)**. `VirtualControllerType.Nintendo`, a fourth HM-backed slot family. A console-family face like Xbox / PlayStation (own group, icon, Nintendo button lettering) riding the Extended raw-HID data path on a catalog profile (`switch-pro` by default, with the Switch 2 Pro's `switch2-pro-controller` and `switch2-pro-controller-composite` also in the picker). No Customize surface: the slot always deploys the catalog profile as-is
 - **Rumble to Audio / Bass Shakers (#236)**. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones. `RumbleAudioService` + `RumbleAudioSampleProvider` (App) render, `LfeOutputState` (Engine) packs the four voices into one long, and the poll loop's `UpdateRumbleAudioLane` publishes once per tick from the slot's `MappingSet.RumbleAudio` config. Surfaced as the per-slot "Bass Shakers" tab
 - **Controller-button SOCD (#240)**. `SlotButtonSocd.cs` extends #205's keyboard Snap Tap to gamepad and raw-HID slots: pair cleaning on the slot's final combined output right before the Step 5 submit, configured via `MappingSet.SocdMode` / `SocdPairs`
 
@@ -585,7 +586,7 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - `HMaestroVRController.cs`. The VR slot type (#49). One `HMVRController` pipe drives both SteamVR hands. Haptic pulses arrive as (hand, amplitude, duration) and fan into the slot's `Vibration` entry with a decay timer, because the rumble path latches motor speeds until someone writes zero
 - `SonyHeadsetMotionDevice.cs` / `SonyHeadsetHid.cs` / `HeadTrackerHid.cs` / `HeadTrackerMath.cs`. Sony headset head tracker (WH-1000XM5 family) over Bluetooth Classic as an Android Head Tracker HID sensor collection, surfaced as a motion-only `ISdlInputDevice` (#188). `HeadTrackerMath` synthesizes an angular rate from consecutive rotation vectors when the descriptor reports rotation but no gyro usage
 - `AtToImpulseTranslator.cs`. Adaptive-trigger blocks a game writes to a virtual DualSense, translated to Xbox impulse-trigger output when the physical pad is an Xbox One+ (#271 item 3)
-- `MidiServiceRecovery.cs` / `MidiEndpointJanitor.cs`. A `midisrv` restart, at most once every two minutes, for a hung create, a hung availability probe or a refused session, and removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death
+- `MidiServiceRecovery.cs` / `MidiEndpointJanitor.cs`. A `midisrv` restart, at most once every two minutes, for a hung create, a hung availability probe, a hung input session or connection, a hung endpoint query or legacy port listing, a release before a runtime uninstall whose worker was at work 15 s without finishing, or a refused session, and never for a hang in a classic driver, which no restart reaches, or on a PC without the MIDI service. Also removal of PadForge MIDI endpoint devnodes Windows MIDI Services stranded past their owner's death
 - `PlayStationEffectWriter.cs`. The former `SonyEffectWriter.cs`, renamed to match the PlayStation VC family naming
 
 **App `Common/`**
@@ -631,7 +632,7 @@ A mouse, keyboard or vendor row assigned to a virtual controller is an output de
 
 - `PeripheralOutputs.cs`. The hub: the link table, each row's haptic level, each lighting claim and the ruling between claims, the Set Chroma Color assertions, the backend states. Every setter is lock-free or takes only the hub's own leaf state
 - `PeripheralLinker.cs`. Vendor software presence, read from the registry, files and process names, and the pure rules that tie a row to its output paths
-- `PeripheralOutputHost.cs`. Runs with the engine: the link pass every 500 ms, claim pruning, the workers' lifetimes, and the Razer Sensa worker while its row is assigned
+- `PeripheralOutputHost.cs`. Runs with the engine: the link pass every 500 ms, claim pruning, the workers' lifetimes, and the Razer Sensa worker while its row is assigned or Identify buzzes it
 - `PeripheralOutputRow.cs`. The Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, synthetic devices with no inputs
 - `PeripheralLightingColor.cs` / `GameLightbarCapture.cs`. One device's color for one slot under the game's lightbar, and that lightbar as a DualShock 4 or DualSense virtual controller receives it
 - `PeripheralRouteText.cs`. The line the Lighting and Force Feedback tabs show: where the output goes, and why it does not show
@@ -815,7 +816,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
 | `InputManager.PeripheralRows.cs` | Step 1 | Peripheral outputs (#494), Phase 1m: the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, each open while its vendor's software is installed |
-| `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Composite-persona self-readback guard: walks a Sony or Nintendo device's PnP ancestry for the `ROOT\HIDMAESTRO_UDE` stamp so PadForge never ingests its own USB persona |
+| `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Self-readback guard, so PadForge never ingests its own virtual controller. It holds the test Step 1 runs on each device it opens (`SelfVirtualSuppressions.PassOver`). A device is passed over on an `HM-CTL-` serial, a `HIDMAESTRO` path, a HIDMaestro hardware id other than the host controller's stamp on its own node or one above it, a place under the usbip-win2 host controller below a USB device whose instance id ends in HIDMaestro's serial (`HM` and twelve hex digits), or a place under that controller with the vendor and product id of a composite persona this process has live, is creating or retired within 10 s, or of any composite profile while the launch sweep runs. An id held on that last ground alone is opened again once it lapses while its device is still in the device tree (`ReleaseLapsed`). Under a host controller that carries the `ROOT\HIDMAESTRO_UDE` stamp, the SDL and OpenXInput forks drop the HID and XUSB interfaces of all of these before Step 1, a real pad forwarded over usbip-win2 included, except a pad xboxgip serves, whose XUSB interface sits past OpenXInput's walk and keeps its slot. An Xbox One instrument that GameInput reports is listed whatever host controller it sits under, and so is what hidapi reads through libusb |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Read `CustomInputState` per device, apply FFB from `VibrationStates[]` + audio bass |
 | `InputManager.Step3.MappingSetEval.cs` | Step 3 | Evaluate the per-VC MappingSet (rows, sources, combine modes, shift layers) into OutputState |
 | `InputManager.Step3.SteeringLockFeedback.cs` | Step 3 | At-lock steering feedback for the winding-stick / 2D steering path (#94) |
@@ -965,7 +966,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 ### 12. Peripheral Outputs (PeripheralOutputHost, with the engine)
 
-`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s and runs the link pass every 500 ms, and four workers: the `PeripheralHidpp` and `PeripheralGameSense` threads and the Razer Chroma and Logitech LED SDK loops on the thread pool. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
+`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s and runs the link pass every 500 ms, and four workers: the `PeripheralHidpp` and `PeripheralGameSense` threads and the Razer Chroma and Logitech LED SDK loops on the thread pool. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
 
 ### Thread Safety Summary
 
@@ -1110,7 +1111,7 @@ Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual contro
 | **WPF-UI** | 4.3.0 | App | Fluent Design theme (Windows 11-style UI) |
 | **BouncyCastle.Cryptography** | 2.6.2 | Engine | Remote Link crypto: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (#138) |
 | **System.Security.Cryptography.ProtectedData** | 10.0.9 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
-| **SteamKit2** | 3.4.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL-2.1-only. protobuf-net and ZstdSharp.Port arrive transitively |
+| **SteamKit2** | 3.4.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only. protobuf-net and ZstdSharp.Port arrive transitively |
 
 `HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.9.0.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 

@@ -4737,7 +4737,7 @@
 <ul>
 <li><strong>HidHide Driver</strong> card: Install and Uninstall buttons.</li>
 <li><strong>HIDMaestro Driver</strong> card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.</li>
-<li><strong>Windows MIDI Services</strong> card: the API PadForge uses (<strong>Built into Windows</strong>, <strong>App SDK Runtime</strong> with the runtime's version, or <strong>Legacy MIDI API</strong>), or <strong>Not Running</strong> with the reason. <strong>Install</strong> shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. <strong>Uninstall</strong> shows while a runtime is installed. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</li>
+<li><strong>Windows MIDI Services</strong> card: the API PadForge uses (<strong>Built into Windows</strong>, <strong>App SDK Runtime</strong> with the runtime's version, or <strong>Legacy MIDI API</strong>), or <strong>Not Running</strong> with the reason: the Windows MIDI service did not respond, a MIDI driver did not respond, or the runtime's uninstaller is still running. Under <strong>Legacy MIDI API</strong> the card names the error when the API built into Windows is registered but did not start. A Windows MIDI Services API that did not start when PadForge first checked is taken later, once it starts, with nothing restarted. <strong>Install</strong> shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. <strong>Uninstall</strong> shows while a runtime is installed. See <a href="../driver-management/#windows-midi-services">Driver Management</a>.</li>
 <li><strong>SteamVR</strong> card: needed only for <a href="../vr-controllers/">VR slots</a>. It describes itself as <em>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</em></li>
 </ul>
 <p>PadForge is already elevated from its startup UAC prompt, so the Install / Uninstall buttons run their installer in the same elevated session without a second prompt.</p>
@@ -4860,11 +4860,11 @@
 </tr>
 <tr>
 <td><strong>Velocity</strong></td>
-<td>Note On velocity (0-127). Higher = louder.</td>
+<td>Note On velocity (1-127). Higher = louder.</td>
 </tr>
 </tbody>
 </table>
-<p>PadForge creates one virtual MIDI device per slot. No port to pick. Different slots can target different channels.</p>
+<p>Under Windows MIDI Services, PadForge creates one virtual MIDI device per slot, with no port to pick. Under the legacy MIDI API the bar adds <strong>Output Port</strong>, and the slot sends to the existing port picked there. Different slots can target different channels.</p>
 <hr />
 <h2 id="community-configs">Community Configs<a class="headerlink" href="#community-configs" title="Permanent link">&para;</a></h2>
 <p><img alt="The Community Configs card in Settings" src="../../images/settings-community-configs.png" /></p>

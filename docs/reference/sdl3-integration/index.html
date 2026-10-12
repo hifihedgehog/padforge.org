@@ -6135,58 +6135,66 @@
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    |
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    Build HashSet&lt;uint&gt; currentInstanceIds (used by Phase 2 to detect disconnects)
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    |
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    For each instanceId in joystickIds:
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    |       (The SDL3 fork&#39;s filter drops HIDMaestro virtuals before
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    |        SDL_GetJoysticks returns. The self-readback guard in step 2b
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    |        catches one that slips past.)
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    |
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    |   1. Is it in _openedSdlInstanceIds?
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    |       YES -&gt; Skip (already open and tracked)
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    |      Is it in _suppressedSelfVirtualIds?
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    |       YES -&gt; Skip (rejected as PadForge&#39;s own virtual on an earlier pass)
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    |
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    |   2. new SdlDeviceWrapper().Open(instanceId)
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>    |       |
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    |       Open() internally:
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    |       |   SDL_IsGamepad(instanceId)?
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    |       |   |-- YES: SDL_OpenGamepad(instanceId)
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    |       |   |        Joystick = SDL_GetGamepadJoystick(GameController)
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    |       |   |-- NO:  SDL_OpenJoystick(instanceId)
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    _suppressedSelfVirtualIds.ReleaseLapsed(currentInstanceIds, now)
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    |       (Forgets the IDs rejected on USB/IP ancestry alone that SDL no
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    |        longer lists, and the ones no persona&#39;s scope covers any more
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    |        while the device is still in the device tree. The loop below
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    |        opens the second kind again.)
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    |
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    For each instanceId in joystickIds:
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    |       (The SDL3 fork&#39;s filter drops HIDMaestro virtuals before
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    |        SDL_GetJoysticks returns. The self-readback guard in step 2b
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    |        catches one that slips past.)
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    |
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>    |   1. Is it in _openedSdlInstanceIds?
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    |       YES -&gt; Skip (already open and tracked)
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    |      Is it in _suppressedSelfVirtualIds?
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    |       YES -&gt; Skip (rejected as PadForge&#39;s own virtual on an earlier pass)
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    |
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    |   2. new SdlDeviceWrapper().Open(instanceId)
 <a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    |       |
-<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    |       |   Populate: Name, VID, PID, Path, Serial, Type
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    |       |   RawButtonCount = SDL_GetNumJoystickButtons(Joystick)
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    |       |   RawAxisCount   = SDL_GetNumJoystickAxes(Joystick)
-<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    |       |   If gamepad: NumAxes=6, NumButtons=22 (0-10 standard + 11-21 SDL extended), NumHats=1
-<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    |       |               ParseMappedButtonIndices(GameController)
-<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    |       |               Detect v4 capabilities (rumble triggers, aux accel,
-<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>    |       |               touchpads, Wii IR / Joy-Con cameras, extra generic axes)
-<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>    |       |   Else:       NumAxes/Buttons/Hats from raw joystick
-<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    |       |   HID name fallback if Name is raw VID/PID
-<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    |       |   Check rumble via SDL properties system
-<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    |       |   Enable gyro/accel sensors (gamepad only)
-<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    |       |   OpenHaptic() for force feedback
-<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    |       |   Build ProductGuid + InstanceGuid
-<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    |       |
-<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    |       Open() failed? -&gt; Dispose wrapper, continue to next
-<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    |
-<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    |   2b. Self-readback guard: serial starts &quot;HM-CTL-&quot;, path contains
-<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    |       &quot;HIDMAESTRO&quot;, or a Sony or Nintendo device whose parent chain reaches the
-<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    |       usbip-win2 host controller (a composite persona)?
-<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    |       YES -&gt; Dispose wrapper, add to _suppressedSelfVirtualIds, continue
-<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    |
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid,
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>    |                             currentInstanceIds, wrapper.SerialNumber)
-<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    |       |   Same unit re-identifying inside the disconnect debounce? -&gt; its own row
-<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>    |       |   Exact match by InstanceGuid? -&gt; return existing
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>    |       |   Fallback match by ProductGuid (offline device)? -&gt; migrate GUID
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>    |       |   No match? -&gt; create new UserDevice
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>    |       If the row&#39;s InstanceGuid differs (a same-serial twin),
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>    |       wrapper.OverrideInstanceGuid(ud.InstanceGuid)
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    |
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>    |   4. ud.LoadFromSdlDevice(wrapper)  -- populates UserDevice runtime state
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>    |      ud.IsOnline = true
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>    |      _openedSdlInstanceIds[wrapper.SdlInstanceId] = wrapper
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    |      changed = true
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    |       Open() internally:
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    |       |   SDL_IsGamepad(instanceId)?
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    |       |   |-- YES: SDL_OpenGamepad(instanceId)
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    |       |   |        Joystick = SDL_GetGamepadJoystick(GameController)
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    |       |   |-- NO:  SDL_OpenJoystick(instanceId)
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    |       |
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>    |       |   Populate: Name, VID, PID, Path, Serial, Type
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>    |       |   RawButtonCount = SDL_GetNumJoystickButtons(Joystick)
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    |       |   RawAxisCount   = SDL_GetNumJoystickAxes(Joystick)
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    |       |   If gamepad: NumAxes=6, NumButtons=22 (0-10 standard + 11-21 SDL extended), NumHats=1
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    |       |               ParseMappedButtonIndices(GameController)
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    |       |               Detect v4 capabilities (rumble triggers, aux accel,
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    |       |               touchpads, Wii IR / Joy-Con cameras, extra generic axes)
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    |       |   Else:       NumAxes/Buttons/Hats from raw joystick
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    |       |   HID name fallback if Name is raw VID/PID
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    |       |   Check rumble via SDL properties system
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    |       |   Enable gyro/accel sensors (gamepad only)
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    |       |   OpenHaptic() for force feedback
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    |       |   Build ProductGuid + InstanceGuid
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    |       |
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    |       Open() failed? -&gt; Dispose wrapper, continue to next
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    |
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>    |   2b. Self-readback guard (_suppressedSelfVirtualIds.PassOver): serial starts
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    |       &quot;HM-CTL-&quot;, path contains &quot;HIDMAESTRO&quot;, or the parent chain reaches the
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>    |       usbip-win2 host controller and either passes a USB device named by
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>    |       HIDMaestro&#39;s own serial or the device has the IDs of a composite
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>    |       persona in scope?
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>    |       YES -&gt; PassOver logs and records the ID. Dispose wrapper, continue
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>    |
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid,
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>    |                             currentInstanceIds, wrapper.SerialNumber)
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>    |       |   Same unit re-identifying inside the disconnect debounce? -&gt; its own row
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>    |       |   Exact match by InstanceGuid? -&gt; return existing
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    |       |   Fallback match by ProductGuid (offline device)? -&gt; migrate GUID
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>    |       |   No match? -&gt; create new UserDevice
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>    |       If the row&#39;s InstanceGuid differs (a same-serial twin),
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>    |       wrapper.OverrideInstanceGuid(ud.InstanceGuid)
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>    |
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>    |   4. ud.LoadFromSdlDevice(wrapper)  -- populates UserDevice runtime state
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>    |      ud.IsOnline = true
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>    |      _openedSdlInstanceIds[wrapper.SdlInstanceId] = wrapper
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>    |      changed = true
 </code></pre></div>
 <p><strong>Why instance IDs, not GUIDs:</strong> <code>_openedSdlInstanceIds</code> uses SDL instance IDs (<code>uint</code>) because serial-based GUIDs (Bluetooth devices) are unavailable until the device is opened. Instance IDs are assigned at connection time and unique per session.</p>
 <h3 id="phase-1b1c-keyboard-and-mouse-enumeration">Phase 1b/1c: Keyboard and Mouse Enumeration<a class="headerlink" href="#phase-1b1c-keyboard-and-mouse-enumeration" title="Permanent link">&para;</a></h3>
@@ -6229,7 +6237,7 @@
 <p>HIDMaestro virtual controllers (Xbox / PlayStation / Nintendo / Extended) appear as real input devices to SDL3 by default. The Nintendo family is the virtual Switch Pro added in 4.1.0 (#215, #246) and rides the same filter as the other three. Without filtering, SDL would enumerate PadForge's own outputs as inputs, the engine would map them back to themselves, and a feedback loop would create controllers exponentially.</p>
 <p>PadForge filters them at the SDL3 fork level. The fork's patched enumeration walks each device's PnP parent chain looking for <code>HIDMAESTRO</code> in the Hardware ID list, with a substring fast path against the interface symlink before falling back to the parent walk. The walk goes five devnodes deep (<code>HM_FILTER_MAX_DEPTH</code>), far enough to reach the emulated host controller HIDMaestro stamps for its composite USB personas. Any device that matches is dropped before <code>SDL_GetJoysticks</code> returns. The hidapi, DirectInput and Raw Input backends all run this check.</p>
 <p>The previous in-engine filter (<code>IsHIDMaestroVirtualDevice</code> in <code>InputManager.Step1</code>) is gone. The engine no longer needs the per-cycle classification by device path, VID/PID, or active/expected count. The fork-side filter is upstream of every consumer (engine, <code>SDL_OpenJoystick</code>, <code>SDL_CloseJoystick</code>), so the rumble-killing close path that the in-engine filter used to guard against can't fire on HM devices.</p>
-<p>One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after <code>Open</code>: a serial starting <code>HM-CTL-</code>, a path containing <code>HIDMAESTRO</code>, or a Sony or Nintendo device whose parent chain reaches the usbip-win2 host controller (<code>IsOnUsbipVhci</code>, the route composite personas take) marks PadForge's own virtual. The wrapper is disposed and its instance ID goes into <code>_suppressedSelfVirtualIds</code>, so later passes skip it without reopening it.</p>
+<p>One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after <code>Open</code> (<code>SelfVirtualSuppressions.PassOver</code>). A serial starting <code>HM-CTL-</code> or a path containing <code>HIDMAESTRO</code> marks PadForge's own virtual. A HIDMaestro hardware id other than the host controller's stamp, on the device's node or one above it, marks it too, for good (<code>HidMaestroAncestry.Classify</code>). A parent chain that reaches the usbip-win2 host controller (the route composite personas take) marks it too, for a device below a USB device named by HIDMaestro's own serial (<code>HM</code> and twelve hex digits), and for one with the vendor and product ID of a composite persona PadForge has live, is creating or disposed within 10 seconds, or of any composite profile while the launch sweep runs (<code>ChecksUsbipAncestry</code>). The wrapper is disposed and its instance ID goes into <code>_suppressedSelfVirtualIds</code>, so later passes skip it without reopening it. An ID rejected on a persona's IDs alone leaves the set once no persona of those IDs is in scope, while its device is still in the device tree (<code>ReleaseLapsed</code>), and that pass opens it again.</p>
 <p>For the SDL3 fork patches, see PadForge's SDL3 fork branch <code>feat/hidmaestro-filter</code>. The OpenXInput fork carries its own complementary filter for the XInput API surface, documented in <a href="../hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
 <hr />
 <h2 id="sdldevicewrapper-class">SdlDeviceWrapper Class<a class="headerlink" href="#sdldevicewrapper-class" title="Permanent link">&para;</a></h2>
@@ -7648,8 +7656,8 @@
 <p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus through the extension register (<code>0xA600FE</code> before activation, <code>0xA400FE</code> once a mode is set, <code>SDL_hidapi_wii.c:574</code>, <code>:638</code>, <code>:1991</code>) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (<code>:1622-1650</code>). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (<code>eee6964ab5</code>, <code>a7c6f5c79f</code>, <code>cb8b58d4a6</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above).</p>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:864</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:54</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1391</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes, and only when a Wii pairing landed (<code>dialog.PairedWii</code>, <code>MainWindow.xaml.cs:944-945</code>), because the rescan drops every connected Wii Remote.</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> before <code>SDL_Init()</code> (<code>InputManager.cs:900</code>), next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:54</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1427</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes, and only when a Wii pairing landed (<code>dialog.PairedWii</code>, <code>MainWindow.xaml.cs:926-927</code>), because the rescan drops every connected Wii Remote.</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git

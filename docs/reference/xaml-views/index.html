@@ -6878,7 +6878,7 @@
 </tr>
 </tbody>
 </table>
-<p>The method counts each type from <code>Pads[].OutputType</code> and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. <code>Main_Nintendo_Max_Format</code> = "Nintendo (max {0})". MIDI additionally requires a Windows MIDI Services API (<code>SettingsViewModel.IsMidiAvailable</code>, the Settings card's cached answer) and VR requires SteamVR (<code>HMaestroVRController.IsAvailable()</code>). <code>HasAnyControllerTypeCapacity()</code> is a separate check: it tallies created slots from <code>SettingsManager.SlotCreated</code> and returns true while the total stays under 16 (<code>MaxPads</code>). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.</p>
+<p>The method counts each type from <code>Pads[].OutputType</code> and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. <code>Main_Nintendo_Max_Format</code> = "Nintendo (max {0})". MIDI additionally requires a MIDI API that started, Windows MIDI Services or the legacy one (<code>SettingsViewModel.IsMidiAvailable</code>, the Settings card's cached answer) and VR requires SteamVR (<code>HMaestroVRController.IsAvailable()</code>). <code>HasAnyControllerTypeCapacity()</code> is a separate check: it tallies created slots from <code>SettingsManager.SlotCreated</code> and returns true while the total stays under 16 (<code>MaxPads</code>). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.</p>
 <h3 id="status-bar">Status Bar<a class="headerlink" href="#status-bar" title="Permanent link">&para;</a></h3>
 <p>Bottom <code>Border</code> (<code>StatusBarBorder</code>), five columns:
 1. <strong>Status text</strong>. <code>StatusText</code> binding (<code>StatusMessageText</code>), trimmed with <code>CharacterEllipsis</code>. A #175 decay sweep fades it out before clearing (code-behind <code>BeginAnimation</code>).
@@ -7324,7 +7324,7 @@
 </tbody>
 </table>
 <h3 id="type-switch-buttons">Type Switch Buttons<a class="headerlink" href="#type-switch-buttons" title="Permanent link">&para;</a></h3>
-<p>7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom <code>TypeSwitchButton</code> style, seated on a recessed <code>SegTrackBrush</code> segment. Transparent and borderless at rest, with a rounded subtle-fill background on hover. The active type fills with <code>EmberSegGradient</code> and a glow (steel <code>SteelRaisedBrush</code> on a card with no mapped devices). Inactive types use the tertiary text color. Unavailable types (missing prerequisite, e.g. MIDI without Windows MIDI Services, VR without SteamVR) show <code>Cursor.No</code> and a tooltip explaining the requirement. Clicks are guarded in code-behind. The power button also uses the <code>TypeSwitchButton</code> style for visual consistency.</p>
+<p>7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom <code>TypeSwitchButton</code> style, seated on a recessed <code>SegTrackBrush</code> segment. Transparent and borderless at rest, with a rounded subtle-fill background on hover. The active type fills with <code>EmberSegGradient</code> and a glow (steel <code>SteelRaisedBrush</code> on a card with no mapped devices). Inactive types use the tertiary text color. Unavailable types (missing prerequisite, e.g. MIDI while no MIDI API runs, VR without SteamVR) show <code>Cursor.No</code> and a tooltip that says why (<code>Main_MIDI_NotRunning</code>, <code>Main_VR_RequiresSteamVR</code>). Clicks are guarded in code-behind. The power button also uses the <code>TypeSwitchButton</code> style for visual consistency.</p>
 <h3 id="ui-automation">UI Automation<a class="headerlink" href="#ui-automation" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7933,7 +7933,7 @@
 <tr>
 <td><code>MidiOutputPortBox_SelectionChanged</code></td>
 <td>ComboBox.SelectionChanged</td>
-<td>Writes the pick to <code>MidiConfig.OutputPort</code>, empty for <strong>None</strong></td>
+<td>Writes the pick through <code>MidiConfig.ChooseOutputPort</code>, empty for <strong>None</strong>, which also marks it the profile's choice</td>
 </tr>
 <tr>
 <td><code>ResetExtendedSetting_Click</code> / <code>ResetMidiSetting_Click</code></td>
@@ -8430,34 +8430,35 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>      ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
 <a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      ├─ &quot;Fold Trigger Rumble into Main Motors&quot; CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      ├─ &quot;Swap Left and Right Motors&quot; CheckBox (SwapMotors)
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      ├─ &quot;Motor Activity&quot; header
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game&#39;s request)
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>      │   over DeviceLeftMotorDisplay (the selected device&#39;s output after its settings)
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      ├─ &quot;Steering Angle Rumble&quot; card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      │   strength 0-100, deadzone 0-25, each with a reset, plus Reset All)
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
-<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
-<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
-<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      ├─ Audio Bass Rumble section
-<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
-<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
-<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
-<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
-<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
-<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
-<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
-<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
-<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
-<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>          │   and activator-mode ComboBox, each with its own reset
-<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      ├─ FfbSwapMotorsRow: &quot;Swap Left and Right Motors&quot; CheckBox (SwapMotors), collapsed for a
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      │   haptic mouse, keyboard or the Razer Sensa row
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>      ├─ &quot;Motor Activity&quot; header
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game&#39;s request)
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      │   over DeviceLeftMotorDisplay (the selected device&#39;s output after its settings)
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      ├─ &quot;Steering Angle Rumble&quot; card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      │   strength 0-100, deadzone 0-25, each with a reset, plus Reset All)
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      ├─ Audio Bass Rumble section
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>          │   and activator-mode ComboBox, each with its own reset
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
-<p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine.</p>
+<p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>
 <h3 id="lighting-tab-tab-7-peripheral-rows-494">Lighting Tab (Tab 7). Peripheral Rows (#494)<a class="headerlink" href="#lighting-tab-tab-7-peripheral-rows-494" title="Permanent link">&para;</a></h3>
 <p>A mouse, keyboard or vendor lighting row assigned to the slot gets the Lighting tab a DualSense gets, with the same modes. <code>SyncTabVisibility()</code> sets <code>hasPeripheralLighting</code> when the selected device has no lightbar and a lighting path links it (<code>PeripheralOutputs.HasLighting</code>) or its record says it has one (<code>UserDevice.HasPeripheralLighting</code>), so the tab stays up while the device sleeps.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>StackPanel
@@ -8475,7 +8476,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │    the DualShock 4 / DualSense art, collapses for these rows)
 <a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 </code></pre></div>
-<p><code>PeripheralLightingRoute</code> is <code>PeripheralRouteText.Lighting(device, PadIndex, lightsHere)</code> (<code>PeripheralRouteText.cs</code> line 108), where <code>lightsHere</code> is true for a vendor row and otherwise follows the switch. Its sentence comes from the <code>Pad_Lighting_Route*</code> strings:</p>
+<p><code>PeripheralLightingRoute</code> is <code>PeripheralRouteText.Lighting(device, PadIndex, lightsHere)</code> (<code>PeripheralRouteText.cs</code> line 134), where <code>lightsHere</code> is true for a vendor row and otherwise follows the switch, in both cases only on a slot that is live (<code>PeripheralOutputs.SlotLive</code>). The line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>). Its sentence comes from the <code>Pad_Lighting_Route*</code> strings:</p>
 <table>
 <thead>
 <tr>
@@ -8502,7 +8503,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>RouteCannotLight</code></td>
-<td>The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads <code>Common_NotAvailableOnArm64</code>)</td>
+<td>The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads <code>Common_NotAvailableOnArm64</code>). While the engine will not load, the LIGHTSYNC row reads it on every virtual controller it is on, one that is gone included, ahead of <code>RouteOtherControllerOnly</code></td>
 </tr>
 <tr>
 <td><code>RouteShared</code></td>
@@ -8514,7 +8515,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>RouteOtherController</code> / <code>RouteOtherControllerOnly</code></td>
-<td>The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The <code>Only</code> form shows while this controller's switch is off</td>
+<td>The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The <code>Only</code> form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the <code>Only</code> form with the number of the controller that lights it elsewhere, and nothing while its software is not answering</td>
 </tr>
 <tr>
 <td><code>RouteOtherRow</code> / <code>RouteOtherRowOnly</code></td>
@@ -8522,11 +8523,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>RouteVendorRow</code> / <code>RouteVendorRowWaiting</code></td>
-<td>A vendor row's own line: what its software lights that no assigned device claims, with examples (<code>Pad_Lighting_VendorRowExamples_*</code>), or that the software is not answering yet</td>
+<td>A vendor row's own line on a live slot: what its software lights that no assigned device claims, with examples (<code>Pad_Lighting_VendorRowExamples_*</code>), or that the software is not answering yet</td>
 </tr>
 </tbody>
 </table>
-<p>With the switch off, the line names only who else lights the device, never a route of its own. <code>SyncTabVisibility()</code> runs again on <code>PeripheralOutputs</code> changes (<code>OnPeripheralOutputsChanged</code>), when the <code>DeviceConfig</code> anchor swaps to another device's config, and when <code>PeripheralLightingEnabled</code> changes, so the line follows the switch even for a device that is offline.</p>
+<p>With the switch off, or on a slot that is not live, the line names only who else lights the device, never a route of its own. <code>SyncTabVisibility()</code> runs again on <code>PeripheralOutputs</code> changes (<code>OnPeripheralOutputsChanged</code>), when the <code>DeviceConfig</code> anchor swaps to another device's config, and when <code>PeripheralLightingEnabled</code> changes, so the line follows the switch even for a device that is offline.</p>
 <h3 id="gyro-tab-tab-8-detailed">Gyro Tab (Tab 8). Detailed<a class="headerlink" href="#gyro-tab-tab-8-detailed" title="Permanent link">&para;</a></h3>
 <p>The tab opens on the E7AD page header (<code>Pad_Gyro_Header</code> + <code>Pad_Gyro_Subtitle</code>), then ten <code>CardBorder</code> cards in this order:</p>
 <table>
@@ -8806,7 +8807,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td>Velocity TextBox</td>
 <td><code>MidiConfig.Velocity</code></td>
-<td>0-127</td>
+<td>1-127</td>
 </tr>
 <tr>
 <td>Output Port ComboBox (<code>MidiOutputPortBox</code>)</td>
@@ -8816,9 +8817,9 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tbody>
 </table>
 <p>All fields have tooltips. <code>_syncingMidiConfig</code> guard prevents recursive updates. When CC/Note counts or start numbers change, <code>vm.RebuildMappings()</code> regenerates mapping rows. A running slot's controller takes every change on its next poll, on the same port (<code>MidiVirtualController.ApplyLayout</code>).</p>
-<p>The Output Port group shows only while <code>PadViewModel.IsLegacyMidi</code> is true, since the Windows MIDI Services APIs create the slot's own port. <code>SyncMidiOutputPortBox</code> fills it: <strong>None</strong> first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. <code>_syncingMidiPort</code> keeps the refill from writing back a pick. Its reset button clears the pick.</p>
+<p>The Output Port group shows only while <code>PadViewModel.IsLegacyMidi</code> is true, since the Windows MIDI Services APIs create the slot's own port. <code>SyncMidiOutputPortBox</code> fills it: <strong>None</strong> first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. <code>_syncingMidiPort</code> keeps the refill from writing back a pick. Its reset button picks <strong>None</strong>.</p>
 <h3 id="copy-from-dialog">Copy From Dialog<a class="headerlink" href="#copy-from-dialog" title="Permanent link">&para;</a></h3>
-<p>Opens <code>CopyFromDialog</code>. Picking a source slot copies the whole mapping table plus every assigned device's tuning (deadzones, sensitivity, FFB, impulse triggers, adaptive triggers, lighting, gyro, TouchpadSettings) into the target slot. Each source device matches a target device by <code>InstanceGuid</code> first, then <code>ProductGuid</code> as a fallback for the same controller model on a different physical unit. Target devices without a source-side match are left alone. The copied <code>MappingSet</code> also carries the slot's menus, Bass Shakers, SOCD, and Keep Awake settings, and <code>CopySlotConfigsAcrossSlots</code> clones the per-device lighting configs, plus the Extended layout, MIDI layout, or Keyboard + Mouse config when both slots share that type.</p>
+<p>Opens <code>CopyFromDialog</code>. Picking a source slot copies the whole mapping table plus every assigned device's tuning (deadzones, sensitivity, FFB, impulse triggers, adaptive triggers, lighting, gyro, TouchpadSettings) into the target slot. Each source device matches a target device by <code>InstanceGuid</code> first, then <code>ProductGuid</code> as a fallback for the same controller model on a different physical unit. A target device with no source-side match keeps its tuning. The copied <code>MappingSet</code> also carries the slot's menus, Bass Shakers, SOCD, and Keep Awake settings, and <code>CopySlotConfigsAcrossSlots</code> clones the per-device lighting configs, plus the Extended layout, MIDI layout, or Keyboard + Mouse config when both slots share that type. In that clone, a target device the source slot does not have takes a stand-in source device's config and keeps its own <strong>Control This Device’s Lighting</strong> switch (#494).</p>
 <hr />
 <h2 id="devicespage">DevicesPage<a class="headerlink" href="#devicespage" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>DevicesPage.xaml</code>, <code>DevicesPage.xaml.cs</code></p>
@@ -9058,7 +9059,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>ShowInputModeSection</code></td>
-<td>Input Mode section visibility (<code>IsGamepad &amp;&amp; !IsInternalVirtual</code>)</td>
+<td>Input Mode section visibility (<code>_forceRawJoystickMode \|\| (IsGamepad &amp;&amp; !IsInternalVirtual)</code>: a row whose flag is on shows the section whatever its type, so it can be turned off)</td>
 </tr>
 <tr>
 <td><code>ShowInputHidingSection</code></td>
@@ -10099,20 +10100,20 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>      ├─ &quot;Overview&quot; section header (E7C3 icon)
 <a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>      ├─ Description card (wrapping text, line height 22)
 <a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>      ├─ &quot;Built With&quot; section header (E74C checkmark icon)
-<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>      ├─ Technologies card (Grid, 164px label + description, 67 rows in alphabetical
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>      ├─ Technologies card (Grid, 164px label + description, 132 rows in alphabetical
 <a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>      │   order, case-insensitive, leading symbols ignored):
-<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>      │   ├─ Bouncy Castle
-<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>      │   ├─ bs2b
-<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>      │   ├─ BthPS3
-<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>      │   ├─ Colore
-<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>      │   ├─ Concentus
-<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>      │   └─ ...62 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>      │   ├─ 3doverstock
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>      │   ├─ AntiMicroX
+<a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>      │   ├─ Arcade I/O references
+<a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>      │   ├─ AudioEndPointLibrary
+<a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>      │   ├─ AutoEq
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>      │   └─ ...126 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
 <a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>      │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
 <a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>      │       CLAPACK row, and others)
 <a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>      ├─ &quot;License&quot; section header (E8D7 icon)
 <a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>      └─ License card (12px wrapping text, secondary brush)
 </code></pre></div>
-<p>The rows sort by label, ignoring case and a leading symbol, so <code>.NET 10</code> sits between nefcon and nipplejs and <code>$Q Recognizer</code> between protobuf-net and QR-Code-generator. <code>Grid.Row</code> runs 0 (Bouncy Castle) through 66 (ZstdSharp). Row 27, "Kaldi, OpenFst, OpenBLAS and CLAPACK" (<code>About_Kaldi</code> / <code>About_KaldiDesc</code>), credits the speech decoder, transducer library, and linear algebra inside <code>libvosk.dll</code>. A new row takes its alphabetical place, and every <code>Grid.Row</code> after it moves down one.</p>
+<p>The rows sort by label, ignoring case and a leading symbol, so <code>.NET 10</code> sits between nefcon and Nintendo_Switch_Reverse_Engineering and <code>$Q Recognizer</code> between psmoveapi and QR-Code-generator. <code>Grid.Row</code> runs 0 (3doverstock) through 130 (ZstdSharp). Row 59, "Kaldi, OpenFst, OpenBLAS and CLAPACK" (<code>About_Kaldi</code> / <code>About_KaldiDesc</code>), credits the speech decoder, transducer library, and linear algebra inside <code>libvosk.dll</code>. A new row takes its alphabetical place, and every <code>Grid.Row</code> after it moves down one.</p>
 <h3 id="code-behind_1">Code-Behind<a class="headerlink" href="#code-behind_1" title="Permanent link">&para;</a></h3>
 <p>Constructor only. All text from localized string bindings.</p>
 <hr />

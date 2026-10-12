@@ -219,7 +219,7 @@ On a DualShock 4 or DualSense virtual controller, the game's lightbar wins for 1
 
 Battery mode reads a Logitech device's charge over HID++, whichever path lights it. Razer and SteelSeries devices and the vendor rows report no charge to PadForge, so Battery holds them at the Full Battery color.
 
-A line above the mode card says where the colors go, such as *Colors go through Razer Synapse.* When the colors do not show, it says why: the vendor's software is not running, a Logitech device has not answered yet, another virtual controller or another row of the same device sets the color, another device or a vendor row sets it for every device of its kind, or the Logitech LED engine on this PC cannot light that kind of device.
+A line above the mode card says where the colors go, such as *Colors go through Razer Synapse.* When the colors do not show, it says why: the vendor's software is not running, a Logitech device has not answered yet, another virtual controller or another row of the same device sets the color, another device or a vendor row sets it for every device of its kind, or the Logitech LED engine on this PC cannot light that kind of device. The line is empty while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, it does not say where the colors go.
 
 Earlier versions mirrored a game's lightbar to Razer Chroma and Logitech LIGHTSYNC from two Dashboard toggles. A toggle that was on now assigns its row to the first DualSense or DualShock 4 virtual controller, if there is one.
 

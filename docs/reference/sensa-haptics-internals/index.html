@@ -3754,7 +3754,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputHost.cs</code></td>
-<td><code>SensaLifecycle</code>: the worker runs while the row is assigned</td>
+<td><code>SensaLifecycle</code>: the worker runs while the row is assigned or Identify buzzes it</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Peripherals/PeripheralOutputs.cs</code></td>
@@ -3796,7 +3796,7 @@
 <p>The two DLLs are vendored from that repository's <code>Runtime/Plugins/x64</code>, the same pair every Unity title embedding the SDK redistributes. They ship unmodified inside the executable under the Wyvrn EULA (see the README's third-party section). The csproj includes them as <code>Content</code> with <code>Link</code> so they land beside the executable, conditioned on the files existing, and the service P/Invokes them lazily so a missing pair degrades to a diag line.</p>
 <hr />
 <h2 id="the-razer-sensa-row">The Razer Sensa row<a class="headerlink" href="#the-razer-sensa-row" title="Permanent link">&para;</a></h2>
-<p>The engine targets body parts, never one device, so one row stands for every Sensa HD device at once. <code>PeripheralOutputRow</code> (<code>PeripheralOutputRow.cs</code> line 44) with kind <code>RazerSensa</code> is a device with no inputs: name Razer Sensa, path <code>razersensa://local</code>, vendor ID <code>0x5046</code>, product ID <code>0x5345</code>, device type <code>PeripheralHaptics</code>, and an id hashed from <code>pfrazersensa</code> (<code>PeripheralOutputRow.IdentityFor</code> (<code>PeripheralOutputRow.cs</code> line 91)), so an assignment of it survives across sessions.</p>
+<p>The engine targets body parts, never one device, so one row stands for every Sensa HD device at once. <code>PeripheralOutputRow</code> (<code>PeripheralOutputRow.cs</code> line 44) with kind <code>RazerSensa</code> is a device with no inputs: name Razer Sensa, path <code>razersensa://local</code>, vendor ID <code>0x5046</code>, product ID <code>0x5345</code>, device type <code>PeripheralHaptics</code>, and an id hashed from <code>pfrazersensa</code> (<code>PeripheralOutputRow.IdentityFor</code> (<code>PeripheralOutputRow.cs</code> line 110)), so an assignment of it survives across sessions.</p>
 <p>Step 1's phase 1m opens the row while <code>InputManager.PeripheralRowWanted</code> (<code>InputManager.PeripheralRows.cs</code> line 20) holds: Synapse's Chroma runtime is installed and the process is x64 (<code>PlatformSupport.SensaAvailable</code>). <code>PeripheralLinker.Build</code> (<code>PeripheralLinker.cs</code> line 149) gives it the one <code>Interhaptics</code> path, <code>sensa</code>, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback tab a gamepad gets, with the controller's rumble reaching it through its own settings.</p>
 <hr />
 <h2 id="bindings">Bindings<a class="headerlink" href="#bindings" title="Permanent link">&para;</a></h2>
@@ -3891,7 +3891,7 @@
 </code></pre></div>
 <hr />
 <h2 id="call-order">Call order<a class="headerlink" href="#call-order" title="Permanent link">&para;</a></h2>
-<p>The worker (<code>SensaHapticsService.Worker</code> (<code>SensaHapticsService.cs</code> line 218)) follows the Unity integration's <code>HapticDeviceManager</code> and <code>HAR.PlayParametricHapticEffect</code>:</p>
+<p>The worker (<code>SensaHapticsService.Worker</code> (<code>SensaHapticsService.cs</code> line 269)) follows the Unity integration's <code>HapticDeviceManager</code> and <code>HAR.PlayParametricHapticEffect</code>:</p>
 <table>
 <thead>
 <tr>
@@ -3933,7 +3933,7 @@
 <p>On success the worker reports <code>Active</code>. The provider stays up for the life of the worker. There is no liveness probe against Synapse after that.</p>
 <hr />
 <h2 id="worker-lifecycle">Worker lifecycle<a class="headerlink" href="#worker-lifecycle" title="Permanent link">&para;</a></h2>
-<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>SensaHapticsService.Start</code> (<code>SensaHapticsService.cs</code> line 192) is a no-op while <code>_thread</code> is set. In a process that cannot load the engine (<code>PlatformSupport.SensaAvailable</code> is true only for x64), <code>Start</code> reports <code>Unsupported</code> on the caller's thread and starts no worker. <code>SensaHapticsService.Stop</code> (<code>SensaHapticsService.cs</code> line 205) sets <code>_stop</code>, joins for 3000 ms, and nulls <code>_thread</code> regardless, so a worker still inside <code>ProviderInit</code> can outlive its service.</p>
+<p>The worker is a dedicated background <code>Thread</code> named <code>SensaHaptics</code>, not a task. <code>SensaHapticsService.Start</code> (<code>SensaHapticsService.cs</code> line 225) is a no-op while <code>_thread</code> is set. In a process that cannot load the engine (<code>PlatformSupport.SensaAvailable</code> is true only for x64), <code>Start</code> reports <code>Unsupported</code> on the caller's thread and starts no worker. <code>SensaHapticsService.Stop</code> (<code>SensaHapticsService.cs</code> line 239) sets the stop flag of that <code>Start</code>'s own <code>WorkerRun</code>, joins for <code>StopJoinMs</code> (3000), and drops the thread and the run regardless, so a worker still inside <code>ProviderInit</code> can outlive its service. Each <code>Start</code> makes its own <code>WorkerRun</code>, so a <code>Start</code> that follows a <code>Stop</code> whose join gave up leaves the old worker stopped.</p>
 <p>That outliving worker is the predecessor-join rule. Its <code>finally</code> stops the engine's events, cleans the provider and calls <code>Har.Quit</code>, and if it ran under the next instance's engine it would tear that engine down. So every worker's first act is:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">var</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Interlocked</span><span class="p">.</span><span class="n">Exchange</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">s_lastWorker</span><span class="p">,</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="p">);</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="n">CurrentThread</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">prev</span><span class="p">.</span><span class="n">IsAlive</span>
@@ -3946,25 +3946,25 @@
 <a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">Volatile</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="k">ref</span><span class="w"> </span><span class="n">_engineStarted</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
 </code></pre></div>
-<p>The predecessor's teardown lands before the successor inits, never after. <code>SensaHapticsService.s_lastWorker</code> (<code>SensaHapticsService.cs</code> line 119) is static because the engine it protects is process-wide.</p>
+<p>The predecessor's teardown lands before the successor inits, never after. <code>SensaHapticsService.s_lastWorker</code> (<code>SensaHapticsService.cs</code> line 120) is static because the engine it protects is process-wide.</p>
 <p>The join is bounded at 10 seconds (<code>DefaultPredecessorJoinMs</code>). That is long past any bring-up the provider completes and short enough that a wedged one costs a single wait. On the deadline the successor hands the slot back to the straggler and quits without starting its engine, because starting over a live predecessor is the exact handoff fault the join exists to prevent: that predecessor's <code>Har.Quit</code> would tear the engine down underneath it. An unbounded join blocked every later worker and leaked one thread per start.</p>
 <p><code>SensaHapticsTests.Service_NextWorkerWaitsForAStragglingPredecessor</code> holds a worker in <code>BeforeProviderInit</code>, stops it, starts a second service, and asserts the second worker waits for the first to exit. <code>Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever</code> keeps the first worker parked past a shortened deadline and asserts the second quits without starting its engine or making a provider attempt, and reports <code>Stopped</code>.</p>
 <p>The <code>finally</code> runs on every exit path, faults included (<code>SENSA worker fault: {type}</code>), and reports <code>Stopped</code> last.</p>
 <h3 id="the-host-runs-it">The host runs it<a class="headerlink" href="#the-host-runs-it" title="Permanent link">&para;</a></h3>
-<p><code>PeripheralOutputHost.SensaLifecycle</code> (<code>PeripheralOutputHost.cs</code> line 289) decides when a worker exists. It runs on every link pass, every 500 ms or sooner when devices change:</p>
+<p><code>PeripheralOutputHost.SensaLifecycle</code> (<code>PeripheralOutputHost.cs</code> line 394) decides when a worker exists. It runs on every link pass, every 500 ms or sooner when devices change or Identify begins or ends:</p>
 <ul>
-<li>The row is linked (online, with its <code>sensa</code> path), it is assigned (<code>SettingsManager.SlotOrders.GetIdentityPlayerNumber</code> answers above 0), and no worker runs: the host creates a service, subscribes its report, starts it, and logs <code>PERIPHERAL Sensa worker started (row assigned)</code>.</li>
+<li>The row is linked (online, with its <code>sensa</code> path), it is assigned (<code>SettingsManager.SlotOrders.GetIdentityPlayerNumber</code> answers above 0) or Identify buzzes it (<code>PeripheralOutputs.IsIdentifying</code>), and no worker runs: the host creates a service, subscribes its report, starts it, and logs <code>PERIPHERAL Sensa worker started (row assigned)</code> or <code>PERIPHERAL Sensa worker started (Identify)</code>.</li>
 <li>A worker whose thread ended on its own while the row stays assigned, because <code>HAR.dll</code> did not load, <code>AddParametricEffect</code> failed, or a straggling predecessor kept the slot, is stopped and started again after <code>SensaRestartMs</code> (30000), the worker's own provider retry, so a missing engine does not spin. The state reads <code>Waiting</code> meanwhile, and the host logs <code>PERIPHERAL Sensa worker ended on its own, starting again later</code>.</li>
-<li>The row leaves its last virtual controller, or goes offline: the host stops the worker (<code>PERIPHERAL Sensa worker stopped (row unassigned)</code>), which stops the engine's events and releases the provider, and the state goes to <code>Idle</code>.</li>
+<li>The row is neither assigned nor buzzed by Identify, or goes offline: the host stops the worker (<code>PERIPHERAL Sensa worker stopped (row unassigned)</code>), which stops the engine's events and releases the provider, and the state goes to <code>Idle</code>.</li>
 </ul>
-<p>Only the current worker reports. The report closure drops a state from a service the host has already replaced, and the host unsubscribes it before it disposes a worker, so a stopped worker's last word never lands after its successor's. The closure maps <code>Active</code> to <code>BackendState.Connected</code> and every other state to <code>Waiting</code> through <code>PeripheralOutputs.SetBackendState</code> (<code>PeripheralOutputs.cs</code> line 254).</p>
+<p>Only the current worker reports. The report closure drops a state from a service the host has already replaced, and the host unsubscribes it before it disposes a worker, so a stopped worker's last word never lands after its successor's. The closure maps <code>Active</code> to <code>BackendState.Connected</code> and every other state to <code>Waiting</code> through <code>PeripheralOutputs.SetBackendState</code> (<code>PeripheralOutputs.cs</code> line 265).</p>
 <hr />
 <h2 id="the-rows-level">The row's level<a class="headerlink" href="#the-rows-level" title="Permanent link">&para;</a></h2>
-<p>Step 2 writes the level. The row is a haptic peripheral (<code>PeripheralOutputs.TakesHaptics</code> (<code>PeripheralOutputs.cs</code> line 186)), so <code>InputManager.ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes its force-feedback cache on first use, runs each slot's rumble through the row's own Force Feedback settings on that slot, takes the strongest across the slots it is on, and folds trigger rumble into the motors. On a change it hands the result to <code>PeripheralOutputs.SetMotors</code> (<code>PeripheralOutputs.cs</code> line 303), which stores the stronger motor over 65535. The engine's silence edges (stop, focus suspend and the crash quiesce) zero the level through <code>PeripheralOutputs.SilenceHaptics</code> (<code>PeripheralOutputs.cs</code> line 352), and the next Step 2 pass sends again the level a game still asks for.</p>
-<p>The worker reads it through <code>SensaHapticsService.RowAmplitude</code> (<code>SensaHapticsService.cs</code> line 150), which is <code>PeripheralOutputs.AmplitudeOf</code> for the row's id, every <code>tickMs</code> (default 16), clamps it to 0..1, and calls <code>SetEventIntensity</code> only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.</p>
+<p>Step 2 writes the level. The row is a haptic peripheral (<code>PeripheralOutputs.TakesHaptics</code> (<code>PeripheralOutputs.cs</code> line 197)), so <code>InputManager.ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes its force-feedback cache on first use, runs each slot's rumble through the row's own Force Feedback settings on that slot, takes the strongest across the slots it is on, and folds trigger rumble into the motors. On a change it hands the result to <code>PeripheralOutputs.SetMotors</code> (<code>PeripheralOutputs.cs</code> line 356), which stores the stronger motor over 65535. Identify's pulse train writes the level too, for a row no controller holds (<code>InputService.IdentifyDevice</code>). The engine's silence edges (stop, focus suspend and the crash quiesce) zero the level through <code>PeripheralOutputs.SilenceHaptics</code> (<code>PeripheralOutputs.cs</code> line 405), and the next Step 2 pass sends again the level a game still asks for. The crash path then waits for the worker to render the zero (<code>SensaHapticsService.WaitForSilence</code>), inside the 250 ms <code>PanicQuiesceOutputs</code> gives the peripheral host. The worker marks a tick as in flight before it reads the level and records the level it rendered after the render, so the wait ends on a rendered zero with no tick in flight, at once when no worker runs, or when its time runs out, and it returns whether the worker went quiet.</p>
+<p>The worker reads it through <code>SensaHapticsService.RowAmplitude</code> (<code>SensaHapticsService.cs</code> line 163), which is <code>PeripheralOutputs.AmplitudeOf</code> for the row's id, every <code>tickMs</code> (default 16), clamps it to 0..1, and calls <code>SetEventIntensity</code> only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.</p>
 <hr />
 <h2 id="the-status-line">The status line<a class="headerlink" href="#the-status-line" title="Permanent link">&para;</a></h2>
-<p>The Force Feedback tab's line comes from <code>PeripheralRouteText.Haptics</code> (<code>PeripheralRouteText.cs</code> line 20):</p>
+<p>The Force Feedback tab's line comes from <code>PeripheralRouteText.Haptics</code> (<code>PeripheralRouteText.cs</code> line 30):</p>
 <table>
 <thead>
 <tr>
@@ -3991,11 +3991,12 @@
 </tr>
 </tbody>
 </table>
+<p>The first three rows hold while the engine runs (<code>PeripheralOutputs.Running</code>) and the tab's slot is live (<code>PeripheralOutputs.SlotLive</code>), and the line is empty otherwise. The ARM64 row shows whatever the engine or the slot does. <code>PeripheralRouteText.Haptics(UserDevice, bool, bool)</code> takes the platform's answer as an argument, which is how the tests reach the ARM64 row.</p>
 <p><code>SensaServiceState</code> (<code>SensaHapticsService.cs</code> line 10) keeps its four values, <code>Stopped</code>, <code>WaitingForRuntime</code>, <code>Active</code> and <code>Unsupported</code>, and the host folds them into the backend state as above. An ARM64 process never opens the row, so its line comes from the record alone.</p>
 <hr />
 <h2 id="persistence-and-migration">Persistence and migration<a class="headerlink" href="#persistence-and-migration" title="Permanent link">&para;</a></h2>
 <p>There is no switch. The row is a device like any other: its assignments and its Force Feedback settings per virtual controller persist with the settings and ride profiles as entries.</p>
-<p>The Dashboard's Razer Sensa section and its switch are gone. <code>AppSettingsData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6704) and the profile's <code>bool?</code> opinion, <code>ProfileData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7675), are read once by <code>PeripheralSwitchMigration</code> and never written, since <code>ShouldSerializeEnableSensaHaptics</code> returns false on both. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists the switch, and <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns one that was on into an assignment of the Razer Sensa row:</p>
+<p>The Dashboard's Razer Sensa section and its switch are gone. <code>AppSettingsData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6762) and the profile's <code>bool?</code> opinion, <code>ProfileData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7733), are read once by <code>PeripheralSwitchMigration</code> and never written, since <code>ShouldSerializeEnableSensaHaptics</code> returns false on both. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists the switch, and <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns one that was on into an assignment of the Razer Sensa row:</p>
 <ul>
 <li>In the live settings when the active profile's opinion, else the global value, was on.</li>
 <li>In the default profile's stored state, while a named profile is active, and in each stored profile, each by its own opinion, else the global value.</li>
@@ -4014,15 +4015,19 @@
 <tbody>
 <tr>
 <td><code>PERIPHERAL Sensa worker started (row assigned)</code></td>
-<td>The host started a worker</td>
+<td>The host started a worker for an assigned row</td>
+</tr>
+<tr>
+<td><code>PERIPHERAL Sensa worker started (Identify)</code></td>
+<td>Identify buzzes the row while no controller holds it</td>
 </tr>
 <tr>
 <td><code>PERIPHERAL Sensa worker stopped (row unassigned)</code></td>
-<td>The row left its last virtual controller</td>
+<td>The row left its last virtual controller, or its Identify train ended</td>
 </tr>
 <tr>
 <td><code>PERIPHERAL Sensa worker ended on its own, starting again later</code></td>
-<td>The worker ended while the row stayed assigned</td>
+<td>The worker ended while the row stayed assigned or buzzed by Identify</td>
 </tr>
 <tr>
 <td><code>SENSA predecessor join timed out after {n} ms, worker quitting</code></td>
@@ -4098,6 +4103,18 @@
 <td>The engine starts, a state is reported before <code>Stopped</code> (<code>WaitingForRuntime</code> on a bench without Synapse), and at least one provider attempt is made, with the level from an injected source</td>
 </tr>
 <tr>
+<td><code>WaitForSilence_ReturnsOnceTheZeroIsRendered</code></td>
+<td>The crash wait ends once the worker has rendered the zero, and answers false while a level still renders</td>
+</tr>
+<tr>
+<td><code>WaitForSilence_AnswersAtOnceAfterAStopWhoseJoinGaveUp</code></td>
+<td>With a tick held inside its level read and Stop's join given up, the crash wait answers at once</td>
+</tr>
+<tr>
+<td><code>WaitForSilence_HoldsForATickThatReadItsLevelBeforeTheQuiesce</code></td>
+<td>The crash wait holds for a tick that read its level before the quiesce, until that tick has ended and a later one has rendered the zero</td>
+</tr>
+<tr>
 <td><code>Service_ReportsUnsupportedAndStartsNoWorkerWhereTheEngineCannotLoad</code></td>
 <td>The ARM64 branch: <code>Unsupported</code> raised once on the caller's thread, no worker</td>
 </tr>
@@ -4110,8 +4127,12 @@
 <td>The bounded join: the successor quits without starting its engine</td>
 </tr>
 <tr>
+<td><code>Service_AStartAfterATimedOutStop_LeavesTheOldWorkerStopped</code></td>
+<td>A <code>Start</code> after a <code>Stop</code> whose join gave up leaves the old worker stopped, and the successor runs its own bring-up once that worker has ended</td>
+</tr>
+<tr>
 <td><code>TheWorkerStreamsTheRowsLevel_AndTheGlobalSwitchIsGone</code></td>
-<td>Source pins: the worker reads the row's level, the Step 5 lane and the Dashboard card are gone, the switch's two legs are read-only, and the host runs the worker only while the row is assigned</td>
+<td>Source pins: the worker reads the row's level, the Step 5 lane and the Dashboard card are gone, the switch's two legs are read-only, and the host tests the row's assignment for the worker</td>
 </tr>
 <tr>
 <td><code>TheKoreanStringsSpellHaptic</code></td>
@@ -4145,6 +4166,10 @@
 <td><code>RowAmplitude</code> reads what <code>SetMotors</code> stored</td>
 </tr>
 <tr>
+<td><code>PeripheralOutputHostTests.IdentifyRunsTheSensaWorker_ForARowNoControllerHolds</code>, <code>IdentifyStartsTheSensaWorkerAtOnce_NotAtTheNextTimedPass</code></td>
+<td>Identify starts the worker for a row no controller holds, at once and not at the next timed pass, and a linked row with no Identify starts none</td>
+</tr>
+<tr>
 <td><code>PeripheralOutputsFacadeTests.TheForceFeedbackLineNamesTheDeviceItsRowReaches</code></td>
 <td>The Sensa lines, the ARM64 one included</td>
 </tr>
@@ -4153,8 +4178,8 @@
 <td>The switch's migration: the ruling slot, each profile's own value, the live settings, the default topology, a row this PC cannot open, imported profiles</td>
 </tr>
 <tr>
-<td><code>PeripheralWiringTests.Step2HandsAHapticRowItsLevel_TheSoleWriterWay</code>, <code>EverySilenceEdgeSilencesThePeripheralsToo</code></td>
-<td>Step 2's branch and the silence edges, by source</td>
+<td><code>PeripheralWiringTests.Step2HandsAHapticRowItsLevel_TheSoleWriterWay</code>, <code>EverySilenceEdgeSilencesThePeripheralsToo</code>, <code>ThePanicPathWaitsForTheSensaZero</code></td>
+<td>Step 2's branch, the silence edges, and the crash path's wait for the worker after GameSense's, by source</td>
 </tr>
 </tbody>
 </table>

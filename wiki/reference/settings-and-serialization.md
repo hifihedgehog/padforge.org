@@ -1244,7 +1244,7 @@ Last-engaged-wins resolves conflicts between simultaneously-active activators (t
 
 Every row writes the `Trim*` and `Motion*` attributes, whatever its target, and the engine reads them only on the targets that use them. A file saved before #475 has no `Motion*` attributes, and its rows read the defaults.
 
-`MappingRow.CopySettingsTo(MappingRow target)` copies every setting but the row's identity: the combine mode and formula, `NoInherit`, the `Trim*` fields and the `Motion*` fields. The target, the layer, the sources and `SuppressBipolarPair` stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: `InputService.CloneMappingSetDeep`, `ExtractAllRowsForSlot` / `ApplySlotMappingSetFromRows` (Copy and Paste), `ReplaceSlotMappingSet` (Copy From), `ExtractDeviceScopedRowsForSlot` / `ApplyMultiSourceRowsToCurrentDevice` (a device's copy and paste), and `PadPage.CloneLayerRow`. The grid's load and save and **Clear All** move the settings between rows and `MappingItem` instead. `MotionRowsCarryTests` holds every lane to every persisted attribute by reflection.
+`MappingRow.CopySettingsTo(MappingRow target)` copies every setting but the row's identity: the combine mode and formula, `NoInherit`, the `Trim*` fields and the `Motion*` fields. The target, the layer, the sources and `SuppressBipolarPair` stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: `InputService.CloneMappingSetDeep`, `ExtractAllRowsForSlot` / `ApplySlotMappingSetFromRows` (Copy and Paste), `ReplaceSlotMappingSet` (Copy From), `ExtractDeviceScopedRowsForSlot` / `ApplyMultiSourceRowsToCurrentDevice` (a device's copy and paste), `PadPage.CloneLayerRow`, and the engine's `LayerExitCommitStandIn` (the row a layer-exit menu commit is evaluated on). The grid's load and save and **Clear All** move the settings between rows and `MappingItem` instead. `MotionRowsCarryTests` holds every lane to every persisted attribute by reflection.
 
 ### MappingSource
 
@@ -1254,22 +1254,23 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 
 | Member | Type | Default | Description |
 |---|---|---|---|
-| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"RapidTrigger"` (the Direct read released and pressed again by travel past the deadzone, #482), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. |
+| `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"RapidTrigger"` (the Direct read released and pressed again by travel past the deadzone, #482), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. `Invert` is the exception: a source drops it when it takes Incremental or Ramp in the editor. |
 | `DeviceGuid` | `string` | `""` | Physical device instance GUID. Empty = first available device on the VC. |
-| `Descriptor` | `string` | `""` | Input descriptor (`"Button N"`, `"Axis N"`, `"IHAxis N"`, `"POV N Dir"`, `"Slider N"`, `"Gyro Pitch"`, `"Gamepad ButtonA"`, ...). Abstract `"Gamepad ..."` descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via `SourceCoercion.CanonicalDescriptor`. For InvertOnHold, the inner source's input. Ignored for Incremental. |
-| `Invert` | `bool` | `false` | Flip per-source value sign before combine. |
+| `Descriptor` | `string` | `""` | Input descriptor (`"Button N"`, `"Axis N"`, `"IHAxis N"`, `"POV N Dir"`, `"Slider N"`, `"Gyro Pitch"`, `"Gamepad ButtonA"`, ...). Abstract `"Gamepad ..."` descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via `SourceCoercion.CanonicalDescriptor`. Unread for Incremental, Ramped and InvertOnHold, and for a motion kind on a stick row, which keep it for a switch back to a kind that reads it. |
+| `DescriptorDeviceGuid` | `string` | `null` | The controller the kept `Descriptor` was picked on, for an Incremental, Ramp or Invert on Hold source that sits on another device. Written only then, and `""` for an input picked under (Any Device). A switch back to a kind that reads the Descriptor returns the source there. It moves with the keys on a copy (`RetargetKeyDevices`), and the kept Descriptor is cleared where its controller has no counterpart. No initializer, so a null stays out of the file. |
+| `Invert` | `bool` | `false` | Flip per-source value sign before combine. Also applied to an Incremental source and to a Ramp source on an axis. |
 | `HalfAxis` | `bool` | `false` | Treat bipolar axis as half-range. `Invert` picks which half. |
 | `InvertOutput` | `bool` | `false` | Output flip carried separately from `Invert`, for the reads where `Invert` is consumed INSIDE the read as the half selector (a half-axis read of a centered `"Axis N"` or a Mouse Motion source). Without it, "select this half AND flip the result" could only be expressed by overwriting `Invert`, which silently destroyed the half selection. Stays false everywhere `Invert` already is the output flip, so old XML keeps its exact behavior. |
 | `Bidirectional` | `bool` | `false` | When `HalfAxis` is also true, fire on absolute deflection past deadzone (either side of center). `Invert` has no effect in this mode. Ignored when `HalfAxis` is off. |
 | `DeadZone` | `int` | `50` | Per-source axis-to-button activation threshold, 0–100%. |
 | `GyroSensitivity` | `double` | `1.0` | Multiplier on the engine's calibrated gyro rate. Only affects sources whose descriptor starts with `"Gyro "`. |
 | `Sensitivity` | `double` | `1.0` | (#9, v4.1) Generic per-source multiplier for plain `Axis` / `Slider` descriptors (including the `"Gamepad ..."` stick and trigger aliases). Applied in `ReadAsBipolar`, `ReadAsUnipolar`, and the `ReadAsBool` axis-to-button threshold read, clamped after scaling. A persisted `0` reads as `1.0`. Mutually exclusive with the family-specific sensitivities above and below (one slider per source). |
-| `ParamUp` / `ParamDown` | `string` | `""` | Incremental and Ramped kinds: the on/off inputs that drive the value up / down, a touchpad or mouse gesture, a menu cell, a MIDI note, CC or encoder detent, and `IR Offscreen` included. |
+| `ParamUp` / `ParamDown` | `string` | `""` | Incremental and Ramped kinds: the on/off inputs that drive the value up / down, a touchpad or mouse gesture, a menu cell, a MIDI note, CC or encoder detent, a stick ring, a touchpad finger ring and `IR Offscreen` included. |
 | `ParamRate` | `double` | `0.5` | Incremental kind: units per second (full sweep takes 1 / Rate seconds). |
 | `ParamSticky` | `bool` | `true` | Incremental kind: hold last value when both released (vs snap to `ParamMin`). |
 | `ParamMin` / `ParamMax` | `double` | `0` / `1` | Incremental kind: clamp range. |
 | `ParamUpDeviceGuid` / `ParamDownDeviceGuid` | `string` | `null` | The controller each key reads: the device it was picked or recorded from, or `""` for any controller on the slot. No initializer, so a null stays out of the file, and a key saved before keys carried a controller loads as null and reads on the source's `DeviceGuid`. |
-| `ParamModifier` | `string` | `""` | InvertOnHold kind: descriptor of the button that flips the inner source while held. |
+| `ParamModifier` | `string` | `""` | InvertOnHold kind: descriptor of the input that inverts the row's combined output while held. The source itself contributes nothing to the combine. |
 | `ParamModifierDeviceGuid` | `string` | `null` | The controller the modifier reads, by the rules of `ParamUpDeviceGuid`. |
 | `ParamAttackTime` | `double` | `0.30` | Ramped kind: seconds to travel 0 to ±1 while the matching-direction key is held. 0 = instant. |
 | `ParamReleaseTime` | `double` | `0.30` | Ramped kind: seconds to travel ±1 back to 0 after release. 0 = instant. |
@@ -1404,9 +1405,9 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
-| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6697). |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6704). |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6712). |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6755). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6762). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6770). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -1528,7 +1529,7 @@ public class MidiSlotConfigData
     [XmlAttribute] public byte Velocity { get; set; } = 127;
     [XmlAttribute] public string OutputPort { get; set; }
 
-    public bool ShouldSerializeOutputPort() => !string.IsNullOrEmpty(OutputPort);
+    public bool ShouldSerializeOutputPort() => OutputPort != null;
     public void ApplyOutputPortTo(MidiSlotConfig config);
 }
 ```
@@ -1541,10 +1542,10 @@ public class MidiSlotConfigData
 | `StartCc` | `1` | First CC number |
 | `NoteCount` | `11` | Note count (maps to buttons) |
 | `StartNote` | `60` | First note (Middle C) |
-| `Velocity` | `127` | Note-on velocity (0–127) |
-| `OutputPort` | none | The output port the slot sends to under the legacy MIDI API, by name. Written only when set |
+| `Velocity` | `127` | Note-on velocity (1–127). A stored 0 reads as 1 |
+| `OutputPort` | none | The output port the slot sends to under the legacy MIDI API, by name, or empty for **None**. Left out of the file when the snapshot records no choice |
 
-The output port is saved in `<MidiConfigs>` and in each profile's `<ProfileMidiConfigs>`. Loading either applies a port only when the snapshot has one (`ApplyOutputPortTo`), so a profile saved before a port was picked keeps the slot's current port. Copying settings between slots and the per-slot `SlotMidiConfigJson` snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.
+The output port is saved in `<MidiConfigs>` and in each profile's `<ProfileMidiConfigs>`. Loading either applies the snapshot's choice, **None** included (`ApplyOutputPortTo`). A snapshot with no choice keeps the slot's current port, so a profile saved before a port was picked keeps it, and a profile saved with **None** picked sets the slot to **None**. Copying settings between slots and the per-slot `SlotMidiConfigJson` snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.
 
 ### KbmSlotConfigData (v4, #205)
 
@@ -2087,7 +2088,7 @@ public class ProfileData
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
-| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7663, 7669 and 7676). |
+| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7721, 7669 and 7676). |
 | `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |

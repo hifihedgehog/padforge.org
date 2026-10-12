@@ -67,7 +67,7 @@ Each [virtual controller slot](controller-slots.md) gets a card under the engine
 |---------|----------|-------------|
 | **Power flame** | Top-left | Slot status, shown as a flame (see below). Click to enable or disable. |
 | **Slot number** | Next to the flame | Global controller number (1, 2, 3, ...). |
-| **Type track** | Second row | A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: when no MIDI API starts, the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
+| **Type track** | Second row | A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: when no MIDI API starts, the MIDI icon shows a no-entry cursor and "MIDI (not running, see the Windows MIDI Services card in Settings)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
 | **Per-type instance number** | After the type track | Position within the type, e.g. `#2` for the second Xbox slot. |
 | **Device roster** | Third row | Every mapped device, each with a device-class icon, a Bluetooth icon on Bluetooth links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty. |
 | **Status text + counts** | Fourth row | The slot state in words (see below), then `2 mapped, 1 connected`. |
@@ -83,7 +83,7 @@ The power flame and the status text both track the slot's state. Hovering the fl
 | **Forging** | Ember, with a glow | Enabled, a device is connected, output is live. |
 | **Idle** | Ember, with a glow | A mapped device dropped offline. The controller holds through the HIDMaestro inactivity grace period (default 60 s), so the flame stays the same as Forging until the timeout tears it down. |
 | **Awaiting devices** | Gold | Enabled and mapped, but nothing is connected and the controller is down, or the engine is stopped. |
-| **Virtual controller failed** | Gold. Steel outline if nothing is mapped | The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return. |
+| **Virtual controller failed** | Gold. Steel outline if nothing is mapped | The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return. A MIDI slot also retries after the Windows MIDI service restarts, after the runtime is installed or uninstalled, when you pick another Output Port, and when its Output Port comes back. |
 | **Cold** | Steel outline | Enabled with no devices mapped. |
 | **Initializing** | Flashing ember | The controller is coming up. |
 | **Disabled** | Steel outline | Turned off with the power flame. |

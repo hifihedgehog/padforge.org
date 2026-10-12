@@ -146,7 +146,7 @@ Drag devices from the Devices page to a sidebar controller card:
 | MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` (16) |
 | VR | `AddVrBtn` | `F119` glyph | `SettingsManager.MaxVrSlots` (1) |
 
-The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires a Windows MIDI Services API (`SettingsViewModel.IsMidiAvailable`, the Settings card's cached answer) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
+The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires a MIDI API that started, Windows MIDI Services or the legacy one (`SettingsViewModel.IsMidiAvailable`, the Settings card's cached answer) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
 
 ### Status Bar
 
@@ -347,7 +347,7 @@ Rows are in trigger order. A later row wins when several hold.
 
 ### Type Switch Buttons
 
-7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom `TypeSwitchButton` style, seated on a recessed `SegTrackBrush` segment. Transparent and borderless at rest, with a rounded subtle-fill background on hover. The active type fills with `EmberSegGradient` and a glow (steel `SteelRaisedBrush` on a card with no mapped devices). Inactive types use the tertiary text color. Unavailable types (missing prerequisite, e.g. MIDI without Windows MIDI Services, VR without SteamVR) show `Cursor.No` and a tooltip explaining the requirement. Clicks are guarded in code-behind. The power button also uses the `TypeSwitchButton` style for visual consistency.
+7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom `TypeSwitchButton` style, seated on a recessed `SegTrackBrush` segment. Transparent and borderless at rest, with a rounded subtle-fill background on hover. The active type fills with `EmberSegGradient` and a glow (steel `SteelRaisedBrush` on a card with no mapped devices). Inactive types use the tertiary text color. Unavailable types (missing prerequisite, e.g. MIDI while no MIDI API runs, VR without SteamVR) show `Cursor.No` and a tooltip that says why (`Main_MIDI_NotRunning`, `Main_VR_RequiresSteamVR`). Clicks are guarded in code-behind. The power button also uses the `TypeSwitchButton` style for visual consistency.
 
 ### UI Automation
 
@@ -556,7 +556,7 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `MidiConfig_Changed` | TextBox.LostFocus | Applies clamped MIDI config, rebuilds mappings if counts change |
 | `MidiConfig_KeyDown` | TextBox.KeyDown(Enter) | Same as LostFocus apply |
 | `MidiOutputPortBox_DropDownOpened` | ComboBox.DropDownOpened | Reads the output ports again (`MidiBackendLegacy.ListOutputPortsBounded`) and refills the picker |
-| `MidiOutputPortBox_SelectionChanged` | ComboBox.SelectionChanged | Writes the pick to `MidiConfig.OutputPort`, empty for **None** |
+| `MidiOutputPortBox_SelectionChanged` | ComboBox.SelectionChanged | Writes the pick through `MidiConfig.ChooseOutputPort`, empty for **None**, which also marks it the profile's choice |
 | `ResetExtendedSetting_Click` / `ResetMidiSetting_Click` | SettingResetButton.Click | Resets the Extended or MIDI config field named by the button's `Tag` (`PadPage.SettingResets.cs`) |
 | `StickPresetX_SelectionChanged` | ComboBox.SelectionChanged | Sets `StickConfigItem.SensitivityCurveX` from preset |
 | `StickPresetY_SelectionChanged` | ComboBox.SelectionChanged | Sets `StickConfigItem.SensitivityCurveY` from preset |
@@ -860,7 +860,8 @@ ScrollViewer
       ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
       ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
       ├─ "Fold Trigger Rumble into Main Motors" CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
-      ├─ "Swap Left and Right Motors" CheckBox (SwapMotors)
+      ├─ FfbSwapMotorsRow: "Swap Left and Right Motors" CheckBox (SwapMotors), collapsed for a
+      │   haptic mouse, keyboard or the Razer Sensa row
       ├─ "Test Rumble" Button (TestRumbleCommand)
       ├─ "Motor Activity" header
       ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game's request)
@@ -889,7 +890,7 @@ ScrollViewer
 
 All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Grayed out when off.
 
-`PeripheralHapticsRoute` takes its sentence from the `Pad_ForceFeedback_Route*` strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads `Common_NotAvailableOnArm64`, since that build cannot load the Interhaptics engine.
+`PeripheralHapticsRoute` takes its sentence from the `Pad_ForceFeedback_Route*` strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads `Common_NotAvailableOnArm64`, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (`PeripheralOutputs.Running`) and on a slot that is not live (`PeripheralOutputs.SlotLive`). The ARM64 line shows either way.
 
 ### Lighting Tab (Tab 7). Peripheral Rows (#494)
 
@@ -912,7 +913,7 @@ StackPanel
   └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 ```
 
-`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere)` (`PeripheralRouteText.cs` line 108), where `lightsHere` is true for a vendor row and otherwise follows the switch. Its sentence comes from the `Pad_Lighting_Route*` strings:
+`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere)` (`PeripheralRouteText.cs` line 134), where `lightsHere` is true for a vendor row and otherwise follows the switch, in both cases only on a slot that is live (`PeripheralOutputs.SlotLive`). The line is empty while the engine is stopped (`PeripheralOutputs.Running`). Its sentence comes from the `Pad_Lighting_Route*` strings:
 
 | Key | When |
 |---|---|
@@ -920,14 +921,14 @@ StackPanel
 | `RouteThrough` | This controller lights the device through the vendor's software, named in the line |
 | `RouteAsleep` | A Logitech device the record says has lighting has not answered yet |
 | `RouteWaiting` | The vendor's software is not answering yet |
-| `RouteCannotLight` | The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads `Common_NotAvailableOnArm64`) |
+| `RouteCannotLight` | The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads `Common_NotAvailableOnArm64`). While the engine will not load, the LIGHTSYNC row reads it on every virtual controller it is on, one that is gone included, ahead of `RouteOtherControllerOnly` |
 | `RouteShared` | Another device of this kind, on the virtual controller the line names, sets the shared path's color |
 | `RouteSharedVendorRow` | A vendor row, on the virtual controller the line names, sets the shared path's color |
-| `RouteOtherController` / `RouteOtherControllerOnly` | The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The `Only` form shows while this controller's switch is off |
+| `RouteOtherController` / `RouteOtherControllerOnly` | The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The `Only` form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the `Only` form with the number of the controller that lights it elsewhere, and nothing while its software is not answering |
 | `RouteOtherRow` / `RouteOtherRowOnly` | Another row of the same HID++ device on this controller holds the unit |
-| `RouteVendorRow` / `RouteVendorRowWaiting` | A vendor row's own line: what its software lights that no assigned device claims, with examples (`Pad_Lighting_VendorRowExamples_*`), or that the software is not answering yet |
+| `RouteVendorRow` / `RouteVendorRowWaiting` | A vendor row's own line on a live slot: what its software lights that no assigned device claims, with examples (`Pad_Lighting_VendorRowExamples_*`), or that the software is not answering yet |
 
-With the switch off, the line names only who else lights the device, never a route of its own. `SyncTabVisibility()` runs again on `PeripheralOutputs` changes (`OnPeripheralOutputsChanged`), when the `DeviceConfig` anchor swaps to another device's config, and when `PeripheralLightingEnabled` changes, so the line follows the switch even for a device that is offline.
+With the switch off, or on a slot that is not live, the line names only who else lights the device, never a route of its own. `SyncTabVisibility()` runs again on `PeripheralOutputs` changes (`OnPeripheralOutputsChanged`), when the `DeviceConfig` anchor swaps to another device's config, and when `PeripheralLightingEnabled` changes, so the line follows the switch even for a device that is offline.
 
 ### Gyro Tab (Tab 8). Detailed
 
@@ -1076,16 +1077,16 @@ Visible when `OutputType == Midi`. Centered horizontal `StackPanel`:
 | Start CC TextBox | `MidiConfig.StartCc` | 0-127 |
 | Note Count TextBox | `MidiConfig.NoteCount` | 0 to 128 − StartNote (clamped against StartNote) |
 | Start Note TextBox | `MidiConfig.StartNote` | 0-127 |
-| Velocity TextBox | `MidiConfig.Velocity` | 0-127 |
+| Velocity TextBox | `MidiConfig.Velocity` | 1-127 |
 | Output Port ComboBox (`MidiOutputPortBox`) | `MidiConfig.OutputPort`, set in code | **None**, the output ports, then the saved port when it is not connected |
 
 All fields have tooltips. `_syncingMidiConfig` guard prevents recursive updates. When CC/Note counts or start numbers change, `vm.RebuildMappings()` regenerates mapping rows. A running slot's controller takes every change on its next poll, on the same port (`MidiVirtualController.ApplyLayout`).
 
-The Output Port group shows only while `PadViewModel.IsLegacyMidi` is true, since the Windows MIDI Services APIs create the slot's own port. `SyncMidiOutputPortBox` fills it: **None** first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. `_syncingMidiPort` keeps the refill from writing back a pick. Its reset button clears the pick.
+The Output Port group shows only while `PadViewModel.IsLegacyMidi` is true, since the Windows MIDI Services APIs create the slot's own port. `SyncMidiOutputPortBox` fills it: **None** first, then every output port by the name it is saved under, then the saved port when it is not connected now, so the pick stays visible. A second port with the same name is listed as "Name (2)". The port list is read only when the picker opens, on a worker that gives up after 2 s, because WinMM on the new MIDI stack asks the MIDI service, which can hang. `_syncingMidiPort` keeps the refill from writing back a pick. Its reset button picks **None**.
 
 ### Copy From Dialog
 
-Opens `CopyFromDialog`. Picking a source slot copies the whole mapping table plus every assigned device's tuning (deadzones, sensitivity, FFB, impulse triggers, adaptive triggers, lighting, gyro, TouchpadSettings) into the target slot. Each source device matches a target device by `InstanceGuid` first, then `ProductGuid` as a fallback for the same controller model on a different physical unit. Target devices without a source-side match are left alone. The copied `MappingSet` also carries the slot's menus, Bass Shakers, SOCD, and Keep Awake settings, and `CopySlotConfigsAcrossSlots` clones the per-device lighting configs, plus the Extended layout, MIDI layout, or Keyboard + Mouse config when both slots share that type.
+Opens `CopyFromDialog`. Picking a source slot copies the whole mapping table plus every assigned device's tuning (deadzones, sensitivity, FFB, impulse triggers, adaptive triggers, lighting, gyro, TouchpadSettings) into the target slot. Each source device matches a target device by `InstanceGuid` first, then `ProductGuid` as a fallback for the same controller model on a different physical unit. A target device with no source-side match keeps its tuning. The copied `MappingSet` also carries the slot's menus, Bass Shakers, SOCD, and Keep Awake settings, and `CopySlotConfigsAcrossSlots` clones the per-device lighting configs, plus the Extended layout, MIDI layout, or Keyboard + Mouse config when both slots share that type. In that clone, a target device the source slot does not have takes a stand-in source device's config and keeps its own **Control This Device’s Lighting** switch (#494).
 
 ---
 
@@ -1238,7 +1239,7 @@ Grid (Margin="24,16")
 | `SdlGuid`, `DossierConnectionPath`, `SerialNumber` | Dossier SDL GUID / LINK / SERIAL rows, each collapsed via `StringToVisibility` when empty |
 | `HidHideInstancePath` | Dossier PATH row (conditional visibility via `StringToVisibility`) |
 | `ShowSubmitMapping` | Submit mapping button visibility (joysticks only) |
-| `ShowInputModeSection` | Input Mode section visibility (`IsGamepad && !IsInternalVirtual`) |
+| `ShowInputModeSection` | Input Mode section visibility (`_forceRawJoystickMode \|\| (IsGamepad && !IsInternalVirtual)`: a row whose flag is on shows the section whatever its type, so it can be turned off) |
 | `ShowInputHidingSection` | Input Hiding section visibility (`ShowHidHideToggle \|\| ShowConsumeToggle`) |
 | `ShowHidHideToggle` | HidHide row visibility (`!IsInternalVirtual && !IsAggregate`: a merged row has no HID instance to cloak) |
 | `ShowTabletCaptureStatus` / `TabletInputStatus` | Tablet capture status line under the HidHide row |
@@ -1810,21 +1811,21 @@ ScrollViewer (Padding="24,0")
       ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 67 rows in alphabetical
+      ├─ Technologies card (Grid, 164px label + description, 132 rows in alphabetical
       │   order, case-insensitive, leading symbols ignored):
-      │   ├─ Bouncy Castle
-      │   ├─ bs2b
-      │   ├─ BthPS3
-      │   ├─ Colore
-      │   ├─ Concentus
-      │   └─ ...62 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+      │   ├─ 3doverstock
+      │   ├─ AntiMicroX
+      │   ├─ Arcade I/O references
+      │   ├─ AudioEndPointLibrary
+      │   ├─ AutoEq
+      │   └─ ...126 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
       │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
       │       CLAPACK row, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
 
-The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and nipplejs and `$Q Recognizer` between protobuf-net and QR-Code-generator. `Grid.Row` runs 0 (Bouncy Castle) through 66 (ZstdSharp). Row 27, "Kaldi, OpenFst, OpenBLAS and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
+The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 130 (ZstdSharp). Row 59, "Kaldi, OpenFst, OpenBLAS and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
 
 ### Code-Behind
 

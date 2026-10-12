@@ -8446,7 +8446,7 @@
 </tbody>
 </table>
 <p>Every row writes the <code>Trim*</code> and <code>Motion*</code> attributes, whatever its target, and the engine reads them only on the targets that use them. A file saved before #475 has no <code>Motion*</code> attributes, and its rows read the defaults.</p>
-<p><code>MappingRow.CopySettingsTo(MappingRow target)</code> copies every setting but the row's identity: the combine mode and formula, <code>NoInherit</code>, the <code>Trim*</code> fields and the <code>Motion*</code> fields. The target, the layer, the sources and <code>SuppressBipolarPair</code> stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: <code>InputService.CloneMappingSetDeep</code>, <code>ExtractAllRowsForSlot</code> / <code>ApplySlotMappingSetFromRows</code> (Copy and Paste), <code>ReplaceSlotMappingSet</code> (Copy From), <code>ExtractDeviceScopedRowsForSlot</code> / <code>ApplyMultiSourceRowsToCurrentDevice</code> (a device's copy and paste), and <code>PadPage.CloneLayerRow</code>. The grid's load and save and <strong>Clear All</strong> move the settings between rows and <code>MappingItem</code> instead. <code>MotionRowsCarryTests</code> holds every lane to every persisted attribute by reflection.</p>
+<p><code>MappingRow.CopySettingsTo(MappingRow target)</code> copies every setting but the row's identity: the combine mode and formula, <code>NoInherit</code>, the <code>Trim*</code> fields and the <code>Motion*</code> fields. The target, the layer, the sources and <code>SuppressBipolarPair</code> stay with the caller, because each lane sets them its own way. Every lane that copies a row to a row goes through it: <code>InputService.CloneMappingSetDeep</code>, <code>ExtractAllRowsForSlot</code> / <code>ApplySlotMappingSetFromRows</code> (Copy and Paste), <code>ReplaceSlotMappingSet</code> (Copy From), <code>ExtractDeviceScopedRowsForSlot</code> / <code>ApplyMultiSourceRowsToCurrentDevice</code> (a device's copy and paste), <code>PadPage.CloneLayerRow</code>, and the engine's <code>LayerExitCommitStandIn</code> (the row a layer-exit menu commit is evaluated on). The grid's load and save and <strong>Clear All</strong> move the settings between rows and <code>MappingItem</code> instead. <code>MotionRowsCarryTests</code> holds every lane to every persisted attribute by reflection.</p>
 <h3 id="mappingsource">MappingSource<a class="headerlink" href="#mappingsource" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Data/MappingSource.cs</code></p>
 <p>Every field is an <code>[XmlAttribute]</code> (no child elements). Kind-specific fields are read only when the matching <code>Kind</code> is set, but persist across kind changes so flipping back-and-forth keeps the user's settings. Every <code>double</code> field refuses a value that is not finite (NaN or infinity) and keeps the one it had, on load and from the grid alike, so a hand-edited or damaged file cannot carry one into the engine. The view models' number setters refuse NaN the same way (<code>FiniteObservableObject</code>).</p>
@@ -8464,7 +8464,7 @@
 <td><code>Kind</code></td>
 <td><code>string</code></td>
 <td><code>"Direct"</code></td>
-<td><code>"Direct"</code>, <code>"Toggle"</code> (the Direct read latched by each press, #461), <code>"RapidTrigger"</code> (the Direct read released and pressed again by travel past the deadzone, #482), <code>"Incremental"</code>, <code>"InvertOnHold"</code>, <code>"Ramped"</code> (keyboard-to-axis time ramp, #111), or the steering kinds <code>"WindingStick"</code> / <code>"AngleToAxisX"</code> / <code>"AngleToAxisY"</code> / <code>"MotionLeanX"</code> (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings.</td>
+<td><code>"Direct"</code>, <code>"Toggle"</code> (the Direct read latched by each press, #461), <code>"RapidTrigger"</code> (the Direct read released and pressed again by travel past the deadzone, #482), <code>"Incremental"</code>, <code>"InvertOnHold"</code>, <code>"Ramped"</code> (keyboard-to-axis time ramp, #111), or the steering kinds <code>"WindingStick"</code> / <code>"AngleToAxisX"</code> / <code>"AngleToAxisY"</code> / <code>"MotionLeanX"</code> (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. <code>Invert</code> is the exception: a source drops it when it takes Incremental or Ramp in the editor.</td>
 </tr>
 <tr>
 <td><code>DeviceGuid</code></td>
@@ -8476,13 +8476,19 @@
 <td><code>Descriptor</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
-<td>Input descriptor (<code>"Button N"</code>, <code>"Axis N"</code>, <code>"IHAxis N"</code>, <code>"POV N Dir"</code>, <code>"Slider N"</code>, <code>"Gyro Pitch"</code>, <code>"Gamepad ButtonA"</code>, ...). Abstract <code>"Gamepad ..."</code> descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via <code>SourceCoercion.CanonicalDescriptor</code>. For InvertOnHold, the inner source's input. Ignored for Incremental.</td>
+<td>Input descriptor (<code>"Button N"</code>, <code>"Axis N"</code>, <code>"IHAxis N"</code>, <code>"POV N Dir"</code>, <code>"Slider N"</code>, <code>"Gyro Pitch"</code>, <code>"Gamepad ButtonA"</code>, ...). Abstract <code>"Gamepad ..."</code> descriptors (#9, v4.1) fold to their canonical per-device form at evaluation via <code>SourceCoercion.CanonicalDescriptor</code>. Unread for Incremental, Ramped and InvertOnHold, and for a motion kind on a stick row, which keep it for a switch back to a kind that reads it.</td>
+</tr>
+<tr>
+<td><code>DescriptorDeviceGuid</code></td>
+<td><code>string</code></td>
+<td><code>null</code></td>
+<td>The controller the kept <code>Descriptor</code> was picked on, for an Incremental, Ramp or Invert on Hold source that sits on another device. Written only then, and <code>""</code> for an input picked under (Any Device). A switch back to a kind that reads the Descriptor returns the source there. It moves with the keys on a copy (<code>RetargetKeyDevices</code>), and the kept Descriptor is cleared where its controller has no counterpart. No initializer, so a null stays out of the file.</td>
 </tr>
 <tr>
 <td><code>Invert</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Flip per-source value sign before combine.</td>
+<td>Flip per-source value sign before combine. Also applied to an Incremental source and to a Ramp source on an axis.</td>
 </tr>
 <tr>
 <td><code>HalfAxis</code></td>
@@ -8524,7 +8530,7 @@
 <td><code>ParamUp</code> / <code>ParamDown</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
-<td>Incremental and Ramped kinds: the on/off inputs that drive the value up / down, a touchpad or mouse gesture, a menu cell, a MIDI note, CC or encoder detent, and <code>IR Offscreen</code> included.</td>
+<td>Incremental and Ramped kinds: the on/off inputs that drive the value up / down, a touchpad or mouse gesture, a menu cell, a MIDI note, CC or encoder detent, a stick ring, a touchpad finger ring and <code>IR Offscreen</code> included.</td>
 </tr>
 <tr>
 <td><code>ParamRate</code></td>
@@ -8554,7 +8560,7 @@
 <td><code>ParamModifier</code></td>
 <td><code>string</code></td>
 <td><code>""</code></td>
-<td>InvertOnHold kind: descriptor of the button that flips the inner source while held.</td>
+<td>InvertOnHold kind: descriptor of the input that inverts the row's combined output while held. The source itself contributes nothing to the combine.</td>
 </tr>
 <tr>
 <td><code>ParamModifierDeviceGuid</code></td>
@@ -9272,21 +9278,21 @@
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6697).</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6755).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6704).</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6762).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6712).</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6770).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -9794,7 +9800,7 @@
 <a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="n">Velocity</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">127</span><span class="p">;</span>
 <a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">    </span><span class="na">[XmlAttribute]</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">OutputPort</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
-<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ShouldSerializeOutputPort</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">OutputPort</span><span class="p">);</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ShouldSerializeOutputPort</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">OutputPort</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
 <a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ApplyOutputPortTo</span><span class="p">(</span><span class="n">MidiSlotConfig</span><span class="w"> </span><span class="n">config</span><span class="p">);</span>
 <a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="p">}</span>
 </code></pre></div>
@@ -9840,16 +9846,16 @@
 <tr>
 <td><code>Velocity</code></td>
 <td><code>127</code></td>
-<td>Note-on velocity (0–127)</td>
+<td>Note-on velocity (1–127). A stored 0 reads as 1</td>
 </tr>
 <tr>
 <td><code>OutputPort</code></td>
 <td>none</td>
-<td>The output port the slot sends to under the legacy MIDI API, by name. Written only when set</td>
+<td>The output port the slot sends to under the legacy MIDI API, by name, or empty for <strong>None</strong>. Left out of the file when the snapshot records no choice</td>
 </tr>
 </tbody>
 </table>
-<p>The output port is saved in <code>&lt;MidiConfigs&gt;</code> and in each profile's <code>&lt;ProfileMidiConfigs&gt;</code>. Loading either applies a port only when the snapshot has one (<code>ApplyOutputPortTo</code>), so a profile saved before a port was picked keeps the slot's current port. Copying settings between slots and the per-slot <code>SlotMidiConfigJson</code> snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.</p>
+<p>The output port is saved in <code>&lt;MidiConfigs&gt;</code> and in each profile's <code>&lt;ProfileMidiConfigs&gt;</code>. Loading either applies the snapshot's choice, <strong>None</strong> included (<code>ApplyOutputPortTo</code>). A snapshot with no choice keeps the slot's current port, so a profile saved before a port was picked keeps it, and a profile saved with <strong>None</strong> picked sets the slot to <strong>None</strong>. Copying settings between slots and the per-slot <code>SlotMidiConfigJson</code> snapshot leave it out: on the classic MIDI stack a port serves one program at a time, and two slots sending to one port would collide.</p>
 <h3 id="kbmslotconfigdata-v4-205">KbmSlotConfigData (v4, #205)<a class="headerlink" href="#kbmslotconfigdata-v4-205" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.App/ViewModels/KbmSlotConfig.cs</code></p>
 <p>Per-slot Keyboard+Mouse DTO: the live surfaces and the SOCD / Snap-Tap config. Stored in <code>&lt;KbmConfigs&gt;</code> (AppSettings) and <code>&lt;ProfileKbmConfigs&gt;</code> (Profiles).</p>
@@ -11052,7 +11058,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7663, 7669 and 7676).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7721, 7669 and 7676).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>

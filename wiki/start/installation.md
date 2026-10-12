@@ -69,9 +69,6 @@ HIDMaestro is the user-mode driver that creates the virtual controllers. PadForg
 
 The driver ships embedded in `PadForge.exe`. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
-!!! note "The very first launch may need one relaunch"
-    The first time PadForge ever installs HIDMaestro on a PC, the driver can stay inactive until PadForge is relaunched once. The symptom: you add a controller, turn on **Hide from Games (HidHide)**, and the game sees no controller at all, because the physical pad is hidden and the virtual one is not live yet. Close PadForge and start it again. It does not happen on later launches or on upgrades.
-
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
 See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForge talks to the driver under the hood.

@@ -4296,7 +4296,7 @@
 <tr>
 <td><strong>HIDMaestro</strong></td>
 <td>Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use.</td>
-<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 232 device profiles, and PadForge offers the 134 with a captured HID descriptor.</td>
+<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 233 device profiles, and PadForge offers the 135 with a captured HID descriptor.</td>
 </tr>
 <tr>
 <td><strong>Keyboard+Mouse</strong></td>
@@ -4381,7 +4381,7 @@
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
-<td>MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI slot type won't switch on, and its button shows the tooltip "MIDI (requires Windows MIDI Services)". Every other slot type works.</td>
+<td>MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI slot type won't switch on, and its button shows the tooltip "MIDI (not running, see the Windows MIDI Services card in Settings)". Every other slot type works.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
@@ -4451,11 +4451,11 @@
 </tr>
 <tr>
 <td><strong>Self-check</strong></td>
-<td>After hiding a controller, PadForge opens it once itself, the way it reopens every device on each scan. If HidHide refuses, PadForge takes every entry back and says so in the status bar, because a controller hidden from PadForge itself stops responding at the next scan. PadForge hides again as soon as HidHide's whitelist changes, which is when HidHide reconsiders a program it refused.</td>
+<td>After hiding a controller, PadForge opens it once itself, the way it reopens every device on each scan, and once more each time a hidden controller reconnects. If HidHide refuses, PadForge takes every entry back and says so in the status bar, because a controller hidden from PadForge itself stops responding at the next scan. PadForge hides again as soon as HidHide's whitelist changes, which is when HidHide reconsiders a program it refused, or when HidHide's Inverse application cloak goes off.</td>
 </tr>
 <tr>
 <td><strong>Inverse application cloak</strong></td>
-<td>This HidHide option turns the whitelist into a list of programs that cannot see hidden devices, so PadForge's own entry would hide every controller from PadForge. While it is on, PadForge keeps itself off the list, hides nothing, and says so in the status bar.</td>
+<td>This HidHide option turns the whitelist into a list of programs that cannot see hidden devices, so PadForge's own entry would hide every controller from PadForge. While it is on, PadForge keeps itself off the list, hides nothing, and says so in the status bar. When it goes off, the line clears and PadForge hides again.</td>
 </tr>
 <tr>
 <td><strong>Engine-aware</strong></td>
@@ -4504,7 +4504,7 @@
 <p>Every physical controller becomes visible again the moment the driver leaves.</p>
 <hr />
 <h2 id="windows-midi-services">Windows MIDI Services<a class="headerlink" href="#windows-midi-services" title="Permanent link">&para;</a></h2>
-<p>System-wide virtual MIDI endpoint (named "PadForge MIDI 1", "PadForge MIDI 2", and so on for each MIDI slot) that any music app can subscribe to. Turns a gamepad into a MIDI controller. No loopMIDI bridge needed.</p>
+<p>System-wide virtual MIDI endpoint (named "PadForge MIDI 1", "PadForge MIDI 2", and so on for each MIDI slot) that any music app can subscribe to. Turns a gamepad into a MIDI controller. No loopMIDI bridge needed on Windows MIDI Services. On the legacy MIDI API each slot sends to an existing port instead.</p>
 <h3 id="use-it-for">Use it for<a class="headerlink" href="#use-it-for" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Driving a DAW (Ableton Live, FL Studio, Reaper) from a gamepad</li>
@@ -4523,7 +4523,7 @@
 <li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
 <li>Click <strong>Install</strong>.</li>
 </ol>
-<p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. When a program holds the old Visual C++ runtime open so Windows cannot swap in the new one, PadForge runs the redistributable again as a repair, twice at most, five seconds apart.</p>
+<p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. When a program holds the old Visual C++ runtime open so Windows cannot swap in the new one, PadForge runs the redistributable again as a repair, twice at most, five seconds apart. When the redistributable is still running after three minutes, or Windows starts it without letting PadForge follow it, the install stops with "The Visual C++ Redistributable installer is still running. Select Install again once it finishes." The runtime's own installer has not run at that point.</p>
 <h3 id="the-settings-card">The Settings card<a class="headerlink" href="#the-settings-card" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4550,25 +4550,43 @@
 <td>No Windows MIDI Services API runs, so PadForge uses the legacy API.</td>
 </tr>
 <tr>
+<td><strong>Legacy MIDI API</strong></td>
+<td>"The MIDI API built into Windows did not start (error 0x<em>code</em>), so PadForge uses the legacy MIDI API. Each MIDI slot sends to a port picked on the slot's page. MIDI input opens only devices assigned to a slot."</td>
+<td>Windows registers its own API, but it failed to start. The code is the error Windows answered with.</td>
+</tr>
+<tr>
 <td><strong>Not Running</strong></td>
 <td>"The Windows MIDI service did not respond. PadForge restarts the service and checks again."</td>
-<td>The engine's check started nothing. A second restart follows two minutes later if the first does not help.</td>
+<td>The engine's check got no answer from the Windows MIDI service within 10 seconds. An answer that comes late is kept. A check still pending after 15 seconds has the service restarted, then restarted again once every two minutes until MIDI answers.</td>
+</tr>
+<tr>
+<td><strong>Not Running</strong></td>
+<td>"A MIDI driver did not respond. PadForge checks again once it answers."</td>
+<td>The check is waiting on a classic MIDI driver, which a service restart does not reach: on Windows 10 and Windows 11 before 24H2, in Legacy API mode, for the legacy API in Hybrid mode, and on a PC that has no MIDI service. PadForge restarts nothing and takes the answer when it comes.</td>
+</tr>
+<tr>
+<td><strong>Not Running</strong></td>
+<td>"The runtime's uninstaller is still running. MIDI starts again once it finishes."</td>
+<td>An uninstall of the runtime holds MIDI released until its uninstaller exits.</td>
 </tr>
 </tbody>
 </table>
 <p>The flame lights while any of them works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.</p>
+<p>When Windows MIDI Services is present but did not start when PadForge first checked, PadForge runs on the legacy API and tries Windows MIDI Services again beside it, first after 10 seconds and then every two minutes. Once it starts, MIDI moves onto it: MIDI slots rebuild with ports of their own and MIDI input reopens. Nothing is restarted for that, and in Legacy API mode nothing is tried.</p>
 <p>In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no <strong>Install</strong>. Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back.</p>
 <h3 id="the-legacy-midi-api">The legacy MIDI API<a class="headerlink" href="#the-legacy-midi-api" title="Permanent link">&para;</a></h3>
 <p>The legacy API cannot create a port for a MIDI slot, so each slot sends to a port that already exists: a MIDI interface, a synth, or a loopback driver that another program reads.</p>
 <ul>
-<li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked.</li>
-<li>A port another program holds cannot be opened, and the slot reports it. Close that program, then turn the slot off and on.</li>
+<li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked, and the status bar says "Virtual Controller <em>N</em> has no Output Port. Pick one on its page."</li>
+<li>A port that is already in use cannot be opened, and the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is already in use." When another MIDI slot is set to the same port, the line names both: "Virtual Controller <em>N</em> and Virtual Controller <em>M</em> are set to the same Output Port “<em>port</em>”. Pick another port for one of them." The slot that failed starts by itself once either slot has moved to another port. For a port another program holds, close that program, then turn the slot off and on.</li>
 <li>Picking another port moves the slot there.</li>
-<li>A slot whose port is missing, because its device is off or unplugged, does not start. About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.</li>
-<li>The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone.</li>
-<li>MIDI input opens a port only while a slot has the device assigned. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.</li>
+<li>A slot whose port is missing, because its device is off or unplugged, does not start, and the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is not connected. The slot starts once the port is back." About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.</li>
+<li>When a port fails to open for any other reason, the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> did not open."</li>
+<li>Each of these lines clears once the slot starts.</li>
+<li>The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone. A profile saved with <strong>None</strong> picked sets the slot to <strong>None</strong>.</li>
+<li>MIDI input opens a port only while a slot has the device assigned, on this PC or on a Remote Link peer. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.</li>
 </ul>
-<p>When a slot stops, PadForge sends a note off for each note it held and closes the port. It does not send the reset to all 16 channels that some programs send on close.</p>
+<p>When a slot stops, PadForge sends a note off for each note it held, turns off a sustain pedal or other on/off controller (CC 64 to 69) it left on, and closes the port. A note off or a pedal's off that the port refuses goes out again on the channel and number it was sent on, until the port takes it or the port is gone, through MIDI bar edits too, and as a slot stops for up to the 3 seconds the stop waits. It does not send the reset to all 16 channels that some programs send on close.</p>
 <h3 id="removing-the-runtime">Removing the runtime<a class="headerlink" href="#removing-the-runtime" title="Permanent link">&para;</a></h3>
 <p><strong>Uninstall</strong> shows while a runtime is installed. It removes PadForge's build, or Microsoft's runtime together with everything Microsoft's <strong>Windows MIDI Services Runtime and Tools</strong> setup installed beside it, the MIDI Settings app included. Microsoft no longer offers that setup for download, so PadForge asks before it removes it. The API built into Windows stays.</p>
 <ol>
@@ -4576,7 +4594,8 @@
 <li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
 <li>Click <strong>Uninstall</strong>.</li>
 </ol>
-<p>While PadForge uses the runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes.</p>
+<p>While PadForge uses the runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes. Under the legacy API, MIDI keeps running through the uninstall. <strong>Uninstall</strong> and <strong>Install</strong> stay disabled while a runtime uninstaller PadForge started is still running, and Install's tooltip reads "The runtime's uninstaller is still running. Install is available once it finishes."</p>
+<p>Before the uninstaller starts, PadForge releases MIDI from the runtime and waits up to a minute for that. A second Uninstall that finds the first one's release still at work waits for it first, then gives its own release the minute again, so the card can wait up to two minutes. When MIDI is not released in time, the uninstaller does not start, and the status bar says "The Windows MIDI service did not respond, so the runtime was not uninstalled. Select Uninstall again in a moment." Where a classic MIDI driver is what did not answer, it says "A MIDI driver did not respond, so the runtime was not uninstalled. Select Uninstall again once MIDI is running."</p>
 <hr />
 <h2 id="steamvr">SteamVR<a class="headerlink" href="#steamvr" title="Permanent link">&para;</a></h2>
 <p>The runtime behind the VR slot type. PadForge installs it Steam-free from Valve's servers: no Steam account, no Steam client. It is several GB.</p>
@@ -4747,12 +4766,16 @@
 <td>Windows could not replace the Visual C++ runtime while that program held it, and the two repair runs that followed could not replace it either. Close other programs and click <strong>Install</strong> again.</td>
 </tr>
 <tr>
+<td>Windows MIDI Services <strong>Install</strong> stops: "The Visual C++ Redistributable installer is still running. Select Install again once it finishes."</td>
+<td>Microsoft's redistributable was still running after three minutes, or Windows started it without letting PadForge follow it, so the runtime's own installer has not run. Click <strong>Install</strong> again once the redistributable has finished.</td>
+</tr>
+<tr>
 <td>Windows MIDI Services card reads <strong>Legacy MIDI API</strong> on Windows 11 25H2</td>
 <td>Windows has no API of its own until the late-November 2026 update. <strong>Settings &gt; System &gt; About</strong> in Windows shows the version, and Windows Update brings the update. Until then, click <strong>Install</strong> on the card.</td>
 </tr>
 <tr>
 <td>Windows MIDI Services card reads <strong>Not Running</strong></td>
-<td>The Windows MIDI service did not respond. PadForge restarts the service and checks again, and the card changes once MIDI answers.</td>
+<td>The line below the status says why. Under "The Windows MIDI service did not respond. PadForge restarts the service and checks again." PadForge restarts the service once its check has been pending 15 seconds, then once every two minutes until MIDI answers, and the card changes then. Under "A MIDI driver did not respond. PadForge checks again once it answers." the check is waiting on a classic MIDI driver (Windows 10, Windows 11 before 24H2, Legacy API mode, the legacy API in Hybrid mode, or a PC that has no MIDI service), so no service is restarted and the card changes when the driver answers. Under "The runtime's uninstaller is still running. MIDI starts again once it finishes." MIDI comes back when the uninstaller exits.</td>
 </tr>
 </tbody>
 </table>
@@ -4770,12 +4793,12 @@
 <td>HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under <strong>Install issues</strong> above.</td>
 </tr>
 <tr>
-<td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (requires Windows MIDI Services)"</td>
+<td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (not running, see the Windows MIDI Services card in Settings)"</td>
 <td>No MIDI API started. The Windows MIDI Services card on <strong>Settings</strong> says why.</td>
 </tr>
 <tr>
 <td>A MIDI slot does not start under the legacy MIDI API</td>
-<td>Pick an <strong>Output Port</strong> on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
+<td>The status bar names the reason. Pick an <strong>Output Port</strong> on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. When two MIDI slots are set to the same port, pick another port for one of them, and the slot that failed starts by itself. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
 </tr>
 <tr>
 <td>A MIDI keyboard does nothing under the legacy MIDI API</td>
@@ -4822,11 +4845,11 @@
 </tr>
 <tr>
 <td>The status bar says HidHide blocked PadForge from a device it had hidden</td>
-<td>PadForge took the hide back, so the controller keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes. The diagnostics log names the device path, the Windows error HidHide answered with, and whether PadForge was on HidHide's whitelist at that moment.</td>
+<td>PadForge took the hide back, so the controller keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes or its Inverse application cloak goes off. The diagnostics log names the device path, the Windows error HidHide answered with, and whether PadForge was on HidHide's whitelist at that moment.</td>
 </tr>
 <tr>
 <td>The status bar says HidHide's Inverse application cloak is on</td>
-<td>PadForge hides no controllers while this HidHide option is on. With it on, HidHide hides devices only from the programs on its list, so it cannot hide a controller from a game that is not listed.</td>
+<td>PadForge hides no controllers while this HidHide option is on. With it on, HidHide hides devices only from the programs on its list, so it cannot hide a controller from a game that is not listed. The line clears and PadForge hides again when the option goes off.</td>
 </tr>
 <tr>
 <td>Antivirus flags a driver installer</td>

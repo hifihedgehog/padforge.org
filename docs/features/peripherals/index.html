@@ -3944,7 +3944,7 @@
 <h3 id="taking-over-a-devices-lighting">Taking over a device's lighting<a class="headerlink" href="#taking-over-a-devices-lighting" title="Permanent link">&para;</a></h3>
 <p>A mouse or keyboard's Lighting tab opens with a <strong>Control This Device’s Lighting</strong> checkbox, off by default. Assigning a keyboard for its keys never repaints it: until the box is checked, this virtual controller leaves the device's lighting alone. The checkbox's tooltip reads: <em>Off stops this virtual controller from lighting the device. A vendor row, or another device of its kind lit through the same software, can still set its color. A Set Chroma Color macro on this virtual controller still paints a Razer device.</em></p>
 <p>The vendor rows have no checkbox. Assigning one is enough.</p>
-<p>A device that nothing lights any more goes back to its own lighting, and so does every device when PadForge's input engine stops. PadForge reaches Synapse, G HUB, Logitech Gaming Software and GG only while something assigned needs them.</p>
+<p>A device that nothing lights any more goes back to its own lighting, and so does every device when PadForge's input engine stops. PadForge reaches Synapse, G HUB, Logitech Gaming Software and GG only while something assigned needs them, or while the rumble mark on the <a href="../devices/">Devices</a> page buzzes a Rival or the Razer Sensa row.</p>
 <h3 id="modes">Modes<a class="headerlink" href="#modes" title="Permanent link">&para;</a></h3>
 <p>The tab's lightbar card is the one a DualSense gets, without the controller art: all fourteen base modes and the <strong>Input Reactive</strong> overlay. The macro lightbar actions reach the device too. <a href="../lighting/">Lighting</a> covers every mode and setting. On a mouse or keyboard:</p>
 <table>
@@ -3990,7 +3990,7 @@
 <p>A device on two virtual controllers follows the same rule: the lower-numbered one sets its color. Devices lit straight over HID++ do not share a color. Each shows the one its own virtual controller sets.</p>
 <hr />
 <h2 id="rumble">Rumble<a class="headerlink" href="#rumble" title="Permanent link">&para;</a></h2>
-<p>A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback tab a gamepad gets, and <a href="../force-feedback/">Force Feedback</a> covers its settings. Macro rumble reaches it too, and <strong>Test Rumble</strong> plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. A device on several virtual controllers takes the strongest rumble among them.</p>
+<p>A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback tab a gamepad gets, and <a href="../force-feedback/">Force Feedback</a> covers its settings. Macro rumble reaches it too, and <strong>Test Rumble</strong> plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. The tab leaves out <strong>Swap Left and Right Motors</strong> for them and for the Razer Sensa row, since swapping the two changes nothing. A device on several virtual controllers takes the strongest rumble among them.</p>
 <table>
 <thead>
 <tr>
@@ -4027,9 +4027,9 @@
 <p>PadForge plays Logitech's own haptic waveforms on the mouse over HID++ (feature 0x19B0). No Logitech software is needed, and any other Logitech device that reports the same feature plays the same way. The waveform repeats every 250 ms at the faintest rumble and every 80 ms at full strength, and new rumble plays its first pulse at once. When the mouse lacks a level's waveform, PadForge plays the nearest one it has.</p>
 <p>PadForge never changes the mouse's haptic settings. With haptic feedback turned off in Logi Options+, the mouse plays nothing until you turn it back on there.</p>
 <h3 id="steelseries-rival-500-700-and-710">SteelSeries Rival 500, 700 and 710<a class="headerlink" href="#steelseries-rival-500-700-and-710" title="Permanent link">&para;</a></h3>
-<p>These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.</p>
+<p>These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. Clicking the rumble mark of any tactile Rival on the Devices page buzzes all of them, whether or not that Rival is assigned. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.</p>
 <h3 id="razer-sensa-hd">Razer Sensa HD<a class="headerlink" href="#razer-sensa-hd" title="Permanent link">&para;</a></h3>
-<p>The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback tab. Its engine runs only while the row is assigned.</p>
+<p>The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback tab. Its engine runs only while the row is assigned, or while the rumble mark on the Devices page buzzes it.</p>
 <p>The row plays through the Interhaptics engine and its Razer provider, which ship unmodified inside PadForge, and through Razer Synapse 4 with Sensa HD Haptics. In Synapse, set the device's Haptic Source to Sensa HD Games. A Wolverine V3 Pro renders Sensa only on a PC, in PC mode, with firmware v2.02 or later (<a href="https://mysupport.razer.com/app/answers/detail/a_id/14630">Razer's firmware updater</a>). Hold Function, Menu and A together for two seconds to switch it to PC mode.</p>
 <p>Sensa takes one strength and plays it as one looping effect in the 65 to 300 Hz band, the same on every Sensa device.</p>
 <h3 id="mice-that-cannot-vibrate">Mice that cannot vibrate<a class="headerlink" href="#mice-that-cannot-vibrate" title="Permanent link">&para;</a></h3>
@@ -4072,6 +4072,7 @@
 <hr />
 <h2 id="the-route-line">The route line<a class="headerlink" href="#the-route-line" title="Permanent link">&para;</a></h2>
 <p>Both tabs carry a line in the accent color that says where the output goes and, when it does not arrive, why. On the Lighting tab it sits above the mode card, and with the checkbox off it shows only when something else lights the device. On the Force Feedback tab it sits at the top.</p>
+<p>Neither tab shows the line while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, the Force Feedback tab shows no line. The Lighting tab there shows only a line that names what else lights the device, or the Logitech LIGHTSYNC row's line for an LED engine that will not load. One line always shows: <em>Not Available on ARM64</em>, on a Razer Sensa row that the x64 build's settings carried into the ARM64 build.</p>
 <table>
 <thead>
 <tr>
@@ -4098,7 +4099,7 @@
 </tr>
 <tr>
 <td><em>Razer Synapse lights every device of this kind at once, so the Razer Chroma row on Virtual Controller 1 sets their color.</em></td>
-<td>The checkbox is off, and a vendor row lights this kind of device.</td>
+<td>The checkbox is off, or this virtual controller is not live, and a vendor row lights this kind of device.</td>
 </tr>
 <tr>
 <td><em>Virtual Controller 1 also lights this device, and its color shows.</em></td>
@@ -4106,7 +4107,7 @@
 </tr>
 <tr>
 <td><em>Virtual Controller 1 lights this device.</em></td>
-<td>The checkbox is off here, and another virtual controller lights the device.</td>
+<td>The checkbox is off here, or this virtual controller is not live, and another virtual controller lights the device. The Logitech LIGHTSYNC row never reads this while its engine will not load.</td>
 </tr>
 <tr>
 <td><em>Another row of this device on this virtual controller sets its color.</em></td>

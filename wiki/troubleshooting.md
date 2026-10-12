@@ -16,7 +16,7 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 2. Try a different cable. Some cables are charge-only.
 3. Check Windows Device Manager. If the device does not appear under "Human Interface Devices" or "Sound, video and game controllers," the issue is the device or its driver.
 4. For Bluetooth controllers, pair and connect in Windows Bluetooth settings before starting PadForge.
-5. If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while **"Hide Devices from Games"** is on in [Settings](features/settings.md), so turn that toggle on if it is off and let PadForge manage hiding. If the status bar says HidHide blocked PadForge from a device it had hidden, PadForge took that hide back, so the device keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes.
+5. If HidHide is installed, another tool may have cloaked the device. PadForge adds itself to the HidHide whitelist automatically while **"Hide Devices from Games"** is on in [Settings](features/settings.md), so turn that toggle on if it is off and let PadForge manage hiding. If the status bar says HidHide blocked PadForge from a device it had hidden, PadForge took that hide back, so the device keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes or its Inverse application cloak goes off.
 6. Close other controller tools (DS4Windows, BetterJoy, reWASD, x360ce). They may intercept access.
 7. A DualShock 3 pairs through PadForge itself, with no separate driver tool to install. Connect it by USB, click **Pair** on the [Devices](features/devices.md) page, and follow the dialog. When it finishes, unplug the pad and press the PS button to connect over Bluetooth. It then streams with rumble and the player-number LED.
 
@@ -151,11 +151,15 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 ## MIDI Not Available
 
-**The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (requires Windows MIDI Services)".**
+**The MIDI button in the "Add Controller" popup is dimmed and does nothing, with the tooltip "MIDI (not running, see the Windows MIDI Services card in Settings)".**
 
 1. Open [Settings](features/settings.md) and read the **Windows MIDI Services** card.
-2. **Not Running** means no MIDI API started, the legacy one included, because the Windows MIDI service did not respond. PadForge restarts the service and checks again, and the card changes once MIDI answers. When that restart does not help, PadForge tries once more two minutes later.
-3. "Failed to create MIDI session" means the API started but the service refused a session. PadForge restarts the service and creates the slot again. It restarts the service at most once every two minutes, so if the message stays, turn the slot off and on after that.
+2. **Not Running** means no MIDI API started, the legacy one included, and the line under it says why:
+    - "The Windows MIDI service did not respond. PadForge restarts the service and checks again." PadForge restarts the service once its check has been pending 15 seconds, and restarts it again every two minutes until MIDI answers. The card changes then.
+    - "A MIDI driver did not respond. PadForge checks again once it answers." The check is waiting on a classic MIDI driver, as on Windows 10, Windows 11 before 24H2, in Legacy API mode, or for the legacy API in Hybrid mode. No service is restarted there, and the card changes when the driver answers.
+    - "The runtime's uninstaller is still running. MIDI starts again once it finishes." The runtime is being uninstalled.
+3. While the card reads **Not Running**, a MIDI slot that tries to start puts "Virtual Controller *N* could not start because MIDI is not running. The Windows MIDI Services card in Settings says why." in the status bar. The slot starts by itself once MIDI answers.
+4. "Virtual Controller *N* could not start because Windows MIDI Services did not create its port." means the API started but the service refused the slot's session or never finished creating its port. PadForge restarts the service and creates the slot again. It restarts the service at most once every two minutes, and a slot that failed starts again by itself after the next restart. The line clears once the slot runs.
 
 Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Legacy API mode, or no runtime installed), the card reads **Legacy MIDI API** and the MIDI button works.
 
@@ -171,7 +175,7 @@ Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Le
 4. Match the MIDI channel (1-16) between PadForge and the receiving app.
 5. Verify CC numbers (axes) and note numbers (buttons) match what the receiving app expects.
 6. Use a MIDI monitor (MIDI-OX or Windows MIDI Services console) to confirm PadForge is sending. If messages appear there but not in the DAW, the issue is DAW configuration.
-7. Under the legacy MIDI API, a slot that reports its port in use cannot open it while another program holds it. Close that program, then turn the slot off and on.
+7. Under the legacy MIDI API, a slot that reports its port in use cannot open it while another program or another MIDI slot holds it. When the status bar names two slots, pick another port for one of them, and the slot that failed starts by itself. Otherwise close the other program, then turn the slot off and on.
 
 ---
 
@@ -235,10 +239,10 @@ Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Le
 
 1. Wait for autosave. PadForge saves after changes settle. Unexpected closes may lose recent edits.
 2. Click **Save** on the [Settings](features/settings.md) page to force an immediate save.
-3. Confirm PadForge has write access to its folder. `PadForge.xml` lives next to the executable. "Error saving settings" in the status bar indicates a permissions issue.
+3. Confirm PadForge has write access to its folder. `PadForge.xml` lives next to the executable. A save that fails puts "Error saving settings: *reason*" in the status bar, and the reason names the cause.
 4. Click **"Open Folder"** on Settings and verify `PadForge.xml` exists and is not read-only.
 5. Add a PadForge exception if antivirus software blocks file writes.
-6. If "Error loading settings" appears on startup, the XML is corrupted. Delete `PadForge.xml` and restart. PadForge creates fresh defaults. Or click **"Reset to Defaults."**
+6. When PadForge cannot read `PadForge.xml` at startup, the status bar says "Error loading settings: *reason*". PadForge copies the unreadable file to `PadForge.xml.unreadable-` plus the date and time, such as `PadForge.xml.unreadable-20261011-213045`, in the same folder, so its contents are kept, and starts with default settings. The copy stays when the next save replaces `PadForge.xml`. To start over, click **Reset to Defaults** on the **Settings File** card of the [Settings](features/settings.md) page. It removes every virtual controller, mapping and saved profile and returns every setting to its default, with no confirmation, and PadForge writes the new file about two seconds later.
 7. If the folder is synced by OneDrive, Dropbox, or similar, concurrent access across machines can corrupt the file. Move PadForge to a non-synced folder.
 
 ---

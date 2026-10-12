@@ -3998,7 +3998,7 @@
 <tr>
 <td><strong>Type track</strong></td>
 <td>Second row</td>
-<td>A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: when no MIDI API starts, the MIDI icon shows a no-entry cursor and "MIDI (requires Windows MIDI Services)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate.</td>
+<td>A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: when no MIDI API starts, the MIDI icon shows a no-entry cursor and "MIDI (not running, see the Windows MIDI Services card in Settings)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate.</td>
 </tr>
 <tr>
 <td><strong>Per-type instance number</strong></td>
@@ -4056,7 +4056,7 @@
 <tr>
 <td><strong>Virtual controller failed</strong></td>
 <td>Gold. Steel outline if nothing is mapped</td>
-<td>The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return.</td>
+<td>The slot's latest attempt to create its virtual controller failed. Outranks Awaiting devices. PadForge retries after you toggle the slot, switch its type or profile, or its devices drop offline and return. A MIDI slot also retries after the Windows MIDI service restarts, after the runtime is installed or uninstalled, when you pick another Output Port, and when its Output Port comes back.</td>
 </tr>
 <tr>
 <td><strong>Cold</strong></td>

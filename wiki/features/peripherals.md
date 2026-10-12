@@ -33,7 +33,7 @@ A mouse or keyboard's Lighting tab opens with a **Control This Device’s Lighti
 
 The vendor rows have no checkbox. Assigning one is enough.
 
-A device that nothing lights any more goes back to its own lighting, and so does every device when PadForge's input engine stops. PadForge reaches Synapse, G HUB, Logitech Gaming Software and GG only while something assigned needs them.
+A device that nothing lights any more goes back to its own lighting, and so does every device when PadForge's input engine stops. PadForge reaches Synapse, G HUB, Logitech Gaming Software and GG only while something assigned needs them, or while the rumble mark on the [Devices](devices.md) page buzzes a Rival or the Razer Sensa row.
 
 ### Modes
 
@@ -76,7 +76,7 @@ A device on two virtual controllers follows the same rule: the lower-numbered on
 
 ## Rumble
 
-A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback tab a gamepad gets, and [Force Feedback](force-feedback.md) covers its settings. Macro rumble reaches it too, and **Test Rumble** plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. A device on several virtual controllers takes the strongest rumble among them.
+A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback tab a gamepad gets, and [Force Feedback](force-feedback.md) covers its settings. Macro rumble reaches it too, and **Test Rumble** plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. The tab leaves out **Swap Left and Right Motors** for them and for the Razer Sensa row, since swapping the two changes nothing. A device on several virtual controllers takes the strongest rumble among them.
 
 | Rumble strength | MX Master 4 | Rival 500, 700 and 710 |
 |---|---|---|
@@ -95,11 +95,11 @@ PadForge never changes the mouse's haptic settings. With haptic feedback turned 
 
 ### SteelSeries Rival 500, 700 and 710
 
-These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.
+These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. Clicking the rumble mark of any tactile Rival on the Devices page buzzes all of them, whether or not that Rival is assigned. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.
 
 ### Razer Sensa HD
 
-The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback tab. Its engine runs only while the row is assigned.
+The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback tab. Its engine runs only while the row is assigned, or while the rumble mark on the Devices page buzzes it.
 
 The row plays through the Interhaptics engine and its Razer provider, which ship unmodified inside PadForge, and through Razer Synapse 4 with Sensa HD Haptics. In Synapse, set the device's Haptic Source to Sensa HD Games. A Wolverine V3 Pro renders Sensa only on a PC, in PC mode, with firmware v2.02 or later ([Razer's firmware updater](https://mysupport.razer.com/app/answers/detail/a_id/14630)). Hold Function, Menu and A together for two seconds to switch it to PC mode.
 
@@ -130,15 +130,17 @@ A lighting row lights only while its software runs, and its tab says it is waiti
 
 Both tabs carry a line in the accent color that says where the output goes and, when it does not arrive, why. On the Lighting tab it sits above the mode card, and with the checkbox off it shows only when something else lights the device. On the Force Feedback tab it sits at the top.
 
+Neither tab shows the line while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, the Force Feedback tab shows no line. The Lighting tab there shows only a line that names what else lights the device, or the Logitech LIGHTSYNC row's line for an LED engine that will not load. One line always shows: *Not Available on ARM64*, on a Razer Sensa row that the x64 build's settings carried into the ARM64 build.
+
 | The Lighting tab reads | When |
 |---|---|
 | *Colors go through Razer Synapse.* | The device lights through Synapse. Through Logitech's LED engine or GG, the line names the program that runs instead: Logitech G HUB, Logitech Gaming Software or SteelSeries GG. |
 | *Colors go straight to* and the device's name | The device lights straight over HID++. |
 | *Waiting for SteelSeries GG. Colors show once it runs.* | The software that lights the device does not answer. |
 | *Razer Synapse lights every device of this kind at once, so the one on Virtual Controller 1 sets their color.* | Another device of the same kind sets the color. |
-| *Razer Synapse lights every device of this kind at once, so the Razer Chroma row on Virtual Controller 1 sets their color.* | The checkbox is off, and a vendor row lights this kind of device. |
+| *Razer Synapse lights every device of this kind at once, so the Razer Chroma row on Virtual Controller 1 sets their color.* | The checkbox is off, or this virtual controller is not live, and a vendor row lights this kind of device. |
 | *Virtual Controller 1 also lights this device, and its color shows.* | The same device, or the same vendor row, is lit from a lower-numbered virtual controller too. |
-| *Virtual Controller 1 lights this device.* | The checkbox is off here, and another virtual controller lights the device. |
+| *Virtual Controller 1 lights this device.* | The checkbox is off here, or this virtual controller is not live, and another virtual controller lights the device. The Logitech LIGHTSYNC row never reads this while its engine will not load. |
 | *Another row of this device on this virtual controller sets its color.* | A device lit over HID++ has two rows on this virtual controller, such as a mouse row and a keyboard row, and the other one sets the color. |
 | *Another row of this device on this virtual controller lights it.* | This row's checkbox is off, and another row of the same HID++ device on this virtual controller lights it. |
 | *This device has not answered yet. Its colors show once it wakes up.* | A Logitech device is asleep or unplugged. |

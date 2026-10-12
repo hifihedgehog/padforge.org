@@ -429,6 +429,12 @@ SDL_GetJoysticks() -> uint[] joystickIds
     |
     Build HashSet<uint> currentInstanceIds (used by Phase 2 to detect disconnects)
     |
+    _suppressedSelfVirtualIds.ReleaseLapsed(currentInstanceIds, now)
+    |       (Forgets the IDs rejected on USB/IP ancestry alone that SDL no
+    |        longer lists, and the ones no persona's scope covers any more
+    |        while the device is still in the device tree. The loop below
+    |        opens the second kind again.)
+    |
     For each instanceId in joystickIds:
     |       (The SDL3 fork's filter drops HIDMaestro virtuals before
     |        SDL_GetJoysticks returns. The self-readback guard in step 2b
@@ -463,10 +469,12 @@ SDL_GetJoysticks() -> uint[] joystickIds
     |       |
     |       Open() failed? -> Dispose wrapper, continue to next
     |
-    |   2b. Self-readback guard: serial starts "HM-CTL-", path contains
-    |       "HIDMAESTRO", or a Sony or Nintendo device whose parent chain reaches the
-    |       usbip-win2 host controller (a composite persona)?
-    |       YES -> Dispose wrapper, add to _suppressedSelfVirtualIds, continue
+    |   2b. Self-readback guard (_suppressedSelfVirtualIds.PassOver): serial starts
+    |       "HM-CTL-", path contains "HIDMAESTRO", or the parent chain reaches the
+    |       usbip-win2 host controller and either passes a USB device named by
+    |       HIDMaestro's own serial or the device has the IDs of a composite
+    |       persona in scope?
+    |       YES -> PassOver logs and records the ID. Dispose wrapper, continue
     |
     |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid,
     |                             currentInstanceIds, wrapper.SerialNumber)
@@ -549,7 +557,7 @@ PadForge filters them at the SDL3 fork level. The fork's patched enumeration wal
 
 The previous in-engine filter (`IsHIDMaestroVirtualDevice` in `InputManager.Step1`) is gone. The engine no longer needs the per-cycle classification by device path, VID/PID, or active/expected count. The fork-side filter is upstream of every consumer (engine, `SDL_OpenJoystick`, `SDL_CloseJoystick`), so the rumble-killing close path that the in-engine filter used to guard against can't fire on HM devices.
 
-One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after `Open`: a serial starting `HM-CTL-`, a path containing `HIDMAESTRO`, or a Sony or Nintendo device whose parent chain reaches the usbip-win2 host controller (`IsOnUsbipVhci`, the route composite personas take) marks PadForge's own virtual. The wrapper is disposed and its instance ID goes into `_suppressedSelfVirtualIds`, so later passes skip it without reopening it.
+One backstop remains in the engine. A driver upgrade recreates the virtual devnodes with fresh instance paths, and one did slip past both the fork filter and the cloak. So Step 1 checks every wrapper right after `Open` (`SelfVirtualSuppressions.PassOver`). A serial starting `HM-CTL-` or a path containing `HIDMAESTRO` marks PadForge's own virtual. A HIDMaestro hardware id other than the host controller's stamp, on the device's node or one above it, marks it too, for good (`HidMaestroAncestry.Classify`). A parent chain that reaches the usbip-win2 host controller (the route composite personas take) marks it too, for a device below a USB device named by HIDMaestro's own serial (`HM` and twelve hex digits), and for one with the vendor and product ID of a composite persona PadForge has live, is creating or disposed within 10 seconds, or of any composite profile while the launch sweep runs (`ChecksUsbipAncestry`). The wrapper is disposed and its instance ID goes into `_suppressedSelfVirtualIds`, so later passes skip it without reopening it. An ID rejected on a persona's IDs alone leaves the set once no persona of those IDs is in scope, while its device is still in the device tree (`ReleaseLapsed`), and that pass opens it again.
 
 For the SDL3 fork patches, see PadForge's SDL3 fork branch `feat/hidmaestro-filter`. The OpenXInput fork carries its own complementary filter for the XInput API surface, documented in [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 
@@ -1459,9 +1467,9 @@ PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildIns
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:864`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:54`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` before `SDL_Init()` (`InputManager.cs:900`), next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:54`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:1391`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:944-945`), because the rescan drops every connected Wii Remote.
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1427`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:926-927`), because the rescan drops every connected Wii Remote.
 
 ### Build Instructions
 

@@ -3886,7 +3886,7 @@
 </tr>
 <tr>
 <td><strong>Also Fire Activator's Own Mapping</strong></td>
-<td>Off by default. On lets the activator input drive its own row alongside the layer change.</td>
+<td>Off by default. On lets the activator input drive its own row alongside the layer change. Off holds the input back from every reader in a row: a source on it reads released, an Up or Down key on it reads released, and an Invert on Hold modifier on it inverts nothing. A D-pad direction is held back from the combined D-pad row too.</td>
 </tr>
 <tr>
 <td><strong>Inherit Unmapped Targets from Base</strong></td>
@@ -3972,6 +3972,7 @@
 <ul>
 <li>A press that opens with the slot on the right layer keeps counting until it releases, even when the layer changes under it.</li>
 <li>A press that opens on the wrong layer stays dead until it releases, even if the slot reaches the right layer mid-hold. Its button's rows on the engaged layer fire as normal.</li>
+<li>A menu cell committed by leaving a layer counts as pressed on that layer, so an activator set to that layer whose input is the cell fires, though the layer has just ended.</li>
 <li>A Cycle activator's <strong>Previous Button</strong> carries the same check on its own.</li>
 <li><strong>Any Layer</strong> is the default, and every layer made before this setting existed behaves that way.</li>
 <li>Deleting the named layer leaves the condition inert. The dialog keeps showing the old name rather than quietly widening the activator to every layer.</li>

@@ -53,7 +53,7 @@ When one physical controller is assigned to several virtual slots, PadForge take
 | Overall Gain | 0–100% | 100% | Master vibration strength. Scales both motors. 0% disables rumble. |
 | Left Motor | 0–100% | 100% | Low-frequency motor strength. |
 | Right Motor | 0–100% | 100% | High-frequency motor strength. |
-| Swap Left and Right Motors | On/Off | Off | Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards. |
+| Swap Left and Right Motors | On/Off | Off | Flips which physical motor receives the left vs. right signal. Use when rumble feels backwards. Not shown for a haptic mouse or keyboard, or for the Razer Sensa row, which play the stronger motor whichever side it is on. |
 | Fold Trigger Rumble into Main Motors | On/Off | Off | Sends each trigger channel to the body motor on the same side. Shows only on a pad that rumbles but has no trigger motors, where impulse trigger data would otherwise go unfelt. |
 
 ---
@@ -181,9 +181,9 @@ A haptic mouse assigned to a virtual controller takes that controller's rumble t
 
 On the mice, rumble strength picks one of three levels: a mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.
 
-SteelSeries GG drives every tactile Rival at once, so the Rival on the virtual controller with the smallest player number sets their rumble. The motor stops as soon as no Rival is assigned. Two seconds after PadForge stops using GG, GG gets its devices back.
+SteelSeries GG drives every tactile Rival at once, so the Rival on the virtual controller with the smallest player number sets their rumble. Clicking the rumble mark of any tactile Rival on the [Devices](devices.md) page buzzes all of them, whether or not that Rival is assigned. The motor stops as soon as no Rival is assigned. Two seconds after PadForge stops using GG, GG gets its devices back.
 
-In the x64 build, the Razer Sensa row appears on the [Devices](devices.md) page once Razer Synapse is installed. Assign it to a virtual controller like any device. PadForge runs the Sensa engine only while the row is assigned. In Synapse, set the device's Haptic Source to Sensa HD Games. Earlier versions sent rumble to Sensa HD devices from a Dashboard toggle. A toggle that was on now assigns the Razer Sensa row to the virtual controller with the smallest player number, if there is one.
+In the x64 build, the Razer Sensa row appears on the [Devices](devices.md) page once Razer Synapse is installed. Assign it to a virtual controller like any device. PadForge runs the Sensa engine only while the row is assigned, or while the rumble mark on the Devices page buzzes it. In Synapse, set the device's Haptic Source to Sensa HD Games. Earlier versions sent rumble to Sensa HD devices from a Dashboard toggle. A toggle that was on now assigns the Razer Sensa row to the virtual controller with the smallest player number, if there is one.
 
 A haptic mouse shared over [Remote Link](../guides/remote-link.md) takes rumble from the other PC's virtual controllers too. The Razer Sensa row is not shared.
 
@@ -202,6 +202,8 @@ A line at the top of the tab says where the rumble goes:
 | *Rumble plays on your Razer Sensa HD devices through Razer Synapse.* | Synapse's Sensa runtime answers. |
 | *Waiting for Sensa HD Haptics in Razer Synapse 4. Set the device’s Haptic Source to Sensa HD Games in Synapse.* | Synapse's Sensa runtime does not answer. |
 | *Not Available on ARM64* | A Razer Sensa row in the ARM64 build, from settings the x64 build saved. |
+
+The line is empty while PadForge's input engine is stopped, and on a virtual controller that is not live, such as one that is turned off. Only *Not Available on ARM64* still shows then.
 
 See [Mice, Keyboards and Vendor Rows](peripherals.md) for the vendor rows and the lighting these devices take.
 

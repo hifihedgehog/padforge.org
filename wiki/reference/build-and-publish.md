@@ -79,6 +79,7 @@ Line endings are repo-enforced. `.gitattributes` opens with a `* text=auto` rule
 | .NET SDK | 10.0+ | `net10.0-windows10.0.26100.0` target framework |
 | Windows SDK | 10.0.26100.57 | Set via `WindowsSdkPackageVersion` in App csproj |
 | Windows | 10 or 11 | WPF builds on Windows only. An x64 machine builds both the x64 and the ARM64 exe |
+| Clone folder | About 125 characters or fewer | The build runs `cswinrt.exe`, which cannot write past Windows' 259-character path limit. The App project refuses a deeper clone with a message (`RefuseCsWinRTPathPastLimit`) |
 | Visual Studio (optional) | 2022+ | Not required. Its own MSBuild runs on .NET Framework, which lacks the Brotli the art packer needs, so build with the `dotnet` CLI |
 
 Minimum supported OS: Windows 10 1809 (build 17763), set via `SupportedOSPlatformVersion` in the App csproj.
@@ -284,7 +285,7 @@ App, Engine, and SteamWorkshop share one version via `SharedVersion.cs` at the r
 
 `SharedVersion.cs` carries `AssemblyVersion` and `AssemblyFileVersion`. The assemblies cannot drift apart because they compile against the same file. `Properties/AssemblyInfo.cs` in the App and the Engine carries the other assembly metadata (title, copyright, COM GUID, and theme info in the App). The SteamWorkshop one carries only `InternalsVisibleTo`. None of them carries version attributes. Every project sets `<GenerateAssemblyInfo>false</GenerateAssemblyInfo>` so the build does not regenerate either file.
 
-**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `4.5.3.0`.
+**Important:** Edit `SharedVersion.cs` to bump the version. Never re-introduce `AssemblyVersion` to `Properties/AssemblyInfo.cs`. It would override the shared version on whichever assembly carries it and the drift guard breaks. GitHub Releases use git tag names (e.g., `v4.4.0`) as the user-facing version, but the binary's `AssemblyVersion` should match. The current shared version is `5.0.0.0`.
 
 ### Build Identity
 
@@ -310,7 +311,7 @@ Every build between two releases carries the same version, so the App also stamp
 | **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown. Its targets file also copies `libvosk.dll` and the MinGW runtime into the output |
 | **WPF-UI** | 4.3.0 | nuget.org | Fluent Design theme for WPF (dark mode, NavigationView, controls) |
 
-`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.9.0.0`, and the csproj comment naming the shipped build says v1.9.0. That comment is hand-maintained, so when the two disagree the DLL's own file version is the authority.
+`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.11.0.0`. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 
@@ -318,7 +319,7 @@ The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.Stea
 
 | Package | Version | Purpose |
 |---|---|---|
-| **SteamKit2** | 3.4.0 | Steam protocol client (LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases |
+| **SteamKit2** | 3.4.0 | Steam protocol client (LGPL-2.1: its license.txt grants 2.1 or any later version, its package metadata says LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases |
 
 The Workshop client is the #9 community config import feature. Every client constructor checks `ISteamWorkshopGate` and throws when the user has not opted in, so no network work can happen until the "Enable Community Configs" toggle in Settings (backed by `EnableCommunityConfigLookup`) is on.
 
@@ -819,6 +820,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 |-------|-------|-----|
 | `SDL3.dll` missing (a publish is refused, a plain build prints a message) | DLL not in `Resources\SDL3\<arch>\` | Build it from the PadForge SDL fork. An upstream SDL3 release lacks the fork's HIDMaestro filter, Switch 2 Pro driver and PS5 status bytes |
 | MIDI package not found | `nuget.config` missing or `nuget-local/` folder missing | Ensure both are present at solution root |
+| `Build refused: cswinrt.exe cannot write past Windows' 259-character path limit` | The clone sits in a folder longer than about 125 characters, which puts C#/WinRT's output folder past the 210 characters its longest generated file allows (`RefuseCsWinRTPathPastLimit`). Without that check `cswinrt.exe` drops the files past the limit, or exits with code -1073740791 and no mention of the path | Clone PadForge into a shorter folder, such as `C:\src\PadForge` |
 | Missing WPF types | Using `dotnet build` instead of `dotnet publish` for deployment | Always use `dotnet publish -c Release` for deployment |
 | `System.Drawing` ambiguity | WinForms implicit usings conflict with WPF | Ensure `<Using Remove="System.Drawing" />` is in csproj |
 | HelixToolkit errors | Package restore failed | Run `dotnet restore` first |

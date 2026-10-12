@@ -55,7 +55,7 @@ graph TB
     HMVC -->|"HMController.SubmitState()<br/>or SubmitRawReport()"| HM
     VRVC -->|"HMVRController.SubmitState()"| HMVRD
     KBM -->|"SendInput()<br/><i>per event</i>"| WIN
-    MIDI -->|"SendSingleMessagePacket()<br/><i>per CC/note</i>"| WMS
+    MIDI -->|"SendSingleMessageWords()<br/><i>per CC/note</i>"| WMS
 
     HM -.->|"OutputDecoded (Sony + Switch Pro motors / DS5 passthrough)<br/>OutputReceived (XInput / Xbox HID / PID FFB)"| HMVC
 
@@ -158,17 +158,17 @@ All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carr
 
 ### FeedbackPadIndex
 
-Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:519`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3341` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1266`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
+Tracks which slot this VC occupies for correct `VibrationStates[]` writes. The runtime writers are `RegisterFeedbackCallback` (sets the initial index), `RetargetToPad` (`HMaestroVirtualController.cs:602`, invoked by `InputManager.RerouteVirtualControllersForReorder` at `InputManager.Step5.VirtualDevices.cs:3646` on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and `UnregisterFeedback` (`HMaestroVirtualController.cs:1349`, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a `SwapSlotData` updater. No such method exists in the codebase.
 
 ### Type-Specific Submit Methods
 
 All implementations have `SubmitGamepadState(Gamepad gp)` for interface compliance, but the non-gamepad outputs use alternative submit methods and leave it as a no-op:
 
-- **Xbox:** `SubmitGamepadState(Gamepad gp)` (`HMaestroVirtualController.cs:647`). Standard XInput-shaped path.
-- **PlayStation:** the extended overload `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`HMaestroVirtualController.cs:771`) carries the Sony sensor / battery payload alongside the gamepad state.
-- **PlayStation (DS4/DS5 USB report):** `SubmitRawReport(ReadOnlySpan<byte> report)` (`HMaestroVirtualController.cs:587`). Sony Report 0x01 carrying touchpad / gyro / accel / battery.
-- **Nintendo and Extended (raw HID surface):** `SubmitRawHidState(RawHidState raw, int sticks, int triggers)` (`HMaestroVirtualController.cs:931`) plus an overload taking `in MotionSnapshot` (`:995`) that feeds the HM v1.3.18 IMU channel. Up to 8 axes, 32-bit button mask, 1 hat. This path carries profile-specific button bits beyond the named set and arbitrary per-profile axis layouts that the fixed `Gamepad` struct can't express.
-- **Extended past 32 buttons or one hat:** `SubmitPackedExtendedReport(ReadOnlySpan<byte> report)` (`HMaestroVirtualController.cs:1237`). When `ExtendedReportPacker.NeedsRawReport(layout)` is true, Step 5 packs the frame against the descriptor the slot's own build emitted (up to 128 buttons and 4 hats) and submits it raw, with the same 16 ms idle dedup.
+- **Xbox:** `SubmitGamepadState(Gamepad gp)` (`HMaestroVirtualController.cs:730`). Standard XInput-shaped path.
+- **PlayStation:** the extended overload `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`HMaestroVirtualController.cs:854`) carries the Sony sensor / battery payload alongside the gamepad state.
+- **PlayStation (DS4/DS5 USB report):** `SubmitRawReport(ReadOnlySpan<byte> report)` (`HMaestroVirtualController.cs:670`). Sony Report 0x01 carrying touchpad / gyro / accel / battery.
+- **Nintendo and Extended (raw HID surface):** `SubmitRawHidState(RawHidState raw, int sticks, int triggers)` (`HMaestroVirtualController.cs:1014`) plus an overload taking `in MotionSnapshot` (`:1078`) that feeds the HM v1.3.18 IMU channel. Up to 8 axes, 32-bit button mask, 1 hat. This path carries profile-specific button bits beyond the named set and arbitrary per-profile axis layouts that the fixed `Gamepad` struct can't express.
+- **Extended past 32 buttons or one hat:** `SubmitPackedExtendedReport(ReadOnlySpan<byte> report)` (`HMaestroVirtualController.cs:1320`). When `ExtendedReportPacker.NeedsRawReport(layout)` is true, Step 5 packs the frame against the descriptor the slot's own build emitted (up to 128 buttons and 4 hats) and submits it raw, with the same 16 ms idle dedup.
 - **VR:** `SubmitVrState(in VrRawState raw)` (`HMaestroVRController.cs:191`). The left + right hand pair for one slot.
 - **KeyboardMouse:** `SubmitKbmState(KbmRawState raw)`. Keys, mouse, scroll.
 - **MIDI:** `SubmitMidiRawState(MidiRawState state)`. CC values and note on/off.
@@ -195,12 +195,12 @@ New in 4.1.0. A virtual Nintendo Switch Pro Controller as a first-class slot cat
 
 | Aspect | Behavior |
 |---|---|
-| **Preset** | Three catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009), `switch2-pro-controller` (VID 0x057E, PID 0x2069, a UMDF2 HID gamepad) and `switch2-pro-controller-composite` (the same pad as a two-interface USB/IP persona, HIDMaestro 1.11.0). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:457`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2537`) seeds new slots with `switch-pro`. |
-| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2618`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:2755`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3186-3189`). |
-| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6356-6358`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:2078-2142`). On a Switch 2 Pro profile the frame's rows go through `Switch2ProStateMap` on the way (see [Switch 2 Pro state](#switch-2-pro-state)). |
-| **Gyro passthrough** | The `MotionSnapshot` overload fills the HM v1.3.18 IMU channel: `AccelGX/GY/GZ` (g) and `GyroDpsX/Y/Z` (deg/s) land verbatim in the SDL sensor frame (`HMaestroVirtualController.cs:1176-1184`). The driver-side packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. Zeroes when the slot maps no motion source and no [Motion Pitch, Yaw or Roll](mappings.md#motion-pitch-yaw-and-roll) row. `switch-pro` and `switch2-pro-controller-composite` only. HIDMaestro keys its Switch Pro protocol (the report 0x30 body with the IMU, and the rumble decode below) on PID 0x2009 (`SwitchProPacker.IsSwitchPro`), and its Switch 2 Pro protocol on a USB/IP controller with PID 0x2069 (`Switch2ProPacker.IsSwitch2Pro`), whose report 0x05 carries the six motion counts. The plain `switch2-pro-controller` profile's report 0x09 carries no motion field. |
+| **Preset** | Three catalog profiles: `switch-pro` (VID 0x057E, PID 0x2009), `switch2-pro-controller` (VID 0x057E, PID 0x2069, a UMDF2 HID gamepad) and `switch2-pro-controller-composite` (the same pad as a two-interface USB/IP persona, HIDMaestro 1.11.0). `HMaestroProfileCatalog.NintendoProfiles` filters on `IsNintendoProfile` (`HMaestroProfileCatalog.cs:466`), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. `DefaultNintendoProfileId` (`InputManager.Step5.VirtualDevices.cs:2686`) seeds new slots with `switch-pro`. |
+| **Creation** | `CreateVirtualController` routes Nintendo through `CreateHMaestroController` (`InputManager.Step5.VirtualDevices.cs:2772`), same as the other HM categories. No Customize surface: the profile-override branch in `CreateHMaestroController` gates on `type == Extended` (`:3059`), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (`:3491-3494`). |
+| **Data path** | The raw HID surface. `SlotRawHidSurface` is true for both Extended and Nintendo slots (`InputService.cs:6400-6402`), so Step 3/4 produce `RawHidState` and Step 5 submits via `SubmitRawHidState` with the slot's `MotionSnapshot` riding beside it (`InputManager.Step5.VirtualDevices.cs:2221-2285`). On a Switch 2 Pro profile the frame's rows go through `Switch2ProStateMap` on the way (see [Switch 2 Pro state](#switch-2-pro-state)). |
+| **Gyro passthrough** | The `MotionSnapshot` overload fills the HM v1.3.18 IMU channel: `AccelGX/GY/GZ` (g) and `GyroDpsX/Y/Z` (deg/s) land verbatim in the SDL sensor frame (`HMaestroVirtualController.cs:1259-1267`). The driver-side packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. Zeroes when the slot maps no motion source and no [Motion Pitch, Yaw or Roll](mappings.md#motion-pitch-yaw-and-roll) row. `switch-pro` and `switch2-pro-controller-composite` only. HIDMaestro keys its Switch Pro protocol (the report 0x30 body with the IMU, and the rumble decode below) on PID 0x2009 (`SwitchProPacker.IsSwitchPro`), and its Switch 2 Pro protocol on a USB/IP controller with PID 0x2069 (`Switch2ProPacker.IsSwitch2Pro`), whose report 0x05 carries the six motion counts. The plain `switch2-pro-controller` profile's report 0x09 carries no motion field. |
 | **Rumble** | On `switch-pro`, HIDMaestro's SDK (`HMController`, `SwitchProPacker.DecodeRumbleAmplitude`) decodes the game's 0x01/0x10 HD-rumble writes itself and emits `leftMotor` / `rightMotor` on `OutputDecoded` only for genuine rumble frames. On `switch2-pro-controller-composite` the SDK decodes output report 0x02 (`Switch2ProPacker.DecodeRumble`) into the same two fields, and a stop arrives as 0, 0. The plain `switch2-pro-controller` gets no rumble decode. `MotorWriteAllowed` keeps non-Sony vendors on unconditional trust (the validity-flag semantics are Sony's, `:1925`), and a dedicated `NintendoVid` (0x057E) branch feeds the [inbound game-feedback pack](#inbound-game-feedback-pack-issue-236) for Bass Shakers (`:1474-1488`). |
-| **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (`NintendoPreviewMap.ButtonTable`, read by `MacroItem.cs` `NintendoLetteredLabel`). The `switch-pro` table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`NintendoExtendedLabel`). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The Switch 2 Pro table, which both of its profiles share, has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:6278`). |
+| **Button lettering** | Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (`NintendoPreviewMap.ButtonTable`, read by `MacroItem.cs` `NintendoLetteredLabel`). The `switch-pro` table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (`NintendoExtendedLabel`). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (`NintendoLetteredButtonCount`). The Switch 2 Pro table, which both of its profiles share, has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride `TriggerClickButtonMask`, derived from the profile layout's trigger-click roles (`InputService.TriggerClickButtonMaskFrom`, `InputService.cs:6322`). |
 | **Preview** | Both views, like Xbox and PlayStation. 3D is the Switch 2 Pro mesh, shared with the `switch2-pro` profiles (`HMaestroProfileCatalog.ResolveAssetFolders` maps `switch-pro` to the `Switch2Pro` model and its own `SWITCHPRO` 2D set). The S2-only parts render inert on an original Pro Controller. |
 | **Readers** | `switch2-pro-controller-composite` sends nothing until a host starts it over its bulk interface, as the real pad does. Steam and SDL built with libusb do. DirectInput, RawInput, Windows.Gaming.Input and browsers read nothing from it, so `switch2-pro-controller` stays the profile for them and `switch-pro` stays the default. |
 | **HOME LED** | Physical Switch pads assigned to the slot take Guide LED brightness through the Lighting tab's "Guide Button LED" card ("Device Default" / "Fixed Brightness" / "Battery Level"). The writer is per device, SDL `SDL_SetJoystickLED`, which the Switch HIDAPI driver converts to a subcommand 0x38 Set HOME Light packet with 15 nonzero intensity steps (`SwitchHomeLedSetter.cs`). Works on any connection. This lane is device-scoped, not VC-scoped: it drives the physical pad's LED whatever the slot type. |
@@ -229,7 +229,7 @@ Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not ass
 
 #### Native input frames
 
-`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:2106-2115`).
+`ValveReportPackers` (`PadForge.App/Common/Input/ValveReportPackers.cs`) packs the slot's `RawHidState`, `TouchpadState` and `MotionSnapshot` into the device's own report. Step 5 asks `ValveReportPackers.ForProfile(profileId)`, and when it gets a packer it submits `scratch[..packer.Size]` through `SubmitRawReport` instead of `SubmitRawHidState` (`InputManager.Step5.VirtualDevices.cs:2249-2258`).
 
 | Profile | Report | Size | Source |
 |---|---|---|---|
@@ -250,13 +250,13 @@ Every slot in a frame resolves through `NintendoPreviewMap.IndexOf(profileId, ro
 
 The 2026 pad carries its lizard-mode mouse (report 0x40) and keyboard (0x41) ahead of its controller state (0x42) on one interface. `HMController.SubmitRawReport` takes data bytes only and the driver prepends the descriptor's first report id, so a 54-byte 0x42 frame shifted one byte and came back out as a mouse report. The rolling sequence number landed on relative X at 250 Hz and the cursor tore sideways until the slot was deleted.
 
-HIDMaestro v1.7.1 fixed it (HIDMaestro#58): a profile that declares an input report id and is always armed now emits verbatim. `HMaestroVirtualController` resolves that pairing once at construction into `_extendedFrameCarriesItsOwnId` and calls `SubmitRawExtendedReport`, rather than letting the driver infer it from frame length, where a one-byte change to either size would flip the branch silently (`HMaestroVirtualController.cs:587-610`).
+HIDMaestro v1.7.1 fixed it (HIDMaestro#58): a profile that declares an input report id and is always armed now emits verbatim. `HMaestroVirtualController` resolves that pairing once at construction into `_extendedFrameCarriesItsOwnId` and calls `SubmitRawExtendedReport`, rather than letting the driver infer it from frame length, where a one-byte change to either size would flip the branch silently (`HMaestroVirtualController.cs:670-693`).
 
-`HMaestroProfileCatalog.LeadsWithAPointingReport` (`:339`) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. It is a tripwire. Nothing in the app refuses a profile on it, and `PointingReportProfileGuardTests` uses it to require that every pointing-led profile carrying a packer is on the verbatim path.
+`HMaestroProfileCatalog.LeadsWithAPointingReport` (`:348`) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. It is a tripwire. Nothing in the app refuses a profile on it, and `PointingReportProfileGuardTests` uses it to require that every pointing-led profile carrying a packer is on the verbatim path.
 
 #### Mapping grid
 
-Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from `MacroButtonNames.ValveRoleLabel` (`MacroItem.cs:7571`) over the family's wire table.
+Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from `MacroButtonNames.ValveRoleLabel` (`MacroItem.cs:7579`) over the family's wire table.
 
 Axes interleave as `[LX LY LT RX RY RT]`, which is what `ComputeAxisLayout` produces for two sticks and two analog triggers. The Nintendo families pack `[LX LY RX RY]`, having no analog triggers at all.
 
@@ -284,7 +284,7 @@ Automap binds the advertised gamepad buttons for the two clicks: "Button 16" is 
 
 #### Switching Extended profiles
 
-The three Valve wires share almost no indices, so a profile change has to move the existing bindings and then fill what the new wire added. The `PadViewModel.ProfileId` setter does both (`PadViewModel.cs:283`):
+The three Valve wires share almost no indices, so a profile change has to move the existing bindings and then fill what the new wire added. The `PadViewModel.ProfileId` setter does both (`PadViewModel.cs:285`):
 
 1. **Translate.** `SettingsManager.TranslateNintendoRawMappings` moves every raw target by role. Deck to 2015 without it left Steam on `RawBtn10`, which is the left grip over there, and a left pad click on `RawBtn16`, past the end of that 14-button wire. Both sides must be lettered: `NintendoPreviewMap.ButtonTable` falls back to the Switch Pro table for an id it does not know, so a numbered Extended profile is never translated.
 2. **Automap the additions.** `DeviceService.FillEmptyAutoMappingsForSlot` fills the targets the outgoing wire never had. The 2026 pad's D-pad is four discrete buttons at 18-21 and the Deck's wire ends at 17. The fill is additive, so a binding the user authored or deliberately cleared on this wire survives.
@@ -297,7 +297,7 @@ A Valve slot also draws its own body instead of the Extended schematic. `PadPage
 
 | Field | Type | Description |
 |---|---|---|
-| `_ctx` | `HMContext` | Shared HM SDK context owned by `InputManager` (`InputManager.Step5.VirtualDevices.cs:100`, `_hmaestroContext`). One instance per process. |
+| `_ctx` | `HMContext` | Shared HM SDK context owned by `InputManager` (`InputManager.Step5.VirtualDevices.cs:101`, `_hmaestroContext`). One instance per process. |
 | `_profile` | `HMProfile` | Profile handle resolved via `_hmaestroContext.GetProfile(profileId) ?? HMaestroProfileCatalog.GetProfileById(profileId)`, optionally rebuilt via `HMProfileBuilder.FromProfile` for descriptor overrides (Extended + Customize only). |
 | `_cachedProfileSticks`, `_cachedProfileTriggers` | `IReadOnlyList<HMSimpleStick/Trigger>` | Ctor-cached layout lists. `HMProfile.Sticks` / `.Triggers` allocate fresh lists per access, and the raw submit path read both per 1 kHz tick (~115 KB/s in the allocation trace). Layout is immutable per profile. |
 | `_type` | `VirtualControllerType` | Reported through `Type` so `SlotControllerTypes`-based counting keeps working. |
@@ -342,7 +342,7 @@ Stores the arguments, resolves the cached axis keys, and seeds `_axesScratch`. T
 
 `identityKey` is the key HIDMaestro 1.8.0 (HM#60) derives every device path, the container id and, for USB/IP personas, the USB serial from, so the pad comes back at the same paths after a PadForge restart, a reboot or a driver upgrade. `IdentityKeyForPad` builds it as `padforge:slot{N}:{Type}`, where N is the pad's position in its own family's order list, not its pad index, which moves on a reorder. A pad missing from that list gets `padforge:pad{padIndex}:{Type}`. A blank key is stored as null, and HIDMaestro then falls back to its controller index.
 
-`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:2725`). It resolves the profile (`:2736`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:2814`), then constructs the wrapper with that key (`:2912`).
+`InputManager.CreateHMaestroController` is the only call site (`InputManager.Step5.VirtualDevices.cs:3029`). It resolves the profile (`:3040`), applies any per-slot overrides for Customized Extended slots via `new HMProfileBuilder().FromProfile(baseProfile)` (`:3118`), then constructs the wrapper with that key (`:3216`).
 
 ### Connect()
 
@@ -358,7 +358,7 @@ Stores the arguments, resolves the cached axis keys, and seeds `_axesScratch`. T
 
 ### Disconnect()
 
-`HMaestroVirtualController.cs:393`.
+`HMaestroVirtualController.cs:474`.
 
 1. Returns immediately if not connected.
 2. Disposes `_ds5Dispatcher` (best-effort, then nulled) BEFORE the controller, so its channel writer is rejecting enqueues by the time `_controller.Dispose()` fires its final `OutputReceived` close events.
@@ -372,15 +372,15 @@ Guarded by `_disposed`. Calls `Disconnect()`. The FFB decoder, if present, is re
 
 ### AttachDeviceConfig(DeviceSlotConfig config)
 
-`HMaestroVirtualController.cs:470`. Attaches a per-slot `PadForge.ViewModels.DeviceSlotConfig` so user-configured adaptive-trigger / lightbar / audio effects synthesize and forward to the assigned physical DualSense via `SDL_SendGamepadEffect`. Initial registration belongs to Step 5's publication: `PrepareDeviceEffectsForPublication` (`:446`) builds the dispatcher under the lifecycle lock without starting it, and `StartDeferredEffects` starts its timer and runs the first `ApplyOnce()` once the controller has won its slot. `InputService` calls `AttachDeviceConfig` to rebind a live slot after device or configuration changes. The dispatcher's runtime resolve returns no targets when the slot has no physical DualSense mapped, so attaching unconditionally is cheap. Runs under `_dispatcherLock` and gates on `IsConnected` and `_retiring`, closing the race where an attach after teardown constructed a zombie dispatcher. A call with no dispatcher allocates `_userEffectsDispatcher` and runs `ApplyOnce()`. Otherwise it calls `Rebind(config)` on the existing dispatcher (idempotent).
+`HMaestroVirtualController.cs:553`. Attaches a per-slot `PadForge.ViewModels.DeviceSlotConfig` so user-configured adaptive-trigger / lightbar / audio effects synthesize and forward to the assigned physical DualSense via `SDL_SendGamepadEffect`. Initial registration belongs to Step 5's publication: `PrepareDeviceEffectsForPublication` (`:527`) builds the dispatcher under the lifecycle lock without starting it, and `StartDeferredEffects` starts its timer and runs the first `ApplyOnce()` once the controller has won its slot. `InputService` calls `AttachDeviceConfig` to rebind a live slot after device or configuration changes. The dispatcher's runtime resolve returns no targets when the slot has no physical DualSense mapped, so attaching unconditionally is cheap. Runs under `_dispatcherLock` and gates on `IsConnected` and `_retiring`, closing the race where an attach after teardown constructed a zombie dispatcher. A call with no dispatcher allocates `_userEffectsDispatcher` and runs `ApplyOnce()`. Otherwise it calls `Rebind(config)` on the existing dispatcher (idempotent).
 
 ### ReApplyUserEffects()
 
-`HMaestroVirtualController.cs:561`. Re-runs `_userEffectsDispatcher.ApplyOnce()`. Called by `InputService` on every `InputManager.DevicesUpdated` tick so a freshly reconnected DualSense gets its configured lightbar / trigger / audio state re-pushed without the user touching a slider. No-op when no dispatcher is attached.
+`HMaestroVirtualController.cs:644`. Re-runs `_userEffectsDispatcher.ApplyOnce()`. Called by `InputService` on every `InputManager.DevicesUpdated` tick so a freshly reconnected DualSense gets its configured lightbar / trigger / audio state re-pushed without the user touching a slider. No-op when no dispatcher is attached.
 
 ### TickFfb()
 
-`HMaestroVirtualController.cs:623`. Re-evaluates PID effect state on the engine clock by calling `_ffbDecoder.ApplyIfDue(_fbVibrationStates[FeedbackPadIndex])`. The `OutputReceived` handler only applies the decoder when the game sends a report, but effect durations expire on the DEVICE clock. Without this per-tick pass, the last computed vibration latches on the physical pad the moment a game goes quiet (discussion #125). `ApplyIfDue` is recompute-gated: it runs the full `Apply` only when effect state changed or a finite effect's expiry is due, so the steady-state poll-tick cost is two reads.
+`HMaestroVirtualController.cs:706`. Re-evaluates PID effect state on the engine clock by calling `_ffbDecoder.ApplyIfDue(_fbVibrationStates[FeedbackPadIndex])`. The `OutputReceived` handler only applies the decoder when the game sends a report, but effect durations expire on the DEVICE clock. Without this per-tick pass, the last computed vibration latches on the physical pad the moment a game goes quiet (discussion #125). `ApplyIfDue` is recompute-gated: it runs the full `Apply` only when effect state changed or a finite effect's expiry is due, so the steady-state poll-tick cost is two reads.
 
 After the apply, it publishes the decoder's `LastComputedMotors` pair into `_inboundRumblePack` (`:642-644`), so PID and vendor FFB feed the bass shakers exactly like the Xbox and Sony motor lanes. The pair comes from the decoder's own game-authored compute, never from the shared `Vibration` array, which keeps test rumble and macro rumble out by provenance.
 
@@ -388,9 +388,9 @@ Every per-tick submit path calls it first. No-op for non-PID profiles (`_ffbDeco
 
 ### SubmitGamepadState(Gamepad gp)
 
-`HMaestroVirtualController.cs:647`. Hot path for Xbox slots (PlayStation rides the extended overload below or `SubmitRawReport`, and Nintendo / Extended ride `SubmitRawHidState`). Calls `TickFfb()`, runs the idle dedup, overwrites the six canonical slots in `_axesScratch`, builds an `HMGamepadState { Axes = _axesScratch, Buttons = MapButtons(gp), Hat = MapHat(gp.Buttons) }`, and calls `_controller.SubmitState(state)`. It never `Clear()`s `_axesScratch`, so the constructor's rest-value seeds for extra axes survive frame to frame.
+`HMaestroVirtualController.cs:730`. Hot path for Xbox slots (PlayStation rides the extended overload below or `SubmitRawReport`, and Nintendo / Extended ride `SubmitRawHidState`). Calls `TickFfb()`, runs the idle dedup, overwrites the six canonical slots in `_axesScratch`, builds an `HMGamepadState { Axes = _axesScratch, Buttons = MapButtons(gp), Hat = MapHat(gp.Buttons) }`, and calls `_controller.SubmitState(state)`. It never `Clear()`s `_axesScratch`, so the constructor's rest-value seeds for extra axes survive frame to frame.
 
-**Idle dedup with a 16 ms keepalive** (`SubmitKeepaliveMs = 16`, skip logic at `:671-689`). An unchanged state means an identical frame: the driver reads a seqlocked latch and the consumer drives the cadence, so skipping an identical write changes nothing for state-latching consumers. Changes still submit the same tick they happen, so latency is untouched. Only redundant identical frames inside the window drop, which cuts idle submits ~94% at the default 1 kHz poll. RawInput consumers see idle reports at ~62 Hz instead of the poll rate.
+**Idle dedup with a 16 ms keepalive** (`SubmitKeepaliveMs = 16`, skip logic at `:671-772`). An unchanged state means an identical frame: the driver reads a seqlocked latch and the consumer drives the cadence, so skipping an identical write changes nothing for state-latching consumers. Changes still submit the same tick they happen, so latency is untouched. Only redundant identical frames inside the window drop, which cuts idle submits ~94% at the default 1 kHz poll. RawInput consumers see idle reports at ~62 Hz instead of the poll rate.
 
 The keepalive is 16 ms, not longer, because three driver watchdogs bound how long `SeqNo` may sit still:
 
@@ -415,15 +415,15 @@ The GIP counter is read-rate-bound, not time-bound. A 250 ms keepalive let any c
 
 Trigger values are mirrored to both the canonical key and the trigger row's own wire-field key when they differ, so every HM SDK lane reads live values instead of the 0.5 seed (discussion #130).
 
-**Buttons.** `MapButtons` (`HMaestroVirtualController.cs:1812`) translates 18 buttons to `HMButton` flags: A, B, X, Y, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, Guide, Touchpad (`gp.Buttons & 0x0800`) from the 16-bit mask, plus six separate bools: Share, Misc1 (DualSense mic mute), LeftPaddle / RightPaddle (Edge back paddles), and LeftPaddle2 / RightPaddle2 (Edge front Fn). HM silently drops any of these on profiles whose descriptor doesn't declare that button position, because since v1.5.1 the buttonMaps carry an explicit -1 for undeclared bits.
+**Buttons.** `MapButtons` (`HMaestroVirtualController.cs:1895`) translates 18 buttons to `HMButton` flags: A, B, X, Y, LeftBumper, RightBumper, Back, Start, LeftStick, RightStick, Guide, Touchpad (`gp.Buttons & 0x0800`) from the 16-bit mask, plus six separate bools: Share, Misc1 (DualSense mic mute), LeftPaddle / RightPaddle (Edge back paddles), and LeftPaddle2 / RightPaddle2 (Edge front Fn). HM silently drops any of these on profiles whose descriptor doesn't declare that button position, because since v1.5.1 the buttonMaps carry an explicit -1 for undeclared bits.
 
-**Hat.** `MapHat` (`HMaestroVirtualController.cs:1959`) collapses the four D-Pad bits into a single `HMHat` direction (`North`, `NorthEast`, `East`, `SouthEast`, `South`, `SouthWest`, `West`, `NorthWest`, `None`). Diagonals take priority over cardinals.
+**Hat.** `MapHat` (`HMaestroVirtualController.cs:2042`) collapses the four D-Pad bits into a single `HMHat` direction (`North`, `NorthEast`, `East`, `SouthEast`, `South`, `SouthWest`, `West`, `NorthWest`, `None`). Diagonals take priority over cardinals.
 
-**PlayStation overload.** `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`:771`) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (`GyroScale = 16`, `AccelScale = 8192`, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.
+**PlayStation overload.** `SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)` (`:854`) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (`GyroScale = 16`, `AccelScale = 8192`, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.
 
 ### SubmitRawHidState(RawHidState raw, int sticks, int triggers)
 
-`HMaestroVirtualController.cs:931`, plus the overload taking `in MotionSnapshot` at `:995` (the 3-argument form forwards with `default`). The overload runs the idle dedup and submits what `BuildRawHidState` (`:1036`) returns. That method needs no device, so a test can hand its state to HIDMaestro's own encoders. Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6356-6358`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:2134-2142`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
+`HMaestroVirtualController.cs:1014`, plus the overload taking `in MotionSnapshot` at `:1078` (the 3-argument form forwards with `default`). The overload runs the idle dedup and submits what `BuildRawHidState` (`:1119`) returns. That method needs no device, so a test can hand its state to HIDMaestro's own encoders. Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (`SubmitRawReport`) and a layout past 32 buttons or one hat (`SubmitPackedExtendedReport`): `SlotRawHidSurface` is true for both categories (`InputService.cs:6400-6402`), and the submit site passes the slot's layout counts and `MotionSnapshot` (`InputManager.Step5.VirtualDevices.cs:2277-2285`). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.
 
 **Why SubmitGamepadState is not enough:** `MapButtons` covers a fixed named set, but the XInput-shaped `Gamepad` struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.
 
@@ -451,13 +451,13 @@ The mask and the hat above are what HIDMaestro reads for most profiles, the firs
 
 Before PadForge commit `f1e3b6c7` the slot sent the raw mask, and no row pressed its own control: B pressed A, R pressed L, the D-pad rows pressed the stick clicks and Home, and the last five rows pressed nothing. Under HIDMaestro 1.10.1 a resting slot also held ZR, because the SDK read the right stick's Y for the trigger axis the slot never wrote. `Switch2ProCompositeTests.EveryRowReachesItsOwnWireBit` runs HIDMaestro's two encoders on the slot's state and requires each of the 21 rows to set its own wire bit.
 
-The composite builds its reports on the device side, so it takes no finished frame: `HMController.SubmitRawReport` and `SubmitRawExtendedReport` throw `NotSupportedException` on it. `HMaestroVirtualController.DeviceBuildsReports` (`:169`) names such a profile by HIDMaestro's own test, a USB/IP profile on 057E:2069. No packer table lists it, and Step 5 skips the packed-report branch for it (`InputManager.Step5.VirtualDevices.cs:2121`).
+The composite builds its reports on the device side, so it takes no finished frame: `HMController.SubmitRawReport` and `SubmitRawExtendedReport` throw `NotSupportedException` on it. `HMaestroVirtualController.DeviceBuildsReports` (`:169`) names such a profile by HIDMaestro's own test, a USB/IP profile on 057E:2069. No packer table lists it, and Step 5 skips the packed-report branch for it (`InputManager.Step5.VirtualDevices.cs:2264`).
 
 **IMU channel (HM v1.3.18):** when `motion.HasMotion`, the state's `AccelGX/GY/GZ` and `GyroDpsX/Y/Z` fields are filled verbatim from the `MotionSnapshot` (already g and deg/s in the SDL sensor frame, `:1176-1184`). The per-profile packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. This is the Nintendo category's gyro passthrough.
 
 ### SubmitRawReport(ReadOnlySpan<byte> report)
 
-`HMaestroVirtualController.cs:587`. Submits a pre-packed frame (after a `TickFfb()`). Step 5 calls it for PlayStation slots whose profile has a `SonyReportPackers` packer (the USB Report 0x01 layouts, carrying the touchpad, gyro, accel and battery fields `HMGamepadState` doesn't model), and for every Extended slot on a Valve profile that has a packer. On USB Sony slots this is the only submit per poll now that Step 5 skips the redundant extended leg when a raw packer exists.
+`HMaestroVirtualController.cs:670`. Submits a pre-packed frame (after a `TickFfb()`). Step 5 calls it for PlayStation slots whose profile has a `SonyReportPackers` packer (the USB Report 0x01 layouts, carrying the touchpad, gyro, accel and battery fields `HMGamepadState` doesn't model), and for every Extended slot on a Valve profile that has a packer. On USB Sony slots this is the only submit per poll now that Step 5 skips the redundant extended leg when a raw packer exists.
 
 Two driver-side paths, chosen once at construction by `_extendedFrameCarriesItsOwnId` (true when the profile declares a non-zero input report id and is always armed):
 
@@ -483,16 +483,16 @@ The audio lane is wider than the pack. Step 5's `UpdateRumbleAudioLane` takes th
 
 ### UnregisterFeedback()
 
-`HMaestroVirtualController.cs:1266`. Called synchronously by `DestroyVirtualController` BEFORE the motor zero. Parks `FeedbackPadIndex` at -1 and nulls `_fbVibrationStates`. The driver-side handlers die only when the async dispose reaches `_controller.Dispose()` (seconds later for xinputhid), and every handler guards on `FeedbackPadIndex`, so parking it makes late callbacks no-op instead of repopulating a slot this VC no longer owns.
+`HMaestroVirtualController.cs:1349`. Called synchronously by `DestroyVirtualController` BEFORE the motor zero. Parks `FeedbackPadIndex` at -1 and nulls `_fbVibrationStates`. The driver-side handlers die only when the async dispose reaches `_controller.Dispose()` (seconds later for xinputhid), and every handler guards on `FeedbackPadIndex`, so parking it makes late callbacks no-op instead of repopulating a slot this VC no longer owns.
 
 ### RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)
 
-`HMaestroVirtualController.cs:1272`. Stores `padIndex` in `FeedbackPadIndex`, caches `vibrationStates` in `_fbVibrationStates` for the per-tick `TickFfb()` pass, then (when `_controller != null`) subscribes to both `OutputDecoded` and `OutputReceived`.
+`HMaestroVirtualController.cs:1355`. Stores `padIndex` in `FeedbackPadIndex`, caches `vibrationStates` in `_fbVibrationStates` for the per-tick `TickFfb()` pass, then (when `_controller != null`) subscribes to both `OutputDecoded` and `OutputReceived`.
 
 **Setup work.**
 
 1. For DualSense virtuals (`IsDualSenseVirtual`), allocates a `DualSensePassthroughDispatcher(padIndex)` and calls `Start()`. Its lifetime matches the subscription.
-2. Subscribes to `_controller.OutputDecoded` (`:1326`). This carries pre-decoded, transport-agnostic fields, and serves three producers: Sony profiles (DS4 / DS5, either transport), both DualShock 3 (SIXAXIS) profiles (their own motor fields, below), and the virtual Switch Pro (HIDMaestro's SDK decodes the 0x01/0x10 HD-rumble writes itself and emits the motor fields only for genuine rumble frames).
+2. Subscribes to `_controller.OutputDecoded` (`:1409`). This carries pre-decoded, transport-agnostic fields, and serves three producers: Sony profiles (DS4 / DS5, either transport), both DualShock 3 (SIXAXIS) profiles (their own motor fields, below), and the virtual Switch Pro (HIDMaestro's SDK decodes the 0x01/0x10 HD-rumble writes itself and emits the motor fields only for genuine rumble frames).
 3. Subscribes to `_controller.OutputReceived` (`:1504`) for the XInput, Steam Deck persona, Xbox HID, and PID FFB paths below.
 
 **OutputDecoded motor gate.** When `leftMotor` / `rightMotor` bytes are present, the write into `vibrationStates[idx]` (`byte * 257`) is allowed by `MotorWriteAllowed(_profile.VendorId, sonyMotorsValid || sonyRelease)` (`:1925`): Sony profiles require the full trust gate, while any other vendor (Switch Pro's synthesized decode, future flag-less profiles) keeps unconditional trust, because the validity-flag semantics are Sony's. The gate is `SonyFrameValid` (`:1881`, legs 1 and 2) plus `SonyRumbleClaimed` (`:1893`, leg 3), and it requires all three legs, per linux-hid `hid-playstation.c` (motor bytes are assigned only inside the block that asserts VALID_FLAG0 bit 0, and an audio/lightbar-only report carries motor=0 meaning "ignore", not "stop"):
@@ -501,7 +501,7 @@ The audio lane is wider than the pack. Step 5's `UpdateRumbleAudioLane` takes th
 2. CRC valid (`CrcValid` alone is insufficient: it initializes true and is skipped when the footer is absent, hence the length leg).
 3. The motor-valid flag asserted: mask `0x01` for DS4, `0x03` for DS5. A DualSense frame also claims the motors with `validFlag2` bit 2 (`0x04`), the improved-emulation bit a writer on firmware 2.24 or newer can set alone.
 
-A failing gate PRESERVES the previous motors, for both consumers (the `VibrationStates` write and the #236 pack): before the gate existed, a lightbar-only report zeroed rumble on every non-Sony device on the slot. Flag asserted with both bytes zero IS a real stop. The DualSense is the exception on the flag leg (#434): a frame that passes legs 1 and 2 with every rumble flag clear is a stop, the way SDL3 stops rumble, so both consumers get zeros. The DualShock 4 keeps the preserve rule. When the gate passes, the pack is written. On Nintendo profiles (`NintendoVid`, `:1474-1488`) the pack rides directly, because that wire has no validFlag/CRC to gate on and HIDMaestro only emits motors for genuine rumble frames.
+A failing gate PRESERVES the previous motors, for both consumers (the `VibrationStates` write and the #236 pack): before the gate existed, a lightbar-only report zeroed rumble on every non-Sony device on the slot. Flag asserted with both bytes zero IS a real stop. The DualSense is the exception on the flag leg (#434): a frame that passes legs 1 and 2 with every rumble flag clear is a stop, the way SDL3 stops rumble, so both consumers get zeros. The DualShock 4 keeps the preserve rule. When the gate passes, the pack is written. On Nintendo profiles (`NintendoVid`, `:1557-1488`) the pack rides directly, because that wire has no validFlag/CRC to gate on and HIDMaestro only emits motors for genuine rumble frames.
 
 **DualShock 3 (SIXAXIS) motors.** Both DualShock 3 (SIXAXIS) profiles decode the output report's motor bytes at the offsets hid-sony's `struct sixaxis_rumble` names, as `rightMotorOn` (the small motor, on or off) and `leftMotorForce` (the large motor, 0 to 255), and never as `leftMotor` / `rightMotor`. `HMaestroVirtualController.TryDualShock3Motors` reads them: the large motor at `force * 257`, the small one full or off, the two bytes SDL's PS3 driver writes (`SDL_hidapi_ps3.c` `HIDAPI_DriverPS3_UpdateEffects`). The report has no validity flag, and both hosts send the whole report, motors included, with every LED change, so a full-length frame is the current motor state and a frame with both motors off is a stop. The result goes to `vibrationStates` and the inbound pack. The plain profile decodes them since HIDMaestro 1.10.1 (HIDMaestro#65). Before that it decoded no output report, and game rumble reached no controller on it.
 
@@ -610,7 +610,7 @@ The "where force COMES FROM" to "toward" 180-degree shift is per HID PID 1.0: a 
 
 A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one `HMVRController` pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.
 
-All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2621`).
+All calls are in-process (named-pipe transport inside `HIDMaestro.Core`), so `Connect` / `Disconnect` need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no `HMContext` (`InputManager.Step5.VirtualDevices.cs:2775`).
 
 ### IsAvailable()
 
@@ -684,7 +684,7 @@ public struct VrRawState
 **Visibility:** `internal sealed`
 **API:** three backends behind `IMidiBackend` (`MidiBackend.cs`). `MidiBackendInBox` drives the in-box `Windows.Devices.Midi2`, whose projection C#/WinRT 2.2.0 generates from `Resources/WinMD/Windows.Devices.Midi2.winmd` (Microsoft's 0.99.88-preview.10 metadata). The implementation is the copy Windows registers in System32, and PadForge ships none. `MidiBackendAppSdk` drives the `Microsoft.Windows.Devices.Midi2` App SDK runtime through the 1.0.16-rc.3.7 projection (from `nuget-local/`): Microsoft's install, or PadForge's build of 1.0.17-rc.4.25 that the Settings card installs. `MidiBackendLegacy` (`MidiBackendLegacy.cs`) drives the legacy WinMM API through `IWinMmMidi`, a seam over winmm.dll's MIDI functions.
 **Max instances:** 16 (`MaxMidiSlots = MaxPads`)
-**Availability:** `IsAvailable()` picks the API through `MidiApiSelection.Choose` and starts it, and where that API is missing or will not start, starts the legacy one. The in-box API is tried first at build 26200 and later. The runtime runs when the in-box classes are not registered (`REGDB_E_CLASSNOTREG`), it is installed, and the build is 26100 or later. While no API starts, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (requires Windows MIDI Services)".
+**Availability:** `IsAvailable()` picks the API through `MidiApiSelection.Choose` and starts it, and where that API is missing or will not start, starts the legacy one. The in-box API is tried first at build 26200 and later. The runtime runs when the in-box classes are not registered (`REGDB_E_CLASSNOTREG`), it is installed, and the build is 26100 or later. While no API starts, the add-controller popup's MIDI button is dimmed, does nothing, and shows the tooltip "MIDI (not running, see the Windows MIDI Services card in Settings)".
 
 Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, which DAWs and MIDI applications list as "PadForge MIDI N". The legacy API cannot create an endpoint, so there the controller opens the existing output port its `OutputPort` names.
 
@@ -694,13 +694,13 @@ Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, whic
 
 | Field | Type | Description |
 |---|---|---|
-| `_isAvailable` | `bool?` | Cached availability check result (nullable for first-check detection) |
-| `_probeTimedOut` | `bool` (volatile) | Set when the bounded availability probe times out. Later checks return false until `ResetAvailability()`, which the recovery runs once it has restarted the service |
-| `ProbeTimeoutMs` | `int` | The probe's bound, 10 000 ms. Tests shorten it |
+| `_probeState` | `int` (volatile) | The probe's cached answer: `ProbeNotRun`, `ProbeAvailable` or `ProbeUnavailable`. One word, written under `_availLock` and read without it |
+| `_probeTimedOut` | `bool` (volatile) | Set when an ask gives up on a probe at `ProbeTimeoutMs`. Later asks return false and keep the recovery going. Cleared when that probe answers or a reset runs |
+| `ProbeTimeoutMs` | `int` | How long an ask waits for one probe, 10 000 ms. Tests shorten it |
 | `HungProbeReturnMs` | `int` | How long the recovery waits for a hung probe to return after the service restart, 30 000 ms |
 | `s_probeRecoveryRunning` | `int` | 1 while a hung-probe recovery runs, so a second hang starts no second one |
-| `s_generation` | `int` | Bumped by every `ResetAvailability()`. Read through `Generation` |
-| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the runtime during its uninstall. Cleared by `ResetAvailability()` |
+| `s_generation` | `int` | Bumped by every reset: `ResetAvailability()`, a service restart PadForge performs (`RestartService`), the hung-probe recovery, a service instance that changed under PadForge (`CheckServiceInstance`), and the end of an uninstall's release (`EndUninstallHold`). Read through `Generation` |
+| `_runtimeSuppressed` | `bool` (volatile) | Latched by `SuppressForUninstall()` so no check reloads the runtime during its uninstall. Cleared only when the last release that holds it ends (`EndUninstallHold`), never by `ResetAvailability()` |
 | `_availLock` | `object` | Lock protecting availability check (readonly) |
 | `s_liveEndpoints` | `ConcurrentDictionary<string, long>` | Per-process registry of endpoint ids this process created: creating, ready, or abandoned-at-tick. The janitor keys off it instead of guessing from names |
 | `_backend` | `IMidiBackend` (volatile) | The backend the last successful probe started. MIDI input rides the same one (`Backend`) |
@@ -721,7 +721,10 @@ Under Windows MIDI Services it creates a system-wide virtual MIDI endpoint, whic
 | `_instanceNum` | `int` | 1-based MIDI-type instance number (readonly) |
 | `_lastCcValues` | `byte[]` | Last sent CC values (change detection, initialized to 64 = center) |
 | `_lastNotes` | `bool[]` | Last sent note states (change detection) |
-| `_layoutApplied`, `_layoutStartCc`, `_layoutCcCount`, `_layoutStartNote`, `_layoutNoteCount` | `bool`, `int` | The MIDI bar settings `CcNumbers` and `NoteNumbers` were last built from, for `ApplyLayout`'s change test (`MidiVirtualController.cs:406`) |
+| `_ccSent` | `bool[]` | Which CC entries have gone out since they took their number, so a switch controller is released only where PadForge pressed it |
+| `_owedNoteOff`, `_owedCc`, `_owedCount` | `bool[2048]`, `int[2048]`, `int` | What the receiver is still owed after the API refused it, keyed by channel and number as the wire word packs them (`WireKey`): a Note Off, and a controller's value plus one, under `_sendLock` |
+| `_sendQueue`, `_waitingCcs`, `_sendThread`, `_sendClosing`, `_sendDrainOver` | `Queue<QueuedSend>`, `WaitingCc[][]`, `Thread`, `bool` | The send worker's queue, the controller values that wait (one per channel and controller number), its thread, and the two marks of a teardown (begun, and its drain over), under `_sendLock` |
+| `_layoutApplied`, `_layoutStartCc`, `_layoutCcCount`, `_layoutStartNote`, `_layoutNoteCount` | `bool`, `int` | The MIDI bar settings `CcNumbers` and `NoteNumbers` were last built from, for `ApplyLayout`'s change test (`MidiVirtualController.cs:519`) |
 
 ### Configurable Properties
 
@@ -751,6 +754,7 @@ Same gamepad detection as the HM-backed slots (`CapType == InputDeviceType.Gamep
 | `FeedbackPadIndex` | `int` | Slot index for feedback routing (unused. MIDI has no rumble) |
 | `ApiKind` | `MidiApiKind` | The API the endpoint was made with, set when `ConnectCore` commits. Step 5 rebuilds the slot when the probe settles on another API, as after the runtime install |
 | `CreatedGeneration` | `int` | The backend generation the endpoint was made in. Step 5 rebuilds the slot once it falls behind `Generation`, since the backend or the service the endpoint talks to is gone |
+| `EndpointLost` | `bool` | True once a send showed the port itself is gone, which only the legacy API reports: a handle whose device left answers every later message with an error, even after the device is back under the same name. Step 5 rebuilds the slot, which opens the port again |
 
 ### Constructor
 
@@ -762,12 +766,14 @@ Stores pad index, clamps channel to 0–15, stores 1-based instance number.
 
 ### Connect()
 
-Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCore` runs on a `Task.Run` and the caller waits on a `ManualResetEventSlim` for `ConnectTimeoutMs` (15 seconds). On timeout it bumps `_creationGen` (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a `MidiEndpointJanitor` sweep, and on the first attempt runs `MidiServiceRecovery.TryRecoverOnce()` and retries once. A refused session gets the same restart and retry: `MidiSessionUnavailableException` on the first attempt runs `TryRecoverOnce("the service refused a MIDI session")`, then `ResetAvailability()` and a fresh `IsAvailable()`, before the second attempt. The failed attempt has already released its endpoint claim. Inside the restart's 120-second cooldown the exception reaches the caller unchanged. `Disconnect()` carries the same bounded shape around `DisconnectCore` (8 seconds).
+Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCore` runs on a `Task.Run` and the caller waits on a `ManualResetEventSlim` for `ConnectTimeoutMs` (15 seconds). On timeout it bumps `_creationGen` (so a late completion tears down its own locals instead of committing them), demotes the registry claim to abandoned, schedules a `MidiEndpointJanitor` sweep, and on the first attempt asks `RestartService("a MIDI create hung", legacyCall)` for a service restart and retries once. A refused session gets the same restart and retry: `MidiSessionUnavailableException` on the first attempt runs `RestartService("the service refused a MIDI session", legacyCall: false)`. The failed attempt has already released its endpoint claim. `Disconnect()` carries the same bounded shape around `DisconnectCore` (8 seconds).
+
+`RestartService` restarts midisrv for a call that hung or a session the service refused: a create, MIDI input, a port listing, and the release before a runtime uninstall. The availability probe asks through its own recovery (`RecoverFromHungProbe`). Both go through `MidiServiceRecovery.TryRestart`, which allows one restart per 120-second cooldown. When the old instance ended, running again or not, `RestartService` resets the cached availability under `_availLock` before the restart reads as over, and starts a new generation after it. It answers `Refused` inside another restart's cooldown, and where no restart can reach the call (`ServiceRestartCanHelp`): on Windows before 24H2, in Legacy API mode, for a legacy call in Hybrid mode, and on a PC that has no MIDI service (`MidiServiceRecovery.ServiceExists`). `Connect()` makes its second attempt only after a restart that left the service running, and only once a fresh `IsAvailable()` returns true. A false there throws `TimeoutException`. After any other outcome of the restart, a refused session's exception reaches the caller unchanged, and a create that timed out throws `TimeoutException`, or under the legacy API `MidiPortException` with `MidiPortProblem.DidNotOpen`.
 
 `ConnectCore` initialization sequence:
 
 1. Registers the id from `BuildUniqueEndpointId` (`"PADFORGE_MIDI_{instanceNum}_{12 hex}"`, unique per creation so a stranded endpoint can never collide with a fresh one) as creating, before the service can materialize the endpoint.
-2. Under the legacy API, calls `MidiBackendLegacy.OpenOutputPort(OutputPort)`: the saved name resolves to the port's current WinMM index, and `midiOutOpen` opens it with `CALLBACK_NULL` (RtMidi `MidiOutWinMM::openPort`). It throws `InvalidOperationException` naming the reason when no port is picked or another program holds it (`MMSYSERR_ALLOCATED`), and `MidiPortNotConnectedException`, a subclass, when the port is not connected. Step 5 retries a slot that failed that way once a port listing shows the port again ([Input Pipeline](../reference/input-pipeline.md)). Otherwise calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both Windows MIDI Services backends run the same steps under their own namespaces:
+2. Under the legacy API, calls `MidiBackendLegacy.OpenOutputPort(OutputPort)`: the saved name resolves to the port's current WinMM index, and `midiOutOpen` opens it with `CALLBACK_NULL` (RtMidi `MidiOutWinMM::openPort`). It throws `MidiPortException`, an `InvalidOperationException` that carries a `MidiPortProblem`: `NotPicked` when no port is picked, `InUse` when the port is already open elsewhere (`MMSYSERR_ALLOCATED`), with a text that names no holder, `DidNotOpen` for any other failed open, and `MidiPortNotConnectedException`, a subclass with `NotConnected`, when the port is not listed. Step 5 retries a slot whose port was missing once a port listing shows the port again ([Input Pipeline](../reference/input-pipeline.md)). Otherwise calls `_backend.CreateVirtualEndpoint("PadForge MIDI {instanceNum}", id, padIndex)`, or throws `InvalidOperationException` when no backend is started. Both Windows MIDI Services backends run the same steps under their own namespaces:
     1. `MidiDeclaredEndpointInfo` with the name, `ProductInstanceId` = the id, MIDI 1.0 protocol, static function blocks.
     2. `MidiVirtualDeviceCreationConfig` with the slot description, and one `MidiFunctionBlock` (bidirectional, Group 0, `RepresentsMidi10Connection = YesBandwidthUnrestricted`).
     3. `MidiSession.Create(deviceName)`. Throws `MidiSessionUnavailableException` if null, which both APIs return when the service is unavailable or not running (`MidiSession::Create` in `microsoft/MIDI`).
@@ -775,17 +781,31 @@ Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCo
     5. A `MidiEndpointConnection` to the device's endpoint ID.
     6. The virtual device as message processing plugin. The in-box API reports the add, and its backend throws on anything but `MidiMessageProcessingPluginAddResult.Succeeded`, as Microsoft's virtual device sample does. The App SDK runtime's add returns nothing.
     7. `Open()`. Throws if false.
-3. Commits `_endpoint`, `ApiKind` and `CreatedGeneration` (read before the backend, so a reset between the two reads costs a rebuild instead of stamping a torn-down backend's endpoint as current), sets `_connected = true`, marks the id ready, and initializes `_lastCcValues` (filled with 64) and `_lastNotes`, only while this attempt is still the current generation.
+3. Commits `_endpoint`, `ApiKind` and `CreatedGeneration` (read before the backend, so a reset between the two reads costs a rebuild instead of stamping a torn-down backend's endpoint as current), sets `_connected = true`, marks the id ready, initializes `_lastCcValues` (filled with 64), `_lastNotes`, `_ccSent` and the two resend arrays, and starts the send worker (`StartSending`), only while this attempt is still the current generation.
 
 **Error handling:** a backend that fails partway disconnects and disposes what it built before re-throwing. `ConnectCore` then drops the registry claim and schedules a janitor sweep (`ReleaseEndpointClaim`). A superseded attempt tears its finished endpoint down through `TeardownLocalCreation` without touching the instance fields.
+
+**Status lines:** Step 5 words every failed MIDI create for the status bar in the UI language (`RaiseCreateError`), naming the slot the way its card does, "Virtual Controller" and the shown number (`SlotLabel`). It remembers the line for the slot and takes it back once the slot starts or is reconfigured, disabled or deleted (`ResolveMidiCreateError`). In the lines below, `{0}` is that label, `{1}` the port's name and `{2}` the other slot's label.
+
+| Failure | `Strings.resx` key | Line |
+|---|---|---|
+| `MidiPortProblem.NotPicked` | `Status_MidiPortNotPicked_Format` | `{0} has no Output Port. Pick one on its page.` |
+| `MidiPortProblem.NotConnected` | `Status_MidiPortNotConnected_Format` | `The Output Port “{1}” of {0} is not connected. The slot starts once the port is back.` |
+| `MidiPortProblem.InUse` | `Status_MidiPortInUse_Format` | `The Output Port “{1}” of {0} is already in use.` |
+| `MidiPortProblem.InUse`, with another created, enabled MIDI slot set to the same port (`OtherMidiSlotOnPort`) | `Status_MidiPortShared_Format` | `{0} and {2} are set to the same Output Port “{1}”. Pick another port for one of them.` |
+| `MidiPortProblem.DidNotOpen` | `Status_MidiPortDidNotOpen_Format` | `The Output Port “{1}” of {0} did not open.` |
+| Any other failure while a Windows MIDI Services API is the one in use | `Status_MidiCreateFailed_Format` | `{0} could not start because Windows MIDI Services did not create its port.` |
+| Any other failure otherwise, and a create that found no MIDI API started | `Status_MidiNotRunning_Format` | `{0} could not start because MIDI is not running. The Windows MIDI Services card in Settings says why.` |
+
+Beside the retries every slot type has (a slot toggle, a type or profile change, its devices coming back), a failed MIDI slot tries again when its port changes, when the probe settles on another API or in a newer generation, when its legacy port comes back, and, after a shared port, once no other MIDI slot is set to that port (`CreateFailedClearReason`).
 
 ### Disconnect()
 
 Returns early if not connected. Sequence:
 
-1. Sets `_connected = false` immediately (prevents sends during cleanup).
-2. Sends Note Off for held notes to prevent stuck notes in DAWs.
-3. Nulls `_lastNotes`.
+1. Sets `_connected = false` immediately, so no later submit queues anything.
+2. Queues what the receiver is still owed first (`QueueOwed(teardown: true)`), then a Note Off for each held note, to prevent stuck notes in DAWs, and an off (value 0) for each switch controller (CC 64–69, sustain to hold 2) PadForge left on, each on the channel and number it went out on (`ReleaseSwitchControllers`). A sustain left down holds every note on its channel, Note Offs included.
+3. Nulls `_lastNotes`, then `StopSending(SendDrainMs)`: the send worker sends what is queued and ends, and the teardown waits up to 3 s for it. During that drain the worker sends a refused release again itself, a millisecond apart, until the port takes it, the port is gone or the drain is over. Then what still waits is dropped.
 4. `IMidiVirtualEndpoint.DisconnectConnection()`, then nulls `_endpoint`.
 5. `IMidiVirtualEndpoint.CloseSession()`.
 
@@ -801,19 +821,21 @@ Legacy path. Not used for dynamic MIDI. Kept as a no-op for `IVirtualController`
 
 ### ApplyLayout(int channel, int startCc, int ccCount, int startNote, int noteCount, byte velocity)
 
-`MidiVirtualController.cs:428`. Takes the slot's MIDI bar settings: channel 0–15, the first CC and note numbers with their counts, and the velocity. `CreateMidiController` calls it before `Connect()`, and Pass 3 calls it before every submit, the way the Keyboard + Mouse slot takes its SOCD settings, so an edit reaches a running slot without closing its port. It clamps the channel to 0–15 and each run to 0–127 again, because the bar sets a start and then re-clamps its count, and a read between the two sees the new start with the old count. Unchanged settings return after the compares and allocate nothing.
+`MidiVirtualController.cs:541`. Takes the slot's MIDI bar settings: channel 0–15, the first CC and note numbers with their counts, and the velocity. `CreateMidiController` calls it before `Connect()`, and Pass 3 calls it before every submit, the way the Keyboard + Mouse slot takes its SOCD settings, so an edit reaches a running slot without closing its port. It clamps the channel to 0–15 and each run to 0–127 again, because the bar sets a start and then re-clamps its count, and a read between the two sees the new start with the old count. Unchanged settings return after the compares and allocate nothing.
 
-On a change, a held note whose channel and number survive stays held. Every other held note gets its Note Off on the channel and number it went out on, since a Note Off ends only the Note On with the same channel and key. A CC whose channel and number survive keeps its last sent value, and the rest start again at 64, as at connect. The next submit presses held buttons on their new notes and sends each moved CC that is off center. A new velocity applies from the next Note On. Like `DisconnectCore`, it sends no All Notes Off (CC 123), which on a legacy port another program shares would end that program's notes too.
+On a change, a held note whose channel and number survive stays held. Every other held note gets its Note Off on the channel and number it went out on, since a Note Off ends only the Note On with the same channel and key. A CC whose channel and number survive keeps its last sent value, and the rest start again at 64, as at connect. A switch controller (CC 64–69) that PadForge left on and whose channel or number does not survive gets its off on the old pair first, since a sustain left down there holds every note on that channel. The next submit presses held buttons on their new notes and sends each moved CC that is off center. What the receiver is still owed stays owed through the edit, and a release the edit queued that the port refuses is sent again. A new velocity applies from the next Note On, and a velocity of 0 sends 1, since a MIDI 1.0 Note On with velocity 0 is a Note Off. Like `DisconnectCore`, it sends no All Notes Off (CC 123), which on a legacy port another program shares would end that program's notes too.
 
 ### SubmitMidiRawState(MidiRawState state)
 
-Sends MIDI messages from `MidiRawState`. Returns immediately if not connected. Only sends on value change.
+Queues MIDI messages from `MidiRawState` for the send worker. Returns immediately if not connected. Only queues on value change, plus what the receiver is still owed after the API refused it.
 
-**CC messages:** Iterates `min(state.CcValues.Length, _lastCcValues.Length, CcNumbers.Length)`. Changed CC values trigger `SendCC()`. Triple-min guards against mid-stream config changes.
+**CC messages:** Iterates `min(state.CcValues.Length, _lastCcValues.Length, CcNumbers.Length)`. A changed CC value goes to `QueueSend` as a Control Change. Triple-min guards against mid-stream config changes.
 
-**Note messages:** Same triple-min pattern. Changed notes trigger `SendNoteOn()` or `SendNoteOff()`.
+**Note messages:** Same triple-min pattern. A changed note goes to `QueueSend` as a Note On at `Velocity` or as a Note Off. A note the queue has no room for stays uncommitted, and the next submit tries it again.
 
-**Thread safety:** `_endpoint` is read into a local before null-check and send, preventing races with `Disconnect()`.
+**Resend:** the worker records what a refused message leaves owed (`Refused`, `Owe`) on the channel and number it went out on, and the next submit sends it again (`QueueOwed`), so a lost Note Off does not leave a note sounding. A controller the layout owns goes out at its current value. A Note Off goes out unless the slot holds that note down again. On a channel and number the slot has left, only a switch controller's release is still sent. Anything queued for a channel and number settles what is owed there. A bar edit drops nothing owed, nothing is owed to a port that is gone, and a refused Note On is never sent again, since a duplicate would retrigger the note.
+
+**Thread safety:** the polling thread never waits on a send. The worker's `SendNow` reads `_endpoint` into a local before the null-check and the send, preventing races with `Disconnect()`.
 
 ### MidiRawState
 
@@ -840,36 +862,41 @@ Guarded by `_disposed`. Calls `Disconnect()`.
 
 ### MIDI Message Helpers
 
-All three helpers call `Send(Midi1Status, data1, data2)`, which hands the message to `IMidiVirtualEndpoint.Send`. A Windows MIDI Services backend builds it as a MIDI 1.0 UMP (Universal MIDI Packet) with `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` on group 0 and sends it with `SendSingleMessagePacket()`. The legacy backend packs it for `midiOutShortMsg`, status byte low and the two data bytes above it (`MidiBackendLegacy.PackShortMessage`, as RtMidi's `MidiOutWinMM::sendMessage` packs it). A throw drops that message, never the polling thread.
+The polling thread queues each message, and one worker per controller (`SendLoop`, on a thread named `MidiSend {instanceNum}`) sends them in order, so a port that takes messages slowly never holds the polling thread. `SendNow` hands each message to `IMidiVirtualEndpoint.Send(Midi1Status, channel, data1, data2)`. A Windows MIDI Services backend packs it as a MIDI 1.0 UMP (Universal MIDI Packet) word on group 0 (`MidiUmp.Midi1Word`, the word `MidiMessageBuilder.BuildMidi1ChannelVoiceMessage()` packs) and sends it with `SendSingleMessageWords()`, with no WinRT object per message. The legacy backend packs it for `midiOutShortMsg`, status byte low and the two data bytes above it (`MidiBackendLegacy.PackShortMessage`, as RtMidi's `MidiOutWinMM::sendMessage` packs it). `Send` answers whether the API took the message. A throw counts as a refusal of that message, never as a fault of the worker.
 
-| Helper | MIDI Status | Description |
-|---|---|---|
-| `SendCC(int ccNumber, byte value)` | `ControlChange` | Sends CC on configured channel, group 0 |
-| `SendNoteOn(int note, byte velocity)` | `NoteOn` | Sends Note On on configured channel |
-| `SendNoteOff(int note)` | `NoteOff` | Sends Note Off (velocity 0) on configured channel |
+| Member | Description |
+|---|---|
+| `QueueSend(status, data1, data2, ...)` | Queues one message on the configured channel. A Control Change waits as one entry per channel and controller number: a newer value takes its place there, and the worker reads the value as it sends, so a slow port gets the newest value next. A Note On or a Note Off is queued in order and never replaced |
+| `SendQueueLimit` | 512, the most note messages that wait. A press or release that finds it reached is not queued, stays uncommitted, and is tried again on the next submit. Controller values never count against it, and the releases of a teardown or a layout edit are queued past it |
+| `SendLoop()`, `SendNow(item)` | The worker: takes the next message, sends it, and records what a refused CC or Note Off leaves owed (`Refused`) |
+| `StartSending()`, `StopSending(drainMs)` | Start the worker at connect, and ask it to send what is queued and end. `DisconnectCore` waits up to `SendDrainMs` (3 000 ms) for it |
 
 ### Static Availability Check
 
 #### IsAvailable() -> bool
 
-Thread-safe, double-checked locking on `_availLock`. Caches result in `_isAvailable`. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), or after an earlier probe timed out (`_probeTimedOut`). The probe runs on `Task.Run`, bounded at `ProbeTimeoutMs` (10 seconds). A timeout sets `_probeTimedOut`, starts `RecoverFromHungProbe` off the calling thread, and returns false, so later creates fail fast instead of waiting again.
+Thread-safe. The answer is cached in `_probeState`, written under `_availLock` and read without it. Returns false at once while `SuppressForUninstall` holds the runtime down (`_runtimeSuppressed`), while an earlier ask has given up on a probe that has not answered (`_probeTimedOut`, where each ask also keeps `RecoverFromHungProbe` going), and while a service restart PadForge performs is in flight (`MidiServiceRecovery.RestartInFlight`), since a Windows MIDI Services API that refuses inside a restart would leave the legacy API in its place. Otherwise the probe runs on `Task.Run` (`StartProbe`) and the ask waits `ProbeTimeoutMs` (10 seconds) for it (`AwaitProbe`). A probe still running then becomes the hung probe the recovery watches (`s_hungProbe`), `RecoverFromHungProbe` starts off the calling thread, and the ask returns false, so later creates fail fast instead of waiting again.
 
-`RecoverFromHungProbe` gives a hung probe the restart a hung create gets. It runs `MidiServiceRecovery.TryRecoverOnce("the availability probe hung")`, waits up to `HungProbeReturnMs` for the hung probe to return against the restarted service, since that probe holds the lock `ResetAvailability()` takes, then resets and probes again, logging `MIDIRECOVER MIDI available again on {ActiveApi}`. When the restart is refused, as inside another restart's 120-second cooldown, or the new probe hangs too, a second attempt follows once the cooldown ends. It stops early when the probe resolved some other way or an uninstall holds the runtime down. Before this, a hung probe left the Settings card reading **Not Running** and every MIDI slot failing until a runtime was installed or removed.
+`RecoverFromHungProbe` watches the probe an ask gave up on until MIDI has an answer, and parks no thread on it. A probe that is slow, not hung, answers by itself, and that answer is kept whenever it comes (`MIDIRECOVER a probe answered after its bound: MIDI available on {ActiveApi}`). So nothing is restarted while the probe can still be a slow one: the restart, `MidiServiceRecovery.TryRestart("the availability probe hung")`, comes for a probe still pending at the create path's bound (`ConnectTimeoutMs`, 15 seconds from the probe's start, `ProbeWatchMs`). From there the service is restarted once per 120-second cooldown until a probe has an answer, whether a restart was refused inside another restart's cooldown, failed, or left the service still hung. After a restart the recovery waits up to `HungProbeReturnMs` for the hung probe to return. A probe the service was restarted under keeps no answer (it compares `MidiServiceRecovery.RestartsBegun` before its starts and before it commits), so the recovery resets (`ResetAfterHungProbe`), which starts a new generation, and runs the probe again, logging `MIDIRECOVER the probe ran again: MIDI available on {ActiveApi}`. A probe that hangs in a classic MIDI driver, where no service restart can help (`ServiceRestartCanHelp`), is waited for instead, and its answer is kept when it comes. While an uninstall holds the runtime down the recovery probes nothing. Before this, a hung probe left the Settings card reading **Not Running** and every MIDI slot failing until a runtime was installed or removed.
 
-1. Fast path: if `_isAvailable.HasValue`, returns cached value.
-2. Under lock: `TryStart(s_backendFactory) ?? TryStart(s_legacyFactory)`. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null. `CreateLegacyBackend` returns a `MidiBackendLegacy`.
+1. Fast path: if `_probeState` is not `ProbeNotRun`, returns the cached answer.
+2. Under lock (`IsAvailableCore`): `TryStart(s_backendFactory, out refused)`, skipped while an uninstall holds Windows MIDI Services from starting (`WmsStartHeld`), then `TryStart(s_legacyFactory, ...)` when that left no backend. In production `CreateBackend` asks `MidiApiSelection.Choose(OsBuild, ProbeInBoxActivation, IsAppSdkRuntimeInstalled, out inBoxFailure)` and returns a `MidiBackendInBox`, a `MidiBackendAppSdk`, or null. An in-box API that Windows registers but that fails to activate is logged and kept in `InBoxActivationFailure` for the Settings card, and the legacy API runs in its place. `CreateLegacyBackend` returns a `MidiBackendLegacy`.
 3. `TryStart` calls `Start()` on the backend it creates. The in-box backend calls the static `MidiApi.EnsureServiceAvailable()`, which returns false in Legacy API mode. The runtime's backend creates its `MidiDesktopAppSdkInitializer`, then calls `InitializeSdkRuntime()` and `EnsureServiceAvailable()`, disposing the initializer when either fails. The legacy backend counts the WinMM ports and returns true. A start that returns false or throws stops that backend, which releases an initializer a half-finished start may hold, and yields null.
-4. Keeps the started backend in `_backend` and caches whether one started.
+4. Keeps the started backend in `_backend`, caches the answer in `_probeState`, and records midisrv's process id (`s_servicePid`) when the backend runs through the service. A probe a service restart began under keeps nothing and stops what it started.
 
 A probe that hangs in the first backend never reaches the legacy one: the 10-second bound gives up on both, and on the new MIDI stack WinMM routes through the same service anyway.
 
-`ActiveApi` reports the started backend's kind after a successful probe, `MidiApiKind.Legacy` included, and `MidiApiKind.None` otherwise. `ProbeFailed` is true after a probe that started nothing, or timed out, until a reset. The Settings card reads both through `MidiApiSelection.ForCard`.
+When a Windows MIDI Services backend did not start and the probe settled on the legacy API (`s_wmsRefused`), `RecheckRefusedApi` starts a fresh Windows MIDI Services backend beside the one in use (`TrialStartsWindowsMidiServices`), first after `RefusalRecheckMs` (10 seconds) and then once per recovery cooldown. Once one starts, it calls `ResetAvailability()`, and the probe runs again and takes it. Nothing there restarts the service, and in Legacy API mode nothing is checked.
+
+`CheckServiceInstance`, called from the MIDI input sweep's enumeration worker, starts a new generation when midisrv is no longer the instance the probe found: restarted from outside PadForge, or by the service manager after a crash. It waits for an instance that runs, or for `ServiceDownResetMs` (30 seconds) of a service that stays down, and leaves a restart PadForge performs to that restart's own reset.
+
+`ActiveApi` reports the started backend's kind after a successful probe, `MidiApiKind.Legacy` included, and `MidiApiKind.None` otherwise. `ProbeFailed` is true after a probe that started nothing, and while an ask has given up on a probe that has not answered. The Settings card reads both through `MidiApiSelection.ForCard`. `NotRunningReason` picks the line under **Not Running**: the service, a classic MIDI driver (`ProbeHungInDriver`), or an uninstall in flight.
 
 #### ResetAvailability()
 
-Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut` and `_runtimeSuppressed`, stops and drops `_backend`, sets `_isAvailable = null`, and bumps `Generation`. The runtime's uninstall calls it once the uninstaller exits, the runtime's install through `InputService.SwitchMidiApi`, and every service restart PadForge performs: `Connect()` after a hung create or a refused session, and `RecoverFromHungProbe`.
+Resets cached availability so `IsAvailable()` re-evaluates. Clears `_probeTimedOut`, stops and drops `_backend`, sets `_probeState` back to `ProbeNotRun`, and bumps `Generation`. It leaves the uninstall latch (`_runtimeSuppressed`) up, since a probe then could load the files the uninstaller is removing. Only the end of the release that set the latch lifts it: `EndUninstallHold`, which the uninstall reaches through `MidiRuntimeSwitch.EndUninstall` once its uninstaller has exited. The runtime's install calls `ResetAvailability()` through `InputService.SwitchMidiApi`, and `RecheckRefusedApi` calls it once Windows MIDI Services starts after all. The same reset (`ResetLocked`) and generation bump run in every service restart PadForge performs (`RestartService`), in the hung-probe recovery, in `CheckServiceInstance`, and at the end of an uninstall's release.
 
-A controller made in an older generation talks to a backend or a service that is gone. Step 5 rebuilds its slot (`CreatedGeneration` behind `Generation`), and the next MIDI input sweep closes every input and the shared session and opens them again on the current backend ([MIDI Input Internals](../reference/midi-input-internals.md)).
+A controller made in an older generation talks to a backend or a service that is gone. Step 5 rebuilds its slot (`CreatedGeneration` behind `Generation`), and the next MIDI input sweep closes every input and the shared session and opens them again on the current backend ([MIDI Input Internals](../reference/midi-input-internals.md)). A MIDI slot whose create failed gets a new attempt in a newer generation too.
 
 #### Shutdown(bool skipDispose = false)
 
@@ -877,11 +904,11 @@ A controller made in an older generation talks to a backend or a service that is
 public static void Shutdown(bool skipDispose = false)
 ```
 
-Stops and drops the backend. Call on application exit. The in-box and legacy backends hold nothing to release: each legacy port closes with the controller or input device that opened it.
+Stops and drops the backend. Call on application exit, through `ShutdownForExit`, which runs `MidiInputRuntime.Shutdown()` and then this on a worker and waits at most 8 seconds for them. The in-box and legacy backends hold nothing to release: each legacy port closes with the controller or input device that opened it.
 
-**`skipDispose`:** When true, the runtime's backend abandons its initializer without `Dispose()`, for teardown while the service may already be mid-removal (app exit racing an external uninstall). `Dispose()` calls into the runtime and crashes if the service is being removed. Either way it resets `_isAvailable = null`.
+**`skipDispose`:** When true, the runtime's backend drops its initializer without `Dispose()`. No production caller passes it. `Dispose()` makes no native call, because Microsoft's projection has the native `Shutdown` commented out of `ShutdownSdkRuntime` (rc-3 and rc-4 `MidiDesktopAppSdkInitializer.cs`), so disposing is as safe while the service goes away as at any other time. Either way it sets `_probeState` back to `ProbeNotRun`.
 
-The in-app uninstall of the runtime calls `SuppressForUninstall()` instead, unless the in-box API or the legacy API is the one in use: it sets `_runtimeSuppressed` and calls `Shutdown(skipDispose: false)` while the service still exists, so the runtime releases its DLLs, and availability stays false until `ResetAvailability()`.
+The in-app uninstall of the runtime goes through `MidiRuntimeSwitch.RunUninstall`, and what it holds follows the API in use (`TryHoldWithoutRelease`). Under the in-box API it holds nothing. Under the legacy API it takes a start hold: MIDI keeps running on its WinMM ports, and no Windows MIDI Services backend starts, by a probe or by `RecheckRefusedApi`, until the uninstaller exits. Otherwise it closes MIDI input and calls `SuppressForUninstall()`, which sets `_runtimeSuppressed` and stops the backend. That drops the runtime's initializer and, with MIDI input's shutdown before it, its sessions. It does not unload the runtime's DLLs, which stay mapped for the life of the process. The uninstall reaches its files because the window declines Restart Manager's request to close PadForge (`MainWindow.OnQueryEndSession`) and Windows Installer schedules held files for removal. Availability stays false until the release ends (`EndUninstallHold`), which the uninstall does once its uninstaller has exited, never before. One release is in flight at a time, and a release that misses its 60-second bound (`MidiRuntimeSwitch.ReleaseTimeoutMs`) keeps the uninstaller from starting and undoes itself.
 
 ---
 

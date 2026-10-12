@@ -55,7 +55,7 @@ Pick the type you want.
 A type button shows faded when:
 
 - **Type at capacity.** The cursor turns into a "no" icon. The tooltip shows the cap.
-- **Missing dependency.** Two types dim when what they need is absent: MIDI when no MIDI API starts ("MIDI (requires Windows MIDI Services)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
+- **Missing dependency.** Two types dim when what they need is absent: MIDI when no MIDI API starts ("MIDI (not running, see the Windows MIDI Services card in Settings)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
 
 The Add Controller card disappears when all 16 slots are in use.
 
@@ -156,9 +156,9 @@ Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pai
 
 ### MIDI
 
-Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
+Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. A sustain pedal or other on/off controller (CC 64 to 69) that PadForge left on is turned off on its old channel and CC number when either changes, and when the slot stops. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
 
-Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
+Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. A slot that cannot open its port says why in the status bar: no port picked ("Virtual Controller *N* has no Output Port. Pick one on its page."), a port that is not connected, a port already in use, or a port that did not open. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
 
 ![MIDI controller configuration](../images/pad-midi-configbar.png)
 
