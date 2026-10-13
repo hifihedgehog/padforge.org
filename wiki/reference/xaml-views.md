@@ -1456,7 +1456,7 @@ ScrollViewer (Padding="24,0")
       ├─ Page header (E713 gear icon + title)
       ├─ Language card (CardBorder)
       │   ├─ Icon F2B7 + "Language" title + description
-      │   └─ ComboBox (AvailableLanguages, DisplayMemberPath="NativeName", Width=250)
+      │   └─ ComboBox (AvailableLanguages, DisplayMemberPath="NativeName", Width=250, each row declares its own language)
       ├─ Appearance card
       │   ├─ Icon E790 + "Appearance" title + description
       │   ├─ "Theme" label
@@ -1558,7 +1558,7 @@ ScrollViewer (Padding="24,0")
 
 | Binding | Target | Description |
 |---------|--------|-------------|
-| `AvailableLanguages` | ComboBox ItemsSource | Language options with `NativeName` display |
+| `AvailableLanguages` | ComboBox ItemsSource | Language options with `NativeName` display. The row style sets each row's `Language` through `CultureLanguageConverter`, so a Chinese, Japanese or Korean name is drawn in its own font (#504). |
 | `SelectedLanguage` | ComboBox SelectedItem | Current language |
 | `SelectedThemeIndex` | ComboBox SelectedIndex | 0=System, 1=Light, 2=Dark |
 | `AutoStartEngine` | CheckBox | Auto-start engine on launch |
@@ -2018,7 +2018,7 @@ The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080
 
 ## Value Converters
 
-All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1057-1075). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
+All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1057-1076). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
 
 | Converter | Key | Input | Output | Description |
 |-----------|-----|-------|--------|-------------|
@@ -2041,6 +2041,7 @@ All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). A
 | `IndexLessThanVisibilityConverter` | `IndexLessThanVisibilityConverter` | `int` (count), param `int` (index) | `Visibility` | Visible when `param < count`. Reveals a per-letter formula chip when its index is within the variable count. |
 | `OneBasedIndexConverter` | `OneBasedIndexConverter` | `int` (0-based) | `string` | Renders a 0-based index as its 1-based number. Touchpad-tab pad selector. |
 | `ExeIconConverter` | `ExeIconConverter` | `string` (exe path) | `ImageSource` | Extracts the exe's shell icon for profile cards (cached per path, frozen). Returns null when the path is empty/missing. |
+| `CultureLanguageConverter` | `CultureLanguageConverter` | `CultureInfo` | `XmlLanguage` | The language a row of the language picker declares: the culture's own for Chinese, Japanese and Korean, `en-US` for every other (`UiLanguage.Declared`). |
 | `UppercaseConverter` | `UpperConverter` | `string` | `string` | Uppercases header strings for the ember eyebrow treatment. Registered in `ControllerIcons.xaml`, not `App.xaml`. |
 
 ---

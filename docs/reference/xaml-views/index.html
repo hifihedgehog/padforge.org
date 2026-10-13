@@ -9399,7 +9399,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>      ├─ Page header (E713 gear icon + title)
 <a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>      ├─ Language card (CardBorder)
 <a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>      │   ├─ Icon F2B7 + &quot;Language&quot; title + description
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>      │   └─ ComboBox (AvailableLanguages, DisplayMemberPath=&quot;NativeName&quot;, Width=250)
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>      │   └─ ComboBox (AvailableLanguages, DisplayMemberPath=&quot;NativeName&quot;, Width=250, each row declares its own language)
 <a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>      ├─ Appearance card
 <a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>      │   ├─ Icon E790 + &quot;Appearance&quot; title + description
 <a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>      │   ├─ &quot;Theme&quot; label
@@ -9509,7 +9509,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <tr>
 <td><code>AvailableLanguages</code></td>
 <td>ComboBox ItemsSource</td>
-<td>Language options with <code>NativeName</code> display</td>
+<td>Language options with <code>NativeName</code> display. The row style sets each row's <code>Language</code> through <code>CultureLanguageConverter</code>, so a Chinese, Japanese or Korean name is drawn in its own font (#504).</td>
 </tr>
 <tr>
 <td><code>SelectedLanguage</code></td>
@@ -10329,7 +10329,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p>The Steam Workshop config browser (#9). <code>FluentWindow</code> (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's <code>AddWorkshopProfile</code> import sink. The config card's pad art is <code>WorkshopControllerPreview</code> (<code>Views/WorkshopControllerPreview.xaml</code>), a <code>UserControl</code> wrapping a <code>Viewbox</code> over a code-built <code>Canvas</code> so callouts stay in the art's own pixel space, which is what <code>ControllerOverlayLayout</code>'s coordinates are expressed in. Full anatomy on <a href="../steam-workshop-import-internals/">Steam Workshop Config Import Internals</a>.</p>
 <hr />
 <h2 id="value-converters">Value Converters<a class="headerlink" href="#value-converters" title="Permanent link">&para;</a></h2>
-<p>All converters in <code>PadForge.App/Converter/</code> (<code>PadForge.Converters</code> namespace). All but one are registered as <code>StaticResource</code> in <code>App.xaml</code> (lines 1057-1075). <code>UppercaseConverter</code> (key <code>UpperConverter</code>) is registered in <code>ControllerIcons.xaml</code> instead.</p>
+<p>All converters in <code>PadForge.App/Converter/</code> (<code>PadForge.Converters</code> namespace). All but one are registered as <code>StaticResource</code> in <code>App.xaml</code> (lines 1057-1076). <code>UppercaseConverter</code> (key <code>UpperConverter</code>) is registered in <code>ControllerIcons.xaml</code> instead.</p>
 <table>
 <thead>
 <tr>
@@ -10473,6 +10473,13 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>string</code> (exe path)</td>
 <td><code>ImageSource</code></td>
 <td>Extracts the exe's shell icon for profile cards (cached per path, frozen). Returns null when the path is empty/missing.</td>
+</tr>
+<tr>
+<td><code>CultureLanguageConverter</code></td>
+<td><code>CultureLanguageConverter</code></td>
+<td><code>CultureInfo</code></td>
+<td><code>XmlLanguage</code></td>
+<td>The language a row of the language picker declares: the culture's own for Chinese, Japanese and Korean, <code>en-US</code> for every other (<code>UiLanguage.Declared</code>).</td>
 </tr>
 <tr>
 <td><code>UppercaseConverter</code></td>

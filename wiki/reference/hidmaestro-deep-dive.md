@@ -23,7 +23,7 @@ The interim milestones a successor should know, each one PadForge's own call sit
 |---|---|---|
 | v1.3.18 (HM#33) | Virtual Switch Pro profile and the IMU submission channel | `HMaestroVirtualController.cs:80` and `:1308` |
 | v1.3.21 (HM#37) | Switch Pro Bluetooth descriptor corrected to the real pad's wire shape | The Nintendo category's BT report shape |
-| v1.3.22 (HM#38) | Input worker survives foreign stop signals, the structural fix for the frozen-output bug | `App.xaml.cs:412` (the startup orphan sweep's ordering barrier) |
+| v1.3.22 (HM#38) | Input worker survives foreign stop signals, the structural fix for the frozen-output bug | `App.xaml.cs:418` (the startup orphan sweep's ordering barrier) |
 | v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1494`, `HMaestroVirtualController.cs:98` |
 | v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2523` |
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:21` |

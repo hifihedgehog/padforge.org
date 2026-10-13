@@ -343,6 +343,7 @@ PadForge.App/
     IndexLessThanVisibilityConverter.cs / IndexToLetterConverter.cs / OneBasedIndexConverter.cs
     HexToBrushConverter.cs / RgbToBrushConverter.cs  # Color string or RGB triple → Brush
     ExeIconConverter.cs               # Executable path → its shell icon
+    CultureLanguageConverter.cs       # Culture → the language its picker row declares (#504)
     UppercaseConverter.cs             # String → upper case
     EqBandTypeNameConverter.cs        # EQ band type enum → display name (#347)
 
@@ -1237,6 +1238,16 @@ WPF updates all bound text when `ChangeCulture()` fires `PropertyChanged`.
 ### Early Language Restore
 
 `App.OnStartup()` applies the saved language **before** creating UI. Reads `<Language>` from `PadForge.xml` via regex (no full deserialization) and sets `CurrentUICulture` so the first window renders correctly.
+
+### Window Language and Fonts
+
+`Common/UiLanguage.cs` declares the interface language on every window, as `xml:lang` does in markup. `App.OnStartup()` calls `UiLanguage.Start()` as its second statement, ahead of the update helper, whose windows open before anything else. From then on a class handler for the `Loaded` event of `Window` sets `Window.Language` as each window loads, and a `Strings.CultureChanged` handler sets it again on every open window when the language changes. Menus, tooltips and drop-downs take the language of the window they open from.
+
+Chinese, Japanese and Korean share their characters, and WPF picks the font for one from the language its text is declared in: Microsoft YaHei UI under `zh-Hans`, Microsoft JhengHei UI under `zh-Hant`, Yu Gothic UI under `ja`, Malgun Gothic under `ko`. Text with no declared language is `en-US`, which takes the last row of WPF's fallback font table, where the Japanese font comes first. Until this was added, a Simplified Chinese interface was drawn in Yu Gothic UI (#504).
+
+Only those three languages are declared. A window's language is also the culture its bindings format and parse numbers in, and the pad page has some 250 number boxes that read and write the en-US notation. Declared German would read a typed `0.5` as 5. The Chinese, Japanese and Korean cultures write numbers as en-US does. `UiLanguageTests` checks that against every number format in the markup and every such culture .NET knows.
+
+Each row of the language picker declares its own language through `CultureLanguageConverter`, so each language's name is drawn in its own font whatever language the interface is in. The binding names `ConverterCulture`, because WPF refuses a binding on `Language` that would take its culture from the property being set.
 
 ---
 
