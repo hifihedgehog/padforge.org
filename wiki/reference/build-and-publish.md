@@ -151,6 +151,44 @@ Runs both xunit suites in the solution:
 
 The live Steam network paths are exercised by the manually-run `tools/SteamWorkshopSmoke` harness instead.
 
+### What the tests leave alone
+
+A test run leaves the PC it runs on as it found it, apart from files in the temp folder, and reaches no other program or machine. Every call in the app, the engine and the workshop library that would change it is refused in the test process, by a flag that only a test assembly sets in a `[ModuleInitializer]`. The flags are false in the app, where each call runs as written. A test hands the code a fake, a seam, a path of its own, or a server of its own on 127.0.0.1. Reads of the PC are not refused, and neither are the app's own files in its own folders.
+
+The refusals matter most in a mutation run, which builds the code with one check removed and so runs code no test ran before. Such a build started SteamVR from the test process on 2026-10-11 and again on 2026-10-12.
+
+| Refused in the test process | Asked at | Tests |
+|-----------------------------|----------|-------|
+| A VR runtime's library or instance | `VrRuntimeGate` | `VrRuntimeOffLimitsTests` |
+| A virtual MIDI device, a MIDI session, a WinMM port, the MIDI service's restart, the endpoint sweep | `MidiVirtualController`, the three MIDI backends, `MidiServiceRecovery`, `MidiEndpointJanitor` | `MachineOffLimitsTests`, `MidiServiceOffLimitsTests` |
+| The driver installer's process starts, downloads, registry writes and folder deletes outside the temp folder | `DriverInstaller` | `MachineOffLimitsTests` |
+| HidHide's control device and a USB hub port cycle | `HidHideController` | `HidHideOffLimitsTests` |
+| A real HID collection opened or written through the shared HID helpers | `RealHidAccess` | `HidDevicesOffLimitsTests`, `HidppOffLimitsTests`, `LampArrayOffLimitsTests` |
+| The lock Razer's programs share | `RazerGuard` | `RazerMutexOffLimitsTests` |
+| A bound TouchSense mouse, and a vendor USB driver change | `RealTouchSenseAccess`, `VendorUsbDriverInstaller` | `TouchSenseOffLimitsTests` |
+| The update check, its download and its helper | `UpdateService` | `UpdateServiceOffLimitsTests` |
+| A device opened by a writer that makes its own handle, SDL's device layer, the smart card service | `DirectDeviceAccess` | `TestHostFenceTests` |
+| A page, a folder or a program handed to the shell, and the clipboard | `ShellLaunch` | `TestHostFenceTests` |
+| A socket or a listener bound beyond loopback | `NetworkListenerGate` | `NetworkListenerGateTests`, `TestHostListenerTests` |
+| A Bluetooth link dropped, a controller powered off, a device paired or rebound | `BluetoothLinkHelper` | `TestHostFenceTests` |
+| A virtual controller device, the HIDMaestro context, the sweep of the PC's virtual controllers | `HMaestroVirtualController` | `TestHostFenceTests` |
+| The FreeTrack memory and mutex every tracker shares | `FreeTrackReader` | `TestHostFenceTests` |
+| Injected keys, buttons and cursor moves, and low-level hooks | `InputHookManager` | `TestHostFenceTests` |
+| The logon task | `StartupHelper` | `TestHostFenceTests` |
+| The DualShock 3 drivers and their certificate, the radio cycle, the pairing records | `Ds3DriverInstaller` | `TestHostFenceTests` |
+| The web controller's certificate, its http.sys binding and its firewall rules | `WebControllerTls` | `TestHostFenceTests` |
+| The mutexes other analog keyboard programs share | `AnalogKeyboardNamedMutex` | `TestHostFenceTests` |
+| A tablet collection captured or restarted | `TabletNative` | `TestHostFenceTests` |
+| Sound played on an audio endpoint, the master volume, a program's volume in the mixer, an endpoint switched on, the default output | `AudioEndpointAccess` | `TestHostFenceTests` |
+| Razer's Chroma server and Sensa runtime, SteelSeries GG, Logitech's LED engine and G-key library | `VendorProgramGate` | `TestHostFenceTests` |
+| A call, a datagram, a web request or a name lookup beyond loopback | `OutboundNetworkGate` | `TestHostFenceTests` |
+| A request to Steam, and the Steam client's connect | `SteamHttp` | `TestHostFenceTests`, `SteamOffLimitsTests` |
+| The GameInput service, which HIDMaestro's context asks `sc.exe` about and starts as it is built | A flag inside the HIDMaestro SDK, set through reflection by `GameInputServiceOffLimits` | `TestHostFenceTests` |
+
+`TestHostFenceTests` also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, `CreateFile` imports, sound outputs, libraries loaded by path, and network clients. `TestHostListenerTests` lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.
+
+Code that reaches the machine in a new way gets its refusal in the same change: a flag on the class that makes the call, a `[ModuleInitializer]` in `TestHostFences.cs` that sets it, and a row in `TestHostFenceTests`.
+
 ## Single-File Publish Configuration
 
 The App csproj defines these publish properties:

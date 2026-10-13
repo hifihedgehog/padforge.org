@@ -3466,6 +3466,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#what-the-tests-leave-alone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the tests leave alone
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4211,6 +4222,17 @@
     <span class="md-ellipsis">
       
         Run Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-the-tests-leave-alone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the tests leave alone
       
     </span>
   </a>
@@ -5037,6 +5059,147 @@
 </tbody>
 </table>
 <p>The live Steam network paths are exercised by the manually-run <code>tools/SteamWorkshopSmoke</code> harness instead.</p>
+<h3 id="what-the-tests-leave-alone">What the tests leave alone<a class="headerlink" href="#what-the-tests-leave-alone" title="Permanent link">&para;</a></h3>
+<p>A test run leaves the PC it runs on as it found it, apart from files in the temp folder, and reaches no other program or machine. Every call in the app, the engine and the workshop library that would change it is refused in the test process, by a flag that only a test assembly sets in a <code>[ModuleInitializer]</code>. The flags are false in the app, where each call runs as written. A test hands the code a fake, a seam, a path of its own, or a server of its own on 127.0.0.1. Reads of the PC are not refused, and neither are the app's own files in its own folders.</p>
+<p>The refusals matter most in a mutation run, which builds the code with one check removed and so runs code no test ran before. Such a build started SteamVR from the test process on 2026-10-11 and again on 2026-10-12.</p>
+<table>
+<thead>
+<tr>
+<th>Refused in the test process</th>
+<th>Asked at</th>
+<th>Tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A VR runtime's library or instance</td>
+<td><code>VrRuntimeGate</code></td>
+<td><code>VrRuntimeOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>A virtual MIDI device, a MIDI session, a WinMM port, the MIDI service's restart, the endpoint sweep</td>
+<td><code>MidiVirtualController</code>, the three MIDI backends, <code>MidiServiceRecovery</code>, <code>MidiEndpointJanitor</code></td>
+<td><code>MachineOffLimitsTests</code>, <code>MidiServiceOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>The driver installer's process starts, downloads, registry writes and folder deletes outside the temp folder</td>
+<td><code>DriverInstaller</code></td>
+<td><code>MachineOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>HidHide's control device and a USB hub port cycle</td>
+<td><code>HidHideController</code></td>
+<td><code>HidHideOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>A real HID collection opened or written through the shared HID helpers</td>
+<td><code>RealHidAccess</code></td>
+<td><code>HidDevicesOffLimitsTests</code>, <code>HidppOffLimitsTests</code>, <code>LampArrayOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>The lock Razer's programs share</td>
+<td><code>RazerGuard</code></td>
+<td><code>RazerMutexOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>A bound TouchSense mouse, and a vendor USB driver change</td>
+<td><code>RealTouchSenseAccess</code>, <code>VendorUsbDriverInstaller</code></td>
+<td><code>TouchSenseOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>The update check, its download and its helper</td>
+<td><code>UpdateService</code></td>
+<td><code>UpdateServiceOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>A device opened by a writer that makes its own handle, SDL's device layer, the smart card service</td>
+<td><code>DirectDeviceAccess</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A page, a folder or a program handed to the shell, and the clipboard</td>
+<td><code>ShellLaunch</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A socket or a listener bound beyond loopback</td>
+<td><code>NetworkListenerGate</code></td>
+<td><code>NetworkListenerGateTests</code>, <code>TestHostListenerTests</code></td>
+</tr>
+<tr>
+<td>A Bluetooth link dropped, a controller powered off, a device paired or rebound</td>
+<td><code>BluetoothLinkHelper</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A virtual controller device, the HIDMaestro context, the sweep of the PC's virtual controllers</td>
+<td><code>HMaestroVirtualController</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>The FreeTrack memory and mutex every tracker shares</td>
+<td><code>FreeTrackReader</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>Injected keys, buttons and cursor moves, and low-level hooks</td>
+<td><code>InputHookManager</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>The logon task</td>
+<td><code>StartupHelper</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>The DualShock 3 drivers and their certificate, the radio cycle, the pairing records</td>
+<td><code>Ds3DriverInstaller</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>The web controller's certificate, its http.sys binding and its firewall rules</td>
+<td><code>WebControllerTls</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>The mutexes other analog keyboard programs share</td>
+<td><code>AnalogKeyboardNamedMutex</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A tablet collection captured or restarted</td>
+<td><code>TabletNative</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>Sound played on an audio endpoint, the master volume, a program's volume in the mixer, an endpoint switched on, the default output</td>
+<td><code>AudioEndpointAccess</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>Razer's Chroma server and Sensa runtime, SteelSeries GG, Logitech's LED engine and G-key library</td>
+<td><code>VendorProgramGate</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A call, a datagram, a web request or a name lookup beyond loopback</td>
+<td><code>OutboundNetworkGate</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A request to Steam, and the Steam client's connect</td>
+<td><code>SteamHttp</code></td>
+<td><code>TestHostFenceTests</code>, <code>SteamOffLimitsTests</code></td>
+</tr>
+<tr>
+<td>The GameInput service, which HIDMaestro's context asks <code>sc.exe</code> about and starts as it is built</td>
+<td>A flag inside the HIDMaestro SDK, set through reflection by <code>GameInputServiceOffLimits</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>TestHostFenceTests</code> also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, <code>CreateFile</code> imports, sound outputs, libraries loaded by path, and network clients. <code>TestHostListenerTests</code> lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.</p>
+<p>Code that reaches the machine in a new way gets its refusal in the same change: a flag on the class that makes the call, a <code>[ModuleInitializer]</code> in <code>TestHostFences.cs</code> that sets it, and a row in <code>TestHostFenceTests</code>.</p>
 <h2 id="single-file-publish-configuration">Single-File Publish Configuration<a class="headerlink" href="#single-file-publish-configuration" title="Permanent link">&para;</a></h2>
 <p>The App csproj defines these publish properties:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cm">&lt;!-- Single-file portable publish: dotnet publish -c Release --&gt;</span>
