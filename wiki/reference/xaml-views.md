@@ -1850,7 +1850,7 @@ Constructor only. All text from localized string bindings.
 
 **Files:** `CopyFromDialog.xaml`, `CopyFromDialog.xaml.cs`
 
-Modal dialog to copy from another slot (`FluentWindow`, 420x420). Lists one entry per other slot whose mapping table has rows (`InputService.SlotHasAnyMapping` or the donor `PadSetting.HasAnyMapping`), plus one entry per unmapped device that still carries a `PadSetting` with mappings. The target slot itself is skipped. The chosen slot's mapping table is applied wholesale to the target, and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
+Modal dialog to copy from another slot (`FluentWindow`, 420x420). Lists one entry per other slot whose mapping table has rows (`InputService.SlotHasAnyMapping` or the donor `PadSetting.HasAnyMapping`), plus one entry per unmapped device that still carries a `PadSetting` with mappings. The target slot itself is skipped. The chosen slot's mapping table is applied wholesale to the target, moved by role where the two slots are on different wires of the same pads (`InputService.LandingOf`), and every assigned device's per-device tuning carries along through `InputService.BuildPerDeviceSettingsSnapshot` + `ApplyPerDeviceSettingsToSlot`, matched by `InstanceGuid` (perfect round-trip) or `ProductGuid` (same model, different unit).
 
 ### ProfileDialog
 
