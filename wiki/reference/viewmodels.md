@@ -1245,7 +1245,7 @@ Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They reb
 
 ### Per-(Slot, Device) Lighting / Adaptive Trigger Configuration
 
-Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. A lit mouse, keyboard or vendor row (#494) gets its own config here too, whose `PeripheralLightingEnabled` decides whether this slot lights a mouse or keyboard at all. See [DeviceSlotConfig](#deviceslotconfig).
+Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. A lit mouse, keyboard, unit row or vendor row (#494) gets its own config here too, whose `PeripheralLightingEnabled` decides whether this slot lights a mouse or keyboard at all and whose `PeripheralClaimLevel` says how firmly. See [DeviceSlotConfig](#deviceslotconfig).
 
 | Property | Type | Description |
 |----------|------|-------------|
@@ -3277,9 +3277,10 @@ Transient runtime state set by `MacroActionType.LightbarColor`. Not persisted (`
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `PeripheralLightingEnabled` | `bool` | `false` | The Lighting tab's Control This Device’s Lighting switch (`DeviceSlotConfig.cs` line 1003). On, this virtual controller lights a mouse or keyboard with the modes above, and the slot's effects dispatcher holds a lighting claim on the device. Off, the dispatcher releases this slot's claim, so the color comes from another virtual controller that lights the device, a vendor row, another device of its kind on a shared path, or the device's own software. A Set Chroma Color macro on this virtual controller still paints a Razer device. Off by default, so assigning a keyboard for its keys never repaints it. The vendor lighting rows ignore it, since lighting is all they carry. A change re-checks the dispatcher's animation timer. |
+| `PeripheralLightingEnabled` | `bool` | `false` | The Lighting tab's Control This Device’s Lighting switch (`DeviceSlotConfig.cs` line 1003). On, this virtual controller lights a mouse or keyboard with the modes above, and the slot's effects dispatcher holds a lighting claim on the device. Off, the dispatcher releases this slot's claim, so the color comes from another virtual controller that lights the device, a vendor row, another device of its kind on a shared path, or the device's own software. A Set Chroma Color macro on this virtual controller still paints a Razer device. Off by default, so assigning a keyboard for its keys never repaints it. The vendor lighting rows and the unit rows ignore it, since lighting is all they carry. A change re-checks the dispatcher's animation timer. |
+| `PeripheralClaimLevel` | `PeripheralClaimLevel` | `Colors` | The Lighting tab's Lighting Hold under that switch, for the same (virtual controller, device) pair: how firmly this controller may hold the device while it lights it. `Colors` (0) takes the colors alone, `Power` (1) the device's lighting power too, so it stops dimming its lights by itself, and `HostMode` (2) its on-board memory mode as well, so the profile saved on the device does not apply while it is lit. The number is the hold a lighting claim carries (`PeripheralOutputs.SetLighting`) and the option's place in the picker, so a member is appended and never renumbered. The saved form is the name. A value the enum does not name leaves the property as it was. Only a device that offers a hold shows the picker, and a worker holds a device at no more than it offers. A vendor row and a unit row ask for colors alone |
 
-`ResetPeripheralLightingEnabledCommand` turns it back off.
+`ResetPeripheralLightingEnabledCommand` turns the switch back off, and `ResetPeripheralClaimLevelCommand` puts the hold back at `Colors`. `PeripheralLightingClaim(out level)` reads the switch and the hold together from one field, for the dispatcher, whose pass can run on its timer's thread while a load writes the two one after the other.
 
 ### Audio-to-lightbar (#55)
 

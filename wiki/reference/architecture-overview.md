@@ -24,7 +24,7 @@ graph TB
         HMP[HM lifecycle thread pool<br/>Create / Destroy off polling thread]
         ABD[AudioBassDetector<br/>WASAPI loopback . IIR filter]
         RAS[RumbleAudioService<br/>Bass Shakers . WASAPI render]
-        PH[PeripheralOutputHost #494<br/>HID++ . Chroma . LED SDK . GameSense . Sensa workers]
+        PH[PeripheralOutputHost #494<br/>HID++ . LampArray . Razer . SteelSeries . TouchSense<br/>Chroma . LED SDK . GameSense . Sensa workers]
     end
 
     subgraph "Virtual Controllers"
@@ -626,23 +626,31 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 
 ### Peripheral outputs (#494)
 
-A mouse, keyboard or vendor row assigned to a virtual controller is an output device of that controller, the way a DualSense is. It takes the controller's lighting through its own Lighting tab when PadForge can light it, and its rumble through its own Force Feedback tab when it can rumble. This subsystem replaced the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirror services and the Razer Sensa switch (#374), and none of it has a Dashboard setting. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an output device of that controller, the way a DualSense is. It takes the controller's lighting through its own Lighting tab when PadForge can light it, and its rumble through its own Force Feedback tab when it can rumble. A device is lit through its vendor's software while that software runs. While it does not, PadForge lights the device on its own where it has a path to it: Logitech HID++, a Razer or SteelSeries control collection, or a HID LampArray collection. This subsystem replaced the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirror services and the Razer Sensa switch (#374), and none of it has a Dashboard setting. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 
 **App `Common/Input/Peripherals/`**
 
 - `PeripheralOutputs.cs`. The hub: the link table, each row's haptic level, each lighting claim and the ruling between claims, the Set Chroma Color assertions, the backend states. Every setter is lock-free or takes only the hub's own leaf state
-- `PeripheralLinker.cs`. Vendor software presence, read from the registry, files and process names, and the pure rules that tie a row to its output paths
-- `PeripheralOutputHost.cs`. Runs with the engine: the link pass every 500 ms, claim pruning, the workers' lifetimes, and the Razer Sensa worker while its row is assigned or Identify buzzes it
+- `PeripheralLinker.cs`. Vendor software presence, read from the registry, files and process names, the watch on running vendor programs, and the pure rules that tie a row to its output paths
+- `PeripheralOutputHost.cs`. Runs with the engine: the link pass every 500 ms, the walk of the present HID collections, claim pruning, the workers' lifetimes, the crash path, and the Razer Sensa worker while its row is assigned or Identify buzzes it
 - `PeripheralOutputRow.cs`. The Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, synthetic devices with no inputs
+- `PeripheralUnitRow.cs`. The row of a lit unit no mouse or keyboard row reaches: a headset, a mousepad or a light strip that Windows lists as a HID LampArray
 - `PeripheralLightingColor.cs` / `GameLightbarCapture.cs`. One device's color for one slot under the game's lightbar, and that lightbar as a DualShock 4 or DualSense virtual controller receives it
 - `PeripheralRouteText.cs`. The line the Lighting and Force Feedback tabs show: where the output goes, and why it does not show
 - `PeripheralProductIds.cs`. Product IDs that name a Razer or SteelSeries device's kind
-- `HidppBackend.cs` / `HidppUnits.cs`. The Logitech HID++ worker: unit discovery, receiver pairing tables, feature 0x8070 lighting, battery reads, and feature 0x19B0 waveforms
+- `HidppBackend.cs` / `HidppUnits.cs` / `HidppLightPlan.cs`. The Logitech HID++ worker: unit discovery, receiver pairing tables, battery reads, feature 0x19B0 waveforms, and the light plans for features 0x8070 and 0x8071 with their per-key partners 0x8080 and 0x8081
+- `IDirectUnitBackend.cs` / `DirectBackends.cs`. The contract of a backend that lights or rumbles one device at a time, and the one place those backends are made
+- `LampArrayBackend.cs` / `LampArrayProtocol.cs` / `WindowsLightingState.cs`. The HID LampArray worker, its reports and descriptor checks, and whether Windows Dynamic Lighting lights a collection
+- `RazerDirectBackend.cs` / `RazerDirectProtocol.cs` / `RazerDirectTable.cs` / `RazerGuard.cs`. The Razer worker, its 90-byte report, the product table, and the lock third-party Razer tools share
+- `SteelSeriesDirectBackend.cs` / `SteelSeriesDirectProtocol.cs`. The SteelSeries worker and the frames of each command family
+- `TouchSenseBackend.cs` / `TouchSenseProtocol.cs` / `TouchSenseChannel.cs` / `TouchSenseWinUsb.cs` / `TouchSenseMouseDevice.cs`. Rumble on a Logitech iFeel mouse bound to WinUSB: the worker, its frames, the one WinUSB handle per mouse, and the mouse row PadForge reads itself
 - `ChromaBackend.cs` / `LedSdkBackend.cs` / `GameSenseBackend.cs`. The Razer Chroma REST, Logitech LED SDK and SteelSeries GameSense workers
 
 **App `Common/Input/`**
 
-- `InputManager.PeripheralRows.cs`. Step 1's phase 1m, which opens and retires the vendor rows
+- `InputManager.PeripheralRows.cs`. Step 1's phase 1m, which opens and retires the vendor rows and the unit rows
+- `InputManager.TouchSenseMice.cs`. Step 1's phase 1n, which opens and retires the rows of bound TouchSense mice
+- `HidCollectionRuntime.cs` / `HidReportChannel.cs` / `RealHidAccess.cs`. The walk of every present HID collection, the report channel with bounded calls, and the test host's refusal of real devices
 - `HidppHaptics.cs`. The HID++ 2.0 frames for the haptic feature 0x19B0
 - `HapticRumbleShaper.cs`. Rumble strength to a waveform and a repeat interval, for devices that play fixed waveforms
 
@@ -651,6 +659,7 @@ A mouse, keyboard or vendor row assigned to a virtual controller is an output de
 - `GameSenseClient.cs`. The client for the GameSense server in SteelSeries GG: one PADFORGE game with a tactile rumble event and a color event per device type
 - `LogiLedEngineNative.cs`. Finds and binds the LED engine G HUB or Logitech Gaming Software installs, so PadForge ships nothing of Logitech's
 - `SensaHapticsService.cs`. The Razer Sensa row's worker, through the bundled Interhaptics engine
+- `TouchSenseBinding.cs`. Which TouchSense mice are bound to PadForge's WinUSB package, and whether a mouse still on Windows' driver declares the buzz report
 - `PeripheralSwitchMigration.cs`. Turns the retired switches into vendor-row assignments, once per file
 
 `ChromaLightbarService.cs` and `LightsyncLightbarService.cs` are gone.
@@ -815,7 +824,8 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
-| `InputManager.PeripheralRows.cs` | Step 1 | Peripheral outputs (#494), Phase 1m: the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, each open while its vendor's software is installed |
+| `InputManager.PeripheralRows.cs` | Step 1 | Peripheral outputs (#494), Phase 1m: the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, each open while its vendor's software is installed, and the unit rows of lit devices no mouse or keyboard row reaches |
+| `InputManager.TouchSenseMice.cs` | Step 1 | Peripheral outputs (#494), Phase 1n: the rows of Logitech iFeel mice bound to WinUSB, read over WinUSB on a thread of their own |
 | `InputManager.Step1.UsbipVhciGuard.cs` | Step 1 | Self-readback guard, so PadForge never ingests its own virtual controller. It holds the test Step 1 runs on each device it opens (`SelfVirtualSuppressions.PassOver`). A device is passed over on an `HM-CTL-` serial, a `HIDMAESTRO` path, a HIDMaestro hardware id other than the host controller's stamp on its own node or one above it, a place under the usbip-win2 host controller below a USB device whose instance id ends in HIDMaestro's serial (`HM` and twelve hex digits), or a place under that controller with the vendor and product id of a composite persona this process has live, is creating or retired within 10 s, or of any composite profile while the launch sweep runs. An id held on that last ground alone is opened again once it lapses while its device is still in the device tree (`ReleaseLapsed`). Under a host controller that carries the `ROOT\HIDMAESTRO_UDE` stamp, the SDL and OpenXInput forks drop the HID and XUSB interfaces of all of these before Step 1, a real pad forwarded over usbip-win2 included, except a pad xboxgip serves, whose XUSB interface sits past OpenXInput's walk and keeps its slot. An Xbox One instrument that GameInput reports is listed whatever host controller it sits under, and so is what hidapi reads through libusb |
 | `InputManager.Step2.UpdateInputStates.cs` | Step 2 | Read `CustomInputState` per device, apply FFB from `VibrationStates[]` + audio bass |
 | `InputManager.Step3.MappingSetEval.cs` | Step 3 | Evaluate the per-VC MappingSet (rows, sources, combine modes, shift layers) into OutputState |
@@ -966,7 +976,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 ### 12. Peripheral Outputs (PeripheralOutputHost, with the engine)
 
-`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s and runs the link pass every 500 ms, and four workers: the `PeripheralHidpp` and `PeripheralGameSense` threads and the Razer Chroma and Logitech LED SDK loops on the thread pool. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
+`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s, walks the present HID collections for the direct backends, and runs the link pass every 500 ms. It starts eight workers: the `PeripheralHidpp` and `PeripheralGameSense` threads, the Razer Chroma and Logitech LED SDK loops on the thread pool, and one thread for each direct backend, `PeripheralLampArray`, `PeripheralSteelSeries`, `PeripheralRazer` and `PeripheralTouchSense`. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and each Logitech iFeel mouse bound to WinUSB has a `TouchSenseMouse` thread that reads its input reports. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
 
 ### Thread Safety Summary
 
@@ -989,8 +999,10 @@ Injected mouse movement is processed synchronously: it traverses every process's
 | `RemotePeerDevice` state | Remote Link UDP loop | Engine (Step 2) | `_stateLock` (double-buffered) |
 | `RumbleAudioService` voice packs | Engine (poll lane) | WASAPI render thread | Volatile long (four packed voices) |
 | `PeripheralOutputs` link table (#494) | `PeripheralLink` thread | Engine (Step 2), effects dispatchers, peripheral workers, UI | Immutable table swapped whole (`Volatile.Write`) |
-| `PeripheralOutputs` haptic levels | Engine (Step 2), Remote Link relay, Identify | HID++, GameSense and Sensa workers | Leaf lock per row on write, volatile bits on read |
-| `PeripheralOutputs` lighting claims | Effects dispatchers | Chroma, LED SDK, GameSense and HID++ workers, the Pad page's route line | `ConcurrentDictionary`, leaf lock per claim |
+| `PeripheralOutputs` haptic levels | Engine (Step 2), Remote Link relay, Identify | HID++, GameSense, TouchSense and Sensa workers | Leaf lock per row on write, volatile bits on read |
+| `PeripheralOutputs` lighting claims | Effects dispatchers | Chroma, LED SDK, GameSense, HID++, LampArray, Razer and SteelSeries workers, the Pad page's route line | `ConcurrentDictionary`, leaf lock per claim |
+| `PeripheralOutputs` direct units and unit rows (#494) | `PeripheralLink` thread | Engine (Step 1 phase 1m), peripheral workers, UI | Immutable snapshots swapped whole (`Volatile.Write`) |
+| A direct backend's snapshot and crash record | Its worker thread | `PeripheralLink` thread, the crash path | Immutable, swapped whole |
 
 ---
 
@@ -1084,13 +1096,13 @@ Step 2: ApplyForceFeedback() (engine thread)
   │    Sony (DS4/DualSense) → UserEffectsDispatcher (sole writer, SDL skipped)
   │    Xbox One+ (One/Elite/Series) → XboxImpulseHidWriter raw HID (sole writer, SDL skipped)
   │    Haptic mice and keyboards, the Razer Sensa row → PeripheralOutputs level, played by
-  │      the HID++, GameSense or Interhaptics worker (sole writer, SDL skipped, #494)
+  │      the HID++, GameSense, TouchSense or Interhaptics worker (sole writer, SDL skipped, #494)
   │    Everything else → SDL_RumbleJoystick or SDL haptic effects
 ```
 
 Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio path (#236): once per tick the poll loop's `UpdateRumbleAudioLane` publishes each slot's packed voice state to `RumbleAudioService`, which renders it as low-frequency tones on the configured audio endpoint (the "Bass Shakers" tab).
 
-Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual controller records the lightbar color a game writes (`GameLightbarCapture`). The slot's `UserEffectsDispatcher` turns each lit mouse's, keyboard's or vendor row's Lighting tab mode into a color under that game color, and stores it in `PeripheralOutputs` as the slot's claim on the device. The HID++, Razer Chroma, Logitech LED SDK and SteelSeries GameSense workers paint the claim that rules each device or shared path: a device's own claim beats a vendor row, then the smaller displayed player number wins. See [Input Pipeline](input-pipeline.md#peripheral-outputs-494).
+Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual controller records the lightbar color a game writes (`GameLightbarCapture`). The slot's `UserEffectsDispatcher` turns each lit mouse's, keyboard's, unit row's or vendor row's Lighting tab mode into a color under that game color, and stores it in `PeripheralOutputs` as the slot's claim on the device, with the device's Lighting Hold. The workers paint the claim that rules each device or shared path: a device's own claim beats a vendor row, then the smaller displayed player number wins. Which worker paints a device follows the link table. While the vendor's program runs that is the Razer Chroma, Logitech LED SDK or SteelSeries GameSense worker, and otherwise the HID++, Razer, SteelSeries or LampArray worker that reaches the device on its own. See [Input Pipeline](input-pipeline.md#peripheral-outputs-494).
 
 ---
 

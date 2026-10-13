@@ -692,6 +692,7 @@ Moving these to PadForge's driver costs Windows something, so they move only whe
 | **Xbox 360 uDraw GameTablet** | Pen and buttons, through Microsoft's wireless receiver |
 | **Intel Wireless Series base station** | Its eight gamepads |
 | **Creative Prodikeys PC-MIDI** | The music keys |
+| **Logitech iFeel Mouse and iFeel MouseMan** | Rumble on the mouse's motor |
 
 ### Xbox 360 receivers Windows leaves without a driver
 

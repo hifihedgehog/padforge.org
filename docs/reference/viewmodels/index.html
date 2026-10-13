@@ -12915,7 +12915,7 @@
 </tbody>
 </table>
 <h3 id="per-slot-device-lighting-adaptive-trigger-configuration">Per-(Slot, Device) Lighting / Adaptive Trigger Configuration<a class="headerlink" href="#per-slot-device-lighting-adaptive-trigger-configuration" title="Permanent link">&para;</a></h3>
-<p>Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. A lit mouse, keyboard or vendor row (#494) gets its own config here too, whose <code>PeripheralLightingEnabled</code> decides whether this slot lights a mouse or keyboard at all. See <a href="#deviceslotconfig">DeviceSlotConfig</a>.</p>
+<p>Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so two devices on one slot each carry their own lighting/trigger config. A lit mouse, keyboard, unit row or vendor row (#494) gets its own config here too, whose <code>PeripheralLightingEnabled</code> decides whether this slot lights a mouse or keyboard at all and whose <code>PeripheralClaimLevel</code> says how firmly. See <a href="#deviceslotconfig">DeviceSlotConfig</a>.</p>
 <table>
 <thead>
 <tr>
@@ -19994,11 +19994,17 @@
 <td><code>PeripheralLightingEnabled</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>The Lighting tab's Control This Device’s Lighting switch (<code>DeviceSlotConfig.cs</code> line 1003). On, this virtual controller lights a mouse or keyboard with the modes above, and the slot's effects dispatcher holds a lighting claim on the device. Off, the dispatcher releases this slot's claim, so the color comes from another virtual controller that lights the device, a vendor row, another device of its kind on a shared path, or the device's own software. A Set Chroma Color macro on this virtual controller still paints a Razer device. Off by default, so assigning a keyboard for its keys never repaints it. The vendor lighting rows ignore it, since lighting is all they carry. A change re-checks the dispatcher's animation timer.</td>
+<td>The Lighting tab's Control This Device’s Lighting switch (<code>DeviceSlotConfig.cs</code> line 1003). On, this virtual controller lights a mouse or keyboard with the modes above, and the slot's effects dispatcher holds a lighting claim on the device. Off, the dispatcher releases this slot's claim, so the color comes from another virtual controller that lights the device, a vendor row, another device of its kind on a shared path, or the device's own software. A Set Chroma Color macro on this virtual controller still paints a Razer device. Off by default, so assigning a keyboard for its keys never repaints it. The vendor lighting rows and the unit rows ignore it, since lighting is all they carry. A change re-checks the dispatcher's animation timer.</td>
+</tr>
+<tr>
+<td><code>PeripheralClaimLevel</code></td>
+<td><code>PeripheralClaimLevel</code></td>
+<td><code>Colors</code></td>
+<td>The Lighting tab's Lighting Hold under that switch, for the same (virtual controller, device) pair: how firmly this controller may hold the device while it lights it. <code>Colors</code> (0) takes the colors alone, <code>Power</code> (1) the device's lighting power too, so it stops dimming its lights by itself, and <code>HostMode</code> (2) its on-board memory mode as well, so the profile saved on the device does not apply while it is lit. The number is the hold a lighting claim carries (<code>PeripheralOutputs.SetLighting</code>) and the option's place in the picker, so a member is appended and never renumbered. The saved form is the name. A value the enum does not name leaves the property as it was. Only a device that offers a hold shows the picker, and a worker holds a device at no more than it offers. A vendor row and a unit row ask for colors alone</td>
 </tr>
 </tbody>
 </table>
-<p><code>ResetPeripheralLightingEnabledCommand</code> turns it back off.</p>
+<p><code>ResetPeripheralLightingEnabledCommand</code> turns the switch back off, and <code>ResetPeripheralClaimLevelCommand</code> puts the hold back at <code>Colors</code>. <code>PeripheralLightingClaim(out level)</code> reads the switch and the hold together from one field, for the dispatcher, whose pass can run on its timer's thread while a load writes the two one after the other.</p>
 <h3 id="audio-to-lightbar-55">Audio-to-lightbar (#55)<a class="headerlink" href="#audio-to-lightbar-55" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

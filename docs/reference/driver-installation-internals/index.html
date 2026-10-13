@@ -5832,7 +5832,7 @@
 <h3 id="vendorusbbindingservice">VendorUsbBindingService<a class="headerlink" href="#vendorusbbindingservice" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.InitializeSdl</code> starts it with the other side-band services, and <code>ShutdownSdl</code> stops it. A background thread named <code>VendorUsbBinder</code> lists the present USB nodes every 3 s in one SetupAPI pass (<code>ListPresentUsbNodes</code>: the USB enumerator, all classes, as libwdi lists devices), plans each one, and binds each planned ID once per sweep. An ID is bound at most once every 30 s, and after three failed binds the session stops trying it. The nodes that need a driver go to the diagnostics log as <code>VendorUSB: needs a driver:</code>, only when that list changes. Nothing here talks to SDL.</p>
 <h3 id="opt-in-bindings">Opt-in bindings<a class="headerlink" href="#opt-in-bindings" title="Permanent link">&para;</a></h3>
-<p>Four devices lose something to WinUSB, so <code>Plan</code> never returns them. <code>OptIns</code> lists them for the Devices page:</p>
+<p>Five kinds of device lose something to WinUSB, so <code>Plan</code> never returns them. <code>OptIns</code> lists them for the Devices page:</p>
 <table>
 <thead>
 <tr>
@@ -5867,8 +5867,20 @@
 <td>no driver, <code>HidUsb</code></td>
 <td>The media and sleep keys stop working</td>
 </tr>
+<tr>
+<td><code>TouchSenseMouse</code></td>
+<td>046D:C030, 046D:C031 or 046D:C032, the device</td>
+<td><code>HidUsb</code></td>
+<td>Windows stops using the mouse as a pointer. PadForge moves the pointer from it only while it runs and the mouse is assigned to a Keyboard + Mouse virtual controller</td>
+</tr>
 </tbody>
 </table>
+<p>A TouchSense mouse (#494), a Logitech iFeel Mouse or iFeel MouseMan, is bound so that PadForge can play rumble on its buzz motor (<a href="../peripheral-outputs-internals/#touchsense">Peripheral Outputs Internals</a>). Three rules are its own:</p>
+<ul>
+<li>It is offered the bind only when its own mouse collection declares the buzz report (<code>TouchSenseBinding.NodeDeclaresBuzz</code>): one output value of seven bytes on usage page <code>0xFF00</code>, usage 2, with no report ID and no feature report, read from what hid.dll already parsed, through an open with no access right. Only the iFeel Mouse's descriptor is on record, so a sibling's IDs alone do not say that it takes the frames. That is also why the kind is bound from <code>HidUsb</code> alone: a node with no driver has no mouse collection to read.</li>
+<li>It is bound one device at a time (<code>VendorUsbDriverInstaller.BindsOneDeviceAtATime</code>). The forced update takes every present node the plan's ID names, whichever one was chosen. <code>WhyNotBind</code> therefore answers <code>BindRefusal.OthersPluggedIn</code> while another mouse of the model sits on Windows' driver, the bind is refused before the confirm and again after it, and the status bar shows <code>Status_DriverBindOthersPluggedIn</code>. Its confirm speaks of the one mouse the user chose, and a second one would stop being a pointer unasked.</li>
+<li>PadForge holds the bound mouse's one WinUSB handle itself, and a handle held open keeps Windows from restarting the node. <code>VendorUsbDriverInstaller.LetGoOf</code> closes it before Windows is asked to change the node's driver and keeps the mouse closed until the wait for the new driver is over (<code>TouchSenseChannels.Hold</code>), since the device pass looks for bound mice every second and would open the mouse again in the middle of the switch.</li>
+</ul>
 <p><code>DevicesViewModel.RefreshDriverOffer</code> asks <code>QueryOptIn</code> when a device is selected, and sweeps the USB nodes only when <code>IsOptInRow</code> says the row's IDs belong to an opt-in device. The answer is a bind offer when a node sits on a driver its target is bound from, or a restore offer when a node is on WinUSB with PadForge's interface active. A pad on the wireless receiver reports the wireless controller's 045E:02A1, so a row with that ID stands for the receiver. Before a bind, <code>MainWindow.SwitchDriverAsync</code> states the cost in a <code>ConfirmDialog</code>, then calls <code>Bind</code> with the target's <code>From</code> list. A restore calls <code>Restore</code> with no prompt. A bind adds the ID to <code>AppSettingsData.WinUsbOptIns</code>, and a restore removes every ID that names the node.</p>
 <p><code>Restore(instanceId)</code> reads the node's <code>DEVPKEY_Device_DriverInfPath</code> and <code>DEVPKEY_Device_DriverProvider</code>, refuses a package whose provider is not <code>PadForge</code>, and deletes it with <code>Devcon.DeleteDriver</code>, which calls DiUninstallDriver to install the best remaining driver on every device the package served, then SetupUninstallOEMInf to take the package out of the driver store. <code>Restore</code> then polls for the node to leave WinUSB.</p>
 <p><code>MainWindow.CheckOptedInDrivers</code> runs 8 s into each start. <code>MovedBack</code> lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the status bar names them.</p>

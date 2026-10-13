@@ -291,7 +291,7 @@ The three Valve wires share almost no indices, so a profile change has to move t
 
 Both halves key on the wire stamp, never on the setter's previous value. Every restore, apply and import path calls `SettingsManager.StampNintendoWire` before assigning the view model, so `stamp == incoming` means the data already belongs to that profile and neither step runs. Creating a slot stamps its profile, a type change stamps the new category's default before it assigns the profile, deleting a slot clears its stamp, and an unknown stamp adopts the next profile assigned without moving anything. `PadForge.Tests/ValveProfileSwitchTests.cs` pins it.
 
-A Valve slot also draws its own body instead of the Extended schematic. `PadPage`'s Extended test defers to `HMaestroProfileCatalog.HasDedicatedArt` (`PadPage.xaml.cs:235-255`), and a profile change re-runs `ApplyViewMode`. The meshes are covered on [3D Model System](../reference/3d-model-system.md).
+A Valve slot also draws its own body instead of the Extended schematic. `PadPage`'s Extended test defers to `HMaestroProfileCatalog.HasDedicatedArt` (`PadPage.xaml.cs:299-319`), and a profile change re-runs `ApplyViewMode`. The meshes are covered on [3D Model System](../reference/3d-model-system.md).
 
 ### Fields
 

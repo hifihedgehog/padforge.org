@@ -177,9 +177,10 @@ A haptic mouse assigned to a virtual controller takes that controller's rumble t
 |---|---|---|
 | **Logitech MX Master 4** | Logitech's own haptic waveforms, sent straight to the mouse over HID++ | No Logitech software |
 | **SteelSeries Rival 500, 700 and 710** | The tactile handler in SteelSeries GG | SteelSeries GG |
+| **Logitech iFeel Mouse and iFeel MouseMan** | A buzz at the rumble's strength, sent straight to the mouse | The mouse on PadForge's driver, from **Play Rumble on This Mouse** on the Devices page |
 | **Razer Sensa HD devices**, such as the Wolverine V3 Pro, Kraken V4 Pro and Freyja | The **Razer Sensa** row on the Devices page, through the Interhaptics engine inside PadForge | Razer Synapse 4 with Sensa HD Haptics, and the x64 build |
 
-On the mice, rumble strength picks one of three levels: a mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.
+On an MX Master 4 and a Rival, rumble strength picks one of three levels: the mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.
 
 SteelSeries GG drives every tactile Rival at once, so the Rival on the virtual controller with the smallest player number sets their rumble. Clicking the rumble mark of any tactile Rival on the [Devices](devices.md) page buzzes all of them, whether or not that Rival is assigned. The motor stops as soon as no Rival is assigned. Two seconds after PadForge stops using GG, GG gets its devices back.
 
@@ -187,7 +188,7 @@ In the x64 build, the Razer Sensa row appears on the [Devices](devices.md) page 
 
 A haptic mouse shared over [Remote Link](../guides/remote-link.md) takes rumble from the other PC's virtual controllers too. The Razer Sensa row is not shared.
 
-Mice built on Immersion TouchSense, such as the Logitech iFeel, take no rumble. Their vibration report goes to the mouse's own HID collection, which Windows keeps to itself.
+An iFeel mouse buzzes at the rumble's own strength, from 2 percent up, once it is on PadForge's driver. The switch costs Windows the mouse as a pointer, so read [Logitech iFeel mice](peripherals.md#logitech-ifeel-mice) first. The other mice built on Immersion TouchSense take no rumble.
 
 A line at the top of the tab says where the rumble goes:
 
@@ -195,7 +196,8 @@ A line at the top of the tab says where the rumble goes:
 |---|---|
 | *Rumble plays on {0} as haptic pulses, sent straight to the device. Stronger rumble picks a stronger pulse and repeats it faster.* | A Logitech haptic mouse, with its name in place of `{0}`. |
 | *Haptic feedback is turned off for {0} in Logi Options+, so it plays nothing until you turn it back on there.* | The mouse's own haptic feedback is off. |
-| *This device has not answered yet. Its rumble plays once it wakes up.* | The Logitech mouse is asleep or unplugged. |
+| *Rumble plays on {0} as a buzz, sent straight to the device.* | An iFeel mouse on PadForge's driver, with its name in place of `{0}`. |
+| *This device has not answered yet. Its rumble plays once it wakes up.* | The Logitech mouse is asleep, unplugged or not answering. |
 | *Rumble plays through the tactile handler in SteelSeries GG.* | GG answers, and this Rival sets the rumble. |
 | *SteelSeries GG drives every tactile Rival at once, so the one on Virtual Controller {0} sets their rumble.* | Another Rival, on the virtual controller numbered `{0}`, sets the rumble. |
 | *Waiting for SteelSeries GG. Rumble plays once GG runs.* | GG does not answer. |

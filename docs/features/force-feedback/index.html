@@ -4418,17 +4418,22 @@
 <td>SteelSeries GG</td>
 </tr>
 <tr>
+<td><strong>Logitech iFeel Mouse and iFeel MouseMan</strong></td>
+<td>A buzz at the rumble's strength, sent straight to the mouse</td>
+<td>The mouse on PadForge's driver, from <strong>Play Rumble on This Mouse</strong> on the Devices page</td>
+</tr>
+<tr>
 <td><strong>Razer Sensa HD devices</strong>, such as the Wolverine V3 Pro, Kraken V4 Pro and Freyja</td>
 <td>The <strong>Razer Sensa</strong> row on the Devices page, through the Interhaptics engine inside PadForge</td>
 <td>Razer Synapse 4 with Sensa HD Haptics, and the x64 build</td>
 </tr>
 </tbody>
 </table>
-<p>On the mice, rumble strength picks one of three levels: a mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.</p>
+<p>On an MX Master 4 and a Rival, rumble strength picks one of three levels: the mouse starts playing at 5 percent, and the level steps up at 33 and 66 percent. The MX Master 4 plays a light, medium or strong pulse, every 250 ms at the faintest rumble and faster as the rumble grows, up to every 80 ms at full strength. A Rival repeats a 30 ms pulse 5 times a second, a 55 ms pulse 7 times, or an 80 ms pulse 10 times.</p>
 <p>SteelSeries GG drives every tactile Rival at once, so the Rival on the virtual controller with the smallest player number sets their rumble. Clicking the rumble mark of any tactile Rival on the <a href="../devices/">Devices</a> page buzzes all of them, whether or not that Rival is assigned. The motor stops as soon as no Rival is assigned. Two seconds after PadForge stops using GG, GG gets its devices back.</p>
 <p>In the x64 build, the Razer Sensa row appears on the <a href="../devices/">Devices</a> page once Razer Synapse is installed. Assign it to a virtual controller like any device. PadForge runs the Sensa engine only while the row is assigned, or while the rumble mark on the Devices page buzzes it. In Synapse, set the device's Haptic Source to Sensa HD Games. Earlier versions sent rumble to Sensa HD devices from a Dashboard toggle. A toggle that was on now assigns the Razer Sensa row to the virtual controller with the smallest player number, if there is one.</p>
 <p>A haptic mouse shared over <a href="../../guides/remote-link/">Remote Link</a> takes rumble from the other PC's virtual controllers too. The Razer Sensa row is not shared.</p>
-<p>Mice built on Immersion TouchSense, such as the Logitech iFeel, take no rumble. Their vibration report goes to the mouse's own HID collection, which Windows keeps to itself.</p>
+<p>An iFeel mouse buzzes at the rumble's own strength, from 2 percent up, once it is on PadForge's driver. The switch costs Windows the mouse as a pointer, so read <a href="../peripherals/#logitech-ifeel-mice">Logitech iFeel mice</a> first. The other mice built on Immersion TouchSense take no rumble.</p>
 <p>A line at the top of the tab says where the rumble goes:</p>
 <table>
 <thead>
@@ -4447,8 +4452,12 @@
 <td>The mouse's own haptic feedback is off.</td>
 </tr>
 <tr>
+<td><em>Rumble plays on {0} as a buzz, sent straight to the device.</em></td>
+<td>An iFeel mouse on PadForge's driver, with its name in place of <code>{0}</code>.</td>
+</tr>
+<tr>
 <td><em>This device has not answered yet. Its rumble plays once it wakes up.</em></td>
-<td>The Logitech mouse is asleep or unplugged.</td>
+<td>The Logitech mouse is asleep, unplugged or not answering.</td>
 </tr>
 <tr>
 <td><em>Rumble plays through the tactile handler in SteelSeries GG.</em></td>

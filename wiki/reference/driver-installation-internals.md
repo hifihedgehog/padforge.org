@@ -606,7 +606,7 @@ internal static bool Bind(BindPlan plan, string instanceId, IReadOnlyList<UsbNod
 
 ### Opt-in bindings
 
-Four devices lose something to WinUSB, so `Plan` never returns them. `OptIns` lists them for the Devices page:
+Five kinds of device lose something to WinUSB, so `Plan` never returns them. `OptIns` lists them for the Devices page:
 
 | Kind | Node | Bound from | What the switch costs |
 |---|---|---|---|
@@ -614,6 +614,13 @@ Four devices lose something to WinUSB, so `Plan` never returns them. `OptIns` li
 | `Xbox360Receiver` | 045E:0719, `REV_0100` | xusb22 | Every controller and headset on the receiver moves with it |
 | `IntelBaseStation` | 8086:C013, interface 0 or the device | no driver, `HidUsb` | The base station's keyboard stops typing in Windows |
 | `Prodikeys` | 041E:2801, interface 1 | no driver, `HidUsb` | The media and sleep keys stop working |
+| `TouchSenseMouse` | 046D:C030, 046D:C031 or 046D:C032, the device | `HidUsb` | Windows stops using the mouse as a pointer. PadForge moves the pointer from it only while it runs and the mouse is assigned to a Keyboard + Mouse virtual controller |
+
+A TouchSense mouse (#494), a Logitech iFeel Mouse or iFeel MouseMan, is bound so that PadForge can play rumble on its buzz motor ([Peripheral Outputs Internals](peripheral-outputs-internals.md#touchsense)). Three rules are its own:
+
+- It is offered the bind only when its own mouse collection declares the buzz report (`TouchSenseBinding.NodeDeclaresBuzz`): one output value of seven bytes on usage page `0xFF00`, usage 2, with no report ID and no feature report, read from what hid.dll already parsed, through an open with no access right. Only the iFeel Mouse's descriptor is on record, so a sibling's IDs alone do not say that it takes the frames. That is also why the kind is bound from `HidUsb` alone: a node with no driver has no mouse collection to read.
+- It is bound one device at a time (`VendorUsbDriverInstaller.BindsOneDeviceAtATime`). The forced update takes every present node the plan's ID names, whichever one was chosen. `WhyNotBind` therefore answers `BindRefusal.OthersPluggedIn` while another mouse of the model sits on Windows' driver, the bind is refused before the confirm and again after it, and the status bar shows `Status_DriverBindOthersPluggedIn`. Its confirm speaks of the one mouse the user chose, and a second one would stop being a pointer unasked.
+- PadForge holds the bound mouse's one WinUSB handle itself, and a handle held open keeps Windows from restarting the node. `VendorUsbDriverInstaller.LetGoOf` closes it before Windows is asked to change the node's driver and keeps the mouse closed until the wait for the new driver is over (`TouchSenseChannels.Hold`), since the device pass looks for bound mice every second and would open the mouse again in the middle of the switch.
 
 `DevicesViewModel.RefreshDriverOffer` asks `QueryOptIn` when a device is selected, and sweeps the USB nodes only when `IsOptInRow` says the row's IDs belong to an opt-in device. The answer is a bind offer when a node sits on a driver its target is bound from, or a restore offer when a node is on WinUSB with PadForge's interface active. A pad on the wireless receiver reports the wireless controller's 045E:02A1, so a row with that ID stands for the receiver. Before a bind, `MainWindow.SwitchDriverAsync` states the cost in a `ConfirmDialog`, then calls `Bind` with the target's `From` list. A restore calls `Restore` with no prompt. A bind adds the ID to `AppSettingsData.WinUsbOptIns`, and a restore removes every ID that names the node.
 

@@ -113,7 +113,7 @@ The blank Device Mapping issue template makes you type the device identification
 
 ### Switch Driver buttons
 
-Four devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button in the detail pane:
+Five devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button in the detail pane:
 
 | Device | Button | What the switch costs |
 |---|---|---|
@@ -121,6 +121,7 @@ Four devices can give PadForge more when they run on Windows' WinUSB driver, but
 | Microsoft Xbox 360 wireless receiver | **Read Chatpads and uDraw Tablets** | Every controller and headset on the receiver moves with it, works only while PadForge runs, and needs assigning to its slot again. |
 | Intel Wireless Series base station | **Read the Gamepads** | The Intel wireless keyboard on it stops typing in Windows. |
 | Creative Prodikeys | **Read the Music Keys** | The keyboard's media and sleep keys stop working in Windows. Its typing keys keep working. |
+| Logitech iFeel Mouse and iFeel MouseMan | **Play Rumble on This Mouse** | Windows stops using the mouse as a pointer until its driver is restored. PadForge moves the pointer from it only while PadForge runs and the mouse is assigned to a Keyboard + Mouse virtual controller. One mouse of a model moves at a time, so unplug the others of that model first. See [Logitech iFeel mice](peripherals.md#logitech-ifeel-mice). |
 
 A **Switch to PadForge's Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
 

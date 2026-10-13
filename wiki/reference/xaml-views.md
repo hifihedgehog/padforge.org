@@ -890,7 +890,7 @@ ScrollViewer
 
 All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Grayed out when off.
 
-`PeripheralHapticsRoute` takes its sentence from the `Pad_ForceFeedback_Route*` strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads `Common_NotAvailableOnArm64`, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (`PeripheralOutputs.Running`) and on a slot that is not live (`PeripheralOutputs.SlotLive`). The ARM64 line shows either way.
+`PeripheralHapticsRoute` takes its sentence from the `Pad_ForceFeedback_Route*` strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a device that has not answered yet, the iFeel mouse the rumble plays on as a buzz, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads `Common_NotAvailableOnArm64`, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (`PeripheralOutputs.Running`) and on a slot that is not live (`PeripheralOutputs.SlotLive`). The ARM64 line shows either way.
 
 ### Lighting Tab (Tab 7). Peripheral Rows (#494)
 
@@ -902,30 +902,41 @@ StackPanel
   ├─ LightingLightbarSubtitle + LightingPlayerIdleHint (lightbar devices only)
   ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
   │   ├─ Pad_Lighting_PeripheralSubtitle
-  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row, which lighting is all it carries)
+  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
   │   │   ├─ CheckBox "Control This Device’s Lighting" (DeviceConfig.PeripheralLightingEnabled,
   │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
   │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
   │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
+  │   ├─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
+  │   │   ├─ TextBlock "Lighting Hold" (Pad_Lighting_ClaimLevel)
+  │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
+  │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
+  │   │   │    "Colors Only", "Colors and Lighting Power",
+  │   │   │    "Colors, Lighting Power and On-Board Memory Mode Off" (PeripheralClaimLevelHostModeItem)
+  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
+  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
   │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
   ├─ LightbarModeCard (the lightbar's mode picker and cards. Its LightbarPreviewPanel,
   │    the DualShock 4 / DualSense art, collapses for these rows)
   └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 ```
 
-`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere)` (`PeripheralRouteText.cs` line 134), where `lightsHere` is true for a vendor row and otherwise follows the switch, in both cases only on a slot that is live (`PeripheralOutputs.SlotLive`). The line is empty while the engine is stopped (`PeripheralOutputs.Running`). Its sentence comes from the `Pad_Lighting_Route*` strings:
+The Lighting Hold row shows for a mouse or keyboard that offers a hold above colors alone (`PadPage.OfferedLightingHold`: the row's `DeviceLinks.MaxClaimLevel` while a path of its own lights it, else what its record kept). `PadPage.ShowLightingHold` collapses and disables the last option for a device that does not offer the second hold. The option stays in the list, so a choice of it saved earlier still shows as the selection, and a closed ComboBox cannot step onto it with an arrow key, since it steps only to an enabled item. The picker then takes the tooltip `Pad_Lighting_ClaimLevel_TooltipNoHostMode`, which stops before the sentences about the last option, and the two options left report a set size of two to a screen reader. Typing a letter selects nothing in this picker, because it would select the last option where that one is out of the list.
+
+`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere, claimLevel)` (`PeripheralRouteText.cs` line 155), where `lightsHere` is true for a vendor row or a unit row and otherwise follows the switch, in both cases only on a slot that is live (`PeripheralOutputs.SlotLive`), and `claimLevel` is the Lighting Hold this controller's claim carries. The line is empty while the engine is stopped (`PeripheralOutputs.Running`). Its sentence comes from the `Pad_Lighting_Route*` strings:
 
 | Key | When |
 |---|---|
-| `RouteDirect` | This controller lights a Logitech unit straight over HID++, named in the line |
-| `RouteThrough` | This controller lights the device through the vendor's software, named in the line |
-| `RouteAsleep` | A Logitech device the record says has lighting has not answered yet |
+| `RouteDirect` / `RouteDirectPower` / `RouteDirectHostMode` | This controller lights a device on its own, through HID++, a Razer or SteelSeries control collection, or HID LampArray, with the device named in the line. The second and third forms add what a Lighting Hold above Colors Only holds: the device does not dim its lights by itself, or its on-board memory mode is off, while it is lit |
+| `RouteThrough` / `RouteThroughOrDirect` | This controller lights the device through the vendor's software, named in the line. The second form adds that PadForge lights the device on its own while that software is not running |
+| `RouteWindowsLighting` / `RouteWindowsLightingBuiltIn` | Windows Dynamic Lighting lights the device, so PadForge leaves it alone. The line names the switch in Windows Settings, and the second form, for a laptop's own keyboard, what turning it off costs on some laptops |
+| `RouteAsleep` | A device the record says has lighting has not answered yet |
 | `RouteWaiting` | The vendor's software is not answering yet |
 | `RouteCannotLight` | The Logitech LED engine on this PC cannot paint this device type, or will not load while its program runs (in the ARM64 build an engine that will not load reads `Common_NotAvailableOnArm64`). While the engine will not load, the LIGHTSYNC row reads it on every virtual controller it is on, one that is gone included, ahead of `RouteOtherControllerOnly` |
 | `RouteShared` | Another device of this kind, on the virtual controller the line names, sets the shared path's color |
 | `RouteSharedVendorRow` | A vendor row, on the virtual controller the line names, sets the shared path's color |
-| `RouteOtherController` / `RouteOtherControllerOnly` | The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The `Only` form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the `Only` form with the number of the controller that lights it elsewhere, and nothing while its software is not answering |
-| `RouteOtherRow` / `RouteOtherRowOnly` | Another row of the same HID++ device on this controller holds the unit |
+| `RouteOtherController` / `RouteOtherControllerOnly` | The same device on another virtual controller sets its color, or, for a device lit on its own, another row of it there does. The `Only` form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the `Only` form with the number of the controller that lights it elsewhere, and nothing while its software is not answering |
+| `RouteOtherRow` / `RouteOtherRowOnly` | Another row of the same directly lit device on this controller holds the unit |
 | `RouteVendorRow` / `RouteVendorRowWaiting` | A vendor row's own line on a live slot: what its software lights that no assigned device claims, with examples (`Pad_Lighting_VendorRowExamples_*`), or that the software is not answering yet |
 
 With the switch off, or on a slot that is not live, the line names only who else lights the device, never a route of its own. `SyncTabVisibility()` runs again on `PeripheralOutputs` changes (`OnPeripheralOutputsChanged`), when the `DeviceConfig` anchor swaps to another device's config, and when `PeripheralLightingEnabled` changes, so the line follows the switch even for a device that is offline.

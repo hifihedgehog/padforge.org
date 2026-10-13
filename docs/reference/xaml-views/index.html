@@ -8458,7 +8458,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
-<p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a Logitech device that has not answered yet, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>
+<p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a device that has not answered yet, the iFeel mouse the rumble plays on as a buzz, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>
 <h3 id="lighting-tab-tab-7-peripheral-rows-494">Lighting Tab (Tab 7). Peripheral Rows (#494)<a class="headerlink" href="#lighting-tab-tab-7-peripheral-rows-494" title="Permanent link">&para;</a></h3>
 <p>A mouse, keyboard or vendor lighting row assigned to the slot gets the Lighting tab a DualSense gets, with the same modes. <code>SyncTabVisibility()</code> sets <code>hasPeripheralLighting</code> when the selected device has no lightbar and a lighting path links it (<code>PeripheralOutputs.HasLighting</code>) or its record says it has one (<code>UserDevice.HasPeripheralLighting</code>), so the tab stays up while the device sleeps.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>StackPanel
@@ -8466,17 +8466,26 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  ├─ LightingLightbarSubtitle + LightingPlayerIdleHint (lightbar devices only)
 <a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
 <a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  │   ├─ Pad_Lighting_PeripheralSubtitle
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row, which lighting is all it carries)
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
 <a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  │   │   ├─ CheckBox &quot;Control This Device’s Lighting&quot; (DeviceConfig.PeripheralLightingEnabled,
 <a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>  │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
 <a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
 <a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  ├─ LightbarModeCard (the lightbar&#39;s mode picker and cards. Its LightbarPreviewPanel,
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │    the DualShock 4 / DualSense art, collapses for these rows)
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  │   ├─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  │   │   ├─ TextBlock &quot;Lighting Hold&quot; (Pad_Lighting_ClaimLevel)
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  │   │   │    &quot;Colors Only&quot;, &quot;Colors and Lighting Power&quot;,
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  │   │   │    &quot;Colors, Lighting Power and On-Board Memory Mode Off&quot; (PeripheralClaimLevelHostModeItem)
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>  ├─ LightbarModeCard (the lightbar&#39;s mode picker and cards. Its LightbarPreviewPanel,
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>  │    the DualShock 4 / DualSense art, collapses for these rows)
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 </code></pre></div>
-<p><code>PeripheralLightingRoute</code> is <code>PeripheralRouteText.Lighting(device, PadIndex, lightsHere)</code> (<code>PeripheralRouteText.cs</code> line 134), where <code>lightsHere</code> is true for a vendor row and otherwise follows the switch, in both cases only on a slot that is live (<code>PeripheralOutputs.SlotLive</code>). The line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>). Its sentence comes from the <code>Pad_Lighting_Route*</code> strings:</p>
+<p>The Lighting Hold row shows for a mouse or keyboard that offers a hold above colors alone (<code>PadPage.OfferedLightingHold</code>: the row's <code>DeviceLinks.MaxClaimLevel</code> while a path of its own lights it, else what its record kept). <code>PadPage.ShowLightingHold</code> collapses and disables the last option for a device that does not offer the second hold. The option stays in the list, so a choice of it saved earlier still shows as the selection, and a closed ComboBox cannot step onto it with an arrow key, since it steps only to an enabled item. The picker then takes the tooltip <code>Pad_Lighting_ClaimLevel_TooltipNoHostMode</code>, which stops before the sentences about the last option, and the two options left report a set size of two to a screen reader. Typing a letter selects nothing in this picker, because it would select the last option where that one is out of the list.</p>
+<p><code>PeripheralLightingRoute</code> is <code>PeripheralRouteText.Lighting(device, PadIndex, lightsHere, claimLevel)</code> (<code>PeripheralRouteText.cs</code> line 155), where <code>lightsHere</code> is true for a vendor row or a unit row and otherwise follows the switch, in both cases only on a slot that is live (<code>PeripheralOutputs.SlotLive</code>), and <code>claimLevel</code> is the Lighting Hold this controller's claim carries. The line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>). Its sentence comes from the <code>Pad_Lighting_Route*</code> strings:</p>
 <table>
 <thead>
 <tr>
@@ -8486,16 +8495,20 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </thead>
 <tbody>
 <tr>
-<td><code>RouteDirect</code></td>
-<td>This controller lights a Logitech unit straight over HID++, named in the line</td>
+<td><code>RouteDirect</code> / <code>RouteDirectPower</code> / <code>RouteDirectHostMode</code></td>
+<td>This controller lights a device on its own, through HID++, a Razer or SteelSeries control collection, or HID LampArray, with the device named in the line. The second and third forms add what a Lighting Hold above Colors Only holds: the device does not dim its lights by itself, or its on-board memory mode is off, while it is lit</td>
 </tr>
 <tr>
-<td><code>RouteThrough</code></td>
-<td>This controller lights the device through the vendor's software, named in the line</td>
+<td><code>RouteThrough</code> / <code>RouteThroughOrDirect</code></td>
+<td>This controller lights the device through the vendor's software, named in the line. The second form adds that PadForge lights the device on its own while that software is not running</td>
+</tr>
+<tr>
+<td><code>RouteWindowsLighting</code> / <code>RouteWindowsLightingBuiltIn</code></td>
+<td>Windows Dynamic Lighting lights the device, so PadForge leaves it alone. The line names the switch in Windows Settings, and the second form, for a laptop's own keyboard, what turning it off costs on some laptops</td>
 </tr>
 <tr>
 <td><code>RouteAsleep</code></td>
-<td>A Logitech device the record says has lighting has not answered yet</td>
+<td>A device the record says has lighting has not answered yet</td>
 </tr>
 <tr>
 <td><code>RouteWaiting</code></td>
@@ -8515,11 +8528,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>RouteOtherController</code> / <code>RouteOtherControllerOnly</code></td>
-<td>The same device on another virtual controller sets its color, or, for a Logitech unit lit over HID++, another row of it there does. The <code>Only</code> form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the <code>Only</code> form with the number of the controller that lights it elsewhere, and nothing while its software is not answering</td>
+<td>The same device on another virtual controller sets its color, or, for a device lit on its own, another row of it there does. The <code>Only</code> form shows while this controller's switch is off or its slot is not live. A vendor row on a slot that is not live reads the <code>Only</code> form with the number of the controller that lights it elsewhere, and nothing while its software is not answering</td>
 </tr>
 <tr>
 <td><code>RouteOtherRow</code> / <code>RouteOtherRowOnly</code></td>
-<td>Another row of the same HID++ device on this controller holds the unit</td>
+<td>Another row of the same directly lit device on this controller holds the unit</td>
 </tr>
 <tr>
 <td><code>RouteVendorRow</code> / <code>RouteVendorRowWaiting</code></td>

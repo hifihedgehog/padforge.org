@@ -39,7 +39,7 @@ Some controllers plug in and sit dead, because Windows has no driver for them or
 
 On its own, PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names one ID, the controller's own or, for original Xbox controllers, their USB device class, and is signed with the certificate this PC's [DualShock 3](../devices/dualshock-3.md) binding uses.
 
-Four devices lose something to the switch, so they move only when you ask, from their card on the [Devices](devices.md#switch-driver-buttons) page.
+Five devices lose something to the switch, so they move only when you ask, from their card on the [Devices](devices.md#switch-driver-buttons) page.
 
 ---
 
