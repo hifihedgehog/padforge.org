@@ -745,7 +745,7 @@ Same pattern as keyboards using `SdlMouseWrapper`, with one extra skip: a mouse 
 
 **Enumerate Consumer Controls** via `EnumerateConsumerControls()`
 
-Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 263 and 255). `EnumerateConsumerControls` (lines 1479-1517) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
+Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 263 and 252). `EnumerateConsumerControls` (lines 1479-1517) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
 
 `FindOnlineDeviceByHandle` (line 4044) resolves a Raw Input handle back to its `UserDevice` by testing `RawInputHandle` on each raw-input wrapper kind. `ConsumerControlWrapper` was missing from that list, so `PruneOrphanedHandles` found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising `DevicesUpdated` and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.
 
@@ -1315,7 +1315,7 @@ Game-written impulse triggers only ever arrive on Xbox-class VCs, so `raw.*Trigg
 
 ### PadSetting Fields
 
-Twelve string fields on `PadSetting` back the feature (`PadForge.Engine/Data/PadSetting.cs` lines 446-485), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
+Twelve string fields on `PadSetting` back the feature (`PadForge.Engine/Data/PadSetting.cs` lines 466-505), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
 
 | Field (Left / Right) | Default | Meaning |
 |---|---|---|
@@ -1583,7 +1583,7 @@ Two gates run before the `Kind` switch. A blank `Direct` source reads nothing (`
 
 #### TickRamped: the ramped axis envelope (#111)
 
-`SourceKindRuntime.TickRamped` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 452-421) maintains a signed `[-1, +1]` envelope per source. `SourceKindRuntime` is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.
+`SourceKindRuntime.TickRamped` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 452-484) maintains a signed `[-1, +1]` envelope per source. `SourceKindRuntime` is a sealed instance class, one per slot runtime, not a static. It models a keyboard-to-axis throttle: two keys drive a value that ramps over time instead of snapping.
 
 State lives in `_rampedAccum`, a `Dictionary<(int slot, string target, int srcIdx), KeyAccumulator>` keyed the same way as the Incremental accumulator (`_incrementalAccum`). A `KeyAccumulator` holds the value, the frame it was last read in, the value when that frame began, and the Up and Down keys read so far in that frame by any reader. Two Ramped sources on one row keep independent envelopes because `srcIdx` differs. A second device pass in the same frame replays that frame's value from `_rampedReplay` instead of ramping again. A replay stamp holds the `FrameSeq` it was written in and is keyed by `(slot, target, commit layer, srcIdx)`. The commit layer is `""` except while the stand-in row of a menu commit made by leaving a layer is evaluated (`SourceKindRuntime.UseCommitLayer`), so that read is a reader of its own on the accumulator it shares with the engaged layer's row for the target. The value steps once a frame for all its readers: each reader's first tick adds its keys to the frame's and steps from where the frame started, so a key any reader holds counts once, and the reader that ticks last returns the value the frame ends on. `_incrementalReplay` is keyed the same way. Each frame:
 
@@ -1632,7 +1632,7 @@ Every one of those methods swaps in a fresh dictionary instead of clearing in pl
 
 #### TickToggle: the Toggle latch (#461)
 
-`SourceKindRuntime.TickToggle` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 555-464) latches a source's Direct read. The evaluator reads the source the way Direct does, decides whether it is pressed, and passes that with the level to hold:
+`SourceKindRuntime.TickToggle` (`PadForge.Engine/Common/Mapping/SourceKindRuntime.cs`, lines 555-581) latches a source's Direct read. The evaluator reads the source the way Direct does, decides whether it is pressed, and passes that with the level to hold:
 
 | Target method | Press | Held level |
 |---|---|---|
@@ -1642,7 +1642,7 @@ Every one of those methods swaps in a fresh dictionary instead of clearing in pl
 
 `TogglePressLevel` is `SourceCoercion.EffectiveThresholdPercent(src, 50) / 100`: the source's own `DeadZone` when one is set, otherwise half travel.
 
-State lives in `_toggleState`, keyed `(slot, target, layer, srcIdx)`, an empty layer reading as Base, so a same-target row on another shift layer keeps a latch of its own. The accumulators keep `(slot, target, srcIdx)`. The latch flips on the rising edge of a press, the rule the macro Toggle (`MacroTriggerMode.Toggle` in `InputManager.Step4b.EvaluateMacros.cs`) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and `FlippedThisFrame` allows one flip per frame. `BuildCustomContribsForButton` reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (`InputManager.Step3.MappingSetEval.cs` line 4198). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. `Clear`, `ResetForSlot`, and `ResetForRow` drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.
+State lives in `_toggleState`, keyed `(slot, target, layer, srcIdx)`, an empty layer reading as Base, so a same-target row on another shift layer keeps a latch of its own. The accumulators keep `(slot, target, srcIdx)`. The latch flips on the rising edge of a press, the rule the macro Toggle (`MacroTriggerMode.Toggle` in `InputManager.Step4b.EvaluateMacros.cs`) and the shift-layer Toggle activator already follow. An any-device source is read once per device on the slot in one frame, so a frame's press is the OR of its reads, and `FlippedThisFrame` allows one flip per frame. `BuildCustomContribsForButton` reads every device for a Toggle source instead of stopping at the first one that answers true, since a latched toggle always answers true on the first device (`InputManager.Step3.MappingSetEval.cs` line 4380). A frame with no read at all (a closed shift layer, a Base row a layer overrides, a suppressed input, an offline device) releases the latch, and the first frame back treats the input as already held, so a press that began unobserved never flips it. `Clear`, `ResetForSlot`, and `ResetForRow` drop it with the other per-row state. The UI previews pass no runtime, and a Toggle read without one returns rest.
 
 `SourceEvaluator.IsDescriptorKind` names Direct, Toggle and Rapid Trigger as the kinds that read their own descriptor. `IsUnmappedDirect` counts a blank Toggle or Rapid Trigger as a blank position. `MappingItem.IsPrimaryDescriptor` keeps the Source picker and the Record button on a Toggle or Rapid Trigger row. The save and load paths route either primary through the descriptor branch with its kind (`MappingSourceItem.DescriptorKind`), a Rapid Trigger one with its `ParamRapidTriggerDistance`, and the legacy merge keeps an any-device Toggle or Rapid Trigger row as authored, as it does an any-device Direct row (`SettingsService.cs` line 2169).
 
@@ -1686,7 +1686,7 @@ The envelope is computed App-side, beside the gravity EMA on the same tick under
 
 | Target class | Shake handling |
 |---|---|
-| Bipolar axis (`SourceEvaluator.EvaluateBipolarKind`, which `EvaluateForBipolarAxisTarget` calls, kinds `MotionShake` / `MotionShakeAux`, lines 272-275 and 341-351) | The envelope straight through, `[0, 1]` |
+| Bipolar axis (`SourceEvaluator.EvaluateBipolarKind`, which `EvaluateForBipolarAxisTarget` calls, kinds `MotionShake` / `MotionShakeAux`, lines 269-272 and 331-341) | The envelope straight through, `[0, 1]` |
 | Trigger | No shake branch. `EvaluateForTriggerTarget` falls through to `SourceCoercion`, whose unipolar read does not recognize the descriptor and returns 0 |
 | Button (`SourceCoercion`, line 5724) | Fires above the per-source `DeadZone`, or `ShakeButtonDefaultThresholdPercent` (25, about 0.5 g of deviation) when none is set. The generic axis default would make a gentle bump a press |
 
