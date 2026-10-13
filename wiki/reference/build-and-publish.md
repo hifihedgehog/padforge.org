@@ -183,9 +183,11 @@ The refusals matter most in a mutation run, which builds the code with one check
 | Razer's Chroma server and Sensa runtime, SteelSeries GG, Logitech's LED engine and G-key library | `VendorProgramGate` | `TestHostFenceTests` |
 | A call, a datagram, a web request or a name lookup beyond loopback | `OutboundNetworkGate` | `TestHostFenceTests` |
 | A request to Steam, and the Steam client's connect | `SteamHttp` | `TestHostFenceTests`, `SteamOffLimitsTests` |
+| A pipe served or written to under the name a running PadForge serves | `ExternalControlService` | `TestHostFenceTests` |
+| A DSU server on the port every DSU client polls | `DsuMotionServer` | `TestHostFenceTests` |
 | The GameInput service, which HIDMaestro's context asks `sc.exe` about and starts as it is built | A flag inside the HIDMaestro SDK, set through reflection by `GameInputServiceOffLimits` | `TestHostFenceTests` |
 
-`TestHostFenceTests` also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, `CreateFile` imports, sound outputs, libraries loaded by path, and network clients. `TestHostListenerTests` lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.
+`TestHostFenceTests` also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, `CreateFile` imports, pipes, sound outputs, libraries loaded by path, and network clients. `TestHostListenerTests` lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.
 
 Code that reaches the machine in a new way gets its refusal in the same change: a flag on the class that makes the call, a `[ModuleInitializer]` in `TestHostFences.cs` that sets it, and a row in `TestHostFenceTests`.
 

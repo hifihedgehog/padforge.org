@@ -5192,13 +5192,23 @@
 <td><code>TestHostFenceTests</code>, <code>SteamOffLimitsTests</code></td>
 </tr>
 <tr>
+<td>A pipe served or written to under the name a running PadForge serves</td>
+<td><code>ExternalControlService</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
+<td>A DSU server on the port every DSU client polls</td>
+<td><code>DsuMotionServer</code></td>
+<td><code>TestHostFenceTests</code></td>
+</tr>
+<tr>
 <td>The GameInput service, which HIDMaestro's context asks <code>sc.exe</code> about and starts as it is built</td>
 <td>A flag inside the HIDMaestro SDK, set through reflection by <code>GameInputServiceOffLimits</code></td>
 <td><code>TestHostFenceTests</code></td>
 </tr>
 </tbody>
 </table>
-<p><code>TestHostFenceTests</code> also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, <code>CreateFile</code> imports, sound outputs, libraries loaded by path, and network clients. <code>TestHostListenerTests</code> lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.</p>
+<p><code>TestHostFenceTests</code> also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, <code>CreateFile</code> imports, pipes, sound outputs, libraries loaded by path, and network clients. <code>TestHostListenerTests</code> lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.</p>
 <p>Code that reaches the machine in a new way gets its refusal in the same change: a flag on the class that makes the call, a <code>[ModuleInitializer]</code> in <code>TestHostFences.cs</code> that sets it, and a row in <code>TestHostFenceTests</code>.</p>
 <h2 id="single-file-publish-configuration">Single-File Publish Configuration<a class="headerlink" href="#single-file-publish-configuration" title="Permanent link">&para;</a></h2>
 <p>The App csproj defines these publish properties:</p>
