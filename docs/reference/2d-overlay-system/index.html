@@ -4015,6 +4015,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#touchsensorstrip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSensorStrip
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overlay_positionspy" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5187,6 +5198,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#touchsensorstrip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TouchSensorStrip
+      
+    </span>
+  </a>
   
 </li>
       
@@ -7072,7 +7094,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <hr />
 <h2 id="kbmpreviewview">KBMPreviewView<a class="headerlink" href="#kbmpreviewview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/KBMPreviewView.xaml</code>, <code>KBMPreviewView.xaml.cs</code></p>
-<p>WPF <code>UserControl</code> for Keyboard+Mouse virtual controllers. Displays a full QWERTY keyboard above a mouse graphic. About 619 lines of code-behind.</p>
+<p>WPF <code>UserControl</code> for Keyboard+Mouse virtual controllers. Displays the slot's keyboard above its mouse: the generic keyboard on Windows input or the picked keyboard's board, and the mouse with the controls the picked mouse has. About 977 lines of code-behind. Every key, mouse control, arrow and lock light is a click-to-record control as well as a display.</p>
 <h3 id="xaml-structure_2">XAML Structure<a class="headerlink" href="#xaml-structure_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="nt">&lt;Grid&gt;</span>
 <a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="nt">&lt;Grid.RowDefinitions&gt;</span>
@@ -7091,12 +7113,17 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </code></pre></div>
 <p><code>ApplySurfaceVisibility()</code> shows only the halves the slot drives (#408), from <code>KbmConfig.KeyboardEnabled</code> and <code>MouseEnabled</code>. A slot set to <strong>Mouse Only</strong> draws only the mouse, and one set to <strong>Keyboard Only</strong> draws only the keyboard. The row heights change with the visibility, because a collapsed <code>Viewbox</code> alone leaves its star row holding the space.</p>
 <h3 id="keyboard-canvas">Keyboard Canvas<a class="headerlink" href="#keyboard-canvas" title="Permanent link">&para;</a></h3>
-<p><code>BuildKeyboardCanvas()</code> generates <code>Border</code> elements per key from <code>KeyboardKeyItem.BuildLayout()</code> (full ANSI QWERTY with numpad, 556x136 layout units). Each key has:
+<p><code>BuildKeyboardCanvas()</code> draws the picked keyboard as its board when <code>KeyboardFamilies.For(KbmKeyboardDevice)</code> has a drawing (<code>BuildDeviceKeyboard</code>), and the generic keyboard otherwise (<code>BuildGenericKeyboard</code>): on Windows input, and for a keyboard profile no drawing covers, such as one a user imported.</p>
+<p>The generic keyboard is <code>KeyboardKeyItem.BuildLayout()</code> (full ANSI QWERTY with numpad, 556x136 layout units) plus four media keys over the number pad (Mute, Volume Down, Volume Up, Play/Pause, as Segoe MDL2 Assets glyphs), where 108-key boards have them. The mapping grid carries the rest of the media and browser keys.</p>
+<p>A board drawing is one of eleven key sets in <code>KeyboardFamilies.g.cs</code>, which <code>tools/gen_kbm_layouts.py</code> generates from QMK's layout data (<code>layouts/default</code>, <code>keyboards/hhkb/jp</code>) and Keychron's QMK fork for the Q6: full size ANSI, ISO and with four keys over the number pad, tenkeyless, 75 percent, 65 percent with and without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Each <code>LayoutKey</code> holds its position and size in key units (24 px each) and the HID usage it sends. <code>KeyboardFamilies</code> maps each of HIDMaestro's 51 keyboard profiles to a set, and <code>KbmHidDeviceTests</code> holds that table to the catalog, so a profile a later SDK adds cannot go undrawn. A board no QMK layout matches draws as the nearest set, marked <code>Approximate</code>, and the canvas adds the caption <code>Pad_Kbm_Preview_Approximate</code> under it.</p>
+<p>Each board key stands for the row the input layout gives it: <code>KbmHidKeyMap.TargetOf(usage, UiLayout())</code> turns its usage into the virtual-key index of its row, and a layout change redraws the board. Its legend comes from, in order, <code>KeyboardFamilies.FixedLegend</code> (Apple's modifier symbols on a Mac board, the JIS keys' own legends, <code>Fn</code> for a key that sends nothing), a media glyph for a consumer usage, the character the layout types (<code>KbmHidKeyMap.CharacterLegend</code>), and <code>ShortLegend</code>. A key the picked keyboard cannot send (<code>KbmDeviceCaps</code>), or that no row reaches (<code>InputManager.IsKbmKeyTarget</code>), is drawn at 35 percent and takes no clicks.</p>
+<p>Every live key has:
 - <code>CornerRadius(3)</code> rounded corners
 - <code>KeyNormalBrush</code> background (semi-transparent gray), <code>KeyPressedBrush</code> (<code>#FF6B2C</code> ember) on press. <code>AccentBrush</code>, used for pressed mouse buttons and movement, is the same ember, not blue. This preview shows what the virtual keyboard and mouse emit, so pressed states light ember (#175).
 - <code>ToolTip</code> with the row's current <code>TargetLabel</code> from <code>_vm.Mappings</code>, falling back to the key's own label
 - <code>MouseLeftButtonDown</code> fires <code>ControllerElementRecordRequested</code> with <code>"KbmKey{VKeyIndex:X2}"</code>
 - Hover: border highlight via <code>HoverBrush</code></p>
+<p><strong>Lock lights.</strong> On a keyboard whose profile declares an LED report (<code>KbmDeviceCaps.HasKeyboardLeds</code>), <code>BuildLedStrip</code> draws three lights in the board's top right corner, Num Lock, Caps Lock and Scroll Lock, in <code>HMKeyboardLeds</code> bit order (<code>LockLightKeys</code>: VK 0x90, 0x14, 0x91). They show the LED report Windows last sent the virtual keyboard. Each light is also its lock key's control: a transparent hit area over the 6 px light and its mark shows the row's label as its tooltip, strokes the light with <code>HoverBrush</code> on hover, and fires <code>ControllerElementRecordRequested</code> with <code>"KbmKey{vk:X2}"</code> on a click. While that row records, the light flashes with the key. A light whose key the keyboard cannot send, or no row reaches, only shows.</p>
 <h3 id="mouse-canvas">Mouse Canvas<a class="headerlink" href="#mouse-canvas" title="Permanent link">&para;</a></h3>
 <p><code>BuildMouseCanvas()</code> calls <code>MouseGlyph.Build()</code>, the one mouse drawing, shared with the Devices page's <code>MousePreviewControl</code>. Nothing here redraws the art. The shell is gaming-mouse vector art from Zergatul.Obs.InputOverlay (MIT), vendored at <code>2DModels/MOUSE/mouse.svg</code> with its license beside it and rendered into PNG layers by <code>tools/gen_mouse_art.py</code>. Each control is a full-canvas alpha mask over the artwork (the same technique the controller overlays use), so a control lights up without the art being recolored. <code>MouseGlyph.Build</code> returns the live shapes and attaches no handlers. <code>KBMPreviewView</code> owns behavior.</p>
 <table>
@@ -7144,6 +7171,11 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <td>Triangular <code>Polygon</code> on wheel</td>
 </tr>
 <tr>
+<td>Tilt left / right arrows</td>
+<td><code>KbmScrollHNeg</code> / <code>KbmScrollH</code></td>
+<td>Triangular <code>Polygon</code>s on the wheel between the scroll arrows, built only on a mouse that tilts</td>
+</tr>
+<tr>
 <td>Movement circle</td>
 <td><code>KbmMouseX/Y/Neg</code></td>
 <td><code>Ellipse</code> with direction arrow, quadrant click detection. Ours, not the art's, sitting in the lower palm</td>
@@ -7156,6 +7188,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </tbody>
 </table>
 <p>Fill on each art layer belongs to the render loop and the flash animation, so hover gets its own layer (<code>LmbHover</code>, <code>RmbHover</code>, and so on) rather than borrowing that channel. Hit-testing gets a third: a masked rectangle hit-tests over its whole rect, not its mask, so <code>LmbHit</code> and friends are real <code>Path</code> shapes.</p>
+<p><code>ApplyMouseCaps</code> fits the drawing to the picked mouse (<code>KbmDeviceCaps</code>). Windows input sends every control, so it keeps them all. A virtual mouse loses the side buttons past its button count, a button it lacks is drawn at 30 percent with its hit shape off, the scroll arrows go with a missing wheel, and a mouse with AC Pan gets the two tilt arrows. The wheel art is also the middle button: it stays while either is there, and takes clicks only while the middle button is.</p>
 <p><strong>Movement circle interaction:</strong>
 - <code>MouseMove</code> determines quadrant and shows direction arrow with <code>HoverBrush</code>
 - Click fires <code>KbmMouseX</code> (right), <code>KbmMouseXNeg</code> (left), <code>KbmMouseY</code> (up), or <code>KbmMouseYNeg</code> (down)
@@ -7165,8 +7198,9 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 - <strong>Keyboard keys:</strong> <code>kbm.GetKey(vKeyIndex)</code> -&gt; <code>KeyPressedBrush</code> / <code>KeyNormalBrush</code>, plus <code>EmberGlow</code> while pressed
 - <strong>Mouse buttons:</strong> <code>kbm.GetMouseButton(0/1/2/3/4)</code> -&gt; <code>AccentBrush</code> fill on LMB/RMB/wheel and the X1/X2 side buttons
 - <strong>Movement dot:</strong> the cursor lanes mapped to circle position, accent when non-zero. The rate lanes (gyro, touchpad, flick) report mouse counts rather than a [-1..+1] deflection, so they are normalized by the counts one full deflection is worth before being summed in
-- <strong>Scroll arrows:</strong> <code>kbm.ScrollDelta</code> -&gt; accent fill on up/down arrow</p>
-<p>Each surface is skipped while its own target is mid-flash. The wheel fill is also the flash surface for <code>KbmScroll</code> and <code>KbmScrollNeg</code> as well as <code>KbmMBtn2</code>, so its guard names all three.</p>
+- <strong>Scroll arrows:</strong> <code>kbm.ScrollDelta</code> -&gt; accent fill on up/down arrow, and <code>kbm.ScrollDeltaH</code> on the tilt arrows
+- <strong>Lock lights:</strong> <code>PadViewModel.KbmKeyboardLeds</code> (bits 0 to 2, -1 before Windows sets any) -&gt; <code>AccentBrush</code> with <code>EmberGlowSmall</code> while lit</p>
+<p>Each surface is skipped while its own target is mid-flash. The wheel fill is also the flash surface for <code>KbmScroll</code>, <code>KbmScrollNeg</code>, <code>KbmScrollH</code> and <code>KbmScrollHNeg</code> as well as <code>KbmMBtn2</code>, so its guard names all five (<code>KbmPreviewFlashGuardTests</code>). A lock light recording its key keeps the flash the same way.</p>
 <h3 id="flash-animation_1">Flash Animation<a class="headerlink" href="#flash-animation_1" title="Permanent link">&para;</a></h3>
 <p>400 ms <code>DispatcherTimer</code>, same pattern as other views. Target elements get <code>FlashBrush</code> (orange) on tick, restored on stop.</p>
 <h3 id="events_2">Events<a class="headerlink" href="#events_2" title="Permanent link">&para;</a></h3>
@@ -7174,6 +7208,10 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </code></pre></div>
 <p>Same click-to-record pattern as all other views. <code>Bind(vm)</code> / <code>Unbind()</code> lifecycle matches 2D/3D/Schematic views.</p>
 <hr />
+<h2 id="touchsensorstrip">TouchSensorStrip<a class="headerlink" href="#touchsensorstrip" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>PadForge.App/Views/TouchSensorStrip.cs</code></p>
+<p>A code-built <code>UserControl</code> that sits at the top center of the pad page's preview host, over the 2D and 3D views. It shows a Valve slot's capacitive touch sensors as capsules, because the front art has no place to click them: a stick cap's center records the stick button, and the grips have no art. <code>RolesFor(type, profileId)</code> lists the roles the slot's wire table carries (<code>NintendoPreviewMap.IndexOf</code>): Left and Right Stick Touch on both Steam Deck profiles and the 2026 Steam Controller, plus Left and Right Grip Touch on the 2026 pad. Every other slot gets none, and the strip collapses.</p>
+<p>Each capsule is labeled with the row's own string (<code>Mapping_CapSense*</code>). It fills with ember while its output is on (<code>PadViewModel.LeftStickTouch</code> and its three twins), takes a warm edge on hover, and fires <code>ControllerElementRecordRequested</code> with its role on a click. <code>PadPage.OnModelRecordRequested</code> turns the role into the slot's raw row (<code>NintendoPreviewMap.ToRaw</code>, <code>RawBtn18</code> for the Deck's left stick), as it does for every Valve preview click. While a row records, <code>RoleOf</code> reads the role back from <code>CurrentRecordingTarget</code> and the capsule flashes on the 400 ms cycle the views use, beside the stick cap the views flash for the same row (<code>NintendoPreviewMap.ArtRole</code>). The strip subscribes to the view model only while loaded.</p>
 <h2 id="overlay_positionspy">overlay_positions.py<a class="headerlink" href="#overlay_positionspy" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>tools/overlay_positions.py</code></p>
 <p>Python tool that generates <code>ControllerOverlayLayout.cs</code> from Gamepad-Asset-Pack SVG files.</p>

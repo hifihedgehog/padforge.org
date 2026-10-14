@@ -4166,6 +4166,7 @@
 </tbody>
 </table>
 <p>The 2D overlays follow one rule: a control the front art cannot show still gets a place to hover, click, and flash. The Steam Deck's R4 L4 R5 L5 and the 2026 pad's bumpers, triggers, and four rear buttons sit as labeled tiles in a column on each side of the body. The 2015 pad's D-Pad wedges are cut out of the left trackpad and its right stick is drawn over the right trackpad, with printed zone lines marking the wedges and each grip's outline. Those printed marks are decals: always visible, never a click target.</p>
+<p>A Steam Deck or 2026 Steam Controller profile adds a row of capsules at the top of the view for its touch sensors: <strong>Left Stick Touch</strong> and <strong>Right Stick Touch</strong>, plus <strong>Left Grip Touch</strong> and <strong>Right Grip Touch</strong> on the 2026 pad. A stick's cap already records the stick button and the grips have no art, so each sensor gets a capsule of its own. It lights while its output is on, a click records its row, and it flashes while that row records. A touched stick's cap also takes a faint wash in both views.</p>
 <p>Live highlights, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See <a href="../controller-slots/#valve-personas">Controller Slots</a> for the row list per pad.</p>
 <hr />
 <h2 id="vr-preview">VR preview<a class="headerlink" href="#vr-preview" title="Permanent link">&para;</a></h2>
@@ -4234,7 +4235,9 @@
 <p>The schematic represents the live HID layout for the Extended slot. Xbox or PlayStation visuals render for actual Xbox or PlayStation slots, not for Extended slots that happen to be running an Xbox- or PlayStation-style HIDMaestro profile. The Valve profiles are the one exception, because PadForge ships their own bodies (see <a href="#valve-preview">Valve preview</a>).</p>
 <hr />
 <h2 id="keyboard-mouse-preview">Keyboard + Mouse preview<a class="headerlink" href="#keyboard-mouse-preview" title="Permanent link">&para;</a></h2>
-<p>Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to <strong>Mouse Only</strong> draws only the mouse, and one set to <strong>Keyboard Only</strong> draws only the keyboard.</p>
+<p>Keyboard+Mouse slots show a keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to <strong>Mouse Only</strong> draws only the mouse, and one set to <strong>Keyboard Only</strong> draws only the keyboard.</p>
+<p>On Windows input the keyboard is a full ANSI layout with the numpad and four media keys over it (Mute, Volume Down, Volume Up, Play/Pause), where 108-key boards have them. A slot set to a keyboard model draws that board's key set instead, from QMK's layout data: full size (ANSI, ISO, or with four keys over the numpad), tenkeyless, 75 percent, 65 percent with or without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Character keys carry the legends PadForge's input layout types and redraw when the layout changes. Apple boards carry Apple's modifier symbols, and the JIS board its Japanese key legends. A board with no exact drawing shows the nearest set with the caption <strong>Drawn as the nearest standard layout</strong> under it. On a keyboard with lock lights, three lights in the top right corner show Num Lock, Caps Lock and Scroll Lock as Windows last set them, and each is a control for its key: a click records that key's row. A key the model cannot send, or that no row reaches, is drawn faint and takes no clicks.</p>
+<p>A slot set to a mouse model draws the controls that mouse has. It loses the side buttons past the model's button count, a button the model lacks is drawn faint and takes no clicks, the scroll arrows go with a missing wheel, and a mouse that tilts gets left and right arrows on the wheel.</p>
 <table>
 <thead>
 <tr>
@@ -4245,7 +4248,7 @@
 <tbody>
 <tr>
 <td>Keyboard</td>
-<td>Full layout including the numpad. Keys show labels, mapping tooltips, and an accent highlight when active.</td>
+<td>The Windows input layout or the picked board's. Keys show labels, mapping tooltips, and an accent highlight when active.</td>
 </tr>
 <tr>
 <td>LMB / RMB</td>
@@ -4253,7 +4256,7 @@
 </tr>
 <tr>
 <td>Scroll wheel</td>
-<td>Center pill for middle-click. Up / down arrows highlight during scroll output.</td>
+<td>Center pill for middle-click. Up / down arrows highlight during scroll output, and left / right arrows during tilt output on a mouse that tilts.</td>
 </tr>
 <tr>
 <td>Movement circle</td>
@@ -4261,11 +4264,11 @@
 </tr>
 <tr>
 <td>Side buttons</td>
-<td>X1 and X2 on the left edge (back / forward).</td>
+<td>X1 and X2 on the left edge (back / forward), when the slot's mouse has them.</td>
 </tr>
 </tbody>
 </table>
-<p>Click any key or mouse element to record a mapping. Same workflow as click-to-record on the 3D model.</p>
+<p>Every key, mouse button, wheel and tilt arrow, lock light and the movement circle is a control as well as a display: hover one to read its row, and click it to record a mapping to it. Same workflow as click-to-record on the 3D model.</p>
 <blockquote>
 <p><strong>Tip:</strong> Hover a key to see its current mapping target in the tooltip before clicking to remap.</p>
 </blockquote>

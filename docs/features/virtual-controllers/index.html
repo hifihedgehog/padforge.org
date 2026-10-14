@@ -2169,6 +2169,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#virtual-keyboards-and-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual keyboards and mice
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual keyboards and mice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#picking-a-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Picking a device
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-model-can-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a model can send
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key map
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading back
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5258,6 +5341,89 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#virtual-keyboards-and-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual keyboards and mice
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual keyboards and mice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#picking-a-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Picking a device
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-model-can-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a model can send
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sending" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sending
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key map
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading back
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5557,7 +5723,7 @@
 </table>
 <p>All six bool extras are set unconditionally. Since HM v1.5.1 the buttonMaps carry an explicit -1 for bits a profile does not declare, which is what ended the identity fallthrough that had Share pressing PS on every Sony pad.</p>
 <h3 id="feedbackpadindex">FeedbackPadIndex<a class="headerlink" href="#feedbackpadindex" title="Permanent link">&para;</a></h3>
-<p>Tracks which slot this VC occupies for correct <code>VibrationStates[]</code> writes. The runtime writers are <code>RegisterFeedbackCallback</code> (sets the initial index), <code>RetargetToPad</code> (<code>HMaestroVirtualController.cs:641</code>, invoked by <code>InputManager.RerouteVirtualControllersForReorder</code> at <code>InputManager.Step5.VirtualDevices.cs:3655</code> on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and <code>UnregisterFeedback</code> (<code>HMaestroVirtualController.cs:1396</code>, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a <code>SwapSlotData</code> updater. No such method exists in the codebase.</p>
+<p>Tracks which slot this VC occupies for correct <code>VibrationStates[]</code> writes. The runtime writers are <code>RegisterFeedbackCallback</code> (sets the initial index), <code>RetargetToPad</code> (<code>HMaestroVirtualController.cs:641</code>, invoked by <code>InputManager.RerouteVirtualControllersForReorder</code> at <code>InputManager.Step5.VirtualDevices.cs:3765</code> on intra-group reorder, which also rebuilds the DS5 passthrough and user-effects dispatchers against the new pad), and <code>UnregisterFeedback</code> (<code>HMaestroVirtualController.cs:1396</code>, parks the index at -1 on destroy so late driver callbacks no-op). The feedback handler reads the property on every callback (not a captured copy), so it always resolves the current slot index after a reorder. The interface docstring still names a <code>SwapSlotData</code> updater. No such method exists in the codebase.</p>
 <h3 id="type-specific-submit-methods">Type-Specific Submit Methods<a class="headerlink" href="#type-specific-submit-methods" title="Permanent link">&para;</a></h3>
 <p>All implementations have <code>SubmitGamepadState(Gamepad gp)</code> for interface compliance, but the non-gamepad outputs use alternative submit methods and leave it as a no-op:</p>
 <ul>
@@ -5592,15 +5758,15 @@
 <tbody>
 <tr>
 <td><strong>Preset</strong></td>
-<td>Three catalog profiles: <code>switch-pro</code> (VID 0x057E, PID 0x2009), <code>switch2-pro-controller</code> (VID 0x057E, PID 0x2069, a UMDF2 HID gamepad) and <code>switch2-pro-controller-composite</code> (the same pad as a two-interface USB/IP persona, HIDMaestro 1.11.0). <code>HMaestroProfileCatalog.NintendoProfiles</code> filters on <code>IsNintendoProfile</code> (<code>HMaestroProfileCatalog.cs:466</code>), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. <code>DefaultNintendoProfileId</code> (<code>InputManager.Step5.VirtualDevices.cs:2695</code>) seeds new slots with <code>switch-pro</code>.</td>
+<td>Three catalog profiles: <code>switch-pro</code> (VID 0x057E, PID 0x2009), <code>switch2-pro-controller</code> (VID 0x057E, PID 0x2069, a UMDF2 HID gamepad) and <code>switch2-pro-controller-composite</code> (the same pad as a two-interface USB/IP persona, HIDMaestro 1.11.0). <code>HMaestroProfileCatalog.NintendoProfiles</code> filters on <code>IsNintendoProfile</code> (<code>HMaestroProfileCatalog.cs:506</code>), an explicit id list. Joy-Cons, NSO retro pads, and the GameCube adapter stay in the Extended category. <code>DefaultNintendoProfileId</code> (<code>InputManager.Step5.VirtualDevices.cs:2778</code>) seeds new slots with <code>switch-pro</code>.</td>
 </tr>
 <tr>
 <td><strong>Creation</strong></td>
-<td><code>CreateVirtualController</code> routes Nintendo through <code>CreateHMaestroController</code> (<code>InputManager.Step5.VirtualDevices.cs:2781</code>), same as the other HM categories. No Customize surface: the profile-override branch in <code>CreateHMaestroController</code> gates on <code>type == Extended</code> (<code>:3068</code>), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (<code>:3500-3503</code>).</td>
+<td><code>CreateVirtualController</code> routes Nintendo through <code>CreateHMaestroController</code> (<code>InputManager.Step5.VirtualDevices.cs:2864</code>), same as the other HM categories. No Customize surface: the profile-override branch in <code>CreateHMaestroController</code> gates on <code>type == Extended</code> (<code>:3177</code>), so a Nintendo slot always deploys the catalog profile as-is. Reorder rerouting includes the Nintendo group (<code>:3610-3613</code>).</td>
 </tr>
 <tr>
 <td><strong>Data path</strong></td>
-<td>The raw HID surface. <code>SlotRawHidSurface</code> is true for both Extended and Nintendo slots (<code>InputService.cs:6394-6396</code>), so Step 3/4 produce <code>RawHidState</code> and Step 5 submits via <code>SubmitRawHidState</code> with the slot's <code>MotionSnapshot</code> riding beside it (<code>InputManager.Step5.VirtualDevices.cs:2273-2281</code>). On a Switch 2 Pro profile the frame's rows go through <code>Switch2ProStateMap</code> on the way (see <a href="#switch-2-pro-state">Switch 2 Pro state</a>).</td>
+<td>The raw HID surface. <code>SlotRawHidSurface</code> is true for both Extended and Nintendo slots (<code>InputService.cs:6397-6399</code>), so Step 3/4 produce <code>RawHidState</code> and Step 5 submits via <code>SubmitRawHidState</code> with the slot's <code>MotionSnapshot</code> riding beside it (<code>InputManager.Step5.VirtualDevices.cs:2356-2364</code>). On a Switch 2 Pro profile the frame's rows go through <code>Switch2ProStateMap</code> on the way (see <a href="#switch-2-pro-state">Switch 2 Pro state</a>).</td>
 </tr>
 <tr>
 <td><strong>Gyro passthrough</strong></td>
@@ -5612,7 +5778,7 @@
 </tr>
 <tr>
 <td><strong>Button lettering</strong></td>
-<td>Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (<code>NintendoPreviewMap.ButtonTable</code>, read by <code>MacroItem.cs</code> <code>NintendoLetteredLabel</code>). The <code>switch-pro</code> table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (<code>NintendoExtendedLabel</code>). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (<code>NintendoLetteredButtonCount</code>). The Switch 2 Pro table, which both of its profiles share, has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride <code>TriggerClickButtonMask</code>, derived from the profile layout's trigger-click roles (<code>InputService.TriggerClickButtonMaskFrom</code>, <code>InputService.cs:6316</code>).</td>
+<td>Nintendo slots keep the raw Numbered value space and re-letter labels per raw index through the active profile's wire table (<code>NintendoPreviewMap.ButtonTable</code>, read by <code>MacroItem.cs</code> <code>NintendoLetteredLabel</code>). The <code>switch-pro</code> table is B A Y X, L R, ZL ZR, Minus Plus, stick clicks, Home, Capture (<code>NintendoExtendedLabel</code>). Its descriptor's gamepad report (0x3F) declares 16 buttons, but only the 14 role-mapped indices reach the wire (<code>NintendoLetteredButtonCount</code>). The Switch 2 Pro table, which both of its profiles share, has 21: the D-pad rides four discrete buttons, and GR, GL and C follow Capture. ZL/ZR digital clicks ride <code>TriggerClickButtonMask</code>, derived from the profile layout's trigger-click roles (<code>InputService.TriggerClickButtonMaskFrom</code>, <code>InputService.cs:6319</code>).</td>
 </tr>
 <tr>
 <td><strong>Preview</strong></td>
@@ -5678,7 +5844,7 @@
 <p>Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.</p>
 <p><strong>What a client sees.</strong> On a headless bench, stock SDL3 with <code>SDL_JOYSTICK_HIDAPI_STEAM=1</code> claimed <code>steam-controller-composite</code> as "Steam Controller" with two touchpads, gyro and accelerometer, and a live Steam client opened it, reserved XInput slot 0, took the input stream and loaded the <code>gordon</code> configuration set. Nothing has run against real Valve hardware.</p>
 <h4 id="native-input-frames">Native input frames<a class="headerlink" href="#native-input-frames" title="Permanent link">&para;</a></h4>
-<p><code>ValveReportPackers</code> (<code>PadForge.App/Common/Input/ValveReportPackers.cs</code>) packs the slot's <code>RawHidState</code>, <code>TouchpadState</code> and <code>MotionSnapshot</code> into the device's own report. Step 5 asks <code>ValveReportPackers.ForProfile(profileId)</code>, and when it gets a packer it submits <code>scratch[..packer.Size]</code> through <code>SubmitRawReport</code> instead of <code>SubmitRawHidState</code> (<code>InputManager.Step5.VirtualDevices.cs:2245-2255</code>).</p>
+<p><code>ValveReportPackers</code> (<code>PadForge.App/Common/Input/ValveReportPackers.cs</code>) packs the slot's <code>RawHidState</code>, <code>TouchpadState</code> and <code>MotionSnapshot</code> into the device's own report. Step 5 asks <code>ValveReportPackers.ForProfile(profileId)</code>, and when it gets a packer it submits <code>scratch[..packer.Size]</code> through <code>SubmitRawReport</code> instead of <code>SubmitRawHidState</code> (<code>InputManager.Step5.VirtualDevices.cs:2328-2338</code>).</p>
 <table>
 <thead>
 <tr>
@@ -5717,10 +5883,11 @@
 <li><strong>Deck View and Menu.</strong> <code>STEAMDECK_LBUTTON_VIEW</code> is bit 12 and <code>_MENU</code> is bit 14 (<code>SDL_hidapi_steamdeck.c:61-63</code>). The Deck packer had the two swapped and its own test pinned the swap. <code>ValveWireTests.Packer_PutsEveryNamedSpecButtonOnItsBit</code>, which reads HIDMaestro's <code>ExtendedReport</code> spec off the SDK, found it.</li>
 <li><strong>IMU.</strong> <code>MotionSnapshot</code> maps into the Valve sensor frame as accel <code>(X, -Z, Y)</code> and gyro <code>(pitch, -roll, yaw)</code>, scaled to +/-2 g and +/-2000 deg/s. The quaternion field stays zero, because the slot has no fused orientation.</li>
 </ul>
+<p>The capacitive sensors ride rows appended to the wire tables, so saved bindings keep their slots. The Deck frame packs Left and Right Stick Touch into <code>ulButtonsH</code> at 0x4000 and 0x8000, byte 13 bits 0x40 and 0x80 (<code>SDL_hidapi_steamdeck.c</code>), and the 2026 frame packs Right Stick, Left Stick, Right Grip and Left Grip Touch at button bits 20, 24, 28 and 29 (<code>SDL_hidapi_steam_triton.c</code>). HIDMaestro 1.12.0 names the same bits. The plain <code>steam-deck</code> profile has no packer, so there the two stick rows are buttons 19 and 20 of its HID gamepad report.</p>
 <h4 id="descriptors-that-lead-with-a-mouse">Descriptors that lead with a mouse<a class="headerlink" href="#descriptors-that-lead-with-a-mouse" title="Permanent link">&para;</a></h4>
 <p>The 2026 pad carries its lizard-mode mouse (report 0x40) and keyboard (0x41) ahead of its controller state (0x42) on one interface. <code>HMController.SubmitRawReport</code> takes data bytes only and the driver prepends the descriptor's first report id, so a 54-byte 0x42 frame shifted one byte and came back out as a mouse report. The rolling sequence number landed on relative X at 250 Hz and the cursor tore sideways until the slot was deleted.</p>
 <p>HIDMaestro v1.7.1 fixed it (HIDMaestro#58): a profile that declares an input report id and is always armed now emits verbatim. <code>HMaestroVirtualController</code> resolves that pairing once at construction into <code>_extendedFrameCarriesItsOwnId</code> and calls <code>SubmitRawExtendedReport</code>, rather than letting the driver infer it from frame length, where a one-byte change to either size would flip the branch silently (<code>HMaestroVirtualController.cs:694-717</code>).</p>
-<p><code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>:348</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. It is a tripwire. Nothing in the app refuses a profile on it, and <code>PointingReportProfileGuardTests</code> uses it to require that every pointing-led profile carrying a packer is on the verbatim path.</p>
+<p><code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>:388</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. It is a tripwire. Nothing in the app refuses a profile on it, and <code>PointingReportProfileGuardTests</code> uses it to require that every pointing-led profile carrying a packer is on the verbatim path.</p>
 <h4 id="mapping-grid">Mapping grid<a class="headerlink" href="#mapping-grid" title="Permanent link">&para;</a></h4>
 <p>Valve slots keep the raw surface, and their rows carry Valve's own control names instead of "Button N". Labels come from <code>MacroButtonNames.ValveRoleLabel</code> (<code>MacroItem.cs:7582</code>) over the family's wire table.</p>
 <p>Axes interleave as <code>[LX LY LT RX RY RT]</code>, which is what <code>ComputeAxisLayout</code> produces for two sticks and two analog triggers. The Nintendo families pack <code>[LX LY RX RY]</code>, having no analog triggers at all.</p>
@@ -5735,7 +5902,7 @@
 <tbody>
 <tr>
 <td><code>SteamDeck</code> (<code>steam-deck</code>, <code>-composite</code>)</td>
-<td>A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click. D-pad is a hat</td>
+<td>A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click, Left Stick Touch, Right Stick Touch. D-pad is a hat</td>
 </tr>
 <tr>
 <td><code>SteamController</code> (<code>steam-controller</code>, <code>-composite</code>)</td>
@@ -5743,7 +5910,7 @@
 </tr>
 <tr>
 <td><code>SteamController2</code> (<code>steam-controller-2</code>)</td>
-<td>A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click, then the D-pad as four discrete buttons</td>
+<td>A B X Y, L1 R1, View Menu, L3 R3, Steam, Quick Access, R4 L4 R5 L5, Left Pad Click, Right Pad Click, then the D-pad as four discrete buttons, then Left Stick Touch, Right Stick Touch, Left Grip Touch, Right Grip Touch</td>
 </tr>
 </tbody>
 </table>
@@ -5923,7 +6090,7 @@
 </code></pre></div>
 <p>Stores the arguments, resolves the cached axis keys, and seeds <code>_axesScratch</code>. Throws <code>ArgumentNullException</code> on null <code>ctx</code> or <code>profile</code>. No driver work happens here. The actual virtual device is created in <code>Connect()</code>.</p>
 <p><code>identityKey</code> is the key HIDMaestro 1.8.0 (HM#60) derives every device path, the container id and, for USB/IP personas, the USB serial from, so the pad comes back at the same paths after a PadForge restart, a reboot or a driver upgrade. <code>IdentityKeyForPad</code> builds it as <code>padforge:slot{N}:{Type}</code>, where N is the pad's position in its own family's order list, not its pad index, which moves on a reorder. A pad missing from that list gets <code>padforge:pad{padIndex}:{Type}</code>. A blank key is stored as null, and HIDMaestro then falls back to its controller index.</p>
-<p><code>InputManager.CreateHMaestroController</code> is the only call site (<code>InputManager.Step5.VirtualDevices.cs:3038</code>). It resolves the profile (<code>:3049</code>), applies any per-slot overrides for Customized Extended slots via <code>new HMProfileBuilder().FromProfile(baseProfile)</code> (<code>:3127</code>), then constructs the wrapper with that key (<code>:3225</code>).</p>
+<p><code>InputManager.CreateHMaestroController</code> is the only call site (<code>InputManager.Step5.VirtualDevices.cs:3147</code>). It resolves the profile (<code>:3158</code>), applies any per-slot overrides for Customized Extended slots via <code>new HMProfileBuilder().FromProfile(baseProfile)</code> (<code>:3236</code>), then constructs the wrapper with that key (<code>:3334</code>).</p>
 <h3 id="connect">Connect()<a class="headerlink" href="#connect" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroVirtualController.cs:389</code>.</p>
 <ol>
@@ -6031,7 +6198,7 @@
 <p><strong>Hat.</strong> <code>MapHat</code> (<code>HMaestroVirtualController.cs:2096</code>) collapses the four D-Pad bits into a single <code>HMHat</code> direction (<code>North</code>, <code>NorthEast</code>, <code>East</code>, <code>SouthEast</code>, <code>South</code>, <code>SouthWest</code>, <code>West</code>, <code>NorthWest</code>, <code>None</code>). Diagonals take priority over cardinals.</p>
 <p><strong>PlayStation overload.</strong> <code>SubmitGamepadState(gp, in TouchpadState, in MotionSnapshot, byte batteryPercent, bool batteryCharging)</code> (<code>:901</code>) performs the same axis/button/hat population, then adds touchpad finger tracking (synthesized tracking IDs), gyro/accel scaled to the Sony int16 wire values (<code>GyroScale = 16</code>, <code>AccelScale = 8192</code>, the inverse of SDL3's no-calibration HIDAPI decode), sensor timestamp in 0.33 µs ticks, and battery level. Sony BT virtuals depend on it entirely (their Report 0x31 vendor blob is written by HM's encoder from these state fields). This overload does not dedup.</p>
 <h3 id="submitrawhidstaterawhidstate-raw-int-sticks-int-triggers">SubmitRawHidState(RawHidState raw, int sticks, int triggers)<a class="headerlink" href="#submitrawhidstaterawhidstate-raw-int-sticks-int-triggers" title="Permanent link">&para;</a></h3>
-<p><code>HMaestroVirtualController.cs:1061</code>, plus the overload taking <code>in MotionSnapshot</code> at <code>:1125</code> (the 3-argument form forwards with <code>default</code>). The overload runs the idle dedup and submits what <code>BuildRawHidState</code> (<code>:1166</code>) returns. That method needs no device, so a test can hand its state to HIDMaestro's own encoders. Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (<code>SubmitRawReport</code>) and a layout past 32 buttons or one hat (<code>SubmitPackedExtendedReport</code>): <code>SlotRawHidSurface</code> is true for both categories (<code>InputService.cs:6394-6396</code>), and the submit site passes the slot's layout counts and <code>MotionSnapshot</code> (<code>InputManager.Step5.VirtualDevices.cs:2273-2281</code>). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.</p>
+<p><code>HMaestroVirtualController.cs:1061</code>, plus the overload taking <code>in MotionSnapshot</code> at <code>:1125</code> (the 3-argument form forwards with <code>default</code>). The overload runs the idle dedup and submits what <code>BuildRawHidState</code> (<code>:1166</code>) returns. That method needs no device, so a test can hand its state to HIDMaestro's own encoders. Used by Step 5 for every Nintendo slot and every Extended slot, except a Valve profile with a packer (<code>SubmitRawReport</code>) and a layout past 32 buttons or one hat (<code>SubmitPackedExtendedReport</code>): <code>SlotRawHidSurface</code> is true for both categories (<code>InputService.cs:6397-6399</code>), and the submit site passes the slot's layout counts and <code>MotionSnapshot</code> (<code>InputManager.Step5.VirtualDevices.cs:2356-2364</code>). Submits up to 8 axes, up to 32 button bits (the named ones plus profile-specific extras), and 1 hat from a single 8-way POV.</p>
 <p><strong>Why SubmitGamepadState is not enough:</strong> <code>MapButtons</code> covers a fixed named set, but the XInput-shaped <code>Gamepad</code> struct can't express arbitrary profile-specific button bits or a per-profile axis layout. Those extras would be truncated. This path passes the full 32-bit mask and drives the profile's stick/trigger rows directly.</p>
 <p><strong>Idle dedup:</strong> the exact basic-path shape (16 ms keepalive), with a content compare on the pooled arrays (<code>RawFrameUnchanged</code>, <code>:1078-1095</code>). An identical frame within the window skips the seqlock publish + <code>SetEvent</code>. Motion frames never dedup: <code>SensorTimestamp</code> must advance for downstream fusion, so while <code>motion.HasMotion</code> is set every frame submits (<code>:1138-1155</code>). <code>PADFORGE_NO_RAWDEDUP=1</code> disables this path's dedup at launch (<code>:1073-1076</code>).</p>
 <p><strong>Axis layout:</strong> computed by replicating <code>ExtendedSlotConfig.ComputeAxisLayout</code>. Sticks and triggers are interleaved in groups of <code>(stickX, stickY, trigger)</code> while both are available, then trailing sticks pack at <code>(prev, prev+1)</code> and trailing triggers pack one index at a time. Hardcoded <code>(3, 4)</code> for right-stick X/Y silently dropped Stick 2 Y on every 0-trigger or 1-trigger profile, hence the explicit interleave logic.</p>
@@ -6045,7 +6212,7 @@
 <p>The mask and the hat above are what HIDMaestro reads for most profiles, the first Pro Controller included: <code>SwitchProPacker</code> takes <code>HMGamepadState.Buttons</code> as bit N for button N. The two Switch 2 Pro profiles read names. The plain profile's report 0x09 lists its button bits by <code>HMButton</code> name, and <code>VendorBlobCodec</code> sets a bit while the flag of that name is set. <code>Switch2ProPacker.BuildBody</code> reads the same names for the composite. Both take ZL and ZR from the trigger axes and the D-pad from <code>Hat</code>.</p>
 <p><code>Switch2ProStateMap</code> (<code>PadForge.App/Common/Input/Switch2ProStateMap.cs</code>) translates. The controller builds one in its constructor for any profile in the Switch 2 Pro wire family (<code>NintendoPreviewMap.FamilyOf</code>), and <code>BuildRawHidState</code> runs the frame's rows through it (<code>:1244</code>). Fifteen rows become named <code>HMButton</code> flags, the four D-pad rows become the hat through <code>MapHat</code>, and the ZL and ZR rows write 1 or 0 to the profile's left and right trigger axes on every frame. Each row is resolved through <code>NintendoPreviewMap.IndexOf</code>, so the wire order stays in one table.</p>
 <p>Before PadForge commit <code>f1e3b6c7</code> the slot sent the raw mask, and no row pressed its own control: B pressed A, R pressed L, the D-pad rows pressed the stick clicks and Home, and the last five rows pressed nothing. Under HIDMaestro 1.10.1 a resting slot also held ZR, because the SDK read the right stick's Y for the trigger axis the slot never wrote. <code>Switch2ProCompositeTests.EveryRowReachesItsOwnWireBit</code> runs HIDMaestro's two encoders on the slot's state and requires each of the 21 rows to set its own wire bit.</p>
-<p>The composite builds its reports on the device side, so it takes no finished frame: <code>HMController.SubmitRawReport</code> and <code>SubmitRawExtendedReport</code> throw <code>NotSupportedException</code> on it. <code>HMaestroVirtualController.DeviceBuildsReports</code> (<code>:174</code>) names such a profile by HIDMaestro's own test, a USB/IP profile on 057E:2069. No packer table lists it, and Step 5 skips the packed-report branch for it (<code>InputManager.Step5.VirtualDevices.cs:2260</code>).</p>
+<p>The composite builds its reports on the device side, so it takes no finished frame: <code>HMController.SubmitRawReport</code> and <code>SubmitRawExtendedReport</code> throw <code>NotSupportedException</code> on it. <code>HMaestroVirtualController.DeviceBuildsReports</code> (<code>:174</code>) names such a profile by HIDMaestro's own test, a USB/IP profile on 057E:2069. No packer table lists it, and Step 5 skips the packed-report branch for it (<code>InputManager.Step5.VirtualDevices.cs:2343</code>).</p>
 <p><strong>IMU channel (HM v1.3.18):</strong> when <code>motion.HasMotion</code>, the state's <code>AccelGX/GY/GZ</code> and <code>GyroDpsX/Y/Z</code> fields are filled verbatim from the <code>MotionSnapshot</code> (already g and deg/s in the SDL sensor frame, <code>:1308-1313</code>). The per-profile packer owns the wire frame and scale, so the vector round-trips bit-consistent to SDL on the client. This is the Nintendo category's gyro passthrough.</p>
 <h3 id="submitrawreportreadonlyspan-report">SubmitRawReport(ReadOnlySpan<byte> report)<a class="headerlink" href="#submitrawreportreadonlyspan-report" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroVirtualController.cs:717</code>. Submits a pre-packed frame (after a <code>TickFfb()</code>). Step 5 calls it for PlayStation slots whose profile has a <code>SonyReportPackers</code> packer (the USB Report 0x01 layouts, carrying the touchpad, gyro, accel and battery fields <code>HMGamepadState</code> doesn't model), and for every Extended slot on a Valve profile that has a packer. On USB Sony slots this is the only submit per poll now that Step 5 skips the redundant extended leg when a raw packer exists.</p>
@@ -6268,7 +6435,7 @@
 <strong>Backs:</strong> <code>VirtualControllerType.Vr</code>
 <strong>Max instances:</strong> 1 (<code>SettingsManager.MaxVrSlots</code>, <code>SettingsManager.cs:97</code>). Enforced by <code>SettingsManager.CanSlotTakeType</code> (<code>:111</code>), which short-circuits to true for every other type</p>
 <p>A SteamVR left + right hand pair (issue #49) served by HIDMaestro's native OpenVR driver (HM#32, v1.6.0). One instance drives BOTH hands through one <code>HMVRController</code> pipe. The driver registers the devices with SteamVR only while this consumer is live, so an idle machine shows no phantom controllers.</p>
-<p>All calls are in-process (named-pipe transport inside <code>HIDMaestro.Core</code>), so <code>Connect</code> / <code>Disconnect</code> need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no <code>HMContext</code> (<code>InputManager.Step5.VirtualDevices.cs:2784</code>).</p>
+<p>All calls are in-process (named-pipe transport inside <code>HIDMaestro.Core</code>), so <code>Connect</code> / <code>Disconnect</code> need none of the bounded-RPC ceremony the MIDI wrapper carries for midisrv. Step 5 constructs it directly, with no profile and no <code>HMContext</code> (<code>InputManager.Step5.VirtualDevices.cs:2867</code>).</p>
 <h3 id="isavailable">IsAvailable()<a class="headerlink" href="#isavailable" title="Permanent link">&para;</a></h3>
 <p><code>HMaestroVRController.cs:87</code>. True when SteamVR itself is present (<code>HMVR.IsSteamVRInstalled</code>). Without SteamVR the driver has no host to register with, so slot creation refuses early with a clear message instead of a silent dead pipe. Cached for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe walks Steam's library metadata on disk and the sidebar rail queries once per slot. A separate <code>s_availHasValue</code> flag marks a real answer: seeding the cache timestamp with <code>long.MinValue</code> overflowed the TTL compare to a large negative value, which always reads as inside the TTL, so the first call returned the default <code>false</code> without ever probing. <code>ResetAvailability()</code> (<code>:120</code>) clears it.</p>
 <h3 id="connect_1">Connect()<a class="headerlink" href="#connect_1" title="Permanent link">&para;</a></h3>
@@ -6753,9 +6920,9 @@
 <h2 id="keyboardmousevirtualcontroller">KeyboardMouseVirtualController<a class="headerlink" href="#keyboardmousevirtualcontroller" title="Permanent link">&para;</a></h2>
 <p><strong>Namespace:</strong> <code>PadForge.Common.Input</code>
 <strong>Visibility:</strong> <code>internal sealed</code>
-<strong>No driver required</strong>. Always available on all Windows systems
+<strong>No driver required</strong> on Windows input. A half set to a keyboard or mouse model needs HIDMaestro.
 <strong>Max instances:</strong> 16 (<code>MaxPads</code>)</p>
-<p>Translates <code>KbmRawState</code> into keyboard and mouse input via Win32 <code>SendInput</code>. Maps controller inputs to key presses, mouse movement, clicks, and scroll. No virtual device. Output goes directly to the Windows input queue.</p>
+<p>Translates <code>KbmRawState</code> into keyboard and mouse input. Maps controller inputs to key presses, mouse movement, clicks, and scroll. Each half sends through Win32 <code>SendInput</code>, straight to the Windows input queue with no virtual device, or through a virtual HID keyboard or mouse HIDMaestro makes from the profile the slot picked. See <a href="#virtual-keyboards-and-mice">Virtual keyboards and mice</a>.</p>
 <h3 id="fields_1">Fields<a class="headerlink" href="#fields_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6775,6 +6942,26 @@
 <td><code>_disposed</code></td>
 <td><code>bool</code></td>
 <td>Dispose guard</td>
+</tr>
+<tr>
+<td><code>_padIndex</code></td>
+<td><code>int</code></td>
+<td>The slot, for the devices' identity keys and the sender threads' names</td>
+</tr>
+<tr>
+<td><code>_ctx</code></td>
+<td><code>HMContext</code></td>
+<td>The HIDMaestro context the virtual devices are made in, null when both halves use Windows input</td>
+</tr>
+<tr>
+<td><code>_keyboardProfile</code>, <code>_mouseProfile</code></td>
+<td><code>HMProfile</code></td>
+<td>The model each half sends through, null for Windows input</td>
+</tr>
+<tr>
+<td><code>_hidKeyboard</code>, <code>_hidMouse</code></td>
+<td><code>KbmHidKeyboard</code>, <code>KbmHidMouse</code></td>
+<td>The senders while connected, null on Windows input</td>
 </tr>
 <tr>
 <td><code>_prevKeys0..3</code></td>
@@ -6868,17 +7055,17 @@
 <tr>
 <td><code>ClampSubmitDt</code></td>
 <td><code>float ClampSubmitDt(double seconds)</code></td>
-<td>Seconds credited to one submit: never negative, capped at 50 ms so a stall (debugger, suspend) resumes gently instead of spending the whole gap as one giant delta (<code>KeyboardMouseVirtualController.cs:115</code>).</td>
+<td>Seconds credited to one submit: never negative, capped at 50 ms so a stall (debugger, suspend) resumes gently instead of spending the whole gap as one giant delta (<code>KeyboardMouseVirtualController.cs:165</code>).</td>
 </tr>
 <tr>
 <td><code>MouseStickPixels</code></td>
 <td><code>float MouseStickPixels(short deflection, float dtSeconds)</code></td>
-<td><code>deflection / 32767 * MouseFullScalePxPerSec * dt</code>. Pure, so the rate contract is directly testable (<code>:122</code>).</td>
+<td><code>deflection / 32767 * MouseFullScalePxPerSec * dt</code>. Pure, so the rate contract is directly testable (<code>:172</code>).</td>
 </tr>
 <tr>
 <td><code>ScrollStickNotches</code></td>
 <td><code>float ScrollStickNotches(short deflection, float dtSeconds)</code></td>
-<td>The scroll twin, in wheel notches (<code>:127</code>).</td>
+<td>The scroll twin, in wheel notches (<code>:177</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -6903,6 +7090,21 @@
 <td>Read from <code>_connected</code></td>
 </tr>
 <tr>
+<td><code>KeyboardDeviceId</code>, <code>MouseDeviceId</code></td>
+<td><code>string</code></td>
+<td>The profile each half sends through, empty for Windows input. Step 5 compares them with the slot's picks</td>
+</tr>
+<tr>
+<td><code>HasHidDevices</code></td>
+<td><code>bool</code></td>
+<td>True when either half has a model, whose removal waits on Windows and so never runs on the polling thread</td>
+</tr>
+<tr>
+<td><code>KeyboardLeds</code></td>
+<td><code>HMKeyboardLeds?</code></td>
+<td>The lock lights Windows last set on the virtual keyboard, null without one</td>
+</tr>
+<tr>
 <td><code>FeedbackPadIndex</code></td>
 <td><code>int</code></td>
 <td>Slot index (unused. KBM has no rumble)</td>
@@ -6911,22 +7113,23 @@
 </table>
 <h3 id="constructor_2">Constructor<a class="headerlink" href="#constructor_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">public</span><span class="w"> </span><span class="nf">KeyboardMouseVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="k">public</span><span class="w"> </span><span class="nf">KeyboardMouseVirtualController</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">padIndex</span><span class="p">,</span><span class="w"> </span><span class="n">HMContext</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">HMProfile</span><span class="w"> </span><span class="n">keyboardProfile</span><span class="p">,</span><span class="w"> </span><span class="n">HMProfile</span><span class="w"> </span><span class="n">mouseProfile</span><span class="p">)</span>
 </code></pre></div>
-<p>Empty body: the <code>padIndex</code> parameter is accepted for call-site symmetry and ignored (<code>KeyboardMouseVirtualController.cs:143-145</code>). No resources acquired, no driver interaction.</p>
+<p>The first is Windows input for both halves and passes no context and no profiles to the second, which stores the slot, the context and the two models (<code>KeyboardMouseVirtualController.cs:193-211</code>). A null profile is Windows input for that half. Nothing is made until <code>Connect()</code>.</p>
 <h3 id="connect_3">Connect()<a class="headerlink" href="#connect_3" title="Permanent link">&para;</a></h3>
-<p>Returns early if connected. Sets <code>_connected = true</code>, resets key/button tracking to zero, zeroes <code>_lastSubmitTimestamp</code> (fresh time base: the first submit after a reconnect credits zero seconds instead of the idle gap), and calls <code>_socd.Reset()</code>. Lightweight. No virtual device created.</p>
+<p>Returns early if connected. Makes the virtual devices first, when a half has a model: one device for both halves when they name the same profile (<code>SharedKbmHidSink</code>, two users), else one per half, each wrapped in its sender. A half that cannot be made throws, so the create fails as any HIDMaestro controller's does, and the slot does not fall back to Windows input it was not set to. Then sets <code>_connected = true</code>, resets key/button tracking to zero, zeroes <code>_lastSubmitTimestamp</code> (fresh time base: the first submit after a reconnect credits zero seconds instead of the idle gap), and calls <code>_socd.Reset()</code>. On Windows input no device is made.</p>
 <h3 id="disconnect_3">Disconnect()<a class="headerlink" href="#disconnect_3" title="Permanent link">&para;</a></h3>
-<p>Returns early if not connected. Sets <code>_connected = false</code>, calls <code>ReleaseAll()</code>, then zeroes all ten motion accumulators (<code>_mx</code>/<code>_my</code>, <code>_scroll</code>/<code>_scrollH</code>, <code>_gx</code>/<code>_gy</code>, <code>_tx</code>/<code>_ty</code>, <code>_sx</code>/<code>_sy</code>, <code>:178-191</code>): a stale sub-count carry must not survive a reconnect and spend itself on the first new poll.</p>
-<p><strong><code>ReleaseAll()</code>:</strong> Sends key-up for all held keys and button-up for all held mouse buttons (a release-phase <code>ProcessKeyWord</code> pass with <code>current = 0</code> emits releases for every set bit). Resets tracking to zero. Prevents stuck keys/buttons on disconnect.</p>
+<p>Returns early if not connected. Sets <code>_connected = false</code>, calls <code>ReleaseAll()</code> and <code>DisposeHidDevices()</code>, which removes the virtual devices after each sends its releases, then zeroes all ten motion accumulators (<code>_mx</code>/<code>_my</code>, <code>_scroll</code>/<code>_scrollH</code>, <code>_gx</code>/<code>_gy</code>, <code>_tx</code>/<code>_ty</code>, <code>_sx</code>/<code>_sy</code>, <code>:318-329</code>): a stale sub-count carry must not survive a reconnect and spend itself on the first new poll.</p>
+<p><strong><code>ReleaseAll()</code>:</strong> Sends key-up for all held keys and button-up for all held mouse buttons (a release-phase <code>ProcessKeyWord</code> pass with <code>current = 0</code> emits releases for every set bit). Resets tracking to zero. Prevents stuck keys/buttons on disconnect. With a virtual keyboard or mouse the releases go through it (<code>KbmHidKeyboard.ReleaseAll</code>, <code>KbmHidMouse.SetButtons(0)</code>).</p>
 <h3 id="applysocdconfigstring-mode-string-pairs">ApplySocdConfig(string mode, string pairs)<a class="headerlink" href="#applysocdconfigstring-mode-string-pairs" title="Permanent link">&para;</a></h3>
-<p><code>KeyboardMouseVirtualController.cs:165</code>. Applies the slot's SOCD (Snap Tap, discussion #205) config. Called from the poll loop before each submit. The UI thread swaps whole config strings atomically, so two <code>ReferenceEquals</code> compares detect an edit and keep the steady-state cost at two compares. On change it forwards <code>mode</code> / <code>pairs</code> to <code>_socd.Configure</code>.</p>
+<p><code>KeyboardMouseVirtualController.cs:269</code>. Applies the slot's SOCD (Snap Tap, discussion #205) config. Called from the poll loop before each submit. The UI thread swaps whole config strings atomically, so two <code>ReferenceEquals</code> compares detect an edit and keep the steady-state cost at two compares. On change it forwards <code>mode</code> / <code>pairs</code> to <code>_socd.Configure</code>.</p>
 <h3 id="dispose_2">Dispose()<a class="headerlink" href="#dispose_2" title="Permanent link">&para;</a></h3>
 <p>Guarded by <code>_disposed</code>. Calls <code>Disconnect()</code>.</p>
 <h3 id="submitgamepadstategamepad-gp_2">SubmitGamepadState(Gamepad gp)<a class="headerlink" href="#submitgamepadstategamepad-gp_2" title="Permanent link">&para;</a></h3>
 <p>No-op. KBM uses <code>SubmitKbmState()</code> instead. Required by the <code>IVirtualController</code> interface.</p>
 <h3 id="submitkbmstatekbmrawstate-raw">SubmitKbmState(KbmRawState raw)<a class="headerlink" href="#submitkbmstatekbmrawstate-raw" title="Permanent link">&para;</a></h3>
 <p>Primary output method. Measures the wall-clock dt first (before the connected check, so the time base stays warm), then returns if not connected. Processes SOCD cleaning, then nine input lanes per frame.</p>
-<p><strong>dt measurement (<code>:205-212</code>):</strong> <code>Stopwatch.GetTimestamp()</code> delta since the previous submit, run through <code>ClampSubmitDt</code> (never negative, 50 ms cap). Measured here rather than passed in, so the contract cannot drift when a caller forgets, and the first submit credits zero.</p>
+<p><strong>dt measurement (<code>:343-350</code>):</strong> <code>Stopwatch.GetTimestamp()</code> delta since the previous submit, run through <code>ClampSubmitDt</code> (never negative, 50 ms cap). Measured here rather than passed in, so the contract cannot drift when a caller forgets, and the first submit credits zero.</p>
 <p><strong>0. SOCD cleaning (Snap Tap, discussion #205):</strong></p>
 <p><code>_socd.Apply(ref raw.Keys0, ref raw.Keys1, ref raw.Keys2, ref raw.Keys3)</code> rewrites the logical bitset before change detection and before the <code>_prevKeys</code> assignment, so a suppressed loser emits its key-up and a later release of the winner lets the still-held loser through as a fresh key-down. No-op while mode is Off.</p>
 <p><strong>1. Keyboard keys (two global phases, change detection via XOR):</strong></p>
@@ -6938,7 +7141,7 @@
 <a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">ProcessKeyWord</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">Keys0</span><span class="p">,</span><span class="w"> </span><span class="n">_prevKeys0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">   </span><span class="n">releases</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 <a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="c1">// ...press pass over words 1..3...</span>
 </code></pre></div>
-<p>Each phase XORs <code>current ^ previous</code> and, per bit, sends only the bits belonging to that phase (<code>changed &amp; ~current</code> for releases, <code>changed &amp; current</code> for presses). Release-before-press must be global across all four words, not per-word, or a cross-word SOCD pair (arrow + letter) still exposed both directions held between the two <code>SendInput</code> calls when the winner's word processed first. Only changed bits generate <code>SendInput</code> calls. Critical at 1000 Hz with 256 VK codes.</p>
+<p>Each phase XORs <code>current ^ previous</code> and, per bit, sends only the bits belonging to that phase (<code>changed &amp; ~current</code> for releases, <code>changed &amp; current</code> for presses). Release-before-press must be global across all four words, not per-word, or a cross-word SOCD pair (arrow + letter) still exposed both directions held between the two <code>SendInput</code> calls when the winner's word processed first. Only changed bits generate <code>SendInput</code> calls. Critical at 1000 Hz with 256 VK codes. With a virtual keyboard the four words go to <code>KbmHidKeyboard.Submit</code> instead: one report carries every key, so an SOCD swap's release and press reach Windows together.</p>
 <p><strong>2. Mouse buttons (change detection):</strong></p>
 <p>Compares <code>raw.MouseButtons</code> against <code>_prevMouseButtons</code> via XOR.</p>
 <table>
@@ -6983,31 +7186,33 @@
 </tr>
 </tbody>
 </table>
-<p>XButton1/XButton2 use <code>mouseData</code> field to specify which extra button.</p>
+<p>XButton1/XButton2 use <code>mouseData</code> field to specify which extra button. With a virtual mouse, <code>KbmHidMouse.SetButtons</code> takes the button byte instead.</p>
 <p><strong>3. Mouse movement (stick deflection, rate-based, routed through the injector thread):</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">_mxAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">MouseStickPixels</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">MouseDeltaX</span><span class="p">,</span><span class="w"> </span><span class="n">_submitDt</span><span class="p">);</span>
 <a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">_myAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="o">-</span><span class="n">MouseStickPixels</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">MouseDeltaY</span><span class="p">,</span><span class="w"> </span><span class="n">_submitDt</span><span class="p">);</span><span class="w">  </span><span class="c1">// Y inverted</span>
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kt">int</span><span class="w"> </span><span class="n">dx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_mxAccumulator</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_myAccumulator</span><span class="p">;</span>
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">_mxAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">dx</span><span class="p">;</span><span class="w"> </span><span class="n">_myAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">dy</span><span class="p">;</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dx</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">InputManager</span><span class="p">.</span><span class="n">AccumulateMouseMoveInput</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">);</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dx</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dy</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">Move</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">);</span>
 </code></pre></div>
+<p><code>Move</code> hands the counts to the virtual mouse when the slot has one (<code>KbmHidMouse.AddMotion</code>) and to the injector thread otherwise. Every motion lane below moves through it.</p>
 <p>Never a <code>SendInput</code> on the poll thread. Injected mouse movement traverses every process's low-level mouse hook chain synchronously, and a stick at full deflection crosses the accumulator nearly every tick. The macro mouse path measured that exact per-poll-<code>SendInput</code> mechanism collapsing the loop to ~200 Hz, so this lane rides the same <code>InputManager</code> injector thread. The integer part goes to <code>AccumulateMouseMoveInput</code>, the fractional residue stays in the accumulator. Y negated (raw up = screen down). Deadzone already applied in Step 3.</p>
-<p><strong>4. Gyro exact counts (<code>:267-291</code>):</strong></p>
+<p><strong>4. Gyro exact counts (<code>:418-442</code>):</strong></p>
 <p><code>MouseGyroX/Y</code> arrive already in calibrated mouse counts and already time-scaled by the engine, so this lane does NOT run through the cursor rate above (that would re-apply a spend the engine has just removed). Its own accumulators carry the sub-count remainder, and the remainder is dropped when the direction reverses or the axis reads zero, so a flick back the other way does not first spend sub-count motion still pointing the old way (DS4Windows <code>MouseCursor.cs</code> hRemainder / vRemainder sign check). BOTH axes negate into screen space: SDL's gyro frame is nose-relative (positive yaw is nose LEFT, positive pitch is nose UP), the opposite of screen space on both counts.</p>
-<p><strong>5. Touchpad exact counts (<code>:293-310</code>):</strong></p>
+<p><strong>5. Touchpad exact counts (<code>:444-461</code>):</strong></p>
 <p>The gyro lane's twin (<code>MouseTouchX/Y</code>), with NEITHER axis negated. A finger on a pad is already screen-aligned: SDL reports raw_y = 0 at the top, so a finger moving down yields a positive delta and screen-Y is positive-down too. Net parity with the old deflection lane is preserved (that path negated twice and arrived at the same sign this arrives at with none).</p>
-<p><strong>6. Stick trackball coast exact counts (issue #291, <code>:312-323</code>):</strong></p>
+<p><strong>6. Stick trackball coast exact counts (issue #291, <code>:463-474</code>):</strong></p>
 <p><code>MouseStickCoastX/Y</code> is the fling a released mouse stick keeps traveling on. Its own accumulator pair, stepped through the same <code>StepExactCounts</code> helper the gyro and touchpad lanes use. Y negates into screen space exactly as the deflection lane's spend does, because the coast launched from that lane.</p>
-<p><strong>7. Flick stick exact counts (issue #225, <code>:332-333</code>):</strong></p>
+<p><strong>7. Flick stick exact counts (issue #225, <code>:483-484</code>):</strong></p>
 <p><code>raw.MouseFlickX</code> forwards to the injector 1:1. NOT scaled by the cursor rate and NOT run through an accumulator: the engine tick already calibrated the value in mouse counts (counts-per-360 on the source) and carries its own sub-count residual. Scaling here would break the flick = exact camera angle contract.</p>
 <p><strong>8. Absolute pointer (Wii IR pointing, issue #146):</strong></p>
 <p>When <code>raw.MouseAbsValid</code> and <code>CursorControlService.TryGetPrimarySize(out w, out h)</code>, the aim (<code>MouseAbsX</code> / <code>MouseAbsY</code>, normalized [-1..+1]) maps over the primary screen and positions the OS cursor via <code>SetCursorPos</code> (Touchmote <code>MouseSimulator</code> idiom). A mixed mapping (IR on one axis, a stick on the other) drives only one absolute coordinate. When <code>MouseAbsXValid != MouseAbsYValid</code>, the un-driven coordinate is read back from <code>GetCursorPos</code> so it keeps its integrated position instead of recentering. On sight loss the cursor holds its last position.</p>
-<p>The write is change-gated (<code>:362-375</code>): <code>SetCursorPos</code> crosses every <code>WH_MOUSE_LL</code> hook in the system, so a resting finger firing it every poll at 1 kHz is the same syscall-storm class as the <code>SendInput</code> poll-rate regression. Only when the target pixel actually moved does the call fire, tracked in <code>_lastAbsCursorX/Y</code>. When the pointer is released or absent, the cache resets to <code>int.MinValue</code> so the next engagement always repositions.</p>
+<p>The write is change-gated (<code>:513-526</code>): <code>SetCursorPos</code> crosses every <code>WH_MOUSE_LL</code> hook in the system, so a resting finger firing it every poll at 1 kHz is the same syscall-storm class as the <code>SendInput</code> poll-rate regression. Only when the target pixel actually moved does the call fire, tracked in <code>_lastAbsCursorX/Y</code>. When the pointer is released or absent, the cache resets to <code>int.MinValue</code> so the next engagement always repositions.</p>
 <p><strong>9. Mouse scroll (vertical + horizontal, rate-based, injector-routed):</strong></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">_scrollAccumulator</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">ScrollStickNotches</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">ScrollDelta</span><span class="p">,</span><span class="w"> </span><span class="n">_submitDt</span><span class="p">);</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">scroll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">_scrollAccumulator</span><span class="p">;</span><span class="w"> </span><span class="n">_scrollAccumulator</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">scroll</span><span class="p">;</span>
 <a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">scroll</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">InputManager</span><span class="p">.</span><span class="n">AccumulateMouseScrollInput</span><span class="p">(</span><span class="n">scroll</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">120</span><span class="p">);</span><span class="w">  </span><span class="c1">// 120 = WHEEL_DELTA</span>
 </code></pre></div>
+<p>A virtual mouse takes whole detents instead (<code>KbmHidMouse.AddWheel</code>, <code>AddPan</code>), and drops a wheel or a tilt the model lacks.</p>
 <p>Horizontal scroll (issue #154, the office-mouse tilt wheel) uses the same idiom on <code>raw.ScrollDeltaH</code>, sent via <code>InputManager.AccumulateMouseScrollHInput(scrollH * 120)</code> (positive = scroll right, matching <code>MOUSEEVENTF_HWHEEL</code>).</p>
 <h3 id="registerfeedbackcallbackint-padindex-vibration-vibrationstates_2">RegisterFeedbackCallback(int padIndex, Vibration[] vibrationStates)<a class="headerlink" href="#registerfeedbackcallbackint-padindex-vibration-vibrationstates_2" title="Permanent link">&para;</a></h3>
 <p>No-op. Keyboard/mouse has no rumble feedback.</p>
@@ -7058,9 +7263,27 @@
 </code></pre></div>
 <p>Note that mouse movement and scroll do NOT go through <code>SendInput</code> here. Those route through the <code>InputManager</code> injector thread (<code>AccumulateMouseMoveInput</code> / <code>AccumulateMouseScrollInput</code> / <code>AccumulateMouseScrollHInput</code>). <code>SendInput</code> in this class handles keyboard keys and mouse buttons only. <code>SetCursorPos</code> / <code>GetCursorPos</code> serve the absolute-pointer path.</p>
 <p><strong>Struct alignment (x64):</strong> <code>INPUT</code> uses <code>LayoutKind.Sequential</code> with an inner <code>Explicit</code> union at <code>FieldOffset(0)</code>. On x64, <code>ULONG_PTR</code> fields need 8-byte alignment, so the union starts at offset 8. A flat <code>Explicit</code> layout with hardcoded offsets would break across architectures.</p>
-<p><strong>Key scan codes:</strong> <code>SendKeyboard</code> sets both <code>wVk</code> and <code>wScan</code> (via <code>MapVirtualKeyW</code>). Some games using DirectInput raw input require the scan code. <code>KeyEvent</code> builds them through <code>InputHookManager.OutputKey</code>, so Numpad Enter's index 0x88 goes out as VK_RETURN with Enter's scan code and the extended flag. Every event carries <code>InputHookManager.OutputTag</code>, which the hooks and the Raw Input reader pass by.</p>
+<p><strong>Key scan codes:</strong> <code>SendKeyboard</code> sets both <code>wVk</code> and <code>wScan</code> (via <code>MapVirtualKeyW</code>). Some games using DirectInput raw input require the scan code. <code>KeyEvent</code> builds them through <code>InputHookManager.OutputKey</code>, so Numpad Enter's index 0x88 goes out as VK_RETURN with Enter's scan code and the extended flag. Every event carries <code>InputHookManager.OutputTag</code>, which the hooks and the Raw Input reader pass by. The browser, volume, media and launch keys (VK 0xA6 to 0xB7) go out with the extended flag as well, since their scan codes carry the E0 prefix: without it a game that reads scan codes sees Play/Pause (E0 22) as G (22) (<code>InputHookManager.IsExtendedKey</code>).</p>
 <p><strong>Individual calls:</strong> Each <code>SendInput</code> submits exactly 1 event. Batching key down + up would give identical timestamps, breaking some applications.</p>
 <hr />
+<h2 id="virtual-keyboards-and-mice">Virtual keyboards and mice<a class="headerlink" href="#virtual-keyboards-and-mice" title="Permanent link">&para;</a></h2>
+<p>HIDMaestro 1.12.0 (HIDMaestro#67) adds 51 keyboard and 52 mouse profiles. Each half of a Keyboard + Mouse slot can send through one in place of <code>SendInput</code>, and the programs that read devices see the model as hardware. Windows input stays the default for both halves.</p>
+<h3 id="picking-a-device">Picking a device<a class="headerlink" href="#picking-a-device" title="Permanent link">&para;</a></h3>
+<p><code>KbmSlotConfig.KeyboardDevice</code> and <code>MouseDevice</code> hold a HIDMaestro profile id, or <code>KbmSlotConfig.WindowsInput</code>, the empty string, for Windows input. They persist as the <code>KeyboardDevice</code> and <code>MouseDevice</code> attributes of <code>KbmSlotConfigData</code>, written only when set, so a file written before the pickers existed reads as Windows input. A load, a copy and paste, a profile apply and the reset buttons set both through <code>SetDevices</code>, which changes the two fields before either dropdown hears of it.</p>
+<p><code>KbmDeviceCatalog</code> builds the two dropdowns from <code>HMaestroProfileCatalog.KeyboardProfiles</code> and <code>MouseProfiles</code>, the profiles whose <code>HMProfile.Type</code> is <code>keyboard</code> or <code>mouse</code>, which no gamepad picker lists. <strong>Windows Input</strong> leads each list. A mouse profile with a keyboard collection heads the keyboard list as <strong>Same Device as the Mouse</strong>, and a keyboard with a mouse collection heads the mouse list as <strong>Same Device as the Keyboard</strong>. Picking it puts both halves on one profile. When the other half's device changes, a half that rode the shared device follows it when the new device has that half, and goes back to Windows input when it has not.</p>
+<h3 id="what-a-model-can-send">What a model can send<a class="headerlink" href="#what-a-model-can-send" title="Permanent link">&para;</a></h3>
+<p><code>KbmDeviceCaps.For(profile)</code> reads the profile's report descriptor once: its keyboard, consumer control and mouse collections, the keys the keyboard report reaches as bits or through its key array (<code>KeyArraySlots</code>, 0 for N-key rollover), the LED output report, the mouse buttons (<code>MouseButtonCount</code>, of the five Windows has), the wheel and the AC Pan tilt. It reads the descriptor the way HIDMaestro's own packer does, and <code>KbmHidDeviceTests</code> holds the two to the same answers for all 103 profiles. The device bar's tags come from it, and <code>KbmSlotConfig.DeviceCanSend</code> hides each mapping row the model cannot send and keeps its binding.</p>
+<h3 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h3>
+<p><code>DesiredKbmBuild</code> reads the two devices the slot asks for and leaves out a half the surface mode turns off. A create captures them as a <code>KbmBuild</code> when it is kicked, as it captures an <code>ExtendedBuild</code>, and <code>CreateKeyboardMouseController</code> sets up the HIDMaestro context on the create worker, installing the driver on first use, then resolves each profile and builds the controller. A profile no catalog has fails the create. A failed create latches with the devices it was started for (<code>_createFailedKbm</code>), and picking another device or Windows input clears the latch. A running controller on other devices than the slot now asks for is torn down and rebuilt (<code>KbmDevicesChanged</code>).</p>
+<p>Each device is made under <code>KeyboardMouseVirtualController.IdentityKeyFor</code>, <code>padforge:pad{N}:KeyboardMouse:keyboard</code> or <code>:mouse</code>, so it comes back at the same device paths after a restart (HIDMaestro 1.8.0). Removing a device waits on Windows, so <code>DestroyVirtualController</code> hands a Keyboard + Mouse controller with devices to a worker, except at shutdown, where the context's own dispose follows.</p>
+<h3 id="sending">Sending<a class="headerlink" href="#sending" title="Permanent link">&para;</a></h3>
+<p><code>HMController.SubmitKeyboard</code>, <code>SubmitConsumer</code> and <code>SubmitMouse</code> wait up to 200 ms for HID class to take the report before, and space reports 1 ms apart, so the poll thread never calls them. <code>KbmHidKeyboard</code> and <code>KbmHidMouse</code> each own a sender thread.</p>
+<p>The keyboard sender takes the slot's four key words after SOCD cleaning and queues one frame for each state the keys pass through, so a tap shorter than a report interval still presses and releases. Past 128 waiting frames the queue collapses to the newest state: Windows has stopped reading the device, and a backlog replayed later would type into whatever has the focus. Each key resolves once, when it goes down, and is released as that same usage, so a layout switch while it is held cannot strand it. A key the report cannot carry is not pressed. Past the key array's slots a new key waits until one frees, which is what the keyboard itself would report. Media, browser and launch keys go to the consumer report.</p>
+<p>The mouse sender adds up motion, wheel and tilt between reports, so none is lost, and queues button changes in order. <code>HMController.KeyboardLeds</code> and <code>KeyboardLedsChanged</code> give the lock lights Windows sets. The sender attaches first and reads second, because Windows sends a new keyboard its LEDs while <code>CreateController</code> runs. The preview lights its lock lights from them (<code>InputManager.KbmKeyboardLedsOf</code>).</p>
+<h3 id="key-map">Key map<a class="headerlink" href="#key-map" title="Permanent link">&para;</a></h3>
+<p><code>KbmHidKeyMap.Resolve</code> turns a key index into a usage. A character key goes through the foreground window's input layout, the layout Windows reads a HID keyboard's scan codes through: its virtual-key code becomes the scan code that layout types it from (<code>MapVirtualKeyExW</code>), and the scan code becomes the usage HID class sends for it, from SDL's <code>windows_scancode_table</code>. A mapped A then types "a" on AZERTY, the key <code>SendInput</code> types. Keys no layout changes (function keys, navigation, modifiers, the number pad) use a fixed table, the pairing DS4Windows' FakerInputMapping makes. The media, browser and launch keys go to the Consumer page usages PadForge's <code>ConsumerUsageTable</code> reads back from real devices. <code>KbmExtraKeys</code> lists the targets added with the devices (F13 to F24, the ISO key, the four Japanese keys, and the media, browser and launch keys), and the engine's key list, the mapping grid and the SOCD key list read that one table.</p>
+<h3 id="reading-back">Reading back<a class="headerlink" href="#reading-back" title="Permanent link">&para;</a></h3>
+<p>A virtual keyboard or mouse is a device to Windows, and PadForge reads devices. Raw Input leaves out HIDMaestro's devices (<code>RawInputListener.IsOwnVirtualDevicePath</code>, set to HidHide's HIDMaestro test), so no keyboard, mouse or consumer state, merged or not, reads the slot's own output, and a slot fed by All Keyboards cannot type into itself. The low-level hooks tell <code>SendInput</code> output apart by its tag, which a HID device cannot carry, so each sender records the keys and buttons it presses before the report goes out (<code>OwnHidOutput</code>), and the hooks let those through. A key down counts as PadForge's until Windows delivers its release, which covers the repeats Windows makes for a held HID key. A release Windows never delivers expires after two seconds.</p>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../reference/architecture-overview/">Architecture Overview</a>: Virtual controller types, slot system, per-type limits</li>

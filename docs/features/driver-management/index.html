@@ -4295,13 +4295,13 @@
 <tbody>
 <tr>
 <td><strong>HIDMaestro</strong></td>
-<td>Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use.</td>
-<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 233 device profiles, and PadForge offers the 135 with a captured HID descriptor.</td>
+<td>Required for any virtual controller other than MIDI, and for a Keyboard+Mouse slot set to a keyboard or mouse model. Auto-installs on first use.</td>
+<td>Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on), and the virtual keyboard and mouse a Keyboard+Mouse slot sends through. HIDMaestro ships 336 device profiles. PadForge offers the 135 controllers with a captured HID descriptor, and all 51 keyboards and 52 mice to the Keyboard+Mouse slot.</td>
 </tr>
 <tr>
 <td><strong>Keyboard+Mouse</strong></td>
-<td>Built in. No driver.</td>
-<td>Maps controller inputs to keyboard and mouse presses.</td>
+<td>Built in. Windows input needs no driver, and a keyboard or mouse model needs HIDMaestro.</td>
+<td>Maps controller inputs to keyboard and mouse presses, sent through Windows input or through a virtual keyboard and mouse that programs see as hardware.</td>
 </tr>
 <tr>
 <td><strong>HidHide</strong></td>
@@ -4397,7 +4397,7 @@
 <p>One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro <strong>device profile</strong>. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.</p>
 <p>The <strong>Nintendo</strong> slot type carries three profiles: Switch Pro (the default), Switch 2 Pro, and Switch 2 Pro: Full. Pick between them from the slot's preset dropdown. None can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering. Switch Pro and Switch 2 Pro: Full carry motion passthrough (games read gyro and accelerometer from the virtual pad) and rumble. The plain Switch 2 Pro profile carries neither, and <a href="../controller-slots/#nintendo">Controller Slots</a> says which programs read which. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the <strong>Extended</strong> category.</p>
 <h3 id="the-profiles-padforge-offers-cover">The profiles PadForge offers cover<a class="headerlink" href="#the-profiles-padforge-offers-cover" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro ships 233 device profiles. PadForge's pickers offer the 135 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own <strong>Custom</strong> profile. They cover:</p>
+<p>HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 135 controllers that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own <strong>Custom</strong> profile. The Keyboard+Mouse slot's pickers offer the other 103, all 51 keyboards and 52 mice. They cover:</p>
 <ul>
 <li>Xbox 360, Xbox One, Xbox Series, Elite, Adaptive</li>
 <li>DualShock 3, DualShock 4, DualSense, DualSense Edge</li>
@@ -4407,6 +4407,7 @@
 <li>HOTAS and flight sticks (Thrustmaster T.Flight HOTAS 4 and One, Thrustmaster T.16000M, Saitek X52, SideWinder Force Feedback 2)</li>
 <li>Hori, Nacon, Razer, Flydigi, other third-party gamepads</li>
 <li>A <strong>Custom</strong> profile for the Extended category, with up to 8 axes, 128 buttons, and 4 POV hats.</li>
+<li>51 keyboards and 52 mice from 32 vendors, for the Keyboard+Mouse slot (<a href="../../devices/supported/#virtual-keyboards-and-mice">the full list</a>).</li>
 </ul>
 <h3 id="install-when-you-want">Install when you want<a class="headerlink" href="#install-when-you-want" title="Permanent link">&para;</a></h3>
 <ul>

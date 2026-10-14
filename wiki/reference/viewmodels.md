@@ -1263,6 +1263,10 @@ Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so tw
 | Property | Type | Description |
 |----------|------|-------------|
 | `KbmConfig` | `KbmSlotConfig` | Per-slot surface mode and SOCD / Snap Tap config. Always present, only meaningful when `OutputType == KeyboardMouse`. See [KbmSlotConfig](#kbmslotconfig). |
+| `KbmKeyboardDevice` / `KbmMouseDevice` | `string` | Forwarders over `KbmConfig.KeyboardDevice` / `MouseDevice` for the device bar's pickers, each with a reset button. A null write is ignored, and a change calls `NotifyKbmSurfacesChanged()`, which re-reads the pickers, their visibility, the capability tags and the mapping table's rows. |
+| `KbmKeyboardDeviceVisible` / `KbmMouseDeviceVisible` | `bool` | A picker shows while the surface mode drives its half. |
+| `KbmKeyboardCapabilities` / `KbmMouseCapabilities` | `IReadOnlyList<string>` | The device bar's tags for the picked model: Keys at Once (or Any), Media Keys and Lock Lights for a keyboard, and Buttons, Wheel and Tilt Wheel for a mouse. Empty on Windows input. |
+| `KbmKeyboardLeds` | `int` | The lock lights Windows last set on the slot's virtual keyboard (bit 0 Num Lock, 1 Caps Lock, 2 Scroll Lock), -1 without one. The poll fills it beside `KbmOutputSnapshot`, and the preview reads it per frame. |
 | `KbmSurfaces` | `string` | Forwarder over `KbmConfig.Surfaces` for the surface dropdown (#408). A null or empty write is ignored. `NotifyKbmSurfacesChanged()` re-reads it after a load, paste, or profile apply and re-filters the mapping table. |
 | `MappingSurfaceScope` | `string` | The mapping table's keyboard / mouse scope: `All`, `Keyboard`, or `Mouse`. Session state. Visible only through `KbmSurfaceScopeVisible` (a Keyboard + Mouse slot in `Both` mode), and reset to `All` when the slot type changes. |
 
@@ -3043,7 +3047,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.11.0 ships 233 profiles in 32 vendor folders, and PadForge's pickers offer the 135 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.12.0 ships 336 profiles in 59 vendor folders, and PadForge's pickers offer the 238 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 
@@ -3338,6 +3342,9 @@ Per-slot keyboard + mouse output config (discussion #205, SOCD / Snap Tap, plus 
 |----------|------|---------|-------------|
 | `Surfaces` | `string` | `"Both"` | Which halves of the slot are live (#408): `Both`, `KeyboardOnly`, or `MouseOnly`. Any other value coerces to `Both`. Turning a half off hides its mapping rows and stops the slot's own keyboard or mouse output for them. The mappings stay on the PadSetting. Macros are not gated. Notifies `KeyboardEnabled` and `MouseEnabled`. |
 | `KeyboardEnabled` / `MouseEnabled` | `bool` | - | Computed: the half is live (`Surfaces != "MouseOnly"` / `Surfaces != "KeyboardOnly"`). `Allows(KbmSurfaceKind)` answers the same question for a row's half. |
+| `KeyboardDevice` / `MouseDevice` | `string` | `""` (`WindowsInput`) | The HIDMaestro keyboard or mouse profile each half sends through, or the empty string for Windows input. When one changes, a half that rode the old shared device follows to the new one if it carries that half, and goes back to Windows input if it does not. A null write is a picker artifact and is ignored. `SetDevices(keyboard, mouse)` sets both as one change, as a load, a paste or a profile apply does, and `ResetToDefaults()` puts both back on Windows input. See [Virtual keyboards and mice](../features/virtual-controllers.md#virtual-keyboards-and-mice). |
+| `AvailableKeyboardDevices` / `AvailableMouseDevices` | `IReadOnlyList<KbmDeviceOption>` | - | The two dropdowns: Windows Input, then the other half's device when it carries this half (Same Device as the Mouse / Keyboard), then every keyboard or mouse profile by name. `KbmDeviceOption` compares by value, so a rebuilt list keeps its selection. |
+| `UsesDevices` | `bool` | - | True when either half has a model. `DeviceCanSend(settingName)` answers whether the picked model can send a row's target, and the mapping table hides a row it cannot and keeps the binding. |
 | `AvailableKbmSurfaces` | `IReadOnlyList<KbmSurfaceOption>` | - | Culture-cached surface dropdown items, in order: "Keyboard + Mouse" (`Both`), "Mouse Only", "Keyboard Only". |
 | `SocdMode` | `string` | `"Off"` | Resolution mode: `Off`, `LastWins`, `Neutral`, `FirstWins`. Stored locale-stable. |
 | `SocdPairs` | `string` | `"87:83\|65:68\|38:40\|37:39"` | Pipe-separated `"vkA:vkB"` decimal pairs (the `DefaultSocdPairs` constant: W/S, A/D, Up/Down, Left/Right). |
@@ -3370,7 +3377,7 @@ Per-slot keyboard + mouse output config (discussion #205, SOCD / Snap Tap, plus 
 - `KbmSurfaceKind` (enum): `Keyboard`, `Mouse`. The half a mapping row drives, classified by `PadViewModel.KbmSurfaceOf`.
 - `SocdKeyOption` carries `Vk` (int) and `Label`. One pickable key.
 - `SocdPairItem` (`ObservableObject`) carries `VkA` and `VkB`. Edits reserialize the owner's `SocdPairs`. `KeyOptions` returns `GetKeyOptions()`.
-- `KbmSlotConfigData` is the DTO with `[XmlAttribute]` `SlotIndex`, `Surfaces` (default "Both", so files written before #408 read as Both), `SocdMode` (default "Off"), and `SocdPairs` (default `DefaultSocdPairs`).
+- `KbmSlotConfigData` is the DTO with `[XmlAttribute]` `SlotIndex`, `Surfaces` (default "Both", so files written before #408 read as Both), `SocdMode` (default "Off"), `SocdPairs` (default `DefaultSocdPairs`), and `KeyboardDevice` and `MouseDevice`, written only when set, so a file written before the device pickers reads as Windows input.
 
 ---
 

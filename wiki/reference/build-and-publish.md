@@ -256,7 +256,7 @@ The reader is C++, so `SDL3.dll` imports `msvcp140.dll` on both architectures, a
 
 Vosk's NuGet targets add their win-x64 natives whenever the BUILD machine is Windows, whatever the target. `DropX64OnlyNativesOnArm64` takes them back out of an ARM64 build, which gets its own `libvosk.dll` from a `Content` item. An ARM64 publish without that file is refused by `RequireBundledNatives`.
 
-Drivers follow the machine. HIDMaestro 1.11.0 and BthPS3 3.2.1 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and Windows MIDI Services needs nothing from the build on either architecture. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
+Drivers follow the machine. HIDMaestro 1.12.0 and BthPS3 3.2.1 each carry an x64 and an ARM64 payload, both builds embed both BthPS3 payloads because the driver is chosen by the machine and not by the build, `Ds3DriverInstaller.SignWinUsbPackage()` builds its catalog for `10_RS3_ARM64` on an ARM64 machine (`Ds3DriverInstaller.CatalogOs`), and Windows MIDI Services needs nothing from the build on either architecture. Inf2Cat has no bare `10_ARM64`. Its ARM64 values name a Windows release, and RS3 is the first on ARM64.
 
 ## Project Configuration Details
 
@@ -352,7 +352,7 @@ Every build between two releases carries the same version, so the App also stamp
 | **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown. Its targets file also copies `libvosk.dll` and the MinGW runtime into the output |
 | **WPF-UI** | 4.3.0 | nuget.org | Fluent Design theme for WPF (dark mode, NavigationView, controls) |
 
-`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.11.0.0`. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.
+`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.12.0.0`. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 

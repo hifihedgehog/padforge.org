@@ -190,6 +190,8 @@ An Extended slot on a Valve profile gets both views, like the console families. 
 
 The 2D overlays follow one rule: a control the front art cannot show still gets a place to hover, click, and flash. The Steam Deck's R4 L4 R5 L5 and the 2026 pad's bumpers, triggers, and four rear buttons sit as labeled tiles in a column on each side of the body. The 2015 pad's D-Pad wedges are cut out of the left trackpad and its right stick is drawn over the right trackpad, with printed zone lines marking the wedges and each grip's outline. Those printed marks are decals: always visible, never a click target.
 
+A Steam Deck or 2026 Steam Controller profile adds a row of capsules at the top of the view for its touch sensors: **Left Stick Touch** and **Right Stick Touch**, plus **Left Grip Touch** and **Right Grip Touch** on the 2026 pad. A stick's cap already records the stick button and the grips have no art, so each sensor gets a capsule of its own. It lights while its output is on, a click records its row, and it flashes while that row records. A touched stick's cap also takes a faint wash in both views.
+
 Live highlights, hover quadrant wedges, click-to-record, Map All flash, mapping annotations, and the two-pad touch preview above work the same as on the other views. The mapping rows use Valve's names. See [Controller Slots](controller-slots.md#valve-personas) for the row list per pad.
 
 ---
@@ -233,17 +235,21 @@ The schematic represents the live HID layout for the Extended slot. Xbox or Play
 
 ## Keyboard + Mouse preview
 
-Keyboard+Mouse slots show a full ANSI QWERTY keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to **Mouse Only** draws only the mouse, and one set to **Keyboard Only** draws only the keyboard.
+Keyboard+Mouse slots show a keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to **Mouse Only** draws only the mouse, and one set to **Keyboard Only** draws only the keyboard.
+
+On Windows input the keyboard is a full ANSI layout with the numpad and four media keys over it (Mute, Volume Down, Volume Up, Play/Pause), where 108-key boards have them. A slot set to a keyboard model draws that board's key set instead, from QMK's layout data: full size (ANSI, ISO, or with four keys over the numpad), tenkeyless, 75 percent, 65 percent with or without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Character keys carry the legends PadForge's input layout types and redraw when the layout changes. Apple boards carry Apple's modifier symbols, and the JIS board its Japanese key legends. A board with no exact drawing shows the nearest set with the caption **Drawn as the nearest standard layout** under it. On a keyboard with lock lights, three lights in the top right corner show Num Lock, Caps Lock and Scroll Lock as Windows last set them, and each is a control for its key: a click records that key's row. A key the model cannot send, or that no row reaches, is drawn faint and takes no clicks.
+
+A slot set to a mouse model draws the controls that mouse has. It loses the side buttons past the model's button count, a button the model lacks is drawn faint and takes no clicks, the scroll arrows go with a missing wheel, and a mouse that tilts gets left and right arrows on the wheel.
 
 | Element | Description |
 |---|---|
-| Keyboard | Full layout including the numpad. Keys show labels, mapping tooltips, and an accent highlight when active. |
+| Keyboard | The Windows input layout or the picked board's. Keys show labels, mapping tooltips, and an accent highlight when active. |
 | LMB / RMB | Shaped around the scroll wheel gap. Accent highlight on press. |
-| Scroll wheel | Center pill for middle-click. Up / down arrows highlight during scroll output. |
+| Scroll wheel | Center pill for middle-click. Up / down arrows highlight during scroll output, and left / right arrows during tilt output on a mouse that tilts. |
 | Movement circle | Dot deflects to show mouse movement. Click a quadrant to map Mouse X or Mouse Y. |
-| Side buttons | X1 and X2 on the left edge (back / forward). |
+| Side buttons | X1 and X2 on the left edge (back / forward), when the slot's mouse has them. |
 
-Click any key or mouse element to record a mapping. Same workflow as click-to-record on the 3D model.
+Every key, mouse button, wheel and tilt arrow, lock light and the movement circle is a control as well as a display: hover one to read its row, and click it to record a mapping to it. Same workflow as click-to-record on the 3D model.
 
 > **Tip:** Hover a key to see its current mapping target in the tooltip before clicking to remap.
 

@@ -7512,14 +7512,15 @@
 <a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>│   │   ├─ RadioButton &quot;Pointer&quot; (Tag=13, x:Name=&quot;TabPointer&quot;, gated on hasIrPointer, #146)
 <a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>│   │   └─ RadioButton &quot;Mouse&quot; (Tag=14, x:Name=&quot;TabMouse&quot;, gated on mouse device, #200)
 <a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>│   └─ AssignOfferBanner (Border, visible on HasAssignOffer): Assign / Not Now
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>├─ Row 1 (Auto): Extended config bar OR MIDI config bar (conditionally visible)
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>├─ Row 1 (Auto): Extended, MIDI or Keyboard + Mouse config bar (conditionally visible)
 <a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>│   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>│   └─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>├─ Invisible MappingsCountIndicator (for UI Automation)
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>   SelectedIndex bound to SelectedConfigTab
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>│   ├─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>│   └─ KbmDeviceBar (Visibility=Collapsed unless OutputType==KeyboardMouse)
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>├─ Invisible MappingsCountIndicator (for UI Automation)
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>   SelectedIndex bound to SelectedConfigTab
 </code></pre></div>
-<p>The <code>HMaestroProfileBar</code> preset chip sits inline in tier 1 rather than on its own row. The Extended and MIDI config bars are the only Row 1 occupants.</p>
+<p>The <code>HMaestroProfileBar</code> preset chip sits inline in tier 1 rather than on its own row. The Extended, MIDI and Keyboard + Mouse bars are the only Row 1 occupants. <code>KbmDeviceBar</code> holds the <strong>Keyboard</strong> and <strong>Mouse</strong> pickers (<code>KbmKeyboardDeviceCombo</code>, <code>KbmMouseDeviceCombo</code>, bound to <code>KbmConfig.AvailableKeyboardDevices</code> / <code>AvailableMouseDevices</code> and to <code>KbmKeyboardDevice</code> / <code>KbmMouseDevice</code>), each with its reset button and shown while the surface mode drives its half, and the picked model's capability tags (<code>KbmKeyboardCapabilities</code>, <code>KbmMouseCapabilities</code>, <code>ChipGhost</code> chips).</p>
 <h3 id="custom-styles-usercontrolresources">Custom Styles (UserControl.Resources)<a class="headerlink" href="#custom-styles-usercontrolresources" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -7803,6 +7804,11 @@
 <td><code>ControllerModelHost</code></td>
 <td>Grid</td>
 <td>Preview tab visualization host</td>
+</tr>
+<tr>
+<td><code>TouchSensors</code></td>
+<td>TouchSensorStrip</td>
+<td>A Valve slot's touch sensor capsules at the top center of the host, over the 2D and 3D views. Collapsed on every other slot. See <a href="../2d-overlay-system/#touchsensorstrip">TouchSensorStrip</a></td>
 </tr>
 <tr>
 <td><code>ViewModeToggle</code></td>
@@ -10115,20 +10121,20 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>      ├─ &quot;Overview&quot; section header (E7C3 icon)
 <a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>      ├─ Description card (wrapping text, line height 22)
 <a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>      ├─ &quot;Built With&quot; section header (E74C checkmark icon)
-<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>      ├─ Technologies card (Grid, 164px label + description, 132 rows in alphabetical
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>      ├─ Technologies card (Grid, 164px label + description, 133 rows in alphabetical
 <a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>      │   order, case-insensitive, leading symbols ignored):
 <a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>      │   ├─ 3doverstock
 <a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>      │   ├─ AntiMicroX
 <a id="__codelineno-18-18" name="__codelineno-18-18" href="#__codelineno-18-18"></a>      │   ├─ Arcade I/O references
 <a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a>      │   ├─ AudioEndPointLibrary
 <a id="__codelineno-18-20" name="__codelineno-18-20" href="#__codelineno-18-20"></a>      │   ├─ AutoEq
-<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>      │   └─ ...127 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+<a id="__codelineno-18-21" name="__codelineno-18-21" href="#__codelineno-18-21"></a>      │   └─ ...128 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
 <a id="__codelineno-18-22" name="__codelineno-18-22" href="#__codelineno-18-22"></a>      │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
 <a id="__codelineno-18-23" name="__codelineno-18-23" href="#__codelineno-18-23"></a>      │       CLAPACK row, and others)
 <a id="__codelineno-18-24" name="__codelineno-18-24" href="#__codelineno-18-24"></a>      ├─ &quot;License&quot; section header (E8D7 icon)
 <a id="__codelineno-18-25" name="__codelineno-18-25" href="#__codelineno-18-25"></a>      └─ License card (12px wrapping text, secondary brush)
 </code></pre></div>
-<p>The rows sort by label, ignoring case and a leading symbol, so <code>.NET 10</code> sits between nefcon and Nintendo_Switch_Reverse_Engineering and <code>$Q Recognizer</code> between psmoveapi and QR-Code-generator. <code>Grid.Row</code> runs 0 (3doverstock) through 131 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (<code>About_Kaldi</code> / <code>About_KaldiDesc</code>), credits the speech decoder, transducer library, and linear algebra inside <code>libvosk.dll</code>. A new row takes its alphabetical place, and every <code>Grid.Row</code> after it moves down one.</p>
+<p>The rows sort by label, ignoring case and a leading symbol, so <code>.NET 10</code> sits between nefcon and Nintendo_Switch_Reverse_Engineering and <code>$Q Recognizer</code> between psmoveapi and QMK Firmware. <code>Grid.Row</code> runs 0 (3doverstock) through 132 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (<code>About_Kaldi</code> / <code>About_KaldiDesc</code>), credits the speech decoder, transducer library, and linear algebra inside <code>libvosk.dll</code>. A new row takes its alphabetical place, and every <code>Grid.Row</code> after it moves down one.</p>
 <h3 id="code-behind_1">Code-Behind<a class="headerlink" href="#code-behind_1" title="Permanent link">&para;</a></h3>
 <p>Constructor only. All text from localized string bindings.</p>
 <hr />

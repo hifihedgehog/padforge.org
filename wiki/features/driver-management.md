@@ -10,8 +10,8 @@
 
 | Component | Status | What it does |
 |---|---|---|
-| **HIDMaestro** | Required for any virtual controller other than Keyboard+Mouse and MIDI. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on). HIDMaestro ships 233 device profiles, and PadForge offers the 135 with a captured HID descriptor. |
-| **Keyboard+Mouse** | Built in. No driver. | Maps controller inputs to keyboard and mouse presses. |
+| **HIDMaestro** | Required for any virtual controller other than MIDI, and for a Keyboard+Mouse slot set to a keyboard or mouse model. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on), and the virtual keyboard and mouse a Keyboard+Mouse slot sends through. HIDMaestro ships 336 device profiles. PadForge offers the 135 controllers with a captured HID descriptor, and all 51 keyboards and 52 mice to the Keyboard+Mouse slot. |
+| **Keyboard+Mouse** | Built in. Windows input needs no driver, and a keyboard or mouse model needs HIDMaestro. | Maps controller inputs to keyboard and mouse presses, sent through Windows input or through a virtual keyboard and mouse that programs see as hardware. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Part of Windows 11 25H2 from the late-November 2026 update. Elsewhere on 24H2 or later, an optional runtime install from **Settings**. | Virtual MIDI ports for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Without it, PadForge uses the legacy MIDI API, which reads MIDI keyboards too but cannot create ports, so MIDI slots send to a port you pick. |
 | **SteamVR** | Optional. Install for the VR controller type. | VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB). |
@@ -85,7 +85,7 @@ The **Nintendo** slot type carries three profiles: Switch Pro (the default), Swi
 
 ### The profiles PadForge offers cover
 
-HIDMaestro ships 233 device profiles. PadForge's pickers offer the 135 that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. They cover:
+HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 135 controllers that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. The Keyboard+Mouse slot's pickers offer the other 103, all 51 keyboards and 52 mice. They cover:
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge
@@ -95,6 +95,7 @@ HIDMaestro ships 233 device profiles. PadForge's pickers offer the 135 that carr
 - HOTAS and flight sticks (Thrustmaster T.Flight HOTAS 4 and One, Thrustmaster T.16000M, Saitek X52, SideWinder Force Feedback 2)
 - Hori, Nacon, Razer, Flydigi, other third-party gamepads
 - A **Custom** profile for the Extended category, with up to 8 axes, 128 buttons, and 4 POV hats.
+- 51 keyboards and 52 mice from 32 vendors, for the Keyboard+Mouse slot ([the full list](../devices/supported.md#virtual-keyboards-and-mice)).
 
 ### Install when you want
 

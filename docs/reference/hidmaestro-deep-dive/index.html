@@ -3794,20 +3794,20 @@
 
 
 <h1 id="hidmaestro-deep-dive">HIDMaestro Deep Dive<a class="headerlink" href="#hidmaestro-deep-dive" title="Permanent link">&para;</a></h1>
-<p>PadForge routes every virtual gamepad except the MIDI and Keyboard+Mouse targets through <a href="https://github.com/hifihedgehog/HIDMaestro">HIDMaestro</a>: its user-mode UMDF2 HID driver, plus its native OpenVR driver for the VR slot. This page documents the contract between PadForge and HIDMaestro, the OpenXInput shim that keeps PadForge's own slots out of its own enumeration, and the lifecycle invariants every Step 5 / Input Manager edit must uphold.</p>
+<p>PadForge routes every virtual gamepad except the MIDI and Keyboard+Mouse targets through <a href="https://github.com/hifihedgehog/HIDMaestro">HIDMaestro</a>: its user-mode UMDF2 HID driver, plus its native OpenVR driver for the VR slot. A Keyboard+Mouse slot goes through it too for each half set to a keyboard or mouse model, and through Windows input otherwise. This page documents the contract between PadForge and HIDMaestro, the OpenXInput shim that keeps PadForge's own slots out of its own enumeration, and the lifecycle invariants every Step 5 / Input Manager edit must uphold.</p>
 <blockquote>
 <p>If you are reading this looking for the legacy <code>vJoy-Deep-Dive.md</code>, that page is gone. v2 used vJoy + ViGEmBus as two separate drivers and inherited a long list of phantom-controller / N²-slot / DLL-cache bugs that came with vJoy's kernel-mode HID stack. v3 replaces both with HIDMaestro and the headaches with them. The seven virtual controller categories (Xbox, PlayStation, Extended, MIDI, KB+M, Nintendo, VR) live in <a href="../../features/virtual-controllers/">Virtual Controllers</a>.</p>
 </blockquote>
 <hr />
 <h2 id="what-hidmaestro-is">What HIDMaestro is<a class="headerlink" href="#what-hidmaestro-is" title="Permanent link">&para;</a></h2>
-<p>HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) virtual HID minidriver. HM's SDK creates each virtual controller's device nodes from user mode, and the driver serves their HID reports. Each PadForge slot that is not MIDI, Keyboard+Mouse, or VR asks HM to instantiate a virtual device matching one of HM's <strong>device profiles</strong>. A profile bundles:</p>
+<p>HIDMaestro (HM) is a UMDF2 (User-Mode Driver Framework 2) virtual HID minidriver. HM's SDK creates each virtual controller's device nodes from user mode, and the driver serves their HID reports. Each PadForge slot that is not MIDI, Keyboard+Mouse, or VR asks HM to instantiate a virtual device matching one of HM's <strong>device profiles</strong>, and so does each Keyboard+Mouse half set to a keyboard or mouse model. A profile bundles:</p>
 <ul>
 <li>A USB VID/PID pair</li>
 <li>A display name, a product string, and a manufacturer string</li>
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge 5.0.0 ships HM 1.10.1, and pre-release builds after it ship HM 1.11.0 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.11.0.0), which embeds 233 profiles spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). Only 135 of the 233 carry a captured HID descriptor, and PadForge's pickers offer those 135 (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>). PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>PadForge 5.0.0 ships HM 1.10.1, and pre-release builds after it ship HM 1.12.0 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.12.0.0), which embeds 336 profiles. 233 are controllers spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). The other 103 are the 51 keyboards and 52 mice HM 1.12.0 added (HM#67). Only 135 of the 233 controllers carry a captured HID descriptor, and PadForge's controller pickers offer those 135 (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>). Every keyboard and mouse carries one. They stay out of the controller pickers and fill the Keyboard+Mouse slot's own two (<code>HMaestroProfileCatalog.KeyboardProfiles</code> and <code>MouseProfiles</code>), so PadForge offers 238 profiles in all. PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
 <p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
 <table>
 <thead>
@@ -3861,12 +3861,12 @@
 <tr>
 <td>v1.7.0 (HM#56)</td>
 <td>Per-instance usbip serials and the three Valve composite persona profiles (<code>steam-deck-composite</code>, <code>steam-controller-composite</code>, <code>steam-controller-2</code>). They were withheld from the pickers until their art landed. <code>WithheldProfileIds</code> is empty in 5.0.0</td>
-<td><code>HMaestroProfileCatalog.cs:306</code> (<code>WithheldProfileIds</code>), <code>ValveReportPackers.cs</code></td>
+<td><code>HMaestroProfileCatalog.cs:346</code> (<code>WithheldProfileIds</code>), <code>ValveReportPackers.cs</code></td>
 </tr>
 <tr>
 <td>v1.7.1 (HM#58)</td>
 <td>The Triton raw path: a profile that declares an input report id and is always armed emits a raw frame verbatim, and <code>SubmitRawExtendedReport</code> is the explicit form of that. Also corrects the 2026 pad's rear-button pairing to SDL's and throws at profile load on a button name that resolves to nothing</td>
-<td><code>HMaestroVirtualController.cs:717</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:380</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
+<td><code>HMaestroVirtualController.cs:717</code> (<code>SubmitRawReport</code>), <code>PadForge.App.csproj:393</code>. See <a href="#raw-frames-submitrawreport-versus-submitrawextendedreport">Raw frames</a></td>
 </tr>
 <tr>
 <td>v1.7.2 (HM#59)</td>
@@ -3876,7 +3876,7 @@
 <tr>
 <td>v1.7.3</td>
 <td>A version resource (company, product, description) on each native binary</td>
-<td><code>PadForge.App.csproj:361</code></td>
+<td><code>PadForge.App.csproj:374</code></td>
 </tr>
 <tr>
 <td>v1.8.0 (HM#60)</td>
@@ -3886,12 +3886,12 @@
 <tr>
 <td>v1.8.1 (HM#61)</td>
 <td>The XUSB battery reply, which packed its fields one byte early, corrected (#447). The DualSense composite persona's name settled on "DualSense (PS5): Full"</td>
-<td><code>PadForge.App.csproj:351</code>, <code>InputManager.Step5.VirtualDevices.cs:2670</code></td>
+<td><code>PadForge.App.csproj:364</code>, <code>InputManager.Step5.VirtualDevices.cs:2753</code></td>
 </tr>
 <tr>
 <td>v1.9.0</td>
 <td>An ARM64 driver payload embedded beside the x64 one, and the USB/IP transport pinned to usbip-win2 0.9.7.5, the last release with an ARM64 build</td>
-<td><code>PadForge.App.csproj:349</code></td>
+<td><code>PadForge.App.csproj:362</code></td>
 </tr>
 <tr>
 <td>v1.9.1 (HM#63, HM#62)</td>
@@ -3901,7 +3901,7 @@
 <tr>
 <td>v1.9.2</td>
 <td>The USB/IP transport moved to usbip-win2 0.9.8.1, with the fix for the attach work item that blocked driver unload, and a client that speaks the 0.9.7.x, 0.9.8.0 and 0.9.8.1 request formats</td>
-<td><code>PadForge.App.csproj:329</code></td>
+<td><code>PadForge.App.csproj:342</code></td>
 </tr>
 <tr>
 <td>v1.10.0 (HM#64)</td>
@@ -3916,7 +3916,12 @@
 <tr>
 <td>v1.11.0 (HM#66)</td>
 <td><code>switch2-pro-controller-composite</code>, the Switch 2 Pro Controller as a two-interface USB/IP persona: HID on interface 0, and on interface 1 the bulk pair Steam and SDL start the pad through. It sends report 0x05 with the accelerometer and the gyro on its own 4 ms clock, decodes output report 0x02 into <code>leftMotor</code> and <code>rightMotor</code>, and refuses raw reports. Both Switch 2 Pro profiles' trigger axes now follow their <code>axisMap</code></td>
-<td><code>HMaestroProfileCatalog.cs:466</code> (<code>IsNintendoProfile</code>), <code>Switch2ProStateMap.cs</code>, <code>HMaestroVirtualController.cs:174</code> (<code>DeviceBuildsReports</code>). Commit <code>f1e3b6c7</code> takes it. See <a href="../../features/virtual-controllers/#switch-2-pro-state">Switch 2 Pro state</a></td>
+<td><code>HMaestroProfileCatalog.cs:506</code> (<code>IsNintendoProfile</code>), <code>Switch2ProStateMap.cs</code>, <code>HMaestroVirtualController.cs:174</code> (<code>DeviceBuildsReports</code>). Commit <code>f1e3b6c7</code> takes it. See <a href="../../features/virtual-controllers/#switch-2-pro-state">Switch 2 Pro state</a></td>
+</tr>
+<tr>
+<td>v1.12.0 (HM#67)</td>
+<td>Keyboards and mice: 51 keyboard and 52 mouse profiles, each the report descriptor of a real device's keyboard or mouse interface, driven through <code>SubmitKeyboard</code>, <code>SubmitConsumer</code> and <code>SubmitMouse</code>. The driver acknowledges each keyboard and mouse report HID class takes, and the SDK waits for that and spaces reports 1 ms apart, so none is lost. A consumer that dies leaves nothing held: the driver sends the release reports the SDK keeps, and <code>Dispose</code> sends them first and then waits until Windows reports the device gone. <code>KeyboardLeds</code> holds the LED state Windows sends a keyboard while <code>CreateController</code> runs. The GameInput mapping and the joy.cpl OEM key go through a ledger that restores the prior state when the last holder goes, and catalog profiles get no GameInput table. The Valve personas name their bits the way SDL numbers them and add the stick and grip touch bits. <code>HMVR.FindDriverNameConflicts</code> lists another OpenVR driver registered under HIDMaestro's name</td>
+<td><code>HMaestroProfileCatalog.cs</code> (<code>KeyboardProfiles</code>, <code>MouseProfiles</code>), <code>KbmHidDevices.cs</code> (the keyboard and mouse senders), <code>KeyboardMouseVirtualController.cs</code>, <code>ValveReportPackers.cs</code> (the touch bits), <code>SettingsViewModel.cs</code> (<code>SteamVrDriverConflictText</code>). Commit <code>31bb0c65</code> takes the DLL. See <a href="../../features/virtual-controllers/#virtual-keyboards-and-mice">Virtual keyboards and mice</a></td>
 </tr>
 </tbody>
 </table>
@@ -3953,8 +3958,8 @@
 </tr>
 <tr>
 <td>KeyboardMouse (<code>KeyboardMouse = 4</code>)</td>
-<td>Win32 SendInput</td>
-<td>NOT HM. No driver. Pumps <code>INPUT</code> structures into the OS input queue.</td>
+<td>Win32 SendInput, or HM per half</td>
+<td>Windows input pumps <code>INPUT</code> structures into the OS input queue and needs no driver. A half set to a keyboard or mouse model sends through a virtual HID keyboard or mouse HM makes from one of its 51 keyboard or 52 mouse profiles (HM 1.12.0).</td>
 </tr>
 <tr>
 <td>Nintendo (<code>Nintendo = 5</code>)</td>
@@ -3974,7 +3979,7 @@
 <p>The relevant assembly is <code>HIDMaestro.Core</code> (bundled at <code>PadForge.App/Resources/HIDMaestro/HIDMaestro.Core.dll</code>). Three primary types:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// HMContext: process-wide entry point. One instance.</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 233 embedded profile JSONs (135 carry a descriptor)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 336 embedded profile JSONs (238 carry a descriptor)</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">context</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span><span class="w">          </span><span class="c1">// register HM with Windows (idempotent)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// HMProfile: handle to a profile (Xbox 360 wired, DualSense Edge, etc.).</span>
@@ -4098,7 +4103,7 @@
 <a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="p">}</span>
 <a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="p">}</span>
 </code></pre></div>
-<p>The dropout grace is one user-facing contract across every slot type: MIDI and Keyboard+Mouse ride the same <code>HmInactivityTimeoutSeconds</code> as the HM-backed categories. They differ only in what happens at the end, because a non-HM slot has no kernel-slot ordering to repair and tears down inline instead of raising the cascade event.</p>
+<p>The dropout grace is one user-facing contract across every slot type: MIDI and Keyboard+Mouse ride the same <code>HmInactivityTimeoutSeconds</code> as the HM-backed categories. They differ only in what happens at the end, because a non-HM slot has no kernel-slot ordering to repair and tears down inline instead of raising the cascade event. A Keyboard+Mouse slot on a virtual keyboard or mouse makes the same inline call, and <code>DestroyVirtualController</code> hands the device removal to a worker, because removing a HID device waits on Windows.</p>
 <p>The event hops to the UI thread, which calls <code>InputService.OnSlotInactivityTimedOut(padIndex)</code>. That method calls <code>InputManager.TryInactivityTeardown(padIndex, slotType)</code>, which works as one operation under the VC lifecycle lock: it re-checks the fired latch (a device that came back during the dispatcher hop vetoes the whole teardown), tears down the live HM controller asynchronously (freeing its kernel slot), and runs the bubble-down cascade across the HM VCs at higher visual positions in the same subgroup. This runs for every HM-backed subgroup (Xbox / PlayStation / Nintendo / Extended), not Xbox alone. Slot configuration is preserved end-to-end: <code>SlotCreated</code>, <code>SlotEnabled</code>, the <code>PadSetting</code>, the device mappings, the per-group slot order, and every other piece of slot state stays intact. <code>PadForge.xml</code> is not touched by the timeout firing.</p>
 <p>Once the slot's mapped devices return online, <code>IsSlotActive(padIndex)</code> flips back to true, the latch clears, and Pass 2 recreates the same VC automatically at the correct visual-position kernel slot. The user's slot, mappings, profile, and per-group order all persist across the timeout cycle. The sidebar flame (#175) stays ember during the grace window (VC alive, devices offline) and turns gold only after the timeout fires and the VC is torn down.</p>
 <h3 id="invariant-3-bubble-down-cascade-on-mid-stack-destroy">Invariant 3: Bubble-down cascade on mid-stack destroy<a class="headerlink" href="#invariant-3-bubble-down-cascade-on-mid-stack-destroy" title="Permanent link">&para;</a></h3>
@@ -4119,7 +4124,7 @@
 <p>HM v1.7.1 (HM#58) fixed it on the driver side. A profile that declares an <code>extendedReport.reportId</code> and is <code>alwaysArmed</code> now emits a raw frame verbatim through the same extended path <code>SubmitState</code> uses. The driver infers the caller's convention from length: a frame the size of the declared input report already carries its id, one byte shorter is the data-only form and gets the id prepended. <code>SubmitRawExtendedReport</code> is the explicit form: the frame goes out verbatim whatever the profile declares.</p>
 <p>PadForge calls the explicit one. <code>HMaestroVirtualController.SubmitRawReport</code> (<code>HMaestroVirtualController.cs:717</code>) forwards to <code>SubmitRawExtendedReport</code> when <code>_extendedFrameCarriesItsOwnId</code> is set, and to <code>SubmitRawReport</code> otherwise. The flag is computed once in the constructor (<code>:314</code>): <code>ExtendedReport != null &amp;&amp; ExtendedReport.AlwaysArmed &amp;&amp; ExtendedReport.ReportIdByte != 0</code>. Saying it outright means the pairing cannot flip the day a packer size or a declared size moves by one, which HM's length inference would let happen in silence.</p>
 <p>One persona takes neither path. <code>switch2-pro-controller-composite</code> builds every report on the device side, from the report its host selected and its own counters, and both raw submits throw <code>NotSupportedException</code> on it (HM#66). Its slot submits state alone. See <a href="../../features/virtual-controllers/#switch-2-pro-state">Switch 2 Pro state</a>.</p>
-<p>What stays on the PadForge side is a tripwire, never a gate. <code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>HMaestroProfileCatalog.cs:348</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. <code>PadForge.Tests/PointingReportProfileGuardTests.cs</code> uses it two ways: <code>PackerFramesCarryTheirOwnReportId</code> asserts every Valve packer's frame size equals its profile's <code>InputReportSize</code>, and <code>APointingLedPackerProfileTakesTheVerbatimPath</code> asserts that any pointing-led profile with a packer declares the always-armed report id that puts it on the verbatim path. Commit <code>581264e9</code> had dropped such profiles from the pickers and refused to build them on the Extended creation path. Commit <code>662e174a</code> reversed that the same day: withdrawing a working profile over a driver defect was not a call to make on the owner's behalf. Since 4.4.0 the 2026 Steam Controller is in the picker, <code>WithheldProfileIds</code> is empty, and no creation path refuses a profile.</p>
+<p>What stays on the PadForge side is a tripwire, never a gate. <code>HMaestroProfileCatalog.LeadsWithAPointingReport</code> (<code>HMaestroProfileCatalog.cs:388</code>) parses a descriptor and returns true when its first input report sits in a Generic Desktop Mouse or Keyboard collection. <code>PadForge.Tests/PointingReportProfileGuardTests.cs</code> uses it two ways: <code>PackerFramesCarryTheirOwnReportId</code> asserts every Valve packer's frame size equals its profile's <code>InputReportSize</code>, and <code>APointingLedPackerProfileTakesTheVerbatimPath</code> asserts that any pointing-led profile with a packer declares the always-armed report id that puts it on the verbatim path. Commit <code>581264e9</code> had dropped such profiles from the pickers and refused to build them on the Extended creation path. Commit <code>662e174a</code> reversed that the same day: withdrawing a working profile over a driver defect was not a call to make on the owner's behalf. Since 4.4.0 the 2026 Steam Controller is in the picker, <code>WithheldProfileIds</code> is empty, and no creation path refuses a profile.</p>
 <p>HM#58 also corrected the 2026 profile's rear-button pairing to SDL's. PadForge's packer already had it right (R4 on bit 7, R5 on bit 8, L4 and L5 on 17 and 18), so the packer did not change. The profile now names all four (<code>RightPaddle</code>, <code>RightPaddle2</code>, <code>LeftPaddle</code>, <code>LeftPaddle2</code>).</p>
 <hr />
 <h2 id="one-wgi-gamepad-per-xbox-360-virtual-hm59">One WGI gamepad per Xbox 360 virtual (HM#59)<a class="headerlink" href="#one-wgi-gamepad-per-xbox-360-virtual-hm59" title="Permanent link">&para;</a></h2>

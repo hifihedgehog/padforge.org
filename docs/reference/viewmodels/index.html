@@ -12975,6 +12975,26 @@
 <td>Per-slot surface mode and SOCD / Snap Tap config. Always present, only meaningful when <code>OutputType == KeyboardMouse</code>. See <a href="#kbmslotconfig">KbmSlotConfig</a>.</td>
 </tr>
 <tr>
+<td><code>KbmKeyboardDevice</code> / <code>KbmMouseDevice</code></td>
+<td><code>string</code></td>
+<td>Forwarders over <code>KbmConfig.KeyboardDevice</code> / <code>MouseDevice</code> for the device bar's pickers, each with a reset button. A null write is ignored, and a change calls <code>NotifyKbmSurfacesChanged()</code>, which re-reads the pickers, their visibility, the capability tags and the mapping table's rows.</td>
+</tr>
+<tr>
+<td><code>KbmKeyboardDeviceVisible</code> / <code>KbmMouseDeviceVisible</code></td>
+<td><code>bool</code></td>
+<td>A picker shows while the surface mode drives its half.</td>
+</tr>
+<tr>
+<td><code>KbmKeyboardCapabilities</code> / <code>KbmMouseCapabilities</code></td>
+<td><code>IReadOnlyList&lt;string&gt;</code></td>
+<td>The device bar's tags for the picked model: Keys at Once (or Any), Media Keys and Lock Lights for a keyboard, and Buttons, Wheel and Tilt Wheel for a mouse. Empty on Windows input.</td>
+</tr>
+<tr>
+<td><code>KbmKeyboardLeds</code></td>
+<td><code>int</code></td>
+<td>The lock lights Windows last set on the slot's virtual keyboard (bit 0 Num Lock, 1 Caps Lock, 2 Scroll Lock), -1 without one. The poll fills it beside <code>KbmOutputSnapshot</code>, and the preview reads it per frame.</td>
+</tr>
+<tr>
 <td><code>KbmSurfaces</code></td>
 <td><code>string</code></td>
 <td>Forwarder over <code>KbmConfig.Surfaces</code> for the surface dropdown (#408). A null or empty write is ignored. <code>NotifyKbmSurfacesChanged()</code> re-reads it after a load, paste, or profile apply and re-filters the mapping table.</td>
@@ -19155,7 +19175,7 @@
 </tr>
 </tbody>
 </table>
-<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>824b4224</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.11.0 ships 233 profiles in 32 vendor folders, and PadForge's pickers offer the 135 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
+<p>The v2 <code>ExtendedPreset</code> enum (<code>Xbox360</code> / <code>DualShock4</code> / <code>Custom</code>) and the <code>ApplyPresetDefaults()</code> method that paired with it were dropped in v3 (commit <code>824b4224</code>). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 1.12.0 ships 336 profiles in 59 vendor folders, and PadForge's pickers offer the 238 that carry a captured HID descriptor (<code>HMaestroProfileCatalog</code> keeps only <code>IsDeployable</code> profiles). <code>Customize</code> is the single boolean that gates user overrides on top of the catalog profile.</p>
 <h3 id="extendedslotconfigdata">ExtendedSlotConfigData<a class="headerlink" href="#extendedslotconfigdata" title="Permanent link">&para;</a></h3>
 <p>Serializable DTO for persisting in PadForge.xml. All properties have <code>[XmlAttribute]</code>.</p>
 <table>
@@ -20114,6 +20134,24 @@
 <td>Computed: the half is live (<code>Surfaces != "MouseOnly"</code> / <code>Surfaces != "KeyboardOnly"</code>). <code>Allows(KbmSurfaceKind)</code> answers the same question for a row's half.</td>
 </tr>
 <tr>
+<td><code>KeyboardDevice</code> / <code>MouseDevice</code></td>
+<td><code>string</code></td>
+<td><code>""</code> (<code>WindowsInput</code>)</td>
+<td>The HIDMaestro keyboard or mouse profile each half sends through, or the empty string for Windows input. When one changes, a half that rode the old shared device follows to the new one if it carries that half, and goes back to Windows input if it does not. A null write is a picker artifact and is ignored. <code>SetDevices(keyboard, mouse)</code> sets both as one change, as a load, a paste or a profile apply does, and <code>ResetToDefaults()</code> puts both back on Windows input. See <a href="../../features/virtual-controllers/#virtual-keyboards-and-mice">Virtual keyboards and mice</a>.</td>
+</tr>
+<tr>
+<td><code>AvailableKeyboardDevices</code> / <code>AvailableMouseDevices</code></td>
+<td><code>IReadOnlyList&lt;KbmDeviceOption&gt;</code></td>
+<td>-</td>
+<td>The two dropdowns: Windows Input, then the other half's device when it carries this half (Same Device as the Mouse / Keyboard), then every keyboard or mouse profile by name. <code>KbmDeviceOption</code> compares by value, so a rebuilt list keeps its selection.</td>
+</tr>
+<tr>
+<td><code>UsesDevices</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>True when either half has a model. <code>DeviceCanSend(settingName)</code> answers whether the picked model can send a row's target, and the mapping table hides a row it cannot and keeps the binding.</td>
+</tr>
+<tr>
 <td><code>AvailableKbmSurfaces</code></td>
 <td><code>IReadOnlyList&lt;KbmSurfaceOption&gt;</code></td>
 <td>-</td>
@@ -20223,7 +20261,7 @@
 - <code>KbmSurfaceKind</code> (enum): <code>Keyboard</code>, <code>Mouse</code>. The half a mapping row drives, classified by <code>PadViewModel.KbmSurfaceOf</code>.
 - <code>SocdKeyOption</code> carries <code>Vk</code> (int) and <code>Label</code>. One pickable key.
 - <code>SocdPairItem</code> (<code>ObservableObject</code>) carries <code>VkA</code> and <code>VkB</code>. Edits reserialize the owner's <code>SocdPairs</code>. <code>KeyOptions</code> returns <code>GetKeyOptions()</code>.
-- <code>KbmSlotConfigData</code> is the DTO with <code>[XmlAttribute]</code> <code>SlotIndex</code>, <code>Surfaces</code> (default "Both", so files written before #408 read as Both), <code>SocdMode</code> (default "Off"), and <code>SocdPairs</code> (default <code>DefaultSocdPairs</code>).</p>
+- <code>KbmSlotConfigData</code> is the DTO with <code>[XmlAttribute]</code> <code>SlotIndex</code>, <code>Surfaces</code> (default "Both", so files written before #408 read as Both), <code>SocdMode</code> (default "Off"), <code>SocdPairs</code> (default <code>DefaultSocdPairs</code>), and <code>KeyboardDevice</code> and <code>MouseDevice</code>, written only when set, so a file written before the device pickers reads as Windows input.</p>
 <hr />
 <h2 id="remotelinktrustedpeer">RemoteLinkTrustedPeer<a class="headerlink" href="#remotelinktrustedpeer" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>RemoteLinkTrustedPeer.cs</code></p>

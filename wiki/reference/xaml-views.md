@@ -434,15 +434,16 @@ Grid (3 rows)
 │   │   ├─ RadioButton "Pointer" (Tag=13, x:Name="TabPointer", gated on hasIrPointer, #146)
 │   │   └─ RadioButton "Mouse" (Tag=14, x:Name="TabMouse", gated on mouse device, #200)
 │   └─ AssignOfferBanner (Border, visible on HasAssignOffer): Assign / Not Now
-├─ Row 1 (Auto): Extended config bar OR MIDI config bar (conditionally visible)
+├─ Row 1 (Auto): Extended, MIDI or Keyboard + Mouse config bar (conditionally visible)
 │   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
-│   └─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
+│   ├─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
+│   └─ KbmDeviceBar (Visibility=Collapsed unless OutputType==KeyboardMouse)
 ├─ Invisible MappingsCountIndicator (for UI Automation)
 └─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
    SelectedIndex bound to SelectedConfigTab
 ```
 
-The `HMaestroProfileBar` preset chip sits inline in tier 1 rather than on its own row. The Extended and MIDI config bars are the only Row 1 occupants.
+The `HMaestroProfileBar` preset chip sits inline in tier 1 rather than on its own row. The Extended, MIDI and Keyboard + Mouse bars are the only Row 1 occupants. `KbmDeviceBar` holds the **Keyboard** and **Mouse** pickers (`KbmKeyboardDeviceCombo`, `KbmMouseDeviceCombo`, bound to `KbmConfig.AvailableKeyboardDevices` / `AvailableMouseDevices` and to `KbmKeyboardDevice` / `KbmMouseDevice`), each with its reset button and shown while the surface mode drives its half, and the picked model's capability tags (`KbmKeyboardCapabilities`, `KbmMouseCapabilities`, `ChipGhost` chips).
 
 ### Custom Styles (UserControl.Resources)
 
@@ -529,6 +530,7 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `SensitivityXCombo` | ComboBox | Sensitivity X preset (Sticks tab) |
 | `TriggerPresetCombo` | ComboBox | Trigger sensitivity preset (Triggers tab) |
 | `ControllerModelHost` | Grid | Preview tab visualization host |
+| `TouchSensors` | TouchSensorStrip | A Valve slot's touch sensor capsules at the top center of the host, over the 2D and 3D views. Collapsed on every other slot. See [TouchSensorStrip](2d-overlay-system.md#touchsensorstrip) |
 | `ViewModeToggle` | Button | 2D/3D preview toggle |
 | `MacroAddButton` / `MacroRemoveButton` | ui:Button | Macro list add and remove |
 | `MenuAddButton` / `MenuRemoveButton` | ui:Button | Menu list add and remove (#9) |
@@ -1824,21 +1826,21 @@ ScrollViewer (Padding="24,0")
       ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 132 rows in alphabetical
+      ├─ Technologies card (Grid, 164px label + description, 133 rows in alphabetical
       │   order, case-insensitive, leading symbols ignored):
       │   ├─ 3doverstock
       │   ├─ AntiMicroX
       │   ├─ Arcade I/O references
       │   ├─ AudioEndPointLibrary
       │   ├─ AutoEq
-      │   └─ ...127 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+      │   └─ ...128 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
       │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
       │       CLAPACK row, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
 
-The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 131 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
+The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QMK Firmware. `Grid.Row` runs 0 (3doverstock) through 132 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
 
 ### Code-Behind
 

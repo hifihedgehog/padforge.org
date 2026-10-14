@@ -18,115 +18,115 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 
 | Language | Own name | Tag | Strings |
 |---|---|---|---|
-| Afrikaans | Afrikaans | `af` | 3638 of 3818 |
-| Albanian | Shqip | `sq` | 3765 of 3818 |
-| Amharic | አማርኛ | `am` | 3782 of 3818 |
-| Arabic | العربية | `ar` | 3817 of 3818, right to left |
-| Armenian | Հայերեն | `hy` | 3776 of 3818 |
-| Basque | Euskara | `eu` | 3813 of 3818 |
+| Afrikaans | Afrikaans | `af` | 3660 of 3841 |
+| Albanian | Shqip | `sq` | 3785 of 3841 |
+| Amharic | አማርኛ | `am` | 3802 of 3841 |
+| Arabic | العربية | `ar` | 3840 of 3841, right to left |
+| Armenian | Հայերեն | `hy` | 3799 of 3841 |
+| Basque | Euskara | `eu` | 3831 of 3841 |
 | Belarusian | Беларуская | `be` | all |
 | Bengali | বাংলা | `bn` | all |
-| Bikol | Bikol | `bik` | 778 of 3818 |
-| Bislama | Bislama | `bi` | 1095 of 3818 |
+| Bikol | Bikol | `bik` | 787 of 3841 |
+| Bislama | Bislama | `bi` | 1107 of 3841 |
 | Bulgarian | Български | `bg` | all |
-| Burmese | မြန်မာ | `my` | 3807 of 3818 |
+| Burmese | မြန်မာ | `my` | 3829 of 3841 |
 | Cantonese (Traditional) | 廣東話（繁體） | `zh-HK` | all |
-| Cape Verdean Creole | Kabuverdianu | `kea` | 2248 of 3818 |
-| Catalan | Català | `ca` | 3816 of 3818 |
-| Cebuano | Cebuano | `ceb` | 2816 of 3818 |
-| Central Kurdish | کوردیی ناوەندی | `ckb` | 3803 of 3818, right to left |
-| Chichewa | Chichewa | `ny` | 880 of 3818 |
-| Chinese (Pinyin) | Hànyǔ Pīnyīn | `zh-Latn` | 3735 of 3818 |
+| Cape Verdean Creole | Kabuverdianu | `kea` | 2263 of 3841 |
+| Catalan | Català | `ca` | 3839 of 3841 |
+| Cebuano | Cebuano | `ceb` | 2835 of 3841 |
+| Central Kurdish | کوردیی ناوەندی | `ckb` | 3825 of 3841, right to left |
+| Chichewa | Chichewa | `ny` | 887 of 3841 |
+| Chinese (Pinyin) | Hànyǔ Pīnyīn | `zh-Latn` | 3758 of 3841 |
 | Chinese (Simplified) | 中文（简体） | `zh-Hans` | all |
 | Chinese (Traditional) | 中文（繁體） | `zh-Hant` | all |
-| Chuukese | Fosun Chuuk | `chk` | 362 of 3818 |
-| Croatian | Hrvatski | `hr` | 3816 of 3818 |
+| Chuukese | Fosun Chuuk | `chk` | 365 of 3841 |
+| Croatian | Hrvatski | `hr` | 3838 of 3841 |
 | Czech | Čeština | `cs` | all |
 | Danish | Dansk | `da` | all |
 | Dutch | Nederlands | `nl` | all |
 | English (United Kingdom) | English (United Kingdom) | `en-GB` | all |
 | English (United States) | English (United States) | `en-US` | all |
-| Estonian | Eesti | `et` | 3815 of 3818 |
-| Fiji Hindi | Fiji Hindi | `hif` | 576 of 3818 |
-| Fijian | Vosa Vakaviti | `fj` | 419 of 3818 |
+| Estonian | Eesti | `et` | 3837 of 3841 |
+| Fiji Hindi | Fiji Hindi | `hif` | 583 of 3841 |
+| Fijian | Vosa Vakaviti | `fj` | 424 of 3841 |
 | Finnish | Suomi | `fi` | all |
 | French | Français | `fr` | all |
-| Georgian | ქართული | `ka` | 3802 of 3818 |
+| Georgian | ქართული | `ka` | 3825 of 3841 |
 | German | Deutsch | `de` | all |
 | Greek | Ελληνικά | `el` | all |
-| Guarani | Avañeʼẽ | `gn` | 764 of 3818 |
-| Gujarati | ગુજરાતી | `gu` | 3806 of 3818 |
-| Haitian Creole | Kreyòl ayisyen | `ht` | 3198 of 3818 |
-| Hawaiian | ʻŌlelo Hawaiʻi | `haw` | 607 of 3818 |
-| Hiligaynon | Hiligaynon | `hil` | 991 of 3818 |
+| Guarani | Avañeʼẽ | `gn` | 771 of 3841 |
+| Gujarati | ગુજરાતી | `gu` | 3829 of 3841 |
+| Haitian Creole | Kreyòl ayisyen | `ht` | 3217 of 3841 |
+| Hawaiian | ʻŌlelo Hawaiʻi | `haw` | 613 of 3841 |
+| Hiligaynon | Hiligaynon | `hil` | 1009 of 3841 |
 | Hindi | हिन्दी | `hi` | all |
-| Hmong | Hmoob | `hmn` | 940 of 3818 |
+| Hmong | Hmoob | `hmn` | 946 of 3841 |
 | Hungarian | Magyar | `hu` | all |
 | Icelandic | Íslenska | `is` | all |
-| Igbo | Igbo | `ig` | 820 of 3818 |
-| Ilocano | Ilokano | `ilo` | 740 of 3818 |
+| Igbo | Igbo | `ig` | 829 of 3841 |
+| Ilocano | Ilokano | `ilo` | 748 of 3841 |
 | Indonesian | Bahasa Indonesia | `id` | all |
 | Italian | Italiano | `it` | all |
 | Japanese | 日本語 | `ja` | all |
-| Kannada | ಕನ್ನಡ | `kn` | 3789 of 3818 |
-| Kazakh | Қазақша | `kk` | 3816 of 3818 |
-| Khmer | ភាសាខ្មែរ | `km` | 3812 of 3818 |
-| Kinyarwanda | Ikinyarwanda | `rw` | 1211 of 3818 |
+| Kannada | ಕನ್ನಡ | `kn` | 3808 of 3841 |
+| Kazakh | Қазақша | `kk` | 3834 of 3841 |
+| Khmer | ភាសាខ្មែរ | `km` | 3834 of 3841 |
+| Kinyarwanda | Ikinyarwanda | `rw` | 1223 of 3841 |
 | Korean | 한국어 | `ko` | all |
-| Lao | ລາວ | `lo` | 3797 of 3818 |
+| Lao | ລາວ | `lo` | 3819 of 3841 |
 | Latvian | Latviešu | `lv` | all |
-| Lingala | Lingála | `ln` | 1227 of 3818 |
-| Lithuanian | Lietuvių | `lt` | 3816 of 3818 |
-| Luganda | Luganda | `lg` | 424 of 3818 |
-| Luxembourgish | Lëtzebuergesch | `lb` | 3792 of 3818 |
+| Lingala | Lingála | `ln` | 1238 of 3841 |
+| Lithuanian | Lietuvių | `lt` | 3834 of 3841 |
+| Luganda | Luganda | `lg` | 431 of 3841 |
+| Luxembourgish | Lëtzebuergesch | `lb` | 3815 of 3841 |
 | Macedonian | Македонски | `mk` | all |
-| Malagasy | Malagasy | `mg` | 1446 of 3818 |
-| Malay | Bahasa Melayu | `ms` | 3817 of 3818 |
-| Malayalam | മലയാളം | `ml` | 3781 of 3818 |
-| Maltese | Malti | `mt` | 3750 of 3818 |
-| Marathi | मराठी | `mr` | 3796 of 3818 |
-| Mongolian | Монгол | `mn` | 3796 of 3818 |
-| Māori | Te Reo Māori | `mi` | 1268 of 3818 |
+| Malagasy | Malagasy | `mg` | 1461 of 3841 |
+| Malay | Bahasa Melayu | `ms` | 3835 of 3841 |
+| Malayalam | മലയാളം | `ml` | 3804 of 3841 |
+| Maltese | Malti | `mt` | 3770 of 3841 |
+| Marathi | मराठी | `mr` | 3819 of 3841 |
+| Mongolian | Монгол | `mn` | 3819 of 3841 |
+| Māori | Te Reo Māori | `mi` | 1284 of 3841 |
 | Nepali | नेपाली | `ne` | all |
-| Northern Sotho | Sepedi | `nso` | 723 of 3818 |
+| Northern Sotho | Sepedi | `nso` | 732 of 3841 |
 | Norwegian | Norsk | `no` | all |
-| Oromo | Afaan Oromoo | `om` | 1390 of 3818 |
-| Papiamento | Papiamentu | `pap` | 1897 of 3818 |
+| Oromo | Afaan Oromoo | `om` | 1402 of 3841 |
+| Papiamento | Papiamentu | `pap` | 1912 of 3841 |
 | Persian | فارسی | `fa` | all, right to left |
 | Polish | Polski | `pl` | all |
 | Portuguese (Brazil) | Português (Brasil) | `pt-BR` | all |
-| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | 3816 of 3818 |
-| Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 982 of 3818 |
+| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | 3839 of 3841 |
+| Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 989 of 3841 |
 | Romanian | Română | `ro` | all |
 | Russian | Русский | `ru` | all |
-| Samoan | Gagana Sāmoa | `sm` | 775 of 3818 |
+| Samoan | Gagana Sāmoa | `sm` | 782 of 3841 |
 | Serbian | Српски | `sr` | all |
-| Sesotho | Sesotho | `st` | 632 of 3818 |
-| Shona | ChiShona | `sn` | 864 of 3818 |
-| Sinhala | සිංහල | `si` | 3772 of 3818 |
+| Sesotho | Sesotho | `st` | 639 of 3841 |
+| Shona | ChiShona | `sn` | 872 of 3841 |
+| Sinhala | සිංහල | `si` | 3795 of 3841 |
 | Slovak | Slovenčina | `sk` | all |
 | Slovenian | Slovenščina | `sl` | all |
 | Spanish | Español | `es` | all |
-| Swahili | Kiswahili | `sw` | 3749 of 3818 |
+| Swahili | Kiswahili | `sw` | 3769 of 3841 |
 | Swedish | Svenska | `sv` | all |
-| Tagalog | Tagalog | `fil` | 3629 of 3818 |
+| Tagalog | Tagalog | `fil` | 3652 of 3841 |
 | Tamil | தமிழ் | `ta` | all |
 | Telugu | తెలుగు | `te` | all |
 | Thai | ไทย | `th` | all |
-| Tok Pisin | Tok Pisin | `tpi` | 1233 of 3818 |
-| Tongan | Lea faka-Tonga | `to` | 436 of 3818 |
-| Tswana | Setswana | `tn` | 665 of 3818 |
+| Tok Pisin | Tok Pisin | `tpi` | 1246 of 3841 |
+| Tongan | Lea faka-Tonga | `to` | 444 of 3841 |
+| Tswana | Setswana | `tn` | 673 of 3841 |
 | Turkish | Türkçe | `tr` | all |
-| Twi | Twi | `tw` | 411 of 3818 |
-| Ukrainian | Українська | `uk` | 3817 of 3818 |
+| Twi | Twi | `tw` | 416 of 3841 |
+| Ukrainian | Українська | `uk` | 3835 of 3841 |
 | Urdu | اردو | `ur` | all, right to left |
 | Vietnamese | Tiếng Việt | `vi` | all |
-| Waray | Winaray | `war` | 891 of 3818 |
-| Welsh | Cymraeg | `cy` | 3792 of 3818 |
-| Western Armenian | Արեւմտահայերէն | `hyw` | 3772 of 3818 |
-| Xhosa | IsiXhosa | `xh` | 1163 of 3818 |
-| Yoruba | Èdè Yorùbá | `yo` | 1337 of 3818 |
-| Zulu | IsiZulu | `zu` | 1802 of 3818 |
+| Waray | Winaray | `war` | 903 of 3841 |
+| Welsh | Cymraeg | `cy` | 3814 of 3841 |
+| Western Armenian | Արեւմտահայերէն | `hyw` | 3794 of 3841 |
+| Xhosa | IsiXhosa | `xh` | 1174 of 3841 |
+| Yoruba | Èdè Yorùbá | `yo` | 1351 of 3841 |
+| Zulu | IsiZulu | `zu` | 1819 of 3841 |
 
 Corrections and new translations land as pull requests. `tools/l10n/check_translation.py` checks a translation against the rules every file in the tree passes: placeholders, line breaks, digits, the names that stay in Latin letters, and decimal numbers written with a period.
 
@@ -316,7 +316,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers. 233 device profiles, of which PadForge offers the 135 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot. Required for those five slot types. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers, and the virtual keyboards and mice of a Keyboard+Mouse slot. 336 device profiles, of which PadForge offers the 238 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot, or set a Keyboard+Mouse slot to a keyboard or mouse model. Required for those five slot types and those models. |
 | **Windows MIDI Services** | Gives each MIDI slot a port of its own and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. Without it, MIDI runs on the legacy MIDI API, where slots send to a port you pick. | On 24H2 or later before Windows carries the API, click **Install** on its card for the runtime. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
@@ -339,6 +339,8 @@ Before installing, the card offers an **Install Location**. It defaults to `C:\S
 **Uninstall appears only for an install PadForge itself created.** PadForge works that out by checking whether it recorded the path and whether Steam's own registry entries point at the same folder. A SteamVR installed through the Steam client belongs to Steam, shows no Uninstall button here, and is never touched. The uninstall also stays disabled while any VR slot exists, and refuses while SteamVR is running.
 
 SteamVR keeps its own log and settings inside the folder you chose, as `logs` and `config` subfolders. Removing the install takes them with it.
+
+When another OpenVR driver is registered under HIDMaestro's driver name, the card warns: "Another OpenVR driver uses HIDMaestro’s driver name, so SteamVR can load it in place of PadForge’s and the virtual VR controllers will not appear. Remove that driver to clear this:" and lists that driver's folders, one per line. OpenVR loads one driver per name, so the VR slot's controllers would otherwise fail with nothing else to show for it. PadForge takes the list from HIDMaestro's `HMVR.FindDriverNameConflicts` (HIDMaestro 1.12.0), which reads SteamVR's driver registrations and changes nothing, at most every ten seconds.
 
 ### Hide Devices from Games
 

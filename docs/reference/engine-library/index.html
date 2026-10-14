@@ -3494,6 +3494,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ownhidoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OwnHidOutput
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#rawinputlistener" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6919,6 +6930,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ownhidoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OwnHidOutput
+      
+    </span>
+  </a>
   
 </li>
       
@@ -11480,7 +11502,7 @@
 <h2 id="inputhookmanager">InputHookManager<a class="headerlink" href="#inputhookmanager" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/InputHookManager.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine.Common</code></p>
-<p>Manages <code>WH_KEYBOARD_LL</code> and <code>WH_MOUSE_LL</code> low-level hooks to suppress mapped keyboard/mouse inputs. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343). The keyboard hook decides through <code>ConsumeKey</code>, which numbers the event with <code>RawInputListener.KeyIndex</code> from its <code>vkCode</code>, <code>scanCode</code> and <code>LLKHF_EXTENDED</code>. Numpad Enter reaches the hook as VK_RETURN with <code>LLKHF_EXTENDED</code> and a mapping names it 0x88, so the hook used to miss a consumed Numpad Enter and swallow Numpad Enter with a consumed Enter (#486).</p>
+<p>Manages <code>WH_KEYBOARD_LL</code> and <code>WH_MOUSE_LL</code> low-level hooks to suppress mapped keyboard/mouse inputs. A key or button PadForge's own virtual HID keyboard or mouse pressed is never consumed or read as a physical press: the hooks ask <a href="#ownhidoutput">OwnHidOutput</a> first, since such a device carries no output tag. <code>IsExtendedKey</code> also covers the browser, volume, media and launch keys (VK 0xA6 to 0xB7), whose scan codes carry the E0 prefix. Only suppresses inputs in the active suppression sets. The same hooks fire global hotkeys and feed the handheld chord engine (#343). The keyboard hook decides through <code>ConsumeKey</code>, which numbers the event with <code>RawInputListener.KeyIndex</code> from its <code>vkCode</code>, <code>scanCode</code> and <code>LLKHF_EXTENDED</code>. Numpad Enter reaches the hook as VK_RETURN with <code>LLKHF_EXTENDED</code> and a mapping names it 0x88, so the hook used to miss a consumed Numpad Enter and swallow Numpad Enter with a consumed Enter (#486).</p>
 <p>Every key and mouse event PadForge sends through <code>SendInput</code> as output, from the Keyboard + Mouse virtual controller and the macro emitters, carries <code>OutputTag</code>, 0x50464F55 ("PFOU"), in <code>dwExtraInfo</code>. Absolute cursor positioning uses <code>SetCursorPos</code>, outside this <code>SendInput</code> tagging path. <code>HandleKeyboardEvent</code> and <code>HandleMouseButton</code>, the hooks' whole decision split from the callbacks, pass a tagged event before anything counts it as physical: no physical-key tracking, hotkeys, chords or consumption. Consuming a key used to swallow PadForge's own output of that key. A <code>ReplayTag</code> event is a physical key replayed, and it still takes consumption.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">InputHookManager</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="p">{</span>
@@ -11674,6 +11696,11 @@
 </tbody>
 </table>
 <hr />
+<h2 id="ownhidoutput">OwnHidOutput<a class="headerlink" href="#ownhidoutput" title="Permanent link">&para;</a></h2>
+<p><strong>File:</strong> <code>PadForge.Engine/Common/OwnHidOutput.cs</code>
+<strong>Namespace:</strong> <code>PadForge.Engine.Common</code></p>
+<p>What PadForge's own virtual HID keyboards and mice hold, so the low-level hooks let that output through as they let <code>SendInput</code> output through. <code>SendInput</code> output carries <code>InputHookManager.OutputTag</code>, but a virtual HID keyboard reaches the hooks the way a real one does: no tag, no injected flag, and no device in <code>KBDLLHOOKSTRUCT</code> or <code>MSLLHOOKSTRUCT</code>. A key a slot sends that is also a consumed source key would be swallowed and recorded as a physical press the slot then reads back, held down by the key's own repeats. So a sender (<code>KbmHidKeyboard</code>, <code>KbmHidMouse</code>) records each key and button before the report that presses it, and each release before the report that lets go, and the hooks ask here first (<code>IsOwnKey</code>, <code>IsOwnButton</code>).</p>
+<p>A key matches by the hook's key index (<code>RawInputListener.KeyIndex</code>) or by its scan code and E0 flag, whichever the event agrees with: with Num Lock off Windows reads a keypad key as an arrow or Home, which changes the code and keeps the scan code. A key down counts as PadForge's from the press until Windows delivers the release, which covers the repeats Windows makes for a held HID key, including one that lands while the release is on its way. A key up is PadForge's once for each release a sender sent. A release Windows has not delivered in two seconds (<code>PendingWindowMs</code>) is dropped, so it cannot later take a physical release for PadForge's. While nothing is recorded, a hook event costs no lock (<code>s_any</code>).</p>
 <h2 id="rawinputlistener">RawInputListener<a class="headerlink" href="#rawinputlistener" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/RawInputListener.cs</code>
 <strong>Namespace:</strong> <code>PadForge.Engine</code></p>
@@ -11803,6 +11830,7 @@
 <li><strong>Keyboard</strong> (<code>RIM_TYPEKEYBOARD</code>): Reads <code>RAWKEYBOARD.VKey</code> and stores each key at <code>RawInputListener.KeyIndex</code>: a modifier reported neutral at its left or right code (Shift by scan code 0x2A or 0x36, Ctrl and Alt by <code>RI_KEY_E0</code>), Numpad Enter (VK_RETURN with <code>RI_KEY_E0</code>) at <code>NumpadEnterKey</code>, 0x88, apart from Enter, and every other key at its own code. The low-level hook numbers what it swallows through the same table (#486). Per-device state in <code>ConcurrentDictionary&lt;IntPtr, bool[]&gt;</code>. A record that is no key changes nothing: PadForge's own output (<code>ExtraInformation</code> equal to <code>InputHookManager.OutputTagValue</code>), an overrun (<code>MakeCode</code> 0xFF), and a record with no VKey (0xFF), half of an escaped sequence such as the fake Shift around PrintScreen. The make code loses its break bit before <code>KeyIndex</code>, since the On-Screen Keyboard can set it. RawInputDemo's keyboard handler does both (<code>RawInputDeviceKeyboard.cpp</code> lines 228-244). The iCade driver still sees every record first.</li>
 <li><strong>Mouse</strong> (<code>RIM_TYPEMOUSE</code>): Accumulates <code>lLastX</code>/<code>lLastY</code> deltas. Tracks buttons via <code>usButtonFlags</code>. Scroll via <code>RI_MOUSE_WHEEL</code>. A record whose <code>ulExtraInformation</code> is <code>OutputTagValue</code> is PadForge's own output and changes nothing (<code>ApplyMouseRecord</code>). Raw Input reports a <code>SendInput</code> event's <code>dwExtraInfo</code> there, with device handle 0.</li>
 <li><strong>Scroll:</strong> <code>usButtonData</code> is a signed <code>short</code>. Accumulated per-device, consumed by <code>ConsumeMouseScroll</code>.</li>
+<li><strong>PadForge's own virtual devices:</strong> <code>IsOwnVirtualDevicePath</code>, which the app sets to HidHide's HIDMaestro test, marks a device PadForge made through HIDMaestro, such as a Keyboard + Mouse slot's virtual keyboard or mouse. Its records reach no keyboard, mouse or consumer state, merged or not, so a slot fed by All Keyboards cannot type into itself. The answer is cached per device handle, and a listing drops the handles it no longer has, so a handle Windows reuses is asked again. <code>SetOwnVirtualDeviceForTests</code> sets an answer for a test.</li>
 <li><strong>Absolute-mode skip:</strong> when <code>RAWMOUSE.usFlags</code> has <code>MOUSE_MOVE_ABSOLUTE</code> (bit 0) set, <code>lLastX</code>/<code>lLastY</code> are absolute coordinates in 0..65535 over the active region, not deltas. RDP virtual mice, Wacom tablets in absolute mode, and some KVMs send these. Treating them as deltas would inject 0..65535-magnitude jumps into the gamepad-mapping aim and scroll paths, so the reader drops the delta for absolute events and still records the same report's buttons and wheel.</li>
 <li><strong>Consumer Control</strong> (<code>RIM_TYPEHID</code>, #168): each report carries the full set of held usages, read with <code>HidP_GetUsages</code>, so the device's slot array is rebuilt from every report rather than edited.</li>
 </ul>

@@ -2549,6 +2549,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#virtual-keyboards-and-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual keyboards and mice
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual keyboards and mice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keyboards-51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboards (51)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mice-52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mice (52)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4216,6 +4255,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#virtual-keyboards-and-mice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtual keyboards and mice
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Virtual keyboards and mice">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keyboards-51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboards (51)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mice-52" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mice (52)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -4235,7 +4313,7 @@
 
 <h1 id="supported-devices">Supported Devices<a class="headerlink" href="#supported-devices" title="Permanent link">&para;</a></h1>
 <p><em>Every controller, wheel, stick and adapter PadForge knows by name, in one place.</em></p>
-<p>PadForge recognizes <strong>1,108</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>464</strong> named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 233 device profiles, and PadForge offers the 135 that carry a captured HID descriptor.</p>
+<p>PadForge recognizes <strong>1,108</strong> devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit <strong>464</strong> named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 135 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, <a href="#virtual-keyboards-and-mice">listed below</a>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Not on this list?</p>
 <p>It very likely still works. Anything Windows enumerates as an input device can be read
@@ -6850,6 +6928,812 @@ as a generic joystick.</p>
 <td><strong>Another PC's controllers</strong></td>
 <td>Any device above, shared over the network or the internet</td>
 <td><a href="../../guides/remote-link/">Remote Link</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="virtual-keyboards-and-mice">Virtual keyboards and mice<a class="headerlink" href="#virtual-keyboards-and-mice" title="Permanent link">&para;</a></h2>
+<p>A Keyboard+Mouse slot can type and point through one of these HIDMaestro models in place of Windows input. Windows and the programs that read devices see the model as that hardware. The tags beside the slot's Keyboard and Mouse pickers show what the model can send, and the mapping table hides the keys, buttons and wheels it cannot. See <a href="../../features/controller-slots/#keyboardmouse">Keyboard+Mouse</a>.</p>
+<h3 id="keyboards-51">Keyboards (51)<a class="headerlink" href="#keyboards-51" title="Permanent link">&para;</a></h3>
+<p>The preview draws each keyboard as its board's key set. A board drawn as the nearest standard set says so under the picture. <strong>Keys at once</strong> counts the keys besides the modifiers the keyboard can hold down together. A keyboard with a mouse report of its own can also be the slot's mouse, as <strong>Same Device as the Keyboard</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Keyboard</th>
+<th>Drawn as</th>
+<th>Keys at once</th>
+<th>Media keys</th>
+<th>Lock lights</th>
+<th>Mouse report</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8BitDo Retro Mechanical Keyboard</td>
+<td>Tenkeyless</td>
+<td>6</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple Keyboard A1243</td>
+<td>Full size, ANSI, nearest set</td>
+<td>5</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple Magic Keyboard A1644 (USB)</td>
+<td>75 percent, nearest set</td>
+<td>6</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple Magic Keyboard with Touch ID and Numeric Keypad (USB)</td>
+<td>Full size, ANSI, nearest set</td>
+<td>6</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple Wireless Keyboard (Bluetooth)</td>
+<td>75 percent, nearest set</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Cherry G83 (RS 6000)</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Cherry KC 6000 Slim</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Cherry Strait 3.0</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Cooler Master CK352</td>
+<td>Full size, ANSI</td>
+<td>62</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair K55 RGB PRO XT</td>
+<td>Full size, ANSI</td>
+<td>Any</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair K70 RGB MK.2 Low Profile</td>
+<td>Full size, ANSI</td>
+<td>Any</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>5 buttons, wheel</td>
+</tr>
+<tr>
+<td>Corsair K70 RGB RAPIDFIRE</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair K95 RGB Platinum XT</td>
+<td>Full size, ANSI</td>
+<td>Any</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair STRAFE RGB</td>
+<td>Full size, ANSI</td>
+<td>Any</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>DREVO BladeMaster TE</td>
+<td>Tenkeyless</td>
+<td>61</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>5 buttons, wheel</td>
+</tr>
+<tr>
+<td>Ducky DK2108</td>
+<td>Full size, four keys over the number pad</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>GamaKay LK67</td>
+<td>65 percent with a blocker</td>
+<td>5</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Genius Imperator</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Glorious GMMK Pro</td>
+<td>75 percent</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HHKB Classic</td>
+<td>Happy Hacking</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HHKB Professional (Topre)</td>
+<td>Happy Hacking</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HHKB Professional JP</td>
+<td>Happy Hacking, JIS</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HHKB Studio (Bluetooth)</td>
+<td>Happy Hacking</td>
+<td>6</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>5 buttons, wheel, tilt wheel</td>
+</tr>
+<tr>
+<td>HP USB Keyboard</td>
+<td>Full size, ISO</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HyperX Alloy Elite RGB</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Keychron Q6</td>
+<td>Keychron Q6</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Lenovo ThinkPad Compact Bluetooth Keyboard with TrackPoint</td>
+<td>75 percent, nearest set</td>
+<td>6</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>3 buttons, wheel, tilt wheel</td>
+</tr>
+<tr>
+<td>Lenovo Ultraslim Wireless Combo (keyboard)</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech Bolt Receiver (keyboard)</td>
+<td>Full size, ANSI</td>
+<td>Any</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G710</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G810</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G815</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech Unifying Receiver (keyboard)</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech USB Receiver C52E (keyboard)</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Designer Keyboard (Bluetooth)</td>
+<td>75 percent, nearest set</td>
+<td>10</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Natural Ergonomic Keyboard 4000</td>
+<td>Full size, ANSI, nearest set</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Wired Keyboard 600</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Obins Anne Pro 2</td>
+<td>60 percent</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Raspberry Pi 400 Keyboard</td>
+<td>75 percent, nearest set</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer BlackWidow V3 Mini</td>
+<td>65 percent</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer BlackWidow V4 Pro</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer BlackWidow V4 X</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Cynosa Chroma Pro</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer DeathStalker V2 Pro</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Huntsman V3 Pro</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Ornata V3</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Pro Type Ultra</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Topre Realforce 108 US</td>
+<td>Full size, four keys over the number pad</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Topre Realforce RGB</td>
+<td>Full size, ANSI</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Truly Ergonomic CLEAVE</td>
+<td>Tenkeyless, nearest set</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Varmilo MA109C</td>
+<td>Full size, four keys over the number pad</td>
+<td>6</td>
+<td></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mice-52">Mice (52)<a class="headerlink" href="#mice-52" title="Permanent link">&para;</a></h3>
+<p><strong>Buttons</strong> counts the five Windows mouse buttons the model reaches: left, right, middle, back and forward. A mouse with more buttons counts five. A mouse with a keyboard report of its own can also be the slot's keyboard, as <strong>Same Device as the Mouse</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Mouse</th>
+<th>Buttons</th>
+<th>Wheel</th>
+<th>Tilt wheel</th>
+<th>Keyboard report</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apple Pro Mouse</td>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ASUS ROG Gladius</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>ASUS ROG Spatha</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair Harpoon RGB Wireless</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair M65 RGB Ultra</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Corsair Scimitar RGB Elite</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td>Any keys at once</td>
+</tr>
+<tr>
+<td>Dell MS116</td>
+<td>3</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Genius Gila</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>HyperX Pulsefire Dart (cable)</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>HyperX Pulsefire Dart (receiver)</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Kensington Slimblade Trackball</td>
+<td>2</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech Bolt Receiver (mouse)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G403 HERO</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G5</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G500s</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G502 HERO</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G502 X</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech G903 LIGHTSPEED</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech Gaming Mouse G502</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech M557 (Bluetooth)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>6 keys at once</td>
+</tr>
+<tr>
+<td>Logitech MX Anywhere 3S (Bluetooth)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech MX Master 3S (Bluetooth)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech MX510</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech MX518</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech Unifying Receiver (mouse)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech USB Optical Mouse</td>
+<td>3</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Logitech USB Trackball</td>
+<td>5</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft 2.4GHz Transceiver v9.0 (mouse)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Classic IntelliMouse</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Notebook Optical Mouse</td>
+<td>3</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Optical Mouse with Tilt Wheel</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Microsoft Sculpt Touch Mouse (Bluetooth)</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>6 keys at once</td>
+</tr>
+<tr>
+<td>Pulsar Xlite Wireless</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Rapoo M50 Plus Silent</td>
+<td>3</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Basilisk V2</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Basilisk V3 Pro</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Basilisk V3 X HyperSpeed</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Cobra</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer DeathAdder V2</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer DeathAdder V3</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer DeathAdder V3 Pro</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Naga Trinity</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Orochi V2</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Viper Mini</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Viper Ultimate</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Razer Viper V3 Pro</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Redragon M690 PRO</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>SteelSeries Kana</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SteelSeries Rival</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SteelSeries Rival 600</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Xiaomi Mi Wireless Mouse</td>
+<td>5</td>
+<td>Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>ZOWIE Gaming Mouse</td>
+<td>5</td>
+<td>Yes</td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>

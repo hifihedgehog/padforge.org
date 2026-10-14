@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 233 device profiles, and PadForge offers the 135 that carry a captured HID descriptor.
+PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 135 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed below](#virtual-keyboards-and-mice).
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -775,6 +775,129 @@ as a generic joystick.
 | **A controller paired to a phone** | Forwarded through the phone's browser: a Bluetooth pad, a telescopic pad clamped around the phone, anything the phone's browser sees as a gamepad. Sticks, triggers, D-pad and up to ten extra buttons on a standard-layout pad, up to 21 buttons and six axes forwarded as reported otherwise, rumble back to the pad where the browser can drive it | [Browser Gamepad](../guides/web-controller.md#browser-gamepad-a-controller-paired-to-the-phone) |
 | **Android and Windows gaming handhelds, through their browser** | The handheld's built-in controls forwarded to the PC from the handheld's own browser, the same way. Expected to forward the controls the handheld's browser exposes, within the same limits. Handheld hardware has not been tested here | [Browser Gamepad](../guides/web-controller.md#browser-gamepad-a-controller-paired-to-the-phone) |
 | **Another PC's controllers** | Any device above, shared over the network or the internet | [Remote Link](../guides/remote-link.md) |
+
+---
+
+## Virtual keyboards and mice
+
+A Keyboard+Mouse slot can type and point through one of these HIDMaestro models in place of Windows input. Windows and the programs that read devices see the model as that hardware. The tags beside the slot's Keyboard and Mouse pickers show what the model can send, and the mapping table hides the keys, buttons and wheels it cannot. See [Keyboard+Mouse](../features/controller-slots.md#keyboardmouse).
+
+### Keyboards (51)
+
+The preview draws each keyboard as its board's key set. A board drawn as the nearest standard set says so under the picture. **Keys at once** counts the keys besides the modifiers the keyboard can hold down together. A keyboard with a mouse report of its own can also be the slot's mouse, as **Same Device as the Keyboard**.
+
+| Keyboard | Drawn as | Keys at once | Media keys | Lock lights | Mouse report |
+| --- | --- | --- | --- | --- | --- |
+| 8BitDo Retro Mechanical Keyboard | Tenkeyless | 6 | Yes | Yes |  |
+| Apple Keyboard A1243 | Full size, ANSI, nearest set | 5 |  | Yes |  |
+| Apple Magic Keyboard A1644 (USB) | 75 percent, nearest set | 6 | Yes | Yes |  |
+| Apple Magic Keyboard with Touch ID and Numeric Keypad (USB) | Full size, ANSI, nearest set | 6 | Yes | Yes |  |
+| Apple Wireless Keyboard (Bluetooth) | 75 percent, nearest set | 6 |  | Yes |  |
+| Cherry G83 (RS 6000) | Full size, ANSI | 6 |  | Yes |  |
+| Cherry KC 6000 Slim | Full size, ANSI | 6 |  | Yes |  |
+| Cherry Strait 3.0 | Full size, ANSI | 6 |  | Yes |  |
+| Cooler Master CK352 | Full size, ANSI | 62 |  | Yes |  |
+| Corsair K55 RGB PRO XT | Full size, ANSI | Any | Yes | Yes |  |
+| Corsair K70 RGB MK.2 Low Profile | Full size, ANSI | Any | Yes | Yes | 5 buttons, wheel |
+| Corsair K70 RGB RAPIDFIRE | Full size, ANSI | 6 |  | Yes |  |
+| Corsair K95 RGB Platinum XT | Full size, ANSI | Any | Yes | Yes |  |
+| Corsair STRAFE RGB | Full size, ANSI | Any | Yes | Yes |  |
+| DREVO BladeMaster TE | Tenkeyless | 61 | Yes | Yes | 5 buttons, wheel |
+| Ducky DK2108 | Full size, four keys over the number pad | 6 |  | Yes |  |
+| GamaKay LK67 | 65 percent with a blocker | 5 |  | Yes |  |
+| Genius Imperator | Full size, ANSI | 6 |  | Yes |  |
+| Glorious GMMK Pro | 75 percent | 6 |  | Yes |  |
+| HHKB Classic | Happy Hacking | 6 |  | Yes |  |
+| HHKB Professional (Topre) | Happy Hacking | 6 |  | Yes |  |
+| HHKB Professional JP | Happy Hacking, JIS | 6 |  | Yes |  |
+| HHKB Studio (Bluetooth) | Happy Hacking | 6 | Yes | Yes | 5 buttons, wheel, tilt wheel |
+| HP USB Keyboard | Full size, ISO | 6 |  | Yes |  |
+| HyperX Alloy Elite RGB | Full size, ANSI | 6 |  | Yes |  |
+| Keychron Q6 | Keychron Q6 | 6 |  | Yes |  |
+| Lenovo ThinkPad Compact Bluetooth Keyboard with TrackPoint | 75 percent, nearest set | 6 | Yes | Yes | 3 buttons, wheel, tilt wheel |
+| Lenovo Ultraslim Wireless Combo (keyboard) | Full size, ANSI | 6 |  | Yes |  |
+| Logitech Bolt Receiver (keyboard) | Full size, ANSI | Any |  | Yes |  |
+| Logitech G710 | Full size, ANSI | 6 |  | Yes |  |
+| Logitech G810 | Full size, ANSI | 6 |  | Yes |  |
+| Logitech G815 | Full size, ANSI | 6 |  | Yes |  |
+| Logitech Unifying Receiver (keyboard) | Full size, ANSI | 6 |  | Yes |  |
+| Logitech USB Receiver C52E (keyboard) | Full size, ANSI | 6 |  | Yes |  |
+| Microsoft Designer Keyboard (Bluetooth) | 75 percent, nearest set | 10 | Yes | Yes |  |
+| Microsoft Natural Ergonomic Keyboard 4000 | Full size, ANSI, nearest set | 6 |  | Yes |  |
+| Microsoft Wired Keyboard 600 | Full size, ANSI | 6 |  | Yes |  |
+| Obins Anne Pro 2 | 60 percent | 6 |  | Yes |  |
+| Raspberry Pi 400 Keyboard | 75 percent, nearest set | 6 |  | Yes |  |
+| Razer BlackWidow V3 Mini | 65 percent | 6 |  | Yes |  |
+| Razer BlackWidow V4 Pro | Full size, ANSI | 6 |  | Yes |  |
+| Razer BlackWidow V4 X | Full size, ANSI | 6 |  | Yes |  |
+| Razer Cynosa Chroma Pro | Full size, ANSI | 6 |  | Yes |  |
+| Razer DeathStalker V2 Pro | Full size, ANSI | 6 |  | Yes |  |
+| Razer Huntsman V3 Pro | Full size, ANSI | 6 |  | Yes |  |
+| Razer Ornata V3 | Full size, ANSI | 6 |  | Yes |  |
+| Razer Pro Type Ultra | Full size, ANSI | 6 |  | Yes |  |
+| Topre Realforce 108 US | Full size, four keys over the number pad | 6 |  | Yes |  |
+| Topre Realforce RGB | Full size, ANSI | 6 |  | Yes |  |
+| Truly Ergonomic CLEAVE | Tenkeyless, nearest set | 6 |  | Yes |  |
+| Varmilo MA109C | Full size, four keys over the number pad | 6 |  | Yes |  |
+
+### Mice (52)
+
+**Buttons** counts the five Windows mouse buttons the model reaches: left, right, middle, back and forward. A mouse with more buttons counts five. A mouse with a keyboard report of its own can also be the slot's keyboard, as **Same Device as the Mouse**.
+
+| Mouse | Buttons | Wheel | Tilt wheel | Keyboard report |
+| --- | --- | --- | --- | --- |
+| Apple Pro Mouse | 1 |  |  |  |
+| ASUS ROG Gladius | 5 | Yes | Yes |  |
+| ASUS ROG Spatha | 5 | Yes | Yes |  |
+| Corsair Harpoon RGB Wireless | 5 | Yes |  |  |
+| Corsair M65 RGB Ultra | 5 | Yes |  |  |
+| Corsair Scimitar RGB Elite | 5 | Yes |  | Any keys at once |
+| Dell MS116 | 3 | Yes |  |  |
+| Genius Gila | 5 | Yes | Yes |  |
+| HyperX Pulsefire Dart (cable) | 5 | Yes |  |  |
+| HyperX Pulsefire Dart (receiver) | 5 | Yes |  |  |
+| Kensington Slimblade Trackball | 2 | Yes |  |  |
+| Logitech Bolt Receiver (mouse) | 5 | Yes | Yes |  |
+| Logitech G403 HERO | 5 | Yes | Yes |  |
+| Logitech G5 | 5 | Yes | Yes |  |
+| Logitech G500s | 5 | Yes | Yes |  |
+| Logitech G502 HERO | 5 | Yes | Yes |  |
+| Logitech G502 X | 5 | Yes | Yes |  |
+| Logitech G903 LIGHTSPEED | 5 | Yes | Yes |  |
+| Logitech Gaming Mouse G502 | 5 | Yes | Yes |  |
+| Logitech M557 (Bluetooth) | 5 | Yes | Yes | 6 keys at once |
+| Logitech MX Anywhere 3S (Bluetooth) | 5 | Yes | Yes |  |
+| Logitech MX Master 3S (Bluetooth) | 5 | Yes | Yes |  |
+| Logitech MX510 | 5 | Yes |  |  |
+| Logitech MX518 | 5 | Yes | Yes |  |
+| Logitech Unifying Receiver (mouse) | 5 | Yes | Yes |  |
+| Logitech USB Optical Mouse | 3 | Yes |  |  |
+| Logitech USB Trackball | 5 |  |  |  |
+| Microsoft 2.4GHz Transceiver v9.0 (mouse) | 5 | Yes | Yes |  |
+| Microsoft Classic IntelliMouse | 5 | Yes |  |  |
+| Microsoft Notebook Optical Mouse | 3 | Yes |  |  |
+| Microsoft Optical Mouse with Tilt Wheel | 5 | Yes | Yes |  |
+| Microsoft Sculpt Touch Mouse (Bluetooth) | 5 | Yes | Yes | 6 keys at once |
+| Pulsar Xlite Wireless | 5 | Yes | Yes |  |
+| Rapoo M50 Plus Silent | 3 | Yes |  |  |
+| Razer Basilisk V2 | 5 | Yes |  |  |
+| Razer Basilisk V3 Pro | 5 | Yes | Yes |  |
+| Razer Basilisk V3 X HyperSpeed | 5 | Yes | Yes |  |
+| Razer Cobra | 5 | Yes |  |  |
+| Razer DeathAdder V2 | 5 | Yes |  |  |
+| Razer DeathAdder V3 | 5 | Yes |  |  |
+| Razer DeathAdder V3 Pro | 5 | Yes |  |  |
+| Razer Naga Trinity | 5 | Yes |  |  |
+| Razer Orochi V2 | 5 | Yes | Yes |  |
+| Razer Viper Mini | 5 | Yes |  |  |
+| Razer Viper Ultimate | 5 | Yes |  |  |
+| Razer Viper V3 Pro | 5 | Yes |  |  |
+| Redragon M690 PRO | 5 | Yes | Yes |  |
+| SteelSeries Kana | 5 | Yes |  |  |
+| SteelSeries Rival | 5 | Yes |  |  |
+| SteelSeries Rival 600 | 5 | Yes | Yes |  |
+| Xiaomi Mi Wireless Mouse | 5 | Yes | Yes |  |
+| ZOWIE Gaming Mouse | 5 | Yes |  |  |
 
 ---
 
