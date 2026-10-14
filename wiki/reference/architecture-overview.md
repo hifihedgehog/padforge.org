@@ -148,6 +148,7 @@ PadForge.App/
     SetupApiInterop.cs                # SetupAPI P/Invoke shared by the device-ancestry walks
     SettingsManager.cs                # Slot arrays, profiles, PadSetting defaults, partial class (see below)
     StartupHelper.cs                  # Launch-at-logon via a schtasks ONLOGON task (/RL HIGHEST), migrating the legacy HKCU\...\Run entry
+    TextDirection.cs                  # Gives each TextBlock in a right-to-left window the direction its own text needs
     VirtualKey.cs                     # Windows VK code → display name lookup table
 
     Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs
@@ -1214,6 +1215,8 @@ A language whose row says `rtl` lays every window out right to left: Arabic, Per
 Unicode does not mirror arrows, so a string that shows a flow with an arrow points it from source to receiver in the reading direction of its language.
 
 WPF's bidi pass has no bracket-pair rule. In a right-to-left paragraph, the closing bracket of "Igor Budzhak (MIT)" followed by Arabic takes the paragraph's direction and is drawn mirrored on the far side of the name. `Common/BidiText.cs` puts each Latin stretch that holds a bracket pair into a `Run` of its own with `FlowDirection` set to left to right, an embedding that keeps both brackets inside it, and the translation rules keep the textbook fix, a direction mark, out of every string. Its `Text` property binds in place of `TextBlock.Text`, and its `ToolTip` property in place of `ToolTip`. Every string on the About page, the formula chips' tooltips and the pad page strings whose translations held such a pair go through it. `BidiTextTests` draws a credit both ways and checks the closing bracket's position.
+
+Every other TextBlock in a right-to-left window is handled by `Common/TextDirection.cs`, data and template parts included. `UiLanguage` sets its inherited `Watch` property on each right-to-left window, so WPF calls back for every element that joins the tree. A class handler for `Loaded` would miss most TextBlocks, because WPF raises `Loaded` only on elements with handlers of their own. Text with no right-to-left letter that the window's direction would draw differently, such as a device named "Controller (XBOX 360 For Windows)" or text that starts with a digit, takes the direction of its first letter, left to right, as HTML's `dir="auto"` does. Its alignment and padding are mirrored with it, so it stays in place. Text that mixes right-to-left letters with Latin bracketed stretches gets those stretches as left-to-right Runs. New Inlines cost a laid-out TextBlock the binding on its `Text`, so the class first takes the text over: it copies the binding on `Text`, the binding a template or style put there, or the `Content` of the ContentPresenter that shows the string, and builds the Runs from that source on every change. Text a trigger sets and Inlines written with formatting are left alone. Tooltips and context menus are watched as they open. `TextDirectionTests` draws device names, bound text, template text, ContentPresenter strings and a tooltip in a right-to-left window, and an unwatched copy of the device name as the positive control.
 
 ### Translation Rules
 
