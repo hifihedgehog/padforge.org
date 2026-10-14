@@ -136,6 +136,7 @@ PadForge.App/
     AssemblyInfo.cs                   # Assembly metadata only (title, copyright, theme, COM GUID). AssemblyVersion + AssemblyFileVersion live in ..\SharedVersion.cs, linked into the App, Engine, and SteamWorkshop csproj files.
 
   Common/
+    BidiText.cs                       # Text and tooltips that keep a Latin name and its brackets together in right-to-left text
     ControllerIcons.cs                # SVG path data for controller type icons (Xbox, PlayStation, Nintendo, Extended, MIDI, KB+M)
     CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
     DriverInstaller.cs                # HidHide install, Windows MIDI Services runtime install and uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
@@ -1211,6 +1212,8 @@ English follows CLDR. A region whose parent is `en-001`, directly or through `en
 A language whose row says `rtl` lays every window out right to left: Arabic, Persian, Urdu and Central Kurdish. `UiLanguage.Direction` sets the window's `FlowDirection` from the catalog, so Hebrew Windows with no Hebrew translation shows English left to right. WPF mirrors every element that inherits the direction, drawings included, so every `Canvas`, `Path`, `Polygon`, `Polyline`, `Line`, `Image` and 3D viewport in the markup declares left to right itself or sits under an element that does, and the flames and platform logos the main window builds in code pin themselves. `RightToLeftPinsTests` reads the markup and fails on a drawing with no pin. The touchpad overlay, the on-screen menus and the light gun's calibration window call `UiLanguage.KeepLeftToRight` and stay left to right whole: mirrored, a calibration target drawn at the top left would sit at the top right while the calibration still read it as the left. The welcome tour's canvas is the one drawing that mirrors, because it cuts its spotlight out at the window coordinates of the control it points at.
 
 Unicode does not mirror arrows, so a string that shows a flow with an arrow points it from source to receiver in the reading direction of its language.
+
+WPF's bidi pass has no bracket-pair rule. In a right-to-left paragraph, the closing bracket of "Igor Budzhak (MIT)" followed by Arabic takes the paragraph's direction and is drawn mirrored on the far side of the name. `Common/BidiText.cs` puts each Latin stretch that holds a bracket pair into a `Run` of its own with `FlowDirection` set to left to right, an embedding that keeps both brackets inside it, and the translation rules keep the textbook fix, a direction mark, out of every string. Its `Text` property binds in place of `TextBlock.Text`, and its `ToolTip` property in place of `ToolTip`. Every string on the About page, the formula chips' tooltips and the pad page strings whose translations held such a pair go through it. `BidiTextTests` draws a credit both ways and checks the closing bracket's position.
 
 ### Translation Rules
 

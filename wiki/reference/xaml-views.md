@@ -1831,14 +1831,14 @@ ScrollViewer (Padding="24,0")
       │   ├─ Arcade I/O references
       │   ├─ AudioEndPointLibrary
       │   ├─ AutoEq
-      │   └─ ...126 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+      │   └─ ...127 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
       │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
       │       CLAPACK row, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
 
-The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 130 (ZstdSharp). Row 59, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
+The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 131 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
 
 ### Code-Behind
 
