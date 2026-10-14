@@ -89,7 +89,7 @@ A Logitech device lit through feature 0x8071 can be held more firmly than by its
 |---|---|
 | **Colors Only** (default) | The colors. The device's power saving and its saved profile keep running |
 | **Colors and Lighting Power** | Also the device's lighting power, so it stops dimming its lights by itself |
-| **Colors, Lighting Power and On-Board Memory Mode Off** | Also the device's mode. Its on-board memory mode goes off while it is lit and back on when it stops. While it is off, the profile saved on the device (its buttons, DPI and report rate) does not apply |
+| **Colors, Lighting Power, and On-Board Memory Mode Off** | Also the device's mode. Its on-board memory mode goes off while it is lit and back on when it stops. While it is off, the profile saved on the device (its buttons, DPI, and report rate) does not apply |
 
 Choose the second option when the device's own idle effect takes the color away, and the third when the device shows its own profile's lighting over the color. A device that would lose keys with its on-board memory mode off, the G915 TKL, has the first two options only.
 
@@ -218,8 +218,8 @@ Four rows on the [Devices](devices.md) page stand for output a vendor's software
 
 | Row | Appears once this is installed | What it reaches |
 |---|---|---|
-| Razer Chroma | Razer Synapse | Every Chroma category that no assigned Razer device lights from its own Lighting tab: headsets, mousepads and Chroma Link strips, and Razer mice, keyboards and keypads while no virtual controller lights a Razer device of that kind |
-| Logitech LIGHTSYNC | G HUB or Logitech Gaming Software | Every LED engine kind that no assigned Logitech device lights from its own Lighting tab: headsets, mousepads and speakers, and Logitech mice and keyboards while no virtual controller lights a Logitech device of that kind. Also, in one color, the devices Logitech's LED SDK manual lists without zones: the G710+, G600, G510, G110, G19, G105, G300, G11, G13 and G15 |
+| Razer Chroma | Razer Synapse | Every Chroma category that no assigned Razer device lights from its own Lighting tab: headsets, mousepads, and Chroma Link strips, and Razer mice, keyboards and keypads while no virtual controller lights a Razer device of that kind |
+| Logitech LIGHTSYNC | G HUB or Logitech Gaming Software | Every LED engine kind that no assigned Logitech device lights from its own Lighting tab: headsets, mousepads, and speakers, and Logitech mice and keyboards while no virtual controller lights a Logitech device of that kind. Also, in one color, the devices Logitech's LED SDK manual lists without zones: the G710+, G600, G510, G110, G19, G105, G300, G11, G13 and G15 |
 | SteelSeries GG | SteelSeries GG | Headsets, and SteelSeries mice and keyboards while no virtual controller lights a SteelSeries device of that kind |
 | Razer Sensa | Razer Synapse, in the x64 build | Rumble on Razer Sensa HD devices, covered under Rumble above |
 
@@ -250,8 +250,8 @@ Neither tab shows the line while PadForge's input engine is stopped. On a virtua
 | *Another row of this device on this virtual controller lights it.* | This row's checkbox is off, and another row of the same device on this virtual controller lights it. |
 | *This device has not answered yet. Its colors show once it wakes up.* | A device PadForge lights on its own is asleep, unplugged or not answering. |
 | *The Logitech LED engine on this PC cannot light this kind of device.* | The LED engine G HUB or Logitech Gaming Software installed lacks the call this kind of device needs, or will not load while that program runs. The Logitech LIGHTSYNC row reads it too when the engine will not load. In the ARM64 build, an engine that will not load reads *Not Available on ARM64* instead. |
-| *Lights the devices Razer Synapse reaches that no assigned device lights on its own, such as headsets, mousepads and Chroma Link strips.* | The Razer Chroma row, while Synapse answers. The Logitech LIGHTSYNC row names Logitech G HUB or Logitech Gaming Software, whichever runs, with headsets, mousepads and speakers, and the SteelSeries GG row names SteelSeries GG with headsets. |
-| *Waiting for Razer Synapse. Once it runs, this row lights the devices it reaches that no assigned device lights on its own, such as headsets, mousepads and Chroma Link strips.* | The Razer Chroma row, while Synapse does not answer. |
+| *Lights the devices Razer Synapse reaches that no assigned device lights on its own, such as headsets, mousepads, and Chroma Link strips.* | The Razer Chroma row, while Synapse answers. The Logitech LIGHTSYNC row names Logitech G HUB or Logitech Gaming Software, whichever runs, with headsets, mousepads, and speakers, and the SteelSeries GG row names SteelSeries GG with headsets. |
+| *Waiting for Razer Synapse. Once it runs, this row lights the devices it reaches that no assigned device lights on its own, such as headsets, mousepads, and Chroma Link strips.* | The Razer Chroma row, while Synapse does not answer. |
 
 | The Force Feedback tab reads | When |
 |---|---|

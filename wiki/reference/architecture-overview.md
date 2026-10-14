@@ -1190,20 +1190,31 @@ HIDMaestro's user-mode UMDF2 driver and signing assets ship inside `HIDMaestro.C
 
 ## Localization
 
-10 languages via .resx files in `Resources/Strings/`:
+The interface text lives in `Resources/Strings/`. `Strings.resx` holds American English, the text every lookup falls back to, and each `Strings.<tag>.resx` beside it holds one translation. `Languages.tsv` is the one list of languages: tag, English name, own name, direction, script, and whether the translation holds every string. `Common/LanguageCatalog.cs` reads it, and the language picker, the tests and the measuring tools all read the catalog. [Settings](../features/settings.md#language) lists the languages.
 
-| File | Language |
-|---|---|
-| `Strings.resx` | English (base/fallback) |
-| `Strings.de.resx` | German |
-| `Strings.es.resx` | Spanish |
-| `Strings.fr.resx` | French |
-| `Strings.it.resx` | Italian |
-| `Strings.ja.resx` | Japanese |
-| `Strings.ko.resx` | Korean |
-| `Strings.nl.resx` | Dutch |
-| `Strings.pt-BR.resx` | Brazilian Portuguese |
-| `Strings.zh-Hans.resx` | Simplified Chinese |
+A partial translation shows English wherever it has no string. `Strings.en-GB.resx` holds only the strings British English writes differently and reads the American text for the rest, so the catalog counts it complete.
+
+### Satellite Resources
+
+MSBuild names the culture of `Strings.<tag>.resx` itself only for a tag it knows. A file tagged `chk` or `tzo` it embeds in the main assembly under a name no culture looks up, and that language would show English. `PadForge.App.csproj` takes the culture and the resource name from the file name for every translation, and `RespectAlreadyAssignedItemCulture` keeps the build from undoing it. `LanguageCatalogTests` fails on a translation the build left out of its satellite.
+
+### Finding a Language
+
+`LanguageCatalog.Find(tag)` returns the row for a tag, else the row an alias names: a saved `en`, from before American and British English each had a row, reads `en-US`, bare `pt` reads `pt-PT`, `zh` reads `zh-Hans`, `nb` and `nn` read `no`, `tl` reads `fil`, and Windows' `ku-Arab` reads `ckb`. `Resolve(culture)` walks the culture's parents to the first row that answers (de-AT reads `de`, zh-TW reads `zh-Hant`) and returns null for a language with no row, which shows English.
+
+English follows CLDR. A region whose parent is `en-001`, directly or through `en-150`, reads British English: the United Kingdom, Ireland, Australia, New Zealand, India, South Africa, most of the Commonwealth and the English of continental Europe. The United States and its territories, Canada and the Philippines read American English. .NET's `CultureInfo.Parent` hands every English region straight to `en`, so the catalog keeps the regions in `BritishEnglishRegions`, and `LanguageCatalogTests` holds the list to the CLDR data in Windows' own ICU, read through `icu.dll`.
+
+`ResourceManager` looks a string up through `CultureInfo.Parent` alone, which never reaches a row the catalog finds through an alias or a CLDR parent. So the first thing `App.OnStartup()` does after its known-folder lookup is swap the Windows display language for the culture of its row (`LanguageCatalog.InterfaceCulture`), ahead of the update helper's windows. Reset to Defaults goes through the same call. Without it, Windows set to nb-NO showed English, and en-AU showed American English while the picker named British English.
+
+### Right to Left
+
+A language whose row says `rtl` lays every window out right to left: Arabic, Persian, Urdu and Central Kurdish. `UiLanguage.Direction` sets the window's `FlowDirection` from the catalog, so Hebrew Windows with no Hebrew translation shows English left to right. WPF mirrors every element that inherits the direction, drawings included, so every `Canvas`, `Path`, `Polygon`, `Polyline`, `Line`, `Image` and 3D viewport in the markup declares left to right itself or sits under an element that does, and the flames and platform logos the main window builds in code pin themselves. `RightToLeftPinsTests` reads the markup and fails on a drawing with no pin. The touchpad overlay, the on-screen menus and the light gun's calibration window call `UiLanguage.KeepLeftToRight` and stay left to right whole: mirrored, a calibration target drawn at the top left would sit at the top right while the calibration still read it as the left. The welcome tour's canvas is the one drawing that mirrors, because it cuts its spotlight out at the window coordinates of the control it points at.
+
+Unicode does not mirror arrows, so a string that shows a flow with an arrow points it from source to receiver in the reading direction of its language.
+
+### Translation Rules
+
+`tools/l10n/check_translation.py` holds a translation to the rules in `tools/l10n/rules.py`: the numbered placeholders, braces and line breaks of the English, digits 0 to 9, no invisible character or special space (a joiner between two letters of a word excepted), the names in `tools/l10n/names.txt` in Latin letters, decimal numbers written with a period, and the strings that must agree with each other. Number boxes read and write the en-US notation in every language, and a box reads a typed `1,0` as 10. `TranslationRulesTests` holds every file in the tree to the same rules. `tools/l10n/write_resx.py` writes a translation, given as a JSON object of keys and text, into `Strings.<tag>.resx` in the layout of `Strings.resx` and refuses one that breaks a rule.
 
 ### Strings.Designer.cs
 
@@ -1241,7 +1252,7 @@ WPF updates all bound text when `ChangeCulture()` fires `PropertyChanged`.
 
 ### Window Language and Fonts
 
-`Common/UiLanguage.cs` declares the interface language on every window, as `xml:lang` does in markup. `App.OnStartup()` calls `UiLanguage.Start()` as its second statement, ahead of the update helper, whose windows open before anything else. From then on a class handler for the `Loaded` event of `Window` sets `Window.Language` as each window loads, and a `Strings.CultureChanged` handler sets it again on every open window when the language changes. Menus, tooltips and drop-downs take the language of the window they open from.
+`Common/UiLanguage.cs` declares the interface language on every window, as `xml:lang` does in markup, and sets the window's layout direction (see [Right to Left](#right-to-left)). `App.OnStartup()` calls `UiLanguage.Start()` right after it swaps in the interface culture, ahead of the update helper, whose windows open before anything else. From then on a class handler for the `Loaded` event of `Window` sets `Window.Language` and `FlowDirection` as each window loads, and a `Strings.CultureChanged` handler sets them again on every open window when the language changes. Menus, tooltips and drop-downs take the language and direction of the window they open from.
 
 Chinese, Japanese and Korean share their characters, and WPF picks the font for one from the language its text is declared in: Microsoft YaHei UI under `zh-Hans`, Microsoft JhengHei UI under `zh-Hant`, Yu Gothic UI under `ja`, Malgun Gothic under `ko`. Text with no declared language is `en-US`, which takes the last row of WPF's fallback font table, where the Japanese font comes first. Until this was added, a Simplified Chinese interface was drawn in Yu Gothic UI (#504).
 

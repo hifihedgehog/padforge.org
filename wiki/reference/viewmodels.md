@@ -419,14 +419,14 @@ Application-level settings: theme, language, drivers, profiles, and engine confi
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `AvailableLanguages` | `ObservableCollection<CultureInfo>` | UI languages: en, de, fr, ja, ko, zh-Hans, pt-BR, es, it, nl. |
-| `SelectedLanguage` | `CultureInfo` | Current UI language. Applies immediately via `Strings.ChangeCulture()`. With no explicit selection it reads the current UI culture or its nearest listed parent (de-DE shows `de`), else English. |
+| `AvailableLanguages` | `IReadOnlyList<LanguageInfo>` | `LanguageCatalog.All`: one row for each language in `Resources/Strings/Languages.tsv`, sorted by own name. Each `LanguageInfo` carries `Tag`, `EnglishName`, `NativeName`, `IsRightToLeft`, `IsComplete`, `Culture`, and `EnglishNameIfDifferent`, the English name the picker shows beside the own name, empty when the two match. |
+| `SelectedLanguage` | `CultureInfo` | Current UI language. Applies immediately via `Strings.ChangeCulture()`. With no explicit selection it reads the row `LanguageCatalog.Resolve` finds for the current UI culture: its own, its nearest parent's or an alias's (de-DE shows `de`, en-AU shows `en-GB`), else American English. |
 
 | Member | Type | Description |
 |--------|------|-------------|
 | `LanguageCode` | `string` | Persisted language code for serialization. Empty when no language was picked. |
-| `SetLanguageFromCode(string)` | method | Sets the language from the persisted code. When it differs from the current UI culture it goes through `Strings.ChangeCulture()`, which raises `CultureChanged`, so a reload to another saved language updates the live window. An empty or unknown code is a no-op. |
-| `ResetLanguageToSystemDefault()` | method | Clears the explicit selection (`LanguageCode` saves `""`) and switches back to the culture the process started under. Used by Reset to Defaults and by the language row's reset button. |
+| `SetLanguageFromCode(string)` | method | Sets the language from the persisted code, found through `LanguageCatalog.Find`, so a code saved before American and British English each had a row (`en`) reads `en-US`. When it differs from the current UI culture it goes through `Strings.ChangeCulture()`, which raises `CultureChanged`, so a reload to another saved language updates the live window. An empty or unknown code is a no-op. |
+| `ResetLanguageToSystemDefault()` | method | Clears the explicit selection (`LanguageCode` saves `""`) and switches back to the culture the process started under, read through its row of the language table (`LanguageCatalog.InterfaceCulture`) as startup reads it. Used by Reset to Defaults and by the language row's reset button. |
 
 ### Driver Status: HIDMaestro
 

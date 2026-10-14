@@ -9890,13 +9890,13 @@
 <tbody>
 <tr>
 <td><code>AvailableLanguages</code></td>
-<td><code>ObservableCollection&lt;CultureInfo&gt;</code></td>
-<td>UI languages: en, de, fr, ja, ko, zh-Hans, pt-BR, es, it, nl.</td>
+<td><code>IReadOnlyList&lt;LanguageInfo&gt;</code></td>
+<td><code>LanguageCatalog.All</code>: one row for each language in <code>Resources/Strings/Languages.tsv</code>, sorted by own name. Each <code>LanguageInfo</code> carries <code>Tag</code>, <code>EnglishName</code>, <code>NativeName</code>, <code>IsRightToLeft</code>, <code>IsComplete</code>, <code>Culture</code>, and <code>EnglishNameIfDifferent</code>, the English name the picker shows beside the own name, empty when the two match.</td>
 </tr>
 <tr>
 <td><code>SelectedLanguage</code></td>
 <td><code>CultureInfo</code></td>
-<td>Current UI language. Applies immediately via <code>Strings.ChangeCulture()</code>. With no explicit selection it reads the current UI culture or its nearest listed parent (de-DE shows <code>de</code>), else English.</td>
+<td>Current UI language. Applies immediately via <code>Strings.ChangeCulture()</code>. With no explicit selection it reads the row <code>LanguageCatalog.Resolve</code> finds for the current UI culture: its own, its nearest parent's or an alias's (de-DE shows <code>de</code>, en-AU shows <code>en-GB</code>), else American English.</td>
 </tr>
 </tbody>
 </table>
@@ -9917,12 +9917,12 @@
 <tr>
 <td><code>SetLanguageFromCode(string)</code></td>
 <td>method</td>
-<td>Sets the language from the persisted code. When it differs from the current UI culture it goes through <code>Strings.ChangeCulture()</code>, which raises <code>CultureChanged</code>, so a reload to another saved language updates the live window. An empty or unknown code is a no-op.</td>
+<td>Sets the language from the persisted code, found through <code>LanguageCatalog.Find</code>, so a code saved before American and British English each had a row (<code>en</code>) reads <code>en-US</code>. When it differs from the current UI culture it goes through <code>Strings.ChangeCulture()</code>, which raises <code>CultureChanged</code>, so a reload to another saved language updates the live window. An empty or unknown code is a no-op.</td>
 </tr>
 <tr>
 <td><code>ResetLanguageToSystemDefault()</code></td>
 <td>method</td>
-<td>Clears the explicit selection (<code>LanguageCode</code> saves <code>""</code>) and switches back to the culture the process started under. Used by Reset to Defaults and by the language row's reset button.</td>
+<td>Clears the explicit selection (<code>LanguageCode</code> saves <code>""</code>) and switches back to the culture the process started under, read through its row of the language table (<code>LanguageCatalog.InterfaceCulture</code>) as startup reads it. Used by Reset to Defaults and by the language row's reset button.</td>
 </tr>
 </tbody>
 </table>

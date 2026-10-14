@@ -792,7 +792,7 @@ Returns early if already connected. `Connect()` is a bounded wrapper: `ConnectCo
 | `MidiPortProblem.NotPicked` | `Status_MidiPortNotPicked_Format` | `{0} has no Output Port. Pick one on its page.` |
 | `MidiPortProblem.NotConnected` | `Status_MidiPortNotConnected_Format` | `The Output Port “{1}” of {0} is not connected. The slot starts once the port is back.` |
 | `MidiPortProblem.InUse` | `Status_MidiPortInUse_Format` | `The Output Port “{1}” of {0} is already in use.` |
-| `MidiPortProblem.InUse`, with another created, enabled MIDI slot set to the same port (`OtherMidiSlotOnPort`) | `Status_MidiPortShared_Format` | `{0} and {2} are set to the same Output Port “{1}”. Pick another port for one of them.` |
+| `MidiPortProblem.InUse`, with another created, enabled MIDI slot set to the same port (`OtherMidiSlotOnPort`) | `Status_MidiPortShared_Format` | `{0} and {2} are set to the same Output Port “{1}.” Pick another port for one of them.` |
 | `MidiPortProblem.DidNotOpen` | `Status_MidiPortDidNotOpen_Format` | `The Output Port “{1}” of {0} did not open.` |
 | Any other failure while a Windows MIDI Services API is the one in use | `Status_MidiCreateFailed_Format` | `{0} could not start because Windows MIDI Services did not create its port.` |
 | Any other failure otherwise, and a create that found no MIDI API started | `Status_MidiNotRunning_Format` | `{0} could not start because MIDI is not running. The Windows MIDI Services card in Settings says why.` |

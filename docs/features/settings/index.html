@@ -4550,39 +4550,677 @@
 <p><img alt="Settings page showing language, theme, and engine configuration" src="../../images/settings.png" /></p>
 <hr />
 <h2 id="language">Language<a class="headerlink" href="#language" title="Permanent link">&para;</a></h2>
-<p>A dropdown at the top of the page. Changes apply right away. No restart. The picked language saves and comes back on the next launch.</p>
-<p>PadForge ships with 10 locales.</p>
+<p>A dropdown at the top of the page lists each language under its own name, with its English name beside it when the two differ. Typing jumps to a language by its own name. Changes apply right away. No restart. The picked language saves and comes back on the next launch.</p>
+<p>With no language picked, PadForge follows the Windows display language: its own translation, else the one its speakers read. Austrian German reads German, Taiwanese Chinese reads Traditional Chinese, and Norwegian Bokmål and Nynorsk read Norwegian. English reads British English in the regions whose English follows British conventions, such as the United Kingdom, Ireland, Australia, New Zealand, India and South Africa, and American English everywhere else. A language with no translation shows American English.</p>
+<p>The interface comes in 109 languages, 46 of them complete. A partial translation shows English wherever it has no string: its translator left out what could not be worded correctly rather than make it up. British English holds only the strings it writes differently and reads the American text for the rest. No native speaker has reviewed the translations.</p>
+<p>Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. Controller drawings, curves and other pictures keep their left-to-right layout, so a left stick stays on the left. The touchpad overlay, the on-screen menus and the light gun's calibration window stay left to right whole.</p>
 <table>
 <thead>
 <tr>
-<th>Locale</th>
-<th></th>
+<th>Language</th>
+<th>Own name</th>
+<th>Tag</th>
+<th>Strings</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>English</td>
-<td>Italian</td>
+<td>Afrikaans</td>
+<td>Afrikaans</td>
+<td><code>af</code></td>
+<td>3638 of 3818</td>
 </tr>
 <tr>
-<td>German</td>
-<td>Japanese</td>
+<td>Albanian</td>
+<td>Shqip</td>
+<td><code>sq</code></td>
+<td>3765 of 3818</td>
 </tr>
 <tr>
-<td>Spanish</td>
-<td>Korean</td>
+<td>Amharic</td>
+<td>አማርኛ</td>
+<td><code>am</code></td>
+<td>3782 of 3818</td>
+</tr>
+<tr>
+<td>Arabic</td>
+<td>العربية</td>
+<td><code>ar</code></td>
+<td>3817 of 3818, right to left</td>
+</tr>
+<tr>
+<td>Armenian</td>
+<td>Հայերեն</td>
+<td><code>hy</code></td>
+<td>3776 of 3818</td>
+</tr>
+<tr>
+<td>Basque</td>
+<td>Euskara</td>
+<td><code>eu</code></td>
+<td>3813 of 3818</td>
+</tr>
+<tr>
+<td>Belarusian</td>
+<td>Беларуская</td>
+<td><code>be</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Bengali</td>
+<td>বাংলা</td>
+<td><code>bn</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Bikol</td>
+<td>Bikol</td>
+<td><code>bik</code></td>
+<td>778 of 3818</td>
+</tr>
+<tr>
+<td>Bislama</td>
+<td>Bislama</td>
+<td><code>bi</code></td>
+<td>1095 of 3818</td>
+</tr>
+<tr>
+<td>Bulgarian</td>
+<td>Български</td>
+<td><code>bg</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Burmese</td>
+<td>မြန်မာ</td>
+<td><code>my</code></td>
+<td>3811 of 3818</td>
+</tr>
+<tr>
+<td>Cantonese (Traditional)</td>
+<td>廣東話（繁體）</td>
+<td><code>zh-HK</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Cape Verdean Creole</td>
+<td>Kabuverdianu</td>
+<td><code>kea</code></td>
+<td>2248 of 3818</td>
+</tr>
+<tr>
+<td>Catalan</td>
+<td>Català</td>
+<td><code>ca</code></td>
+<td>3816 of 3818</td>
+</tr>
+<tr>
+<td>Cebuano</td>
+<td>Cebuano</td>
+<td><code>ceb</code></td>
+<td>2816 of 3818</td>
+</tr>
+<tr>
+<td>Central Kurdish</td>
+<td>کوردیی ناوەندی</td>
+<td><code>ckb</code></td>
+<td>3803 of 3818, right to left</td>
+</tr>
+<tr>
+<td>Chichewa</td>
+<td>Chichewa</td>
+<td><code>ny</code></td>
+<td>880 of 3818</td>
+</tr>
+<tr>
+<td>Chinese (Pinyin)</td>
+<td>Hànyǔ Pīnyīn</td>
+<td><code>zh-Latn</code></td>
+<td>3735 of 3818</td>
+</tr>
+<tr>
+<td>Chinese (Simplified)</td>
+<td>中文（简体）</td>
+<td><code>zh-Hans</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Chinese (Traditional)</td>
+<td>中文（繁體）</td>
+<td><code>zh-Hant</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Chuukese</td>
+<td>Fosun Chuuk</td>
+<td><code>chk</code></td>
+<td>362 of 3818</td>
+</tr>
+<tr>
+<td>Croatian</td>
+<td>Hrvatski</td>
+<td><code>hr</code></td>
+<td>3816 of 3818</td>
+</tr>
+<tr>
+<td>Czech</td>
+<td>Čeština</td>
+<td><code>cs</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Danish</td>
+<td>Dansk</td>
+<td><code>da</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Dutch</td>
+<td>Nederlands</td>
+<td><code>nl</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>English (United Kingdom)</td>
+<td>English (United Kingdom)</td>
+<td><code>en-GB</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>English (United States)</td>
+<td>English (United States)</td>
+<td><code>en-US</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Estonian</td>
+<td>Eesti</td>
+<td><code>et</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Fiji Hindi</td>
+<td>Fiji Hindi</td>
+<td><code>hif</code></td>
+<td>576 of 3818</td>
+</tr>
+<tr>
+<td>Fijian</td>
+<td>Vosa Vakaviti</td>
+<td><code>fj</code></td>
+<td>419 of 3818</td>
+</tr>
+<tr>
+<td>Finnish</td>
+<td>Suomi</td>
+<td><code>fi</code></td>
+<td>all</td>
 </tr>
 <tr>
 <td>French</td>
-<td>Dutch</td>
+<td>Français</td>
+<td><code>fr</code></td>
+<td>all</td>
 </tr>
 <tr>
-<td>Brazilian Portuguese</td>
-<td>Simplified Chinese</td>
+<td>Georgian</td>
+<td>ქართული</td>
+<td><code>ka</code></td>
+<td>3802 of 3818</td>
+</tr>
+<tr>
+<td>German</td>
+<td>Deutsch</td>
+<td><code>de</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Greek</td>
+<td>Ελληνικά</td>
+<td><code>el</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Guarani</td>
+<td>Avañeʼẽ</td>
+<td><code>gn</code></td>
+<td>764 of 3818</td>
+</tr>
+<tr>
+<td>Gujarati</td>
+<td>ગુજરાતી</td>
+<td><code>gu</code></td>
+<td>3806 of 3818</td>
+</tr>
+<tr>
+<td>Haitian Creole</td>
+<td>Kreyòl ayisyen</td>
+<td><code>ht</code></td>
+<td>3198 of 3818</td>
+</tr>
+<tr>
+<td>Hawaiian</td>
+<td>ʻŌlelo Hawaiʻi</td>
+<td><code>haw</code></td>
+<td>607 of 3818</td>
+</tr>
+<tr>
+<td>Hiligaynon</td>
+<td>Hiligaynon</td>
+<td><code>hil</code></td>
+<td>991 of 3818</td>
+</tr>
+<tr>
+<td>Hindi</td>
+<td>हिन्दी</td>
+<td><code>hi</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Hmong</td>
+<td>Hmoob</td>
+<td><code>hmn</code></td>
+<td>940 of 3818</td>
+</tr>
+<tr>
+<td>Hungarian</td>
+<td>Magyar</td>
+<td><code>hu</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Icelandic</td>
+<td>Íslenska</td>
+<td><code>is</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Igbo</td>
+<td>Igbo</td>
+<td><code>ig</code></td>
+<td>820 of 3818</td>
+</tr>
+<tr>
+<td>Ilocano</td>
+<td>Ilokano</td>
+<td><code>ilo</code></td>
+<td>740 of 3818</td>
+</tr>
+<tr>
+<td>Indonesian</td>
+<td>Bahasa Indonesia</td>
+<td><code>id</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Italian</td>
+<td>Italiano</td>
+<td><code>it</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Japanese</td>
+<td>日本語</td>
+<td><code>ja</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Kannada</td>
+<td>ಕನ್ನಡ</td>
+<td><code>kn</code></td>
+<td>3789 of 3818</td>
+</tr>
+<tr>
+<td>Kazakh</td>
+<td>Қазақша</td>
+<td><code>kk</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Khmer</td>
+<td>ភាសាខ្មែរ</td>
+<td><code>km</code></td>
+<td>3813 of 3818</td>
+</tr>
+<tr>
+<td>Kinyarwanda</td>
+<td>Ikinyarwanda</td>
+<td><code>rw</code></td>
+<td>1211 of 3818</td>
+</tr>
+<tr>
+<td>Korean</td>
+<td>한국어</td>
+<td><code>ko</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Lao</td>
+<td>ລາວ</td>
+<td><code>lo</code></td>
+<td>3797 of 3818</td>
+</tr>
+<tr>
+<td>Latvian</td>
+<td>Latviešu</td>
+<td><code>lv</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Lingala</td>
+<td>Lingála</td>
+<td><code>ln</code></td>
+<td>1227 of 3818</td>
+</tr>
+<tr>
+<td>Lithuanian</td>
+<td>Lietuvių</td>
+<td><code>lt</code></td>
+<td>3816 of 3818</td>
+</tr>
+<tr>
+<td>Luganda</td>
+<td>Luganda</td>
+<td><code>lg</code></td>
+<td>424 of 3818</td>
+</tr>
+<tr>
+<td>Luxembourgish</td>
+<td>Lëtzebuergesch</td>
+<td><code>lb</code></td>
+<td>3792 of 3818</td>
+</tr>
+<tr>
+<td>Macedonian</td>
+<td>Македонски</td>
+<td><code>mk</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Malagasy</td>
+<td>Malagasy</td>
+<td><code>mg</code></td>
+<td>1446 of 3818</td>
+</tr>
+<tr>
+<td>Malay</td>
+<td>Bahasa Melayu</td>
+<td><code>ms</code></td>
+<td>3817 of 3818</td>
+</tr>
+<tr>
+<td>Malayalam</td>
+<td>മലയാളം</td>
+<td><code>ml</code></td>
+<td>3781 of 3818</td>
+</tr>
+<tr>
+<td>Maltese</td>
+<td>Malti</td>
+<td><code>mt</code></td>
+<td>3750 of 3818</td>
+</tr>
+<tr>
+<td>Marathi</td>
+<td>मराठी</td>
+<td><code>mr</code></td>
+<td>3796 of 3818</td>
+</tr>
+<tr>
+<td>Mongolian</td>
+<td>Монгол</td>
+<td><code>mn</code></td>
+<td>3796 of 3818</td>
+</tr>
+<tr>
+<td>Māori</td>
+<td>Te Reo Māori</td>
+<td><code>mi</code></td>
+<td>1268 of 3818</td>
+</tr>
+<tr>
+<td>Nepali</td>
+<td>नेपाली</td>
+<td><code>ne</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Northern Sotho</td>
+<td>Sepedi</td>
+<td><code>nso</code></td>
+<td>723 of 3818</td>
+</tr>
+<tr>
+<td>Norwegian</td>
+<td>Norsk</td>
+<td><code>no</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Oromo</td>
+<td>Afaan Oromoo</td>
+<td><code>om</code></td>
+<td>1390 of 3818</td>
+</tr>
+<tr>
+<td>Papiamento</td>
+<td>Papiamentu</td>
+<td><code>pap</code></td>
+<td>1897 of 3818</td>
+</tr>
+<tr>
+<td>Persian</td>
+<td>فارسی</td>
+<td><code>fa</code></td>
+<td>all, right to left</td>
+</tr>
+<tr>
+<td>Polish</td>
+<td>Polski</td>
+<td><code>pl</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Portuguese (Brazil)</td>
+<td>Português (Brasil)</td>
+<td><code>pt-BR</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Portuguese (Portugal)</td>
+<td>Português (Portugal)</td>
+<td><code>pt-PT</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Quechua (Bolivia)</td>
+<td>Qhichwa (Bolivia)</td>
+<td><code>quh</code></td>
+<td>982 of 3818</td>
+</tr>
+<tr>
+<td>Romanian</td>
+<td>Română</td>
+<td><code>ro</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Russian</td>
+<td>Русский</td>
+<td><code>ru</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Samoan</td>
+<td>Gagana Sāmoa</td>
+<td><code>sm</code></td>
+<td>775 of 3818</td>
+</tr>
+<tr>
+<td>Serbian</td>
+<td>Српски</td>
+<td><code>sr</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Sesotho</td>
+<td>Sesotho</td>
+<td><code>st</code></td>
+<td>632 of 3818</td>
+</tr>
+<tr>
+<td>Shona</td>
+<td>ChiShona</td>
+<td><code>sn</code></td>
+<td>864 of 3818</td>
+</tr>
+<tr>
+<td>Sinhala</td>
+<td>සිංහල</td>
+<td><code>si</code></td>
+<td>3776 of 3818</td>
+</tr>
+<tr>
+<td>Slovak</td>
+<td>Slovenčina</td>
+<td><code>sk</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Slovenian</td>
+<td>Slovenščina</td>
+<td><code>sl</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Spanish</td>
+<td>Español</td>
+<td><code>es</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Swahili</td>
+<td>Kiswahili</td>
+<td><code>sw</code></td>
+<td>3749 of 3818</td>
+</tr>
+<tr>
+<td>Swedish</td>
+<td>Svenska</td>
+<td><code>sv</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Tagalog</td>
+<td>Tagalog</td>
+<td><code>fil</code></td>
+<td>3629 of 3818</td>
+</tr>
+<tr>
+<td>Tamil</td>
+<td>தமிழ்</td>
+<td><code>ta</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Telugu</td>
+<td>తెలుగు</td>
+<td><code>te</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Thai</td>
+<td>ไทย</td>
+<td><code>th</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Tok Pisin</td>
+<td>Tok Pisin</td>
+<td><code>tpi</code></td>
+<td>1233 of 3818</td>
+</tr>
+<tr>
+<td>Tongan</td>
+<td>Lea faka-Tonga</td>
+<td><code>to</code></td>
+<td>436 of 3818</td>
+</tr>
+<tr>
+<td>Tswana</td>
+<td>Setswana</td>
+<td><code>tn</code></td>
+<td>665 of 3818</td>
+</tr>
+<tr>
+<td>Turkish</td>
+<td>Türkçe</td>
+<td><code>tr</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Twi</td>
+<td>Twi</td>
+<td><code>tw</code></td>
+<td>411 of 3818</td>
+</tr>
+<tr>
+<td>Ukrainian</td>
+<td>Українська</td>
+<td><code>uk</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Urdu</td>
+<td>اردو</td>
+<td><code>ur</code></td>
+<td>all, right to left</td>
+</tr>
+<tr>
+<td>Vietnamese</td>
+<td>Tiếng Việt</td>
+<td><code>vi</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td>Waray</td>
+<td>Winaray</td>
+<td><code>war</code></td>
+<td>891 of 3818</td>
+</tr>
+<tr>
+<td>Welsh</td>
+<td>Cymraeg</td>
+<td><code>cy</code></td>
+<td>3792 of 3818</td>
+</tr>
+<tr>
+<td>Western Armenian</td>
+<td>Արեւմտահայերէն</td>
+<td><code>hyw</code></td>
+<td>3772 of 3818</td>
+</tr>
+<tr>
+<td>Xhosa</td>
+<td>IsiXhosa</td>
+<td><code>xh</code></td>
+<td>1163 of 3818</td>
+</tr>
+<tr>
+<td>Yoruba</td>
+<td>Èdè Yorùbá</td>
+<td><code>yo</code></td>
+<td>1337 of 3818</td>
+</tr>
+<tr>
+<td>Zulu</td>
+<td>IsiZulu</td>
+<td><code>zu</code></td>
+<td>1802 of 3818</td>
 </tr>
 </tbody>
 </table>
-<p>New translations land as community pull requests.</p>
+<p>Corrections and new translations land as pull requests. <code>tools/l10n/check_translation.py</code> checks a translation against the rules every file in the tree passes: placeholders, line breaks, digits, the names that stay in Latin letters, and decimal numbers written with a period.</p>
 <blockquote>
 <p><strong>New in 3.2:</strong> Profile Shortcuts dropdowns keep their picked value when you switch language. Earlier builds cleared them when culture changed. See <a href="../../guides/profiles/">Profiles</a>.</p>
 </blockquote>

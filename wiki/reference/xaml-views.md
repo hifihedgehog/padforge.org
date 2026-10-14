@@ -912,7 +912,7 @@ StackPanel
   │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
   │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
   │   │   │    "Colors Only", "Colors and Lighting Power",
-  │   │   │    "Colors, Lighting Power and On-Board Memory Mode Off" (PeripheralClaimLevelHostModeItem)
+  │   │   │    "Colors, Lighting Power, and On-Board Memory Mode Off" (PeripheralClaimLevelHostModeItem)
   │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
   │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
   │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
@@ -1456,7 +1456,8 @@ ScrollViewer (Padding="24,0")
       ├─ Page header (E713 gear icon + title)
       ├─ Language card (CardBorder)
       │   ├─ Icon F2B7 + "Language" title + description
-      │   └─ ComboBox (AvailableLanguages, DisplayMemberPath="NativeName", Width=250, each row declares its own language)
+      │   └─ ComboBox (AvailableLanguages, SelectedValuePath="Culture", TextSearch.TextPath="NativeName", Width=340.
+      │        Each row shows NativeName with EnglishNameIfDifferent beside it in the tertiary brush and declares its own language)
       ├─ Appearance card
       │   ├─ Icon E790 + "Appearance" title + description
       │   ├─ "Theme" label
@@ -1836,7 +1837,7 @@ ScrollViewer (Padding="24,0")
       └─ License card (12px wrapping text, secondary brush)
 ```
 
-The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 130 (ZstdSharp). Row 59, "Kaldi, OpenFst, OpenBLAS and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
+The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QR-Code-generator. `Grid.Row` runs 0 (3doverstock) through 130 (ZstdSharp). Row 59, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
 
 ### Code-Behind
 
@@ -2076,7 +2077,7 @@ The #175 ember restyle grew `App.xaml` well past the old two-dictionary shell. M
         <!-- keyed: EmberIconButton(+Hot), EmberAccentButton, EmberPrimaryButton,
              EmberDestructiveButton, EmberSelectListItem, EmberSlider,
              InstrumentBarRaw / InstrumentBarOut, EmberFocusVisual, EntranceFade -->
-        <!-- 19 global converter registrations (lines 1057-1075) -->
+        <!-- 20 global converter registrations (lines 1057-1076) -->
     </ResourceDictionary>
 </Application.Resources>
 ```

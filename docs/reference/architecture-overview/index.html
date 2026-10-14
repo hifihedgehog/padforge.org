@@ -2977,6 +2977,50 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#satellite-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Satellite Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-a-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding a Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-to-left" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right to Left
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stringsdesignercs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4555,6 +4599,50 @@
   
     <nav class="md-nav" aria-label="Localization">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#satellite-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Satellite Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-a-language" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding a Language
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-to-left" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right to Left
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translation-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation Rules
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#stringsdesignercs" class="md-nav__link">
@@ -6176,57 +6264,19 @@
 <p>HIDMaestro's user-mode UMDF2 driver and signing assets ship inside <code>HIDMaestro.Core.dll</code> (referenced as a project-local <code>&lt;Reference HintPath&gt;</code> and bundled into the single-file EXE). <code>DriverInstaller</code> does not handle HM. On first engine start, <code>InputManager.Step5.VirtualDevices.EnsureHMaestroContext</code> calls <code>HMContext.InstallDriver()</code> to register the driver with Windows via <code>pnputil</code>. OpenXInput's <code>xinput1_4.dll</code> is embedded in the single-file EXE via <code>&lt;Content&gt;</code> + <code>IncludeNativeLibrariesForSelfExtract</code>. <code>App.xaml.cs</code> calls <code>SetDllDirectory</code> on the extract directory so the loader resolves PadForge's copy ahead of <code>C:\Windows\System32\xinput1_4.dll</code>. <code>devobj.dll</code> is deliberately not bundled. A stub <code>devobj.dll</code> from OpenXInput's source tree would hijack <code>setupapi.dll</code>'s own <code>DevObj*</code> imports and crash HID class enumeration. The system <code>devobj.dll</code> resolves from System32 unaided.</p>
 <hr />
 <h2 id="localization">Localization<a class="headerlink" href="#localization" title="Permanent link">&para;</a></h2>
-<p>10 languages via .resx files in <code>Resources/Strings/</code>:</p>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Language</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Strings.resx</code></td>
-<td>English (base/fallback)</td>
-</tr>
-<tr>
-<td><code>Strings.de.resx</code></td>
-<td>German</td>
-</tr>
-<tr>
-<td><code>Strings.es.resx</code></td>
-<td>Spanish</td>
-</tr>
-<tr>
-<td><code>Strings.fr.resx</code></td>
-<td>French</td>
-</tr>
-<tr>
-<td><code>Strings.it.resx</code></td>
-<td>Italian</td>
-</tr>
-<tr>
-<td><code>Strings.ja.resx</code></td>
-<td>Japanese</td>
-</tr>
-<tr>
-<td><code>Strings.ko.resx</code></td>
-<td>Korean</td>
-</tr>
-<tr>
-<td><code>Strings.nl.resx</code></td>
-<td>Dutch</td>
-</tr>
-<tr>
-<td><code>Strings.pt-BR.resx</code></td>
-<td>Brazilian Portuguese</td>
-</tr>
-<tr>
-<td><code>Strings.zh-Hans.resx</code></td>
-<td>Simplified Chinese</td>
-</tr>
-</tbody>
-</table>
+<p>The interface text lives in <code>Resources/Strings/</code>. <code>Strings.resx</code> holds American English, the text every lookup falls back to, and each <code>Strings.&lt;tag&gt;.resx</code> beside it holds one translation. <code>Languages.tsv</code> is the one list of languages: tag, English name, own name, direction, script, and whether the translation holds every string. <code>Common/LanguageCatalog.cs</code> reads it, and the language picker, the tests and the measuring tools all read the catalog. <a href="../../features/settings/#language">Settings</a> lists the languages.</p>
+<p>A partial translation shows English wherever it has no string. <code>Strings.en-GB.resx</code> holds only the strings British English writes differently and reads the American text for the rest, so the catalog counts it complete.</p>
+<h3 id="satellite-resources">Satellite Resources<a class="headerlink" href="#satellite-resources" title="Permanent link">&para;</a></h3>
+<p>MSBuild names the culture of <code>Strings.&lt;tag&gt;.resx</code> itself only for a tag it knows. A file tagged <code>chk</code> or <code>tzo</code> it embeds in the main assembly under a name no culture looks up, and that language would show English. <code>PadForge.App.csproj</code> takes the culture and the resource name from the file name for every translation, and <code>RespectAlreadyAssignedItemCulture</code> keeps the build from undoing it. <code>LanguageCatalogTests</code> fails on a translation the build left out of its satellite.</p>
+<h3 id="finding-a-language">Finding a Language<a class="headerlink" href="#finding-a-language" title="Permanent link">&para;</a></h3>
+<p><code>LanguageCatalog.Find(tag)</code> returns the row for a tag, else the row an alias names: a saved <code>en</code>, from before American and British English each had a row, reads <code>en-US</code>, bare <code>pt</code> reads <code>pt-PT</code>, <code>zh</code> reads <code>zh-Hans</code>, <code>nb</code> and <code>nn</code> read <code>no</code>, <code>tl</code> reads <code>fil</code>, and Windows' <code>ku-Arab</code> reads <code>ckb</code>. <code>Resolve(culture)</code> walks the culture's parents to the first row that answers (de-AT reads <code>de</code>, zh-TW reads <code>zh-Hant</code>) and returns null for a language with no row, which shows English.</p>
+<p>English follows CLDR. A region whose parent is <code>en-001</code>, directly or through <code>en-150</code>, reads British English: the United Kingdom, Ireland, Australia, New Zealand, India, South Africa, most of the Commonwealth and the English of continental Europe. The United States and its territories, Canada and the Philippines read American English. .NET's <code>CultureInfo.Parent</code> hands every English region straight to <code>en</code>, so the catalog keeps the regions in <code>BritishEnglishRegions</code>, and <code>LanguageCatalogTests</code> holds the list to the CLDR data in Windows' own ICU, read through <code>icu.dll</code>.</p>
+<p><code>ResourceManager</code> looks a string up through <code>CultureInfo.Parent</code> alone, which never reaches a row the catalog finds through an alias or a CLDR parent. So the first thing <code>App.OnStartup()</code> does after its known-folder lookup is swap the Windows display language for the culture of its row (<code>LanguageCatalog.InterfaceCulture</code>), ahead of the update helper's windows. Reset to Defaults goes through the same call. Without it, Windows set to nb-NO showed English, and en-AU showed American English while the picker named British English.</p>
+<h3 id="right-to-left">Right to Left<a class="headerlink" href="#right-to-left" title="Permanent link">&para;</a></h3>
+<p>A language whose row says <code>rtl</code> lays every window out right to left: Arabic, Persian, Urdu and Central Kurdish. <code>UiLanguage.Direction</code> sets the window's <code>FlowDirection</code> from the catalog, so Hebrew Windows with no Hebrew translation shows English left to right. WPF mirrors every element that inherits the direction, drawings included, so every <code>Canvas</code>, <code>Path</code>, <code>Polygon</code>, <code>Polyline</code>, <code>Line</code>, <code>Image</code> and 3D viewport in the markup declares left to right itself or sits under an element that does, and the flames and platform logos the main window builds in code pin themselves. <code>RightToLeftPinsTests</code> reads the markup and fails on a drawing with no pin. The touchpad overlay, the on-screen menus and the light gun's calibration window call <code>UiLanguage.KeepLeftToRight</code> and stay left to right whole: mirrored, a calibration target drawn at the top left would sit at the top right while the calibration still read it as the left. The welcome tour's canvas is the one drawing that mirrors, because it cuts its spotlight out at the window coordinates of the control it points at.</p>
+<p>Unicode does not mirror arrows, so a string that shows a flow with an arrow points it from source to receiver in the reading direction of its language.</p>
+<h3 id="translation-rules">Translation Rules<a class="headerlink" href="#translation-rules" title="Permanent link">&para;</a></h3>
+<p><code>tools/l10n/check_translation.py</code> holds a translation to the rules in <code>tools/l10n/rules.py</code>: the numbered placeholders, braces and line breaks of the English, digits 0 to 9, no invisible character or special space (a joiner between two letters of a word excepted), the names in <code>tools/l10n/names.txt</code> in Latin letters, decimal numbers written with a period, and the strings that must agree with each other. Number boxes read and write the en-US notation in every language, and a box reads a typed <code>1,0</code> as 10. <code>TranslationRulesTests</code> holds every file in the tree to the same rules. <code>tools/l10n/write_resx.py</code> writes a translation, given as a JSON object of keys and text, into <code>Strings.&lt;tag&gt;.resx</code> in the layout of <code>Strings.resx</code> and refuses one that breaks a rule.</p>
 <h3 id="stringsdesignercs">Strings.Designer.cs<a class="headerlink" href="#stringsdesignercs" title="Permanent link">&para;</a></h3>
 <p>Despite the <code>&lt;auto-generated&gt;</code> header, this file is <strong>hand-written</strong> (not ResXFileCodeGenerator). It implements <code>INotifyPropertyChanged</code> so XAML bindings update on language change.</p>
 <p>Key design:</p>
@@ -6251,7 +6301,7 @@
 <h3 id="early-language-restore">Early Language Restore<a class="headerlink" href="#early-language-restore" title="Permanent link">&para;</a></h3>
 <p><code>App.OnStartup()</code> applies the saved language <strong>before</strong> creating UI. Reads <code>&lt;Language&gt;</code> from <code>PadForge.xml</code> via regex (no full deserialization) and sets <code>CurrentUICulture</code> so the first window renders correctly.</p>
 <h3 id="window-language-and-fonts">Window Language and Fonts<a class="headerlink" href="#window-language-and-fonts" title="Permanent link">&para;</a></h3>
-<p><code>Common/UiLanguage.cs</code> declares the interface language on every window, as <code>xml:lang</code> does in markup. <code>App.OnStartup()</code> calls <code>UiLanguage.Start()</code> as its second statement, ahead of the update helper, whose windows open before anything else. From then on a class handler for the <code>Loaded</code> event of <code>Window</code> sets <code>Window.Language</code> as each window loads, and a <code>Strings.CultureChanged</code> handler sets it again on every open window when the language changes. Menus, tooltips and drop-downs take the language of the window they open from.</p>
+<p><code>Common/UiLanguage.cs</code> declares the interface language on every window, as <code>xml:lang</code> does in markup, and sets the window's layout direction (see <a href="#right-to-left">Right to Left</a>). <code>App.OnStartup()</code> calls <code>UiLanguage.Start()</code> right after it swaps in the interface culture, ahead of the update helper, whose windows open before anything else. From then on a class handler for the <code>Loaded</code> event of <code>Window</code> sets <code>Window.Language</code> and <code>FlowDirection</code> as each window loads, and a <code>Strings.CultureChanged</code> handler sets them again on every open window when the language changes. Menus, tooltips and drop-downs take the language and direction of the window they open from.</p>
 <p>Chinese, Japanese and Korean share their characters, and WPF picks the font for one from the language its text is declared in: Microsoft YaHei UI under <code>zh-Hans</code>, Microsoft JhengHei UI under <code>zh-Hant</code>, Yu Gothic UI under <code>ja</code>, Malgun Gothic under <code>ko</code>. Text with no declared language is <code>en-US</code>, which takes the last row of WPF's fallback font table, where the Japanese font comes first. Until this was added, a Simplified Chinese interface was drawn in Yu Gothic UI (#504).</p>
 <p>Only those three languages are declared. A window's language is also the culture its bindings format and parse numbers in, and the pad page has some 250 number boxes that read and write the en-US notation. Declared German would read a typed <code>0.5</code> as 5. The Chinese, Japanese and Korean cultures write numbers as en-US does. <code>UiLanguageTests</code> checks that against every number format in the markup and every such culture .NET knows.</p>
 <p>Each row of the language picker declares its own language through <code>CultureLanguageConverter</code>, so each language's name is drawn in its own font whatever language the interface is in. The binding names <code>ConverterCulture</code>, because WPF refuses a binding on <code>Language</code> that would take its culture from the property being set.</p>

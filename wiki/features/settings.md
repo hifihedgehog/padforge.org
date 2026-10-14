@@ -8,19 +8,127 @@
 
 ## Language
 
-A dropdown at the top of the page. Changes apply right away. No restart. The picked language saves and comes back on the next launch.
+A dropdown at the top of the page lists each language under its own name, with its English name beside it when the two differ. Typing jumps to a language by its own name. Changes apply right away. No restart. The picked language saves and comes back on the next launch.
 
-PadForge ships with 10 locales.
+With no language picked, PadForge follows the Windows display language: its own translation, else the one its speakers read. Austrian German reads German, Taiwanese Chinese reads Traditional Chinese, and Norwegian Bokmål and Nynorsk read Norwegian. English reads British English in the regions whose English follows British conventions, such as the United Kingdom, Ireland, Australia, New Zealand, India and South Africa, and American English everywhere else. A language with no translation shows American English.
 
-| Locale | |
-|---|---|
-| English | Italian |
-| German | Japanese |
-| Spanish | Korean |
-| French | Dutch |
-| Brazilian Portuguese | Simplified Chinese |
+The interface comes in 109 languages, 46 of them complete. A partial translation shows English wherever it has no string: its translator left out what could not be worded correctly rather than make it up. British English holds only the strings it writes differently and reads the American text for the rest. No native speaker has reviewed the translations.
 
-New translations land as community pull requests.
+Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. Controller drawings, curves and other pictures keep their left-to-right layout, so a left stick stays on the left. The touchpad overlay, the on-screen menus and the light gun's calibration window stay left to right whole.
+
+| Language | Own name | Tag | Strings |
+|---|---|---|---|
+| Afrikaans | Afrikaans | `af` | 3638 of 3818 |
+| Albanian | Shqip | `sq` | 3765 of 3818 |
+| Amharic | አማርኛ | `am` | 3782 of 3818 |
+| Arabic | العربية | `ar` | 3817 of 3818, right to left |
+| Armenian | Հայերեն | `hy` | 3776 of 3818 |
+| Basque | Euskara | `eu` | 3813 of 3818 |
+| Belarusian | Беларуская | `be` | all |
+| Bengali | বাংলা | `bn` | all |
+| Bikol | Bikol | `bik` | 778 of 3818 |
+| Bislama | Bislama | `bi` | 1095 of 3818 |
+| Bulgarian | Български | `bg` | all |
+| Burmese | မြန်မာ | `my` | 3811 of 3818 |
+| Cantonese (Traditional) | 廣東話（繁體） | `zh-HK` | all |
+| Cape Verdean Creole | Kabuverdianu | `kea` | 2248 of 3818 |
+| Catalan | Català | `ca` | 3816 of 3818 |
+| Cebuano | Cebuano | `ceb` | 2816 of 3818 |
+| Central Kurdish | کوردیی ناوەندی | `ckb` | 3803 of 3818, right to left |
+| Chichewa | Chichewa | `ny` | 880 of 3818 |
+| Chinese (Pinyin) | Hànyǔ Pīnyīn | `zh-Latn` | 3735 of 3818 |
+| Chinese (Simplified) | 中文（简体） | `zh-Hans` | all |
+| Chinese (Traditional) | 中文（繁體） | `zh-Hant` | all |
+| Chuukese | Fosun Chuuk | `chk` | 362 of 3818 |
+| Croatian | Hrvatski | `hr` | 3816 of 3818 |
+| Czech | Čeština | `cs` | all |
+| Danish | Dansk | `da` | all |
+| Dutch | Nederlands | `nl` | all |
+| English (United Kingdom) | English (United Kingdom) | `en-GB` | all |
+| English (United States) | English (United States) | `en-US` | all |
+| Estonian | Eesti | `et` | all |
+| Fiji Hindi | Fiji Hindi | `hif` | 576 of 3818 |
+| Fijian | Vosa Vakaviti | `fj` | 419 of 3818 |
+| Finnish | Suomi | `fi` | all |
+| French | Français | `fr` | all |
+| Georgian | ქართული | `ka` | 3802 of 3818 |
+| German | Deutsch | `de` | all |
+| Greek | Ελληνικά | `el` | all |
+| Guarani | Avañeʼẽ | `gn` | 764 of 3818 |
+| Gujarati | ગુજરાતી | `gu` | 3806 of 3818 |
+| Haitian Creole | Kreyòl ayisyen | `ht` | 3198 of 3818 |
+| Hawaiian | ʻŌlelo Hawaiʻi | `haw` | 607 of 3818 |
+| Hiligaynon | Hiligaynon | `hil` | 991 of 3818 |
+| Hindi | हिन्दी | `hi` | all |
+| Hmong | Hmoob | `hmn` | 940 of 3818 |
+| Hungarian | Magyar | `hu` | all |
+| Icelandic | Íslenska | `is` | all |
+| Igbo | Igbo | `ig` | 820 of 3818 |
+| Ilocano | Ilokano | `ilo` | 740 of 3818 |
+| Indonesian | Bahasa Indonesia | `id` | all |
+| Italian | Italiano | `it` | all |
+| Japanese | 日本語 | `ja` | all |
+| Kannada | ಕನ್ನಡ | `kn` | 3789 of 3818 |
+| Kazakh | Қазақша | `kk` | all |
+| Khmer | ភាសាខ្មែរ | `km` | 3813 of 3818 |
+| Kinyarwanda | Ikinyarwanda | `rw` | 1211 of 3818 |
+| Korean | 한국어 | `ko` | all |
+| Lao | ລາວ | `lo` | 3797 of 3818 |
+| Latvian | Latviešu | `lv` | all |
+| Lingala | Lingála | `ln` | 1227 of 3818 |
+| Lithuanian | Lietuvių | `lt` | 3816 of 3818 |
+| Luganda | Luganda | `lg` | 424 of 3818 |
+| Luxembourgish | Lëtzebuergesch | `lb` | 3792 of 3818 |
+| Macedonian | Македонски | `mk` | all |
+| Malagasy | Malagasy | `mg` | 1446 of 3818 |
+| Malay | Bahasa Melayu | `ms` | 3817 of 3818 |
+| Malayalam | മലയാളം | `ml` | 3781 of 3818 |
+| Maltese | Malti | `mt` | 3750 of 3818 |
+| Marathi | मराठी | `mr` | 3796 of 3818 |
+| Mongolian | Монгол | `mn` | 3796 of 3818 |
+| Māori | Te Reo Māori | `mi` | 1268 of 3818 |
+| Nepali | नेपाली | `ne` | all |
+| Northern Sotho | Sepedi | `nso` | 723 of 3818 |
+| Norwegian | Norsk | `no` | all |
+| Oromo | Afaan Oromoo | `om` | 1390 of 3818 |
+| Papiamento | Papiamentu | `pap` | 1897 of 3818 |
+| Persian | فارسی | `fa` | all, right to left |
+| Polish | Polski | `pl` | all |
+| Portuguese (Brazil) | Português (Brasil) | `pt-BR` | all |
+| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | all |
+| Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 982 of 3818 |
+| Romanian | Română | `ro` | all |
+| Russian | Русский | `ru` | all |
+| Samoan | Gagana Sāmoa | `sm` | 775 of 3818 |
+| Serbian | Српски | `sr` | all |
+| Sesotho | Sesotho | `st` | 632 of 3818 |
+| Shona | ChiShona | `sn` | 864 of 3818 |
+| Sinhala | සිංහල | `si` | 3776 of 3818 |
+| Slovak | Slovenčina | `sk` | all |
+| Slovenian | Slovenščina | `sl` | all |
+| Spanish | Español | `es` | all |
+| Swahili | Kiswahili | `sw` | 3749 of 3818 |
+| Swedish | Svenska | `sv` | all |
+| Tagalog | Tagalog | `fil` | 3629 of 3818 |
+| Tamil | தமிழ் | `ta` | all |
+| Telugu | తెలుగు | `te` | all |
+| Thai | ไทย | `th` | all |
+| Tok Pisin | Tok Pisin | `tpi` | 1233 of 3818 |
+| Tongan | Lea faka-Tonga | `to` | 436 of 3818 |
+| Tswana | Setswana | `tn` | 665 of 3818 |
+| Turkish | Türkçe | `tr` | all |
+| Twi | Twi | `tw` | 411 of 3818 |
+| Ukrainian | Українська | `uk` | all |
+| Urdu | اردو | `ur` | all, right to left |
+| Vietnamese | Tiếng Việt | `vi` | all |
+| Waray | Winaray | `war` | 891 of 3818 |
+| Welsh | Cymraeg | `cy` | 3792 of 3818 |
+| Western Armenian | Արեւմտահայերէն | `hyw` | 3772 of 3818 |
+| Xhosa | IsiXhosa | `xh` | 1163 of 3818 |
+| Yoruba | Èdè Yorùbá | `yo` | 1337 of 3818 |
+| Zulu | IsiZulu | `zu` | 1802 of 3818 |
+
+Corrections and new translations land as pull requests. `tools/l10n/check_translation.py` checks a translation against the rules every file in the tree passes: placeholders, line breaks, digits, the names that stay in Latin letters, and decimal numbers written with a period.
 
 > **New in 3.2:** Profile Shortcuts dropdowns keep their picked value when you switch language. Earlier builds cleared them when culture changed. See [Profiles](../guides/profiles.md).
 

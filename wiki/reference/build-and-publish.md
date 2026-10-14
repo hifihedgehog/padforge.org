@@ -63,8 +63,9 @@ PadForge.sln
     ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
     ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
     ├── WdgProbe/             Runs the app's own ACPI _WDG / WMI learner path outside the app
-    ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
-    ├── rowmeasure/           WPF width-measurement harness for fixed-size rows, every locale
+    ├── combomeasure/         WPF width-measurement harness for the pad page's pickers, every language
+    ├── rowmeasure/           WPF width-measurement harness for fixed-size rows, every language
+    ├── l10n/                 Translation checker, resx writer, and the rules every translation passes
     ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
     └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, runtime traces, asset
                               generation (see Development Scripts)
@@ -607,24 +608,26 @@ The repository's `LICENSE`, which carries PadForge's license, the third-party li
   <Generator>PublicResXFileCodeGenerator</Generator>
   <LastGenOutput>Strings.Designer.cs</LastGenOutput>
 </EmbeddedResource>
+
+<PropertyGroup>
+  <RespectAlreadyAssignedItemCulture>true</RespectAlreadyAssignedItemCulture>
+</PropertyGroup>
+<ItemGroup>
+  <EmbeddedResource Update="Resources\Strings\Strings.*.resx">
+    <Culture>$([System.String]::Copy('%(Filename)').Substring(8))</Culture>
+    <LogicalName>PadForge.Resources.Strings.%(Filename).resources</LogicalName>
+  </EmbeddedResource>
+  <EmbeddedResource Include="Resources\Strings\Languages.tsv" LogicalName="PadForge.Languages.tsv" />
+</ItemGroup>
 ```
 
-Resource files for multilingual UI support:
+`Strings.resx` holds the American English text every lookup falls back to, and each `Strings.<tag>.resx` beside it holds one translation. `Languages.tsv` lists them, one row per language, and `LanguageCatalog` reads it. [Settings](../features/settings.md#language) lists the languages and [Architecture Overview](architecture-overview.md#localization) describes how a culture finds its row.
 
-| File | Language |
-|------|----------|
-| `Strings.resx` | English (default/fallback) |
-| `Strings.de.resx` | German |
-| `Strings.es.resx` | Spanish |
-| `Strings.fr.resx` | French |
-| `Strings.it.resx` | Italian |
-| `Strings.ja.resx` | Japanese |
-| `Strings.ko.resx` | Korean |
-| `Strings.nl.resx` | Dutch |
-| `Strings.pt-BR.resx` | Brazilian Portuguese |
-| `Strings.zh-Hans.resx` | Simplified Chinese |
+MSBuild names the culture of a satellite `.resx` itself only for a tag it knows, and embeds a file with any other tag, such as `chk` or `tzo`, in the main assembly under a name no culture looks up. The second item group takes the culture and the resource name from the file name for every translation, and `RespectAlreadyAssignedItemCulture` keeps the build from undoing that.
 
-The csproj carries `PublicResXFileCodeGenerator` metadata on `Strings.resx`, but the checked-in `Strings.Designer.cs` is hand-written. It implements `INotifyPropertyChanged` and a weak `CultureChanged` event so live language switching refreshes XAML bindings, which no generator emits. Access is through the singleton: `Strings.Instance.PropertyName`. Satellite `.resx` files follow standard .NET localization conventions and compile into satellite assemblies automatically.
+The csproj carries `PublicResXFileCodeGenerator` metadata on `Strings.resx`, but the checked-in `Strings.Designer.cs` is hand-written. It implements `INotifyPropertyChanged` and a weak `CultureChanged` event so live language switching refreshes XAML bindings, which no generator emits. Access is through the singleton: `Strings.Instance.PropertyName`.
+
+A new translation goes through `tools/l10n`: `check_translation.py` holds a `Strings.<tag>.resx` to the rules in `rules.py`, and `write_resx.py` writes one from a JSON object of keys and text in the layout of `Strings.resx`, refusing one that breaks a rule. The new language then needs its row in `Languages.tsv` and the count in `LanguageCatalogTests.LanguageCount`.
 
 ### 2D Model Assets (Resource)
 
@@ -814,8 +817,8 @@ Standalone diagnostic utilities and development scripts. None of the tool projec
 | **Ds4InputDump** | `cd tools/Ds4InputDump && dotnet run` | net10.0-windows | None (raw HID) | Dumps DS4 raw HID input frames. Used to validate Sony Report 0x01 passthrough on PlayStation virtual controllers |
 | **SteamWorkshopSmoke** | `cd tools/SteamWorkshopSmoke && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Manually-run smoke harness for the live Steam network paths. The test suite has no live-network tests, so this is the end-to-end check against real Steam endpoints |
 | **SteamWorkshopSweep** | `cd tools/SteamWorkshopSweep && dotnet run` | net10.0-windows | PadForge.SteamWorkshop | Mass wild-corpus regression sweep for the Workshop config translator: harvests top-by-vote configs for every game in `games.csv`, caches the VDFs, translates everything, and reports reason keys outside the lockdown-approved set |
-| **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option per locale for the Indicator LEDs card combos |
-| **rowmeasure** | `cd tools/rowmeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and the gesture recorder's hint, in every locale |
+| **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option in every language `Languages.tsv` lists, a string a partial translation leaves out measured in English as the window shows it. Lists every option wider than the picker `PadPage.xaml` gives it, by language and key |
+| **rowmeasure** | `cd tools/rowmeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and the gesture recorder's hint, in every language `Languages.tsv` lists |
 | **PersonaVerify** | `dotnet run --project tools/PersonaVerify -- [diagLogPath]` | net10.0-windows10.0.26100.0 | NAudio 2.2.1 | Consumer-side integration check for HIDMaestro composite USB personas. Measures at the persona's own WASAPI endpoints instead of trusting PadForge's internal counters, which read healthy while Windows received full-scale noise. Also renders four channels (speaker on 1/2, authored haptics on 3/4) so the haptics lane is exercised with no game running. Pass a `PADFORGE_DIAG` log path for the log-backed checks. The audio checks run without it |
 | **WdgProbe** | `dotnet run --project tools/WdgProbe -- [seconds]` | net10.0-windows | PadForge.Engine, System.Management 10.0.11 | Runs the handheld hidden-button learner's own path outside the app (#343): dumps the firmware ACPI `_WDG` table, lists the WMI event classes that pass the gate, then subscribes and prints every event for the given seconds. Compiles the app's `AcpiWmi.cs` and `WmiEventRuntime.cs` directly, so it cannot drift from what PadForge does |
 

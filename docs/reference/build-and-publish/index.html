@@ -4947,11 +4947,12 @@
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    ├── SteamWorkshopSmoke/   Manually-run smoke harness for the live Steam network paths
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    ├── SteamWorkshopSweep/   Wild-corpus regression sweep for the Workshop config translator
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    ├── WdgProbe/             Runs the app&#39;s own ACPI _WDG / WMI learner path outside the app
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    ├── combomeasure/         WPF width-measurement harness for the Indicator LEDs card combos
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    ├── rowmeasure/           WPF width-measurement harness for fixed-size rows, every locale
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, runtime traces, asset
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>                              generation (see Development Scripts)
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    ├── combomeasure/         WPF width-measurement harness for the pad page&#39;s pickers, every language
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    ├── rowmeasure/           WPF width-measurement harness for fixed-size rows, every language
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    ├── l10n/                 Translation checker, resx writer, and the rules every translation passes
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    ├── deploy.ps1            Copy the published exe to C:\PadForge and restart
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    └── *.ps1 / *.py          Screenshot capture, UIA diagnostics, runtime traces, asset
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>                              generation (see Development Scripts)
 </code></pre></div>
 <p>Line endings are repo-enforced. <code>.gitattributes</code> opens with a <code>* text=auto</code> rule, so a text file committed from a CRLF working tree is still stored with LF. A CRLF copy of one file once turned a 167-line change into a 12,000-line diff. Narrower rules set the exceptions. The BthPS3 and BthPS3PSM INFs are stored and checked out byte for byte (<code>-text</code>), because a signed catalog hashes the exact bytes of each INF it covers and two of upstream's signed INFs mix CRLF lines with one bare LF. Converting them in either direction makes the catalog reject them, and <code>BthPs3DriverUpgradeTests</code> pins the SHA-256 of every bundled BthPS3 file so such a checkout fails the suite. The DualShock 3 WinUSB INF is signed on the machine that installs it and checks out with CRLF. <code>*.sh</code> scripts check out with LF, because bash reads a carriage return as part of each command.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
@@ -5902,59 +5903,22 @@ Carbon set whole and bring only their own shell texture.</p>
 <a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="nt">&lt;Generator&gt;</span>PublicResXFileCodeGenerator<span class="nt">&lt;/Generator&gt;</span>
 <a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span><span class="nt">&lt;LastGenOutput&gt;</span>Strings.Designer.cs<span class="nt">&lt;/LastGenOutput&gt;</span>
 <a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="nt">&lt;PropertyGroup&gt;</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span><span class="nt">&lt;RespectAlreadyAssignedItemCulture&gt;</span>true<span class="nt">&lt;/RespectAlreadyAssignedItemCulture&gt;</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="nt">&lt;/PropertyGroup&gt;</span>
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="nt">&lt;ItemGroup&gt;</span>
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">  </span><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Update=</span><span class="s">&quot;Resources\Strings\Strings.*.resx&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="w">    </span><span class="nt">&lt;Culture&gt;</span>$([System.String]::Copy(&#39;%(Filename)&#39;).Substring(8))<span class="nt">&lt;/Culture&gt;</span>
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="nt">&lt;LogicalName&gt;</span>PadForge.Resources.Strings.%(Filename).resources<span class="nt">&lt;/LogicalName&gt;</span>
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">  </span><span class="nt">&lt;/EmbeddedResource&gt;</span>
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">  </span><span class="nt">&lt;EmbeddedResource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Resources\Strings\Languages.tsv&quot;</span><span class="w"> </span><span class="na">LogicalName=</span><span class="s">&quot;PadForge.Languages.tsv&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="nt">&lt;/ItemGroup&gt;</span>
 </code></pre></div>
-<p>Resource files for multilingual UI support:</p>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Language</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Strings.resx</code></td>
-<td>English (default/fallback)</td>
-</tr>
-<tr>
-<td><code>Strings.de.resx</code></td>
-<td>German</td>
-</tr>
-<tr>
-<td><code>Strings.es.resx</code></td>
-<td>Spanish</td>
-</tr>
-<tr>
-<td><code>Strings.fr.resx</code></td>
-<td>French</td>
-</tr>
-<tr>
-<td><code>Strings.it.resx</code></td>
-<td>Italian</td>
-</tr>
-<tr>
-<td><code>Strings.ja.resx</code></td>
-<td>Japanese</td>
-</tr>
-<tr>
-<td><code>Strings.ko.resx</code></td>
-<td>Korean</td>
-</tr>
-<tr>
-<td><code>Strings.nl.resx</code></td>
-<td>Dutch</td>
-</tr>
-<tr>
-<td><code>Strings.pt-BR.resx</code></td>
-<td>Brazilian Portuguese</td>
-</tr>
-<tr>
-<td><code>Strings.zh-Hans.resx</code></td>
-<td>Simplified Chinese</td>
-</tr>
-</tbody>
-</table>
-<p>The csproj carries <code>PublicResXFileCodeGenerator</code> metadata on <code>Strings.resx</code>, but the checked-in <code>Strings.Designer.cs</code> is hand-written. It implements <code>INotifyPropertyChanged</code> and a weak <code>CultureChanged</code> event so live language switching refreshes XAML bindings, which no generator emits. Access is through the singleton: <code>Strings.Instance.PropertyName</code>. Satellite <code>.resx</code> files follow standard .NET localization conventions and compile into satellite assemblies automatically.</p>
+<p><code>Strings.resx</code> holds the American English text every lookup falls back to, and each <code>Strings.&lt;tag&gt;.resx</code> beside it holds one translation. <code>Languages.tsv</code> lists them, one row per language, and <code>LanguageCatalog</code> reads it. <a href="../../features/settings/#language">Settings</a> lists the languages and <a href="../architecture-overview/#localization">Architecture Overview</a> describes how a culture finds its row.</p>
+<p>MSBuild names the culture of a satellite <code>.resx</code> itself only for a tag it knows, and embeds a file with any other tag, such as <code>chk</code> or <code>tzo</code>, in the main assembly under a name no culture looks up. The second item group takes the culture and the resource name from the file name for every translation, and <code>RespectAlreadyAssignedItemCulture</code> keeps the build from undoing that.</p>
+<p>The csproj carries <code>PublicResXFileCodeGenerator</code> metadata on <code>Strings.resx</code>, but the checked-in <code>Strings.Designer.cs</code> is hand-written. It implements <code>INotifyPropertyChanged</code> and a weak <code>CultureChanged</code> event so live language switching refreshes XAML bindings, which no generator emits. Access is through the singleton: <code>Strings.Instance.PropertyName</code>.</p>
+<p>A new translation goes through <code>tools/l10n</code>: <code>check_translation.py</code> holds a <code>Strings.&lt;tag&gt;.resx</code> to the rules in <code>rules.py</code>, and <code>write_resx.py</code> writes one from a JSON object of keys and text in the layout of <code>Strings.resx</code>, refusing one that breaks a rule. The new language then needs its row in <code>Languages.tsv</code> and the count in <code>LanguageCatalogTests.LanguageCount</code>.</p>
 <h3 id="2d-model-assets-resource">2D Model Assets (Resource)<a class="headerlink" href="#2d-model-assets-resource" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="cm">&lt;!-- 2D controller model assets (Gamepad-Asset-Pack by AL2009man, MIT license) --&gt;</span>
 <a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
@@ -6149,14 +6113,14 @@ Carbon set whole and bring only their own shell texture.</p>
 <td><code>cd tools/combomeasure &amp;&amp; dotnet run</code></td>
 <td>net10.0-windows (WPF)</td>
 <td>WPF-UI 4.3.0</td>
-<td>Renders the real WPF-UI ComboBox with the app's style and font, then reads back <code>ActualWidth</code> per option per locale for the Indicator LEDs card combos</td>
+<td>Renders the real WPF-UI ComboBox with the app's style and font, then reads back <code>ActualWidth</code> per option in every language <code>Languages.tsv</code> lists, a string a partial translation leaves out measured in English as the window shows it. Lists every option wider than the picker <code>PadPage.xaml</code> gives it, by language and key</td>
 </tr>
 <tr>
 <td><strong>rowmeasure</strong></td>
 <td><code>cd tools/rowmeasure &amp;&amp; dotnet run</code></td>
 <td>net10.0-windows (WPF)</td>
 <td>WPF-UI 4.3.0</td>
-<td>The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and the gesture recorder's hint, in every locale</td>
+<td>The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and the gesture recorder's hint, in every language <code>Languages.tsv</code> lists</td>
 </tr>
 <tr>
 <td><strong>PersonaVerify</strong></td>
