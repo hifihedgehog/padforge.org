@@ -504,8 +504,8 @@ tools/
   SteamWorkshopSmoke/           # Manually-run live-network smoke harness for the Workshop client
   SteamWorkshopSweep/           # Wild-corpus regression sweep for the Workshop config translator
   WdgProbe/                     # Runs the handheld learner's ACPI _WDG / WMI path outside the app (#343)
-  combomeasure/                 # WPF width-measurement harness for the Indicator LEDs combos
-  rowmeasure/                   # The same harness for fixed-size rows (Profiles shortcut row, raw hat strip, equalizer row, gesture recorder hint) in every locale
+  combomeasure/                 # WPF width-measurement harness for the lighting pickers in every language
+  rowmeasure/                   # The same harness for fixed-size rows (Profiles shortcut row, raw hat strip, equalizer row, gesture recorder hint, pad page first tier) in every language
   build-libvosk-arm64.sh        # Builds the ARM64 libvosk.dll bundled at PadForge.App/Resources/Vosk/arm64
   capture_all.ps1               # Full screenshot capture orchestration (+ _wrapper for elevation)
   capture_vr.ps1 / capture_web.ps1 / capture_colorways.ps1 / capture_mouse_gestures.ps1

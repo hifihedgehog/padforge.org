@@ -7484,39 +7484,40 @@
 <h3 id="layout-structure_1">Layout Structure<a class="headerlink" href="#layout-structure_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Grid (3 rows)
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├─ Row 0 (Auto): Two-tier tab strip (StackPanel: two gradient-bordered Borders + assign-offer banner)
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├─ Tier 1 (slot scope, ember underline): scope label + identity chip + preset
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   chip on the left, slot tabs pushed right (TabStripButton, GroupName=&quot;PadTab&quot;)
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │   ├─ RadioButton &quot;Preview&quot; (Tag=0, x:Name=&quot;TabController&quot;, AutomationId=&quot;TabController&quot;)
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   │   ├─ RadioButton &quot;Mappings&quot; (Tag=2, AutomationId=&quot;MappingsTab&quot;)
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   │   ├─ RadioButton &quot;Macros&quot; (Tag=1, AutomationId=&quot;MacrosTab&quot;)
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   │   ├─ RadioButton &quot;Menus&quot; (Tag=15, AutomationId=&quot;MenusTab&quot;, #9)
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   │   ├─ RadioButton &quot;Bass Shakers&quot; (Tag=16, AutomationId=&quot;BassShakersTab&quot;,
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   │   │    Visibility bound to RumbleAudioTabVisible, #236)
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   │   └─ RadioButton &quot;Output&quot; (Tag=17, AutomationId=&quot;OutputTab&quot;,
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   │        Visibility bound to OutputTabVisible, #270 follow-up)
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   ├─ Tier 2 (device scope, cold underline): scope label + device ComboBox on the left,
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   │  capability tabs pushed right in a WrapPanel (TabStripButtonCold, GroupName=&quot;PadTabDevice&quot;)
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   │   ├─ ComboBox (MappedDevices, item = liveness flame Path (LivenessFlameBase) + Name + battery)
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│   │   ├─ RadioButton &quot;Sticks&quot; (Tag=3, x:Name=&quot;TabSticks&quot;)
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│   │   ├─ RadioButton &quot;Triggers&quot; (Tag=4, x:Name=&quot;TabTriggers&quot;)
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│   │   ├─ RadioButton &quot;Force Feedback&quot; (Tag=5, x:Name=&quot;TabForceFeedback&quot;, gated on hasForceFeedback)
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│   │   ├─ RadioButton &quot;Wheel&quot; (Tag=11, x:Name=&quot;TabWheel&quot;, gated on wheel VID/PID)
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│   │   ├─ RadioButton &quot;Impulse Triggers&quot; (Tag=9, x:Name=&quot;TabImpulseTriggers&quot;, gated on hasRumbleTriggers)
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>│   │   ├─ RadioButton &quot;Adaptive Triggers&quot; (Tag=6, x:Name=&quot;TabAdaptiveTriggers&quot;, gated on hasAdaptiveTriggers)
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│   │   ├─ RadioButton &quot;Lighting&quot; (Tag=7, x:Name=&quot;TabLighting&quot;, gated on hasLightbar || hasGuideLed
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│   │   │    || hasPeripheralLighting, #494)
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│   │   ├─ RadioButton &quot;Gyro&quot; (Tag=8, x:Name=&quot;TabGyro&quot;, gated on any motion sensor, #392)
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>│   │   ├─ RadioButton &quot;Touchpad&quot; (Tag=10, x:Name=&quot;TabTouchpad&quot;, gated on hasTouchpad)
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>│   │   ├─ RadioButton &quot;Audio&quot; (Tag=12, x:Name=&quot;TabAudio&quot;, gated on hasAudio)
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│   │   ├─ RadioButton &quot;Pointer&quot; (Tag=13, x:Name=&quot;TabPointer&quot;, gated on hasIrPointer, #146)
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>│   │   └─ RadioButton &quot;Mouse&quot; (Tag=14, x:Name=&quot;TabMouse&quot;, gated on mouse device, #200)
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>│   └─ AssignOfferBanner (Border, visible on HasAssignOffer): Assign / Not Now
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>├─ Row 1 (Auto): Extended config bar OR MIDI config bar (conditionally visible)
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>│   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
-<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>│   └─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
-<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>├─ Invisible MappingsCountIndicator (for UI Automation)
-<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>   SelectedIndex bound to SelectedConfigTab
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├─ Tier 1 (slot scope, ember underline): a WrapPanel of the scope label, identity
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   │   chip, preset chip and the slot tabs, which wrap among themselves in a WrapPanel
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   │   of their own (TabStripButton, GroupName=&quot;PadTab&quot;)
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   │   ├─ RadioButton &quot;Preview&quot; (Tag=0, x:Name=&quot;TabController&quot;, AutomationId=&quot;TabController&quot;)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   │   ├─ RadioButton &quot;Mappings&quot; (Tag=2, AutomationId=&quot;MappingsTab&quot;)
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   │   ├─ RadioButton &quot;Macros&quot; (Tag=1, AutomationId=&quot;MacrosTab&quot;)
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   │   ├─ RadioButton &quot;Menus&quot; (Tag=15, AutomationId=&quot;MenusTab&quot;, #9)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   │   ├─ RadioButton &quot;Bass Shakers&quot; (Tag=16, AutomationId=&quot;BassShakersTab&quot;,
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│   │   │    Visibility bound to RumbleAudioTabVisible, #236)
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   │   └─ RadioButton &quot;Output&quot; (Tag=17, AutomationId=&quot;OutputTab&quot;,
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   │        Visibility bound to OutputTabVisible, #270 follow-up)
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   ├─ Tier 2 (device scope, cold underline): scope label + device ComboBox on the left,
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│   │  capability tabs pushed right in a WrapPanel (TabStripButtonCold, GroupName=&quot;PadTabDevice&quot;)
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│   │   ├─ ComboBox (MappedDevices, item = liveness flame Path (LivenessFlameBase) + Name + battery)
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│   │   ├─ RadioButton &quot;Sticks&quot; (Tag=3, x:Name=&quot;TabSticks&quot;)
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>│   │   ├─ RadioButton &quot;Triggers&quot; (Tag=4, x:Name=&quot;TabTriggers&quot;)
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>│   │   ├─ RadioButton &quot;Force Feedback&quot; (Tag=5, x:Name=&quot;TabForceFeedback&quot;, gated on hasForceFeedback)
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>│   │   ├─ RadioButton &quot;Wheel&quot; (Tag=11, x:Name=&quot;TabWheel&quot;, gated on wheel VID/PID)
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>│   │   ├─ RadioButton &quot;Impulse Triggers&quot; (Tag=9, x:Name=&quot;TabImpulseTriggers&quot;, gated on hasRumbleTriggers)
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>│   │   ├─ RadioButton &quot;Adaptive Triggers&quot; (Tag=6, x:Name=&quot;TabAdaptiveTriggers&quot;, gated on hasAdaptiveTriggers)
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>│   │   ├─ RadioButton &quot;Lighting&quot; (Tag=7, x:Name=&quot;TabLighting&quot;, gated on hasLightbar || hasGuideLed
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>│   │   │    || hasPeripheralLighting, #494)
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>│   │   ├─ RadioButton &quot;Gyro&quot; (Tag=8, x:Name=&quot;TabGyro&quot;, gated on any motion sensor, #392)
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>│   │   ├─ RadioButton &quot;Touchpad&quot; (Tag=10, x:Name=&quot;TabTouchpad&quot;, gated on hasTouchpad)
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>│   │   ├─ RadioButton &quot;Audio&quot; (Tag=12, x:Name=&quot;TabAudio&quot;, gated on hasAudio)
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>│   │   ├─ RadioButton &quot;Pointer&quot; (Tag=13, x:Name=&quot;TabPointer&quot;, gated on hasIrPointer, #146)
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>│   │   └─ RadioButton &quot;Mouse&quot; (Tag=14, x:Name=&quot;TabMouse&quot;, gated on mouse device, #200)
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>│   └─ AssignOfferBanner (Border, visible on HasAssignOffer): Assign / Not Now
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>├─ Row 1 (Auto): Extended config bar OR MIDI config bar (conditionally visible)
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>│   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>│   └─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>├─ Invisible MappingsCountIndicator (for UI Automation)
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>   SelectedIndex bound to SelectedConfigTab
 </code></pre></div>
 <p>The <code>HMaestroProfileBar</code> preset chip sits inline in tier 1 rather than on its own row. The Extended and MIDI config bars are the only Row 1 occupants.</p>
 <h3 id="custom-styles-usercontrolresources">Custom Styles (UserControl.Resources)<a class="headerlink" href="#custom-styles-usercontrolresources" title="Permanent link">&para;</a></h3>
@@ -8926,7 +8927,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>            ├─ MIDI preview (MIDI input devices)
 <a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
 <a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            │   └─ Horizontal StackPanel of compass indicators
+<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
 <a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>            │       ├─ 36×36 Ellipse background + center dot
 <a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
 <a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)

@@ -12,7 +12,7 @@ A dropdown at the top of the page lists each language under its own name, with i
 
 With no language picked, PadForge follows the Windows display language: its own translation, else the one its speakers read. Austrian German reads German, Taiwanese Chinese reads Traditional Chinese, and Norwegian Bokmål and Nynorsk read Norwegian. English reads British English in the regions whose English follows British conventions, such as the United Kingdom, Ireland, Australia, New Zealand, India and South Africa, and American English everywhere else. A language with no translation shows American English.
 
-The interface comes in 109 languages, 46 of them complete. A partial translation shows English wherever it has no string: its translator left out what could not be worded correctly rather than make it up. British English holds only the strings it writes differently and reads the American text for the rest. No native speaker has reviewed the translations.
+The interface comes in 109 languages, 42 of them complete. A partial translation shows English wherever it has no string: its translator left out what could not be worded correctly rather than make it up. British English holds only the strings it writes differently and reads the American text for the rest. No native speaker has reviewed the translations.
 
 Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. Controller drawings, curves and other pictures keep their left-to-right layout, so a left stick stays on the left. The touchpad overlay, the on-screen menus and the light gun's calibration window stay left to right whole.
 
@@ -29,7 +29,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Bikol | Bikol | `bik` | 778 of 3818 |
 | Bislama | Bislama | `bi` | 1095 of 3818 |
 | Bulgarian | Български | `bg` | all |
-| Burmese | မြန်မာ | `my` | 3811 of 3818 |
+| Burmese | မြန်မာ | `my` | 3807 of 3818 |
 | Cantonese (Traditional) | 廣東話（繁體） | `zh-HK` | all |
 | Cape Verdean Creole | Kabuverdianu | `kea` | 2248 of 3818 |
 | Catalan | Català | `ca` | 3816 of 3818 |
@@ -46,7 +46,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Dutch | Nederlands | `nl` | all |
 | English (United Kingdom) | English (United Kingdom) | `en-GB` | all |
 | English (United States) | English (United States) | `en-US` | all |
-| Estonian | Eesti | `et` | all |
+| Estonian | Eesti | `et` | 3815 of 3818 |
 | Fiji Hindi | Fiji Hindi | `hif` | 576 of 3818 |
 | Fijian | Vosa Vakaviti | `fj` | 419 of 3818 |
 | Finnish | Suomi | `fi` | all |
@@ -69,8 +69,8 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Italian | Italiano | `it` | all |
 | Japanese | 日本語 | `ja` | all |
 | Kannada | ಕನ್ನಡ | `kn` | 3789 of 3818 |
-| Kazakh | Қазақша | `kk` | all |
-| Khmer | ភាសាខ្មែរ | `km` | 3813 of 3818 |
+| Kazakh | Қазақша | `kk` | 3816 of 3818 |
+| Khmer | ភាសាខ្មែរ | `km` | 3812 of 3818 |
 | Kinyarwanda | Ikinyarwanda | `rw` | 1211 of 3818 |
 | Korean | 한국어 | `ko` | all |
 | Lao | ລາວ | `lo` | 3797 of 3818 |
@@ -95,7 +95,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Persian | فارسی | `fa` | all, right to left |
 | Polish | Polski | `pl` | all |
 | Portuguese (Brazil) | Português (Brasil) | `pt-BR` | all |
-| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | all |
+| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | 3816 of 3818 |
 | Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 982 of 3818 |
 | Romanian | Română | `ro` | all |
 | Russian | Русский | `ru` | all |
@@ -103,7 +103,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Serbian | Српски | `sr` | all |
 | Sesotho | Sesotho | `st` | 632 of 3818 |
 | Shona | ChiShona | `sn` | 864 of 3818 |
-| Sinhala | සිංහල | `si` | 3776 of 3818 |
+| Sinhala | සිංහල | `si` | 3772 of 3818 |
 | Slovak | Slovenčina | `sk` | all |
 | Slovenian | Slovenščina | `sl` | all |
 | Spanish | Español | `es` | all |
@@ -118,7 +118,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 | Tswana | Setswana | `tn` | 665 of 3818 |
 | Turkish | Türkçe | `tr` | all |
 | Twi | Twi | `tw` | 411 of 3818 |
-| Ukrainian | Українська | `uk` | all |
+| Ukrainian | Українська | `uk` | 3817 of 3818 |
 | Urdu | اردو | `ur` | all, right to left |
 | Vietnamese | Tiếng Việt | `vi` | all |
 | Waray | Winaray | `war` | 891 of 3818 |

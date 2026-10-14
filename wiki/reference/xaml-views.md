@@ -406,8 +406,9 @@ Per-slot configuration: two-tier tab strip, optional config bars, and 18 tab pan
 ```
 Grid (3 rows)
 ├─ Row 0 (Auto): Two-tier tab strip (StackPanel: two gradient-bordered Borders + assign-offer banner)
-│   ├─ Tier 1 (slot scope, ember underline): scope label + identity chip + preset
-│   │   chip on the left, slot tabs pushed right (TabStripButton, GroupName="PadTab")
+│   ├─ Tier 1 (slot scope, ember underline): a WrapPanel of the scope label, identity
+│   │   chip, preset chip and the slot tabs, which wrap among themselves in a WrapPanel
+│   │   of their own (TabStripButton, GroupName="PadTab")
 │   │   ├─ RadioButton "Preview" (Tag=0, x:Name="TabController", AutomationId="TabController")
 │   │   ├─ RadioButton "Mappings" (Tag=2, AutomationId="MappingsTab")
 │   │   ├─ RadioButton "Macros" (Tag=1, AutomationId="MacrosTab")
@@ -1198,7 +1199,7 @@ Grid (Margin="24,16")
             ├─ MIDI preview (MIDI input devices)
             │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
             ├─ D-Pad / POV hats (conditional on RawPovs.Count > 0)
-            │   └─ Horizontal StackPanel of compass indicators
+            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
             │       ├─ 36×36 Ellipse background + center dot
             │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
             ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
