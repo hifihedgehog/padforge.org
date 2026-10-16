@@ -2227,10 +2227,12 @@ Codes used: `E713` settings, `E790` personalization, `E9F5` processing, `E737` s
 Numeric input with inline spin buttons:
 
 ```xml
-<ui:NumberBox Value="{Binding PollingRateMs, Mode=TwoWay}"
+<ui:NumberBox Value="{Binding PollingRateMs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
               Minimum="1" Maximum="16"
               SpinButtonPlacementMode="Inline" Width="200"/>
 ```
+
+Every NumberBox binds with `UpdateSourceTrigger=PropertyChanged`. WPF UI registers `Value` to write back on `LostFocus`, and the spin buttons step the value without focusing the box, so a box bound without the trigger saved nothing from its arrows until it was clicked into and out of again (#511). The control sets `Value` only on Enter, on leaving the box, on a paste and on a step, so typing still saves once. A box bound to a port adds `Delay=1000`, because a port change restarts its server: a held arrow then restarts it once, a second after the last step. `NumberBoxCommitTests` holds every box in the app to both rules.
 
 ### Localized String Bindings
 
