@@ -146,7 +146,7 @@ There is no installer, so removal is short.
 2. Close PadForge.
 3. Delete the PadForge folder.
 
-Already deleted PadForge? Download `HIDMaestro-v2.0.2.zip` (`HIDMaestro-v2.0.2-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and run `HIDMaestroUninstall.exe` from its `HIDMaestroUninstall` folder. It removes HIDMaestro the way the Uninstall button does, and asks first.
+Already deleted PadForge? Download `HIDMaestro-v2.0.2.zip` (`HIDMaestro-v2.0.2-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and extract it. In a terminal opened as administrator, change to its `HIDMaestroUninstall` folder and run `.\HIDMaestroUninstall.exe`. It removes HIDMaestro the way the Uninstall button does, and asks first. [Troubleshooting](../troubleshooting.md#removing-padforge-and-hidmaestro) covers the rest of what PadForge installs.
 
 If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy driver cleanup dialog on first launch removes them for you.
 
