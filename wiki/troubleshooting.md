@@ -611,7 +611,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 3. Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead.
 4. Map **IR Pointer X** and **IR Pointer Y** to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.
 5. A right Joy-Con's **IR Brightness** source is different. It reports a single cover/proximity value, not an X/Y pointer.
-6. Each time a remote connects, PadForge checks that its camera sends IR data, and starts the camera again if it does not, up to three times. The [diagnostics log](features/settings.md#keep-a-diagnostics-log) records each try as a `WIIIR` line.
+6. Each time a remote connects, its camera is started until it sends IR data. SDL's Wii driver starts a failed camera again after 1, 2 and 4 seconds and then every 8, and PadForge restarts it up to three times if no IR data comes. The [diagnostics log](features/settings.md#keep-a-diagnostics-log) records PadForge's tries as `WIIIR` lines.
 
 ---
 

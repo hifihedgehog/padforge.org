@@ -282,7 +282,7 @@ The 2015 pad has one physical stick and rides its right trackpad as the right st
 
 #### Both trackpads
 
-`InputManager.SlotCarriesTouchpad(slot)` (`InputManager.cs:270`) is true for every PlayStation slot, and for an Extended slot on a raw surface whose profile is Valve. Step 3 computes the touch surface and Step 4 combines it only when it is true. Before that predicate existed both steps gated on PlayStation alone, so every Valve packer received a zeroed `TouchpadState` and no pad on a virtual Deck or Steam Controller could be touched.
+`InputManager.SlotCarriesTouchpad(slot)` (`InputManager.cs:292`) is true for every PlayStation slot, and for an Extended slot on a raw surface whose profile is Valve. Step 3 computes the touch surface and Step 4 combines it only when it is true. Before that predicate existed both steps gated on PlayStation alone, so every Valve packer received a zeroed `TouchpadState` and no pad on a virtual Deck or Steam Controller could be touched.
 
 Every Valve frame carries one finger per pad, so the slot's two-finger `TouchpadState` splits as finger 0 = left pad, finger 1 = right pad (`ValveReportPackers.Pads`). The grid lists Left / Right Pad X, Y and Touch on those two fingers. Pad clicks stay raw buttons, so a Valve grid has no `TouchpadClick` row. A click arriving with no per-pad source lands on whichever pad is touched, and on the left pad when neither is.
 

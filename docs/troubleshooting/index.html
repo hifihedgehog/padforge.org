@@ -5274,7 +5274,7 @@
 <li>Aim the remote at the bar. When the camera loses the dots the source holds its last aim and moves again when both dots return. 4.5.3 and earlier relaxed to center instead.</li>
 <li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> to stick axes. Tune sensor-bar position, vertical offset, and smoothing on the Pointer tab. Sensitivity is per source, on the mapping row itself.</li>
 <li>A right Joy-Con's <strong>IR Brightness</strong> source is different. It reports a single cover/proximity value, not an X/Y pointer.</li>
-<li>Each time a remote connects, PadForge checks that its camera sends IR data, and starts the camera again if it does not, up to three times. The <a href="../features/settings/#keep-a-diagnostics-log">diagnostics log</a> records each try as a <code>WIIIR</code> line.</li>
+<li>Each time a remote connects, its camera is started until it sends IR data. SDL's Wii driver starts a failed camera again after 1, 2 and 4 seconds and then every 8, and PadForge restarts it up to three times if no IR data comes. The <a href="../features/settings/#keep-a-diagnostics-log">diagnostics log</a> records PadForge's tries as <code>WIIIR</code> lines.</li>
 </ol>
 <hr />
 <h2 id="joy-con-2-mouse-not-working">Joy-Con 2 Mouse Not Working<a class="headerlink" href="#joy-con-2-mouse-not-working" title="Permanent link">&para;</a></h2>

@@ -745,9 +745,9 @@ The crash path calls `GameSenseBackend.WaitForSilence` (`GameSenseBackend.cs` li
 
 | Edge | Site |
 |---|---|
-| Engine stop | `InputManager.Stop` (`InputManager.cs` line 1863) |
-| Crash quiesce | `InputManager.StopAllForceFeedback` (`InputManager.cs` line 2388), which also stops each row's level under its output gate, so a level the poll thread or Identify decided under the gate cannot land after the sweep |
-| Focus suspend | `InputManager.ApplyFocusSuspension` (`InputManager.cs` line 3903), with `keepRelayed: true`: a level a Remote Link peer drives keeps playing, as a peer-driven SDL rumble does, since the relay still writes while the engine is suspended and a peer sends a steady level only once |
+| Engine stop | `InputManager.Stop` (`InputManager.cs` line 1885) |
+| Crash quiesce | `InputManager.StopAllForceFeedback` (`InputManager.cs` line 2396), which also stops each row's level under its output gate, so a level the poll thread or Identify decided under the gate cannot land after the sweep |
+| Focus suspend | `InputManager.ApplyFocusSuspension` (`InputManager.cs` line 3911), with `keepRelayed: true`: a level a Remote Link peer drives keeps playing, as a peer-driven SDL rumble does, since the relay still writes while the engine is suspended and a peer sends a steady level only once |
 
 Idle is no edge. Step 2 runs there and writes the level itself.
 
