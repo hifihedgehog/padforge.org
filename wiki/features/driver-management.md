@@ -26,7 +26,7 @@ HIDMaestro installs itself the first time PadForge creates a virtual controller 
 
 HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. They sit on the **Settings** page until you click **Install**. The runtime's **Install** shows only on a PC that needs it (see [Windows MIDI Services](#windows-midi-services)).
 
-Two more drivers install outside **Settings**, and only when something needs them. Pairing a [DualShock 3](../devices/dualshock-3.md), [PS Move](../devices/ps-move.md) or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. The first controller on a composite profile (the three PlayStation profiles named **Full**, **Nintendo Switch 2 Pro Controller: Full**, the two Valve **Composite** profiles, and **Steam Controller (2026)**) installs usbip-win2's virtual USB host controller, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, **DualSense (PS5): Full**, is one of them. That install needs no prompt and restarts no USB hub.
+Two more drivers install outside **Settings**, and only when something needs them. Pairing a [DualShock 3](../devices/dualshock-3.md), [PS Move](../devices/ps-move.md) or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. Its card in **Settings** shows whether it is installed, and removes it (see [BthPS3](#bthps3)). The first controller on a composite profile (the three PlayStation profiles named **Full**, **Nintendo Switch 2 Pro Controller: Full**, the two Valve **Composite** profiles, and **Steam Controller (2026)**) installs usbip-win2's virtual USB host controller, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, **DualSense (PS5): Full**, is one of them. That install needs no prompt and restarts no USB hub.
 
 ---
 
@@ -51,7 +51,7 @@ Each driver card on the Settings page shows an ember flame next to its status te
 
 | Flame | Meaning |
 |---|---|
-| **Lit flame** (orange, glowing) "Installed" | Driver ready. HidHide and HIDMaestro show their version number below. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active. |
+| **Lit flame** (orange, glowing) "Installed" | Driver ready. HidHide shows its installed version below, and HIDMaestro and BthPS3 the version PadForge carries. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active. |
 | **Unlit flame** (outline only) "Not Installed" | Install before the matching slot type works. |
 
 HIDMaestro auto-installs, so its flame stays lit. The Windows MIDI Services card has its own states, listed under [Windows MIDI Services](#the-settings-card). Driver status lives on the Settings page and nowhere else. The [Dashboard](dashboard.md) carried a **Drivers** text row through 4.3.2 and no longer does.
@@ -66,6 +66,7 @@ PadForge runs whether or not the optional drivers are installed. Missing drivers
 |---|---|
 | **HIDMaestro** | It auto-installs on first use, so it isn't normally missing. If that install fails, Xbox, PlayStation, Nintendo, and Extended slots can't create a virtual controller. Keyboard+Mouse and MIDI still work. |
 | **HidHide** | **Hide from Games (HidHide)** has no effect. Games may see the physical and the virtual at the same time. |
+| **BthPS3** | PlayStation 3 controllers, the PlayStation Move and the Navigation controller work over USB only. Pairing one for Bluetooth installs BthPS3 again. |
 | **Windows MIDI Services** | MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI slot type won't switch on, and its button shows the tooltip "MIDI (not running, see the Windows MIDI Services card in Settings)". Every other slot type works. |
 | **SteamVR** | The VR slot type won't switch on. Its button stays visible and shows the tooltip "VR (requires SteamVR)". Every other slot type works. |
 
@@ -116,6 +117,22 @@ When you confirm, PadForge stops its engine, and HIDMaestro removes every virtua
 On a PC where PadForge is already gone, download `HIDMaestro-v2.0.3.zip` (`HIDMaestro-v2.0.3-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and extract it. In a terminal opened as administrator, change to its `HIDMaestroUninstall` folder and run `.\HIDMaestroUninstall.exe`. It lists what it would remove and keep, asks before it removes anything, and then prints what it removed and kept. It needs no .NET runtime. Removing the devices in Device Manager leaves the driver packages, the certificate and the files behind.
 
 For the contract between PadForge and HIDMaestro, see [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md).
+
+---
+
+## BthPS3
+
+Nefarius's BthPS3 drivers let a [DualShock 3](../devices/dualshock-3.md), a [PS Move](../devices/ps-move.md) and a Navigation controller connect over the PC's Bluetooth: a profile driver, and a filter on Bluetooth that steers those controllers to it. PadForge carries them and installs them the first time one of those controllers is paired. The **BthPS3 Bluetooth Driver** card on the **Settings** page lights its flame while either driver is installed, and shows the BthPS3 version PadForge carries.
+
+### Uninstall
+
+**Uninstall** on the card removes BthPS3 from the PC. It first lists what it would remove: the filter's registration on Bluetooth, the drivers and their files, and the WinUSB driver PadForge gave PlayStation 3 and Navigation controllers for pairing, with the certificate that signs it. The certificate stays while another of PadForge's WinUSB drivers is signed with it. When BthPS3's own setup installed the drivers, its own uninstaller removes them first.
+
+The removal waits while a PlayStation controller is connected over Bluetooth. Turn the controller off, then select **Refresh**. Unloading the drivers while a controller is connected can crash Windows. The drivers stay while DsHidMini is installed, since DsHidMini needs them.
+
+When you confirm, PadForge stops its engine and Bluetooth switches off for a moment while the drivers unload, then back on. A driver still loaded goes when Windows next starts. The status line says how the removal ended, and one that could not take everything lists what stayed and why. The engine stays stopped. PlayStation 3, Move and Navigation controllers then work over USB, and pairing one installs BthPS3 again. Starting the engine with a PlayStation 3 or Navigation controller plugged in puts its WinUSB driver back.
+
+For the steps and the checks behind them, see [Driver Installation Internals](../reference/driver-installation-internals.md#removal_1).
 
 ---
 

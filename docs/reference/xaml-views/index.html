@@ -3846,6 +3846,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#uninstallbthps3dialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UninstallBthPS3Dialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pairdevicedialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6290,6 +6301,17 @@
     <span class="md-ellipsis">
       
         UninstallHIDMaestroDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#uninstallbthps3dialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UninstallBthPS3Dialog
       
     </span>
   </a>
@@ -9492,39 +9514,43 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-67" name="__codelineno-13-67" href="#__codelineno-13-67"></a>      │   ├─ Icon E7FC + title + description
 <a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a>      │   └─ Status: ember flame lit while the driver is in the driver store + &quot;Installed&quot; or
 <a id="__codelineno-13-69" name="__codelineno-13-69" href="#__codelineno-13-69"></a>      │      &quot;Not Installed&quot; + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
-<a id="__codelineno-13-70" name="__codelineno-13-70" href="#__codelineno-13-70"></a>      ├─ Windows MIDI Services card
-<a id="__codelineno-13-71" name="__codelineno-13-71" href="#__codelineno-13-71"></a>      │   ├─ Icon E8D6 + title + description
-<a id="__codelineno-13-72" name="__codelineno-13-72" href="#__codelineno-13-72"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
-<a id="__codelineno-13-73" name="__codelineno-13-73" href="#__codelineno-13-73"></a>      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
-<a id="__codelineno-13-74" name="__codelineno-13-74" href="#__codelineno-13-74"></a>      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
-<a id="__codelineno-13-75" name="__codelineno-13-75" href="#__codelineno-13-75"></a>      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
-<a id="__codelineno-13-76" name="__codelineno-13-76" href="#__codelineno-13-76"></a>      ├─ SteamVR card (#49)
-<a id="__codelineno-13-77" name="__codelineno-13-77" href="#__codelineno-13-77"></a>      │   ├─ Icon F119 + title + description
-<a id="__codelineno-13-78" name="__codelineno-13-78" href="#__codelineno-13-78"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
-<a id="__codelineno-13-79" name="__codelineno-13-79" href="#__codelineno-13-79"></a>      │   │   Installed, or the runtime / driver / live-controller state)
-<a id="__codelineno-13-80" name="__codelineno-13-80" href="#__codelineno-13-80"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
-<a id="__codelineno-13-81" name="__codelineno-13-81" href="#__codelineno-13-81"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
-<a id="__codelineno-13-82" name="__codelineno-13-82" href="#__codelineno-13-82"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
-<a id="__codelineno-13-83" name="__codelineno-13-83" href="#__codelineno-13-83"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
-<a id="__codelineno-13-84" name="__codelineno-13-84" href="#__codelineno-13-84"></a>      ├─ Community Configs card (#9)
-<a id="__codelineno-13-85" name="__codelineno-13-85" href="#__codelineno-13-85"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
-<a id="__codelineno-13-86" name="__codelineno-13-86" href="#__codelineno-13-86"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
-<a id="__codelineno-13-87" name="__codelineno-13-87" href="#__codelineno-13-87"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
-<a id="__codelineno-13-88" name="__codelineno-13-88" href="#__codelineno-13-88"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
-<a id="__codelineno-13-89" name="__codelineno-13-89" href="#__codelineno-13-89"></a>      ├─ Settings File card
-<a id="__codelineno-13-90" name="__codelineno-13-90" href="#__codelineno-13-90"></a>      │   ├─ Icon E8A5 + title + description
-<a id="__codelineno-13-91" name="__codelineno-13-91" href="#__codelineno-13-91"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
-<a id="__codelineno-13-92" name="__codelineno-13-92" href="#__codelineno-13-92"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
-<a id="__codelineno-13-93" name="__codelineno-13-93" href="#__codelineno-13-93"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
-<a id="__codelineno-13-94" name="__codelineno-13-94" href="#__codelineno-13-94"></a>      └─ Diagnostics card
-<a id="__codelineno-13-95" name="__codelineno-13-95" href="#__codelineno-13-95"></a>          ├─ Icon E9D9 + title + description
-<a id="__codelineno-13-96" name="__codelineno-13-96" href="#__codelineno-13-96"></a>          ├─ Grid (140px label + value):
-<a id="__codelineno-13-97" name="__codelineno-13-97" href="#__codelineno-13-97"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
-<a id="__codelineno-13-98" name="__codelineno-13-98" href="#__codelineno-13-98"></a>          │   ├─ .NET Runtime (RuntimeVersion)
-<a id="__codelineno-13-99" name="__codelineno-13-99" href="#__codelineno-13-99"></a>          │   └─ SDL Version (SdlVersion)
-<a id="__codelineno-13-100" name="__codelineno-13-100" href="#__codelineno-13-100"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
-<a id="__codelineno-13-101" name="__codelineno-13-101" href="#__codelineno-13-101"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
-<a id="__codelineno-13-102" name="__codelineno-13-102" href="#__codelineno-13-102"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
+<a id="__codelineno-13-70" name="__codelineno-13-70" href="#__codelineno-13-70"></a>      ├─ BthPS3 Bluetooth Driver card
+<a id="__codelineno-13-71" name="__codelineno-13-71" href="#__codelineno-13-71"></a>      │   ├─ Icon E702 + title + description
+<a id="__codelineno-13-72" name="__codelineno-13-72" href="#__codelineno-13-72"></a>      │   └─ Status: ember flame lit while either BthPS3 driver is a service + &quot;Installed&quot; or
+<a id="__codelineno-13-73" name="__codelineno-13-73" href="#__codelineno-13-73"></a>      │      &quot;Not Installed&quot; + BthPS3Version, and Uninstall, which opens UninstallBthPS3Dialog
+<a id="__codelineno-13-74" name="__codelineno-13-74" href="#__codelineno-13-74"></a>      ├─ Windows MIDI Services card
+<a id="__codelineno-13-75" name="__codelineno-13-75" href="#__codelineno-13-75"></a>      │   ├─ Icon E8D6 + title + description
+<a id="__codelineno-13-76" name="__codelineno-13-76" href="#__codelineno-13-76"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
+<a id="__codelineno-13-77" name="__codelineno-13-77" href="#__codelineno-13-77"></a>      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
+<a id="__codelineno-13-78" name="__codelineno-13-78" href="#__codelineno-13-78"></a>      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
+<a id="__codelineno-13-79" name="__codelineno-13-79" href="#__codelineno-13-79"></a>      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
+<a id="__codelineno-13-80" name="__codelineno-13-80" href="#__codelineno-13-80"></a>      ├─ SteamVR card (#49)
+<a id="__codelineno-13-81" name="__codelineno-13-81" href="#__codelineno-13-81"></a>      │   ├─ Icon F119 + title + description
+<a id="__codelineno-13-82" name="__codelineno-13-82" href="#__codelineno-13-82"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
+<a id="__codelineno-13-83" name="__codelineno-13-83" href="#__codelineno-13-83"></a>      │   │   Installed, or the runtime / driver / live-controller state)
+<a id="__codelineno-13-84" name="__codelineno-13-84" href="#__codelineno-13-84"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
+<a id="__codelineno-13-85" name="__codelineno-13-85" href="#__codelineno-13-85"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
+<a id="__codelineno-13-86" name="__codelineno-13-86" href="#__codelineno-13-86"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
+<a id="__codelineno-13-87" name="__codelineno-13-87" href="#__codelineno-13-87"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
+<a id="__codelineno-13-88" name="__codelineno-13-88" href="#__codelineno-13-88"></a>      ├─ Community Configs card (#9)
+<a id="__codelineno-13-89" name="__codelineno-13-89" href="#__codelineno-13-89"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
+<a id="__codelineno-13-90" name="__codelineno-13-90" href="#__codelineno-13-90"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
+<a id="__codelineno-13-91" name="__codelineno-13-91" href="#__codelineno-13-91"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
+<a id="__codelineno-13-92" name="__codelineno-13-92" href="#__codelineno-13-92"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
+<a id="__codelineno-13-93" name="__codelineno-13-93" href="#__codelineno-13-93"></a>      ├─ Settings File card
+<a id="__codelineno-13-94" name="__codelineno-13-94" href="#__codelineno-13-94"></a>      │   ├─ Icon E8A5 + title + description
+<a id="__codelineno-13-95" name="__codelineno-13-95" href="#__codelineno-13-95"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
+<a id="__codelineno-13-96" name="__codelineno-13-96" href="#__codelineno-13-96"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
+<a id="__codelineno-13-97" name="__codelineno-13-97" href="#__codelineno-13-97"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
+<a id="__codelineno-13-98" name="__codelineno-13-98" href="#__codelineno-13-98"></a>      └─ Diagnostics card
+<a id="__codelineno-13-99" name="__codelineno-13-99" href="#__codelineno-13-99"></a>          ├─ Icon E9D9 + title + description
+<a id="__codelineno-13-100" name="__codelineno-13-100" href="#__codelineno-13-100"></a>          ├─ Grid (140px label + value):
+<a id="__codelineno-13-101" name="__codelineno-13-101" href="#__codelineno-13-101"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
+<a id="__codelineno-13-102" name="__codelineno-13-102" href="#__codelineno-13-102"></a>          │   ├─ .NET Runtime (RuntimeVersion)
+<a id="__codelineno-13-103" name="__codelineno-13-103" href="#__codelineno-13-103"></a>          │   └─ SDL Version (SdlVersion)
+<a id="__codelineno-13-104" name="__codelineno-13-104" href="#__codelineno-13-104"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
+<a id="__codelineno-13-105" name="__codelineno-13-105" href="#__codelineno-13-105"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
+<a id="__codelineno-13-106" name="__codelineno-13-106" href="#__codelineno-13-106"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 </code></pre></div>
 <h3 id="key-bindings_2">Key Bindings<a class="headerlink" href="#key-bindings_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -10315,6 +10341,9 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <h3 id="uninstallhidmaestrodialog">UninstallHIDMaestroDialog<a class="headerlink" href="#uninstallhidmaestrodialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>UninstallHIDMaestroDialog.xaml</code>, <code>UninstallHIDMaestroDialog.xaml.cs</code></p>
 <p>The removal of HIDMaestro from the PC (#518), in <code>ConfirmDialog</code>'s chrome: the ember-tick title, the body, and a footer where Cancel holds the default and the initial focus. <code>Confirm(owner, preview, out includeUsbip)</code> runs the preview it is handed (<code>HIDMaestroRemoval.Preview</code> on a worker) on load and on each change of the usbip-win2 checkbox, showing a progress line meanwhile, then lists each item as location, kind and, for one kept or not read, the reason (<code>RowsFor</code>). A blocked preview names the programs in the cold mono face, and a preview with nothing to take says so. <strong>Refresh</strong> reads the PC again. <strong>Uninstall</strong> opens only when <code>CanRemove</code> holds. <code>ShowReport(owner, report, statusLine)</code> reuses the window with Close alone to list what a failed removal could not take. A preview that ends after the window closed, or after a newer one started, is dropped (<code>_generation</code>).</p>
+<h3 id="uninstallbthps3dialog">UninstallBthPS3Dialog<a class="headerlink" href="#uninstallbthps3dialog" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong> <code>UninstallBthPS3Dialog.xaml</code>, <code>UninstallBthPS3Dialog.xaml.cs</code></p>
+<p>The removal of BthPS3 from the PC, built as <code>UninstallHIDMaestroDialog</code> is, without its usbip-win2 option. <code>Confirm(owner, preview)</code> runs the preview it is handed (<code>BthPS3Removal.Preview</code> on a worker) on load and on <strong>Refresh</strong>, then lists each item as location, kind (<code>BthPS3Removal.KindText</code>) and, for one kept, the reason in the HIDMaestro removal's <code>Stays:</code> form (<code>RowsFor</code>). The line above the list (<code>NoteFor</code>) says what holds the removal (a connected controller, or a check that could not run), that DsHidMini keeps the drivers, or that nothing is left. <strong>Uninstall</strong> opens only when <code>CanRemove</code> holds. <code>ShowReport(owner, report, statusLine)</code> reuses the window with Close alone to list what a removal could not take.</p>
 <h3 id="pairdevicedialog">PairDeviceDialog<a class="headerlink" href="#pairdevicedialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>PairDeviceDialog.xaml</code>, <code>PairDeviceDialog.xaml.cs</code></p>
 <p>Wii Remote pairing flow (#116). <code>FluentWindow</code> (<code>WiiPair_Title</code>) that walks the user through the Bluetooth sync-button handshake.</p>

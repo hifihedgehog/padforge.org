@@ -442,6 +442,18 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 |---------|-----------|-------------|
 | `UninstallHIDMaestroCommand` | Always | Raises `UninstallHIDMaestroRequested`, which `MainWindow.UninstallHIDMaestroAsync` handles. Available with the driver gone, since HIDMaestro can leave other things behind. |
 
+### Driver Status: BthPS3
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `BthPS3Version` | `string` | The BthPS3 version PadForge carries, from the `DriverVer` of its embedded `BthPS3.inf` (`Ds3DriverInstaller.BundledBthPs3Version`). |
+| `IsBthPS3Installed` | `bool` | Either BthPS3 driver is installed as a service. Set by `MainWindow.RefreshBthPS3Status` from `Ds3DriverInstaller.IsAnyBthPs3DriverInstalled()` at startup, on the driver status timer and after a removal. |
+| `BthPS3StatusText` | `string` | Computed: `Common_Installed` or `Common_NotInstalled`. Raised again on a language change. |
+
+| Command | CanExecute | Description |
+|---------|-----------|-------------|
+| `UninstallBthPS3Command` | Always | Raises `UninstallBthPS3Requested`, which `MainWindow.UninstallBthPS3Async` handles. Available with the drivers gone, since PadForge's WinUSB package and certificate can remain. |
+
 ### Driver Status: HidHide
 
 | Property | Type | Description |

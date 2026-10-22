@@ -79,7 +79,7 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 Two optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled inside `PadForge.exe`: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. SteamVR downloads on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**. Windows MIDI Services comes with Windows 11 25H2 from the late-November 2026 update, and its card offers the runtime on a PC that does not have it yet.
 
-One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it.
+One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it. Its **BthPS3 Bluetooth Driver** card on **Settings** shows whether it is installed and removes it.
 
 <!-- SCREENSHOT: settings-driver-cards -->
 ![The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards](../images/settings-driver-cards.png)

@@ -2917,6 +2917,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#driver-status-bthps3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Status: BthPS3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#driver-status-hidhide" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6336,6 +6347,17 @@
     <span class="md-ellipsis">
       
         Driver Status: HIDMaestro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-status-bthps3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Status: BthPS3
       
     </span>
   </a>
@@ -9967,6 +9989,49 @@
 <td><code>UninstallHIDMaestroCommand</code></td>
 <td>Always</td>
 <td>Raises <code>UninstallHIDMaestroRequested</code>, which <code>MainWindow.UninstallHIDMaestroAsync</code> handles. Available with the driver gone, since HIDMaestro can leave other things behind.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="driver-status-bthps3">Driver Status: BthPS3<a class="headerlink" href="#driver-status-bthps3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BthPS3Version</code></td>
+<td><code>string</code></td>
+<td>The BthPS3 version PadForge carries, from the <code>DriverVer</code> of its embedded <code>BthPS3.inf</code> (<code>Ds3DriverInstaller.BundledBthPs3Version</code>).</td>
+</tr>
+<tr>
+<td><code>IsBthPS3Installed</code></td>
+<td><code>bool</code></td>
+<td>Either BthPS3 driver is installed as a service. Set by <code>MainWindow.RefreshBthPS3Status</code> from <code>Ds3DriverInstaller.IsAnyBthPs3DriverInstalled()</code> at startup, on the driver status timer and after a removal.</td>
+</tr>
+<tr>
+<td><code>BthPS3StatusText</code></td>
+<td><code>string</code></td>
+<td>Computed: <code>Common_Installed</code> or <code>Common_NotInstalled</code>. Raised again on a language change.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>CanExecute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UninstallBthPS3Command</code></td>
+<td>Always</td>
+<td>Raises <code>UninstallBthPS3Requested</code>, which <code>MainWindow.UninstallBthPS3Async</code> handles. Available with the drivers gone, since PadForge's WinUSB package and certificate can remain.</td>
 </tr>
 </tbody>
 </table>

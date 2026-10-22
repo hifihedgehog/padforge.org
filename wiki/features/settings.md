@@ -302,10 +302,11 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 ## Driver Management
 
-Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide also shows the installed version, and HIDMaestro the version PadForge carries.
+Five driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide also shows the installed version, and HIDMaestro and BthPS3 the version PadForge carries.
 
 - **HidHide Driver** card: Install and Uninstall buttons.
 - **HIDMaestro Driver** card: the installed state and an **Uninstall** button. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot. **Uninstall** shows what HIDMaestro left on the PC, then stops the engine and removes it. See [Driver Management](driver-management.md#uninstall).
+- **BthPS3 Bluetooth Driver** card: the installed state and an **Uninstall** button. BthPS3 lets PlayStation 3 controllers, the PlayStation Move and the Navigation controller connect over Bluetooth, and installs itself the first time one of them is paired. **Uninstall** shows what BthPS3 left on the PC, then stops the engine and removes it. See [Driver Management](driver-management.md#bthps3).
 - **Windows MIDI Services** card: the API PadForge uses (**Built into Windows**, **App SDK Runtime** with the runtime's version, or **Legacy MIDI API**), or **Not Running** with the reason: the Windows MIDI service did not respond, a MIDI driver did not respond, or the runtime's uninstaller is still running. Under **Legacy MIDI API** the card names the error when the API built into Windows is registered but did not start. A Windows MIDI Services API that did not start when PadForge first checked is taken later, once it starts, with nothing restarted. **Install** shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. **Uninstall** shows while a runtime is installed. See [Driver Management](driver-management.md#windows-midi-services).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
@@ -317,18 +318,20 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
 | **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers, and the virtual keyboards and mice of a Keyboard+Mouse slot. 337 device profiles, of which PadForge offers 239 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot, or set a Keyboard+Mouse slot to a keyboard or mouse model. Required for those five slot types and those models. |
+| **BthPS3** | Bluetooth drivers for PlayStation 3 controllers, the PlayStation Move and the Navigation controller: a profile driver and a filter on the PC's Bluetooth. | Installs itself the first time one of those controllers is paired for Bluetooth. |
 | **Windows MIDI Services** | Gives each MIDI slot a port of its own and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. Without it, MIDI runs on the legacy MIDI API, where slots send to a port you pick. | On 24H2 or later before Windows carries the API, click **Install** on its card for the runtime. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 
 ### Uninstall guards
 
-PadForge blocks three driver uninstalls until you clear what still depends on them.
+PadForge blocks four driver uninstalls until you clear what still depends on them.
 
 - **HidHide** stays locked while any device still has the cloak armed. Disarm the cloak on the [Devices](devices.md) page first.
 - **Windows MIDI Services** (the runtime) stays locked while any slot still outputs MIDI through it. Delete those slots or switch them to another output on the [Controller Slots](controller-slots.md) page first. When the API built into Windows or the legacy MIDI API runs MIDI, the slots do not hold the runtime.
 - **SteamVR** stays locked while any VR slot exists. Delete those slots or switch them to another type first.
+- **BthPS3** waits while a PlayStation controller is connected over Bluetooth. Turn the controller off, then select **Refresh**. Its drivers stay while DsHidMini is installed, since DsHidMini needs them.
 
-Each guard reads the slots you have saved rather than what the engine is currently running, so it holds with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.
+The HidHide, MIDI and SteamVR guards read the slots you have saved rather than what the engine is currently running, so they hold with the engine stopped, which is when most people go tidying up drivers. Switching a slot's type releases the old type's driver and locks the new one straight away.
 
 ### The SteamVR card
 

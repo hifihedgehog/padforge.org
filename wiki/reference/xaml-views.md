@@ -1523,6 +1523,10 @@ ScrollViewer (Padding="24,0")
       │   ├─ Icon E7FC + title + description
       │   └─ Status: ember flame lit while the driver is in the driver store + "Installed" or
       │      "Not Installed" + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
+      ├─ BthPS3 Bluetooth Driver card
+      │   ├─ Icon E702 + title + description
+      │   └─ Status: ember flame lit while either BthPS3 driver is a service + "Installed" or
+      │      "Not Installed" + BthPS3Version, and Uninstall, which opens UninstallBthPS3Dialog
       ├─ Windows MIDI Services card
       │   ├─ Icon E8D6 + title + description
       │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
@@ -1938,6 +1942,12 @@ HIDMaestro profile catalog manager. `FluentWindow` (640x660). Section 1 lists im
 **Files:** `UninstallHIDMaestroDialog.xaml`, `UninstallHIDMaestroDialog.xaml.cs`
 
 The removal of HIDMaestro from the PC (#518), in `ConfirmDialog`'s chrome: the ember-tick title, the body, and a footer where Cancel holds the default and the initial focus. `Confirm(owner, preview, out includeUsbip)` runs the preview it is handed (`HIDMaestroRemoval.Preview` on a worker) on load and on each change of the usbip-win2 checkbox, showing a progress line meanwhile, then lists each item as location, kind and, for one kept or not read, the reason (`RowsFor`). A blocked preview names the programs in the cold mono face, and a preview with nothing to take says so. **Refresh** reads the PC again. **Uninstall** opens only when `CanRemove` holds. `ShowReport(owner, report, statusLine)` reuses the window with Close alone to list what a failed removal could not take. A preview that ends after the window closed, or after a newer one started, is dropped (`_generation`).
+
+### UninstallBthPS3Dialog
+
+**Files:** `UninstallBthPS3Dialog.xaml`, `UninstallBthPS3Dialog.xaml.cs`
+
+The removal of BthPS3 from the PC, built as `UninstallHIDMaestroDialog` is, without its usbip-win2 option. `Confirm(owner, preview)` runs the preview it is handed (`BthPS3Removal.Preview` on a worker) on load and on **Refresh**, then lists each item as location, kind (`BthPS3Removal.KindText`) and, for one kept, the reason in the HIDMaestro removal's `Stays:` form (`RowsFor`). The line above the list (`NoteFor`) says what holds the removal (a connected controller, or a check that could not run), that DsHidMini keeps the drivers, or that nothing is left. **Uninstall** opens only when `CanRemove` holds. `ShowReport(owner, report, statusLine)` reuses the window with Close alone to list what a removal could not take.
 
 ### PairDeviceDialog
 
