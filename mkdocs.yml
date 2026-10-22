@@ -10,6 +10,10 @@ copyright: "PadForge™ is a trademark of hifihedgehog. U.S. trademark applicati
 
 docs_dir: wiki
 site_dir: docs
+# The theme overrides live in the docs folder, so keep the templates
+# themselves out of the published site.
+exclude_docs: |
+  /overrides/
 
 theme:
   name: material
