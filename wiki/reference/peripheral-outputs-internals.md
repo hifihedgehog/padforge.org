@@ -417,7 +417,7 @@ The same rule holds in the three direct lighting workers ([The direct backends](
 
 A crash dialog keeps the process alive, and the workers with it, and a worker left running would claim its device again on its next re-assert. `HidppBackend.NoteClaimed` (`HidppBackend.cs` line 1083) records a unit and the frames of its hand-back before its claim goes out, so no moment exists in which a device is claimed and the hand-back does not know it. The record holds the frames themselves and never an index to build one from: a 0x8070 release sent to a 0x8071 index sets the power mode and releases nothing.
 
-`InputService.PanicQuiesceOutputs` (`InputService.cs` line 13814) first waits up to 250 ms in all for silence (`PeripheralOutputHost.WaitForSilence`): the GameSense worker, the Razer Sensa worker, then each direct backend that rumbles a device. It then calls `PeripheralOutputHost.ReleaseLightingNow` (`PeripheralOutputHost.cs` line 799), which sets one deadline `PanicBudgetMs` (750) ahead for the direct backends together:
+`InputService.PanicQuiesceOutputs` (`InputService.cs` line 13809) first waits up to 250 ms in all for silence (`PeripheralOutputHost.WaitForSilence`): the GameSense worker, the Razer Sensa worker, then each direct backend that rumbles a device. It then calls `PeripheralOutputHost.ReleaseLightingNow` (`PeripheralOutputHost.cs` line 799), which sets one deadline `PanicBudgetMs` (750) ahead for the direct backends together:
 
 1. `SignalStop` on every direct backend, before any is waited for, so none claims anything more.
 2. `HidppBackend.ReleaseClaimedNow` (`HidppBackend.cs` line 1126). The HID++ units go first, because only they can leave a device in host mode. The worker is stopped and given `PanicJoinMs` (250) to hand back on its own channel, OpenRGB's teardown order (its sender stops before SetSWControl(0, 0), `LogitechHIDPP20Controller.cpp:3843-3856`). Each unit still on the record then gets its frames in order through `RawHidOutput.WriteOnce`, which opens its own handle with a 200 ms timeout. A unit whose write fails is left there, since the frames behind it would wait out the same timeout on the same path.
@@ -727,7 +727,7 @@ The crash path calls `GameSenseBackend.WaitForSilence` (`GameSenseBackend.cs` li
 
 `PeripheralOutputs.SetMotors` (`PeripheralOutputs.cs` line 463) stores a row's combined level as float bits: the stronger motor over 65535, since every backend plays one waveform or one intensity. A zero goes through `PeripheralOutputs.StopHaptics` (`PeripheralOutputs.cs` line 484). The first nonzero level after silence raises `HapticsChanged`, which wakes the HID++, GameSense and TouchSense workers so the first pulse of new rumble plays at once. The level is kept whether or not a path is linked now. A backend plays only a linked path, so a device that wakes plays the level the game holds, and a stop sent while it slept is never lost. `PeripheralOutputs.AmplitudeOf` (`PeripheralOutputs.cs` line 495) reads it.
 
-`PeripheralOutputs.IsHapticPeripheral` (`PeripheralOutputs.cs` line 276) adds to `TakesHaptics` a mouse or keyboard a linked PC forwards with rumble. It opens the Force Feedback tab and the Devices page's rumble chip (`InputService.PopulateDeviceRow` (`InputService.cs` line 15377)), and the chip is Identify's button.
+`PeripheralOutputs.IsHapticPeripheral` (`PeripheralOutputs.cs` line 276) adds to `TakesHaptics` a mouse or keyboard a linked PC forwards with rumble. It opens the Force Feedback tab and the Devices page's rumble chip (`InputService.PopulateDeviceRow` (`InputService.cs` line 15379)), and the chip is Identify's button.
 
 ### Step 2
 
@@ -751,7 +751,7 @@ The crash path calls `GameSenseBackend.WaitForSilence` (`GameSenseBackend.cs` li
 
 Idle is no edge. Step 2 runs there and writes the level itself.
 
-The other writers: `InputManager.MarkDeviceOffline` (`InputManager.Step1.UpdateDevices.cs` line 1246) and `SettingsManager.RemoveDevice` (`SettingsManager.cs` line 487) stop a row's level and release its claims. Identify's pulse train (`InputService.IdentifyDevice` (`InputService.cs` line 17198)) sets the level under the row's gate with the quiesce checked again, and ends at the level the snapshot holds. For the train, a row on a controller or on none also holds its shared haptic path (`PeripheralOutputs.BeginIdentify`, ended in the train's `finally`, lapsing 1000 ms past the train's length), so GameSense plays that Rival and the host runs the Sensa worker for a row no controller holds. Steering-angle rumble accepts a haptic peripheral (`InputManager.SupportsSteeringAngleRumble` (`InputManager.SteeringAngleRumble.cs` line 51)).
+The other writers: `InputManager.MarkDeviceOffline` (`InputManager.Step1.UpdateDevices.cs` line 1246) and `SettingsManager.RemoveDevice` (`SettingsManager.cs` line 487) stop a row's level and release its claims. Identify's pulse train (`InputService.IdentifyDevice` (`InputService.cs` line 17200)) sets the level under the row's gate with the quiesce checked again, and ends at the level the snapshot holds. For the train, a row on a controller or on none also holds its shared haptic path (`PeripheralOutputs.BeginIdentify`, ended in the train's `finally`, lapsing 1000 ms past the train's length), so GameSense plays that Rival and the host runs the Sensa worker for a row no controller holds. Steering-angle rumble accepts a haptic peripheral (`InputManager.SupportsSteeringAngleRumble` (`InputManager.SteeringAngleRumble.cs` line 51)).
 
 ### HID++ 0x19B0
 
@@ -789,8 +789,8 @@ The Sensa row's level reaches the Interhaptics engine through `SensaHapticsServi
 
 - The owner advertises rumble for a haptic mouse or keyboard. `InputService.BuildExposedDevices` (`InputService.cs` line 12188) sets `HasRumble` from the device or the row's recorded haptics bit, so the capability does not flap while the device sleeps. A consumer registers a device again when its rumble flag changes (`LinkServer.ReconcileRemoteDevices` (`LinkServer.cs` line 2176)).
 - On the consumer, the forwarded mouse shows its Force Feedback tab through `IsHapticPeripheral`, and Step 2 ships its level back to the owner as it does for any forwarded device. The host never links a forwarded device to this PC's vendor channels.
-- On the owner, `InputService.ApplyRemoteOutput` (`InputService.cs` line 12604) pays a resend a silence edge owed, records the relayed motors, and calls `SetMotors` with `relayed: true`.
-- Vendor rows are not shared. `InputService.IsShareableDevice` (`InputService.cs` line 12383) refuses a `PeripheralOutputRow`, since it stands for this PC's vendor software and has no input.
+- On the owner, `InputService.ApplyRemoteOutput` (`InputService.cs` line 12605) pays a resend a silence edge owed, records the relayed motors, and calls `SetMotors` with `relayed: true`.
+- Vendor rows are not shared. `InputService.IsShareableDevice` (`InputService.cs` line 12384) refuses a `PeripheralOutputRow`, since it stands for this PC's vendor software and has no input.
 
 ### TouchSense mice
 
