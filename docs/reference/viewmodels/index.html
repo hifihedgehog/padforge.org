@@ -14272,6 +14272,56 @@
 </tr>
 </tbody>
 </table>
+<p><strong>Wheel (per-device):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WheelRotationRange</code></td>
+<td><code>int</code></td>
+<td><code>900</code></td>
+<td><code>WheelRangeMinimum</code>–<code>WheelRangeMaximum</code></td>
+<td>Native wheel rotation range in degrees. The setter clamps to the bounds.</td>
+</tr>
+<tr>
+<td><code>WheelRangeMinimum</code></td>
+<td><code>int</code></td>
+<td><code>40</code></td>
+<td>-</td>
+<td>The least range the loaded wheel takes. Read-only, set by <code>LoadWheelRotationRange</code>.</td>
+</tr>
+<tr>
+<td><code>WheelRangeMaximum</code></td>
+<td><code>int</code></td>
+<td><code>2520</code></td>
+<td>-</td>
+<td>The greatest range the loaded wheel takes. Read-only, set by <code>LoadWheelRotationRange</code>.</td>
+</tr>
+<tr>
+<td><code>WheelAutoCenter</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>0–100</td>
+<td>Auto-center strength %. 0 is off.</td>
+</tr>
+<tr>
+<td><code>WheelRpmLeds</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>-</td>
+<td>Drive the wheel's RPM / shift LEDs from game telemetry.</td>
+</tr>
+</tbody>
+</table>
+<p><code>LoadWheelRotationRange(int degrees, (int Min, int Max)? limits)</code> loads a device's stored range with that device's wheel bounds (<code>WheelRangeLimits.For</code>), or 40–2520 when no native writer drives it (#512). The bounds change only here, with the values they belong to. See <a href="../wheel-ffb-internals/#wheel-tab-settings">Wheel Force Feedback Internals</a>.</p>
 <p><strong>Audio Bass Rumble (per-device):</strong></p>
 <table>
 <thead>

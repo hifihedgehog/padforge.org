@@ -1608,6 +1608,18 @@ Per-(slot, device) mouse-gesture settings. Twin of the Touchpad partial's Load/S
 | `LeftMotorDisplay` | `double` | `0` | 0–1 | Live left motor level (post-scaling). |
 | `RightMotorDisplay` | `double` | `0` | 0–1 | Live right motor level. |
 
+**Wheel (per-device):**
+
+| Property | Type | Default | Range | Description |
+|----------|------|---------|-------|-------------|
+| `WheelRotationRange` | `int` | `900` | `WheelRangeMinimum`–`WheelRangeMaximum` | Native wheel rotation range in degrees. The setter clamps to the bounds. |
+| `WheelRangeMinimum` | `int` | `40` | - | The least range the loaded wheel takes. Read-only, set by `LoadWheelRotationRange`. |
+| `WheelRangeMaximum` | `int` | `2520` | - | The greatest range the loaded wheel takes. Read-only, set by `LoadWheelRotationRange`. |
+| `WheelAutoCenter` | `int` | `0` | 0–100 | Auto-center strength %. 0 is off. |
+| `WheelRpmLeds` | `bool` | `false` | - | Drive the wheel's RPM / shift LEDs from game telemetry. |
+
+`LoadWheelRotationRange(int degrees, (int Min, int Max)? limits)` loads a device's stored range with that device's wheel bounds (`WheelRangeLimits.For`), or 40–2520 when no native writer drives it (#512). The bounds change only here, with the values they belong to. See [Wheel Force Feedback Internals](wheel-ffb-internals.md#wheel-tab-settings).
+
 **Audio Bass Rumble (per-device):**
 
 | Property | Type | Default | Range | Description |

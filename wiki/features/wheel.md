@@ -28,11 +28,27 @@ Three settings, each with a reset button.
 
 | Setting | Range | Default | What it does |
 |---|---|---|---|
-| Rotation Range | 40–2520° | 900° | Degrees of lock-to-lock rotation. Each wheel clamps this to its own hardware maximum. |
+| Rotation Range | the wheel's own range, from 40° to 2520° | 900° | Degrees of lock-to-lock rotation. The slider spans the range the wheel turns, listed below. |
 | Auto Centering Strength | 0–100% | 0% | A centering spring PadForge holds on the wheel. 0% leaves centering to the game. |
 | RPM Shift LEDs | On / Off | Off | Lights the rev LEDs on the wheel rim or base from live sim telemetry. |
 
 The rotation-range and RPM-LED rows are hidden for wheels PadForge drives through the generic path, since those rows need vendor commands.
+
+### Rotation Range
+
+The slider stops at the selected wheel's own limits, so the angle it shows is the angle the wheel turns. A saved range outside those limits loads as the nearer one. A wheel with a fixed range shows that one angle.
+
+| Wheel | Range |
+|---|---|
+| Logitech G29, G923, G27, G25, Driving Force GT, Driving Force Pro | 40–900° |
+| Logitech MOMO Racing, MOMO Force, Driving Force | 270°, fixed |
+| Logitech WingMan Formula Force GP | 180°, fixed |
+| Fanatec CSL Elite | 90–1080° |
+| Fanatec ClubSport V2 and V2.5, CSR Elite, Porsche 911 GT3 RS | 90–900° |
+| Fanatec CSL DD, DD Pro, ClubSport DD, Podium DD1 and DD2 | 90–2520° |
+| Thrustmaster T300RS, T-GT II, TS-PC Racer, TS-XW | 40–1080° |
+| Thrustmaster T248 | 180–900° |
+| Thrustmaster TX | 140–900° |
 
 ### Auto Centering
 

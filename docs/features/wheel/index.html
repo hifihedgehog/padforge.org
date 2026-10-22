@@ -1621,6 +1621,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#rotation-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rotation Range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#auto-centering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3633,6 +3644,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#rotation-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rotation Range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#auto-centering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3829,9 +3851,9 @@
 <tbody>
 <tr>
 <td>Rotation Range</td>
-<td>40–2520°</td>
+<td>the wheel's own range, from 40° to 2520°</td>
 <td>900°</td>
-<td>Degrees of lock-to-lock rotation. Each wheel clamps this to its own hardware maximum.</td>
+<td>Degrees of lock-to-lock rotation. The slider spans the range the wheel turns, listed below.</td>
 </tr>
 <tr>
 <td>Auto Centering Strength</td>
@@ -3848,6 +3870,54 @@
 </tbody>
 </table>
 <p>The rotation-range and RPM-LED rows are hidden for wheels PadForge drives through the generic path, since those rows need vendor commands.</p>
+<h3 id="rotation-range">Rotation Range<a class="headerlink" href="#rotation-range" title="Permanent link">&para;</a></h3>
+<p>The slider stops at the selected wheel's own limits, so the angle it shows is the angle the wheel turns. A saved range outside those limits loads as the nearer one. A wheel with a fixed range shows that one angle.</p>
+<table>
+<thead>
+<tr>
+<th>Wheel</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logitech G29, G923, G27, G25, Driving Force GT, Driving Force Pro</td>
+<td>40–900°</td>
+</tr>
+<tr>
+<td>Logitech MOMO Racing, MOMO Force, Driving Force</td>
+<td>270°, fixed</td>
+</tr>
+<tr>
+<td>Logitech WingMan Formula Force GP</td>
+<td>180°, fixed</td>
+</tr>
+<tr>
+<td>Fanatec CSL Elite</td>
+<td>90–1080°</td>
+</tr>
+<tr>
+<td>Fanatec ClubSport V2 and V2.5, CSR Elite, Porsche 911 GT3 RS</td>
+<td>90–900°</td>
+</tr>
+<tr>
+<td>Fanatec CSL DD, DD Pro, ClubSport DD, Podium DD1 and DD2</td>
+<td>90–2520°</td>
+</tr>
+<tr>
+<td>Thrustmaster T300RS, T-GT II, TS-PC Racer, TS-XW</td>
+<td>40–1080°</td>
+</tr>
+<tr>
+<td>Thrustmaster T248</td>
+<td>180–900°</td>
+</tr>
+<tr>
+<td>Thrustmaster TX</td>
+<td>140–900°</td>
+</tr>
+</tbody>
+</table>
 <h3 id="auto-centering">Auto Centering<a class="headerlink" href="#auto-centering" title="Permanent link">&para;</a></h3>
 <p>Auto centering is a steady centering spring that pulls the wheel back to straight. It is useful for a wheel mapped to an Xbox or PlayStation slot in a game that cannot send DirectInput forces of its own, so the wheel would otherwise have no centering at all. On Logitech and Thrustmaster this is a firmware command. On Fanatec it is a software spring PadForge re-sends with each constant-force update, because Fanatec bases expose no firmware auto centering.</p>
 <h3 id="rpm-shift-leds">RPM shift LEDs<a class="headerlink" href="#rpm-shift-leds" title="Permanent link">&para;</a></h3>

@@ -2173,7 +2173,7 @@ Per device, per slot, so each binding config carries its own gyro feel and its o
 | `ConstantForceX` / `ConstantForceY` | `string` | `[XmlElement]` | `"0"` | |
 | `ConstantTriggerForceEnabled` | `string` | `[XmlElement]` | `"0"` | The impulse-trigger twin: while game trigger rumble is silent, `ConstantTriggerForceLeft` / `ConstantTriggerForceRight` (0..1) drive the trigger motors |
 | `ConstantTriggerForceLeft` / `ConstantTriggerForceRight` | `string` | `[XmlElement]` | `"0"` | |
-| `RotationRange` | `string` | `[XmlElement]` | `"900"` | Wheel rotation range in degrees (40–1080), applied by the native Logitech / Fanatec / Thrustmaster writers |
+| `RotationRange` | `string` | `[XmlElement]` | `"900"` | Wheel rotation range in degrees, applied by the native Logitech / Fanatec / Thrustmaster writers within the wheel's own range (40–2520 across models) |
 | `AutoCenterStrength` | `string` | `[XmlElement]` | `"0"` | Wheel auto-center spring 0–100% (0 = off). Also drives the software spring for generic SDL wheels |
 | `WheelRpmLeds` | `string` | `[XmlElement]` | `"0"` | "1" drives a Logitech or Fanatec wheel's RPM LEDs from racing-game telemetry |
 

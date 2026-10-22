@@ -35,6 +35,7 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 | `PadForge.App/Common/Input/LogitechRawHidWriter.cs` | Logitech native HID. Original C#, wire protocol checked against `new-lg4ff`, read as documentation. |
 | `PadForge.App/Common/Input/FanatecRawHidWriter.cs` | Fanatec native HID. Original C#, wire protocol checked against `hid-fanatecff`, read as documentation. |
 | `PadForge.App/Common/Input/ThrustmasterRawHidWriter.cs` | Thrustmaster native HID. Original C#, wire protocol checked against `hid-tmff2`, read as documentation. |
+| `PadForge.App/Common/Input/WheelRangeLimits.cs` | The rotation range each native wheel takes, from its writer's `RangeLimits`. The Wheel tab's slider spans it. |
 | `PadForge.Engine/Common/ForceFeedbackState.cs` | The `Vibration` carrier, the host-sampled and software paths, the SDL writer for generic devices. |
 | `PadForge.App/Common/Input/InputManager.Step3.SteeringLockFeedback.cs` | The at-lock feedback channels for a steering source. |
 | `PadForge.App/Common/Telemetry/` | The RPM-LED telemetry sources, hub, and LED map. |
@@ -105,7 +106,11 @@ The spring is built as `SDL_HAPTIC_CARTESIAN` with `dir0 = 1`, not `STEERING_AXI
 
 ## Wheel-tab settings
 
-`PadSetting.RotationRange` (default 900), `AutoCenterStrength` (default 0), and `WheelRpmLeds` (default 0) all participate in the settings checksum. The `PadViewModel` bridges them through `InputService`. In `ApplyForceFeedback`, range and auto-center are one-shot, re-sent only when the cached `_appliedWheelSettings` changes, with each writer clamping range to its own hardware maximum.
+`PadSetting.RotationRange` (default 900), `AutoCenterStrength` (default 0), and `WheelRpmLeds` (default 0) all participate in the settings checksum. The `PadViewModel` bridges them through `InputService`. In `ApplyForceFeedback`, range and auto-center are one-shot, re-sent only when the cached `_appliedWheelSettings` changes.
+
+Each writer's `RangeLimits(pid)` is the range a model takes. `WriteRange` clamps to it, and `WheelRangeLimits.For` gives the Wheel tab the same bounds, which the slider spans through `WheelRangeMinimum` and `WheelRangeMaximum`. A wheel with a fixed range (MOMO, Driving Force, WingMan Formula Force GP) has one bound at both ends. The bounds load with the device whose `PadSetting` loads, through `PadViewModel.LoadWheelRotationRange`, called from `InputService.LoadPadSettingIntoViewModel` and from the startup load in `SettingsService.LoadPadSettings`. They never change from the page's device sync. A device switch saves the outgoing device's values before the incoming device loads, and bounds changed between the two would clamp one wheel's saved range by the other wheel's limits (#512).
+
+Thrustmaster's ranges follow Thrustmaster's documentation where `hid-tmff2` differs. The TS-PC and TS-XW take 40–1080°, as their SDK notes state, where `hid-tmff2` stops at 140°. A TS-PC set to 40° was sent 140° before this (#512). The T248 takes 180–900°: its support page gives 180° as its minimum. The TX keeps `hid-tmff2`'s 140–900°, since no Thrustmaster document gives its minimum.
 
 The tab-visibility gate is `PadPage.SyncTabVisibility`. `hasWheel` is the OR of the three `IsXxxWheel` gates on the selected device's VID and PID. `hasGenericWheel` covers a non-vendor SDL wheel that can only self-center: not `hasWheel`, `CapType == InputDeviceType.Driving`, and `ForceFeedbackState.IsGenericWheelSpringCapable(ud.Device)`. Moza bases land here, not in a vendor writer. The Wheel tab shows when either is true, but the rotation-range and RPM-LED rows show only for `hasWheel`. See [Wheel](../features/wheel.md) for the user-facing behavior.
 
