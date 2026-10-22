@@ -131,7 +131,7 @@ Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorks
 PadForge.App/
   App.xaml / App.xaml.cs              # Entry point: update-helper and pending-update checks, single-instance mutex, single-file OpenXInput SetDllDirectory, global exception handling
   MainWindow.xaml / MainWindow.xaml.cs # Shell: app branding bar, sidebar navigation, page hosting, event wiring
-  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (today one entry: the DualShock 3 under DsHidMini SDF / SXS)
+  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (two entries: the DualShock 3 under DsHidMini SDF / SXS and the PS VR Aim Controller, #506)
   Properties/
     AssemblyInfo.cs                   # Assembly metadata only (title, copyright, theme, COM GUID). AssemblyVersion + AssemblyFileVersion live in ..\SharedVersion.cs, linked into the App, Engine, and SteamWorkshop csproj files.
 

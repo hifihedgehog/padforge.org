@@ -189,12 +189,14 @@ mapped = _mapped_names(DB)
 mapped_sdl = _mapped_names(DB.replace(COMMUNITY, ""))
 mapped_community = mapped - mapped_sdl
 # PadForge's own embedded file, which it adds through SDL_AddGamepadMapping
-# at startup: one row, the DualShock 3 under DsHidMini. Its name stays whole:
-# display() trims the "(DsHidMini SDF and SXS)" that tells it apart from the
-# community database's plain DualShock 3, a different device identity.
+# at startup: two rows, the DualShock 3 under DsHidMini and the PS VR Aim
+# Controller (#506). Names stay whole: display() would trim the "(DsHidMini
+# SDF and SXS)" that tells the first apart from the community database's
+# plain DualShock 3, a different device identity.
+PF_DB = (r"C:\Users\sonic\OneDrive\Documents\GitHub\PadForge\PadForge.App"
+         r"\gamecontrollerdb_padforge.txt")
 mapped_padforge = set()
-for _l in read(r"C:\Users\sonic\OneDrive\Documents\GitHub\PadForge\PadForge.App"
-               r"\gamecontrollerdb_padforge.txt").splitlines():
+for _l in read(PF_DB).splitlines():
     _m = re.match(r'\s*([0-9a-fA-F]{32}),([^,]+),', _l)
     if _m:
         mapped_padforge.add(_m.group(2).strip())
@@ -412,6 +414,11 @@ def _guid_id(g):
 community = {_guid_id(_g) for _g in re.findall(r'^\s*"([0-9a-fA-F]{32}),', COMMUNITY, re.M)} - union
 union = union | community
 
+# A pad that only PadForge's own file maps is recognized by that row: the
+# PS VR Aim Controller, whose 054C:0BB2 no SDL table names.
+padforge_ids = {_guid_id(_g) for _g in re.findall(r'^\s*([0-9a-fA-F]{32}),', read(PF_DB), re.M)} - union
+union = union | padforge_ids
+
 # The fork's Windows serial driver opens some ports by the USB device behind
 # them (serial_auto_rules: the DJI RC-N1 family's protocol port, the Konami
 # BIO2), and its iCade driver reads the ION iCade cabinet by its ID.
@@ -445,6 +452,7 @@ N = {
     "mapped_sdl": len(mapped_sdl),
     "mapped_community": len(mapped_community),
     "mapped_padforge": len(mapped_padforge),
+    "padforge": len(padforge_ids),
     # The categories that also sit in the gamepad list, so the sum of the
     # categories exceeds the total by exactly these.
     "overlap_wheels": len(ids("initial_wheel_devices") & cl_ids),

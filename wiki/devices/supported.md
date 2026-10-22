@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **1,108** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, and 24 devices PadForge's own code claims. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **464** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own DualShock 3 entry. For virtual controllers, HIDMaestro ships 337 device profiles. PadForge's controller pickers offer the 136 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed below](#virtual-keyboards-and-mice).
+PadForge recognizes **1,109** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, 24 devices PadForge's own code claims, and the PS VR Aim Controller, which PadForge's own mapping file names. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **465** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For virtual controllers, HIDMaestro ships 337 device profiles. PadForge's controller pickers offer the 136 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed below](#virtual-keyboards-and-mice).
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -246,12 +246,12 @@ SDL's Wii driver recognizes a Wii U Pro Controller by the extension it reports, 
 | **Steam** | Steam Virtual Gamepad |
 | **Streaming** | Streaming mobile touch virtual controls |
 
-### With a shipped mapping (464)
+### With a shipped mapping (465)
 
 Pads carrying a mapping in the database, so their buttons and axes land in the right places
 the moment they are plugged in. SDL's database holds 249 names in its Windows section, the
 community SDL_GameControllerDB that PadForge's SDL3 build adds holds 214 more, and PadForge
-adds one of its own for the DualShock 3 under DsHidMini.
+adds two of its own, for the DualShock 3 under DsHidMini and the PS VR Aim Controller.
 
 | Vendor | Devices |
 | --- | --- |
@@ -269,7 +269,7 @@ adds one of its own for the DualShock 3 under DsHidMini.
 | **PowerA** | PowerA Fusion Nintendo Switch Arcade Stick, PowerA Fusion Pro Nintendo Switch Controller, PowerA OPS v1 Wireless Controller, PowerA OPS v3 Pro Wireless Controller, PowerA Pro Ex, PowerA PS3 Controller, PowerA Wired GameCube Controller |
 | **Elecom** | Elecom DUX60 MMO, Elecom Gamepad, Elecom PlayStation Adapter, Elecom U1012, Elecom U3912T, Elecom U4113S |
 | **Hyperkin** | Hyperkin Admiral N64 Controller, Hyperkin N64 Adapter, Hyperkin RetroN Sq, Hyperkin Scout, Hyperkin Scout Premium SNES Controller, Hyperkin Trooper 2 |
-| **Sony** | Sony DualShock 2, Sony DualShock 3, Sony DualShock 3 (DsHidMini SDF and SXS), Sony PlayStation Adapter, Sony PlayStation Portable, Sony PlayStation Vita |
+| **Sony** | Sony DualShock 2, Sony DualShock 3, Sony DualShock 3 (DsHidMini SDF and SXS), Sony PlayStation Adapter, Sony PlayStation Portable, Sony PlayStation Vita, Sony PS VR Aim Controller |
 | **InterAct** | InterAct ActionPad, InterAct AxisPad, InterAct Hammerhead, InterAct Hammerhead FX, InterAct ProPad |
 | **SteelSeries** | SteelSeries, SteelSeries Free, SteelSeries Nimbus Cloud, SteelSeries Stratus Duo, SteelSeries Stratus XL |
 | **Thrustmaster** | Thrustmaster Dual Analog 4, Thrustmaster Dual Trigger 3-in-1, ThrustMaster eSwap PRO Controller, Thrustmaster Firestorm Dual Power, Thrustmaster Firestorm Dual Power 3 |

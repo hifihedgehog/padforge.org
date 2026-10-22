@@ -22,7 +22,7 @@ from emit_supported import fam, mapped, CAT, N, FAM_ORDER, lines, SITE
 # The count of HIDMaestro profiles PadForge's pickers offer: the ones that
 # carry a captured HID descriptor (HMaestroProfileCatalog keeps only
 # IsDeployable profiles). Checked by hand against the bundled DLL.
-OFFERED_PROFILES = 134
+OFFERED_PROFILES = 136
 
 WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
          6: "six", 7: "seven", 8: "eight", 9: "nine"}
@@ -47,20 +47,23 @@ HN.update(
 # else does. A rebase that changes either needs the sentence rewritten.
 if N["overlap_arcade"] != N["arcade"]:
     raise SystemExit("not every arcade stick is in the gamepad list now: reword HEADLINE")
-if N["mapped_padforge"] != 1:
-    raise SystemExit("PadForge's own mapping file no longer holds one row: reword HEADLINE")
+if N["mapped_padforge"] != 2 or N["padforge"] != 1:
+    raise SystemExit("PadForge's own mapping file no longer holds the two rows HEADLINE names: reword it")
 HEADLINE = (
     "PadForge recognizes **{union_fmt}** devices by their USB identity: {pads} gamepads in SDL's "
     "controller list, {community} more pads that the community SDL_GameControllerDB maps, "
     "{flydigi} Flydigi pads, {claimed} pads and specialty devices that SDL's dedicated drivers "
     "claim, {wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} "
-    "arcade sticks, {gamecube} GameCube adapters, and {native} devices PadForge's own code "
-    "claims. The arcade sticks, {ow} wheels and {og} adapters also sit in the gamepad list, so "
-    "the total is smaller than the sum. Behind those sit **{mapped_all}** named gamepad "
-    "mappings: {mapped_sdl} from SDL's Windows database, {mapped_community} more from the "
-    "community database, and PadForge's own DualShock 3 entry. For virtual controllers, "
-    "HIDMaestro ships {profiles} device profiles, and PadForge offers the {offered} that carry "
-    "a captured HID descriptor."
+    "arcade sticks, {gamecube} GameCube adapters, {native} devices PadForge's own code "
+    "claims, and the PS VR Aim Controller, which PadForge's own mapping file names. The arcade "
+    "sticks, {ow} wheels and {og} adapters also sit in the gamepad list, so the total is smaller "
+    "than the sum. Behind those sit **{mapped_all}** named gamepad mappings: {mapped_sdl} from "
+    "SDL's Windows database, {mapped_community} more from the community database, and "
+    "PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For "
+    "virtual controllers, HIDMaestro ships {profiles} device profiles. PadForge's controller "
+    "pickers offer the {offered} controllers that carry a captured HID descriptor, and a "
+    "Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed "
+    "below](#virtual-keyboards-and-mice)."
 )
 
 Q = '"'
