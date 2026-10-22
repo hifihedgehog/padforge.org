@@ -10235,7 +10235,7 @@
 <p>Called at 30 Hz by <code>UiTimer_Tick</code>:</p>
 <ol>
 <li>Bails if <code>EnableAutoProfileSwitching</code> is false, if <code>SettingsManager.ExternalProfilePinActive</code> is set (a script holds the profile, #366), or if no profiles exist.</li>
-<li>Gets foreground window handle via <code>GetForegroundWindow()</code>, then process ID and <code>MainModule.FileName</code>. The (hwnd, pid) pair is cached, so the same window costs no <code>Process.GetProcessById</code>.</li>
+<li>Gets the foreground window handle via <code>GetForegroundWindow()</code>, its process ID, and the image path through <code>ProcessImage.PathOf</code>: <code>QueryFullProcessImageNameW</code> on a limited-query handle, the access Windows grants for a protected process, where <code>MainModule</code> needs memory-read access such a process refuses. The (hwnd, pid) pair is cached, so the same window costs no query, and a failed query is cached as null.</li>
 <li>Skips if exe path unchanged (<code>_lastExePath</code> deduplication).</li>
 <li>Matches against all profiles' <code>ExecutableNames</code> (pipe-separated full paths, case-insensitive).</li>
 <li>Fires <code>ProfileSwitchRequired</code> only when the matched profile changes (<code>_lastMatchedProfileId</code>). Null signals reversion to default. While a manual override is active, a match on the overridden profile returns without firing, and a match on anything else clears the override first.</li>

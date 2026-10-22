@@ -606,7 +606,7 @@ No device was written to while these paths were built: no Razer, SteelSeries, La
 
 ### The loader
 
-`LogiLedEngineNative` (`LogiLedEngineNative.cs` line 33) replicates the `LogitechLedEnginesWrapper.dll` shim from managed code, so PadForge redistributes nothing of Logitech's. `LogiLedEngineNative.TryLoad` (`LogiLedEngineNative.cs` line 100) reads the default value of `ServerBinaryKey`, the wrapper's only embedded wide string and the key Aurora and Artemis read from HKLM's 64-bit view. It checks that the file's description is `Logitech Gaming LED SDK` (Aurora `LgsInstallationUtils.cs:48-64`), loads it with `LoadLibraryExW` and `LOAD_WITH_ALTERED_SEARCH_PATH` so the engine's own directory joins its dependency resolution, and resolves the undecorated cdecl `LogiLed*` exports:
+`LogiLedEngineNative` (`LogiLedEngineNative.cs` line 34) replicates the `LogitechLedEnginesWrapper.dll` shim from managed code, so PadForge redistributes nothing of Logitech's. `LogiLedEngineNative.TryLoad` (`LogiLedEngineNative.cs` line 103) reads the default value of `ServerBinaryKey`, the wrapper's only embedded wide string and the key Aurora and Artemis read from HKLM's 64-bit view. It checks that the file's description is `Logitech Gaming LED SDK` (Aurora `LgsInstallationUtils.cs:48-64`), loads it with `LoadLibraryExW` and `LOAD_WITH_ALTERED_SEARCH_PATH` so the engine's own directory joins its dependency resolution, and resolves the undecorated cdecl `LogiLed*` exports:
 
 | Export | Required |
 |---|---|
@@ -616,7 +616,7 @@ No device was written to while these paths were built: no Razer, SteelSeries, La
 | `LogiLedSaveCurrentLighting`, `LogiLedRestoreLighting` | no |
 | `LogiLedSetLightingForTargetZone` | no. The 9.00 header's zone call (logitech-led-sdk-rs `bindings-x86_64.rs:354`, RGB.NET `_LogitechGSDK.cs:146`) |
 
-Old engines carry 13 exports, so each optional one degrades on its own. Returns are one-byte C++ `bool`, marshaled as `byte`. `LogiLedEngineNative.Unload` (`LogiLedEngineNative.cs` line 230) nulls every delegate before `FreeLibrary`, so a stray call lands on a null check instead of a freed code page. `ILogiLedNative` (`LedSdkBackend.cs` line 16) is the seam the bench scripts.
+Old engines carry 13 exports, so each optional one degrades on its own. Returns are one-byte C++ `bool`, marshaled as `byte`. `LogiLedEngineNative.Unload` (`LogiLedEngineNative.cs` line 233) nulls every delegate before `FreeLibrary`, so a stray call lands on a null check instead of a freed code page. `ILogiLedNative` (`LedSdkBackend.cs` line 16) is the seam the bench scripts.
 
 ### Types and zones
 
@@ -746,12 +746,12 @@ The crash path calls `GameSenseBackend.WaitForSilence` (`GameSenseBackend.cs` li
 | Edge | Site |
 |---|---|
 | Engine stop | `InputManager.Stop` (`InputManager.cs` line 1863) |
-| Crash quiesce | `InputManager.StopAllForceFeedback` (`InputManager.cs` line 2381), which also stops each row's level under its output gate, so a level the poll thread or Identify decided under the gate cannot land after the sweep |
-| Focus suspend | `InputManager.ApplyFocusSuspension` (`InputManager.cs` line 3896), with `keepRelayed: true`: a level a Remote Link peer drives keeps playing, as a peer-driven SDL rumble does, since the relay still writes while the engine is suspended and a peer sends a steady level only once |
+| Crash quiesce | `InputManager.StopAllForceFeedback` (`InputManager.cs` line 2388), which also stops each row's level under its output gate, so a level the poll thread or Identify decided under the gate cannot land after the sweep |
+| Focus suspend | `InputManager.ApplyFocusSuspension` (`InputManager.cs` line 3903), with `keepRelayed: true`: a level a Remote Link peer drives keeps playing, as a peer-driven SDL rumble does, since the relay still writes while the engine is suspended and a peer sends a steady level only once |
 
 Idle is no edge. Step 2 runs there and writes the level itself.
 
-The other writers: `InputManager.MarkDeviceOffline` (`InputManager.Step1.UpdateDevices.cs` line 1188) and `SettingsManager.RemoveDevice` (`SettingsManager.cs` line 487) stop a row's level and release its claims. Identify's pulse train (`InputService.IdentifyDevice` (`InputService.cs` line 17181)) sets the level under the row's gate with the quiesce checked again, and ends at the level the snapshot holds. For the train, a row on a controller or on none also holds its shared haptic path (`PeripheralOutputs.BeginIdentify`, ended in the train's `finally`, lapsing 1000 ms past the train's length), so GameSense plays that Rival and the host runs the Sensa worker for a row no controller holds. Steering-angle rumble accepts a haptic peripheral (`InputManager.SupportsSteeringAngleRumble` (`InputManager.SteeringAngleRumble.cs` line 51)).
+The other writers: `InputManager.MarkDeviceOffline` (`InputManager.Step1.UpdateDevices.cs` line 1246) and `SettingsManager.RemoveDevice` (`SettingsManager.cs` line 487) stop a row's level and release its claims. Identify's pulse train (`InputService.IdentifyDevice` (`InputService.cs` line 17181)) sets the level under the row's gate with the quiesce checked again, and ends at the level the snapshot holds. For the train, a row on a controller or on none also holds its shared haptic path (`PeripheralOutputs.BeginIdentify`, ended in the train's `finally`, lapsing 1000 ms past the train's length), so GameSense plays that Rival and the host runs the Sensa worker for a row no controller holds. Steering-angle rumble accepts a haptic peripheral (`InputManager.SupportsSteeringAngleRumble` (`InputManager.SteeringAngleRumble.cs` line 51)).
 
 ### HID++ 0x19B0
 
@@ -802,8 +802,8 @@ A Logitech iFeel mouse rumbles once it is bound to WinUSB. Its buzz command is a
 
 The macro action (#468), `MacroActionType.SetChromaColor` (`MacroItem.cs` line 6642), paints while it is current, the AxisHold duration shape.
 
-1. `InputManager.ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs` line 2858) and its extended twin `InputManager.ExecuteSequentialActionRaw` (`InputManager.Step4b.EvaluateMacros.cs` line 5188) call `InputManager.NoteChromaColor` (`InputManager.Step4b.EvaluateMacros.cs` line 2829) with the macro's slot and color on every frame the action is current. Several macros current in one frame leave the last one evaluated, which is how a full-press macro listed below its soft-press twin wins at the bottom of the press.
-2. `InputManager.EvaluateSlotMacros` (`InputManager.Step4b.EvaluateMacros.cs` line 464) and `InputManager.EvaluateSlotMacrosExtended` (`InputManager.Step4b.EvaluateMacros.cs` line 4498) end with `InputManager.FlushChromaColors` (`InputManager.Step4b.EvaluateMacros.cs` line 2838), which hands each slot's color for the frame to `MacroChromaSink` once, so a reader never sees the color flip between two macros within a frame. Each macro pass sends one color per controller.
+1. `InputManager.ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs` line 2860) and its extended twin `InputManager.ExecuteSequentialActionRaw` (`InputManager.Step4b.EvaluateMacros.cs` line 5190) call `InputManager.NoteChromaColor` (`InputManager.Step4b.EvaluateMacros.cs` line 2831) with the macro's slot and color on every frame the action is current. Several macros current in one frame leave the last one evaluated, which is how a full-press macro listed below its soft-press twin wins at the bottom of the press.
+2. `InputManager.EvaluateSlotMacros` (`InputManager.Step4b.EvaluateMacros.cs` line 466) and `InputManager.EvaluateSlotMacrosExtended` (`InputManager.Step4b.EvaluateMacros.cs` line 4500) end with `InputManager.FlushChromaColors` (`InputManager.Step4b.EvaluateMacros.cs` line 2840), which hands each slot's color for the frame to `MacroChromaSink` once, so a reader never sees the color flip between two macros within a frame. Each macro pass sends one color per controller.
 3. The sink is `PeripheralOutputs.AssertChromaMacro` (`PeripheralOutputs.cs` line 895). It packs the tick shifted left 24 bits with the color into one `long` per slot, so one atomic read gives a matching pair. A first assertion, a new color, or one after the window lapsed raises `PeripheralOutputs.ChromaMacroChanged` (`PeripheralOutputs.cs` line 888), which wakes the Chroma worker and the Razer direct worker and no other. A held color asserted every frame raises nothing.
 4. `PeripheralOutputs.TryGetChromaMacro` (`PeripheralOutputs.cs` line 920) reads a slot's color while its latest assertion is within `PeripheralOutputs.MacroAssertWindowMs` (`PeripheralOutputs.cs` line 879), 120 ms. The action asserts on every poll, a millisecond apart, so the window measures only the gap after the action ends.
 

@@ -1445,7 +1445,7 @@ Monitors the foreground window and fires an event when the foreground process ma
 Called at 30 Hz by `UiTimer_Tick`:
 
 1. Bails if `EnableAutoProfileSwitching` is false, if `SettingsManager.ExternalProfilePinActive` is set (a script holds the profile, #366), or if no profiles exist.
-2. Gets foreground window handle via `GetForegroundWindow()`, then process ID and `MainModule.FileName`. The (hwnd, pid) pair is cached, so the same window costs no `Process.GetProcessById`.
+2. Gets the foreground window handle via `GetForegroundWindow()`, its process ID, and the image path through `ProcessImage.PathOf`: `QueryFullProcessImageNameW` on a limited-query handle, the access Windows grants for a protected process, where `MainModule` needs memory-read access such a process refuses. The (hwnd, pid) pair is cached, so the same window costs no query, and a failed query is cached as null.
 3. Skips if exe path unchanged (`_lastExePath` deduplication).
 4. Matches against all profiles' `ExecutableNames` (pipe-separated full paths, case-insensitive).
 5. Fires `ProfileSwitchRequired` only when the matched profile changes (`_lastMatchedProfileId`). Null signals reversion to default. While a manual override is active, a match on the overridden profile returns without firing, and a match on anything else clears the override first.
