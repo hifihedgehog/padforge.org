@@ -3838,7 +3838,7 @@
 <p>Thrustmaster is the exception. A T-series wheel powers on in a boot mode and switches to the mode PadForge drives only after Thrustmaster's own driver is installed. Keep the Thrustmaster driver in place. Without it, PadForge does not recognize the wheel as a Thrustmaster, and it falls back to the generic path with no native rotation range or RPM LEDs.</p>
 <hr />
 <h2 id="the-wheel-tab">The Wheel tab<a class="headerlink" href="#the-wheel-tab" title="Permanent link">&para;</a></h2>
-<p>Three settings, each with a reset button.</p>
+<p>Four settings, each with a reset button.</p>
 <table>
 <thead>
 <tr>
@@ -3849,6 +3849,12 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Set Rotation Range</td>
+<td>On / Off</td>
+<td>On</td>
+<td>Sends the wheel the Rotation Range below. Off leaves the range to the wheel and its own software.</td>
+</tr>
 <tr>
 <td>Rotation Range</td>
 <td>the wheel's own range, from 40° to 2520°</td>
@@ -3872,6 +3878,7 @@
 <p>The rotation-range and RPM-LED rows are hidden for wheels PadForge drives through the generic path, since those rows need vendor commands.</p>
 <h3 id="rotation-range">Rotation Range<a class="headerlink" href="#rotation-range" title="Permanent link">&para;</a></h3>
 <p>The slider stops at the selected wheel's own limits, so the angle it shows is the angle the wheel turns. A saved range outside those limits loads as the nearer one. A wheel with a fixed range shows that one angle.</p>
+<p>To set the range in the wheel maker's own software instead, such as Thrustmaster's control panel or a Fanatec base's tuning menu, clear <strong>Set Rotation Range</strong>. PadForge then sends the wheel no range at all, and the slider rests. Clearing it does not undo a range PadForge already sent, so set the range in the wheel's own software afterward. On a Fanatec base the range command is also what switches off the base's own centering spring, so with Set Rotation Range off the base keeps its own centering too. Each wheel keeps its own setting, and a wheel on another PC through the <a href="../../guides/remote-link/">Remote Link</a> follows the setting of the PC that maps it.</p>
 <table>
 <thead>
 <tr>

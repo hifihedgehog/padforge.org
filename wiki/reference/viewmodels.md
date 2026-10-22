@@ -1624,6 +1624,7 @@ Per-(slot, device) mouse-gesture settings. Twin of the Touchpad partial's Load/S
 
 | Property | Type | Default | Range | Description |
 |----------|------|---------|-------|-------------|
+| `WheelRotationRangeEnabled` | `bool` | `true` | - | Set Rotation Range. False leaves the range to the wheel and its own software, and no range is sent (#512). Persisted in `PadSetting.RotationRangeEnabled`, reset by its row and by the Wheel card's Reset All. |
 | `WheelRotationRange` | `int` | `900` | `WheelRangeMinimum`–`WheelRangeMaximum` | Native wheel rotation range in degrees. The setter clamps to the bounds. |
 | `WheelRangeMinimum` | `int` | `40` | - | The least range the loaded wheel takes. Read-only, set by `LoadWheelRotationRange`. |
 | `WheelRangeMaximum` | `int` | `2520` | - | The greatest range the loaded wheel takes. Read-only, set by `LoadWheelRotationRange`. |

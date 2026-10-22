@@ -178,7 +178,7 @@ The first three rows hold while the engine runs (`PeripheralOutputs.Running`) an
 
 There is no switch. The row is a device like any other: its assignments and its Force Feedback settings per virtual controller persist with the settings and ride profiles as entries.
 
-The Dashboard's Razer Sensa section and its switch are gone. `AppSettingsData.EnableSensaHaptics` (`SettingsService.cs` line 6862) and the profile's `bool?` opinion, `ProfileData.EnableSensaHaptics` (`SettingsService.cs` line 7833), are read once by `PeripheralSwitchMigration` and never written, since `ShouldSerializeEnableSensaHaptics` returns false on both. `PeripheralSwitchMigration.Switches` (`PeripheralSwitchMigration.cs` line 49) lists the switch, and `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns one that was on into an assignment of the Razer Sensa row:
+The Dashboard's Razer Sensa section and its switch are gone. `AppSettingsData.EnableSensaHaptics` (`SettingsService.cs` line 6864) and the profile's `bool?` opinion, `ProfileData.EnableSensaHaptics` (`SettingsService.cs` line 7835), are read once by `PeripheralSwitchMigration` and never written, since `ShouldSerializeEnableSensaHaptics` returns false on both. `PeripheralSwitchMigration.Switches` (`PeripheralSwitchMigration.cs` line 49) lists the switch, and `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns one that was on into an assignment of the Razer Sensa row:
 
 - In the live settings when the active profile's opinion, else the global value, was on.
 - In the default profile's stored state, while a named profile is active, and in each stored profile, each by its own opinion, else the global value.

@@ -24,10 +24,11 @@ Thrustmaster is the exception. A T-series wheel powers on in a boot mode and swi
 
 ## The Wheel tab
 
-Three settings, each with a reset button.
+Four settings, each with a reset button.
 
 | Setting | Range | Default | What it does |
 |---|---|---|---|
+| Set Rotation Range | On / Off | On | Sends the wheel the Rotation Range below. Off leaves the range to the wheel and its own software. |
 | Rotation Range | the wheel's own range, from 40° to 2520° | 900° | Degrees of lock-to-lock rotation. The slider spans the range the wheel turns, listed below. |
 | Auto Centering Strength | 0–100% | 0% | A centering spring PadForge holds on the wheel. 0% leaves centering to the game. |
 | RPM Shift LEDs | On / Off | Off | Lights the rev LEDs on the wheel rim or base from live sim telemetry. |
@@ -37,6 +38,8 @@ The rotation-range and RPM-LED rows are hidden for wheels PadForge drives throug
 ### Rotation Range
 
 The slider stops at the selected wheel's own limits, so the angle it shows is the angle the wheel turns. A saved range outside those limits loads as the nearer one. A wheel with a fixed range shows that one angle.
+
+To set the range in the wheel maker's own software instead, such as Thrustmaster's control panel or a Fanatec base's tuning menu, clear **Set Rotation Range**. PadForge then sends the wheel no range at all, and the slider rests. Clearing it does not undo a range PadForge already sent, so set the range in the wheel's own software afterward. On a Fanatec base the range command is also what switches off the base's own centering spring, so with Set Rotation Range off the base keeps its own centering too. Each wheel keeps its own setting, and a wheel on another PC through the [Remote Link](../guides/remote-link.md) follows the setting of the PC that maps it.
 
 | Wheel | Range |
 |---|---|
