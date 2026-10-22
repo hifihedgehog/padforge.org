@@ -7848,7 +7848,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 </ol>
 <h3 id="pointer-and-mouse-sensor-reads">Pointer and Mouse-Sensor Reads<a class="headerlink" href="#pointer-and-mouse-sensor-reads" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.Engine/Common/SdlDeviceWrapper.cs</code></p>
-<p>The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. <code>SdlDeviceWrapper.GetCurrentState</code> (line 898, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:</p>
+<p>The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. <code>SdlDeviceWrapper.GetCurrentState</code> (line 924, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:</p>
 <table>
 <thead>
 <tr>
@@ -7861,7 +7861,7 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 <tbody>
 <tr>
 <td>Wii IR pointer (#146)</td>
-<td><code>ReadIrPointer</code> (line 1347, the step in <code>StepIrPointer</code> line 1387, the midpoint in <code>ComputeIrAim</code> line 1658)</td>
+<td><code>ReadIrPointer</code> (line 1373, the step in <code>StepIrPointer</code> line 1417, the midpoint in <code>ComputeIrAim</code> line 1791)</td>
 <td>6-9 (two sensor-bar dots)</td>
 <td><code>CustomInputState.Ir</code> (line 137): <code>Ir.X</code> / <code>Ir.Y</code> in <code>[-1, +1]</code>, <code>Ir.Detected</code>, <code>Ir.Calibrated</code></td>
 </tr>
