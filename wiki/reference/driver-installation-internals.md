@@ -130,7 +130,7 @@ Declared in `PadForge.App.csproj`:
 </EmbeddedResource>
 ```
 
-`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 5.0.0 ships HIDMaestro 1.10.1, and pre-release builds after it ship 1.12.0. 1.12.0 changed the driver, so the first slot that needs it after the update reinstalls the driver once. 1.9.0 asked Inf2Cat for its ARM64 catalog with `/os:10_ARM64`, which Inf2Cat refuses, so on an ARM64 PC its install stopped before the driver reached the store. 1.9.1 asks for `10_RS3_ARM64` (HM#63). The 1.6 line introduced the native OpenVR driver behind the VR slot type.
+`HIDMaestro.Core.dll` is a `<Reference>`, not a `<ProjectReference>`. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of `HIDMaestro.Core.dll` from the HIDMaestro repo into `Resources\HIDMaestro\` after a tag is cut there. PadForge 5.0.0 ships HIDMaestro 1.10.1, and pre-release builds after it ship 2.0.2. 1.12.0 and 2.0.0 each changed the driver, so the first slot that needs it after the update reinstalls the driver once. 1.9.0 asked Inf2Cat for its ARM64 catalog with `/os:10_ARM64`, which Inf2Cat refuses, so on an ARM64 PC its install stopped before the driver reached the store. 1.9.1 asks for `10_RS3_ARM64` (HM#63). The 1.6 line introduced the native OpenVR driver behind the VR slot type.
 
 ---
 
