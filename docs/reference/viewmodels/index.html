@@ -9942,6 +9942,32 @@
 <td><code>string</code></td>
 <td>HIDMaestro SDK version. Initialized from the embedded <code>HIDMaestro.Core</code> assembly via <code>GetEmbeddedHidMaestroVersion()</code>.</td>
 </tr>
+<tr>
+<td><code>IsHIDMaestroInstalled</code></td>
+<td><code>bool</code></td>
+<td>HIDMaestro's driver is in the driver store. Set by <code>MainWindow.RefreshHIDMaestroStatus</code> from <code>HIDMaestroRemoval.IsDriverInstalled()</code> at startup, on the driver status timer and after a removal.</td>
+</tr>
+<tr>
+<td><code>HIDMaestroStatusText</code></td>
+<td><code>string</code></td>
+<td>Computed: <code>Common_Installed</code> or <code>Common_NotInstalled</code>. Raised again on a language change.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>CanExecute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UninstallHIDMaestroCommand</code></td>
+<td>Always</td>
+<td>Raises <code>UninstallHIDMaestroRequested</code>, which <code>MainWindow.UninstallHIDMaestroAsync</code> handles. Available with the driver gone, since HIDMaestro can leave other things behind.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="driver-status-hidhide">Driver Status: HidHide<a class="headerlink" href="#driver-status-hidhide" title="Permanent link">&para;</a></h3>

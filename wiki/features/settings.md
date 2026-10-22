@@ -302,10 +302,10 @@ The same rumble drives **identify**: buzzing a device is how you tell which of s
 
 ## Driver Management
 
-Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide and HIDMaestro also show the installed version.
+Four driver cards. Each card has an ember flame beside its status text (lit when installed, an unlit outline when not). HidHide also shows the installed version, and HIDMaestro the version PadForge carries.
 
 - **HidHide Driver** card: Install and Uninstall buttons.
-- **HIDMaestro Driver** card: status only. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot.
+- **HIDMaestro Driver** card: the installed state and an **Uninstall** button. The driver installs itself the first time you create a virtual controller and is required for every Xbox / PlayStation / Nintendo / Extended / VR slot. **Uninstall** shows what HIDMaestro left on the PC, then stops the engine and removes it. See [Driver Management](driver-management.md#uninstall).
 - **Windows MIDI Services** card: the API PadForge uses (**Built into Windows**, **App SDK Runtime** with the runtime's version, or **Legacy MIDI API**), or **Not Running** with the reason: the Windows MIDI service did not respond, a MIDI driver did not respond, or the runtime's uninstaller is still running. Under **Legacy MIDI API** the card names the error when the API built into Windows is registered but did not start. A Windows MIDI Services API that did not start when PadForge first checked is taken later, once it starts, with nothing restarted. **Install** shows on Windows 11 24H2 or later while Windows has no API of its own and no runtime is installed, and installs PadForge's build of the Windows MIDI Services runtime. **Uninstall** shows while a runtime is installed. See [Driver Management](driver-management.md#windows-midi-services).
 - **SteamVR** card: needed only for [VR slots](vr-controllers.md). It describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
 
@@ -316,7 +316,7 @@ PadForge is already elevated from its startup UAC prompt, so the Install / Unins
 | Driver | What it does | When to install |
 |---|---|---|
 | **HidHide** | Hides physical controllers from games so they only see the virtuals. Stops double input. | Games see both the physical and the virtual. |
-| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers, and the virtual keyboards and mice of a Keyboard+Mouse slot. 336 device profiles, of which PadForge offers the 238 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot, or set a Keyboard+Mouse slot to a keyboard or mouse model. Required for those five slot types and those models. |
+| **HIDMaestro** | Single user-mode driver that creates Xbox, PlayStation, Nintendo (Switch Pro and Switch 2 Pro), and Extended (DirectInput) virtual controllers, and the virtual keyboards and mice of a Keyboard+Mouse slot. 337 device profiles, of which PadForge offers 239 that carry a HID descriptor. Replaces ViGEmBus and vJoy in v3. | Installs itself the first time you create an Xbox, PlayStation, Nintendo, Extended, or VR slot, or set a Keyboard+Mouse slot to a keyboard or mouse model. Required for those five slot types and those models. |
 | **Windows MIDI Services** | Gives each MIDI slot a port of its own and reads MIDI inputs. Part of Windows 11 25H2 from the late-November 2026 update. Without it, MIDI runs on the legacy MIDI API, where slots send to a port you pick. | On 24H2 or later before Windows carries the API, click **Install** on its card for the runtime. |
 | **SteamVR** | Valve's VR runtime. PadForge fetches it directly, with no Steam account and no Steam client. | You want a [VR slot](vr-controllers.md). The VR tile stays disabled without it. |
 

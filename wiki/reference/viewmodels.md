@@ -435,6 +435,12 @@ HIDMaestro is shipped as an embedded managed SDK (`HIDMaestro.Core`, bundled at 
 | Property | Type | Description |
 |----------|------|-------------|
 | `HIDMaestroVersion` | `string` | HIDMaestro SDK version. Initialized from the embedded `HIDMaestro.Core` assembly via `GetEmbeddedHidMaestroVersion()`. |
+| `IsHIDMaestroInstalled` | `bool` | HIDMaestro's driver is in the driver store. Set by `MainWindow.RefreshHIDMaestroStatus` from `HIDMaestroRemoval.IsDriverInstalled()` at startup, on the driver status timer and after a removal. |
+| `HIDMaestroStatusText` | `string` | Computed: `Common_Installed` or `Common_NotInstalled`. Raised again on a language change. |
+
+| Command | CanExecute | Description |
+|---------|-----------|-------------|
+| `UninstallHIDMaestroCommand` | Always | Raises `UninstallHIDMaestroRequested`, which `MainWindow.UninstallHIDMaestroAsync` handles. Available with the driver gone, since HIDMaestro can leave other things behind. |
 
 ### Driver Status: HidHide
 

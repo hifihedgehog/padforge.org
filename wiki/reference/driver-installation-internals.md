@@ -71,7 +71,7 @@ graph TD
         VX["One-device xusb22 package<br/>signed on this machine"]
     end
 
-    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(336 profiles bundled in the SDK,<br/>238 of them offered in PadForge)"]
+    HM -->|"InstallDriver() inside HIDMaestro.Core.dll"| HM_DRV["HIDMaestro UMDF2 driver<br/>(337 profiles bundled in the SDK,<br/>239 of them offered in PadForge)"]
     HH -->|"x64: HidHide_1.5.230_x64.exe<br/>/extract -> msiexec /i HidHide.msi<br/>ARM64: nefconc install, then class filters"| HH_DRV["HidHide kernel driver"]
     MS -->|"vc_redist.x64.exe if older than 14.51<br/>-> msiexec /i PadForge-MIDI-Runtime-*.msi"| MS_SVC["C:\Program Files\PadForge MIDI Runtime<br/>(the in-box API needs no install)"]
     SV -->|"steamcmd.zip -> +app_update 250820<br/>-> HMVR.SetSteamVRPathHint"| SV_DIR["SteamVR payload<br/>(default C:\SteamVR)"]
@@ -152,9 +152,9 @@ Helpers reused across the install flows. `ExtractEmbeddedResource` and `CleanupT
 
 ## HIDMaestro
 
-PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` / `UninstallHIDMaestro` methods. The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 336 device profiles. PadForge's pickers offer the 238 that carry a captured HID descriptor: `HMaestroProfileCatalog` keeps only profiles whose `HMProfile.IsDeployable` is true, which is `HasDescriptor`, and adds its own synthetic Custom profile. The 51 keyboards and 52 mice go to the Keyboard+Mouse slot's pickers (`KeyboardProfiles`, `MouseProfiles`) and the 135 controllers to the others. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created, or a Keyboard+Mouse slot set to a keyboard or mouse model (typically during the first engine `Start()` that has such a slot configured).
+PadForge does not ship a separate HIDMaestro installer EXE or MSI, and `DriverInstaller` has no `InstallHIDMaestro` method. The removal is HIDMaestro's own ([Removal](#removal)). The HM SDK assembly (`HIDMaestro.Core.dll`) bundles the UMDF2 driver binaries, INF, signing tools, and 337 device profiles. PadForge's pickers offer 239 that carry a captured HID descriptor: `HMaestroProfileCatalog` keeps only profiles whose `HMProfile.IsDeployable` is true, which is `HasDescriptor`, leaves out the one it withholds (`WithheldProfileIds`, the GameCube adapter's Full persona), and adds its own synthetic Custom profile. The 51 keyboards and 52 mice go to the Keyboard+Mouse slot's pickers (`KeyboardProfiles`, `MouseProfiles`) and the 136 controllers to the others. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created, or a Keyboard+Mouse slot set to a keyboard or mouse model (typically during the first engine `Start()` that has such a slot configured).
 
-Composite personas need one more driver. The seven profiles whose `backend` is `usbip` (`dualsense-composite`, `dualsense-edge-composite`, `dualshock-4-v2-composite`, `steam-controller-2`, `steam-controller-composite`, `steam-deck-composite` and `switch2-pro-controller-composite`) attach through usbip-win2's virtual USB host controller. HIDMaestro 1.9.2 and later carry the usbip-win2 0.9.8.1 installers inside `HIDMaestro.Core.dll`: the x64 release asset, whose driver Microsoft certified, and the same tag's ARM64 build from the project's signing service, whose drivers Microsoft attestation-signed. It checks each one's SHA-256 before it runs, and runs it with `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART` the first time a composite controller is created (`HMContext.CreateController` reaches `UsbipDriverInstaller.EnsureInstalled`). PadForge makes no call of its own. The install re-enumerates the USB root hubs once. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall. One still carrying the 0.9.7.7 or 0.9.7.5 host controller that HIDMaestro installed through 1.9.1 moves to 0.9.8.1 by one driver update in place, only in a Windows session where that controller has carried no device yet, and `HIDMAESTRO_KEEP_TRANSPORT=1` turns the move off. HIDMaestro moves only a host controller whose driver file matches a build it installed, so another program's usbip-win2 of a different build keeps its version, and it adds its own hardware ID, `ROOT\HIDMAESTRO_UDE`, to every usbip-win2 host controller it finds. It asks the driver which request format it speaks, 0.9.7.x, 0.9.8.0 or 0.9.8.1, before each attach, stop or device-list request. The detach request has one format in all three.
+Composite personas need one more driver. The seven profiles whose `backend` is `usbip` (`dualsense-composite`, `dualsense-edge-composite`, `dualshock-4-v2-composite`, `steam-controller-2`, `steam-controller-composite`, `steam-deck-composite` and `switch2-pro-controller-composite`) attach through usbip-win2's virtual USB host controller. HIDMaestro 2.0.1 and later carry usbip-win2 0.9.8.1's host controller driver inside `HIDMaestro.Core.dll`, three files for each architecture: x64 from the release installer, whose driver Microsoft certified, and ARM64 from the same tag's build from the project's signing service, whose drivers Microsoft attestation-signed. It checks each file against its pinned SHA-256 and installs only the host controller, the first time a composite controller is created (`HMContext.CreateController` reaches `UsbipDriverInstaller.EnsureInstalled`): it registers the `ROOT\USB` devnode usbip-win2's own `devnode.exe` would, installs the driver on it through Windows' driver update, and records the install under `HKLM\SOFTWARE\HIDMaestroUsbip`. It never runs usbip-win2's installer and never installs its root-hub filter, so no USB root hub restarts. PadForge makes no call of its own. HIDMaestro 1.9.2 through 2.0.0 ran the 0.9.8.1 installer itself with `/VERYSILENT /SUPPRESSMSGBOXES /NORESTART`, and the removal's usbip-win2 option takes what that left. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall. One still carrying the 0.9.7.7 or 0.9.7.5 host controller that HIDMaestro installed through 1.9.1 moves to 0.9.8.1 by one driver update in place, only in a Windows session where that controller has carried no device yet, and `HIDMAESTRO_KEEP_TRANSPORT=1` turns the move off. HIDMaestro moves only a host controller whose driver file matches a build it installed, so another program's usbip-win2 of a different build keeps its version, and it adds its own hardware ID, `ROOT\HIDMAESTRO_UDE`, to every usbip-win2 host controller it finds. It asks the driver which request format it speaks, 0.9.7.x, 0.9.8.0 or 0.9.8.1, before each attach, stop or device-list request. The detach request has one format in all three.
 
 ### EnsureHMaestroContext()
 
@@ -170,21 +170,20 @@ private void EnsureHMaestroContext()
         HMContext ctx = null;
         try
         {
-            // Preflight: sweep leftover HM virtuals from prior sessions
-            // (crash / forced kill / ungraceful exit). Without this,
-            // InstallDriver's RemoveOldDriverPackages step fails with
-            // "device using INF" because stale device nodes still
-            // reference the old driver package.
-            try { HMContext.RemoveAllVirtualControllers(preserveInstall: true); } catch { }
+            // Preflight: remove what programs that have ended left
+            // behind, a crashed PadForge's controllers among them. Since
+            // HIDMaestro 2.0.0 the sweep never touches a running
+            // program's controllers, this one's included.
+            try { HMaestroVirtualController.SweepVirtualControllers(); } catch { }
 
             ctx = new HMContext();
             int n = ctx.LoadDefaultProfiles();
             ctx.InstallDriver();
             bool recovered = _hmaestroSetupFailedTick != 0;
             Volatile.Write(ref _hmaestroSetupFailedTick, 0);
-            _cleanShutdownPerformed = false;
             if (recovered) RaiseErrorResolved(HmSetupFailedMessage);
-            // ... ProcessExit hook to purge VCs on ungraceful shutdown
+            // No exit sweep of PadForge's own: HIDMaestro's ProcessExit
+            // handler removes the controllers a program did not dispose.
 
             // Published last, after everything that can throw.
             _hmaestroContext = ctx;
@@ -207,7 +206,7 @@ A failed setup holds for five seconds (`HmSetupRetryHoldMs`), so the other slots
 
 ### Settings page surface
 
-The HIDMaestro card in `SettingsPage.xaml` shows a fixed, always-lit Ember flame (a `Path` styled `LivenessFlameBase`, `Fill="{DynamicResource EmberBrush}"`, with a static `#FF6B2C` `DropShadowEffect`), the localized "Installed" text beside it, and the SDK assembly version below. The version string is bound to `HIDMaestroVersion`, computed once at startup by `SettingsViewModel.GetEmbeddedHidMaestroVersion()` (a view-model method, not markup):
+The HIDMaestro card in `SettingsPage.xaml` shows an Ember flame lit while the driver is in the driver store (a `Path` styled `LivenessFlameBase` whose `DataTrigger` on `IsHIDMaestroInstalled` sets `Fill="{DynamicResource EmberBrush}"` and the `#FF6B2C` `DropShadowEffect`, as the HidHide card's does), the localized "Installed" or "Not Installed" beside it (`HIDMaestroStatusText`), the SDK assembly version below, and an **Uninstall** button (`EmberDestructiveButton`, `UninstallHIDMaestroCommand`). `MainWindow.RefreshHIDMaestroStatus` sets `IsHIDMaestroInstalled` from `HIDMaestroRemoval.IsDriverInstalled()` at startup, on the five-second driver status timer and after a removal. The version string is bound to `HIDMaestroVersion`, computed once at startup by `SettingsViewModel.GetEmbeddedHidMaestroVersion()` (a view-model method, not markup):
 
 ```csharp
 private static string GetEmbeddedHidMaestroVersion()
@@ -222,25 +221,26 @@ private static string GetEmbeddedHidMaestroVersion()
 }
 ```
 
-There are no Install or Uninstall buttons. The card is informational only because the SDK assembly is always present in the publish output, so the Xbox / PlayStation / Nintendo / Extended categories are always enabled. MIDI still depends on a MIDI API starting, Windows MIDI Services or the legacy one, and VR still depends on SteamVR.
+There is no Install button: the SDK assembly is always present in the publish output, so the Xbox / PlayStation / Nintendo / Extended categories are always enabled, and the driver installs with the first controller. **Uninstall** stays available with the driver gone, since HIDMaestro can leave other things behind, and its preview says when nothing is left. MIDI still depends on a MIDI API starting, Windows MIDI Services or the legacy one, and VR still depends on SteamVR.
 
 ### Cleanup
 
-`HMContext.RemoveAllVirtualControllers(preserveInstall: true)` is called in three places, all three with the preserving flag:
+`HMContext.RemoveAllVirtualControllers(preserveInstall: true)` runs in two places, both through `HMaestroVirtualController.SweepVirtualControllers` and both with the preserving flag. Since HIDMaestro 2.0.0 it removes only the controllers of programs that have ended, never a running program's, this one's included:
 
 | Site | When | Purpose |
 |---|---|---|
 | `EnsureHMaestroContext` preflight | Before each `InstallDriver()` | Purge stragglers from a prior crash so the install can succeed. |
-| `ProcessExit` hook (Step5) | Process teardown | Safety net for ungraceful exits where the normal Stop path did not run. Skipped when `_cleanShutdownPerformed` is set by `DisposeHMaestroContextOnShutdown()`. |
 | `App.xaml.cs` startup orphan sweep (`OrphanSweepTask`) | App launch, on a background `Task` in `OnStartup` | Purge HM virtuals left by a prior crashed or force-killed session, then wait (bounded) for the devnodes to actually vanish (the HM#38 ordering barrier below). Runs off the UI thread so `OnStartup` returns at once. `UpdateDevices` does **not** block on it. The SDL3 fork filters HM HIDs out of SDL enumeration whether or not the prior session's kernel cleanup has finished, so enumeration is safe immediately (blocking the poll thread on the sweep once pinned startup past 90 seconds). `MainWindow` shows the startup overlay ("Cleaning up virtual controllers left from a previous session.") while the sweep runs. Same role as the row-1 preflight, not a shutdown mirror. |
 
 **Startup sweep ordering barrier (HM#38).** `RemoveAllVirtualControllers()` returns when the call completes, not when PnP removal completes, and a virtual-controller create racing an in-flight removal was one of the trigger windows for the frozen-output bug that the HIDMaestro 1.3.22 driver fixed structurally. So after the sweep, `OrphanSweepTask` polls `SetupApiInterop.AnyPresentHidMaestroDevice()` up to 25 times at 200 ms intervals (about 5 s) until the HIDMaestro devnodes are genuinely absent, so a same-session create cannot adopt a dying devnode. A devnode that lingers past the bound logs `ORPHANSWEEP devnodes still present after 5 s; proceeding` rather than block startup. The wait is consumer-side ordering hygiene, not the fix itself.
 
 **OEM-name orphan recovery.** Before any virtuals are created, `App.xaml.cs` calls `HIDMaestro.HMOemNameOverride.RecoverOrphans()` to replay OEM-name overrides left by a prior session that never ran its cleanup `Clear` (crash, force-kill, power loss). This restores the DirectInput OEM-name table in HKLM to its pre-override state. Idempotent (a no-op when no orphan records exist) and best-effort (a swallow-all `try/catch`).
 
-Graceful shutdown does not call `RemoveAllVirtualControllers()`. `InputManager.Stop()` tears each virtual down with `DestroyAllVirtualControllers()`, then `DisposeHMaestroContextOnShutdown()` disposes the static `HMContext` and sets `_cleanShutdownPerformed`. That flag is why the Step5 `ProcessExit` sweep (row 2) no-ops on a clean exit.
+Graceful shutdown does not call `RemoveAllVirtualControllers()`. `InputManager.Stop()` tears each virtual down with `DestroyAllVirtualControllers()`, then `DisposeHMaestroContextOnShutdown()` disposes the static `HMContext`. PadForge has had no exit sweep of its own since HIDMaestro 2.0.0: the sweep can no longer reach a running program's controllers, and HIDMaestro's own `ProcessExit` handler, added with its owner claim at the program's first cleanup, `InstallDriver` or create, removes the controllers a program did not dispose. A killed PadForge's controllers go with the next sweep of any program on the PC.
 
-PadForge does not expose a "remove HIDMaestro driver" path, and HIDMaestro is not designed to be removed like an ordinary user-mode driver. Removing it through Device Manager or `pnputil /delete-driver` is not supported and may leave the system in an inconsistent state. Deleting the PadForge folder leaves HM registered but inert. It only services PadForge's virtual-device creation requests, so an unused driver is effectively dormant.
+### Removal
+
+Settings, HIDMaestro Driver, **Uninstall** runs HIDMaestro 2.0.1's own removal (`HMUninstall`). It takes every HIDMaestro controller and device record, the driver packages, the signing certificate, HIDMaestro's registry keys and files and its OpenVR registration, and puts back the joy.cpl names and GameInput tables a controller changed while they still hold what HIDMaestro wrote. `HIDMaestroRemoval.Preview` fills `UninstallHIDMaestroDialog`, and `HIDMaestroRemoval.Run(includeUsbip, stopEngine)` stops the engine and calls `HMaestroVirtualController.RemoveHIDMaestro`, the one call site, fenced in the test host. [HIDMaestro Deep Dive](hidmaestro-deep-dive.md#removing-hidmaestro) covers the flow. Removing HIDMaestro's devices in Device Manager or a package with `pnputil /delete-driver` leaves the rest behind. On a PC without PadForge, `HIDMaestroUninstall.exe` from the HIDMaestro release ZIP runs the same removal.
 
 ---
 

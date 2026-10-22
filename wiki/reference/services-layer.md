@@ -1142,8 +1142,9 @@ Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM/VR slots and sets the topolog
 | `BuildMacroAction` / `BuildActionData` | `static MacroAction BuildMacroAction(ActionData ad)` / `static ActionData BuildActionData(MacroAction a)` | The per-action halves of the same pair |
 | `SerializeMacrosToClipboard` | `static string SerializeMacrosToClipboard(MacroData[] macros)` | Macro clipboard envelope writer |
 | `TryParseMacroClipboard` | `static MacroClipboardEnvelope TryParseMacroClipboard(string json)` | Reader. Returns null on anything unparseable |
-| `GetUserProfileRows` | `IReadOnlyList<ImportedProfileRow> GetUserProfileRows()` | The imported-HIDMaestro-profile rows behind Manage Profiles |
-| `AddUserProfile` | `string AddUserProfile(string extractedJson)` | Imports a user profile from JSON, suffixing its id. Returns the stored id |
+| `GetUserProfileRows` | `IReadOnlyList<ImportedProfileRow> GetUserProfileRows()` | The imported-HIDMaestro-profile rows behind Manage Profiles, each with the `Problem` line of a profile HIDMaestro left out of the pickers |
+| `AddUserProfile` | `string AddUserProfile(string extractedJson, out string problem)` | Imports a user profile from JSON, suffixing its id. Returns the stored id, or null with the reason in `problem` when `HMaestroProfileCatalog.CheckUserProfile` finds HIDMaestro would refuse it or it has no HID descriptor, in which case nothing is stored |
+| `DescribeUserProfileProblem` | `static string DescribeUserProfileProblem(HMaestroProfileCatalog.UserProfileProblem problem)` | The Manage Profiles line for a problem: HIDMaestro's reason and JSON path, or the missing descriptor |
 | `RemoveUserProfile` | `void RemoveUserProfile(string id)` | Removes a saved user profile |
 | `ExportUserProfile` | `void ExportUserProfile(string id, string filePath)` | Exports a saved profile to a file |
 

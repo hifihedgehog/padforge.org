@@ -142,9 +142,11 @@ Version 4.5.2 and older have no updater. Download the new zip, close PadForge, a
 
 There is no installer, so removal is short.
 
-1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers **Uninstall** while a runtime is installed. Other MIDI apps can use the runtime too, so remove it only if nothing else needs it. HIDMaestro has no Uninstall button and stays registered. Turn off **Start at Login** too if it is on, so Windows drops its logon task.
+1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers **Uninstall** while a runtime is installed. Other MIDI apps can use the runtime too, so remove it only if nothing else needs it. Click **Uninstall** on the HIDMaestro Driver card last: it stops the engine and removes HIDMaestro's virtual controllers, driver, certificate, registry keys and files ([what it removes](../features/driver-management.md#uninstall)). Turn off **Start at Login** too if it is on, so Windows drops its logon task.
 2. Close PadForge.
 3. Delete the PadForge folder.
+
+Already deleted PadForge? Download `HIDMaestro-v2.0.2.zip` (`HIDMaestro-v2.0.2-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and run `HIDMaestroUninstall.exe` from its `HIDMaestroUninstall` folder. It removes HIDMaestro the way the Uninstall button does, and asks first.
 
 If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy driver cleanup dialog on first launch removes them for you.
 

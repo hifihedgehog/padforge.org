@@ -2852,6 +2852,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#imported-profiles-hidmaestro-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Imported profiles HIDMaestro refuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#removing-hidmaestro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing HIDMaestro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3766,6 +3788,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#imported-profiles-hidmaestro-refuses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Imported profiles HIDMaestro refuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#removing-hidmaestro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing HIDMaestro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3807,7 +3851,7 @@
 <li>A pre-recorded HID report descriptor (input + output + feature reports)</li>
 <li>Optional FFB PID descriptor pages</li>
 </ul>
-<p>PadForge 5.0.0 ships HM 1.10.1, and pre-release builds after it ship HM 1.12.0 (<code>HIDMaestro.Core.dll</code>, FileVersion 1.12.0.0), which embeds 336 profiles. 233 are controllers spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). The other 103 are the 51 keyboards and 52 mice HM 1.12.0 added (HM#67). Only 135 of the 233 controllers carry a captured HID descriptor, and PadForge's controller pickers offer those 135 (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>). Every keyboard and mouse carries one. They stay out of the controller pickers and fill the Keyboard+Mouse slot's own two (<code>HMaestroProfileCatalog.KeyboardProfiles</code> and <code>MouseProfiles</code>), so PadForge offers 238 profiles in all. PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
+<p>PadForge 5.0.0 ships HM 1.10.1, and pre-release builds after it ship HM 2.0.2 (<code>HIDMaestro.Core.dll</code>, FileVersion 2.0.2.0), which embeds 337 profiles. 234 are controllers spanning Xbox 360 / Xbox One / Xbox Series / Elite / Adaptive, DualShock 3/4, DualSense / DualSense Edge, Switch Pro and Switch 2 Pro, the Steam Deck and both Steam Controllers, Logitech G-series, Thrustmaster, Fanatec, and PXN wheels, HOTAS / flight sticks, and third-party gamepads (Hori, 8BitDo, etc.). The other 103 are the 51 keyboards and 52 mice HM 1.12.0 added (HM#67). 137 of the 234 controllers carry a captured HID descriptor, and PadForge's controller pickers offer 136 of them (22 Xbox, 14 PlayStation, 4 Nintendo, 96 Extended), because a profile with no descriptor cannot be deployed (<code>HMProfile.IsDeployable</code>) and the GameCube adapter's Full persona is withheld (<code>HMaestroProfileCatalog.WithheldProfileIds</code>). Every keyboard and mouse carries one. They stay out of the controller pickers and fill the Keyboard+Mouse slot's own two (<code>HMaestroProfileCatalog.KeyboardProfiles</code> and <code>MouseProfiles</code>), so PadForge offers 239 profiles in all. PadForge adds a synthetic "Custom" entry at the top of the Extended list that lets the Extended slot type build a HID descriptor from scratch.</p>
 <p>The interim milestones a successor should know, each one PadForge's own call sites still cite by version:</p>
 <table>
 <thead>
@@ -3923,6 +3967,21 @@
 <td>Keyboards and mice: 51 keyboard and 52 mouse profiles, each the report descriptor of a real device's keyboard or mouse interface, driven through <code>SubmitKeyboard</code>, <code>SubmitConsumer</code> and <code>SubmitMouse</code>. The driver acknowledges each keyboard and mouse report HID class takes, and the SDK waits for that and spaces reports 1 ms apart, so none is lost. A consumer that dies leaves nothing held: the driver sends the release reports the SDK keeps, and <code>Dispose</code> sends them first and then waits until Windows reports the device gone. <code>KeyboardLeds</code> holds the LED state Windows sends a keyboard while <code>CreateController</code> runs. The GameInput mapping and the joy.cpl OEM key go through a ledger that restores the prior state when the last holder goes, and catalog profiles get no GameInput table. The Valve personas name their bits the way SDL numbers them and add the stick and grip touch bits. <code>HMVR.FindDriverNameConflicts</code> lists another OpenVR driver registered under HIDMaestro's name</td>
 <td><code>HMaestroProfileCatalog.cs</code> (<code>KeyboardProfiles</code>, <code>MouseProfiles</code>), <code>KbmHidDevices.cs</code> (the keyboard and mouse senders), <code>KeyboardMouseVirtualController.cs</code>, <code>ValveReportPackers.cs</code> (the touch bits), <code>SettingsViewModel.cs</code> (<code>SteamVrDriverConflictText</code>). Commit <code>31bb0c65</code> takes the DLL. See <a href="../../features/virtual-controllers/#virtual-keyboards-and-mice">Virtual keyboards and mice</a></td>
 </tr>
+<tr>
+<td>v2.0.0</td>
+<td>Profiles load strictly: a file the schema or a check refuses, or one that repeats an id already loaded, is listed in <code>HMContext.ProfileLoadIssues</code> with its JSON path and reason and never thrown. <code>RemoveAllVirtualControllers</code> sweeps only the controllers of programs that have ended, and the SDK's own <code>ProcessExit</code> handler removes the ones a program did not dispose. Tools stage under <code>%ProgramFiles%\HIDMaestro\Staging</code>, for an elevated process only. <code>HMProfile.BuildsItsOwnReports</code> marks the profiles whose raw submit is a state block. <code>switch-pro-usb</code> arrives, and the GameCube adapter's Full persona gains a descriptor</td>
+<td><code>HMaestroProfileCatalog.cs</code> (<code>LoadUserProfiles</code>, <code>CheckUserProfile</code>, <code>WithheldProfileIds</code>), <code>InputManager.Step5.VirtualDevices.cs</code> (<code>EnsureHMaestroContext</code>, whose exit hook is gone), <code>HMaestroVirtualController.cs</code> (<code>DeviceBuildsReports</code>). Commit <code>5ef24f24</code> takes 2.0.2. See <a href="#imported-profiles-hidmaestro-refuses">Imported profiles HIDMaestro refuses</a></td>
+</tr>
+<tr>
+<td>v2.0.1</td>
+<td><code>HMUninstall.Preview</code> and <code>Run</code>, the code behind <code>HIDMaestroUninstall.exe</code>, take every controller and its records, the driver packages, the signing certificate, HIDMaestro's registry keys and files off the PC, and put back the shared Windows keys a controller changed. usbip-win2's host controller installs without usbip-win2's installer</td>
+<td><code>Services/HIDMaestroRemoval.cs</code>, <code>HMaestroVirtualController.RemoveHIDMaestro</code>, <code>Views/UninstallHIDMaestroDialog.xaml</code>, <code>MainWindow.xaml.cs</code> (<code>UninstallHIDMaestroAsync</code>). See <a href="#removing-hidmaestro">Removing HIDMaestro</a></td>
+</tr>
+<tr>
+<td>v2.0.2</td>
+<td>The Valve personas report on their own clock (4 ms on the Deck and the 2026 pad, 9 ms on the 2015 pad), read calibrated motion, answer a unit serial per identity, and carry Valve's trigger click thresholds</td>
+<td><code>ValveReportPackers.cs</code> (<code>TriggerClickPull</code>, <code>PadPressure</code>, <code>MicrosNow</code>), which now writes the 2015 roll sign, the trigger bits, pad pressure and the 2026 IMU timestamp as SDL reads them. See <a href="../../features/virtual-controllers/#valve-personas-issues-337-338">Valve personas</a></td>
+</tr>
 </tbody>
 </table>
 <h3 id="one-driver-seven-categories">One driver, seven categories<a class="headerlink" href="#one-driver-seven-categories" title="Permanent link">&para;</a></h3>
@@ -3979,7 +4038,7 @@
 <p>The relevant assembly is <code>HIDMaestro.Core</code> (bundled at <code>PadForge.App/Resources/HIDMaestro/HIDMaestro.Core.dll</code>). Three primary types:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// HMContext: process-wide entry point. One instance.</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">var</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HMContext</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 336 embedded profile JSONs (238 carry a descriptor)</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">context</span><span class="p">.</span><span class="n">LoadDefaultProfiles</span><span class="p">();</span><span class="w">    </span><span class="c1">// load HM&#39;s 337 embedded profile JSONs (240 carry a descriptor)</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">context</span><span class="p">.</span><span class="n">InstallDriver</span><span class="p">();</span><span class="w">          </span><span class="c1">// register HM with Windows (idempotent)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// HMProfile: handle to a profile (Xbox 360 wired, DualSense Edge, etc.).</span>
@@ -4157,6 +4216,16 @@
 </ul>
 <p>The legacy v2 driver cleanup dialog (offered on the first launch that detects ViGEmBus or vJoy from a prior v2 install) handles uninstalling them. After that dialog runs, neither v2 driver remains. The drivers PadForge itself puts on the machine are HIDMaestro (with the usbip-win2 transport HM deploys the first time a composite persona is created), HidHide, and, on demand, Windows MIDI Services and the BthPS3 DualShock 3 stack. See <a href="../driver-installation-internals/">Driver Installation Internals</a>.</p>
 <hr />
+<h2 id="imported-profiles-hidmaestro-refuses">Imported profiles HIDMaestro refuses<a class="headerlink" href="#imported-profiles-hidmaestro-refuses" title="Permanent link">&para;</a></h2>
+<p>HIDMaestro 2.0.0 loads a profile file strictly. A file that does not parse, carries a key the schema lacks or a key written twice, holds a value a check refuses, uses a removed spelling, or repeats an id already loaded is refused alone, and the load lists it in <code>HMContext.ProfileLoadIssues</code> (<code>File</code>, <code>ProfileId</code>, <code>JsonPath</code>, <code>Reason</code>, <code>Kind</code>) instead of throwing. A profile whose device model does not fit loads with the model its identity gives it, listed as a <code>ModelProblem</code>.</p>
+<p><code>HMaestroProfileCatalog.LoadUserProfiles(ctx, jsons)</code> stages the imported profiles <code>PadForge.xml</code> holds as <code>user-NNNN.json</code> in a temporary folder, named under the folder's full path as the load names them, loads them into the catalog's context beside the built-in profiles, and keys each issue back to the JSON it came from. A refused file gets a <code>UserProfileProblem</code> carrying the issue. A profile that loads with no HID descriptor gets one with no issue, since <code>IsDeployable</code> keeps it out of the pickers all the same. Model problems only reach the diagnostics log, as <code>PROFILES:</code> lines, and so do any issues of the built-in catalog.</p>
+<p>Manage Profiles shows the problem under the profile's row (<code>SettingsService.DescribeUserProfileProblem</code>): "HIDMaestro refused this profile at {path}: {reason}", or the missing descriptor. <code>SettingsService.AddUserProfile(json, out problem)</code> asks <code>HMaestroProfileCatalog.CheckUserProfile</code> first, in a context of its own beside the built-in catalog, and stores nothing when the answer is a problem, so no slot is pointed at a profile that is not there. Profiles written by HIDMaestro 1.12.0's extractor load under 2.0.2: all 336 catalog profiles and the HID devices of the bench PC, captured with 1.12.0's <code>ToJson</code> under PadForge's <code>-user</code> ids, loaded with no issue but repeated ids among interfaces of one device, which the import replaces rather than keeps.</p>
+<h2 id="removing-hidmaestro">Removing HIDMaestro<a class="headerlink" href="#removing-hidmaestro" title="Permanent link">&para;</a></h2>
+<p>Settings, HIDMaestro Driver, <strong>Uninstall</strong> (#518) runs HIDMaestro's own removal, <code>HMUninstall</code> (2.0.1). <code>UninstallHIDMaestroDialog.Confirm</code> shows <code>HMUninstall.Preview</code> (<code>HIDMaestroRemoval.Preview</code>, read on a worker) as rows of location, kind and, for an item kept or not read, the reason. A preview whose status is <code>Blocked</code> names the programs that block it. <strong>Uninstall</strong> opens only when no program blocks the removal and the preview found something to take or a part of the PC it could not read, which the removal reads again (<code>CanRemove</code>). <strong>Also remove usbip-win2 set up by its own installer</strong> sets <code>HMUninstallOptions.IncludeUsbip</code> and reads the PC again.</p>
+<p>On confirm, <code>MainWindow.UninstallHIDMaestroAsync</code> shows the engine stopping, waits out a stop the Dashboard toggle already started (<code>_engineStopTask</code>), and runs <code>HIDMaestroRemoval.Run(includeUsbip, _inputService.Stop)</code> on the driver operation's worker behind its overlay. The engine's stop removes PadForge's controllers and disposes its context first, so nothing PadForge holds outlives its device and nothing creates a controller while the removal runs. HIDMaestro would take PadForge's controllers anyway, since a program never blocks its own removal. The engine stays stopped, and <code>EnsureHMaestroContext</code> installs the driver again at the next controller create. <code>HIDMaestroRemoval.Log</code> writes each item to the diagnostics log, the status line follows <code>HMUninstallStatus</code>, and a <code>Failed</code> run lists what it could not take in the same dialog with Close alone.</p>
+<p>The Settings card reads <code>DriverStore\FileRepository\hidmaestro.inf_*</code> (<code>HIDMaestroRemoval.IsDriverInstalled</code>) at startup, on the five-second driver status timer and after a removal, never through <code>HMContext.IsDriverInstalled</code>. Constructing a context starts HIDMaestro's warm-up, and in an elevated process with no driver installed the warm-up takes the owner claim and stages the driver files under <code>%ProgramFiles%\HIDMaestro</code> again (<code>HMContext</code> constructor).</p>
+<p>On the development PC the removal took 3.2 seconds and reported 345 items removed and 50 kept by HIDMaestro's rules: USB persona records that wait for a restart, the GameCube adapter's WinUSB package that a device record shared with real adapters still names, the certificate that package was signed with, and GameInputSvc's start type. With PadForge running, a removal from another process reported <code>Blocked</code> and named PadForge. PadForge installed HIDMaestro again with its first controller after a relaunch.</p>
+<p>The test host never removes anything: <code>HMaestroVirtualController.RemoveHIDMaestro</code> answers null under <code>OffLimitsForTest</code> (<code>TestHostFenceTests.HIDMaestro_IsNotRemoved</code>).</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../features/virtual-controllers/">Virtual Controllers</a>: IVirtualController surface, per-category implementations.</li>

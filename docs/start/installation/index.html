@@ -3969,10 +3969,11 @@
 <h2 id="uninstalling">Uninstalling<a class="headerlink" href="#uninstalling" title="Permanent link">&para;</a></h2>
 <p>There is no installer, so removal is short.</p>
 <ol>
-<li>Open <strong><a href="../../features/settings/">Settings</a></strong> and click <strong>Uninstall</strong> next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers <strong>Uninstall</strong> while a runtime is installed. Other MIDI apps can use the runtime too, so remove it only if nothing else needs it. HIDMaestro has no Uninstall button and stays registered. Turn off <strong>Start at Login</strong> too if it is on, so Windows drops its logon task.</li>
+<li>Open <strong><a href="../../features/settings/">Settings</a></strong> and click <strong>Uninstall</strong> next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers <strong>Uninstall</strong> while a runtime is installed. Other MIDI apps can use the runtime too, so remove it only if nothing else needs it. Click <strong>Uninstall</strong> on the HIDMaestro Driver card last: it stops the engine and removes HIDMaestro's virtual controllers, driver, certificate, registry keys and files (<a href="../../features/driver-management/#uninstall">what it removes</a>). Turn off <strong>Start at Login</strong> too if it is on, so Windows drops its logon task.</li>
 <li>Close PadForge.</li>
 <li>Delete the PadForge folder.</li>
 </ol>
+<p>Already deleted PadForge? Download <code>HIDMaestro-v2.0.2.zip</code> (<code>HIDMaestro-v2.0.2-arm64.zip</code> on Windows on ARM) from the <a href="https://github.com/hifihedgehog/HIDMaestro/releases/latest">HIDMaestro releases</a> and run <code>HIDMaestroUninstall.exe</code> from its <code>HIDMaestroUninstall</code> folder. It removes HIDMaestro the way the Uninstall button does, and asks first.</p>
 <p>If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy driver cleanup dialog on first launch removes them for you.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>

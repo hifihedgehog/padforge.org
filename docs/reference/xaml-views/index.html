@@ -3835,6 +3835,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#uninstallhidmaestrodialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UninstallHIDMaestroDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pairdevicedialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6275,6 +6286,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#uninstallhidmaestrodialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UninstallHIDMaestroDialog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pairdevicedialog" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6962,7 +6984,7 @@
 <tr>
 <td><code>_driverStatusTimer</code></td>
 <td>5s</td>
-<td><code>RefreshHidHideStatus()</code>, <code>RefreshMidiServicesStatus()</code>, and <code>SweepStatusMessage()</code>. Started in the constructor and stopped only in <code>OnClosing</code>, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." HIDMaestro is embedded so it has no install/uninstall poll</td>
+<td><code>RefreshHidHideStatus()</code>, <code>RefreshHIDMaestroStatus()</code>, <code>RefreshMidiServicesStatus()</code>, and <code>SweepStatusMessage()</code>. Started in the constructor and stopped only in <code>OnClosing</code>, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." The HIDMaestro poll reads the driver store folder, since the engine installs HIDMaestro with its first virtual controller</td>
 </tr>
 <tr>
 <td><code>CompositionTarget.Rendering</code></td>
@@ -9468,8 +9490,8 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-65" name="__codelineno-13-65" href="#__codelineno-13-65"></a>      │       └─ Add/Remove buttons
 <a id="__codelineno-13-66" name="__codelineno-13-66" href="#__codelineno-13-66"></a>      ├─ HIDMaestro Driver card
 <a id="__codelineno-13-67" name="__codelineno-13-67" href="#__codelineno-13-67"></a>      │   ├─ Icon E7FC + title + description
-<a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a>      │   └─ Status: always-lit ember flame + &quot;Installed&quot; + HIDMaestroVersion (no Install/Uninstall
-<a id="__codelineno-13-69" name="__codelineno-13-69" href="#__codelineno-13-69"></a>      │      buttons, because HIDMaestro is embedded in the binary)
+<a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a>      │   └─ Status: ember flame lit while the driver is in the driver store + &quot;Installed&quot; or
+<a id="__codelineno-13-69" name="__codelineno-13-69" href="#__codelineno-13-69"></a>      │      &quot;Not Installed&quot; + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
 <a id="__codelineno-13-70" name="__codelineno-13-70" href="#__codelineno-13-70"></a>      ├─ Windows MIDI Services card
 <a id="__codelineno-13-71" name="__codelineno-13-71" href="#__codelineno-13-71"></a>      │   ├─ Icon E8D6 + title + description
 <a id="__codelineno-13-72" name="__codelineno-13-72" href="#__codelineno-13-72"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
@@ -10289,7 +10311,10 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p>Generic modal confirm. <code>FluentWindow</code> with the ember-tick display-face header, a message body, and OK / Cancel buttons. Used ahead of destructive actions across the app.</p>
 <h3 id="manageprofilesdialog">ManageProfilesDialog<a class="headerlink" href="#manageprofilesdialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>ManageProfilesDialog.xaml</code>, <code>ManageProfilesDialog.xaml.cs</code></p>
-<p>HIDMaestro profile catalog manager. <code>FluentWindow</code> (640x660). Section 1 lists imported profiles (name + id) with Import From File / Export / Delete (Delete wears the destructive chrome and confirms first). Section 2 imports a profile from a connected device.</p>
+<p>HIDMaestro profile catalog manager. <code>FluentWindow</code> (640x660). Section 1 lists imported profiles (name + id) with Import From File / Export / Delete (Delete wears the destructive chrome and confirms first). A row HIDMaestro left out of the pickers carries a third line in <code>SystemFillColorCautionBrush</code>, <code>ImportedProfileRow.Problem</code>: HIDMaestro's reason and JSON path for a refused file, or the missing HID descriptor. Section 2 imports a profile from a connected device. An import HIDMaestro would refuse is not stored, and the status line gives the reason (<code>ImportFailedText</code>).</p>
+<h3 id="uninstallhidmaestrodialog">UninstallHIDMaestroDialog<a class="headerlink" href="#uninstallhidmaestrodialog" title="Permanent link">&para;</a></h3>
+<p><strong>Files:</strong> <code>UninstallHIDMaestroDialog.xaml</code>, <code>UninstallHIDMaestroDialog.xaml.cs</code></p>
+<p>The removal of HIDMaestro from the PC (#518), in <code>ConfirmDialog</code>'s chrome: the ember-tick title, the body, and a footer where Cancel holds the default and the initial focus. <code>Confirm(owner, preview, out includeUsbip)</code> runs the preview it is handed (<code>HIDMaestroRemoval.Preview</code> on a worker) on load and on each change of the usbip-win2 checkbox, showing a progress line meanwhile, then lists each item as location, kind and, for one kept or not read, the reason (<code>RowsFor</code>). A blocked preview names the programs in the cold mono face, and a preview with nothing to take says so. <strong>Refresh</strong> reads the PC again. <strong>Uninstall</strong> opens only when <code>CanRemove</code> holds. <code>ShowReport(owner, report, statusLine)</code> reuses the window with Close alone to list what a failed removal could not take. A preview that ends after the window closed, or after a newer one started, is dropped (<code>_generation</code>).</p>
 <h3 id="pairdevicedialog">PairDeviceDialog<a class="headerlink" href="#pairdevicedialog" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>PairDeviceDialog.xaml</code>, <code>PairDeviceDialog.xaml.cs</code></p>
 <p>Wii Remote pairing flow (#116). <code>FluentWindow</code> (<code>WiiPair_Title</code>) that walks the user through the Bluetooth sync-button handshake.</p>

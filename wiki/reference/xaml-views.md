@@ -196,7 +196,7 @@ Four more full-window layers span all three rows (`Grid.RowSpan="3"`). `SteelLay
 | Timer | Interval | Purpose |
 |-------|----------|---------|
 | `DispatcherTimer` | 33ms (~30Hz) | `InputService._uiTimer` fires `UiTimer_Tick` to push engine state into ViewModels |
-| `_driverStatusTimer` | 5s | `RefreshHidHideStatus()`, `RefreshMidiServicesStatus()`, and `SweepStatusMessage()`. Started in the constructor and stopped only in `OnClosing`, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." HIDMaestro is embedded so it has no install/uninstall poll |
+| `_driverStatusTimer` | 5s | `RefreshHidHideStatus()`, `RefreshHIDMaestroStatus()`, `RefreshMidiServicesStatus()`, and `SweepStatusMessage()`. Started in the constructor and stopped only in `OnClosing`, so the status-bar decay keeps running after the engine stops. Hosting the decay on the engine 30 Hz timer would have burned in "Engine stopped." The HIDMaestro poll reads the driver store folder, since the engine installs HIDMaestro with its first virtual controller |
 | `CompositionTarget.Rendering` | ~60fps | Used by all visualization views (3D, 2D, Schematic, MIDI, KBM, VR, MousePreview) for per-frame visual updates |
 
 ---
@@ -1521,8 +1521,8 @@ ScrollViewer (Padding="24,0")
       │       └─ Add/Remove buttons
       ├─ HIDMaestro Driver card
       │   ├─ Icon E7FC + title + description
-      │   └─ Status: always-lit ember flame + "Installed" + HIDMaestroVersion (no Install/Uninstall
-      │      buttons, because HIDMaestro is embedded in the binary)
+      │   └─ Status: ember flame lit while the driver is in the driver store + "Installed" or
+      │      "Not Installed" + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
       ├─ Windows MIDI Services card
       │   ├─ Icon E8D6 + title + description
       │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
@@ -1931,7 +1931,13 @@ Generic modal confirm. `FluentWindow` with the ember-tick display-face header, a
 
 **Files:** `ManageProfilesDialog.xaml`, `ManageProfilesDialog.xaml.cs`
 
-HIDMaestro profile catalog manager. `FluentWindow` (640x660). Section 1 lists imported profiles (name + id) with Import From File / Export / Delete (Delete wears the destructive chrome and confirms first). Section 2 imports a profile from a connected device.
+HIDMaestro profile catalog manager. `FluentWindow` (640x660). Section 1 lists imported profiles (name + id) with Import From File / Export / Delete (Delete wears the destructive chrome and confirms first). A row HIDMaestro left out of the pickers carries a third line in `SystemFillColorCautionBrush`, `ImportedProfileRow.Problem`: HIDMaestro's reason and JSON path for a refused file, or the missing HID descriptor. Section 2 imports a profile from a connected device. An import HIDMaestro would refuse is not stored, and the status line gives the reason (`ImportFailedText`).
+
+### UninstallHIDMaestroDialog
+
+**Files:** `UninstallHIDMaestroDialog.xaml`, `UninstallHIDMaestroDialog.xaml.cs`
+
+The removal of HIDMaestro from the PC (#518), in `ConfirmDialog`'s chrome: the ember-tick title, the body, and a footer where Cancel holds the default and the initial focus. `Confirm(owner, preview, out includeUsbip)` runs the preview it is handed (`HIDMaestroRemoval.Preview` on a worker) on load and on each change of the usbip-win2 checkbox, showing a progress line meanwhile, then lists each item as location, kind and, for one kept or not read, the reason (`RowsFor`). A blocked preview names the programs in the cold mono face, and a preview with nothing to take says so. **Refresh** reads the PC again. **Uninstall** opens only when `CanRemove` holds. `ShowReport(owner, report, statusLine)` reuses the window with Close alone to list what a failed removal could not take. A preview that ends after the window closed, or after a newer one started, is dropped (`_generation`).
 
 ### PairDeviceDialog
 

@@ -10,7 +10,7 @@
 
 | Component | Status | What it does |
 |---|---|---|
-| **HIDMaestro** | Required for any virtual controller other than MIDI, and for a Keyboard+Mouse slot set to a keyboard or mouse model. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on), and the virtual keyboard and mouse a Keyboard+Mouse slot sends through. HIDMaestro ships 336 device profiles. PadForge offers the 135 controllers with a captured HID descriptor, and all 51 keyboards and 52 mice to the Keyboard+Mouse slot. |
+| **HIDMaestro** | Required for any virtual controller other than MIDI, and for a Keyboard+Mouse slot set to a keyboard or mouse model. Auto-installs on first use. | Creates the virtual controller that matches each slot's shape (Xbox Series, DualSense, Switch Pro, Logitech wheel, and so on), and the virtual keyboard and mouse a Keyboard+Mouse slot sends through. HIDMaestro ships 337 device profiles. PadForge offers 136 controllers with a captured HID descriptor, and all 51 keyboards and 52 mice to the Keyboard+Mouse slot. |
 | **Keyboard+Mouse** | Built in. Windows input needs no driver, and a keyboard or mouse model needs HIDMaestro. | Maps controller inputs to keyboard and mouse presses, sent through Windows input or through a virtual keyboard and mouse that programs see as hardware. |
 | **HidHide** | Optional. Install when games show double input. | Hides physical controllers from games so they only see the virtual ones. |
 | **Windows MIDI Services** | Part of Windows 11 25H2 from the late-November 2026 update. Elsewhere on 24H2 or later, an optional runtime install from **Settings**. | Virtual MIDI ports for sending notes and CC to DAWs and music software, and the input path that reads a MIDI keyboard as a mapping source. Without it, PadForge uses the legacy MIDI API, which reads MIDI keyboards too but cannot create ports, so MIDI slots send to a port you pick. |
@@ -81,11 +81,11 @@ PadForge always runs as administrator. The UAC prompt fires once per launch, whe
 
 One driver that publishes the virtual controllers. Each Xbox, PlayStation, Nintendo, and Extended slot uses one HIDMaestro **device profile**. VR slots ride HIDMaestro's OpenVR driver instead and have no profile. A profile decides how the virtual controller looks to Windows and games: its name, its make and model, its buttons and axes, and its force-feedback support.
 
-The **Nintendo** slot type carries three profiles: Switch Pro (the default), Switch 2 Pro, and Switch 2 Pro: Full. Pick between them from the slot's preset dropdown. None can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering. Switch Pro and Switch 2 Pro: Full carry motion passthrough (games read gyro and accelerometer from the virtual pad) and rumble. The plain Switch 2 Pro profile carries neither, and [Controller Slots](controller-slots.md#nintendo) says which programs read which. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
+The **Nintendo** slot type carries four profiles: Switch Pro (the default), Switch Pro (USB), Switch 2 Pro, and Switch 2 Pro: Full. Pick between them from the slot's preset dropdown. None can be customized, so the slot deploys the chosen profile as-is, with Nintendo button lettering. Switch Pro, Switch Pro (USB) and Switch 2 Pro: Full carry motion passthrough (games read gyro and accelerometer from the virtual pad) and rumble. Switch Pro (USB) is the pad on its USB cable, and like a real one it sends input only once a program such as SDL or Steam starts it with the Switch protocol. The plain Switch 2 Pro profile carries neither, and [Controller Slots](controller-slots.md#nintendo) says which programs read which. The remaining Nintendo profiles (Joy-Cons, GameCube adapter, NSO retro pads) live in the **Extended** category.
 
 ### The profiles PadForge offers cover
 
-HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 135 controllers that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. The Keyboard+Mouse slot's pickers offer the other 103, all 51 keyboards and 52 mice. They cover:
+HIDMaestro ships 337 device profiles. PadForge's controller pickers offer 136 controllers that carry a captured HID descriptor, since a profile without one cannot be deployed, plus PadForge's own **Custom** profile. The Keyboard+Mouse slot's pickers offer 103 more, all 51 keyboards and 52 mice. One profile with a descriptor stays out of every picker: the GameCube adapter's Full persona. Dolphin and Slippi read that adapter only through WinUSB, and it carries four ports where a slot drives one. The adapter's HID-mode profile is offered. They cover:
 
 - Xbox 360, Xbox One, Xbox Series, Elite, Adaptive
 - DualShock 3, DualShock 4, DualSense, DualSense Edge
@@ -105,11 +105,15 @@ HIDMaestro ships 336 device profiles. PadForge's controller pickers offer the 13
 
 ### Install
 
-HIDMaestro installs itself the first time PadForge creates a virtual controller. The HIDMaestro card on the **Settings** page is status-only. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The card's flame is always lit and the Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.
+HIDMaestro installs itself the first time PadForge creates a virtual controller. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The HIDMaestro card on the **Settings** page lights its flame while the driver is in Windows' driver store, and shows the HIDMaestro version PadForge carries. The Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.
 
 ### Uninstall
 
-There is no in-app Uninstall button for HIDMaestro. Removing it through Device Manager is not supported. If you stop using PadForge, deleting the program leaves HIDMaestro installed but idle. It only acts when PadForge asks it to create a virtual controller.
+**Uninstall** on the HIDMaestro card removes HIDMaestro from the PC. It first shows what HIDMaestro left: each item it would remove, each item it keeps and why, and any running program that uses HIDMaestro. Such a program blocks the removal until you close it and select **Refresh**. **Also remove usbip-win2 set up by its own installer** also takes what usbip-win2's installer left on a PC where an older PadForge set it up that way, unless another program uses usbip-win2. Its USB root hub filter always stays, since removing it restarts every USB root hub.
+
+When you confirm, PadForge stops its engine, and HIDMaestro removes every virtual controller and the records Windows keeps of them, its driver packages, its signing certificate, its registry keys and its files. The controller names and GameInput tables it changed go back to what they held, unless another program changed them since. A file in use under `%ProgramFiles%\HIDMaestro` goes when Windows next starts. The status line says how the removal ended, and one that could not take everything lists what stayed and why. The engine stays stopped, and PadForge installs HIDMaestro again the next time it starts a virtual controller. Other programs that use HIDMaestro lose its driver until they next start.
+
+On a PC where PadForge is already gone, download `HIDMaestro-v2.0.2.zip` (`HIDMaestro-v2.0.2-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and run `HIDMaestroUninstall.exe` from its `HIDMaestroUninstall` folder. It asks for administrator rights, lists what it would remove and keep, and asks before it removes anything. It needs no .NET runtime. Removing the devices in Device Manager leaves the driver packages, the certificate and the files behind.
 
 For the contract between PadForge and HIDMaestro, see [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md).
 
@@ -317,7 +321,7 @@ PadForge blocks driver removal while a slot still needs it.
 | **Windows MIDI Services runtime** | Any MIDI slot exists while PadForge uses the runtime. |
 | **SteamVR** | Any VR slot exists, SteamVR is running, or the install did not come from PadForge. |
 
-Delete the slots or turn the feature off. Then **Uninstall** becomes available. (HIDMaestro has no Uninstall button, so it needs no guard.)
+Delete the slots or turn the feature off. Then **Uninstall** becomes available. HIDMaestro's **Uninstall** needs no guard: it stops the engine itself, and the next virtual controller installs HIDMaestro again.
 
 The slot guards read your saved slots, not what the engine is running, so they hold with the engine stopped. Switching a slot from one type to another releases the type it left and locks the type it joined, immediately.
 

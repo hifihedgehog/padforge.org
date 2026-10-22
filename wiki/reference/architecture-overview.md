@@ -47,7 +47,7 @@ graph TB
     subgraph "External Systems"
         SDL3[SDL3.dll<br/>Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
         OXI[OpenXInput<br/>xinput1_4 shim]
-        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 336 profiles, PadForge offers the 238 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
+        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 337 profiles, PadForge offers 239 with a captured descriptor<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
         WMS[Windows MIDI Services<br/>or legacy WinMM]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
@@ -376,7 +376,7 @@ PadForge.App/
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService, the Razer Sensa row's worker (#374, #494)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v1.12.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v2.0.2, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
     HidHideArm64/                     # HidHide_ARM64.zip (the Microsoft-signed ARM64 driver) + nefconc.exe, embedded in both builds for ARM64 machines
 
@@ -717,7 +717,7 @@ Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from 
 | Advantage | Detail |
 |---|---|
 | One driver, two roles | HIDMaestro covers Xbox-family, DS4 / DualSense, Switch Pro, and arbitrary HID descriptors (flight sticks, wheels, HOTAS). v2 needed ViGEmBus + vJoy side by side |
-| 336 profiles in HIDMaestro's catalog | HIDMaestro ships 336 profiles for the long tail of DirectInput devices, keyboards and mice, and PadForge offers the 238 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 3 Nintendo, 96 Extended, 51 keyboards, 52 mice), plus a profile builder for custom HID descriptors. vJoy was generic-only |
+| 337 profiles in HIDMaestro's catalog | HIDMaestro ships 337 profiles for the long tail of DirectInput devices, keyboards and mice, and PadForge offers 239 that carry a captured HID descriptor (22 Xbox, 14 PlayStation, 4 Nintendo, 96 Extended, 51 keyboards, 52 mice), plus a profile builder for custom HID descriptors. vJoy was generic-only |
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360 and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
 | One marker to filter | Every HM device carries `HIDMAESTRO` in its path or hardware IDs (a composite persona on its emulated host controller), so one classifier filters them from SDL enumeration. v2's two drivers needed two filters and produced N² phantom controllers at edge cases |

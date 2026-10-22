@@ -9705,12 +9705,17 @@
 <tr>
 <td><code>GetUserProfileRows</code></td>
 <td><code>IReadOnlyList&lt;ImportedProfileRow&gt; GetUserProfileRows()</code></td>
-<td>The imported-HIDMaestro-profile rows behind Manage Profiles</td>
+<td>The imported-HIDMaestro-profile rows behind Manage Profiles, each with the <code>Problem</code> line of a profile HIDMaestro left out of the pickers</td>
 </tr>
 <tr>
 <td><code>AddUserProfile</code></td>
-<td><code>string AddUserProfile(string extractedJson)</code></td>
-<td>Imports a user profile from JSON, suffixing its id. Returns the stored id</td>
+<td><code>string AddUserProfile(string extractedJson, out string problem)</code></td>
+<td>Imports a user profile from JSON, suffixing its id. Returns the stored id, or null with the reason in <code>problem</code> when <code>HMaestroProfileCatalog.CheckUserProfile</code> finds HIDMaestro would refuse it or it has no HID descriptor, in which case nothing is stored</td>
+</tr>
+<tr>
+<td><code>DescribeUserProfileProblem</code></td>
+<td><code>static string DescribeUserProfileProblem(HMaestroProfileCatalog.UserProfileProblem problem)</code></td>
+<td>The Manage Profiles line for a problem: HIDMaestro's reason and JSON path, or the missing descriptor</td>
 </tr>
 <tr>
 <td><code>RemoveUserProfile</code></td>
