@@ -34,7 +34,7 @@ There is no per-model table anywhere in this feature. A learned button is data, 
 
 The button row opens on the poll thread with no I/O (`HandheldButtonsDevice.Open` only wires events and pushes the registry). Everything that blocks lives in `HandheldSweep`, a worker task every `_handheldSweepIntervalMs` = 4000 ms:
 
-1. `HandheldDaemonWatch.Refresh` scans the process list (3 ms measured across 335 processes).
+1. `HandheldDaemonWatch.Refresh` reads the running processes from `RunningProcessList`, about 7 ms on a PC with 400 processes and 9,000 threads, where a walk of every process with `Process.GetProcesses` took 240 to 360 ms of CPU.
 2. `VendorHidRuntime.Enumerate` lists vendor collections and `SyncReaders` opens or closes readers.
 3. `SyncWmi` subscribes the wanted WMI classes.
 4. Once, `SystemMotionDevice.IsAvailable` probes for a gyrometer and opens the Motion row, which the next poll registers from `_systemMotionPending`.

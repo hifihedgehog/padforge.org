@@ -3878,7 +3878,7 @@
 <p><code>UpdateHandheldDevices</code> runs on the poll thread inside Step 1. With <code>HandheldButtonRegistry.FeatureEnabled</code> false and nothing to retire, it returns after five volatile field reads and takes no lock. Turning the feature off retires both rows, neutralizes their mapped outputs, and stops the chord worker (<code>HandheldChordRuntime.Stop</code>) outside the handheld lock, since <code>Stop</code> joins its worker and the poll thread must not block on a join under a nested lock.</p>
 <p>The button row opens on the poll thread with no I/O (<code>HandheldButtonsDevice.Open</code> only wires events and pushes the registry). Everything that blocks lives in <code>HandheldSweep</code>, a worker task every <code>_handheldSweepIntervalMs</code> = 4000 ms:</p>
 <ol>
-<li><code>HandheldDaemonWatch.Refresh</code> scans the process list (3 ms measured across 335 processes).</li>
+<li><code>HandheldDaemonWatch.Refresh</code> reads the running processes from <code>RunningProcessList</code>, about 7 ms on a PC with 400 processes and 9,000 threads, where a walk of every process with <code>Process.GetProcesses</code> took 240 to 360 ms of CPU.</li>
 <li><code>VendorHidRuntime.Enumerate</code> lists vendor collections and <code>SyncReaders</code> opens or closes readers.</li>
 <li><code>SyncWmi</code> subscribes the wanted WMI classes.</li>
 <li>Once, <code>SystemMotionDevice.IsAvailable</code> probes for a gyrometer and opens the Motion row, which the next poll registers from <code>_systemMotionPending</code>.</li>

@@ -34,7 +34,7 @@ The two DLLs are vendored from that repository's `Runtime/Plugins/x64`, the same
 
 The engine targets body parts, never one device, so one row stands for every Sensa HD device at once. `PeripheralOutputRow` (`PeripheralOutputRow.cs` line 58) with kind `RazerSensa` is a device with no inputs: name Razer Sensa, path `razersensa://local`, vendor ID `0x5046`, product ID `0x5345`, device type `PeripheralHaptics`, and an id hashed from `pfrazersensa` (`PeripheralOutputRow.IdentityFor` (`PeripheralOutputRow.cs` line 124)), so an assignment of it survives across sessions.
 
-Step 1's phase 1m opens the row while `InputManager.PeripheralRowWanted` (`InputManager.PeripheralRows.cs` line 27) holds: Synapse's Chroma runtime is installed and the process is x64 (`PlatformSupport.SensaAvailable`). `PeripheralLinker.Build` (`PeripheralLinker.cs` line 577) gives it the one `Interhaptics` path, `sensa`, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback tab a gamepad gets, with the controller's rumble reaching it through its own settings.
+Step 1's phase 1m opens the row while `InputManager.PeripheralRowWanted` (`InputManager.PeripheralRows.cs` line 27) holds: Synapse's Chroma runtime is installed and the process is x64 (`PlatformSupport.SensaAvailable`). `PeripheralLinker.Build` (`PeripheralLinker.cs` line 500) gives it the one `Interhaptics` path, `sensa`, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback tab a gamepad gets, with the controller's rumble reaching it through its own settings.
 
 ---
 

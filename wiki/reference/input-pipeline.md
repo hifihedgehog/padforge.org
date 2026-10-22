@@ -675,7 +675,7 @@ Phases 1e through 1j share one shape: an `_opened*` dictionary keyed by the sour
 
 Phases 1g and 1h split their work by cost. Blocking I/O (feature-report qualification, vendor HID enumeration, the sensor-stack probe) runs on a worker. The poll thread only registers what the worker finished and retires what vanished. Phase 1i needs no worker: a UDP bind and a file mapping do not block, and the OpenXR source starts its own thread, so the poll thread runs the whole lifecycle itself. Retiring the row does wait, up to 50 ms for the UDP receive thread and up to 2 s for the OpenXR thread. Phase 1j follows the 1i shape.
 
-The Flydigi Space Station check (#395) splits like 1g and 1h. `FlydigiWatchTick` starts its process scan on a worker every 10 s (`FlydigiWatchIntervalMs`), one scan at a time, and a later sweep marks the rows changed when the set of running Flydigi processes changed. `RecordFlydigiArrival` writes a Flydigi pad's arrival record from a worker after a scan of its own. The scan walks every process, 230 to 290 ms on a PC with about 480 processes, and run on the poll thread it stopped the loop for that long every 10 s.
+The Flydigi Space Station check (#395) splits like 1g and 1h. `FlydigiWatchTick` starts its process scan on a worker every 10 s (`FlydigiWatchIntervalMs`), one scan at a time, and a later sweep marks the rows changed when the set of running Flydigi processes changed. `RecordFlydigiArrival` writes a Flydigi pad's arrival record from a worker after a scan of its own. The scan once walked every process, 230 to 290 ms on a PC with about 480 processes, and on the poll thread it stopped the loop that long every 10 s. It now names the running processes from the list of process IDs (`RunningProcessList`: one `K32EnumProcesses` call, then `ProcessImage.PathOf` for each ID), about 7 ms where the walk cost 240 to 360 ms of CPU. Every check for a running program reads it: the peripheral link, the Flydigi and handheld watches, the Razer Synapse and Logitech checks, and the SteamVR check behind **Uninstall**. `ProcessPresenceTests.NoProductionCode_WalksTheKernelsProcessRecords` fails on any production call that walks every process.
 
 ### Method Signature
 
@@ -2360,8 +2360,8 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 | Path | Site | Flow |
 |---|---|---|
-| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8395) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
-| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8454) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
+| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8398) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
+| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8457) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
 | Duplicate | `DuplicateMacroCommand` (`PadViewModel.cs` ~5732) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
 
 `LoadMacroFromData` rebinds only the display side to the destination: button naming (`ButtonStyle`), the custom-button width, and the raw profile id. Trigger and action button values travel verbatim, so an Xbox-slot macro copied into an Extended slot keeps its Xbox bitmask and reads as inert until it is re-bound.
