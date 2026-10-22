@@ -2905,6 +2905,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#removing-padforge-and-hidmaestro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing PadForge and HIDMaestro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#update-wont-check-or-install" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4682,6 +4693,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#removing-padforge-and-hidmaestro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Removing PadForge and HIDMaestro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#update-wont-check-or-install" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5330,6 +5352,15 @@
 <li>Two real pads of the same model trigger the same path. Nothing in PadForge changes that.</li>
 </ol>
 <hr />
+<h2 id="removing-padforge-and-hidmaestro">Removing PadForge and HIDMaestro<a class="headerlink" href="#removing-padforge-and-hidmaestro" title="Permanent link">&para;</a></h2>
+<p><strong>You want PadForge and what it installed off the PC.</strong></p>
+<ol>
+<li>Deleting <code>PadForge.exe</code> leaves HIDMaestro, the driver behind PadForge's virtual controllers, on the PC. Before you delete PadForge, open <strong>Settings → HIDMaestro Driver</strong> and select <strong>Uninstall</strong>. It shows what HIDMaestro left, then stops the engine and removes HIDMaestro's virtual controllers, driver, certificate, registry keys and files (<a href="../features/driver-management/#uninstall">Driver Management</a>).</li>
+<li>Uninstall HidHide, SteamVR and the Windows MIDI Services runtime from their cards on the same page if you installed them, and turn off <strong>Start at Login</strong>, which removes the <code>PadForge</code> task from Task Scheduler. Then close PadForge and delete its folder (<a href="../start/installation/#uninstalling">Installation</a>).</li>
+<li>Already deleted PadForge? Download <code>HIDMaestro-v2.0.2.zip</code> (<code>HIDMaestro-v2.0.2-arm64.zip</code> on Windows on ARM) from the <a href="https://github.com/hifihedgehog/HIDMaestro/releases/latest">HIDMaestro releases</a> and run <code>HIDMaestroUninstall.exe</code> from its <code>HIDMaestroUninstall</code> folder. <code>--include-usbip</code> also removes usbip-win2 that an older PadForge set up with usbip-win2's own installer. A <code>PadForge</code> task left in Task Scheduler can be deleted there.</li>
+<li>Each item the removal keeps is listed with the reason. A USB persona's device record waits for the next restart, and a removal run after it takes the record. A program that still uses HIDMaestro blocks the removal until you close it.</li>
+</ol>
+<hr />
 <h2 id="update-wont-check-or-install">Update Won't Check or Install<a class="headerlink" href="#update-wont-check-or-install" title="Permanent link">&para;</a></h2>
 <p><strong>The Updates card in Settings reports an error, or an update did not install.</strong></p>
 <ol>
@@ -5417,6 +5448,10 @@
 <tr>
 <td>Extended controller not in joy.cpl</td>
 <td>Create an Extended slot. Turn it off and on to run a failed HIDMaestro setup again</td>
+</tr>
+<tr>
+<td>HIDMaestro left after removing PadForge</td>
+<td><strong>Settings → HIDMaestro Driver → Uninstall</strong> first, or <code>HIDMaestroUninstall.exe</code> from the HIDMaestro release</td>
 </tr>
 <tr>
 <td>Extended FFB silent</td>

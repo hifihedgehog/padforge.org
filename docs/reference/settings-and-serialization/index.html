@@ -9283,21 +9283,21 @@
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6822).</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6854).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6829).</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6861).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6837).</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6869).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -11063,7 +11063,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7788, 7785 and 7792).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7820, 7785 and 7792).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>

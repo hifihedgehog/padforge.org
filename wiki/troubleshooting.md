@@ -706,6 +706,17 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 
 ---
 
+## Removing PadForge and HIDMaestro
+
+**You want PadForge and what it installed off the PC.**
+
+1. Deleting `PadForge.exe` leaves HIDMaestro, the driver behind PadForge's virtual controllers, on the PC. Before you delete PadForge, open **Settings → HIDMaestro Driver** and select **Uninstall**. It shows what HIDMaestro left, then stops the engine and removes HIDMaestro's virtual controllers, driver, certificate, registry keys and files ([Driver Management](features/driver-management.md#uninstall)).
+2. Uninstall HidHide, SteamVR and the Windows MIDI Services runtime from their cards on the same page if you installed them, and turn off **Start at Login**, which removes the `PadForge` task from Task Scheduler. Then close PadForge and delete its folder ([Installation](start/installation.md#uninstalling)).
+3. Already deleted PadForge? Download `HIDMaestro-v2.0.2.zip` (`HIDMaestro-v2.0.2-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and run `HIDMaestroUninstall.exe` from its `HIDMaestroUninstall` folder. `--include-usbip` also removes usbip-win2 that an older PadForge set up with usbip-win2's own installer. A `PadForge` task left in Task Scheduler can be deleted there.
+4. Each item the removal keeps is listed with the reason. A USB persona's device record waits for the next restart, and a removal run after it takes the record. A program that still uses HIDMaestro blocks the removal until you close it.
+
+---
+
 ## Update Won't Check or Install
 
 **The Updates card in Settings reports an error, or an update did not install.**
@@ -758,6 +769,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
 | Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
 | Extended controller not in joy.cpl | Create an Extended slot. Turn it off and on to run a failed HIDMaestro setup again |
+| HIDMaestro left after removing PadForge | **Settings → HIDMaestro Driver → Uninstall** first, or `HIDMaestroUninstall.exe` from the HIDMaestro release |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
 | MIDI button dimmed | No MIDI API started. Read the Windows MIDI Services card on Settings |
 | No MIDI output | Select "PadForge MIDI N" in the DAW, or under the legacy MIDI API the port picked on the slot's page |

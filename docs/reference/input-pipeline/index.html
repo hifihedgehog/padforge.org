@@ -7295,7 +7295,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RerouteVirtualControllersForReorder</span><span class="p">(</span>
 <a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">VirtualControllerType</span><span class="w"> </span><span class="n">groupType</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">oldOrder</span><span class="p">,</span><span class="w"> </span><span class="n">IReadOnlyList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">newOrder</span><span class="p">)</span>
 </code></pre></div>
-<p><code>InputManager.Step5.VirtualDevices.cs</code> line 3589. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
+<p><code>InputManager.Step5.VirtualDevices.cs</code> line 3568. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:</p>
 <ul>
 <li><strong>Same profile at V</strong>: reuse the kernel VC in place. The pad-index pointer in <code>_virtualControllers[]</code> moves so the new pad-at-position-V feeds V's kernel slot, and <code>FeedbackPadIndex</code> is updated on the surviving VC so the rumble callback writes the right <code>VibrationStates[]</code> entry. No teardown.</li>
 <li><strong>Different profile at V</strong>: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus <code>ApplyAscendingIndexPreemption</code> recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.</li>
@@ -9695,12 +9695,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8391)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8395)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8450)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8454)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)</code> -&gt; set <code>PadIndex</code> -&gt; clear <code>LayerMask</code> unless <code>DestinationDeclaresLayer</code> -&gt; add</td>
 </tr>
 <tr>
