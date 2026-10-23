@@ -6121,7 +6121,7 @@
 <li><strong>Demand comes from reads.</strong> <code>SourceCoercion</code> stamps <code>LastNfcReadRequestTick</code> / <code>LastJoyConIrReadRequestTick</code> whenever a configured, enabled mapping evaluates an NFC or IR descriptor. Configured inputs are read every tick, so an active binding keeps the latch continuously fresh. A deleted or disabled one lapses after <code>McuDemandWindowMs</code> (10 s).</li>
 <li><strong>Why not init-time.</strong> The right Joy-Con camera and the NFC reader share the one MCU (camera = mode 5, NFC = mode 4, and the fork's <code>UpdateNfc</code> abandons while the camera streams). A globally-on IR hint silently killed standalone right Joy-Con NFC (#248 audit). Do not move either hint back into the init table.</li>
 <li><strong>Registration preempts the camera.</strong> A tag-registration capture with the camera streaming would wait forever for a UID, so <code>RegistrationCaptureActive</code> forces IR off. The camera resumes when the dialog closes and IR demand re-latches.</li>
-<li><strong>The update loop.</strong> The fork reads both hints on every device update. <code>UpdateIR</code> starts the camera on a right Joy-Con (<code>0x2007</code>, or the right half of a <code>0x2008</code> pair) whose sensors are on while the hint asks for it, and tears it down when the hint stops asking, which frees the MCU for NFC. A flip takes effect on the next update, so the service sets the hint and does nothing more. Until SDL 3f4999d129 (PadForge 51f408fb) the fork decided the camera's fate only at <code>SetSensorsEnabled</code>, and the service bounced every IR-capable Joy-Con's sensors after a flip.</li>
+<li><strong>The update loop.</strong> The fork reads both hints on every device update. <code>UpdateIR</code> starts the camera on a right Joy-Con (<code>0x2007</code>, or the right half of a <code>0x2008</code> pair) whose sensors are on while the hint asks for it, and tears it down when the hint stops asking, which frees the MCU for NFC. A flip takes effect on the next update, so the service sets the hint and does nothing more. Until fork commit 22118db0c9 (PadForge 51f408fb) the fork decided the camera's fate only at <code>SetSensorsEnabled</code>, and the service bounced every IR-capable Joy-Con's sensors after a flip.</li>
 <li><strong>Latch only on success.</strong> The managed flag updates only when <code>SDL_SetHint</code> accepts the value. A rejected write retries on the next cadence instead of leaving the flag and the MCU disagreeing.</li>
 <li>When both the camera and NFC are configured for one standalone right Joy-Con, the camera wins by fork arbitration. That conflict is the mapping author's own choice.</li>
 </ul>
@@ -7415,7 +7415,7 @@
 <p>The SDL instance ID is removed from <code>_openedSdlInstanceIds</code> by the caller, enabling the device to be re-detected if reconnected.</p>
 <hr />
 <h2 id="sdl3-fork">SDL3 Fork<a class="headerlink" href="#sdl3-fork" title="Permanent link">&para;</a></h2>
-<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>756e0f2fb1</code> (2026-10-03) for both architectures, and pre-release builds after it ship <code>ec35d0bda7</code> (2026-10-05). 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). The branch rebases onto <code>libsdl-org/SDL</code> mainline, so the fork commits below carry the hashes of the current branch.</p>
+<p>PadForge ships a custom SDL3 fork at <a href="https://github.com/hifihedgehog/SDL">hifihedgehog/SDL</a> on branch <code>feat/hidmaestro-filter</code>. The built binaries land at <code>PadForge.App/Resources/SDL3/x64/SDL3.dll</code> and <code>PadForge.App/Resources/SDL3/arm64/SDL3.dll</code>. PadForge 5.0.0 ships the fork's Release build at commit <code>756e0f2fb1</code> (2026-10-03) for both architectures, and pre-release builds after it ship <code>77cf0379f5</code> (2026-10-22). 4.5.2 and 4.5.3 shipped <code>5df5eff539</code> (2026-09-21). Those are the hashes the builds carry. The branch rebases onto <code>libsdl-org/SDL</code> mainline, and a rebase gives every fork commit a new hash: on October 22, 2026 <code>756e0f2fb1</code> became <code>85a0117bf7</code> and <code>5df5eff539</code> became <code>067b770ba8</code>. The fork commits below carry the hashes of the current branch, and line citations into the fork's sources on this page are at <code>77cf0379f5</code>.</p>
 <h3 id="why-a-fork">Why a Fork<a class="headerlink" href="#why-a-fork" title="Permanent link">&para;</a></h3>
 <p>The branch began with six commits spanning four logical features. v4 consumes substantially more fork work on top. The original four are listed first, the v4 additions in the next subsection.</p>
 <table>
@@ -7431,25 +7431,25 @@
 <tr>
 <td>1</td>
 <td><strong>Switch 2 Pro Controller</strong>: WinUSB bulk I/O on Windows. The controller is a USB composite device with two interfaces. SDL needs to drive HID Interface 0 for input and WinUSB Interface 1 for the bulk init sequence.</td>
-<td><code>e962d7bb8d</code></td>
+<td><code>d70d0e102a</code></td>
 <td>None</td>
 </tr>
 <tr>
 <td>2</td>
 <td><strong>HIDMaestro virtual-controller filter</strong> (PadForge-specific): <code>SDL_GetJoysticks</code> walks each device's PnP parent chain and drops any device whose hardware-ID list contains the <code>HIDMAESTRO</code> substring, with a fast-path substring match on the interface symlink. Stops SDL from re-enumerating the virtual controllers PadForge just created.</td>
-<td><code>bc9a80d77e</code> (main filter) + <code>c910b06a30</code> (HMXINPUT dead-branch cleanup)</td>
+<td><code>705419dbbb</code> (main filter) + <code>59183d1b4a</code> (HMXINPUT dead-branch cleanup)</td>
 <td>None</td>
 </tr>
 <tr>
 <td>3</td>
 <td><strong>16 XInput controllers</strong>: bumps <code>XUSER_MAX_COUNT</code> from 4 to 16 so SDL3's XInput driver tracks all of PadForge's Xbox-category slots, rather than the first four alone.</td>
-<td><code>469f70815d</code></td>
+<td><code>a65ad58051</code></td>
 <td><a href="https://github.com/hifihedgehog/OpenXinput"><code>hifihedgehog/OpenXinput</code></a> branch <code>OpenXinput1_4</code> commit <code>45c91b1</code> (CMake default bump)</td>
 </tr>
 <tr>
 <td>4</td>
 <td><strong>XInput Share button</strong>: reads OpenXInput's <code>XInputGetSystemButtons</code> ordinal 109 and exposes Share at raw button 11 + the gamepad-db <code>misc1</code> mapping.</td>
-<td><code>d8c4d9006c</code> (loader + dispatch) + <code>259d947299</code> (gamepad-db <code>misc1:b11</code> mapping)</td>
+<td><code>d88142c0f7</code> (loader + dispatch) + <code>61c3e40180</code> (gamepad-db <code>misc1:b11</code> mapping)</td>
 <td>Uses an existing OpenXInput export. No OpenXInput change needed.</td>
 </tr>
 </tbody>
@@ -7512,29 +7512,34 @@
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE</code>, <code>SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER</code>, <code>HasSwitch2Magnetometer</code> (#271)</td>
 </tr>
 <tr>
-<td><code>SDL#27</code> (fork commit <code>c2794e11cb</code>)</td>
-<td>Five second-generation MOZA wheelbase IDs in <code>initial_wheel_devices</code> (<code>SDL_joystick.c:614-618</code>: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed <code>SDL_JOYSTICK_TYPE_WHEEL</code> like the first-generation IDs at <code>:609-613</code></td>
+<td><code>SDL#27</code> (fork commit <code>a5a8c98d98</code>)</td>
+<td>Five second-generation MOZA wheelbase IDs in <code>initial_wheel_devices</code> (<code>SDL_joystick.c:643-647</code>: 346E:0010 R16/R21, 0012 R9, 0014 R5, 0015 R3, 0016 R12), so a newer base is typed <code>SDL_JOYSTICK_TYPE_WHEEL</code> like the first-generation IDs at <code>:609-613</code></td>
 <td><code>SdlDeviceWrapper</code> wheel typing, the Wheel tab (#282)</td>
 </tr>
 <tr>
-<td>Fork commit <code>067c3b9661</code></td>
+<td>Fork commit <code>0e2541f1f0</code></td>
 <td>The DualSense's trigger feedback bytes (payload 40..47 of the full report) published as the joystick property <code>SDL.joystick.hidapi.ps5.status_bytes</code></td>
 <td><code>DualSenseStatusBytes.Read</code>, which fills the same bytes in the virtual DualSense's report (#433)</td>
 </tr>
 <tr>
-<td><code>SDL_XINPUT_PADDLES</code> (fork commits <code>49cbac4a41</code>, <code>167f8ca9bc</code>, <code>11bf187ca5</code>, <code>4763baf830</code>, <code>a1416320e2</code>, <code>5df5eff539</code>, the last for <code>SDL#32</code>)</td>
+<td><code>SDL_XINPUT_PADDLES</code> (fork commits <code>37a0e93f16</code>, <code>94b5bd2df9</code>, <code>fb1dc1e800</code>, <code>bc61f107a9</code>, <code>0f89c9da0d</code>, <code>067b770ba8</code>, the last for <code>SDL#32</code>)</td>
 <td>Adds an Elite controller's four paddles to its XInput joystick as raw buttons 12-15 (<code>paddle1</code>-<code>paddle4</code>), over Bluetooth and, where the Windows GameInput files belong to a version family the fork has read, over USB and the Xbox Wireless Adapter. Builds for x64 and ARM64</td>
 <td>Gamepad positions 12-15 (Right/Left Paddle 1 and 2)</td>
 </tr>
 <tr>
-<td><code>SDL#36</code> (fork commit <code>756e0f2fb1</code>)</td>
+<td><code>SDL#36</code> (fork commit <code>85a0117bf7</code>)</td>
 <td>A Wii Remote with a Classic Controller registers the remote's accelerometer, and the Motion Plus gyro when one is present. Enabling a sensor is what powers the IR camera, and the driver registered none for that configuration, so its four IR axes never moved</td>
 <td><code>SdlDeviceWrapper</code>, which enables every sensor a joystick registers. <code>ReadIrPointer</code> and the light gun (#485) then read the camera with a Classic Controller attached</td>
 </tr>
 <tr>
-<td><code>SDL#37</code> (fork commits <code>69dd3048b6</code>, <code>ec35d0bda7</code>)</td>
+<td><code>SDL#37</code> (fork commits <code>1dc63df4f0</code>, <code>f586b11b08</code>)</td>
 <td>The wired Switch 2 search on Windows finds the controller's bulk interface in libusb's device list. It no longer takes a device whose serial string reads as another unit's, and with no serial on the HID side it skips a device whose serial a HIDMaestro virtual controller reports. Before, it fell back to the first device it had opened, which could be the Switch 2 Pro persona</td>
 <td>No PadForge code. It covers a real wired Switch 2 Pro Controller as an input beside a slot on the <code>switch2-pro-controller-composite</code> preset. Not run with either device</td>
+</tr>
+<tr>
+<td><code>SDL#39</code> / <code>SDL#40</code> (fork commits <code>c2eb7a5f2a</code>, <code>77cf0379f5</code>)</td>
+<td>A Wii Remote's camera start runs again after 1, 2 and 4 seconds and then every 8 when it fails or a status report shows the camera off, and a remote that stops answering loses its joystick and is taken back when it answers again. The start runs on the driver's update loop, each write sent once the one before it is acknowledged, so it waits on nothing</td>
+<td><code>ReadIrPointer</code>, with <code>StepIrCameraCheck</code> as a backstop (#484)</td>
 </tr>
 </tbody>
 </table>
@@ -7553,19 +7558,19 @@
 <tbody>
 <tr>
 <td><code>SDL_HIDAPI_DriverFlydigi</code> (<code>SDL_hidapi_flydigi.c</code>)</td>
-<td><code>SDL_hidapijoystick.c:105</code>, enabled by <code>SDL_JOYSTICK_HIDAPI_FLYDIGI</code> at <code>SDL_hidapijoystick_c.h:49</code></td>
-<td><code>SDL_IsJoystickFlydigiController</code> (<code>SDL_joystick.c:3585</code>) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2502 / 37D7:2401 (second generation, any interface), from <code>usb_ids.h:38-39</code> and <code>:94-97</code>. The model comes from the controller's device ID (<code>HIDAPI_DriverFlydigi_UpdateDeviceIdentity</code>): Apex 2, 3, 4, 5, 6 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro</td>
-<td>The gamepad mapping (<code>SDL_gamepad.c:1301-1313</code>) puts the four paddles at <code>b11-b14</code>, the Vader C/Z and the Apex 5 and Apex 6 shoulder macros at <code>misc2:b15,misc3:b16</code>, and the Vader 5 Pro's three extra buttons at <code>misc4:b17,misc5:b18,misc6:b19</code>. <code>SdlDeviceWrapper</code> carries MISC2-MISC6 at <code>CustomInputState</code> button indices 17-21 (<code>SdlDeviceWrapper.cs:3219-3223</code>), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (<code>PhysicalSlotResolver.cs</code>). Apex 5, Apex 6, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: <code>d2050211eb</code> (2026-09-21, Apex 6 support)</td>
+<td><code>SDL_hidapijoystick.c:129</code>, enabled by <code>SDL_JOYSTICK_HIDAPI_FLYDIGI</code> at <code>SDL_hidapijoystick_c.h:52</code></td>
+<td><code>SDL_IsJoystickFlydigiController</code> (<code>SDL_joystick.c:3616</code>) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2502 / 37D7:2401 (second generation, any interface), from <code>usb_ids.h:46-47</code> and <code>:137-140</code> and <code>:94-97</code>. The model comes from the controller's device ID (<code>HIDAPI_DriverFlydigi_UpdateDeviceIdentity</code>): Apex 2, 3, 4, 5, 6 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro</td>
+<td>The gamepad mapping (<code>SDL_gamepad.c:1493-1505</code>) puts the four paddles at <code>b11-b14</code>, the Vader C/Z and the Apex 5 and Apex 6 shoulder macros at <code>misc2:b15,misc3:b16</code>, and the Vader 5 Pro's three extra buttons at <code>misc4:b17,misc5:b18,misc6:b19</code>. <code>SdlDeviceWrapper</code> carries MISC2-MISC6 at <code>CustomInputState</code> button indices 17-21 (<code>SdlDeviceWrapper.cs:3227-3231</code>), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (<code>PhysicalSlotResolver.cs</code>). Apex 5, Apex 6, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream change carried: <code>d2050211eb</code> (2026-09-21, Apex 6 support)</td>
 </tr>
 <tr>
 <td><code>SDL_HIDAPI_DriverSteamDeck</code> (<code>SDL_hidapi_steamdeck.c</code>)</td>
-<td><code>SDL_hidapijoystick.c:71</code></td>
+<td><code>SDL_hidapijoystick.c:95</code></td>
 <td>28DE:1205 (<code>controller_list.h:669</code>)</td>
 <td>Trackpads, gyro, haptics. PadForge also drives the Deck as a virtual-controller persona (<code>steam-deck-composite</code>), which is HIDMaestro work, not SDL's</td>
 </tr>
 <tr>
 <td><code>SDL_HIDAPI_DriverSteamTriton</code> (<code>SDL_hidapi_steam_triton.c</code>)</td>
-<td><code>SDL_hidapijoystick.c:74</code></td>
+<td><code>SDL_hidapijoystick.c:98</code></td>
 <td>28DE:1302 wired, 1303 BLE, 1304 Proteus dongle, 1305 Nereid dongle (<code>controller_list.h:670-673</code>)</td>
 <td>The 2026 Steam Controller. Upstream added the driver in May 2026 (<code>f7a8801227</code>, <code>f6ffa69890</code>, <code>634dff3725</code>). PadForge's PCM haptic stream (reports 0x86 / 0x88) is written by PadForge itself, outside SDL (<code>TritonPcmSupport.cs</code>)</td>
 </tr>
@@ -7653,7 +7658,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus through the extension register (<code>0xA600FE</code> before activation, <code>0xA400FE</code> once a mode is set, <code>SDL_hidapi_wii.c:574</code>, <code>:638</code>, <code>:1991</code>) and converts its gyro words with fixed constants: 8192 counts per degree per second, times 440 in slow mode or 2000 in fast mode, per axis (<code>:1622-1650</code>). It reads no Motion Plus calibration block from the remote. The stick calibration and the Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) are the only calibration reads. The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them, and no Wii commit landed in the fork after the July Motion Plus fixes (<code>eee6964ab5</code>, <code>a7c6f5c79f</code>, <code>cb8b58d4a6</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above).</p>
+<p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus from the extension's six ID bytes, read at <code>0xA400FA</code> while one is active and at <code>0xA600FA</code> while one is inactive (<code>GetMotionPlusState</code>, <code>SDL_hidapi_wii.c:669-714</code> at <code>77cf0379f5</code>). It writes the mode to <code>0xA600FE</code> before activation and to <code>0xA400FE</code> once a mode is set (<code>:770</code>). It converts the gyro words with fixed constants, 440 degrees per second per 8192 counts in slow mode and 2000 in fast mode, per axis (<code>HandleMotionPlusData</code>, <code>:2049-2087</code>). It reads no Motion Plus calibration block from the remote. The Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) is the only calibration it reads, and the stick ranges are learned from the values seen (<code>PostStickCalibrated</code>). The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them. The gyro conversion has not changed since the July Motion Plus fixes (<code>98cd0e237d</code>, <code>4a5e03f727</code>, <code>5c73f284de</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above). Since then <code>4f9c90ff41</code> reads all six ID bytes, where the old read took two at <code>0xFE</code>, <code>85a0117bf7</code> (<code>SDL#36</code>) registers the gyro with a Classic Controller attached, and <code>77cf0379f5</code> (<code>SDL#40</code>) sends the mode write and the deactivation through the driver's write queue.</p>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
 <p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> (<code>InputManager.cs:938</code>) before <code>SDL_Init()</code>, next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:54</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
@@ -7666,9 +7671,9 @@
 <a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-A<span class="w"> </span>x64<span class="w"> </span>-DSDL_HIDAPI_LIBUSB<span class="o">=</span>ON<span class="w"> </span>-DSDL_HIDAPI_LIBUSB_SHARED<span class="o">=</span>ON<span class="w"> </span>-DLibUSB_INCLUDE_PATH<span class="o">=</span>&lt;folder<span class="w"> </span>with<span class="w"> </span>libusb.h&gt;<span class="w"> </span>-DLibUSB_LIBRARY<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>libusb-1.0.lib&gt;
 <a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>--target<span class="w"> </span>SDL3-shared
 </code></pre></div>
-<p>Pass both libusb paths. <code>FindLibUSB.cmake</code> looks only on CMake's search path and in pkg-config's answer, and when it finds nothing <code>HAVE_LIBUSB</code> stays off: the wired Switch 2 driver compiles out (<code>SDL_hidapijoystick_c.h:38-39</code>) and the GameCube adapter becomes unreachable.</p>
+<p>Pass both libusb paths. <code>FindLibUSB.cmake</code> looks only on CMake's search path and in pkg-config's answer, and when it finds nothing <code>HAVE_LIBUSB</code> stays off: the wired Switch 2 driver compiles out (<code>SDL_hidapijoystick_c.h:40-41</code>) and the GameCube adapter becomes unreachable.</p>
 <p>Copy the output <code>SDL3.dll</code> into <code>PadForge.App/Resources/SDL3/x64/</code> before publishing PadForge.</p>
-<p>The ARM64 build is the same configuration generated with <code>-A ARM64</code> into its own build directory, cross-compiled on an x64 machine, and its <code>SDL3.dll</code> goes into <code>PadForge.App/Resources/SDL3/arm64/</code>. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 <code>libusb-1.0.dll</code> with <code>lib /def /machine:arm64</code>. The ARM64 configuration differs from x64 in one way: NEON replaces SSE and AVX. Until fork commit a1416320e2 the Elite paddle reader required <code>SDL_CPU_X64</code>, so <code>SDL_XINPUT_PADDLES</code> was off for ARM64. It builds for both now.</p>
+<p>The ARM64 build is the same configuration generated with <code>-A ARM64</code> into its own build directory, cross-compiled on an x64 machine, and its <code>SDL3.dll</code> goes into <code>PadForge.App/Resources/SDL3/arm64/</code>. libusb publishes no MSVC ARM64 import library, so one is generated from the exports of the ARM64 <code>libusb-1.0.dll</code> with <code>lib /def /machine:arm64</code>. The ARM64 configuration differs from x64 in one way: NEON replaces SSE and AVX. Until fork commit 0f89c9da0d the Elite paddle reader required <code>SDL_CPU_X64</code>, so <code>SDL_XINPUT_PADDLES</code> was off for ARM64. It builds for both now.</p>
 <p>Whichever architecture you build, check the libusb name inside the DLL before bundling it. The configure step reads it off the import library with <code>dumpbin</code> and stops if it does not end in <code>.dll</code>. <code>BundledSdlLibusbNameTests</code> in PadForge checks the delivered file again.</p>
 <hr />
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>

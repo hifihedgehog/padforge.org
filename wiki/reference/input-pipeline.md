@@ -981,11 +981,11 @@ Once per tick, before the device loop: when `AudioBassDetector` is set, it is de
 
 **File:** `PadForge.Engine/Common/SdlDeviceWrapper.cs`
 
-The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (line 923, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
+The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (line 924, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
 
 | Source | Reader | Axes | Populates |
 |---|---|---|---|
-| Wii IR pointer (#146) | `ReadIrPointer` (line 1372, the step in `StepIrPointer` line 1416, the midpoint in `ComputeIrAim` line 1792) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (line 137): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected`, `Ir.Calibrated` |
+| Wii IR pointer (#146) | `ReadIrPointer` (line 1373, the step in `StepIrPointer` line 1417, the midpoint in `ComputeIrAim` line 1800) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (line 137): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected`, `Ir.Calibrated` |
 | Right Joy-Con IR brightness (#151) | `ReadJoyConIr` (~1044-1048) | 6 (MCU average intensity) | `CustomInputState.JoyConIrIntensity` (~140) |
 | Joy-Con 2 mouse (#154) | `ReadJoyCon2Mouse` (~1005-1036) | 6/7 (16-bit position counters) | `CustomInputState.JoyCon2MouseDX` / `DY` (~149-150) |
 | WingMan Warrior spin dial (hifihedgehog/SDL#33) | `ReadSpinDial` | Ball 0, not an axis: `SDL_GetJoystickBall` returns the counts since the last read and clears them | `CustomInputState.JoyCon2MouseDX`, unscaled |
