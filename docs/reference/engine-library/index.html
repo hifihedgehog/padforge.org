@@ -9942,7 +9942,7 @@
 <tr>
 <td><code>BounceMotionSensors</code></td>
 <td><code>void BounceMotionSensors()</code></td>
-<td>Turns every open motion sensor off and back on. The fork decides the right Joy-Con NIR camera's power only at that enable edge, so a runtime flip of the IR hint needs one bounce.</td>
+<td>Turns every open motion sensor off and back on, through the API that opened the device. The fork powers a Wii Remote's IR camera at that enable edge, so a bounce is one more camera start, which the IR camera check uses (<code>StepIrCameraCheck</code>).</td>
 </tr>
 <tr>
 <td><code>OverrideInstanceGuid</code></td>

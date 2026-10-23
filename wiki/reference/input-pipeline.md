@@ -473,7 +473,7 @@ The engine half of the "Continue Polling When Window Loses Focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20322), `MoveSlot(int, int)` (line 20355), and `MoveSlotToGroupTail(int)` (line 20402). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20303), `MoveSlot(int, int)` (line 20336), and `MoveSlotToGroupTail(int)` (line 20383). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
@@ -981,11 +981,11 @@ Once per tick, before the device loop: when `AudioBassDetector` is set, it is de
 
 **File:** `PadForge.Engine/Common/SdlDeviceWrapper.cs`
 
-The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (line 925, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
+The Wii IR pointer, right-Joy-Con NIR camera scalar, and Joy-Con 2 optical mouse ride dedicated raw joystick axes that SDL's gamepad mapping does not surface. `SdlDeviceWrapper.GetCurrentState` (line 923, the sensor reads at 907-938) reads them joystick-direct after the gamepad-or-joystick state is built, each gated on a capability flag:
 
 | Source | Reader | Axes | Populates |
 |---|---|---|---|
-| Wii IR pointer (#146) | `ReadIrPointer` (line 1374, the step in `StepIrPointer` line 1418, the midpoint in `ComputeIrAim` line 1794) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (line 137): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected`, `Ir.Calibrated` |
+| Wii IR pointer (#146) | `ReadIrPointer` (line 1372, the step in `StepIrPointer` line 1416, the midpoint in `ComputeIrAim` line 1792) | 6-9 (two sensor-bar dots) | `CustomInputState.Ir` (line 137): `Ir.X` / `Ir.Y` in `[-1, +1]`, `Ir.Detected`, `Ir.Calibrated` |
 | Right Joy-Con IR brightness (#151) | `ReadJoyConIr` (~1044-1048) | 6 (MCU average intensity) | `CustomInputState.JoyConIrIntensity` (~140) |
 | Joy-Con 2 mouse (#154) | `ReadJoyCon2Mouse` (~1005-1036) | 6/7 (16-bit position counters) | `CustomInputState.JoyCon2MouseDX` / `DY` (~149-150) |
 | WingMan Warrior spin dial (hifihedgehog/SDL#33) | `ReadSpinDial` | Ball 0, not an axis: `SDL_GetJoystickBall` returns the counts since the last read and clears them | `CustomInputState.JoyCon2MouseDX`, unscaled |
@@ -1680,9 +1680,9 @@ The steering math is original C# written from the geometry described in JoyShock
 
 ### Motion Shake
 
-Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2565 and 2513), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
+Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2565 and 2570), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
 
-The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15774), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
+The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15755), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
 
 `ReadShakeEnvelope` (`SourceCoercion.cs` line 2595) applies the per-source sensitivity and clamps to `[0, 1]`. The envelope is unsigned by nature, so `HalfAxis` and `Invert` have nothing to point at and are not applied. Per target class:
 
