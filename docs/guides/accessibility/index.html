@@ -1074,6 +1074,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity curves
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3528,6 +3539,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#sensitivity-curves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sensitivity curves
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3547,7 +3569,7 @@
 
 <h1 id="screen-readers-and-the-keyboard">Screen Readers and the Keyboard<a class="headerlink" href="#screen-readers-and-the-keyboard" title="Permanent link">&para;</a></h1>
 <p><em>PadForge read aloud by a screen reader and driven from the keyboard: what you hear, the keys, and the one thing NVDA needs.</em></p>
-<p>PadForge is tested with NVDA. Every control the Tab key reaches has a name a screen reader speaks, in the language the interface uses. The app looks the same with or without a screen reader.</p>
+<p>PadForge is tested with NVDA. Every control the Tab key reaches has a name a screen reader speaks, in the language the interface uses. The app looks the same with or without a screen reader, and the keys work without one.</p>
 <hr />
 <h2 id="nvda-and-administrator-rights">NVDA and administrator rights<a class="headerlink" href="#nvda-and-administrator-rights" title="Permanent link">&para;</a></h2>
 <p>PadForge runs as administrator, and Windows lets a screen reader read an administrator program only when the screen reader can work with one. An installed copy of NVDA can. A portable or temporary copy of NVDA cannot, unless that copy also runs as administrator. Use the installed copy.</p>
@@ -3555,8 +3577,11 @@
 <ul>
 <li>A button that shows only a symbol speaks what its tooltip says, such as "Record" on the record buttons.</li>
 <li>A field or slider speaks the setting it changes: "Web Controller Port, edit, 8080".</li>
-<li>The controller type buttons on the Dashboard and in the sidebar speak as radio buttons, checked on the slot's current type: "Nintendo, radio button, checked".</li>
+<li>The controller type buttons on the Dashboard and in the sidebar speak as radio buttons, checked on the slot's current type: "Nintendo, radio button, checked". The filter chips on the Devices page and the tag chips in the Workshop speak the same way, checked on the current filter.</li>
 <li>The engine and slot power buttons speak as toggle buttons, pressed while on, then their state: "Enabled, toggle button, pressed, Awaiting devices".</li>
+<li>The arrows of a scroll bar or a number box, and the buttons at the top right of the window, speak their names: "Scroll Up", "Increase", "Minimize".</li>
+<li>Each cell of the Mappings table speaks what it holds: the output, the source, the live value, or "Does not apply" for a dead zone the row has no use for.</li>
+<li>A sensitivity curve speaks the point its keys move: "Point 2 of 4, input 50%, output 38%".</li>
 <li>Page titles and section titles are headings.</li>
 <li>Each dialog speaks as a dialog when it opens.</li>
 <li>Status changes are spoken as they happen: the message in the status bar at the bottom of the window, and the status lines on the Dashboard, Settings and Devices pages, such as a server starting or a driver's install status. They are spoken only while PadForge is the active window, so nothing interrupts a game.</li>
@@ -3576,11 +3601,11 @@
 </tr>
 <tr>
 <td>Space, Enter</td>
-<td>Press the focused button</td>
+<td>Press the focused button, chip, swatch or tile. On a sidebar entry, open its page</td>
 </tr>
 <tr>
 <td>Escape</td>
-<td>Close the dialog</td>
+<td>Close the dialog or the open list</td>
 </tr>
 <tr>
 <td>Ctrl+Tab, Ctrl+Shift+Tab</td>
@@ -3589,6 +3614,47 @@
 <tr>
 <td>Alt+Up, Alt+Down</td>
 <td>On the Macros tab, move the selected step of the action sequence up or down one place</td>
+</tr>
+</tbody>
+</table>
+<p>A dialog opened from the keyboard starts with the focus on its first control. The Add Controller list and the profile list do the same: the arrow keys and Tab move through them, and Escape closes them and puts the focus back on what opened them.</p>
+<h2 id="sensitivity-curves">Sensitivity curves<a class="headerlink" href="#sensitivity-curves" title="Permanent link">&para;</a></h2>
+<p>Tab reaches each curve. The point the keys move is drawn orange while the curve has the focus.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Left, Right</td>
+<td>Select the point before or after</td>
+</tr>
+<tr>
+<td>Home, End</td>
+<td>Select the first or last point</td>
+</tr>
+<tr>
+<td>Up, Down</td>
+<td>Raise or lower the point's output by 1%</td>
+</tr>
+<tr>
+<td>Page Up, Page Down</td>
+<td>Raise or lower the point's output by 10%</td>
+</tr>
+<tr>
+<td>Shift+Left, Shift+Right</td>
+<td>Move the point's input by 1%, short of the points beside it. The two end points keep theirs</td>
+</tr>
+<tr>
+<td>Insert</td>
+<td>Add a point on the curve, halfway to the next point</td>
+</tr>
+<tr>
+<td>Delete</td>
+<td>Remove the point. The two end points stay</td>
 </tr>
 </tbody>
 </table>
