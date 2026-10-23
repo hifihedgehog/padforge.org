@@ -11063,7 +11063,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7823, 7785 and 7792).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7823, 7829 and 7836).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>
