@@ -16,6 +16,7 @@ device, except Remote Link, which needs PadForge on both PCs.
 | [Per-game Profiles](profiles.md) | Mappings that switch when a game gains focus, on a controller combo, or on a command from your launcher |
 | [Remote Link](remote-link.md) | A controller on one PC driving games on another, on your network or across the internet |
 | [Steering with any stick](steering.md) | Winding-wheel steering on a stick, d-pad, or motion |
+| [Screen readers and the keyboard](accessibility.md) | PadForge spoken by NVDA, and the keys for the custom controls |
 
 ---
 

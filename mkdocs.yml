@@ -90,6 +90,7 @@ nav:
       - Per-game Profiles: guides/profiles.md
       - Remote Link: guides/remote-link.md
       - Steering with any stick: guides/steering.md
+      - Screen readers and the keyboard: guides/accessibility.md
   - Features:
       - features/index.md
       - Dashboard: features/dashboard.md
