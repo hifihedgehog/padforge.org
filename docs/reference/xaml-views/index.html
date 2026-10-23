@@ -7073,8 +7073,8 @@
 <a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>       │   │   │    overflow) or the DeviceName empty-state line
 <a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>       │   │   ├─ Row 3: StatusText + mapped/connected counts
 <a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>       │   │   └─ Row 4: StageLedger chips (per-stage glyphs with hover readout)
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       │   └─ Add Controller tile (AddControllerCard, 252px, dashed steel outline,
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>       │   └─ Add Controller tile (AddControllerCard, a ClickBorder, 252px, dashed steel outline,
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>       │        Click from the mouse, Enter or Space → AddControllerRequested, gated on ShowAddController)
 <a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>       └─ ServicesSection StackPanel (one panel so the welcome tour can ring
 <a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>            the whole group as a single target)
 <a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>            ├─ &quot;Services&quot; divider (ServicesHeader, ember tick + hairline rule)
@@ -7463,7 +7463,7 @@
 </tr>
 <tr>
 <td><code>AddControllerCard_Click</code></td>
-<td>Border.MouseLeftButtonUp</td>
+<td>ClickBorder.Click</td>
 <td>Raises <code>AddControllerRequested</code></td>
 </tr>
 <tr>
@@ -7590,9 +7590,8 @@
 <a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>│   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
 <a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>│   ├─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
 <a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>│   └─ KbmDeviceBar (Visibility=Collapsed unless OutputType==KeyboardMouse)
-<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>├─ Invisible MappingsCountIndicator (for UI Automation)
-<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
-<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>   SelectedIndex bound to SelectedConfigTab
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>└─ Row 2 (*): ContentTabControl (a TabControl with no header, whose UI Automation peer lists the selected tab&#39;s content), one TabItem per Tag (0-17),
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>   SelectedIndex bound to SelectedConfigTab
 </code></pre></div>
 <p>The <code>HMaestroProfileBar</code> preset chip sits inline in tier 1 rather than on its own row. The Extended, MIDI and Keyboard + Mouse bars are the only Row 1 occupants. <code>KbmDeviceBar</code> holds the <strong>Keyboard</strong> and <strong>Mouse</strong> pickers (<code>KbmKeyboardDeviceCombo</code>, <code>KbmMouseDeviceCombo</code>, bound to <code>KbmConfig.AvailableKeyboardDevices</code> / <code>AvailableMouseDevices</code> and to <code>KbmKeyboardDevice</code> / <code>KbmMouseDevice</code>), each with its reset button and shown while the surface mode drives its half, and the picked model's capability tags (<code>KbmKeyboardCapabilities</code>, <code>KbmMouseCapabilities</code>, <code>ChipGhost</code> chips).</p>
 <h3 id="custom-styles-usercontrolresources">Custom Styles (UserControl.Resources)<a class="headerlink" href="#custom-styles-usercontrolresources" title="Permanent link">&para;</a></h3>
@@ -7855,11 +7854,6 @@
 <td>Extended slot button count override</td>
 </tr>
 <tr>
-<td><code>MappingsCountIndicator</code></td>
-<td>TextBlock (invisible)</td>
-<td><code>AutomationProperties.Name</code> bound to <code>Mappings.Count</code></td>
-</tr>
-<tr>
 <td><code>DeadZoneShapeCombo</code></td>
 <td>ComboBox</td>
 <td>Deadzone shape selector (Sticks tab)</td>
@@ -7958,17 +7952,17 @@
 </tr>
 <tr>
 <td><code>Motor_MouseEnter/Leave</code></td>
-<td>StackPanel.Mouse</td>
+<td>ClickBorder.MouseEnter/MouseLeave</td>
 <td>Hover opacity effect (0.7/1.0)</td>
 </tr>
 <tr>
 <td><code>LeftMotor_Click</code></td>
-<td>StackPanel.MouseLeftButtonDown</td>
+<td>ClickBorder.Click (ClickMode Press)</td>
 <td><code>padVm.FireTestLeftMotor()</code></td>
 </tr>
 <tr>
 <td><code>RightMotor_Click</code></td>
-<td>StackPanel.MouseLeftButtonDown</td>
+<td>ClickBorder.Click (ClickMode Press)</td>
 <td><code>padVm.FireTestRightMotor()</code></td>
 </tr>
 <tr>
@@ -8928,7 +8922,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>└─ Row 1 (*): Main content (Grid, 2 columns)
 <a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
 <a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    │   │    MOUSE / OTHER, MouseLeftButtonUp=&quot;FacetChip_Click&quot;, count per chip)
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    │   │    MOUSE / OTHER, ClickBorder radio chips, Click=&quot;FacetChip_Click&quot;, count per chip)
 <a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    │   ├─ Row 1: ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
 <a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    │   │   └─ Card Border (CornerRadius=8, Padding=&quot;12,10&quot;)
 <a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    │   │       ├─ Row 0, Col 0: liveness flame Path (LivenessFlameBase) + DeviceName (SemiBold, 13px)
@@ -9292,7 +9286,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>FacetChip_Click</code></td>
-<td>Border.MouseLeftButtonUp</td>
+<td>ClickBorder.Click</td>
 <td>Sets <code>SelectedFacet</code> from the chip's <code>Tag</code>, filtering the device list</td>
 </tr>
 <tr>
@@ -9332,7 +9326,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 </tr>
 <tr>
 <td><code>IdentifyChip_Click</code></td>
-<td>Border.MouseLeftButtonUp</td>
+<td>ClickBorder.Click</td>
 <td>Forwards to <code>IdentifyDevice_Click</code>, which calls <code>InputService.IdentifyDevice(SelectedDevice.InstanceGuid)</code> to vibrate the pad (#293)</td>
 </tr>
 <tr>

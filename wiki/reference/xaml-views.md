@@ -234,8 +234,8 @@ ScrollViewer
        │   │   │    overflow) or the DeviceName empty-state line
        │   │   ├─ Row 3: StatusText + mapped/connected counts
        │   │   └─ Row 4: StageLedger chips (per-stage glyphs with hover readout)
-       │   └─ Add Controller tile (AddControllerCard, 252px, dashed steel outline,
-       │        MouseLeftButtonUp → AddControllerRequested, gated on ShowAddController)
+       │   └─ Add Controller tile (AddControllerCard, a ClickBorder, 252px, dashed steel outline,
+       │        Click from the mouse, Enter or Space → AddControllerRequested, gated on ShowAddController)
        └─ ServicesSection StackPanel (one panel so the welcome tour can ring
             the whole group as a single target)
             ├─ "Services" divider (ServicesHeader, ember tick + hairline rule)
@@ -366,7 +366,7 @@ Rows are in trigger order. A later row wins when several hold.
 | Handler | Event | Action |
 |---------|-------|--------|
 | `EngineToggle_Click` | Button.Click | Raises `EngineToggleRequested` |
-| `AddControllerCard_Click` | Border.MouseLeftButtonUp | Raises `AddControllerRequested` |
+| `AddControllerCard_Click` | ClickBorder.Click | Raises `AddControllerRequested` |
 | `DeleteSlot_Click` | Button.Click | Raises `DeleteSlotRequested(slotIndex)` |
 | `PowerToggle_Click` | Button.Click | Raises `SlotEnabledToggled(slotIndex, !SettingsManager.SlotEnabled[slotIndex])`, inverting the live setting rather than the summary VM |
 | `XboxType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Xbox)`. HIDMaestro is embedded so no install gate |
@@ -438,8 +438,7 @@ Grid (3 rows)
 │   ├─ ExtendedConfigBar (Visibility=Collapsed unless OutputType==Extended)
 │   ├─ MidiConfigBar (Visibility=Collapsed unless OutputType==Midi)
 │   └─ KbmDeviceBar (Visibility=Collapsed unless OutputType==KeyboardMouse)
-├─ Invisible MappingsCountIndicator (for UI Automation)
-└─ Row 2 (*): TabControl (hidden header via ControlTemplate), one TabItem per Tag (0-17),
+└─ Row 2 (*): ContentTabControl (a TabControl with no header, whose UI Automation peer lists the selected tab's content), one TabItem per Tag (0-17),
    SelectedIndex bound to SelectedConfigTab
 ```
 
@@ -525,7 +524,6 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `ExtendedTriggerCountBox` | TextBox | Extended slot trigger count override |
 | `RawPovCountBox` | TextBox | Extended slot POV count override |
 | `RawButtonCountBox` | TextBox | Extended slot button count override |
-| `MappingsCountIndicator` | TextBlock (invisible) | `AutomationProperties.Name` bound to `Mappings.Count` |
 | `DeadZoneShapeCombo` | ComboBox | Deadzone shape selector (Sticks tab) |
 | `SensitivityXCombo` | ComboBox | Sensitivity X preset (Sticks tab) |
 | `TriggerPresetCombo` | ComboBox | Trigger sensitivity preset (Triggers tab) |
@@ -548,9 +546,9 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `OnDataContextChanged` | DataContextChanged | Unsubscribes old VM, subscribes new VM PropertyChanged, resyncs all |
 | `ViewModeToggle_Click` | Button.Click | Toggles `SettingsViewModel.Use2DControllerView`, calls `ApplyViewMode` |
 | `TabBtn_Click` | RadioButton.Click | Sets `vm.SelectedConfigTab` from `Tag` |
-| `Motor_MouseEnter/Leave` | StackPanel.Mouse | Hover opacity effect (0.7/1.0) |
-| `LeftMotor_Click` | StackPanel.MouseLeftButtonDown | `padVm.FireTestLeftMotor()` |
-| `RightMotor_Click` | StackPanel.MouseLeftButtonDown | `padVm.FireTestRightMotor()` |
+| `Motor_MouseEnter/Leave` | ClickBorder.MouseEnter/MouseLeave | Hover opacity effect (0.7/1.0) |
+| `LeftMotor_Click` | ClickBorder.Click (ClickMode Press) | `padVm.FireTestLeftMotor()` |
+| `RightMotor_Click` | ClickBorder.Click (ClickMode Press) | `padVm.FireTestRightMotor()` |
 | `MapAllToggle_Click` | Button.Click | Starts Map All, or stops it when already active (button text is `MapAllButtonText`) |
 | `CalibrateCenter_Click` | Button.Click | `StickConfigItem.StartCalibration()` |
 | `ProfileCombo_PreviewKeyDown` | ComboBox.PreviewKeyDown | Forwards Enter/Esc on `HMaestroProfileCombo` and `ExtendedProfileCombo` to commit / dismiss |
@@ -1122,7 +1120,7 @@ Grid (Margin="24,16")
 └─ Row 1 (*): Main content (Grid, 2 columns)
     ├─ Col 0 (*): Facet chips + device card ListBox + drag-assign hint
     │   ├─ Row 0: Type facet chips (ALL / GAMEPAD / JOYSTICK / WHEEL / KEYBOARD /
-    │   │    MOUSE / OTHER, MouseLeftButtonUp="FacetChip_Click", count per chip)
+    │   │    MOUSE / OTHER, ClickBorder radio chips, Click="FacetChip_Click", count per chip)
     │   ├─ Row 1: ListBoxItem with custom ControlTemplate (4px accent left bar on selection)
     │   │   └─ Card Border (CornerRadius=8, Padding="12,10")
     │   │       ├─ Row 0, Col 0: liveness flame Path (LivenessFlameBase) + DeviceName (SemiBold, 13px)
@@ -1297,7 +1295,7 @@ Custom `ListBoxItem` `ControlTemplate`:
 | Handler | Trigger | Action |
 |---------|---------|--------|
 | `RemoveDevice_Click` | Button.Click | Selects device, executes `RemoveDeviceCommand` |
-| `FacetChip_Click` | Border.MouseLeftButtonUp | Sets `SelectedFacet` from the chip's `Tag`, filtering the device list |
+| `FacetChip_Click` | ClickBorder.Click | Sets `SelectedFacet` from the chip's `Tag`, filtering the device list |
 | `HidingToggle_Click` | CheckBox.Click | Shows the warning flyout when enabling on a keyboard, mouse, or consumer-control device, clears `LastRawStateDeviceGuid` for rebuild, calls `NotifyDeviceHidingChanged` |
 | `ShowHidingWarningFlyout` | (internal) | WPF UI `Flyout` with warning icon, message, Proceed/Cancel buttons. Reverts checkbox immediately, re-checks only on Proceed. |
 | `SubmitMapping_Click` | Button.Click | Opens browser to GitHub issue template with device info pre-filled |
@@ -1305,7 +1303,7 @@ Custom `ListBoxItem` `ControlTemplate`:
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
 | `ManageVoicePhrases_Click` | Button.Click | Opens `RegisterVoicePhraseDialog` for the selected microphone-carrying device (#317) |
 | `LearnHandheldButton_Click` | Button.Click | Opens `LearnHandheldButtonDialog` for the machine's hidden buttons (#343) |
-| `IdentifyChip_Click` | Border.MouseLeftButtonUp | Forwards to `IdentifyDevice_Click`, which calls `InputService.IdentifyDevice(SelectedDevice.InstanceGuid)` to vibrate the pad (#293) |
+| `IdentifyChip_Click` | ClickBorder.Click | Forwards to `IdentifyDevice_Click`, which calls `InputService.IdentifyDevice(SelectedDevice.InstanceGuid)` to vibrate the pad (#293) |
 | `QuickCharge_Click` | CheckBox.Click | Persists the Quick Charge toggle. Click, not Checked, so the binding-driven refresh on a selection change never writes (#372) |
 | `IdleDisconnect_LostFocus` | TextBox.LostFocus | Applies the clamped idle-disconnect minutes (#162) |
 | `DeviceCard_MouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
