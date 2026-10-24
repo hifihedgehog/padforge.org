@@ -120,7 +120,7 @@ A DualSense or DualSense Edge adds these rows under Master Volume. Audio Buffer 
 
 Headphones + Speaker plays mono on the headset side, a firmware limit. Over Bluetooth that mode plays through the headphones only. Follow Headphone Jack switches to headphones when something is plugged in and back to the speaker when unplugged. PadForge reads the jack state from the pad itself whenever the slot has audio to play, over USB or Bluetooth, so the switch works with or without a virtual DualSense on the slot.
 
-A DualShock 4 does not get these rows.
+A DualShock 4 on Bluetooth gets Headphone Volume and Output Path as well, described under [DualShock 4 headset jack](#dualshock-4-headset-jack).
 
 ### A DualSense on Bluetooth and USB at once
 
@@ -130,11 +130,31 @@ The drop runs once for each time you plug the cable in. If you re-link Bluetooth
 
 ---
 
+## DualShock 4 headset jack
+
+*Added after 5.1.0.*
+
+A DualShock 4 on Bluetooth gets two of the DualSense's rows under Master Volume, Headphone Volume and Output Path, and they work the same way. Its stream plays on the built-in speaker or on the headphone jack, never both at once, so Output Path leaves Headphones + Speaker out of its list. Audio Buffer Length stays DualSense-only, since the DualShock 4 has no such setting.
+
+| Output Path | Where a DualShock 4 plays |
+|---|---|
+| Default | The built-in speaker, in mono, as in 5.1.0 and earlier |
+| Headphones (Stereo) | The headphone jack, in stereo, with the speaker muted |
+| Headphones (Mono) | The headphone jack, the same sound in both ears, with the speaker muted |
+| Speaker Only | The built-in speaker, in mono, with the jack muted |
+| Follow Headphone Jack | Headphones (Stereo) while something is plugged in and Speaker Only while nothing is. Default until PadForge has read the jack once |
+
+Headphone Volume sets the jack's level from 0 to 100, and the **Raise Headphone Volume** and **Lower Headphone Volume** macro actions step it by 10%. PadForge reads the jack from the pad's own reports, so Follow Headphone Jack works with or without a virtual controller on the slot.
+
+The stream to the pad keeps running through quiet stretches instead of stopping two seconds after the last sound. It sends silence instead, as DS4-Sound-Link does, whose notes say a stop makes the controller pop and power down its headphone amplifier. It ends when nothing on the slot plays to the pad anymore: Mirror System Audio is off, no macro sound plays on the controller, and no virtual controller sends it audio.
+
+---
+
 ## Crossfeed, EQ, and limiter
 
 ![Audio tab scrolled to the crossfeed picker, the graphic EQ, and the limiter](../images/pad-audio-dsp.png)
 
-Under Output Path (under Master Volume on a DualShock 4), the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
+Under Output Path (under Master Volume on a DualShock 4 on Sony's USB wireless adapter), the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
 
 ### Crossfeed
 
@@ -151,7 +171,7 @@ Headphones hand each ear one channel and nothing of the other, which never happe
 
 Cutoff is the crossover: below it the channels blend toward mono, above it they stay separated, so a lower cutoff crossfeeds less. Feed is how far below the direct sound the opposite channel arrives under the cutoff, so a higher feed crossfeeds less. The ranges are libbs2b's own.
 
-Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack unless it has switched to the speaker. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing.
+Crossfeed only runs on a genuine stereo route. That means Output Path set to Default or Headphones (Stereo), or Follow Headphone Jack unless it has switched to the speaker. The mono headset paths and Speaker Only carry a mono mix, and crossfeed is skipped there rather than run over nothing. On a DualShock 4, whose Default is the mono speaker, it runs on Headphones (Stereo), and on Follow Headphone Jack while something is plugged in.
 
 ### Parametric EQ
 
@@ -218,7 +238,8 @@ Every setting row has its own reset button that returns just that setting to its
 ## Limits
 
 - **DualShock 4 audio is Bluetooth only.** A wired DS4 exposes no audio interface. The exception is the Sony USB wireless adapter, which presents a real USB audio endpoint.
-- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads, plus the PC fallback output. Each macro's Play Sound action still carries its own volume.
+- **A DualShock 4 streams while audio routes to it.** Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it. (Added after 5.1.0.)
+- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads, plus the PC fallback output. Each macro's Play Sound action still carries its own volume. A DualShock 4's headphone jack follows Headphone Volume (added after 5.1.0).
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
 - **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
