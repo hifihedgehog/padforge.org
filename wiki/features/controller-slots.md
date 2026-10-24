@@ -79,7 +79,7 @@ For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full**. It presents a DualSho
 
 ### Nintendo
 
-HIDMaestro-backed. Three presets: **Nintendo Switch Pro Controller** (the default), **Nintendo Switch 2 Pro Controller**, and **Nintendo Switch 2 Pro Controller: Full**. Pick one from the slot's preset dropdown.
+HIDMaestro-backed. Four presets: **Nintendo Switch Pro Controller** (the default), **Nintendo Switch Pro Controller (USB)**, **Nintendo Switch 2 Pro Controller**, and **Nintendo Switch 2 Pro Controller: Full**. Pick one from the slot's preset dropdown.
 
 The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Both Switch 2 Pro presets carry 21, adding C, GL, and GR among others, on their own wire order. None of the three has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on any of them. The slot deploys the preset as-is.
 

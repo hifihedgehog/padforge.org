@@ -22,7 +22,7 @@
 
 ## First-run auto-install
 
-HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch and the HIDMaestro card on the **Settings** page always reads **Installed**.
+HIDMaestro installs itself the first time PadForge creates a virtual controller (any Xbox, PlayStation, Nintendo, or Extended slot). PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch. The HIDMaestro card on the **Settings** page reads **Not Installed** until that first install, then **Installed**.
 
 HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. They sit on the **Settings** page until you click **Install**. The runtime's **Install** shows only on a PC that needs it (see [Windows MIDI Services](#windows-midi-services)).
 
@@ -54,7 +54,7 @@ Each driver card on the Settings page shows an ember flame next to its status te
 | **Lit flame** (orange, glowing) "Installed" | Driver ready. HidHide shows its installed version below, and HIDMaestro and BthPS3 the version PadForge carries. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active. |
 | **Unlit flame** (outline only) "Not Installed" | Install before the matching slot type works. |
 
-HIDMaestro auto-installs, so its flame stays lit. The Windows MIDI Services card has its own states, listed under [Windows MIDI Services](#the-settings-card). Driver status lives on the Settings page and nowhere else. The [Dashboard](dashboard.md) carried a **Drivers** text row through 4.3.2 and no longer does.
+The HIDMaestro card's flame lights while the driver is in Windows' driver store, so it stays dark on a PC that has never created a virtual controller and after **Uninstall**. The Windows MIDI Services card has its own states, listed under [Windows MIDI Services](#the-settings-card). Driver status lives on the Settings page and nowhere else. The [Dashboard](dashboard.md) carried a **Drivers** text row through 4.3.2 and no longer does.
 
 ---
 

@@ -67,7 +67,7 @@ The **About** page, at the bottom of the sidebar, lists the projects PadForge is
 
 HIDMaestro is the user-mode driver that creates the virtual controllers. PadForge needs it for the Xbox, PlayStation, Nintendo, and Extended controller types. Keyboard + Mouse and MIDI use their own paths and do not need it. The VR type rides HIDMaestro's OpenVR driver, which registers itself with SteamVR instead of creating a HID device.
 
-The driver ships embedded in `PadForge.exe`. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card always reads **Installed** and shows the embedded driver version. Neither changes when the first install runs. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
+The driver ships embedded in `PadForge.exe`. It installs automatically the first time an online device is assigned to an Xbox, PlayStation, Nintendo, or Extended slot. Creating the slot alone does not install it, because PadForge only builds the virtual controller once something is feeding it. There's no button to click, and the startup UAC prompt covers it. On the [Settings](../features/settings.md) page, the HIDMaestro card reads **Not Installed** until that first install puts the driver in Windows' driver store, then **Installed**. It always shows the HIDMaestro version PadForge carries. After that, every Xbox, PlayStation, Nintendo, or Extended slot with an assigned device becomes a fresh HIDMaestro device. Delete the slot and the device disappears. Slots and devices stay 1:1.
 
 If you upgraded from PadForge v2, HIDMaestro replaces ViGEmBus and vJoy. The legacy driver cleanup dialog on first launch handles uninstalling them.
 
@@ -108,7 +108,7 @@ PadForge bundles a build of [OpenXInput](https://github.com/hifihedgehog/OpenXin
 
 ## Administrator privileges
 
-PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic, with no in-app uninstall path), HidHide install / uninstall / whitelist edits, SteamVR install / uninstall, and the Windows MIDI Services runtime's install / uninstall all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
+PadForge needs administrator rights and shows a UAC prompt at startup. HIDMaestro driver registration (automatic) and its removal from the Settings card, HidHide install / uninstall / whitelist edits, SteamVR install / uninstall, and the Windows MIDI Services runtime's install / uninstall all need administrator access. Reading physical controllers needs it too. Declining the prompt means PadForge does not start.
 
 The UAC shield is on the EXE icon as a hint. PadForge prompts once per launch.
 

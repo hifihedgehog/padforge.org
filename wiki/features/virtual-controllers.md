@@ -1202,7 +1202,7 @@ A virtual keyboard or mouse is a device to Windows, and PadForge reads devices. 
 - [Engine Library](../reference/engine-library.md): `IVirtualController` interface, `Gamepad`, `RawHidState`, `KbmRawState`, `MidiRawState`, `Vibration`
 - [VR Controllers](vr-controllers.md): the user-facing side of the VR slot type
 - [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md): HM SDK surface, OpenXInput filter, Step 5 lifecycle invariants, FFB through HM PID descriptors
-- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration (no in-app uninstall), HidHide install / uninstall, and the Windows MIDI Services runtime's install and uninstall
+- [Driver Installation Internals](../reference/driver-installation-internals.md): HIDMaestro registration and its removal from Settings, HidHide install / uninstall, and the Windows MIDI Services runtime's install and uninstall
 - [Settings and Serialization](../reference/settings-and-serialization.md): `VirtualControllerType` (`[XmlEnum("Microsoft")]` / `[XmlEnum("Sony")]` aliases) and per-slot HM profile persistence
 - [Build and Publish](../reference/build-and-publish.md): HIDMaestro and HidHide embedded resources
 

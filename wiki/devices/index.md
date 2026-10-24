@@ -7,7 +7,7 @@ a slot, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
 Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
-lists every one PadForge knows by name, all 1,109 of them, grouped by family.
+lists every one PadForge knows by name, all 1,110 of them, grouped by family.
 
 | Family | Why it has a page |
 | --- | --- |

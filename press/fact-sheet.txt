@@ -1,7 +1,7 @@
 PadForge
 Product information | October 24, 2026
 
-PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,109 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,110 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
@@ -21,7 +21,7 @@ Works with screen readers: Blind and low-vision players can now use PadForge wit
 Lighting for mice and keyboards: A mouse or keyboard assigned to a virtual controller takes the controller's lighting, in any mode a DualSense lightbar has, and glows the color a game gives a PlayStation controller. PadForge lights Logitech, Razer and SteelSeries gear itself while their apps are closed, and through those apps while they run. Vendor rows carry the lighting to headsets and mousepads.
 Rumble in a mouse: The Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 rumble with their virtual controller, as do Logitech's iFeel mice on PadForge's driver. The Razer Sensa row brings the rumble to Sensa HD gear.
 Virtual keyboards and mice: A Keyboard + Mouse slot can type and point through a virtual keyboard and mouse that programs see as one of 51 keyboard and 52 mouse models.
-1,109 devices: PadForge knows 1,109 devices by USB identity, the PS VR Aim Controller among them, and the NYXI Hyperion 3 and console-protocol Joy-Con 2 clones connect over Bluetooth.
+1,110 devices: PadForge knows 1,110 devices by USB identity, the PS VR Aim Controller among them, and the NYXI Hyperion 3 and console-protocol Joy-Con 2 clones connect over Bluetooth.
 
 Setup
 PadForge runs as administrator. Its runtime is included in the executable.

@@ -2,7 +2,7 @@
 
 *Every controller, wheel, stick and adapter PadForge knows by name, in one place.*
 
-PadForge recognizes **1,109** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 67 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, 24 devices PadForge's own code claims, and the PS VR Aim Controller, which PadForge's own mapping file names. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **465** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For virtual controllers, HIDMaestro ships 337 device profiles. PadForge's controller pickers offer the 136 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed below](#virtual-keyboards-and-mice).
+PadForge recognizes **1,110** devices by their USB identity: 605 gamepads in SDL's controller list, 289 more pads that the community SDL_GameControllerDB maps, 4 Flydigi pads, 68 pads and specialty devices that SDL's dedicated drivers claim, 86 racing wheels, 24 flight sticks, 4 throttles, 32 arcade sticks, 10 GameCube adapters, 24 devices PadForge's own code claims, and the PS VR Aim Controller, which PadForge's own mapping file names. The arcade sticks, three wheels and two adapters also sit in the gamepad list, so the total is smaller than the sum. Behind those sit **465** named gamepad mappings: 249 from SDL's Windows database, 214 more from the community database, and PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For virtual controllers, HIDMaestro ships 337 device profiles. PadForge's controller pickers offer the 136 controllers that carry a captured HID descriptor, and a Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed below](#virtual-keyboards-and-mice).
 
 !!! tip "Not on this list?"
     It very likely still works. Anything Windows enumerates as an input device can be read
@@ -206,13 +206,14 @@ Models the driver names from the device ID: Apex 2, Apex 3, Apex 4, Apex 5, Apex
 
 The four rear paddles map as Right Paddle 1 and 2 and Left Paddle 1 and 2. The Vader series C and Z buttons and the Apex 5 and Apex 6 shoulder macro buttons map as Misc 2 and Misc 3, and the Vader 5 Pro's three extra buttons as Misc 4 to 6. The Apex 5, Apex 6, Vader 3 Pro, Vader 4 Pro and Vader 5 Pro report gyro and accelerometer.
 
-### Other SDL drivers (23 USB identities)
+### Other SDL drivers (24 USB identities)
 
-These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names follow SDL's driver code and its USB ID list. SDL gives the 8BitDo Ultimate 3 and the two EVOTOP DirectInput identities no name of its own, so they show the pad's USB product name.
+These pads are claimed by SDL's dedicated drivers by USB identity, not through its controller list, the way the Flydigi driver works. The names follow SDL's driver code and its USB ID list. SDL gives the 8BitDo Ultimate 3, the 8BitDo Ultimate 2C Wireless and the two EVOTOP DirectInput identities no name of its own, so they show the pad's USB product name.
 
 | Identity | Device | SDL driver |
 | --- | --- | --- |
 | **2DC8:202F** | 8BitDo Ultimate 3, mode switch on BT | 8BitDo |
+| **2DC8:301B** | 8BitDo Ultimate 2C Wireless, mode switch on BT | 8BitDo |
 | **3537:10B8** | GameSir G7 Pro 8K, wired, 2.4 GHz or Bluetooth in 8K mode | GameSir |
 | **3537:103C** | GameSir Tarantula 8K, wired, 2.4 GHz or Bluetooth | GameSir |
 | **1949:0419** | Amazon Luna Controller over Bluetooth | Luna |

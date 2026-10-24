@@ -1014,7 +1014,7 @@ Guards are `Func<bool>` delegates on `SettingsViewModel`, injected by `MainWindo
 
 SteamVR adds ownership on top of usage. `UninstallSteamVrCommand` is gated on `IsSteamVrInstalled && IsSteamVrOwned && !HasAnyVrSlots()`, and `ShowSteamVrUninstall` hides the button entirely when the install is Steam's own. `RefreshDriverGuards()` re-evaluates it alongside the other two, and the two ownership properties also raise `NotifyCanExecuteChanged` from their own setters, refreshed by `RefreshMidiServicesStatus()`. The runtime refusal is enforced a second time inside `UninstallSteamVR()`, which throws when `vrserver` is running, and `MainWindow` checks the same process before showing the confirm dialog.
 
-HIDMaestro has no Install or Uninstall command (the SDK assembly is always available), so there is no guard to enforce. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either. The DS3 Bluetooth stack has no uninstall path at all.
+HIDMaestro has no Install command, since PadForge installs its driver with the first virtual controller. Its **Uninstall** (#518) and the BthPS3 card's **Uninstall** carry no slot guard and stay enabled even with nothing left to remove, so the dialog lists what remains or says nothing does. HIDMaestro's removal stops the engine first and refuses while another program built on HIDMaestro runs, which its preview names. The BthPS3 removal waits while a PlayStation controller is connected over Bluetooth. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either.
 
 ---
 
