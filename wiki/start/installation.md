@@ -164,4 +164,4 @@ If you previously had ViGEmBus or vJoy installed from PadForge v2, the legacy dr
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

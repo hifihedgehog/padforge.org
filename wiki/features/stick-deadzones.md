@@ -431,4 +431,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

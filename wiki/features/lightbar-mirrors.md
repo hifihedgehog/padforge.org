@@ -4,4 +4,4 @@ The Dashboard's Lightbar Mirrors and Razer Sensa HD Haptics sections are gone. T
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

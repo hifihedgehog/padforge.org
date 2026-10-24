@@ -668,4 +668,4 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

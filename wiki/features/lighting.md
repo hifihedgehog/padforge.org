@@ -243,4 +243,4 @@ Earlier versions mirrored a game's lightbar to Razer Chroma and Logitech LIGHTSY
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

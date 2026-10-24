@@ -112,12 +112,12 @@
  {
   "eyebrow": "A MIDI keyboard as a controller",
   "t": "MIDI in, gamepad out.",
-  "d": "PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same Windows MIDI Services stack the MIDI virtual controller uses. No bridge software."
+  "d": "PadForge reads MIDI input devices as mapping sources. Notes, Control Change knobs, pitch bend, and encoder dials from a MIDI keyboard or pad controller bind like any button or axis, so a piano key can press A and a mod wheel can pull a trigger. It rides the same MIDI API the MIDI virtual controller uses. No bridge software."
  },
  {
   "eyebrow": "MIDI from a gamepad",
   "t": "A 16-channel MIDI controller, no extra hardware.",
-  "d": "Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. PadForge creates a real Windows MIDI endpoint that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge."
+  "d": "Map sticks to Control Change messages. Map buttons to Note On / Note Off. Set velocity per slot. Through Windows MIDI Services, PadForge creates a real Windows MIDI endpoint that DAWs (Ableton Live, FL Studio, Reaper), VJ tools, and stage lighting apps can subscribe to. No loopMIDI bridge. Where Windows MIDI Services does not run, PadForge uses the legacy MIDI API, which cannot create a port, so each slot sends to an existing port you pick on its page."
  },
  {
   "eyebrow": "NFC tag triggers",

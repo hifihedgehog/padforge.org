@@ -71,4 +71,4 @@ when that device has the matching hardware.
 | [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
 | [Mice, Keyboards and Vendor Rows](peripherals.md) | Lighting and rumble for the mice and keyboards assigned to a virtual controller, and the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows |
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

@@ -173,6 +173,8 @@ PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Bu
 
 A haptic mouse assigned to a virtual controller takes that controller's rumble through this tab, the way a gamepad does, with its own settings on each virtual controller. The Razer Sensa row does the same for Razer Sensa HD devices. Each plays a single strength, taken from the stronger of the two motors. None has trigger motors, so **Fold Trigger Rumble into Main Motors** shows for them.
 
+![The Force Feedback tab of a SteelSeries Rival 710 assigned to an Xbox virtual controller](../images/pad-forcefeedback-peripheral.png)
+
 | Device | How the rumble plays | Needs |
 |---|---|---|
 | **Logitech MX Master 4** | Logitech's own haptic waveforms, sent straight to the mouse over HID++ | No Logitech software |
@@ -394,4 +396,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

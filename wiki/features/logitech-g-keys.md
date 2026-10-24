@@ -90,4 +90,4 @@ G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logite
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

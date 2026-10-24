@@ -112,6 +112,8 @@ HIDMaestro installs itself the first time PadForge creates a virtual controller.
 
 **Uninstall** on the HIDMaestro card removes HIDMaestro from the PC. It first shows what HIDMaestro left: each item it would remove, each item it keeps and why, and any running program that uses HIDMaestro. Such a program blocks the removal until you close it and select **Refresh**. **Also remove usbip-win2 set up by its own installer** also takes what usbip-win2's installer left on a PC where an older PadForge set it up that way, its USB root hub filter included, unless another program uses usbip-win2. Taking the filter off restarts every USB 3 root hub, so the USB devices on them disconnect for a moment.
 
+![The HIDMaestro uninstall preview, with what it removes and what stays](../images/settings-hidmaestro-uninstall.png)
+
 When you confirm, PadForge stops its engine, and HIDMaestro removes every virtual controller and the records Windows keeps of them, its driver packages, its signing certificate, its registry keys and its files. The controller names and GameInput tables it changed go back to what they held, unless another program changed them since. A file in use under `%ProgramFiles%\HIDMaestro` goes when Windows next starts, and so does the filter's service after a removal that took usbip-win2's filter. The status line says how the removal ended, and one that could not take everything lists what stayed and why. The engine stays stopped, and PadForge installs HIDMaestro again the next time it starts a virtual controller. Other programs that use HIDMaestro lose its driver until they next start.
 
 On a PC where PadForge is already gone, download `HIDMaestro-v2.0.3.zip` (`HIDMaestro-v2.0.3-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and extract it. In a terminal opened as administrator, change to its `HIDMaestroUninstall` folder and run `.\HIDMaestroUninstall.exe`. It lists what it would remove and keep, asks before it removes anything, and then prints what it removed and kept. It needs no .NET runtime. Removing the devices in Device Manager leaves the driver packages, the certificate and the files behind.
@@ -124,9 +126,13 @@ For the contract between PadForge and HIDMaestro, see [HIDMaestro Deep Dive](../
 
 Nefarius's BthPS3 drivers let a [DualShock 3](../devices/dualshock-3.md), a [PS Move](../devices/ps-move.md) and a Navigation controller connect over the PC's Bluetooth: a profile driver, and a filter on Bluetooth that steers those controllers to it. PadForge carries them and installs them the first time one of those controllers is paired. The **BthPS3 Bluetooth Driver** card on the **Settings** page lights its flame while either driver is installed, and shows the BthPS3 version PadForge carries.
 
+![The BthPS3 Bluetooth Driver card in Settings](../images/settings-bthps3.png)
+
 ### Uninstall
 
 **Uninstall** on the card removes BthPS3 from the PC. It first lists what it would remove: the filter's registration on Bluetooth, the drivers and their files, and the WinUSB driver PadForge gave PlayStation 3 and Navigation controllers for pairing, with the certificate that signs it. The certificate stays while another of PadForge's WinUSB drivers is signed with it. When BthPS3's own setup installed the drivers, its own uninstaller removes them first.
+
+![The BthPS3 uninstall preview, listing what it removes](../images/settings-bthps3-uninstall.png)
 
 The removal waits while a PlayStation controller is connected over Bluetooth. Turn the controller off, then select **Refresh**. Unloading the drivers while a controller is connected can crash Windows. The drivers stay while DsHidMini is installed, since DsHidMini needs them.
 
@@ -395,4 +401,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

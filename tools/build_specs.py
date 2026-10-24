@@ -118,7 +118,7 @@ CATS = [
    "trigger motors that feel the game", "adaptive triggers and lightbar",
    "dualsense effects in any game", "guide led brightness", "bass shaker output",
    "bass shakers", "controller speaker audio", "audio through the controller speaker",
-   "headphone dsp chain"]),
+   "headphone dsp chain", "rumble and lighting in mice and keyboards"]),
  ("motion", "Motion", [
    "gyro at steam input parity", "flick stick", "headset head tracking",
    "dsu motion server", "motion to emulators", "wii pointer modes",

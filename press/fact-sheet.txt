@@ -1,27 +1,27 @@
 PadForge
-Product information | October 3, 2026
+Product information | October 23, 2026
 
-PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,108 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,109 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
-Version: 5.0.0
+Version: 5.1.0
 Downloads and release notes: https://github.com/hifihedgehog/PadForge/releases/latest
 Platforms: Windows 10 and 11 on x64. Preliminary build for Windows 11 on ARM64.
 Price: Free. No subscriptions or paid feature packs.
-Languages: English, German, Spanish, French, Italian, Japanese, Korean, Dutch, Brazilian Portuguese and Simplified Chinese.
+Languages: 109, 42 of them complete. Arabic, Persian, Urdu and Central Kurdish are laid out right to left.
 Source license: CC BY-NC-SA 4.0.
 Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICENSE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
-New in 5.0.0
-Analog keyboards: PadForge reads how far each key of a Hall effect or analog keyboard is pressed, on more than 370 models from 101 brands. A key can drive a trigger, one side of a stick, or two macros at different depths.
-Rapid Trigger and Toggle: Rapid Trigger presses and releases on movement instead of at one fixed point, and it works on any input with depth. Toggle holds an output on with one press and lets go with the next.
-Bliss-Box adapters: Each adapter port names the console controller plugged into it and maps it the way SDL or RetroArch does. PadForge reads DualShock 2 button pressure, drives rumble, puts pictures on a Dreamcast VMU and backs up N64 Controller Paks.
-Wii Remote light gun: A Wii Remote calibrates to the screen in four shots and then aims where it points. A Namco GunCon 2 calibrates the same way against a CRT.
-Motion from a stick or a key: PlayStation, Nintendo and Valve slots gain Motion Pitch, Yaw and Roll rows, so a stick, a trigger or a key can turn the virtual controller's gyro.
-DualShock 3: The pad draws as itself in 3D and 2D, and it can fill pitch and roll from its accelerometer. A new preset presents button pressure in the form PCSX2 and RPCS3 read.
-1,108 devices: PadForge knows 1,108 devices by USB identity, up from 758 in 4.5.3. It reads Bluetooth LE, serial and other controllers that give Windows no usable input, and installs the driver some of them need.
+New in 5.1.0
+109 languages: The interface comes in 109 languages, 99 of them new and 42 complete, with British English beside American English. Arabic, Persian, Urdu and Central Kurdish lay it out right to left, and Chinese, Japanese and Korean text draws in its own font.
+Screen readers and the keyboard: PadForge is tested with NVDA. Every control the Tab key reaches has a spoken name in the interface's language, status changes are spoken as they happen, and chips, tiles and dialogs work from the keyboard. The app looks as it did.
+Lighting for mice and keyboards: A mouse or keyboard assigned to a virtual controller takes that controller's lighting, with the modes of a DualSense lightbar. Logitech, Razer and SteelSeries devices light directly while their software is closed, and through it while it runs. Vendor rows carry the lighting to headsets and mousepads.
+Rumble in a mouse: The Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 take their virtual controller's rumble, as do the Logitech iFeel mice on PadForge's driver. The Razer Sensa row carries it to Sensa HD gear.
+Virtual keyboards and mice: A Keyboard + Mouse slot can type and point through one of 51 keyboard and 52 mouse models that programs see as that hardware.
+HIDMaestro 2.0: PadForge moves to HIDMaestro 2.0.3 and its 337 device profiles. Settings removes HIDMaestro, and the PlayStation Bluetooth drivers, after a preview of what each removal takes.
+1,109 devices: PadForge knows 1,109 devices by USB identity, the PS VR Aim Controller among them, and the NYXI Hyperion 3 and console-protocol Joy-Con 2 clones connect over Bluetooth.
 
 Setup
 PadForge runs as administrator. Its runtime is included in the executable.
@@ -33,39 +33,39 @@ Installation and removal: https://padforge.org/docs/start/installation/
 Product references
 Specifications: https://padforge.org/specs.html
 Supported devices: https://padforge.org/docs/devices/supported/
-Analog keyboards: https://padforge.org/docs/features/analog-keyboards/
-Rapid Trigger: https://padforge.org/docs/features/mappings/#rapid-trigger
-Bliss-Box adapters: https://padforge.org/docs/features/bliss-box/
-Wii Remote light gun: https://padforge.org/docs/devices/wii-controllers/#light-gun
-Motion rows: https://padforge.org/docs/features/mappings/#motion-pitch-yaw-and-roll
-DualShock 3: https://padforge.org/docs/devices/dualshock-3/
+Languages: https://padforge.org/docs/features/settings/#language
+Screen readers and the keyboard: https://padforge.org/docs/guides/accessibility/
+Mice, keyboards and vendor rows: https://padforge.org/docs/features/peripherals/
+Haptic mice: https://padforge.org/docs/features/force-feedback/#haptic-mice-and-the-razer-sensa-row
+Virtual keyboards and mice: https://padforge.org/docs/features/controller-slots/#keyboardmouse
+Driver management: https://padforge.org/docs/features/driver-management/
 Gyro controls: https://padforge.org/docs/guides/gyro/
 Steam community imports: https://padforge.org/docs/guides/steam-workshop-import/
 Phone and browser controllers: https://padforge.org/docs/guides/web-controller/
-DualSense audio: https://padforge.org/docs/reference/controller-audio-internals/#composite-usb-persona-lanes
 
 Notes
+The direct lighting and rumble paths for mice and keyboards follow the
+public implementations that drive each device, and tests check every frame
+against them. They have not run on the devices themselves.
+No native speaker has reviewed the translations. A partial translation
+shows English wherever it has no string.
+No NYXI Hyperion 3 has run against PadForge.
 DualSense audio over Bluetooth uses a virtual USB DualSense for compatible
 games. The game supplies its native speaker audio and haptic effects.
 Steam imports include a translation report. Some bindings are approximated
 or skipped. Game-specific Steam Input API actions do not translate.
-Most hardware new in 5.0.0 has not been tested on real devices, including
-analog keyboards, Bliss-Box adapters and the Wii Remote light gun. Each
-reader follows the public implementations that drive the device, and tests
-check it against their byte formats. The ARM64 build has not run on ARM64
-hardware.
+The ARM64 build has not run on ARM64 hardware.
 
 Images
-dualsense-cobalt.jpg: DualSense controller preview in the Deep Earth Cobalt finish. 2560 x 1539 JPG.
-dualshock-3.jpg: A PlayStation slot on the DualShock 3 (SIXAXIS) preset, with the pad's 3D model. 2560 x 1539 JPG. New in 5.0.0.
-analog-keyboards.jpg: An analog keyboard on the Devices page. 2560 x 1539 JPG. New in 5.0.0.
-rapid-trigger.jpg: A trigger row in Rapid Trigger mode with its Distance setting. 2560 x 1539 JPG. New in 5.0.0.
-wii-remote-light-gun.jpg: A Wii Remote's Light Gun section on the Devices page. 2560 x 1539 JPG. New in 5.0.0.
-motion-rows.jpg: The Motion Pitch, Yaw and Roll rows, with roll on the shoulder buttons. 2560 x 1539 JPG. New in 5.0.0.
-button-mappings.jpg: Button mappings and combined inputs. 2560 x 1539 JPG.
-macros.jpg: Macro conditions and actions. 2560 x 1539 JPG.
-controller-audio.jpg: Controller speaker output, crossfeed and EQ. 2560 x 1539 JPG.
-steam-community-layouts.jpg: Steam community layout translation. 2560 x 1539 JPG.
+dualsense-cobalt.jpg: DualSense controller preview in the Deep Earth Cobalt finish. 2560 x 1528 JPG.
+mice-and-keyboards.jpg: The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller. 2560 x 1528 JPG. New in 5.1.0.
+mouse-rumble.jpg: The Force Feedback tab of a SteelSeries Rival 710 assigned to an Xbox virtual controller. 2560 x 1528 JPG. New in 5.1.0.
+languages.jpg: The Language list in Settings, each language under its own name. 2560 x 1528 JPG. New in 5.1.0.
+right-to-left.jpg: The Settings page in Arabic, laid out right to left. 2560 x 1528 JPG. New in 5.1.0.
+button-mappings.jpg: Button mappings and combined inputs. 2560 x 1528 JPG.
+macros.jpg: Macro conditions and actions. 2560 x 1528 JPG.
+controller-audio.jpg: Controller speaker output, crossfeed and EQ. 2560 x 1528 JPG.
+steam-community-layouts.jpg: Steam community layout translation. 2560 x 1528 JPG.
 padforge-logo.png: Logo with wordmark. 800 x 800 transparent PNG.
 padforge-icon.png: App icon. 571 x 533 transparent PNG.
 

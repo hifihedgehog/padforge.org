@@ -37,7 +37,7 @@
   },
   {
     "t": "MIDI input",
-    "d": "Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same Windows MIDI Services stack as the MIDI virtual output."
+    "d": "Use a MIDI keyboard or pad controller as a mapping source. Notes, CC, pitch bend, and encoders bind like buttons and axes. Same MIDI API as the MIDI virtual output."
   },
   {
     "t": "Multi-source mappings",
@@ -101,7 +101,7 @@
   },
   {
     "t": "MIDI virtual output",
-    "d": "Channel 1-16. CC for axes, Note On/Off for buttons. Real Windows MIDI Services endpoint. No loopMIDI bridge."
+    "d": "Channel 1-16. CC for axes, Note On/Off for buttons. A real Windows MIDI Services endpoint with no loopMIDI bridge, or an existing port on the legacy MIDI API."
   },
   {
     "t": "1000 Hz polling",
@@ -182,5 +182,17 @@
   {
     "t": "Controllers Windows cannot read",
     "d": "Bluetooth LE pads, the iCade, serial I-Force wheels with force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards, plus 289 pads from the community SDL_GameControllerDB."
+  },
+  {
+    "t": "Rumble and lighting in mice and keyboards",
+    "d": "A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights Logitech, Razer and SteelSeries devices directly while their software is closed, and through Synapse, G HUB or GG while it runs."
+  },
+  {
+    "t": "109 languages",
+    "d": "The interface in 109 languages, 42 of them complete, each listed under its own name. Arabic, Persian, Urdu and Central Kurdish lay it out right to left, while controller drawings and curves keep their left-to-right layout. With no language picked, PadForge follows the Windows display language."
+  },
+  {
+    "t": "Screen readers and the keyboard",
+    "d": "Tested with NVDA. Every control the Tab key reaches has a spoken name in the interface's language, status changes are spoken as they happen, and the keyboard reaches chips, tiles, curve points and dialogs. The app looks the same with or without a screen reader."
   }
 ]

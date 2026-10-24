@@ -228,4 +228,4 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

@@ -33,6 +33,8 @@ PadForge finds Logitech devices over HID++ by the features they report, with no 
 
 A mouse or keyboard's Lighting tab opens with a **Control This Device’s Lighting** checkbox, off by default. Assigning a keyboard for its keys never repaints it: until the box is checked, this virtual controller leaves the device's lighting alone. The checkbox's tooltip reads: *Off stops this virtual controller from lighting the device. A vendor row, or another device of its kind lit through the same software, can still set its color. A Set Chroma Color macro on this virtual controller still paints a Razer device.*
 
+![The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller](../images/pad-lighting-peripheral.png)
+
 The vendor rows have no checkbox. Assigning one is enough.
 
 A device that nothing lights any more goes back to its own lighting, where it has a way back, and so does every device when PadForge's input engine stops. [Letting go of a device](#letting-go-of-a-device) lists the devices that keep the last color. PadForge reaches Synapse, G HUB, Logitech Gaming Software and GG only while something assigned needs them, or while the rumble mark on the [Devices](devices.md) page buzzes a Rival or the Razer Sensa row.
@@ -314,4 +316,4 @@ The ARM64 build has no Razer Sensa row, because Razer ships no ARM64 engine. Log
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

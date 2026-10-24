@@ -10,11 +10,15 @@
 
 A dropdown at the top of the page lists each language under its own name, with its English name beside it when the two differ. Typing jumps to a language by its own name. Changes apply right away. No restart. The picked language saves and comes back on the next launch.
 
+![The Language dropdown open, each language under its own name with its English name beside it](../images/settings-language-list.png)
+
 With no language picked, PadForge follows the Windows display language: its own translation, else the one its speakers read. Austrian German reads German, Taiwanese Chinese reads Traditional Chinese, and Norwegian Bokmål and Nynorsk read Norwegian. English reads British English in the regions whose English follows British conventions, such as the United Kingdom, Ireland, Australia, New Zealand, India and South Africa, and American English everywhere else. A language with no translation shows American English.
 
 The interface comes in 109 languages, 42 of them complete. A partial translation shows English wherever it has no string: its translator left out what could not be worded correctly rather than make it up. British English holds only the strings it writes differently and reads the American text for the rest. No native speaker has reviewed the translations.
 
 Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. Controller drawings, curves and other pictures keep their left-to-right layout, so a left stick stays on the left. The touchpad overlay, the on-screen menus and the light gun's calibration window stay left to right whole.
+
+![The Settings page in Arabic, laid out right to left](../images/settings-language-rtl.png)
 
 | Language | Own name | Tag | Strings |
 |---|---|---|---|
@@ -130,7 +134,7 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 
 Corrections and new translations land as pull requests. `tools/l10n/check_translation.py` checks a translation against the rules every file in the tree passes: placeholders, line breaks, digits, the names that stay in Latin letters, and decimal numbers written with a period.
 
-> **New in 3.2:** Profile Shortcuts dropdowns keep their picked value when you switch language. Earlier builds cleared them when culture changed. See [Profiles](../guides/profiles.md).
+> Profile Shortcuts dropdowns keep their picked value when you switch language. See [Profiles](../guides/profiles.md).
 
 ---
 
@@ -529,4 +533,4 @@ Opens the folder holding `diagnostics.log` and any snapshots.
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

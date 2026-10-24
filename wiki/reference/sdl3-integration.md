@@ -1504,4 +1504,4 @@ Whichever architecture you build, check the libusb name inside the DLL before bu
 
 ---
 
-*Last updated for PadForge 5.0.0.*
+*Last updated for PadForge 5.1.0.*

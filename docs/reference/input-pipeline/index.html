@@ -9748,12 +9748,12 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <tbody>
 <tr>
 <td>Copy</td>
-<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8405)</td>
+<td><code>OnCopyMacro</code> (<code>MainWindow.xaml.cs</code> line 8523)</td>
 <td><code>BuildMacroDataForMacro</code> -&gt; <code>SerializeMacrosToClipboard</code> -&gt; <code>Clipboard.SetText</code></td>
 </tr>
 <tr>
 <td>Paste</td>
-<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8464)</td>
+<td><code>OnPasteMacro</code> (<code>MainWindow.xaml.cs</code> line 8582)</td>
 <td><code>TryParseMacroClipboard</code> -&gt; per-<code>MacroData</code> <code>LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)</code> -&gt; set <code>PadIndex</code> -&gt; clear <code>LayerMask</code> unless <code>DestinationDeclaresLayer</code> -&gt; add</td>
 </tr>
 <tr>
@@ -10483,7 +10483,7 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: The workers behind Step 2's haptic peripherals, the dispatcher's peripheral lighting and Set Chroma Color</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.0.0.</em></p>
+<p><em>Last updated for PadForge 5.1.0.</em></p>
 
 
 
