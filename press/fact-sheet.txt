@@ -1,5 +1,5 @@
 PadForge
-Product information | October 23, 2026
+Product information | October 24, 2026
 
 PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,109 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
@@ -15,12 +15,12 @@ Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
 New in 5.1.0
-109 languages: The interface comes in 109 languages, 99 of them new and 42 complete, with British English beside American English. Arabic, Persian, Urdu and Central Kurdish lay it out right to left, and Chinese, Japanese and Korean text draws in its own font.
-Screen readers and the keyboard: PadForge is tested with NVDA. Every control the Tab key reaches has a spoken name in the interface's language, status changes are spoken as they happen, and chips, tiles and dialogs work from the keyboard. The app looks as it did.
-Lighting for mice and keyboards: A mouse or keyboard assigned to a virtual controller takes that controller's lighting, with the modes of a DualSense lightbar. Logitech, Razer and SteelSeries devices light directly while their software is closed, and through it while it runs. Vendor rows carry the lighting to headsets and mousepads.
-Rumble in a mouse: The Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 take their virtual controller's rumble, as do the Logitech iFeel mice on PadForge's driver. The Razer Sensa row carries it to Sensa HD gear.
-Virtual keyboards and mice: A Keyboard + Mouse slot can type and point through one of 51 keyboard and 52 mouse models that programs see as that hardware.
-HIDMaestro 2.0: PadForge moves to HIDMaestro 2.0.3 and its 337 device profiles. Settings removes HIDMaestro, and the PlayStation Bluetooth drivers, after a preview of what each removal takes.
+HIDMaestro 2.0: PadForge's virtual controllers move to HIDMaestro 2.0, which describes each of its 337 devices entirely in data and keeps no device-specific code in its driver. In HIDMaestro's tests against its last 1.x release, a virtual DualShock 4 appears in 217 ms instead of 467 and an Xbox 360 controller in 358 ms instead of 674. Settings can now remove HIDMaestro and the PlayStation Bluetooth drivers.
+Works with screen readers: Blind and low-vision players can now use PadForge with a screen reader. Every control the Tab key reaches has a name the screen reader speaks, in PadForge's language, status messages are read as they happen, and tiles, chips and dialogs work from the keyboard. Tested with NVDA. Mouse users see no change.
+109 languages: The interface comes in 109 languages, up from 10, and 42 of them are complete, British English among them. Arabic, Persian, Urdu and Central Kurdish lay it out right to left, and Chinese, Japanese and Korean draw in their own fonts.
+Lighting for mice and keyboards: A mouse or keyboard assigned to a virtual controller takes the controller's lighting, in any mode a DualSense lightbar has, and glows the color a game gives a PlayStation controller. PadForge lights Logitech, Razer and SteelSeries gear itself while their apps are closed, and through those apps while they run. Vendor rows carry the lighting to headsets and mousepads.
+Rumble in a mouse: The Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 rumble with their virtual controller, as do Logitech's iFeel mice on PadForge's driver. The Razer Sensa row brings the rumble to Sensa HD gear.
+Virtual keyboards and mice: A Keyboard + Mouse slot can type and point through a virtual keyboard and mouse that programs see as one of 51 keyboard and 52 mouse models.
 1,109 devices: PadForge knows 1,109 devices by USB identity, the PS VR Aim Controller among them, and the NYXI Hyperion 3 and console-protocol Joy-Con 2 clones connect over Bluetooth.
 
 Setup
