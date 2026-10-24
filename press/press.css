@@ -41,6 +41,15 @@
 .new-list .mf b { font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.25; }
 .new-list .mf span { font-size: .86rem; line-height: 1.6; text-wrap: pretty; }
 .screenshots-section { padding-block: var(--pad-section); }
+.film-section { padding-block: var(--pad-section) 0; }
+.film-figure .rig { display: block; width: 100%; }
+.film-figure video { background: #000; }
+.film-caption { flex-wrap: wrap; align-items: flex-start; }
+.film-downloads { display: flex; flex-wrap: wrap; gap: .7rem; }
+.film-downloads a { display: inline-flex; align-items: center; gap: .55rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 100px; font-size: .8rem; color: var(--text-hi); }
+.film-downloads a:hover { background: var(--panel); border-color: var(--text-muted); }
+.film-downloads a svg { width: 16px; height: 16px; }
+.film-downloads a span { color: var(--text-muted); font-family: var(--font-mono); font-size: .62rem; letter-spacing: .02em; }
 .section-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: 4rem; }
 .section-heading > p { color: var(--text-muted); font-size: .88rem; margin-bottom: .25rem; }
 .media-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4.5rem 3.5rem; }

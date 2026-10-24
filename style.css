@@ -668,6 +668,24 @@ a { color: inherit; text-decoration: none; }
 }
 .lb-close:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.28); }
 
+/* The film plays in the lightbox's room. Closed, it leaves the tab order
+   and the accessibility tree, which opacity alone does not do. */
+.film-lb { visibility: hidden; transition: opacity 0.4s var(--ease), visibility 0s linear 0.4s; }
+.film-lb.on { visibility: visible; transition: opacity 0.4s var(--ease); }
+.film-lb video {
+    display: block; width: min(100%, 1440px, calc((100svh - 9rem) * 16 / 9));
+    height: auto; aspect-ratio: 16 / 9; background: #000;
+    border-radius: var(--radius); border: 1px solid var(--border-soft);
+    box-shadow: 0 40px 100px -30px rgba(0,0,0,0.9);
+    transform: scale(0.985); transition: transform 0.4s var(--ease);
+}
+.film-lb.on video { transform: none; }
+.film-lb .lb-cap a { color: var(--text-hi); text-decoration: underline; text-underline-offset: 3px; }
+.btn-film svg { width: 14px; height: 14px; fill: currentColor; }
+.btn-meta { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 400; color: var(--text-muted); }
+.rig-in > video { display: block; width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .film-lb, .film-lb video { transition: none; } }
+
 
 /* ══════════════════════════════════════════════════════════════════════
    THE RIG

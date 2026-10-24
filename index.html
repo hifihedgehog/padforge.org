@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=v6">
+    <link rel="stylesheet" href="style.css?v=v7">
     <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -53,6 +53,7 @@
         <div class="hero-cta reveal" data-d="2">
             <a href="https://github.com/hifihedgehog/PadForge/releases/latest" class="btn btn-primary" target="_blank" rel="noopener">Download for Windows</a>
             <a href="/docs/" class="btn btn-ghost">Read the docs</a>
+            <button type="button" class="btn btn-ghost btn-film" id="filmOpen" aria-haspopup="dialog" aria-controls="film"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>Watch the film<span class="btn-meta">2:20</span></button>
         </div>
     </div>
 
@@ -801,6 +802,16 @@
     <div class="lb-cap" id="lbCap"></div>
 </div>
 
+<div class="lb film-lb" id="film" role="dialog" aria-modal="true" aria-labelledby="filmTitle" aria-describedby="filmDesc">
+    <button class="lb-close" id="filmClose" aria-label="Close the film">&#10005;</button>
+    <h2 class="visually-hidden" id="filmTitle">PadForge 5.1 film</h2>
+    <p class="visually-hidden" id="filmDesc">A 140-second film with music and on-screen text, and no narration. An Xbox controller becomes the Xbox 360 pad, DualSense or Steam Controller a game expects. The film then shows what is new in PadForge 5.1: 109 languages, PadForge working with a screen reader, desk lighting and haptic mice that follow the controller, virtual keyboards and mice, and HIDMaestro 2.0, which creates a virtual DualShock 4 in 217 ms instead of 467. It tours mapping, force feedback, motion, phones and remote play, and ends on the price: free.</p>
+    <video id="filmVideo" controls playsinline preload="none" poster="assets/video/padforge-5.1-promo-poster.jpg" width="1920" height="1080">
+        <source src="assets/video/padforge-5.1-promo-landscape.mp4" type="video/mp4">
+    </video>
+    <div class="lb-cap">PadForge 5.1 &middot; 2:20 &middot; <a href="/press/#film">Portrait and square cuts on the press page</a></div>
+</div>
+
 <footer class="footer">
     <div class="container">
         <div class="footer-grid">
@@ -868,6 +879,37 @@
     document.getElementById("lbClose").addEventListener("click", closeLb);
     lb.addEventListener("click", function (e) { if (e.target === lb || e.target === lbImg) closeLb(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && lb.classList.contains("on")) closeLb(); });
+
+    /* ── Film ────────────────────────────────────────────────────
+       Nothing loads until the button is pressed. While the player is
+       open the rest of the page is inert, so focus stays inside it. */
+    var film = document.getElementById("film"), filmVideo = document.getElementById("filmVideo"),
+        filmOpen = document.getElementById("filmOpen"), filmFocus = null;
+    function pageInert(on) {
+        [].forEach.call(document.body.children, function (el) { if (el !== film) el.inert = on; });
+    }
+    function openFilm() {
+        filmFocus = document.activeElement;
+        film.classList.add("on");
+        document.body.style.overflow = "hidden";
+        pageInert(true);
+        document.getElementById("filmClose").focus();
+        var p = filmVideo.play();
+        if (p && p.catch) p.catch(function () {});
+    }
+    function closeFilm() {
+        filmVideo.pause();
+        film.classList.remove("on");
+        document.body.style.overflow = "";
+        pageInert(false);
+        if (filmFocus) filmFocus.focus();
+    }
+    if (film && filmOpen) {
+        filmOpen.addEventListener("click", openFilm);
+        document.getElementById("filmClose").addEventListener("click", closeFilm);
+        film.addEventListener("click", function (e) { if (e.target === film) closeFilm(); });
+        addEventListener("keydown", function (e) { if (e.key === "Escape" && film.classList.contains("on")) closeFilm(); });
+    }
 
     /* ── Colorway morph ──────────────────────────────────────────── */
     var stage = document.getElementById("morph");
