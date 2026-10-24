@@ -132,6 +132,7 @@ nav:
       - PlayStation Move: devices/ps-move.md
       - SpaceMouse: devices/spacemouse.md
       - Wii Controllers: devices/wii-controllers.md
+  - FAQ: faq.md
   - Troubleshooting: troubleshooting.md
   - Technical Reference:
       - reference/index.md

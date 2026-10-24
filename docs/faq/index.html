@@ -1,0 +1,5498 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/faq/">
+      
+      
+        <link rel="prev" href="../devices/wii-controllers/">
+      
+      
+        <link rel="next" href="../troubleshooting/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>FAQ - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frequently-asked-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../reference/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../start/first-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../start/five-minute-remap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Five-Minute Remap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/starter-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start from a starter profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radial and Grid Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/accessibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen readers and the keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/peripherals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mice, Keyboards and Vendor Rows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/voice-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/handheld-buttons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/logitech-g-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/bliss-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/head-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/vr-controller-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VR Controller Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/supported/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/ps-move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PlayStation Move
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/spacemouse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpaceMouse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-padforge-cost-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does PadForge cost anything?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-stream-record-or-use-padforge-at-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I stream, record or use PadForge at work?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-padforge-portable-what-does-another-pc-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is PadForge portable? What does another PC need?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-hid-my-controller-but-the-game-sees-no-controller-at-all-what-should-i-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I hid my controller, but the game sees no controller at all. What should I check?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-an-automatic-update-replace-padforge-while-it-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does an automatic update replace PadForge while it is running?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-difference-between-close-to-system-tray-and-always-show-in-system-tray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the difference between Close to System Tray and Always Show in System Tray?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#are-idle-disconnect-and-inactivity-timeout-the-same-timer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Idle Disconnect and Inactivity Timeout the same timer?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-should-i-save-before-resetting-padforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What should I save before resetting PadForge?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#there-is-no-crashlog-what-helps-a-bug-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There is no crash.log. What helps a bug report?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#devices-and-virtual-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Devices and virtual controllers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Devices and virtual controllers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-sixteen-slots-mean-sixteen-xbox-controllers-in-every-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do sixteen slots mean sixteen Xbox controllers in every game?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Steam or Windows still react to a controller after Hide from Games is on?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do I have to hide a whole keyboard to remap a few keys?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-picking-a-preset-unlock-every-control-on-my-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does picking a preset unlock every control on my controller?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A virtual controller works in a tester but not in an older game. What should I check?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-force-raw-joystick-mode-lower-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Force Raw Joystick Mode lower latency?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-removed-a-controller-and-it-came-back-without-its-mappings-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I removed a controller and it came back without its mappings. Why?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-controllers-player-number-light-mean-the-game-sees-it-as-player-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a controller's Player Number light mean the game sees it as player one?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-hiding-a-device-in-the-mapping-picker-delete-its-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does hiding a device in the mapping picker delete its bindings?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-do-the-xbox-elite-paddles-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What do the Xbox Elite paddles need?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mappings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-is-there-no-triggers-tab-on-a-keyboard-mouse-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is there no Triggers tab on a Keyboard + Mouse slot?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#button-0-maps-to-the-first-virtual-button-is-that-off-by-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button 0 maps to the first virtual button. Is that off by one?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-an-any-device-gamepad-row-ignore-my-mouse-raw-joystick-or-head-tracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does an (Any Device) Gamepad row ignore my mouse, raw joystick or head tracker?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-make-a-touchpad-act-like-a-thumbstick-that-recenters-on-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I make a touchpad act like a thumbstick that recenters on release?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should-mouse-steering-use-mouse-speed-mouse-position-or-ramp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Should mouse steering use Mouse Speed, Mouse Position or Ramp?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-an-axis-picked-as-a-ramp-or-incremental-key-do-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does an axis picked as a Ramp or Incremental key do nothing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-rapid-trigger-change-my-keyboards-firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Rapid Trigger change my keyboard's firmware?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-can-one-press-hold-aim-without-a-macro-or-a-shift-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How can one press hold aim without a macro or a shift layer?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#my-mapping-grid-is-blank-were-my-mappings-erased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My mapping grid is blank. Were my mappings erased?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-copying-a-slot-keep-every-row-across-controller-types-and-pcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does copying a slot keep every row across controller types and PCs?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macros-layers-and-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros, layers and profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Macros, layers and profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I send a keyboard shortcut from a controller chord in one game only?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-on-single-press-wait-when-on-press-does-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does On Single Press wait when On Press does not?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-autofire-keep-going-after-i-let-go-of-the-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can autofire keep going after I let go of the trigger?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-text-block-type-in-a-chat-box-but-not-move-my-character" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Text Block type in a chat box but not move my character?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can Limit Mouse Region keep a game's cursor inside its rectangle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-does-switch-layer-do-when-it-goes-back-to-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What does Switch Layer do when it goes back to Base?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hold-layer-driven-by-a-trigger-stays-on-at-rest-is-that-normal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Hold layer driven by a trigger stays on at rest. Is that normal?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-one-profile-cover-many-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can one profile cover many games?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should-a-launcher-like-playnite-edit-padforgexml-to-pick-a-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Should a launcher like Playnite edit PadForge.xml to pick a profile?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-two-players-switch-profiles-independently" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can two players switch profiles independently?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-profiles-polling-rate-change-each-controllers-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a profile's polling rate change each controller's rate?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-and-gyro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion and gyro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Motion and gyro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The gyro moves on screen, but holding the aim trigger does not turn the camera. What is missing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-input-keeps-steering-while-i-hold-the-controller-tilted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which input keeps steering while I hold the controller tilted?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-nintendo-virtual-controller-need-a-physical-gyro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a Nintendo virtual controller need a physical gyro?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#are-momentum-and-flick-stick-the-same-thing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Momentum and Flick Stick the same thing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-reading-an-openxr-headset-put-input-into-my-vr-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does reading an OpenXR headset put input into my VR game?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble-triggers-and-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble, triggers and audio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rumble, triggers and audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-the-rumble-meter-prove-the-motor-moved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does the rumble meter prove the motor moved?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#body-motors-work-but-the-xbox-trigger-motors-get-nothing-from-the-game-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body motors work, but the Xbox trigger motors get nothing from the game. Why?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-xbox-trigger-motors-play-dualsense-adaptive-trigger-effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can Xbox trigger motors play DualSense adaptive trigger effects?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do a game's own DualSense haptics differ from audio mirroring?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#will-a-longer-bluetooth-audio-buffer-fix-every-crackle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will a longer Bluetooth audio buffer fix every crackle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Bluetooth drop when I plug in USB, with Quick Charge off?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-bass-shakers-play-the-soundtrack-or-simulator-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do Bass Shakers play the soundtrack or simulator telemetry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-constant-force-pull-my-wheel-to-one-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Constant Force pull my wheel to one side?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phones-browsers-and-remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phones, browsers and Remote Link
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phones, browsers and Remote Link">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#are-browser-gamepad-phone-motion-and-web-menus-the-same-thing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Browser Gamepad, phone motion and Web Menus the same thing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-the-streaming-pc-assign-its-web-controller-to-slots-on-the-gaming-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can the streaming PC assign its web controller to slots on the gaming PC?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-two-pcs-use-one-remote-link-identity-by-copying-the-padforge-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can two PCs use one Remote Link identity by copying the PadForge folder?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-remote-link-need-a-port-forward-or-a-padforge-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Remote Link need a port forward or a PadForge server?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Gamepad Only block every non-gamepad action from a remote PC?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steam-community-layouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam community layouts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Steam community layouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-padforge-pick-the-best-settings-for-every-game-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does PadForge pick the best settings for every game automatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-clean-in-the-import-report-mean-the-layout-was-played" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Clean in the import report mean the layout was played?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-does-padforge-send-to-steam-when-community-configs-is-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What does PadForge send to Steam when Community Configs is on?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voice-macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Voice macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-voice-macros-download-a-model-or-need-the-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do Voice Macros download a model or need the internet?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-cant-a-spoken-phrase-hold-a-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why can't a spoken phrase hold a button?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/peripheral-outputs-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Peripheral Outputs Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/openxr-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenXR Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/logitech-g-keys-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/bliss-box-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Getting started
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting started">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-padforge-cost-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does PadForge cost anything?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-stream-record-or-use-padforge-at-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I stream, record or use PadForge at work?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-padforge-portable-what-does-another-pc-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is PadForge portable? What does another PC need?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-hid-my-controller-but-the-game-sees-no-controller-at-all-what-should-i-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I hid my controller, but the game sees no controller at all. What should I check?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-an-automatic-update-replace-padforge-while-it-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does an automatic update replace PadForge while it is running?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-the-difference-between-close-to-system-tray-and-always-show-in-system-tray" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the difference between Close to System Tray and Always Show in System Tray?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#are-idle-disconnect-and-inactivity-timeout-the-same-timer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Idle Disconnect and Inactivity Timeout the same timer?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-should-i-save-before-resetting-padforge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What should I save before resetting PadForge?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#there-is-no-crashlog-what-helps-a-bug-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There is no crash.log. What helps a bug report?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#devices-and-virtual-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Devices and virtual controllers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Devices and virtual controllers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-sixteen-slots-mean-sixteen-xbox-controllers-in-every-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do sixteen slots mean sixteen Xbox controllers in every game?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Steam or Windows still react to a controller after Hide from Games is on?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do I have to hide a whole keyboard to remap a few keys?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-picking-a-preset-unlock-every-control-on-my-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does picking a preset unlock every control on my controller?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A virtual controller works in a tester but not in an older game. What should I check?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-force-raw-joystick-mode-lower-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Force Raw Joystick Mode lower latency?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#i-removed-a-controller-and-it-came-back-without-its-mappings-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I removed a controller and it came back without its mappings. Why?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-controllers-player-number-light-mean-the-game-sees-it-as-player-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a controller's Player Number light mean the game sees it as player one?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-hiding-a-device-in-the-mapping-picker-delete-its-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does hiding a device in the mapping picker delete its bindings?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-do-the-xbox-elite-paddles-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What do the Xbox Elite paddles need?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mappings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mappings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mappings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-is-there-no-triggers-tab-on-a-keyboard-mouse-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is there no Triggers tab on a Keyboard + Mouse slot?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#button-0-maps-to-the-first-virtual-button-is-that-off-by-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button 0 maps to the first virtual button. Is that off by one?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-an-any-device-gamepad-row-ignore-my-mouse-raw-joystick-or-head-tracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does an (Any Device) Gamepad row ignore my mouse, raw joystick or head tracker?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-make-a-touchpad-act-like-a-thumbstick-that-recenters-on-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I make a touchpad act like a thumbstick that recenters on release?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should-mouse-steering-use-mouse-speed-mouse-position-or-ramp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Should mouse steering use Mouse Speed, Mouse Position or Ramp?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-an-axis-picked-as-a-ramp-or-incremental-key-do-nothing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does an axis picked as a Ramp or Incremental key do nothing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-rapid-trigger-change-my-keyboards-firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Rapid Trigger change my keyboard's firmware?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-can-one-press-hold-aim-without-a-macro-or-a-shift-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How can one press hold aim without a macro or a shift layer?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#my-mapping-grid-is-blank-were-my-mappings-erased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        My mapping grid is blank. Were my mappings erased?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-copying-a-slot-keep-every-row-across-controller-types-and-pcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does copying a slot keep every row across controller types and PCs?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#macros-layers-and-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Macros, layers and profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Macros, layers and profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I send a keyboard shortcut from a controller chord in one game only?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-on-single-press-wait-when-on-press-does-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does On Single Press wait when On Press does not?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-autofire-keep-going-after-i-let-go-of-the-trigger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can autofire keep going after I let go of the trigger?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-text-block-type-in-a-chat-box-but-not-move-my-character" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Text Block type in a chat box but not move my character?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can Limit Mouse Region keep a game's cursor inside its rectangle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-does-switch-layer-do-when-it-goes-back-to-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What does Switch Layer do when it goes back to Base?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-hold-layer-driven-by-a-trigger-stays-on-at-rest-is-that-normal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A Hold layer driven by a trigger stays on at rest. Is that normal?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-one-profile-cover-many-games" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can one profile cover many games?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#should-a-launcher-like-playnite-edit-padforgexml-to-pick-a-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Should a launcher like Playnite edit PadForge.xml to pick a profile?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-two-players-switch-profiles-independently" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can two players switch profiles independently?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-profiles-polling-rate-change-each-controllers-rate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a profile's polling rate change each controller's rate?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motion-and-gyro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motion and gyro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Motion and gyro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The gyro moves on screen, but holding the aim trigger does not turn the camera. What is missing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-input-keeps-steering-while-i-hold-the-controller-tilted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which input keeps steering while I hold the controller tilted?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-a-nintendo-virtual-controller-need-a-physical-gyro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does a Nintendo virtual controller need a physical gyro?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#are-momentum-and-flick-stick-the-same-thing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Momentum and Flick Stick the same thing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-reading-an-openxr-headset-put-input-into-my-vr-game" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does reading an OpenXR headset put input into my VR game?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rumble-triggers-and-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rumble, triggers and audio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rumble, triggers and audio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-the-rumble-meter-prove-the-motor-moved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does the rumble meter prove the motor moved?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#body-motors-work-but-the-xbox-trigger-motors-get-nothing-from-the-game-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Body motors work, but the Xbox trigger motors get nothing from the game. Why?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-xbox-trigger-motors-play-dualsense-adaptive-trigger-effects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can Xbox trigger motors play DualSense adaptive trigger effects?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do a game's own DualSense haptics differ from audio mirroring?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#will-a-longer-bluetooth-audio-buffer-fix-every-crackle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will a longer Bluetooth audio buffer fix every crackle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Bluetooth drop when I plug in USB, with Quick Charge off?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#do-bass-shakers-play-the-soundtrack-or-simulator-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do Bass Shakers play the soundtrack or simulator telemetry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-does-constant-force-pull-my-wheel-to-one-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why does Constant Force pull my wheel to one side?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phones-browsers-and-remote-link" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phones, browsers and Remote Link
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phones, browsers and Remote Link">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#are-browser-gamepad-phone-motion-and-web-menus-the-same-thing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Are Browser Gamepad, phone motion and Web Menus the same thing?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-the-streaming-pc-assign-its-web-controller-to-slots-on-the-gaming-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can the streaming PC assign its web controller to slots on the gaming PC?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-two-pcs-use-one-remote-link-identity-by-copying-the-padforge-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can two PCs use one Remote Link identity by copying the PadForge folder?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-remote-link-need-a-port-forward-or-a-padforge-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Remote Link need a port forward or a PadForge server?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Gamepad Only block every non-gamepad action from a remote PC?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steam-community-layouts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steam community layouts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Steam community layouts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-padforge-pick-the-best-settings-for-every-game-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does PadForge pick the best settings for every game automatically?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#does-clean-in-the-import-report-mean-the-layout-was-played" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does Clean in the import report mean the layout was played?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-does-padforge-send-to-steam-when-community-configs-is-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What does PadForge send to Steam when Community Configs is on?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voice-macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice macros
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Voice macros">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do-voice-macros-download-a-model-or-need-the-internet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do Voice Macros download a model or need the internet?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-cant-a-spoken-phrase-hold-a-button" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why can't a spoken phrase hold a button?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h1>
+<p><em>The questions people ask most in PadForge's discussions and issues, answered in short, with a link to the full story.</em></p>
+<hr />
+<h2 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
+<h3 id="does-padforge-cost-anything">Does PadForge cost anything?<a class="headerlink" href="#does-padforge-cost-anything" title="Permanent link">&para;</a></h3>
+<p>No. PadForge is free, with no subscription, no paid tier and no nag screens. Controllers, adapters, games and any optional third-party software cost what they cost.</p>
+<h3 id="can-i-stream-record-or-use-padforge-at-work">Can I stream, record or use PadForge at work?<a class="headerlink" href="#can-i-stream-record-or-use-padforge-at-work" title="Permanent link">&para;</a></h3>
+<p>Yes. Playing games with PadForge, streaming them, recording videos and using it on a work machine draw no license action. The license's NonCommercial term covers the software itself: it stops anyone from redistributing PadForge, modified or not, for profit. The maintainer said so in <a href="https://github.com/hifihedgehog/PadForge/discussions/304">discussion #304</a>, and <a href="https://github.com/hifihedgehog/PadForge/blob/main/LICENSE">LICENSE</a> holds the full terms.</p>
+<h3 id="is-padforge-portable-what-does-another-pc-need">Is PadForge portable? What does another PC need?<a class="headerlink" href="#is-padforge-portable-what-does-another-pc-need" title="Permanent link">&para;</a></h3>
+<p>PadForge is one executable in a ZIP, and it keeps its settings in <code>PadForge.xml</code> beside it, so the folder moves as a unit. Drivers do not travel with it. Each PC installs HIDMaestro the first time a virtual controller is created there, and hiding, MIDI, Bluetooth DualShock 3 input and VR each bring their own installs. More: <a href="../start/installation/#requirements">Requirements</a>.</p>
+<h3 id="i-hid-my-controller-but-the-game-sees-no-controller-at-all-what-should-i-check">I hid my controller, but the game sees no controller at all. What should I check?<a class="headerlink" href="#i-hid-my-controller-but-the-game-sees-no-controller-at-all-what-should-i-check" title="Permanent link">&para;</a></h3>
+<p>An empty slot creates nothing. Start the engine, turn the slot on and assign an online device to it, then reopen any game that only looks for controllers at startup. A failed HIDMaestro setup leaves "Error: Failed to initialize HIDMaestro." in the status bar, and it runs again when you turn the slot off and on, change its type or profile, or reconnect its controller. More: <a href="../troubleshooting/#extended-controllers-not-working">Extended Controllers Not Working</a>.</p>
+<h3 id="does-an-automatic-update-replace-padforge-while-it-is-running">Does an automatic update replace PadForge while it is running?<a class="headerlink" href="#does-an-automatic-update-replace-padforge-while-it-is-running" title="Permanent link">&para;</a></h3>
+<p>No. With <strong>Install Updates Automatically</strong> on, PadForge downloads the update and installs it at the next launch. <strong>Install and Restart</strong> installs it now and restarts. Versions 4.5.3 and later update from the Updates card in Settings, while 4.5.2 and older need one manual download. More: <a href="../features/updates/#the-switches">Updates</a>.</p>
+<h3 id="what-is-the-difference-between-close-to-system-tray-and-always-show-in-system-tray">What is the difference between Close to System Tray and Always Show in System Tray?<a class="headerlink" href="#what-is-the-difference-between-close-to-system-tray-and-always-show-in-system-tray" title="Permanent link">&para;</a></h3>
+<p><strong>Close to System Tray</strong> keeps PadForge running when you close the window with the X or Alt+F4. <strong>Always Show in System Tray</strong> keeps the tray icon there while the window is open, so <strong>Exit</strong> in its menu is always one click away. Use <strong>Exit</strong> in the tray menu to quit for real. More: <a href="../features/settings/#window">Settings</a>.</p>
+<h3 id="are-idle-disconnect-and-inactivity-timeout-the-same-timer">Are Idle Disconnect and Inactivity Timeout the same timer?<a class="headerlink" href="#are-idle-disconnect-and-inactivity-timeout-the-same-timer" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Idle Disconnect</strong> is a per-device setting, in minutes, that tells a supported controller to switch off its radio after sitting idle. <strong>Inactivity Timeout</strong> is a global setting, in seconds, for how long a virtual controller stays after every device assigned to it goes offline. Set it to 0 to keep the virtual controller indefinitely. The slot's setup survives either way, and the virtual controller returns when a device does. More: <a href="../features/settings/#inactivity-timeout">Inactivity Timeout</a>.</p>
+<h3 id="what-should-i-save-before-resetting-padforge">What should I save before resetting PadForge?<a class="headerlink" href="#what-should-i-save-before-resetting-padforge" title="Permanent link">&para;</a></h3>
+<p>Copy <code>PadForge.xml</code> and export the profile you are working on first, then note what the symptom looks like. <strong>Reset to Defaults</strong> removes every virtual controller, mapping and saved profile without asking, and once it is gone nobody can tell what caused the problem. When PadForge cannot read <code>PadForge.xml</code> at startup, it keeps a copy named <code>PadForge.xml.unreadable-</code> plus the date and time beside it and starts with defaults. More: <a href="../troubleshooting/#settings-not-saving">Settings Not Saving</a>.</p>
+<h3 id="there-is-no-crashlog-what-helps-a-bug-report">There is no crash.log. What helps a bug report?<a class="headerlink" href="#there-is-no-crashlog-what-helps-a-bug-report" title="Permanent link">&para;</a></h3>
+<p>Click <strong>Save Snapshot</strong> right after the problem happens, or turn on <strong>Keep a Diagnostics Log</strong> before reproducing a longer one. Add the PadForge build, the controller and how it connects, the virtual preset, the active profile, and the game or program that misbehaved. A missing crash.log does not mean nothing went wrong. More: <a href="../troubleshooting/#logs-and-diagnostics">Logs and diagnostics</a>.</p>
+<hr />
+<h2 id="devices-and-virtual-controllers">Devices and virtual controllers<a class="headerlink" href="#devices-and-virtual-controllers" title="Permanent link">&para;</a></h2>
+<h3 id="do-sixteen-slots-mean-sixteen-xbox-controllers-in-every-game">Do sixteen slots mean sixteen Xbox controllers in every game?<a class="headerlink" href="#do-sixteen-slots-mean-sixteen-xbox-controllers-in-every-game" title="Permanent link">&para;</a></h3>
+<p>No. Sixteen is the total across every slot type: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI and VR. A game that uses XInput sees only the first four Xbox controllers, while SDL and DirectInput games see all of them. More: <a href="../features/controller-slots/#slot-limits">Slot limits</a>.</p>
+<h3 id="why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on">Why does Steam or Windows still react to a controller after Hide from Games is on?<a class="headerlink" href="#why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on" title="Permanent link">&para;</a></h3>
+<p>Hiding applies when a program opens a device, so a program that already had the controller open keeps it. When PadForge hides a USB controller that is already connected, it reconnects it in Windows so those programs lose it. A Bluetooth controller, or a receiver that carries several controllers, stays with whatever opened it until it next connects, so reconnect that one yourself. <strong>Keep Devices Cloaked Between Launches</strong> keeps the hides in place while PadForge is closed. More: <a href="../features/devices/#input-hiding">Input hiding</a>.</p>
+<h3 id="do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys">Do I have to hide a whole keyboard to remap a few keys?<a class="headerlink" href="#do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Consume Mapped Inputs</strong> swallows only the keys and mouse buttons you mapped and leaves the rest working. Windows does not say which keyboard a key came from, so consuming a key consumes it on every keyboard. PadForge's own output is never consumed. More: <a href="../features/devices/#input-hiding">Input hiding</a>.</p>
+<h3 id="does-picking-a-preset-unlock-every-control-on-my-controller">Does picking a preset unlock every control on my controller?<a class="headerlink" href="#does-picking-a-preset-unlock-every-control-on-my-controller" title="Permanent link">&para;</a></h3>
+<p>No. The preset decides what the game sees. What PadForge can read from your controller depends on the controller and how it connects. A matching name on both sides does not by itself carry pressure, touch, paddles, motion or feedback through, so check the controls you need. More: <a href="../features/controller-slots/">Controller Slots</a>.</p>
+<h3 id="a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check">A virtual controller works in a tester but not in an older game. What should I check?<a class="headerlink" href="#a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check" title="Permanent link">&para;</a></h3>
+<p>Older games can bind one joystick by its position in the list, or expect particular DirectInput axes. Keep the exact preset and, on an Extended slot, the same axes, triggers, buttons and hats. Choosing the preferred device in <code>joy.cpl</code> has fixed some games. More: <a href="../troubleshooting/#virtual-controller-not-appearing-in-games">Virtual Controller Not Appearing in Games</a>.</p>
+<h3 id="does-force-raw-joystick-mode-lower-latency">Does Force Raw Joystick Mode lower latency?<a class="headerlink" href="#does-force-raw-joystick-mode-lower-latency" title="Permanent link">&para;</a></h3>
+<p>No. It exists to skip a standard gamepad layout that reads a device wrong, and to show its raw buttons and axes. It also turns off auto-mapping, so existing mappings can land on the wrong inputs. Turn it off again if a controller starts misbehaving after you enabled it. More: <a href="../features/devices/#force-raw-joystick-mode">Force Raw Joystick Mode</a>.</p>
+<h3 id="i-removed-a-controller-and-it-came-back-without-its-mappings-why">I removed a controller and it came back without its mappings. Why?<a class="headerlink" href="#i-removed-a-controller-and-it-came-back-without-its-mappings-why" title="Permanent link">&para;</a></h3>
+<p><strong>Remove Device</strong> deletes that device's mappings, assignments and hiding settings, and a device that is still connected shows up again at the next scan as a new record. To keep a controller's setup while it is away, unplug it instead. PadForge remembers an offline device. More: <a href="../features/devices/#removing-a-device">Removing a device</a>.</p>
+<h3 id="does-a-controllers-player-number-light-mean-the-game-sees-it-as-player-one">Does a controller's Player Number light mean the game sees it as player one?<a class="headerlink" href="#does-a-controllers-player-number-light-mean-the-game-sees-it-as-player-one" title="Permanent link">&para;</a></h3>
+<p>No. The light follows PadForge's numbering of its virtual controllers. Games number XInput controllers themselves, and other controllers on the PC can change that order. More: <a href="../features/lighting/#indicator-leds-dualsense">Lighting</a>.</p>
+<h3 id="does-hiding-a-device-in-the-mapping-picker-delete-its-bindings">Does hiding a device in the mapping picker delete its bindings?<a class="headerlink" href="#does-hiding-a-device-in-the-mapping-picker-delete-its-bindings" title="Permanent link">&para;</a></h3>
+<p>No. The picker's device filter only narrows the inputs offered, and the mappings stay as they are. The filter is saved per slot, outside profiles. The search box filters rows for the current session only. More: <a href="../features/mappings/">Mappings</a>.</p>
+<h3 id="what-do-the-xbox-elite-paddles-need">What do the Xbox Elite paddles need?<a class="headerlink" href="#what-do-the-xbox-elite-paddles-need" title="Permanent link">&para;</a></h3>
+<p>Over USB or the Xbox Wireless Adapter, the paddles read through Windows' GameInput service, which needs Windows 11 24H2 or 25H2 at build 26100.8973 or 26200.8973 or later. The GameInput redistributable is not needed. An Elite Series 2 over Bluetooth uses its own path on any Windows, and the first Elite has no Bluetooth. Each paddle is its own input, separate from the Xbox buttons. More: <a href="../troubleshooting/#xbox-elite-paddles-do-nothing">Xbox Elite Paddles Do Nothing</a>.</p>
+<hr />
+<h2 id="mappings">Mappings<a class="headerlink" href="#mappings" title="Permanent link">&para;</a></h2>
+<h3 id="why-is-there-no-triggers-tab-on-a-keyboard-mouse-slot">Why is there no Triggers tab on a Keyboard + Mouse slot?<a class="headerlink" href="#why-is-there-no-triggers-tab-on-a-keyboard-mouse-slot" title="Permanent link">&para;</a></h3>
+<p>That tab tunes the analog triggers a virtual gamepad sends, and a Keyboard + Mouse slot sends none. When a physical trigger drives a key, set where it presses with the row's <strong>Axis-to-Button Deadzone</strong>. More: <a href="../features/mappings/#axis-to-button-deadzone">Axis-to-Button Deadzone</a>.</p>
+<h3 id="button-0-maps-to-the-first-virtual-button-is-that-off-by-one">Button 0 maps to the first virtual button. Is that off by one?<a class="headerlink" href="#button-0-maps-to-the-first-virtual-button-is-that-off-by-one" title="Permanent link">&para;</a></h3>
+<p>No. Raw source names count from zero, while virtual outputs follow the numbering Windows and games show, which starts at one. Check which output actually presses before reading the labels as a mistake. More: <a href="../features/mappings/#clone-device-11">Clone Device 1:1</a>.</p>
+<h3 id="why-does-an-any-device-gamepad-row-ignore-my-mouse-raw-joystick-or-head-tracker">Why does an (Any Device) Gamepad row ignore my mouse, raw joystick or head tracker?<a class="headerlink" href="#why-does-an-any-device-gamepad-row-ignore-my-mouse-raw-joystick-or-head-tracker" title="Permanent link">&para;</a></h3>
+<p><strong>Gamepad</strong> sources name inputs by their role on a standard gamepad, so only devices PadForge recognizes as gamepads answer them. A keyboard, a mouse, an unmapped joystick or a pad in Force Raw Joystick Mode does not. Head trackers, microphones, pens, VR controllers and G-keys have named inputs of their own. More: <a href="../features/mappings/#gamepad-sources">Gamepad sources</a>.</p>
+<h3 id="how-do-i-make-a-touchpad-act-like-a-thumbstick-that-recenters-on-release">How do I make a touchpad act like a thumbstick that recenters on release?<a class="headerlink" href="#how-do-i-make-a-touchpad-act-like-a-thumbstick-that-recenters-on-release" title="Permanent link">&para;</a></h3>
+<p>Turn on <strong>Stick / D-Pad Output</strong> on the Touchpad tab and map <strong>Touchpad Stick X</strong> and <strong>Y</strong> to the stick. Where the finger lands becomes the center, and moving away from it pushes the stick. <strong>Max Radius</strong> and <strong>Inner Deadzone</strong> set its travel and rest. More: <a href="../features/touchpad/">Touchpad</a>.</p>
+<h3 id="should-mouse-steering-use-mouse-speed-mouse-position-or-ramp">Should mouse steering use Mouse Speed, Mouse Position or Ramp?<a class="headerlink" href="#should-mouse-steering-use-mouse-speed-mouse-position-or-ramp" title="Permanent link">&para;</a></h3>
+<p><strong>Mouse Speed</strong> reads how fast the mouse moves. <strong>Mouse Position</strong> reads where the cursor sits relative to the center of the main screen, reaching full deflection at 10% of the screen width by default. <strong>Ramp</strong> ignores the mouse and moves the axis while its Up or Down key is held. Each one gives a resting mouse a different meaning, so pick the one that matches the game. More: <a href="../features/mappings/">Mappings</a>.</p>
+<h3 id="why-does-an-axis-picked-as-a-ramp-or-incremental-key-do-nothing">Why does an axis picked as a Ramp or Incremental key do nothing?<a class="headerlink" href="#why-does-an-axis-picked-as-a-ramp-or-incremental-key-do-nothing" title="Permanent link">&para;</a></h3>
+<p>Those modes read their own Up and Down keys, and a key has to be an on/off input: a button, a hat direction, a stick ring, a gesture, a menu cell, a MIDI note or CC, and the like. The pickers offer only inputs that work as keys, so a stick, trigger or slider is not listed. A key saved by an older version from such an axis reads nothing until you pick a new one. More: <a href="../features/mappings/#source-kinds">Source kinds</a>.</p>
+<h3 id="does-rapid-trigger-change-my-keyboards-firmware">Does Rapid Trigger change my keyboard's firmware?<a class="headerlink" href="#does-rapid-trigger-change-my-keyboards-firmware" title="Permanent link">&para;</a></h3>
+<p>No. It is a mode on a mapping row that reads how deep the key is. One <strong>Distance</strong>, 1 to 50 percent of travel and 10 by default, sets both the release and the next press. Separate press and release distances and Continuous Rapid Trigger are not offered. More: <a href="../features/mappings/#source-kinds">Source kinds</a>.</p>
+<h3 id="how-can-one-press-hold-aim-without-a-macro-or-a-shift-layer">How can one press hold aim without a macro or a shift layer?<a class="headerlink" href="#how-can-one-press-hold-aim-without-a-macro-or-a-shift-layer" title="Permanent link">&para;</a></h3>
+<p>Set the aim row's <strong>Primary Mode</strong> to <strong>Toggle</strong>. One press holds the output and the next lets it go. A trigger holds a full pull, a button stays pressed, and a stick holds full deflection. The hold ends when the row stops running, such as when its layer closes or its device goes offline. More: <a href="../features/mappings/#source-kinds">Source kinds</a>.</p>
+<h3 id="my-mapping-grid-is-blank-were-my-mappings-erased">My mapping grid is blank. Were my mappings erased?<a class="headerlink" href="#my-mapping-grid-is-blank-were-my-mappings-erased" title="Permanent link">&para;</a></h3>
+<p>Not necessarily. Save <code>PadForge.xml</code> and note the active profile before you reset or import anything. Then check which slot and device are selected, and whether the output still works. A blank grid has come from a stale picker, from parked settings, and from real data loss, and only the saved file tells them apart. More: <a href="../guides/profiles/#what-a-profile-holds">What a profile holds</a>.</p>
+<h3 id="does-copying-a-slot-keep-every-row-across-controller-types-and-pcs">Does copying a slot keep every row across controller types and PCs?<a class="headerlink" href="#does-copying-a-slot-keep-every-row-across-controller-types-and-pcs" title="Permanent link">&para;</a></h3>
+<p>Between slots with the same layout, such as an Xbox slot and a PlayStation slot, everything copies: rows, layers, menus and SOCD pairs. Between different layouts, the Base layer's bindings carry over by position or by role, and the target keeps its own layers, menus and SOCD pairs. A Bass Shakers route copied to another PC stays silent until you pick one of that PC's audio outputs. More: <a href="../features/mappings/#copy-paste-copy-from">Copy, Paste, Copy From</a>.</p>
+<hr />
+<h2 id="macros-layers-and-profiles">Macros, layers and profiles<a class="headerlink" href="#macros-layers-and-profiles" title="Permanent link">&para;</a></h2>
+<h3 id="how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only">How do I send a keyboard shortcut from a controller chord in one game only?<a class="headerlink" href="#how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only" title="Permanent link">&para;</a></h3>
+<p>Load that game's profile, add a macro on its slot, and pick the chord as the trigger, from the virtual controller or from the assigned devices. Add a <strong>Key Press</strong> action with the shortcut. Macros belong to their profile, so the shortcut runs only while that profile is active. <strong>Consume Trigger Buttons</strong> keeps the chord's buttons out of the game. More: <a href="../guides/macros/#triggers">Triggers</a>.</p>
+<h3 id="why-does-on-single-press-wait-when-on-press-does-not">Why does On Single Press wait when On Press does not?<a class="headerlink" href="#why-does-on-single-press-wait-when-on-press-does-not" title="Permanent link">&para;</a></h3>
+<p><strong>On Press</strong> fires as soon as the trigger goes down. <strong>On Single Press</strong> waits through the <strong>Press Window</strong>, 442 ms by default, to be sure no second press is coming. <strong>On Short Press</strong> fires on release before the <strong>Hold Time</strong>, and <strong>On Long Press</strong> fires once the hold passes it, 500 ms by default. Pair a Short and a Long macro on one trigger to get tap and hold. More: <a href="../guides/macros/#fire-modes">Fire modes</a>.</p>
+<h3 id="can-autofire-keep-going-after-i-let-go-of-the-trigger">Can autofire keep going after I let go of the trigger?<a class="headerlink" href="#can-autofire-keep-going-after-i-let-go-of-the-trigger" title="Permanent link">&para;</a></h3>
+<p>Yes. Use a <strong>Toggle Button</strong>, <strong>Toggle Key</strong>, <strong>Toggle Mouse Button</strong> or <strong>Toggle Axis</strong> action with <strong>Pulse While Latched</strong>. One press starts the repeating output and the next stops it. <strong>Repeat While Held</strong> and the <strong>Turbo</strong> fire mode stop when you let go. More: <a href="../guides/macros/#toggle-button-toggle-key">Toggle Button / Toggle Key</a>.</p>
+<h3 id="why-does-text-block-type-in-a-chat-box-but-not-move-my-character">Why does Text Block type in a chat box but not move my character?<a class="headerlink" href="#why-does-text-block-type-in-a-chat-box-but-not-move-my-character" title="Permanent link">&para;</a></h3>
+<p><strong>Text Block</strong> sends text as characters, which chat boxes accept and many games' movement controls ignore, since those read the keys' up and down state. Use <strong>Key Press</strong> for keys a game reads as controls. More: <a href="../guides/macros/#text-block">Text Block</a>.</p>
+<h3 id="can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle">Can Limit Mouse Region keep a game's cursor inside its rectangle?<a class="headerlink" href="#can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle" title="Permanent link">&para;</a></h3>
+<p>Not against the game. <strong>Limit Mouse Region</strong> and <strong>Fix Mouse Position</strong> move the cursor back every frame, and a game that moves the cursor too can fight them. More: <a href="../guides/macros/#limit-mouse-region">Limit Mouse Region</a>.</p>
+<h3 id="what-does-switch-layer-do-when-it-goes-back-to-base">What does Switch Layer do when it goes back to Base?<a class="headerlink" href="#what-does-switch-layer-do-when-it-goes-back-to-base" title="Permanent link">&para;</a></h3>
+<p>Switching to Base releases toggled and sticky layers. A Hold activator that is still held engages its layer again on the next update. More: <a href="../guides/macros/#switch-layer">Switch Layer</a>.</p>
+<h3 id="a-hold-layer-driven-by-a-trigger-stays-on-at-rest-is-that-normal">A Hold layer driven by a trigger stays on at rest. Is that normal?<a class="headerlink" href="#a-hold-layer-driven-by-a-trigger-stays-on-at-rest-is-that-normal" title="Permanent link">&para;</a></h3>
+<p>No. A Hold layer should follow its input. Check the activator's source, threshold, <strong>Mode</strong>, <strong>Delay</strong> and <strong>Fire on Release</strong>, and remember that a trigger rests at zero while a stick rests at its center. More: <a href="../guides/shift-layers/#activator-kinds">Activator kinds</a>.</p>
+<h3 id="can-one-profile-cover-many-games">Can one profile cover many games?<a class="headerlink" href="#can-one-profile-cover-many-games" title="Permanent link">&para;</a></h3>
+<p>Yes. Add each game's executable to one profile and turn on auto-switching. The profile loads when any of them comes to the front, and Default returns for everything else. More: <a href="../guides/profiles/#auto-switch-on-app-focus">Auto-switch on app focus</a>.</p>
+<h3 id="should-a-launcher-like-playnite-edit-padforgexml-to-pick-a-profile">Should a launcher like Playnite edit PadForge.xml to pick a profile?<a class="headerlink" href="#should-a-launcher-like-playnite-edit-padforgexml-to-pick-a-profile" title="Permanent link">&para;</a></h3>
+<p>No. Turn on <strong>Allow External Control by Launchers and Scripts</strong> on the Profiles page, and have the launcher send <code>activate &lt;name&gt;</code> to PadForge's <code>PadForge.Control</code> pipe before the game starts and <code>deactivate</code> after it closes. Auto-switching leaves the profile alone until then. More: <a href="../guides/profiles/#external-control-from-launchers-and-scripts">External control from launchers and scripts</a>.</p>
+<h3 id="can-two-players-switch-profiles-independently">Can two players switch profiles independently?<a class="headerlink" href="#can-two-players-switch-profiles-independently" title="Permanent link">&para;</a></h3>
+<p>No. A profile holds every slot, mapping, macro and menu at once, so switching it changes them together. Two players can still use different slots with different mappings inside one profile. More: <a href="../guides/profiles/#what-a-profile-holds">What a profile holds</a>.</p>
+<h3 id="does-a-profiles-polling-rate-change-each-controllers-rate">Does a profile's polling rate change each controller's rate?<a class="headerlink" href="#does-a-profiles-polling-rate-change-each-controllers-rate" title="Permanent link">&para;</a></h3>
+<p>No. It replaces the engine's polling interval while the profile is active, and every slot shares that loop. A controller's own USB report rate does not change. More: <a href="../guides/profiles/#polling-rate-override">Polling rate override</a>.</p>
+<hr />
+<h2 id="motion-and-gyro">Motion and gyro<a class="headerlink" href="#motion-and-gyro" title="Permanent link">&para;</a></h2>
+<h3 id="the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing">The gyro moves on screen, but holding the aim trigger does not turn the camera. What is missing?<a class="headerlink" href="#the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing" title="Permanent link">&para;</a></h3>
+<p>The engage trigger decides when gyro is on, and the mapping table decides where it goes. Map the gyro to <strong>Mouse X</strong> and <strong>Y</strong> for a mouse-aimed game, or to the aiming stick for a controller-aimed one. With both <strong>Easy Aim</strong> and an aim engage set, both have to be active. More: <a href="../guides/gyro/#output-routing">Output routing</a>.</p>
+<h3 id="which-input-keeps-steering-while-i-hold-the-controller-tilted">Which input keeps steering while I hold the controller tilted?<a class="headerlink" href="#which-input-keeps-steering-while-i-hold-the-controller-tilted" title="Permanent link">&para;</a></h3>
+<p><strong>Gyro Tilt X</strong> and <strong>Y</strong>. They hold their deflection for as long as the controller stays tilted, across a range of angles you set. <strong>Gyro Pitch</strong>, <strong>Yaw</strong> and <strong>Roll</strong> report turning speed and fall back to zero when the turning stops. More: <a href="../guides/gyro/#gyro-tilt">Gyro Tilt</a>.</p>
+<h3 id="does-a-nintendo-virtual-controller-need-a-physical-gyro">Does a Nintendo virtual controller need a physical gyro?<a class="headerlink" href="#does-a-nintendo-virtual-controller-need-a-physical-gyro" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Motion Pitch</strong>, <strong>Yaw</strong> and <strong>Roll</strong> rows make motion from any input, a stick or buttons included. The game gets it through presets whose reports carry motion. The plain Switch 2 Pro preset carries none, while <strong>Nintendo Switch 2 Pro Controller: Full</strong> carries both sensors for Steam and SDL built with libusb. More: <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a>.</p>
+<h3 id="are-momentum-and-flick-stick-the-same-thing">Are Momentum and Flick Stick the same thing?<a class="headerlink" href="#are-momentum-and-flick-stick-the-same-thing" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Momentum</strong> lets the mouse cursor coast after a flick on a touchpad or a mouse stick. <strong>Flick Stick</strong> turns the camera to wherever the stick points and keeps turning as the stick rolls around its rim, and it needs the game's <strong>Dots per 360</strong> calibrated. More: <a href="../features/stick-deadzones/#flick-stick">Flick Stick</a>.</p>
+<h3 id="does-reading-an-openxr-headset-put-input-into-my-vr-game">Does reading an OpenXR headset put input into my VR game?<a class="headerlink" href="#does-reading-an-openxr-headset-put-input-into-my-vr-game" title="Permanent link">&para;</a></h3>
+<p>No. PadForge reads the headset and its controllers through the OpenXR runtime as input for your mappings. It does not create a headset or join a VR game's session. A Quest on Link has to go through SteamVR's runtime. More: <a href="../features/head-tracking/#setting-up-an-openxr-headset">Setting up an OpenXR headset</a>.</p>
+<hr />
+<h2 id="rumble-triggers-and-audio">Rumble, triggers and audio<a class="headerlink" href="#rumble-triggers-and-audio" title="Permanent link">&para;</a></h2>
+<h3 id="does-the-rumble-meter-prove-the-motor-moved">Does the rumble meter prove the motor moved?<a class="headerlink" href="#does-the-rumble-meter-prove-the-motor-moved" title="Permanent link">&para;</a></h3>
+<p>No. The meter shows what PadForge sends. <strong>Test Rumble</strong> on the device is the check that the motor itself moves. More: <a href="../features/force-feedback/">Force Feedback</a>.</p>
+<h3 id="body-motors-work-but-the-xbox-trigger-motors-get-nothing-from-the-game-why">Body motors work, but the Xbox trigger motors get nothing from the game. Why?<a class="headerlink" href="#body-motors-work-but-the-xbox-trigger-motors-get-nothing-from-the-game-why" title="Permanent link">&para;</a></h3>
+<p>The game has to send trigger rumble, and the slot has to carry it. That needs an Xbox One, Elite or Series virtual profile, since the Xbox 360 path carries the body motors only. The controller you hold also needs trigger motors. More: <a href="../features/impulse-triggers/">Impulse Triggers</a>.</p>
+<h3 id="can-xbox-trigger-motors-play-dualsense-adaptive-trigger-effects">Can Xbox trigger motors play DualSense adaptive trigger effects?<a class="headerlink" href="#can-xbox-trigger-motors-play-dualsense-adaptive-trigger-effects" title="Permanent link">&para;</a></h3>
+<p>Partly. <strong>Translate Adaptive Trigger Vibrations</strong>, a per-device setting that is off by default, plays a virtual DualSense's vibration effects on an Xbox controller's trigger motors. Resistance effects have nothing to play on and are left out. More: <a href="../features/impulse-triggers/">Impulse Triggers</a>.</p>
+<h3 id="how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring">How do a game's own DualSense haptics differ from audio mirroring?<a class="headerlink" href="#how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring" title="Permanent link">&para;</a></h3>
+<p>A game that supports the DualSense sends its own haptics and speaker sound to a virtual DualSense that carries audio. Mirroring is separate: it captures a Windows audio output and plays that sound on the controller. Speaker sound, rumble, trigger effects and haptics are separate things to check. More: <a href="../features/controller-audio/#mirror-a-windows-audio-output">Mirror a Windows audio output</a>.</p>
+<h3 id="will-a-longer-bluetooth-audio-buffer-fix-every-crackle">Will a longer Bluetooth audio buffer fix every crackle?<a class="headerlink" href="#will-a-longer-bluetooth-audio-buffer-fix-every-crackle" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Bluetooth Audio Buffer Length</strong> sets the DualSense's Bluetooth buffer, shared by speaker, haptics and microphone. Mirroring and other paths have their own queues. Work out which sound path crackles before changing it. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
+<h3 id="why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off">Why does Bluetooth drop when I plug in USB, with Quick Charge off?<a class="headerlink" href="#why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off" title="Permanent link">&para;</a></h3>
+<p>A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadForge drops the Bluetooth link once when it sets up wired audio. <strong>Quick Charge</strong> is separate: it drops Bluetooth when the controller starts charging. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
+<h3 id="do-bass-shakers-play-the-soundtrack-or-simulator-telemetry">Do Bass Shakers play the soundtrack or simulator telemetry?<a class="headerlink" href="#do-bass-shakers-play-the-soundtrack-or-simulator-telemetry" title="Permanent link">&para;</a></h3>
+<p>Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. Macro rumble stays on the controller. More: <a href="../features/bass-shakers/#rumble-to-audio-card">Rumble to Audio card</a>.</p>
+<h3 id="why-does-constant-force-pull-my-wheel-to-one-side">Why does Constant Force pull my wheel to one side?<a class="headerlink" href="#why-does-constant-force-pull-my-wheel-to-one-side" title="Permanent link">&para;</a></h3>
+<p><strong>Constant Force</strong> applies a fixed push in one direction, wherever the wheel points. <strong>Auto Centering Strength</strong> on the Wheel tab is the spring that returns it. On the generic force feedback path the two share one effect, so turning on Constant Force stops the spring. More: <a href="../features/force-feedback/#constant-force">Constant Force</a>.</p>
+<h3 id="why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab">Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?<a class="headerlink" href="#why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab" title="Permanent link">&para;</a></h3>
+<p>The tab also drives the physical device assigned to the slot. <strong>Audio Bass Rumble</strong> turns the PC's sound into rumble, and <strong>Test Rumble</strong> checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: <a href="../features/force-feedback/#audio-bass-rumble">Audio Bass Rumble</a>.</p>
+<hr />
+<h2 id="phones-browsers-and-remote-link">Phones, browsers and Remote Link<a class="headerlink" href="#phones-browsers-and-remote-link" title="Permanent link">&para;</a></h2>
+<h3 id="are-browser-gamepad-phone-motion-and-web-menus-the-same-thing">Are Browser Gamepad, phone motion and Web Menus the same thing?<a class="headerlink" href="#are-browser-gamepad-phone-motion-and-web-menus-the-same-thing" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Browser Gamepad</strong> forwards a controller paired to the phone. Phone motion reads the phone's own sensors and needs the HTTPS address. <strong>Web Menus</strong> shows a slot's Touch Grid menus as tiles to tap. More: <a href="../guides/web-controller/#browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad</a>.</p>
+<h3 id="can-the-streaming-pc-assign-its-web-controller-to-slots-on-the-gaming-pc">Can the streaming PC assign its web controller to slots on the gaming PC?<a class="headerlink" href="#can-the-streaming-pc-assign-its-web-controller-to-slots-on-the-gaming-pc" title="Permanent link">&para;</a></h3>
+<p>Yes, once the gaming PC turns on <strong>Allow Remote Assignment Changes</strong> for that PC. The streaming PC can then move its shared devices between the gaming PC's existing slots. It cannot create controllers, switch profiles or edit mappings. A Web Menus phone is not shared. More: <a href="../guides/remote-link/#assign-devices-from-the-other-pc">Assign devices from the other PC</a>.</p>
+<h3 id="can-two-pcs-use-one-remote-link-identity-by-copying-the-padforge-folder">Can two PCs use one Remote Link identity by copying the PadForge folder?<a class="headerlink" href="#can-two-pcs-use-one-remote-link-identity-by-copying-the-padforge-folder" title="Permanent link">&para;</a></h3>
+<p>No. A copied identity moves pairings to a new PC, but two PCs running the same identity at the same time cannot see each other. Give each running PC its own identity. More: <a href="../guides/remote-link/#identity-protection">Identity protection</a>.</p>
+<h3 id="does-remote-link-need-a-port-forward-or-a-padforge-server">Does Remote Link need a port forward or a PadForge server?<a class="headerlink" href="#does-remote-link-need-a-port-forward-or-a-padforge-server" title="Permanent link">&para;</a></h3>
+<p>No. On a local network the PCs find each other by broadcast. Over the internet, a connection code lets them try a direct path, and n0's free public relays carry the session when no direct path works. A connection code only finds the other PC. The pairing check decides trust. More: <a href="../guides/remote-link/">Remote Link</a>.</p>
+<h3 id="does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc">Does Gamepad Only block every non-gamepad action from a remote PC?<a class="headerlink" href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" title="Permanent link">&para;</a></h3>
+<p>No. It blocks keyboard and mouse output, scrolling, cursor moves and VR slots for that PC. <strong>Run Program</strong> and MIDI still work. More: <a href="../guides/remote-link/#staying-safe-gamepad-only">Staying safe: gamepad-only</a>.</p>
+<hr />
+<h2 id="steam-community-layouts">Steam community layouts<a class="headerlink" href="#steam-community-layouts" title="Permanent link">&para;</a></h2>
+<h3 id="does-padforge-pick-the-best-settings-for-every-game-automatically">Does PadForge pick the best settings for every game automatically?<a class="headerlink" href="#does-padforge-pick-the-best-settings-for-every-game-automatically" title="Permanent link">&para;</a></h3>
+<p>No. You choose a Steam community layout, check how it translated, and save it as a PadForge profile. That profile can then switch in by the game's executable like any other. More: <a href="../guides/steam-workshop-import/">Steam Workshop Config Import</a>.</p>
+<h3 id="does-clean-in-the-import-report-mean-the-layout-was-played">Does Clean in the import report mean the layout was played?<a class="headerlink" href="#does-clean-in-the-import-report-mean-the-layout-was-played" title="Permanent link">&para;</a></h3>
+<p>No. <strong>Clean</strong> means a binding translated with the same behavior. It says nothing about a game session, and some tuning values, such as mouse smoothing and trackball friction, are dropped without a note. Test the actions you need. More: <a href="../guides/steam-workshop-import/#the-translation-manifest">The translation manifest</a>.</p>
+<h3 id="what-does-padforge-send-to-steam-when-community-configs-is-on">What does PadForge send to Steam when Community Configs is on?<a class="headerlink" href="#what-does-padforge-send-to-steam-when-community-configs-is-on" title="Permanent link">&para;</a></h3>
+<p>Your search text, the ids of the games, configs and creators involved, and PadForge's version. Steam's anonymous logon adds the OS type, a language and a machine id built from hashes of Windows and hardware identifiers. No Steam account or sign-in is used, and nothing goes out until you search or open something. More: <a href="../guides/steam-workshop-import/">Steam Workshop Config Import</a>.</p>
+<hr />
+<h2 id="voice-macros">Voice macros<a class="headerlink" href="#voice-macros" title="Permanent link">&para;</a></h2>
+<h3 id="do-voice-macros-download-a-model-or-need-the-internet">Do Voice Macros download a model or need the internet?<a class="headerlink" href="#do-voice-macros-download-a-model-or-need-the-internet" title="Permanent link">&para;</a></h3>
+<p>No. The English Vosk model ships inside PadForge and unpacks on the PC the first time it is used. Windows speech recognition stands in while it unpacks. More: <a href="../features/voice-macros/">Voice Macros</a>.</p>
+<h3 id="why-cant-a-spoken-phrase-hold-a-button">Why can't a spoken phrase hold a button?<a class="headerlink" href="#why-cant-a-spoken-phrase-hold-a-button" title="Permanent link">&para;</a></h3>
+<p>A recognized phrase is a 175 ms press, not a held key. To make a phrase change something that stays changed, use it as a <strong>Toggle</strong> layer activator. The model is US English, so a word outside its vocabulary cannot fire. More: <a href="../features/voice-macros/">Voice Macros</a>.</p>
+<hr />
+<p><em>Last updated for PadForge 5.1.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../devices/wii-controllers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Wii Controllers">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Wii Controllers
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../troubleshooting/" class="md-footer__link md-footer__link--next" aria-label="Next: Troubleshooting">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Troubleshooting
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <nav class="product-footer-nav md-grid" aria-label="Site sections">
+    <a href="/">Home</a><a href="/press/">Press</a><a href="/specs.html">Specifications</a><a href="/docs/">Documentation</a>
+  </nav>
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
