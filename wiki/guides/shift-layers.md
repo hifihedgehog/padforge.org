@@ -67,7 +67,7 @@ Each slot has its own layers. Open a slot, open the **Mappings** tab, and click 
 
 | Mode | Behavior |
 |---|---|
-| **Hold** | Layer is active while the input is engaged. Release the input to drop back to Base. The keyboard-Shift model. |
+| **Hold** | Layer is active while the input is engaged. Release the input and the slot falls back to the next layer still held, or to Base when none is, unless a Latch or Cycle holds it. The keyboard-Shift model. |
 | **Toggle** | Each press flips engagement. Press once to engage. Press again to release. The Caps-Lock model. Set **Auto-Cancel After Inactivity** to have the layer drop itself after a spell with no input of its own. |
 | **Latch** | Press to latch this layer's own mappings on. Press again to return to Base. Pressing a different Latch button switches straight to that layer. Renamed from **Custom**. |
 | **Cycle** | One control steps through a queue of layers. See [Cycle queue](#cycle-queue) for the Next and Previous buttons and the queue options. |
@@ -160,7 +160,7 @@ Layers carry more than button rows:
 
 - **Any output type.** Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.
 - **Flick stick.** A [flick stick](../features/stick-deadzones.md#flick-stick) row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.
-- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any Layer** fires regardless of the engaged layer. Base and named layers fire only while that layer is engaged, exactly like a mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
+- **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any Layer** fires regardless of the engaged layer. A named layer's macros fire only while that layer is engaged. Base macros fire on Base and while an engaged layer inherits from Base, exactly like a Base mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
 - **Menus.** An on-screen [menu](menus.md) set to a named **Layer** (menus imported from a Steam action layer arrive that way) engages only while that layer is engaged, and the layer ending commits an On Touch Release menu's hovered cell.
 
 ---

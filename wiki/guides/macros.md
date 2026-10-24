@@ -51,7 +51,7 @@ The **Source** dropdown picks where the trigger reads its inputs:
 
 An **Assigned Devices** source also reaches devices that are not gamepads. An NFC reader shows an **Any NFC Tag** button plus one button per tag you have registered. A media device shows its named media keys (Play/Pause, Mute, and the rest). Tap a registered tag or press a media key to fire the macro, the same way a button press does.
 
-An Assigned Devices trigger does not have to name a specific device. Entries picked from the **(Any Device)** group fire from whichever assigned device provides that input, and they render with an "(Any Device)" chip. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
+An Assigned Devices trigger does not have to name a specific device. Entries picked from the **(Any Device)** group fire from whichever assigned device provides that input, and they render with an "(Any Device)" chip. They skip specialized devices: NFC readers, microphones, head trackers, Logitech G-key devices, analog keyboards and the like have to be picked by name. Profiles imported from the [Steam Workshop](steam-workshop-import.md) use these for macros triggered by paddles, touchpads, and gyro, which never pass through the virtual pad's output.
 
 ### Record a trigger
 

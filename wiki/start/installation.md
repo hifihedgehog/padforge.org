@@ -79,7 +79,7 @@ See [HIDMaestro Deep Dive](../reference/hidmaestro-deep-dive.md) for how PadForg
 
 Two optional installs live on **[Settings](../features/settings.md)**. HidHide is bundled inside `PadForge.exe`: the 1.5.230 setup on an x64 PC, the ARM64 driver 1.6.280.0 on an ARM64 PC. SteamVR downloads on demand. Each card lights its status indicator once installed and swaps its **Install** button for **Uninstall**. Windows MIDI Services comes with Windows 11 25H2 from the late-November 2026 update, and its card offers the runtime on a PC that does not have it yet.
 
-One more driver installs outside Settings. Pairing a [DualShock 3](../devices/dualshock-3.md) over Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time, from the pairing dialog. A PC that never pairs a DualShock 3 never gets it. Its **BthPS3 Bluetooth Driver** card on **Settings** shows whether it is installed and removes it.
+One more driver installs outside Settings. The first pairing of a [DualShock 3](../devices/dualshock-3.md), [PS Move or Navigation controller](../devices/ps-move.md) for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter). Plugging an original Move or a Navigation controller in over USB runs that pairing on its own. A PC that never pairs one of them never gets the driver. Its **BthPS3 Bluetooth Driver** card on **Settings** shows whether it is installed and removes it.
 
 <!-- SCREENSHOT: settings-driver-cards -->
 ![The Settings drivers section: HIDMaestro, HidHide, and Windows MIDI Services cards](../images/settings-driver-cards.png)
@@ -134,7 +134,7 @@ With all three on, PadForge runs in the background with only a tray icon.
 
 From 4.5.3 on, PadForge updates itself. **Settings > Updates** checks GitHub 20 seconds after launch and every 12 hours, and **Install and Restart** replaces `PadForge.exe` in place. `PadForge.xml` is not touched. See [Updates](../features/updates.md).
 
-Version 4.5.2 and older have no updater. Download the new zip, close PadForge, and replace `PadForge.exe` with the one from the zip. `PadForge.xml` stays where it is and carries over.
+Version 4.5.2 and older have no updater. Download the new zip, exit PadForge, and replace `PadForge.exe` with the one from the zip. If **Close to System Tray** is on, closing the window leaves PadForge running, so pick **Exit** from its tray icon's menu. `PadForge.xml` stays where it is and carries over.
 
 ---
 
@@ -143,7 +143,7 @@ Version 4.5.2 and older have no updater. Download the new zip, close PadForge, a
 There is no installer, so removal is short.
 
 1. Open **[Settings](../features/settings.md)** and click **Uninstall** next to HidHide and SteamVR if you installed them. The Windows MIDI Services card offers **Uninstall** while a runtime is installed. Other MIDI apps can use the runtime too, so remove it only if nothing else needs it. Click **Uninstall** on the HIDMaestro Driver card last: it stops the engine and removes HIDMaestro's virtual controllers, driver, certificate, registry keys and files ([what it removes](../features/driver-management.md#uninstall)). Turn off **Start at Login** too if it is on, so Windows drops its logon task.
-2. Close PadForge.
+2. Exit PadForge. If **Close to System Tray** is on, pick **Exit** from its tray icon's menu, since closing the window leaves it running.
 3. Delete the PadForge folder.
 
 Already deleted PadForge? Download `HIDMaestro-v2.0.3.zip` (`HIDMaestro-v2.0.3-arm64.zip` on Windows on ARM) from the [HIDMaestro releases](https://github.com/hifihedgehog/HIDMaestro/releases/latest) and extract it. In a terminal opened as administrator, change to its `HIDMaestroUninstall` folder and run `.\HIDMaestroUninstall.exe`. It removes HIDMaestro the way the Uninstall button does, and asks first. [Troubleshooting](../troubleshooting.md#removing-padforge-and-hidmaestro) covers the rest of what PadForge installs.

@@ -209,7 +209,7 @@ Acceptance was hardware-verified: SDL3's `HIDAPI_DriverSwitch` opens the virtual
 
 ### Valve personas (issues #337 / #338)
 
-New in 4.4.0. Five HIDMaestro profiles in the **Extended** category present as Valve hardware. Steam and any SDL game read the real device's USB identity, and the slot submits that device's own input frame instead of the field-encoded raw surface.
+New in 4.4.0. Five HIDMaestro profiles in the **Extended** category present as Valve hardware, and Steam and any SDL game read the real device's USB identity. Four of them submit that device's own input frame instead of the field-encoded raw surface. The plain Steam Deck Controller sends the field-encoded surface.
 
 ![Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below](../images/pad-extended-steam-deck.png)
 

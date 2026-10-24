@@ -73,7 +73,7 @@ Once paired, each PC's shareable devices appear in the other's [Devices](../feat
 
 Both PCs need a build with remote assignment support.
 
-Web controllers already travel over Remote Link like other input devices. Remote assignment lets you choose their destination slots from the PC sharing them. For a two-PC streaming setup:
+Web controllers travel over Remote Link like other input devices, and remote assignment lets you choose their slots from the PC sharing them. Web Menus is the exception: its taps fire the menus of the PC the phone connects to, so Remote Link does not share it. For a two-PC streaming setup:
 
 1. On the gaming PC, open **Remote Link > Paired PCs**, find the streaming PC, and check **Allow Remote Assignment Changes**. The same option is available during pairing. It starts off, including for existing pairings.
 2. On the streaming PC, find the gaming PC under **Paired PCs** and click **Assign Shared Devices**.
@@ -90,6 +90,8 @@ If the destination's settings change while the dialog is open, review the refres
 Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.
 
 Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.
+
+Discovery on the local network broadcasts this PC's name, its identity fingerprint, the protocol version and the link port to the subnet, and appearing in that list grants nothing. Paired PCs exchange device names, ids, types and capabilities alongside the input, rumble and audio they carry. Over the internet, PadForge asks public STUN servers for its outside address, uses the public BitTorrent DHT to meet a PC by code and to find paired PCs that moved, and falls back to n0's free iroh relays when no direct path exists. The DHT record carries the public signing key, and a relay sees public keys, nonces and signatures before the encrypted session starts. [Remote Link Internals](../reference/remote-link-internals.md) names every server.
 
 To end a pairing, find the PC under **Paired PCs** and click **Revoke**. **Revoke All** drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.
 

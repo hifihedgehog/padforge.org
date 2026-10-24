@@ -4292,10 +4292,10 @@
 </tr>
 </tbody>
 </table>
-<p>A profile switch changes all of these at once. Physical controllers stay connected. Only the virtual side changes.</p>
+<p>A profile switch changes all of these at once. Its macro list replaces the current macros, and an empty list clears them. A profile saved before macros rode profiles has no macro list and leaves the current macros alone. Physical controllers stay connected. Only the virtual side changes.</p>
 <hr />
 <h2 id="the-default-profile">The Default profile<a class="headerlink" href="#the-default-profile" title="Permanent link">&para;</a></h2>
-<p><strong>Default</strong> loads at startup and runs any time no other profile matches the foreground app. You cannot delete or rename it.</p>
+<p><strong>Default</strong> loads at startup and runs any time no other profile matches the foreground app. If a named profile was active when PadForge closed, startup puts it back on top of Default, and a launch command from a launcher or script, or auto-switching, can pick another. You cannot delete or rename Default.</p>
 <p>Set Default to your general layout, like a standard Xbox pad for platformers. Make game-specific profiles only where you want something different.</p>
 <blockquote>
 <p><strong>Important.</strong> Changes you make on any page (Dashboard, Mappings, Macros, etc.) save into the profile that is loaded right now.</p>
@@ -4308,7 +4308,7 @@
 <li>The matching app gains focus. PadForge loads the profile.</li>
 <li>An unmatched app gains focus (desktop, browser, etc.). PadForge goes back to Default.</li>
 </ol>
-<p>The outgoing profile's state saves before the new one loads. The virtual controllers stay connected through the switch.</p>
+<p>The outgoing profile's state saves before the new one loads. A virtual controller whose slot keeps the same preset stays connected through the switch. One whose preset changes is rebuilt with the new identity, and one the new profile turns off or removes goes away.</p>
 <p>Turn it on from the <strong>Profiles</strong> page. Check <strong>Auto-Switch Profiles Based on Foreground Application</strong>.</p>
 <h3 id="live-foreground-readout">Live foreground readout<a class="headerlink" href="#live-foreground-readout" title="Permanent link">&para;</a></h3>
 <p>With auto-switch on, a <strong>FOREGROUND</strong> line appears under the checkbox. It shows the executable name of whatever app is in front right now. The name lights up with a flame and ember color while that executable matches a profile, so you can confirm matching works without launching the game blind.</p>
@@ -4331,7 +4331,7 @@
 <li>Name it after the game.</li>
 <li>Click <strong>Browse...</strong> and pick the game's executable.</li>
 </ol>
-<p>The full working setup is now a saved profile and is ready to auto-switch.</p>
+<p>The working setup is now a saved profile, and it loads on its own when the game comes to the front once <strong>Auto-Switch Profiles Based on Foreground Application</strong> is on. It saves no choice for the Dashboard's OpenTrack and FreeTrack head-tracking switches, so loading it leaves them as they are. Flip either one while the profile is active to save that choice into it.</p>
 <hr />
 <h2 id="executable-matching">Executable matching<a class="headerlink" href="#executable-matching" title="Permanent link">&para;</a></h2>
 <p>Each profile can list one or more executables. When the foreground process matches one of them, the profile loads.</p>
@@ -4644,9 +4644,12 @@ ends when:</p>
 <li>you switch profiles yourself, by the status-bar switcher, the <strong>Load</strong> button on
   this page (loading <strong>Default</strong> reverts), a controller shortcut, or a
   <a href="../web-controller/#profiles-from-the-phone">Web Menus</a> phone,</li>
-<li>you uncheck <strong>Allow External Control by Launchers and Scripts</strong>,</li>
+<li>you uncheck <strong>Allow External Control by Launchers and Scripts</strong> while the engine runs,</li>
 <li>the engine stops, or PadForge restarts.</li>
 </ul>
+<p>One exception: a profile set by <code>--profile</code> as PadForge starts, with <strong>Allow External Control by Launchers
+and Scripts</strong> off, stays held through an engine stop. Switch profiles yourself or restart PadForge to end it.
+The launch command runs once, so restarting the engine does not apply it again.</p>
 <p>A <code>deactivate</code> and an unchecked box both tell the foreground monitor to re-read
 the window in front, so a still-focused game picks its own rule back up on the
 next check.</p>
@@ -4761,7 +4764,7 @@ elevated scripts and Task Scheduler jobs.</p>
 </tr>
 <tr>
 <td>Macros for one game only</td>
-<td>Make a profile with D-pad-to-keyboard macros for an MMO. Add the MMO executable. Default has no macros, so they only run when the MMO is in front.</td>
+<td>Make a profile with D-pad-to-keyboard macros for an MMO and add the MMO executable. Keep Default free of those macros. With auto-switching on, the MMO profile loads when the game comes to the front and Default returns when you leave it.</td>
 </tr>
 <tr>
 <td>Quick on/off from the couch</td>
@@ -4775,7 +4778,7 @@ elevated scripts and Task Scheduler jobs.</p>
 <li>Set up Default first. It is your everyday layout.</li>
 <li><strong>Save As</strong> from a working setup is faster than building a profile from scratch.</li>
 <li>Test auto-switch by Alt+Tabbing between your game and another app. Watch the FOREGROUND readout and the active profile name.</li>
-<li>Macros save per profile. Per-game macros only run when their game is in front.</li>
+<li>Macros save per profile and run while their profile is active. Auto-switching picks the profile by the game in front, but a profile you load by hand, or one a launcher holds, keeps its macros after you leave the game.</li>
 <li>Physical device connections stay open across switches. Only the virtual side changes.</li>
 <li>Export profiles to <code>.pfprofile</code> files to back them up or share them.</li>
 <li>Controller shortcuts beat Alt+Tabbing for mid-game profile changes.</li>

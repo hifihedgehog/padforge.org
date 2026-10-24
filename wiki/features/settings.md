@@ -418,7 +418,7 @@ Controls the [Steam Workshop Config Import](../guides/steam-workshop-import.md) 
 
 The master opt-in, off by default. PadForge sends nothing to Steam until you check it.
 
-With it on, PadForge connects directly to Steam, and only when you act (a search, opening a config, or the update check below). The servers are all Steam's own: store.steampowered.com, api.steampowered.com, steamcommunity.com, cdn.steamusercontent.com, cdn.cloudflare.steamstatic.com, and avatars.fastly.steamstatic.com. Your search text and the chosen config are the only data sent. No telemetry, no third-party service, no Steam sign-in.
+With it on, PadForge connects directly to Steam, and only when you act (a search, opening a config, or the update check below). The servers are all Steam's own: store.steampowered.com, api.steampowered.com and the connection servers it names, steamcommunity.com, cdn.steamusercontent.com, cdn.cloudflare.steamstatic.com, and avatars.fastly.steamstatic.com. PadForge sends your search text, the ids of the games, configs and creators involved, and its version number. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the physical network adapters' MAC addresses and the boot disk serial. No telemetry, no third-party service, no Steam sign-in. [Steam Workshop Config Import](../guides/steam-workshop-import.md) says what each server receives.
 
 The **Browse Community Configs** button on the [Profiles](../guides/profiles.md) page works either way. With the opt-in off, its dialog opens on an explanation panel and offers the enable step there.
 

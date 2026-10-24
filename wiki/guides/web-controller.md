@@ -39,7 +39,7 @@ PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, 
 2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller.
 3. Done. Start playing.
 
-With [Remote Link](remote-link.md#4-share-and-assign), the web controller also appears on paired PCs. Assign it to a slot on the PC running the game. [Remote assignment](remote-link.md#assign-devices-from-the-other-pc) lets a streaming PC change those assignments after the gaming PC grants permission.
+With [Remote Link](remote-link.md#4-share-and-assign), the web controller also appears on paired PCs. Assign it to a slot on the PC running the game. [Remote assignment](remote-link.md#assign-devices-from-the-other-pc) lets a streaming PC change those assignments after the gaming PC grants permission. A Web Menus phone is not shared, since its taps fire the menus of the PC it connects to.
 
 > **Tip:** Use your browser's "Add to Home Screen" option for fullscreen mode without the address bar.
 
@@ -47,7 +47,7 @@ With [Remote Link](remote-link.md#4-share-and-assign), the web controller also a
 
 ## Network requirements
 
-The web controller is built into PadForge. Nothing extra to install. The phone or tablet and the PC must be on the **same local network** (the same Wi-Fi, usually).
+The web controller is built into PadForge. Nothing extra to install. The phone or tablet and the PC must be on the **same local network** (the same Wi-Fi, usually), or reach the PC through an HTTPS tunnel or reverse proxy on the [plain HTTP address](#plain-http-address).
 
 | Requirement | Details |
 |-------------|---------|
@@ -217,11 +217,11 @@ The top of the page names the PC's active profile. Tap it for the profile list, 
 
 The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.
 
-Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors still works. The Dashboard card then says why under the status line. When another program's certificate holds the port, choosing another port brings HTTPS back.
+Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors and Browser Gamepad's keep-the-screen-on request still works. The Dashboard card then says why under the status line. When another program's certificate holds the port, choosing another port brings HTTPS back.
 
 Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.
 
-Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. On iOS the same tap is what triggers Safari's sensor permission prompt, so the button is required there, not optional. The Touchpad page has no motion button.
+Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. Browsers that ask permission for the sensors, Safari on iOS among them, ask on that tap, so there the button is required, not optional. The Touchpad page has no motion button.
 
 Opened over plain HTTP on a touch device, a gamepad layout shows **Motion needs HTTPS** in that corner instead. When PadForge also serves HTTPS, the note reads **Motion: open over HTTPS**, and tapping it opens the same layout on the secure address.
 
@@ -238,7 +238,7 @@ Check **Also Serve Plain HTTP** on the [Dashboard](../features/dashboard.md). Th
 
 ### The access code
 
-Every request to the plain address needs the card's **Access Code**, ten letters and digits. The address the card shows carries it, as in `http://192.168.1.100:8081/?code=7KQ2M9XH4P`, and so does the QR code beside it. The first page trades the code for a browser cookie that lasts until the browser closes, so the pages and the connection after it need nothing more. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.
+Every request to the plain address needs the card's **Access Code**, ten letters and digits. The address the card shows carries it, as in `http://192.168.1.100:8081/?code=7KQ2M9XH4P`, and so does the QR code beside it. The first page trades the code for a browser-session cookie, so the pages and the connection after it need nothing more. A browser that restores its last session can keep that cookie after it is closed and opened again, and **New Code** is what shuts it out. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.
 
 **New Code** replaces the code and disconnects everyone on the plain address. Their pages stop working until they open the address with the new code. The main address and its clients are not affected, and the main address asks for no code.
 
@@ -250,7 +250,7 @@ The code is stored in `PadForge.xml` encrypted for this PC, so a copy of the fil
 
 ### What plain HTTP gives up
 
-Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows **Motion needs HTTPS**. Through a tunnel or proxy that serves HTTPS the page is secure again, and motion works.
+Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows **Motion needs HTTPS**. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.
 
 Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.
 
@@ -284,7 +284,7 @@ The web controller stays connected for instant input. Updates send the moment yo
 
 ## Rumble feedback
 
-PadForge forwards vibration to the browser, which uses your device's built-in vibration support. Works on phones and tablets with vibration motors. Chrome on Android handles it well. Safari on iOS does not.
+PadForge forwards rumble to the browser, which uses the device's vibration support. It needs a vibration motor and a browser that offers vibration. Chrome on Android vibrates once you have touched the page. Safari on iOS offers no vibration, and other browsers vary. Rumble for a controller paired to the phone, through Browser Gamepad, is a separate path.
 
 ---
 
@@ -300,7 +300,7 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 | Requirement | Details |
 |-------------|---------|
-| **Network** | PC and device on the same local network (Wi-Fi) |
+| **Network** | PC and device on the same local network (Wi-Fi), or a tunnel or reverse proxy to the plain HTTP address |
 | **Port** | TCP 8080 (default), not blocked by the firewall. The optional plain HTTP address adds TCP 8081 (default). |
 | **Orientation** | Every gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout works in portrait or landscape. |
 | **Browser** | Any current browser (Chrome, Safari, Firefox, Edge) |

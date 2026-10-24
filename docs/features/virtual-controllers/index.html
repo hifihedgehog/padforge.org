@@ -5826,7 +5826,7 @@
 </table>
 <p>Acceptance was hardware-verified: SDL3's <code>HIDAPI_DriverSwitch</code> opens the virtual pad, completes init, reads calibrated sticks and buttons, reports gyro + accel through <code>SDL_GetGamepadSensorData</code>, and Steam Input shows a Pro Controller with Nintendo glyphs.</p>
 <h3 id="valve-personas-issues-337-338">Valve personas (issues #337 / #338)<a class="headerlink" href="#valve-personas-issues-337-338" title="Permanent link">&para;</a></h3>
-<p>New in 4.4.0. Five HIDMaestro profiles in the <strong>Extended</strong> category present as Valve hardware. Steam and any SDL game read the real device's USB identity, and the slot submits that device's own input frame instead of the field-encoded raw surface.</p>
+<p>New in 4.4.0. Five HIDMaestro profiles in the <strong>Extended</strong> category present as Valve hardware, and Steam and any SDL game read the real device's USB identity. Four of them submit that device's own input frame instead of the field-encoded raw surface. The plain Steam Deck Controller sends the field-encoded surface.</p>
 <p><img alt="Extended slot on the Pad page with the Steam Deck Controller profile: the config bar with the Extended type chip and the Preset picker, and the Steam Deck body in the 3D preview below" src="../../images/pad-extended-steam-deck.png" /></p>
 <table>
 <thead>

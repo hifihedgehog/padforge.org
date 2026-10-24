@@ -29,7 +29,7 @@ Any app that asks for a "cemuhook motion server" or "DSU server" speaks this for
 
 ## Controllers that report motion
 
-A controller has to ship a gyro and accelerometer for any of this to work.
+Passing a controller's own motion through needs a gyro and accelerometer in that controller. Motion made from other inputs needs neither: assign an input to **Motion Pitch**, **Yaw** or **Roll** on a PlayStation, Nintendo or Valve-profile slot, and DSU broadcasts it from slots 1 to 4 while DSU is on. The table below covers controllers with sensors.
 
 | Reports motion | No motion sensors |
 |---|---|
@@ -71,7 +71,7 @@ Three things still reach it. **Grip** rotates the body gyro, the body accelerome
 
 ### The Mappings grid picks the source device
 
-A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the virtual controller's motion report and the DSU broadcast alike. While either row exists, DSU follows the rows alone. A channel with no row sends nothing, and so does a row emptied of sources. A row whose devices are all offline hands the channel to another row for the same sensor, on any layer, that has a live device, and sends nothing only when no such row exists.
+A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the DSU broadcast, and the virtual controller's motion report where its preset has one: the plain DualShock 3 (SIXAXIS), plain Switch 2 Pro and plain Steam Deck Controller presets have none. While either row exists, DSU follows the rows alone. A channel with no row sends nothing, and so does a row emptied of sources. A row whose devices are all offline hands the channel to another row for the same sensor, on any layer, that has a live device, and sends nothing only when no such row exists.
 
 A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the **Strongest** combine mode uses. The virtual controller itself carries no motion on such a slot. Those slots have no Motion Pitch, Yaw or Roll rows either, so motion from a stick or buttons reaches DSU only from a PlayStation, Nintendo, or Valve slot.
 

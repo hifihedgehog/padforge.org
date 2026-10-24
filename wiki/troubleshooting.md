@@ -130,7 +130,7 @@ The game is reading both the physical controller and PadForge's virtual controll
 
 1. Accept the UAC prompt at PadForge startup. PadForge always runs as administrator. Canceling the prompt blocks startup entirely, so the engine never initializes HIDMaestro.
 2. The HIDMaestro card on the [Settings](features/settings.md) page reads "Installed" once the driver is in Windows' driver store, which happens with the first virtual controller. It does not show whether a virtual controller exists right now.
-3. Check `joy.cpl` (Win+R > `joy.cpl`). If empty, create an Extended slot on the Dashboard first.
+3. Check `joy.cpl` (Win+R > `joy.cpl`). An empty slot creates no controller: start the engine, turn the Extended slot on, assign an online device to it, and look again. If the controller is still missing, read the slot's status.
 4. A failed HIDMaestro setup leaves "Error: Failed to initialize HIDMaestro." in the status bar. It runs again when you turn the slot off and on, change its type or profile, or reconnect its controller, and the message clears once it succeeds.
 5. If a slot stays stuck on "Initializing," check the **Inactivity Timeout** in [Settings](features/settings.md). After the timeout, a slot whose mapped devices stay offline has its live virtual controller torn down to free its kernel slot. The slot configuration (mappings, profile, position) is preserved. The virtual controller recreates automatically when the devices return online.
 

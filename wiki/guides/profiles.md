@@ -30,13 +30,13 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 | Extended slot shape | Per-slot Sticks, Triggers, POVs, and Buttons counts for Extended (HIDMaestro) slots. |
 | Polling rate override | Optional. A profile can carry its own polling rate, set in the profile dialog. While that profile is active it replaces the global Settings value. See [Polling rate override](#polling-rate-override). |
 
-A profile switch changes all of these at once. Physical controllers stay connected. Only the virtual side changes.
+A profile switch changes all of these at once. Its macro list replaces the current macros, and an empty list clears them. A profile saved before macros rode profiles has no macro list and leaves the current macros alone. Physical controllers stay connected. Only the virtual side changes.
 
 ---
 
 ## The Default profile
 
-**Default** loads at startup and runs any time no other profile matches the foreground app. You cannot delete or rename it.
+**Default** loads at startup and runs any time no other profile matches the foreground app. If a named profile was active when PadForge closed, startup puts it back on top of Default, and a launch command from a launcher or script, or auto-switching, can pick another. You cannot delete or rename Default.
 
 Set Default to your general layout, like a standard Xbox pad for platformers. Make game-specific profiles only where you want something different.
 
@@ -52,7 +52,7 @@ PadForge watches the foreground window at about 30 Hz. When the app in front mat
 2. The matching app gains focus. PadForge loads the profile.
 3. An unmatched app gains focus (desktop, browser, etc.). PadForge goes back to Default.
 
-The outgoing profile's state saves before the new one loads. The virtual controllers stay connected through the switch.
+The outgoing profile's state saves before the new one loads. A virtual controller whose slot keeps the same preset stays connected through the switch. One whose preset changes is rebuilt with the new identity, and one the new profile turns off or removes goes away.
 
 Turn it on from the **Profiles** page. Check **Auto-Switch Profiles Based on Foreground Application**.
 
@@ -83,7 +83,7 @@ The fastest way to make a per-game profile:
 3. Name it after the game.
 4. Click **Browse...** and pick the game's executable.
 
-The full working setup is now a saved profile and is ready to auto-switch.
+The working setup is now a saved profile, and it loads on its own when the game comes to the front once **Auto-Switch Profiles Based on Foreground Application** is on. It saves no choice for the Dashboard's OpenTrack and FreeTrack head-tracking switches, so loading it leaves them as they are. Flip either one while the profile is active to save that choice into it.
 
 ---
 
@@ -287,8 +287,12 @@ ends when:
 - you switch profiles yourself, by the status-bar switcher, the **Load** button on
   this page (loading **Default** reverts), a controller shortcut, or a
   [Web Menus](web-controller.md#profiles-from-the-phone) phone,
-- you uncheck **Allow External Control by Launchers and Scripts**,
+- you uncheck **Allow External Control by Launchers and Scripts** while the engine runs,
 - the engine stops, or PadForge restarts.
+
+One exception: a profile set by `--profile` as PadForge starts, with **Allow External Control by Launchers
+and Scripts** off, stays held through an engine stop. Switch profiles yourself or restart PadForge to end it.
+The launch command runs once, so restarting the engine does not apply it again.
 
 A `deactivate` and an unchecked box both tell the foreground monitor to re-read
 the window in front, so a still-focused game picks its own rule back up on the
@@ -373,7 +377,7 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 | Flight sim on Extended (HIDMaestro) | Make an "MSFS" profile that uses an Extended slot instead of Xbox. Map axes to flight-stick axes. Add `FlightSimulator.exe`. Other games keep the Default Xbox profile. |
 | Switch emulator with a Nintendo pad | Make a profile that uses a Nintendo slot instead of Xbox. The emulator sees a Switch Pro Controller and shows Nintendo button prompts. Add the emulator's executable. |
 | Several emulators, one profile | Make an "Emulators" profile and add `Dolphin.exe`, `Cemu.exe`, and `Ryujinx.exe`. All three load the same setup. |
-| Macros for one game only | Make a profile with D-pad-to-keyboard macros for an MMO. Add the MMO executable. Default has no macros, so they only run when the MMO is in front. |
+| Macros for one game only | Make a profile with D-pad-to-keyboard macros for an MMO and add the MMO executable. Keep Default free of those macros. With auto-switching on, the MMO profile loads when the game comes to the front and Default returns when you leave it. |
 | Quick on/off from the couch | Bind **Toggle Virtual Controllers Disabled** to LS + RS. Press it to make every virtual pad go away (for keyboard play), press again to bring them all back. |
 
 ---
@@ -383,7 +387,7 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 - Set up Default first. It is your everyday layout.
 - **Save As** from a working setup is faster than building a profile from scratch.
 - Test auto-switch by Alt+Tabbing between your game and another app. Watch the FOREGROUND readout and the active profile name.
-- Macros save per profile. Per-game macros only run when their game is in front.
+- Macros save per profile and run while their profile is active. Auto-switching picks the profile by the game in front, but a profile you load by hand, or one a launcher holds, keeps its macros after you leave the game.
 - Physical device connections stay open across switches. Only the virtual side changes.
 - Export profiles to `.pfprofile` files to back them up or share them.
 - Controller shortcuts beat Alt+Tabbing for mid-game profile changes.
