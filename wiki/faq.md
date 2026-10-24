@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-*The questions people ask most in PadForge's discussions and issues, answered in short, with a link to the full story.*
+*The questions people ask most about PadForge, answered in short, with a link to the full story.*
 
 ---
 
@@ -10,6 +10,10 @@
 
 No. PadForge is free, with no subscription, no paid tier and no nag screens. Controllers, adapters, games and any optional third-party software cost what they cost.
 
+### Which versions of Windows does PadForge run on?
+
+Windows 10 and 11 on x64. Every release also carries a preliminary native build for Windows 11 on ARM64, which has not run on ARM64 hardware yet. Razer Sensa HD haptics, Logitech G-keys and the VR headset and controllers through SteamVR are missing from it until their vendors ship ARM64 libraries. More: [Windows on ARM](start/installation.md#windows-on-arm-preliminary).
+
 ### Can I stream, record or use PadForge at work?
 
 Yes. Playing games with PadForge, streaming them, recording videos and using it on a work machine draw no license action. The license's NonCommercial term covers the software itself: it stops anyone from redistributing PadForge, modified or not, for profit. The maintainer said so in [discussion #304](https://github.com/hifihedgehog/PadForge/discussions/304), and [LICENSE](https://github.com/hifihedgehog/PadForge/blob/main/LICENSE) holds the full terms.
@@ -17,6 +21,10 @@ Yes. Playing games with PadForge, streaming them, recording videos and using it 
 ### Is PadForge portable? What does another PC need?
 
 PadForge is one executable in a ZIP, and it keeps its settings in `PadForge.xml` beside it, so the folder moves as a unit. Drivers do not travel with it. Each PC installs HIDMaestro the first time a virtual controller is created there, and hiding, MIDI, Bluetooth DualShock 3 input and VR each bring their own installs. More: [Requirements](start/installation.md#requirements).
+
+### Can PadForge import my DS4Windows, reWASD or SimHub setup?
+
+No. PadForge imports its own profile packages and translates supported Steam community layouts, but it reads no DS4Windows, reWASD or SimHub file. Rebuild the setup in PadForge one game at a time, and keep the old tool until the new setup does everything the game needs. More: [Switching from Another Tool](guides/switching.md).
 
 ### I hid my controller, but the game sees no controller at all. What should I check?
 
@@ -85,6 +93,14 @@ No. The picker's device filter only narrows the inputs offered, and the mappings
 ### What do the Xbox Elite paddles need?
 
 Over USB or the Xbox Wireless Adapter, the paddles read through Windows' GameInput service, which needs Windows 11 24H2 or 25H2 at build 26100.8973 or 26200.8973 or later. The GameInput redistributable is not needed. An Elite Series 2 over Bluetooth uses its own path on any Windows, and the first Elite has no Bluetooth. Each paddle is its own input, separate from the Xbox buttons. More: [Xbox Elite Paddles Do Nothing](troubleshooting.md#xbox-elite-paddles-do-nothing).
+
+### Can my mouse or keyboard light up and rumble with a virtual controller?
+
+Yes, once it is assigned to a virtual controller on the Devices page. Check **Control This Device’s Lighting** on its **Lighting** tab and it takes the controller's lighting. PadForge lights Logitech, Razer and SteelSeries devices itself while their own software is closed, and through that software while it runs. It also lights any device Windows Dynamic Lighting can drive, while Dynamic Lighting is off for that device. Rumble reaches the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710 through SteelSeries GG, and Logitech's iFeel mice after a driver switch, which stops Windows using the mouse as a pointer until its driver is restored. More: [Mice, Keyboards and Vendor Rows](features/peripherals.md).
+
+### Does a MIDI slot need Windows MIDI Services?
+
+No. Without it, PadForge uses the legacy MIDI API that every Windows has, and each MIDI slot sends to an existing port you pick on the slot's page. With it, each MIDI slot gets its own port that any music app can open, named PadForge MIDI 1, PadForge MIDI 2 and so on. Microsoft removed its runtime installers on October 1, 2026, so on Windows 11 24H2 and later, until Windows carries the API itself, **Install** on the Windows MIDI Services card in Settings adds PadForge's own build of the runtime. More: [Windows MIDI Services](features/driver-management.md#windows-midi-services).
 
 ---
 
@@ -249,6 +265,10 @@ The tab also drives the physical device assigned to the slot. **Audio Bass Rumbl
 ### Are Browser Gamepad, phone motion and Web Menus the same thing?
 
 No. **Browser Gamepad** forwards a controller paired to the phone. Phone motion reads the phone's own sensors and needs the HTTPS address. **Web Menus** shows a slot's Touch Grid menus as tiles to tap. More: [Browser Gamepad](guides/web-controller.md#browser-gamepad-a-controller-paired-to-the-phone).
+
+### Why does the phone page say Motion needs HTTPS?
+
+Browsers give sensor readings only to pages on a secure connection. PadForge serves the controller over HTTPS whenever it can bind its self-signed certificate to the port. If the binding fails it falls back to plain HTTP, where everything works except phone motion and Browser Gamepad's keep-the-screen-on request, and the Dashboard card says why under its status line. When another program's certificate holds the port, choosing another port brings HTTPS back. A page opened at the plain HTTP address while PadForge also serves HTTPS shows **Motion: open over HTTPS** instead, and tapping it opens the same layout on the secure address. More: [Phone motion](guides/web-controller.md#phone-motion).
 
 ### Can the streaming PC assign its web controller to slots on the gaming PC?
 
