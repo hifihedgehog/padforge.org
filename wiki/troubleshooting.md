@@ -769,7 +769,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | No rumble | Overall Gain > 0%, motor strength > 0%, Test Rumble |
 | Audio bass rumble flat | Check audio playing, raise sensitivity |
 | Bass shakers silent | Check the Bass Shakers status line. Game feedback and Test Rumble route to audio, macro rumble does not |
-| Extended controller not in joy.cpl | Create an Extended slot. Turn it off and on to run a failed HIDMaestro setup again |
+| Extended controller not in joy.cpl | Start the engine, turn the Extended slot on and assign an online device to it. An empty slot creates no controller. Turn the slot off and on to run a failed HIDMaestro setup again |
 | HIDMaestro left after removing PadForge | **Settings → HIDMaestro Driver → Uninstall** first, or `HIDMaestroUninstall.exe` from the HIDMaestro release |
 | Extended FFB silent | Game must send HID PID 1.0 effects, check gain |
 | MIDI button dimmed | No MIDI API started. Read the Windows MIDI Services card on Settings |
