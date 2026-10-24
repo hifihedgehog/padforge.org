@@ -91,6 +91,7 @@ nav:
       - Remote Link: guides/remote-link.md
       - Steering with any stick: guides/steering.md
       - Screen readers and the keyboard: guides/accessibility.md
+      - Switching from another tool: guides/switching.md
   - Features:
       - features/index.md
       - Dashboard: features/dashboard.md

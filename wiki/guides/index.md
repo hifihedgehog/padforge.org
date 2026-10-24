@@ -17,6 +17,7 @@ device, except Remote Link, which needs PadForge on both PCs.
 | [Remote Link](remote-link.md) | A controller on one PC driving games on another, on your network or across the internet |
 | [Steering with any stick](steering.md) | Winding-wheel steering on a stick, d-pad, or motion |
 | [Screen readers and the keyboard](accessibility.md) | PadForge spoken by NVDA, and the keys for the custom controls |
+| [Switching from another tool](switching.md) | A setup from Steam Input, DS4Windows, reWASD or SimHub rebuilt in PadForge, with a way back |
 
 ---
 
