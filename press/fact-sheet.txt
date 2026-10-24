@@ -42,6 +42,8 @@ Driver management: https://padforge.org/docs/features/driver-management/
 Gyro controls: https://padforge.org/docs/guides/gyro/
 Steam community imports: https://padforge.org/docs/guides/steam-workshop-import/
 Phone and browser controllers: https://padforge.org/docs/guides/web-controller/
+Reviewer brief (3 pages): https://padforge.org/press/PadForge-5.1-reviewer-brief.pdf
+Reviewer field guide (24 pages): https://padforge.org/press/PadForge-5.1-reviewer-field-guide.pdf
 
 Notes
 The direct lighting and rumble paths for mice and keyboards follow the
