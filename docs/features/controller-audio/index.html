@@ -4252,6 +4252,7 @@
 </tbody>
 </table>
 <p>Headphone Volume sets the jack's level from 0 to 100, and the <strong>Raise Headphone Volume</strong> and <strong>Lower Headphone Volume</strong> macro actions step it by 10%. PadForge reads the jack from the pad's own reports, so Follow Headphone Jack works with or without a virtual controller on the slot.</p>
+<p>A headset microphone plugged into the jack works too. When the slot's virtual controller carries audio, the microphone becomes that virtual controller's microphone in Windows, so a game or chat app records from it, and <a href="../voice-macros/">Voice Macros</a> can listen to it as well. PadForge turns the controller's microphone on only while something records or listens, since an open microphone uses Bluetooth bandwidth.</p>
 <p>The stream to the pad keeps running through quiet stretches instead of stopping two seconds after the last sound. It sends silence instead, as DS4-Sound-Link does, whose notes say a stop makes the controller pop and power down its headphone amplifier. It ends when nothing on the slot plays to the pad anymore: Mirror System Audio is off, no macro sound plays on the controller, and no virtual controller sends it audio.</p>
 <hr />
 <h2 id="crossfeed-eq-and-limiter">Crossfeed, EQ, and limiter<a class="headerlink" href="#crossfeed-eq-and-limiter" title="Permanent link">&para;</a></h2>

@@ -3667,7 +3667,7 @@
 
 <h1 id="voice-macros">Voice Macros<a class="headerlink" href="#voice-macros" title="Permanent link">&para;</a></h1>
 <p><em>Say a phrase and it presses a button. Register phrases once, then bind them like any other input: mappings, macros, shift layers.</em></p>
-<p>PadForge listens for short spoken phrases on any microphone it can reach, including the one inside a DualSense. Each registered phrase becomes a button that presses for a moment when you say it. Recognition runs fully offline through the Vosk engine, whose English model ships inside PadForge rather than downloading, and anything that is not a registered phrase decodes as unknown and fires nothing, so a cough or a game sound does not trigger your macros.</p>
+<p>PadForge listens for short spoken phrases on any microphone it can reach, including the one inside a DualSense and a headset plugged into a DualShock 4 on Bluetooth. Each registered phrase becomes a button that presses for a moment when you say it. Recognition runs fully offline through the Vosk engine, whose English model ships inside PadForge rather than downloading, and anything that is not a registered phrase decodes as unknown and fires nothing, so a cough or a game sound does not trigger your macros.</p>
 <hr />
 <h2 id="where-phrases-live">Where phrases live<a class="headerlink" href="#where-phrases-live" title="Permanent link">&para;</a></h2>
 <p>Phrases follow the microphone that hears them.</p>
@@ -3691,16 +3691,20 @@
 <td>Bluetooth DualSense</td>
 <td>No system microphone exists, so PadForge opens the controller's mic itself and the phrases ride the pad directly</td>
 </tr>
+<tr>
+<td>Bluetooth DualShock 4 (added after 5.1.0)</td>
+<td>A headset plugged into the controller's jack. PadForge reads its microphone from the controller, so the phrases ride the pad directly</td>
+</tr>
 </tbody>
 </table>
-<p>Every microphone row exposes <strong>Any Phrase</strong> plus one button per registered phrase. A DualSense row additionally offers <strong>Any Voice Phrase</strong> and one <strong>Voice Phrase</strong> source per phrase in its mapping dropdown, alongside its sticks and buttons.</p>
+<p>Every microphone row exposes <strong>Any Phrase</strong> plus one button per registered phrase. A DualSense row, or a Bluetooth DualShock 4 row, additionally offers <strong>Any Voice Phrase</strong> and one <strong>Voice Phrase</strong> source per phrase in its mapping dropdown, alongside its sticks and buttons.</p>
 <hr />
 <p><img alt="A microphone row on the Devices page, with Manage Voice Macros" src="../../images/devices-voice.png" /></p>
 <h2 id="registering-phrases">Registering phrases<a class="headerlink" href="#registering-phrases" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Manage Voice Macros</strong> from a Microphone row or a Bluetooth DualSense row on the Devices page. The dialog holds everything:</p>
+<p>Open <strong>Manage Voice Macros</strong> from a Microphone row, a Bluetooth DualSense row or a Bluetooth DualShock 4 row on the Devices page. The dialog holds everything:</p>
 <ul>
 <li><strong>Enable Voice Macros</strong> turns listening on.</li>
-<li><strong>Listening</strong> picks <strong>Always</strong> or <strong>Push to Talk</strong>. Always keeps the microphone open. Push to Talk listens only while a bound <strong>Voice Listen (While Held)</strong> macro is held, which also keeps a Bluetooth DualSense's mic session closed while idle, costing no bandwidth or battery.</li>
+<li><strong>Listening</strong> picks <strong>Always</strong> or <strong>Push to Talk</strong>. Always keeps the microphone open. Push to Talk listens only while a bound <strong>Voice Listen (While Held)</strong> macro is held, which also keeps a Bluetooth DualSense's mic session closed and a Bluetooth DualShock 4's microphone off while idle, costing no bandwidth or battery.</li>
 <li><strong>Minimum Confidence</strong> sets how sure the recognizer must be before a phrase fires. It defaults to 0.80, and the slider runs 0.50 to 0.99. Raise it if stray speech triggers macros, lower it if your phrases are missed.</li>
 <li>Type a phrase, give it a name, and press <strong>Register</strong>. The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below <strong>Minimum Confidence</strong> or the talk key was up.</li>
 </ul>
@@ -3710,7 +3714,7 @@
 <h2 id="binding-phrases">Binding phrases<a class="headerlink" href="#binding-phrases" title="Permanent link">&para;</a></h2>
 <p>A phrase button binds anywhere a real button does:</p>
 <ul>
-<li><strong>Mappings</strong>. Pick <strong>Voice Phrase: name</strong> from a DualSense row's input dropdown, or the named phrase button on a Microphone row, and target any output.</li>
+<li><strong>Mappings</strong>. Pick <strong>Voice Phrase: name</strong> from a DualSense or Bluetooth DualShock 4 row's input dropdown, or the named phrase button on a Microphone row, and target any output.</li>
 <li><strong>Macros</strong>. A phrase works as a macro trigger, picked from the trigger list or recorded by simply saying it while recording.</li>
 <li><strong>Shift layers</strong>. A phrase works as a layer activator. A recognition is a 175 ms pulse rather than a held key, so use <strong>Toggle</strong> mode: say the phrase to enter the layer, say it again to leave.</li>
 <li><strong>Recording</strong>. All three recorders (mapping rows, macro triggers, expression variables) hear phrases and capture the specific phrase you said, not the Any button.</li>
@@ -3718,14 +3722,13 @@
 <p>The binding stores the phrase's stable button, so renaming a phrase never breaks it.</p>
 <hr />
 <h2 id="watching-it-live">Watching it live<a class="headerlink" href="#watching-it-live" title="Permanent link">&para;</a></h2>
-<p>Every DualSense and Microphone row's details pane carries a <strong>Voice Macros</strong> section at the end of the raw input state. Each registered phrase lights the moment it is recognized, which is the quickest way to check that listening works before binding anything.</p>
+<p>Every DualSense, Bluetooth DualShock 4 and Microphone row's details pane carries a <strong>Voice Macros</strong> section at the end of the raw input state. Each registered phrase lights the moment it is recognized, which is the quickest way to check that listening works before binding anything.</p>
 <hr />
 <h2 id="limitations-stated-plainly">Limitations, stated plainly<a class="headerlink" href="#limitations-stated-plainly" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The recognition model is English (en-US). Vosk drops any phrase word missing from that model's vocabulary, so a phrase in another language, or one built on a word the model does not know, never fires its own button while Vosk is listening.</li>
 <li>A recognition is a single 175 ms press. Holding a note does not hold the button.</li>
-<li>The DualShock 4 is not supported. Its microphone is a headset-jack passthrough, not a controller mic.</li>
-<li>On the full DualSense profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
+<li>On the full DualSense or DualShock 4 profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
 <li>The first time voice macros are on with a phrase registered, PadForge unpacks the model from inside itself, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.</li>
 </ul>
 <p><em>Last updated for PadForge 5.1.0.</em></p>

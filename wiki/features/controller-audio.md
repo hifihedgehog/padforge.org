@@ -146,6 +146,8 @@ A DualShock 4 on Bluetooth gets two of the DualSense's rows under Master Volume,
 
 Headphone Volume sets the jack's level from 0 to 100, and the **Raise Headphone Volume** and **Lower Headphone Volume** macro actions step it by 10%. PadForge reads the jack from the pad's own reports, so Follow Headphone Jack works with or without a virtual controller on the slot.
 
+A headset microphone plugged into the jack works too. When the slot's virtual controller carries audio, the microphone becomes that virtual controller's microphone in Windows, so a game or chat app records from it, and [Voice Macros](voice-macros.md) can listen to it as well. PadForge turns the controller's microphone on only while something records or listens, since an open microphone uses Bluetooth bandwidth.
+
 The stream to the pad keeps running through quiet stretches instead of stopping two seconds after the last sound. It sends silence instead, as DS4-Sound-Link does, whose notes say a stop makes the controller pop and power down its headphone amplifier. It ends when nothing on the slot plays to the pad anymore: Mirror System Audio is off, no macro sound plays on the controller, and no virtual controller sends it audio.
 
 ---
