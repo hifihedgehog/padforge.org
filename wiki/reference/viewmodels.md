@@ -1660,7 +1660,7 @@ Audio-tab surface over the per-device crossfeed / EQ / limiter fields on `Device
 
 | Member | Type | Description |
 |--------|------|-------------|
-| `SelectedDeviceHasDspChain` | `bool` (computed, `PadViewModel.cs`) | True when the selected device is a Sony pad whose audio rides an `AudioPassthroughService` sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adaptor (PID 0BA0), or a DualShock 4 over Bluetooth. |
+| `SelectedDeviceHasDspChain` | `bool` (computed, `PadViewModel.cs`) | True when the selected device is a Sony pad whose audio rides an `AudioPassthroughService` sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), or a DualShock 4 over Bluetooth. |
 | `EqBands` | `ObservableCollection<EqBandVm>` | Grid rows decoded from `DeviceSlotConfig.AudioEqBands`. Every row edit re-encodes the whole list back into the config (`PushEqBands`). |
 | `RefreshEqBands()` | method | Rebuilds the rows from the selected device's config on every device switch and clears the import status. |
 | `AddEqBandCommand` / `RemoveEqBandCommand` / `ClearEqBandsCommand` | `RelayCommand` (`RemoveEqBandCommand` takes the `EqBandVm` row) | Add a default band, remove one row, or clear the list. Each pushes the encoded list. |
@@ -3243,8 +3243,8 @@ Per (slot, device) like the rest of the bag, never gated on OutputType. The chai
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `HeadphoneVolume` | `int` | `100` | Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. `0%` writes `0x00`. Owned by the Audio-tab card and the `HeadphoneVolumeUp` / `HeadphoneVolumeDown` macro actions. |
-| `AudioOutputPath` | `AudioOutputPath` | `Automatic` | Where the DualSense plays its audio (output report byte 7 bits 4–5). |
+| `HeadphoneVolume` | `int` | `100` | Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. `0%` writes `0x00`. Owned by the Audio-tab card and the `HeadphoneVolumeUp` / `HeadphoneVolumeDown` macro actions. On a Bluetooth DualShock 4 (#528) the same percent maps onto 0x00 to 0x4F for its left and right headphone bytes. |
+| `AudioOutputPath` | `AudioOutputPath` | `Automatic` | Where the DualSense plays its audio (output report byte 7 bits 4–5). On a Bluetooth DualShock 4 (#528) it picks the stream's target, 0x24 for the two headphone routes and 0x02 otherwise, and which output's volume the route mutes. |
 | `Ds5AudioBufferLength` | `int` | `48` | DualSense Bluetooth audio buffer length (#314): the packet 0x11 header byte governing the transport that carries speaker audio, haptics, and microphone capture together. Clamped 16–255, defaulting to `AudioPassthroughService.Ds5AudioBufferLengthDefault`. Lower is less delay and more dropout risk. |
 
 | Command | Description |
@@ -3337,7 +3337,7 @@ Each control has a matching `Reset…Command` (mirroring the Sticks / Triggers p
 
 **AdaptiveTriggerMode:** `Off`(0), `Feedback`(1), `Weapon`(2), `Vibration`(3), `MultiplePositionFeedback`(4), `SlopeFeedback`(5), `MultiplePositionVibration`(6). Sony's seven PS5 SDK effect modes.
 
-**AudioOutputPath:** `Automatic`(0), `StereoHeadset`(1), `MonoHeadset`(2), `HeadsetAndSpeaker`(3), `SpeakerOnly`(4), `FollowHeadphoneJack`(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. `Automatic` writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. `FollowHeadphoneJack` tracks the pad's own jack detect. The jack bit is read by `AudioPassthroughService`'s sink-owned `JackWatch` on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), independent of any persona lane. Plugged resolves to `StereoHeadset`, unplugged to `SpeakerOnly`, and no reading to the default. Persisted numerically, so the members are append-only.
+**AudioOutputPath:** `Automatic`(0), `StereoHeadset`(1), `MonoHeadset`(2), `HeadsetAndSpeaker`(3), `SpeakerOnly`(4), `FollowHeadphoneJack`(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. `Automatic` writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. `FollowHeadphoneJack` tracks the pad's own jack detect. The jack bit is read by `AudioPassthroughService`'s sink-owned `JackWatch` on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), and on a Bluetooth DualShock 4 from bit 5 of the status byte at offset 32 (#528), independent of any persona lane. Plugged resolves to `StereoHeadset`, unplugged to `SpeakerOnly`, and no reading to the default. Persisted numerically, so the members are append-only.
 
 **MicLedMode:** `Off`(0), `Solid`(1), `Pulse`(2), `FollowDeviceMute`(3).
 

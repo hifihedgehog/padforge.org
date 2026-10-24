@@ -14606,7 +14606,7 @@
 <tr>
 <td><code>SelectedDeviceHasDspChain</code></td>
 <td><code>bool</code> (computed, <code>PadViewModel.cs</code>)</td>
-<td>True when the selected device is a Sony pad whose audio rides an <code>AudioPassthroughService</code> sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adaptor (PID 0BA0), or a DualShock 4 over Bluetooth.</td>
+<td>True when the selected device is a Sony pad whose audio rides an <code>AudioPassthroughService</code> sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), or a DualShock 4 over Bluetooth.</td>
 </tr>
 <tr>
 <td><code>EqBands</code></td>
@@ -19981,13 +19981,13 @@
 <td><code>HeadphoneVolume</code></td>
 <td><code>int</code></td>
 <td><code>100</code></td>
-<td>Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. <code>0%</code> writes <code>0x00</code>. Owned by the Audio-tab card and the <code>HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> macro actions.</td>
+<td>Headphone-jack hardware volume percent, clamped 0–100. Maps onto the DS5 output report's VolumeHeadphones byte over Sony's own scePad window. <code>0%</code> writes <code>0x00</code>. Owned by the Audio-tab card and the <code>HeadphoneVolumeUp</code> / <code>HeadphoneVolumeDown</code> macro actions. On a Bluetooth DualShock 4 (#528) the same percent maps onto 0x00 to 0x4F for its left and right headphone bytes.</td>
 </tr>
 <tr>
 <td><code>AudioOutputPath</code></td>
 <td><code>AudioOutputPath</code></td>
 <td><code>Automatic</code></td>
-<td>Where the DualSense plays its audio (output report byte 7 bits 4–5).</td>
+<td>Where the DualSense plays its audio (output report byte 7 bits 4–5). On a Bluetooth DualShock 4 (#528) it picks the stream's target, 0x24 for the two headphone routes and 0x02 otherwise, and which output's volume the route mutes.</td>
 </tr>
 <tr>
 <td><code>Ds5AudioBufferLength</code></td>
@@ -20349,7 +20349,7 @@
 <p>Each control has a matching <code>Reset…Command</code> (mirroring the Sticks / Triggers per-row reset pattern), plus the palette add/remove commands <code>AddPaletteColorCommand</code>, <code>RemovePaletteColorCommand</code>, <code>AddInputReactivePaletteColorCommand</code>, <code>RemoveInputReactivePaletteColorCommand</code>, <code>ResetInputReactivePaletteCommand</code>, <code>ResetPaletteCommand</code>.</p>
 <h3 id="enums-and-helper-classes-deviceslotconfigcs">Enums and helper classes (DeviceSlotConfig.cs)<a class="headerlink" href="#enums-and-helper-classes-deviceslotconfigcs" title="Permanent link">&para;</a></h3>
 <p><strong>AdaptiveTriggerMode:</strong> <code>Off</code>(0), <code>Feedback</code>(1), <code>Weapon</code>(2), <code>Vibration</code>(3), <code>MultiplePositionFeedback</code>(4), <code>SlopeFeedback</code>(5), <code>MultiplePositionVibration</code>(6). Sony's seven PS5 SDK effect modes.</p>
-<p><strong>AudioOutputPath:</strong> <code>Automatic</code>(0), <code>StereoHeadset</code>(1), <code>MonoHeadset</code>(2), <code>HeadsetAndSpeaker</code>(3), <code>SpeakerOnly</code>(4), <code>FollowHeadphoneJack</code>(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. <code>Automatic</code> writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. <code>FollowHeadphoneJack</code> tracks the pad's own jack detect. The jack bit is read by <code>AudioPassthroughService</code>'s sink-owned <code>JackWatch</code> on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), independent of any persona lane. Plugged resolves to <code>StereoHeadset</code>, unplugged to <code>SpeakerOnly</code>, and no reading to the default. Persisted numerically, so the members are append-only.</p>
+<p><strong>AudioOutputPath:</strong> <code>Automatic</code>(0), <code>StereoHeadset</code>(1), <code>MonoHeadset</code>(2), <code>HeadsetAndSpeaker</code>(3), <code>SpeakerOnly</code>(4), <code>FollowHeadphoneJack</code>(5). Values 1–4 map to firmware paths 0–3, the four names in duaLib's scePad surface. <code>Automatic</code> writes nothing and keeps the #83 behavior: firmware routing, with PadForge forcing the speaker only while it plays sounds there. <code>FollowHeadphoneJack</code> tracks the pad's own jack detect. The jack bit is read by <code>AudioPassthroughService</code>'s sink-owned <code>JackWatch</code> on either transport (USB input report 0x01 or Bluetooth 0x31, the duaLib PluggedHeadphones status bit), and on a Bluetooth DualShock 4 from bit 5 of the status byte at offset 32 (#528), independent of any persona lane. Plugged resolves to <code>StereoHeadset</code>, unplugged to <code>SpeakerOnly</code>, and no reading to the default. Persisted numerically, so the members are append-only.</p>
 <p><strong>MicLedMode:</strong> <code>Off</code>(0), <code>Solid</code>(1), <code>Pulse</code>(2), <code>FollowDeviceMute</code>(3).</p>
 <p><strong>PlayerLedMode:</strong> <code>Off</code>(0), <code>Player1</code>(1), <code>Player2</code>(2), <code>Player3</code>(3), <code>Player4</code>(4), <code>All</code>(5), <code>PlayerNumber</code>(6, default). Sequential to map 1:1 with the dropdown.</p>
 <p><strong>PlayerLedBrightness:</strong> <code>High</code>(0), <code>Medium</code>(1), <code>Low</code>(2).</p>
