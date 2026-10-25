@@ -14677,6 +14677,56 @@
 </tbody>
 </table>
 <p><strong>Reset commands:</strong> <code>ResetForceAllCommand</code>, <code>ResetOverallGainCommand</code>, <code>ResetLeftMotorCommand</code>, <code>ResetRightMotorCommand</code>, <code>ResetAudioRumbleAllCommand</code>, <code>ResetAudioSensitivityCommand</code>, <code>ResetAudioCutoffCommand</code>, <code>ResetAudioLeftMotorCommand</code>, <code>ResetAudioRightMotorCommand</code>.</p>
+<p><strong>Steering Angle Rumble (per-device):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Range</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SteeringAngleRumbleEnabled</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>-</td>
+<td>Turns the selected virtual stick axis into continuous rumble.</td>
+</tr>
+<tr>
+<td><code>SteeringAngleRumbleAxis</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>0–3</td>
+<td>Left Stick X, Left Stick Y, Right Stick X, Right Stick Y.</td>
+</tr>
+<tr>
+<td><code>SteeringAngleRumbleMotor</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>0–2</td>
+<td>Split by Direction, Left Motor, Right Motor (#510). The setter reads any other value as 0, as the engine does, so the picker shows what plays.</td>
+</tr>
+<tr>
+<td><code>SteeringAngleRumbleStrength</code></td>
+<td><code>int</code></td>
+<td><code>50</code></td>
+<td>0–100</td>
+<td>Rumble at full travel, %.</td>
+</tr>
+<tr>
+<td><code>SteeringAngleRumbleDeadzone</code></td>
+<td><code>int</code></td>
+<td><code>2</code></td>
+<td>0–25</td>
+<td>Travel around center that adds no rumble, %.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reset commands:</strong> <code>ResetSteeringAngleRumbleCommand</code> (the card's Reset All, also run by <code>ResetForceAllCommand</code> and <code>ResetAllSettings</code>), <code>ResetSteeringAngleRumbleEnabledCommand</code>, <code>ResetSteeringAngleRumbleAxisCommand</code>, <code>ResetSteeringAngleRumbleMotorCommand</code>, <code>ResetSteeringAngleRumbleStrengthCommand</code>, <code>ResetSteeringAngleRumbleDeadzoneCommand</code>.</p>
 <p><strong>Constant Force (per-device, FFB-capable + scalar-rumble pads):</strong></p>
 <table>
 <thead>

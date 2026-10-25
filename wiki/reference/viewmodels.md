@@ -1646,6 +1646,18 @@ Per-(slot, device) mouse-gesture settings. Twin of the Touchpad partial's Load/S
 
 **Reset commands:** `ResetForceAllCommand`, `ResetOverallGainCommand`, `ResetLeftMotorCommand`, `ResetRightMotorCommand`, `ResetAudioRumbleAllCommand`, `ResetAudioSensitivityCommand`, `ResetAudioCutoffCommand`, `ResetAudioLeftMotorCommand`, `ResetAudioRightMotorCommand`.
 
+**Steering Angle Rumble (per-device):**
+
+| Property | Type | Default | Range | Description |
+|----------|------|---------|-------|-------------|
+| `SteeringAngleRumbleEnabled` | `bool` | `false` | - | Turns the selected virtual stick axis into continuous rumble. |
+| `SteeringAngleRumbleAxis` | `int` | `0` | 0–3 | Left Stick X, Left Stick Y, Right Stick X, Right Stick Y. |
+| `SteeringAngleRumbleMotor` | `int` | `0` | 0–2 | Split by Direction, Left Motor, Right Motor (#510). The setter reads any other value as 0, as the engine does, so the picker shows what plays. |
+| `SteeringAngleRumbleStrength` | `int` | `50` | 0–100 | Rumble at full travel, %. |
+| `SteeringAngleRumbleDeadzone` | `int` | `2` | 0–25 | Travel around center that adds no rumble, %. |
+
+**Reset commands:** `ResetSteeringAngleRumbleCommand` (the card's Reset All, also run by `ResetForceAllCommand` and `ResetAllSettings`), `ResetSteeringAngleRumbleEnabledCommand`, `ResetSteeringAngleRumbleAxisCommand`, `ResetSteeringAngleRumbleMotorCommand`, `ResetSteeringAngleRumbleStrengthCommand`, `ResetSteeringAngleRumbleDeadzoneCommand`.
+
 **Constant Force (per-device, FFB-capable + scalar-rumble pads):**
 
 | Property | Type | Default | Range | Description |

@@ -66,12 +66,13 @@ The **Steering Angle Rumble** card adds continuous feedback as the selected virt
 | --- | --- | --- |
 | Enable Steering Angle Rumble | Off | On / Off |
 | Virtual Axis | Left Stick X | Left Stick X/Y or Right Stick X/Y |
+| Motor | Split by Direction | Split by Direction, Left Motor, Right Motor |
 | Strength | 50% | 0-100% |
 | Center Deadzone | 2% | 0-25% |
 
-Negative axis movement drives the left, low-frequency rumble channel. Positive movement drives the right, high-frequency channel. Intensity rises linearly from the edge of the center deadzone to the chosen strength at full travel. Center adds no rumble. Games and other enabled effects can still vibrate there.
+With Split by Direction, negative axis movement drives the left, low-frequency motor and positive movement drives the right, high-frequency motor. The two motors sit in different places and spin different weights on most pads, so the same angle can feel different on each side. Left Motor or Right Motor puts both directions on that one motor, so a turn of the same size feels the same either way. Intensity rises linearly from the edge of the center deadzone to the chosen strength at full travel. Center adds no rumble. Games and other enabled effects can still vibrate there.
 
-The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward. Game rumble and the steering cue combine by taking the stronger value on each motor.
+The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward, as they do to game rumble. With Swap on, the picked motor swaps too. Game rumble and the steering cue combine by taking the stronger value on each motor.
 
 This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Extended, Nintendo, Keyboard + Mouse, MIDI, and VR outputs get no steering cue. It reads the stick axes of an Xbox or PlayStation virtual controller only. Physical motor placement depends on the device.
 

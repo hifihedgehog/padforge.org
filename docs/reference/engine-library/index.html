@@ -13947,7 +13947,7 @@
 <td><code>string</code></td>
 <td><code>[XmlElement]</code></td>
 <td><code>"0"</code></td>
-<td>"1" turns a mapped virtual stick axis into continuous rumble: left motor for negative deflection, right for positive</td>
+<td>"1" turns a mapped virtual stick axis into continuous rumble, on the motors <code>SteeringAngleRumbleMotor</code> picks</td>
 </tr>
 <tr>
 <td><code>SteeringAngleRumbleAxis</code></td>
@@ -13969,6 +13969,13 @@
 <td><code>[XmlElement]</code></td>
 <td><code>"2"</code></td>
 <td>0–25%</td>
+</tr>
+<tr>
+<td><code>SteeringAngleRumbleMotor</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"0"</code></td>
+<td>0 = split by direction (left motor for negative deflection, right for positive), 1 = left motor for both, 2 = right motor for both (#510). <code>SteeringAngleRumble.Compute</code> reads any other value as 0</td>
 </tr>
 <tr>
 <td><code>SteeringLockRumbleEnabled</code> / <code>SteeringLockTriggerVibEnabled</code> / <code>SteeringLockLightbarEnabled</code> / <code>SteeringLockATResistanceEnabled</code></td>

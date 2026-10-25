@@ -7290,7 +7290,7 @@
 <li><strong>Thumbstick axes</strong> (8): LeftThumbAxisX, LeftThumbAxisY, RightThumbAxisX, RightThumbAxisY, LeftThumbAxisXNeg, LeftThumbAxisYNeg, RightThumbAxisXNeg, RightThumbAxisYNeg</li>
 <li><strong>Touchpad</strong> (7): TouchpadX1, TouchpadY1, TouchpadX2, TouchpadY2, TouchpadContact1, TouchpadContact2, TouchpadClick</li>
 <li><strong>Deadzones and curves</strong> (36): LeftThumbDeadZoneX/Y, RightThumbDeadZoneX/Y, LeftThumbDeadZoneShape, RightThumbDeadZoneShape, LeftThumbAntiDeadZone, RightThumbAntiDeadZone, LeftThumbAntiDeadZoneX/Y, RightThumbAntiDeadZoneX/Y, LeftThumbLinear, RightThumbLinear, LeftThumbSensitivity, RightThumbSensitivity (the per-stick output multipliers, without which two PadSettings differing only in stick sensitivity hash identically), all 6 sensitivity curves, all 8 max range properties, all 4 center offset properties, LeftThumbBoundaryMap, RightThumbBoundaryMap (the stick boundary-calibration pair, #174)</li>
-<li><strong>Force feedback</strong> (24): ForceType, ForceOverall, RotationRange, RotationRangeEnabled (#512), AutoCenterStrength, WheelRpmLeds (wheel, #81), the four SteeringAngleRumble fields (continuous steering rumble: Enabled, Axis, Strength, Deadzone), the 10 SteeringLock fields (#94: RumbleEnabled, TriggerVibEnabled, LightbarEnabled, ATResistanceEnabled, PulseMs, LightbarColor, LightbarColorSource, LightbarPaletteCsv, LightbarHoldMs, LightbarFadeMs), ForceSwapMotor, TriggerRumbleFold (#271), LeftMotorStrength, RightMotorStrength</li>
+<li><strong>Force feedback</strong> (34): ForceType, ForceOverall, RotationRange, RotationRangeEnabled (#512), AutoCenterStrength, WheelRpmLeds (wheel, #81), the nine Falcon fields (#521: Feel, Spring, KickButton, Kick, Shake, BraceButton, PreloadButton, Gravity, ForceCap), the five SteeringAngleRumble fields (continuous steering rumble: Enabled, Axis, Strength, Deadzone, and Motor from #510), the 10 SteeringLock fields (#94: RumbleEnabled, TriggerVibEnabled, LightbarEnabled, ATResistanceEnabled, PulseMs, LightbarColor, LightbarColorSource, LightbarPaletteCsv, LightbarHoldMs, LightbarFadeMs), ForceSwapMotor, TriggerRumbleFold (#271), LeftMotorStrength, RightMotorStrength</li>
 <li><strong>Impulse triggers</strong> (5, v3.2): ImpulseOverallGain, ImpulseLeftStrength, ImpulseRightStrength, ImpulseSwapTriggers, AtVibrationToImpulseEnabled (#271)</li>
 <li><strong>Constant trigger force</strong> (3, v3.2): ConstantTriggerForceEnabled, ConstantTriggerForceLeft, ConstantTriggerForceRight</li>
 <li><strong>Audio bass trigger rumble</strong> (5, v3.2): AudioRumbleTriggersEnabled, AudioRumbleTriggersSensitivity, AudioRumbleTriggersCutoffHz, AudioRumbleLeftTrigger, AudioRumbleRightTrigger</li>
@@ -8311,7 +8311,7 @@
 <p>Each entry carries a <code>DeviceGuid</code> key and a <code>MouseGestureSettings</code> payload (Enabled, GestureButtons, CustomEngageButton, CustomEngageDeviceGuid, FlickThresholdCounts, CooldownMs), serialized into the <code>MGS:</code> checksum block. <code>GestureButtons</code> is a bitmask over the raw mouse-button indices (bit 0 Left through bit 4 X2) plus bit 5, the Custom activation (v4.1, discussion #216): <code>CustomEngageButton</code> + <code>CustomEngageDeviceGuid</code> name a recorded cross-device input (a keyboard key, a gamepad button, or an axis past the button threshold, the same pair shape as <code>GyroAimEngageButton</code>) that arms the gesture session while held instead of a mouse button. An empty <code>CustomEngageButton</code> keeps the Custom session inert even with bit 5 set. The empty-descriptor pass-through convention of the engage family does not apply here. <strong>Excluded from <code>CopyablePropertyNames</code>:</strong> deep-copied separately in <code>CopyFrom()</code> via <code>DeepCopyMouseGestureSettings</code>, and round-tripped through clipboard JSON under <code>__MouseGestureSettings</code>.</p>
 <h3 id="copyablepropertynames">CopyablePropertyNames<a class="headerlink" href="#copyablepropertynames" title="Permanent link">&para;</a></h3>
 <p>Static array defining which properties participate in <code>CopyFrom()</code>, <code>ToJson()</code>, and <code>FromJson()</code>. Includes all user-facing configuration. Excludes identity and metadata.</p>
-<p><strong>Complete list (201 properties):</strong></p>
+<p><strong>Complete list (211 properties):</strong></p>
 <table>
 <thead>
 <tr>
@@ -8361,8 +8361,12 @@
 <td><code>LeftThumbBoundaryMap</code>, <code>RightThumbBoundaryMap</code></td>
 </tr>
 <tr>
-<td><strong>Force feedback / wheel</strong> (14)</td>
-<td><code>ForceType</code>, <code>ForceOverall</code>, <code>ForceSwapMotor</code>, <code>TriggerRumbleFold</code>, <code>LeftMotorStrength</code>, <code>RightMotorStrength</code>, <code>RotationRange</code>, <code>RotationRangeEnabled</code>, <code>AutoCenterStrength</code>, <code>WheelRpmLeds</code>, <code>SteeringAngleRumbleEnabled</code>, <code>SteeringAngleRumbleAxis</code>, <code>SteeringAngleRumbleStrength</code>, <code>SteeringAngleRumbleDeadzone</code></td>
+<td><strong>Force feedback / wheel</strong> (15)</td>
+<td><code>ForceType</code>, <code>ForceOverall</code>, <code>ForceSwapMotor</code>, <code>TriggerRumbleFold</code>, <code>LeftMotorStrength</code>, <code>RightMotorStrength</code>, <code>RotationRange</code>, <code>RotationRangeEnabled</code>, <code>AutoCenterStrength</code>, <code>WheelRpmLeds</code>, <code>SteeringAngleRumbleEnabled</code>, <code>SteeringAngleRumbleAxis</code>, <code>SteeringAngleRumbleStrength</code>, <code>SteeringAngleRumbleDeadzone</code>, <code>SteeringAngleRumbleMotor</code></td>
+</tr>
+<tr>
+<td><strong>Novint Falcon</strong> (9, #521)</td>
+<td><code>FalconFeel</code>, <code>FalconSpring</code>, <code>FalconKickButton</code>, <code>FalconKick</code>, <code>FalconShake</code>, <code>FalconBraceButton</code>, <code>FalconPreloadButton</code>, <code>FalconGravity</code>, <code>FalconForceCap</code></td>
 </tr>
 <tr>
 <td><strong>Steering at-lock feedback</strong> (10, #94)</td>
@@ -9509,21 +9513,21 @@
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6922).</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6924).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6929).</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6931).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6937).</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6939).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -11289,7 +11293,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7914, 7920 and 7927).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7916, 7922 and 7929).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>

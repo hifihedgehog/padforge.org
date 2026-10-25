@@ -8709,24 +8709,25 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      │   over DeviceLeftMotorDisplay (the selected device&#39;s output after its settings)
 <a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
 <a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      ├─ &quot;Steering Angle Rumble&quot; card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      │   strength 0-100, deadzone 0-25, each with a reset, plus Reset All)
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
-<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
-<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
-<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
-<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      ├─ Audio Bass Rumble section
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
-<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
-<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
-<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
-<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
-<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
-<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
-<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
-<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
-<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
-<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>          │   and activator-mode ComboBox, each with its own reset
-<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      │   motor Split by Direction / Left Motor / Right Motor (#510), strength 0-100,
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      │   deadzone 0-25, each with a reset, plus Reset All)
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      ├─ Audio Bass Rumble section
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>          │   and activator-mode ComboBox, each with its own reset
+<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
 <p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a device that has not answered yet, the iFeel mouse the rumble plays on as a buzz, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>

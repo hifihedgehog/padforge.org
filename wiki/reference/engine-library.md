@@ -2182,10 +2182,11 @@ Per device, per slot, so each binding config carries its own gyro feel and its o
 
 | Property | Type | Serialization | Default | Description |
 |----------|------|---------------|---------|-------------|
-| `SteeringAngleRumbleEnabled` | `string` | `[XmlElement]` | `"0"` | "1" turns a mapped virtual stick axis into continuous rumble: left motor for negative deflection, right for positive |
+| `SteeringAngleRumbleEnabled` | `string` | `[XmlElement]` | `"0"` | "1" turns a mapped virtual stick axis into continuous rumble, on the motors `SteeringAngleRumbleMotor` picks |
 | `SteeringAngleRumbleAxis` | `string` | `[XmlElement]` | `"0"` | 0 = LX, 1 = LY, 2 = RX, 3 = RY |
 | `SteeringAngleRumbleStrength` | `string` | `[XmlElement]` | `"50"` | 0–100% |
 | `SteeringAngleRumbleDeadzone` | `string` | `[XmlElement]` | `"2"` | 0–25% |
+| `SteeringAngleRumbleMotor` | `string` | `[XmlElement]` | `"0"` | 0 = split by direction (left motor for negative deflection, right for positive), 1 = left motor for both, 2 = right motor for both (#510). `SteeringAngleRumble.Compute` reads any other value as 0 |
 | `SteeringLockRumbleEnabled` / `SteeringLockTriggerVibEnabled` / `SteeringLockLightbarEnabled` / `SteeringLockATResistanceEnabled` | `string` | `[XmlElement]` | `"0"` | Pulses on reaching full lock: rumble, impulse triggers, lightbar (DualSense / DS4), and an adaptive-trigger resistance ramp (DualSense) |
 | `SteeringLockPulseMs` | `string` | `[XmlElement]` | `"80"` | Rumble and trigger pulse length |
 | `SteeringLockLightbarColor` | `string` | `[XmlElement]` | `"#FF0000"` | Lightbar pulse color when the source is `Fixed` |

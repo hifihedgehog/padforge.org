@@ -869,7 +869,8 @@ ScrollViewer
       │   over DeviceLeftMotorDisplay (the selected device's output after its settings)
       ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
       ├─ "Steering Angle Rumble" card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
-      │   strength 0-100, deadzone 0-25, each with a reset, plus Reset All)
+      │   motor Split by Direction / Left Motor / Right Motor (#510), strength 0-100,
+      │   deadzone 0-25, each with a reset, plus Reset All)
       ├─ "Constant Force" card (F0AD icon + "Reset All" ResetConstantForceCommand + description)
       │   ├─ "Apply Constant Force" CheckBox (ConstantForceEnabled)
       │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)

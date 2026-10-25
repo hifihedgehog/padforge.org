@@ -51,9 +51,9 @@ Motion Lean needs a controller with a motion sensor. Without one it produces no 
 
 ## Continuous steering rumble
 
-For a cue throughout the turn, open **Force Feedback > Steering Angle Rumble**. It follows the selected virtual stick axis, so an ordinary wheel-axis mapping works too. Center adds no rumble, and each direction increases its own rumble channel up to the configured strength at full travel. The option is off by default and saves per assigned device.
+For a cue throughout the turn, open **Force Feedback > Steering Angle Rumble**. It follows the selected virtual stick axis, so an ordinary wheel-axis mapping works too. Center adds no rumble, and the rumble rises to the configured strength at full travel. Each direction plays on its own motor unless **Motor** puts both on the left or the right motor. The option is off by default and saves per assigned device.
 
-See [Steering Angle Rumble](../features/force-feedback.md#steering-angle-rumble) for the axis selector, strength, center deadzone, output support, and interaction with game rumble.
+See [Steering Angle Rumble](../features/force-feedback.md#steering-angle-rumble) for the axis selector, the motor choice, strength, center deadzone, output support, and interaction with game rumble.
 
 ## At-lock feedback
 
