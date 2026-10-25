@@ -856,6 +856,12 @@ ScrollViewer
       ├─ PeripheralHapticsRoute (ember TextBlock, collapsed unless the selected device is a haptic
       │   mouse, keyboard or the Razer Sensa row, #494): where its rumble goes and whether that
       │   path answers, from PeripheralRouteText.Haptics
+      ├─ FalconCard (collapsed unless the selected device is a Novint Falcon, #521): header +
+      │   Reset All (ResetFalconAllCommand), Feel ComboBox (FalconFeel), the spring
+      │   (FalconSpring, Joystick only), Kick Button (FalconKickButton), kick and shake
+      │   strength (FalconKick / FalconShake), Brace and Preload buttons (FalconBraceButton /
+      │   FalconPreloadButton, Aim only), gravity compensation (FalconGravity) and the force
+      │   limit in newtons (FalconForceCap), each with its own reset
       ├─ "Force Feedback / Rumble / Haptics" card header + "Reset All" button
       ├─ Overall Gain slider (0-100%, ForceOverallGain)
       ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
@@ -1155,6 +1161,11 @@ Grid (Margin="24,16")
         │   DreamcastScreen_Click / PakBackup_Click / PakRestore_Click, Read Arrows
         │   One by One CheckBox with NativeArrows_Click, shown on ShowBlissBoxPlayer /
         │   ShowDreamcastScreen / ShowControllerPak / ShowNativeArrows, #469)
+        ├─ Keyboard screen line and button (KeyboardScreenLine, and KeyboardScreen_Click on a
+        │   button that reads KeyboardScreenButtonText, shown on ShowKeyboardScreen, #519)
+        ├─ Falcon line, Calibrate Reach and its result (FalconLine, FalconCalibrate_Click,
+        │   FalconCalibrationStatus as a polite live region, shown on ShowFalconCalibrate, #521)
+        ├─ AnalogKeyboardLine (#468, collapsed when empty)
         ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
         ├─ HeadTrackerStatus line (#355, collapsed when empty)
@@ -1183,6 +1194,8 @@ Grid (Margin="24,16")
         │       (GunCalibration)
         ├─ Separator (ShowRawInputDivider)
         └─ Raw Input State section
+            ├─ Falcon handle (#521, IsFalconDevice): a dot in a square (FalconPreviewBorder,
+            │   FalconDot) for Left/Right and Up/Down, beside the named axes
             ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
             │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
             ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
@@ -1489,6 +1502,8 @@ ScrollViewer (Padding="24,0")
       │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
       │   ├─ Flydigi Enhanced Protocol toggle (FlydigiEnhancedProtocol)
       │   ├─ Read Logitech G-Keys toggle (GKeysEnabled, #454) + GKeysStatus line
+      │   ├─ Read Analog Keyboards toggle (AnalogKeyboardsEnabled, #468) + AnalogKeyboardsStatus line
+      │   ├─ Read Bliss-Box Adapters toggle (BlissBoxEnabled, #469) + BlissBoxStatus line
       │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs) + "ms"
       │   ├─ PollingOverrideNote (ember, shown only while the active profile
       │   │   overrides the global value, #365)
@@ -1502,6 +1517,18 @@ ScrollViewer (Padding="24,0")
       │   ├─ Icon E7F8 + title + description
       │   └─ Enable toggle (HandheldButtonsEnabled). On, the Devices page gains
       │      the machine's Hidden Buttons row and its System Motion row
+      ├─ Keyboard Screens card (#519)
+      │   ├─ Drive Keyboard Screens toggle (KeyboardScreensEnabled) + KeyboardScreensStatus,
+      │   │   lines for the feature as a whole. Each screen's line and dialog are on its
+      │   │   Devices row
+      │   └─ S.T.R.I.K.E. 7 library buttons (DownloadStrike7LibraryCommand,
+      │      PickStrike7LibraryCommand, InstallVc2008RuntimeCommand)
+      ├─ Novint Falcon card (#521)
+      │   ├─ Drive Novint Falcon toggle (NovintFalconEnabled) + FalconStatus: the library
+      │   │   that loaded, and why no Falcon opened while none did. It names no Falcon
+      │   └─ Choose dhd64.dll… (PickFalconLibraryCommand), Install Falcon Driver
+      │      (InstallFalconDriverCommand, shown on FalconCanInstallDriver) and Get Force
+      │      Dimension's SDK (OpenFalconDownloadCommand)
       ├─ Battery Alerts card (#293)
       │   ├─ Icon E83F + title + description
       │   ├─ "Notify When Battery Runs Low" toggle (BatteryNotifyEnabled)
@@ -1582,6 +1609,12 @@ ScrollViewer (Padding="24,0")
 | `UpdateStatusText` / `IsUpdateAvailable` / `IsUpdateDownloading` / `UpdateProgress` | string, bool, bool, number | Updates card status line, button visibility, and download progress |
 | `CheckForUpdatesNowCommand` / `InstallUpdateCommand` / `OpenReleaseNotesCommand` | ICommand | Check Now, Install and Restart, Release Notes |
 | `FlydigiEnhancedProtocol` / `GKeysEnabled` / `GKeysStatus` | CheckBox, CheckBox, string | Input Engine card: Flydigi vendor protocol, Logitech G-Keys input, and the G-Keys status line |
+| `AnalogKeyboardsEnabled` / `AnalogKeyboardsStatus` | CheckBox, string | Input Engine card: Read Analog Keyboards (#468) and its line, which names no keyboard. A keyboard's own line is on its Devices row |
+| `BlissBoxEnabled` / `BlissBoxStatus` | CheckBox, string | Input Engine card: Read Bliss-Box Adapters (#469) and its line, which names no port. Each port's row names its controller |
+| `KeyboardScreensEnabled` / `KeyboardScreensStatus` | CheckBox, string | Keyboard Screens card (#519): the switch and the feature's lines |
+| `DownloadStrike7LibraryCommand` / `PickStrike7LibraryCommand` / `InstallVc2008RuntimeCommand` | ICommand | The S.T.R.I.K.E. 7 library buttons |
+| `NovintFalconEnabled` / `FalconStatus` / `FalconCanInstallDriver` | CheckBox, string, bool | Novint Falcon card (#521): the switch, the library line and why no Falcon opened, and Install Falcon Driver's visibility |
+| `PickFalconLibraryCommand` / `InstallFalconDriverCommand` / `OpenFalconDownloadCommand` | ICommand | Choose dhd64.dll…, Install Falcon Driver, Get Force Dimension's SDK |
 | `BatteryNotifyEnabled` / `BatteryNotifyThreshold` / `BatteryNotifyVibrate` | CheckBox, NumberBox (5-50), CheckBox | Battery Alerts card: low-battery toast on/off, the percent threshold, and the optional controller vibration (#293) |
 | `IsHidHideInstalled` | bool | Controls status flame, button visibility, whitelist section |
 | `InstallHidHideCommand` / `UninstallHidHideCommand` | ICommand | Driver install/uninstall |

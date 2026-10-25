@@ -826,6 +826,8 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.cs` | Core | Fields, constants, `Start()`/`Stop()`, `PollingLoop(int generation, int pollRun)`, `IDisposable`, motion snapshots, DSU broadcast |
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): per-(slot, device, menu) hover-commit contexts ticked in Step 2, fired items read by Step 3 rows / activators / macro triggers, direct bindings delivered in Step 4b |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | SDL device enumeration, open/close, HIDMaestro filtering, `UserDevices`/`UserSettings` collection classes |
+| `InputManager.KeyboardScreens.cs` | Step 1 | Keyboard screens (#519), Phase 1j2: a row per screen the screen host publishes, with the keys beside it |
+| `InputManager.Falcon.cs` | Steps 1, 2 | Novint Falcon (#521), Phase 1j3: the worker sweep that opens Falcons, their rows, and Step 2's hand-off of each Falcon's combined force to its haptic thread |
 | `InputManager.BlissBox.cs` | Step 1 | Bliss-Box adapters (#469), Phase 1l: an API sidecar beside each online port row while Read Bliss-Box Adapters is on |
 | `InputManager.PeripheralRows.cs` | Step 1 | Peripheral outputs (#494), Phase 1m: the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, each open while its vendor's software is installed, and the unit rows of lit devices no mouse or keyboard row reaches |
 | `InputManager.TouchSenseMice.cs` | Step 1 | Peripheral outputs (#494), Phase 1n: the rows of Logitech iFeel mice bound to WinUSB, read over WinUSB on a thread of their own |

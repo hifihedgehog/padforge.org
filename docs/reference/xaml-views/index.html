@@ -8696,38 +8696,44 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>      ├─ PeripheralHapticsRoute (ember TextBlock, collapsed unless the selected device is a haptic
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>      │   mouse, keyboard or the Razer Sensa row, #494): where its rumble goes and whether that
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>      │   path answers, from PeripheralRouteText.Haptics
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>      ├─ &quot;Force Feedback / Rumble / Haptics&quot; card header + &quot;Reset All&quot; button
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>      ├─ Overall Gain slider (0-100%, ForceOverallGain)
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>      ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      ├─ &quot;Fold Trigger Rumble into Main Motors&quot; CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
-<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      ├─ FfbSwapMotorsRow: &quot;Swap Left and Right Motors&quot; CheckBox (SwapMotors), collapsed for a
-<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      │   haptic mouse, keyboard or the Razer Sensa row
-<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
-<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>      ├─ &quot;Motor Activity&quot; header
-<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game&#39;s request)
-<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      │   over DeviceLeftMotorDisplay (the selected device&#39;s output after its settings)
-<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
-<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      ├─ &quot;Steering Angle Rumble&quot; card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      │   motor Split by Direction / Left Motor / Right Motor (#510), strength 0-100,
-<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      │   deadzone 0-25, each with a reset, plus Reset All)
-<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
-<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
-<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
-<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      ├─ Audio Bass Rumble section
-<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
-<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
-<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
-<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
-<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
-<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
-<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
-<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
-<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
-<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
-<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>          │   and activator-mode ComboBox, each with its own reset
-<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>      ├─ FalconCard (collapsed unless the selected device is a Novint Falcon, #521): header +
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>      │   Reset All (ResetFalconAllCommand), Feel ComboBox (FalconFeel), the spring
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>      │   (FalconSpring, Joystick only), Kick Button (FalconKickButton), kick and shake
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>      │   strength (FalconKick / FalconShake), Brace and Preload buttons (FalconBraceButton /
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>      │   FalconPreloadButton, Aim only), gravity compensation (FalconGravity) and the force
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>      │   limit in newtons (FalconForceCap), each with its own reset
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>      ├─ &quot;Force Feedback / Rumble / Haptics&quot; card header + &quot;Reset All&quot; button
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>      ├─ Overall Gain slider (0-100%, ForceOverallGain)
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>      ├─ Left Motor Strength slider (0-100%, LeftMotorStrength)
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>      ├─ Right Motor Strength slider (0-100%, RightMotorStrength)
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>      ├─ &quot;Fold Trigger Rumble into Main Motors&quot; CheckBox (FfbTriggerFoldChk, TriggerRumbleFold)
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>      ├─ FfbSwapMotorsRow: &quot;Swap Left and Right Motors&quot; CheckBox (SwapMotors), collapsed for a
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>      │   haptic mouse, keyboard or the Razer Sensa row
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>      ├─ &quot;Test Rumble&quot; Button (TestRumbleCommand)
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>      ├─ &quot;Motor Activity&quot; header
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game&#39;s request)
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>      │   over DeviceLeftMotorDisplay (the selected device&#39;s output after its settings)
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>      ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>      ├─ &quot;Steering Angle Rumble&quot; card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>      │   motor Split by Direction / Left Motor / Right Motor (#510), strength 0-100,
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>      │   deadzone 0-25, each with a reset, plus Reset All)
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>      ├─ &quot;Constant Force&quot; card (F0AD icon + &quot;Reset All&quot; ResetConstantForceCommand + description)
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>      │   ├─ &quot;Apply Constant Force&quot; CheckBox (ConstantForceEnabled)
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>      │   ├─ Drag pad (ConstantForcePadBorder, mouse handlers, SignedNormToCanvasConverter)
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>      │   └─ X / Y sliders + F2 edits + per-axis reset (ConstantForceX / ConstantForceY)
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a>      ├─ Audio Bass Rumble section
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a>      │   ├─ &quot;Audio Rumble&quot; header (E767 icon) + &quot;Reset All&quot; button + description
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a>      │   ├─ Enable CheckBox (AudioRumbleEnabled)
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a>      │   ├─ Sensitivity slider (1-20, AudioRumbleSensitivity, format F1)
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a>      │   ├─ Bass Cutoff slider (20-200 Hz, AudioRumbleCutoffHz, format F0)
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>      │   ├─ Left Motor slider (0-100%, AudioRumbleLeftMotor)
+<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a>      │   ├─ Right Motor slider (0-100%, AudioRumbleRightMotor)
+<a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a>      │   └─ Level meter (ProgressBar 0-1, AudioRumbleLevelMeter)
+<a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a>      └─ &quot;Trigger Routing&quot; card (E72A icon + &quot;Reset All&quot; ResetTriggerRouteCardCommand + description)
+<a id="__codelineno-9-41" name="__codelineno-9-41" href="#__codelineno-9-41"></a>          ├─ Left: source ComboBox, mode ComboBox, scale slider, activator display +
+<a id="__codelineno-9-42" name="__codelineno-9-42" href="#__codelineno-9-42"></a>          │   record button (LeftTriggerRouteActivatorRecordCommand, EmberIconButtonHot)
+<a id="__codelineno-9-43" name="__codelineno-9-43" href="#__codelineno-9-43"></a>          │   and activator-mode ComboBox, each with its own reset
+<a id="__codelineno-9-44" name="__codelineno-9-44" href="#__codelineno-9-44"></a>          └─ Right: the same five rows on the RightTriggerRoute* bindings
 </code></pre></div>
 <p>All Audio Rumble controls bind <code>IsEnabled="{Binding AudioRumbleEnabled}"</code>. Grayed out when off.</p>
 <p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a device that has not answered yet, the iFeel mouse the rumble plays on as a buzz, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>
@@ -9153,65 +9159,72 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>        │   DreamcastScreen_Click / PakBackup_Click / PakRestore_Click, Read Arrows
 <a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>        │   One by One CheckBox with NativeArrows_Click, shown on ShowBlissBoxPlayer /
 <a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>        │   ShowDreamcastScreen / ShowControllerPak / ShowNativeArrows, #469)
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>        ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
-<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
-<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>        ├─ Separator
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>        ├─ VC Assignment section
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>        ├─ Input Mode section (ShowInputModeSection)
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>        ├─ Input Hiding section (ShowInputHidingSection)
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
-<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
-<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>        ├─ Separator (ShowInputModeOrHidingSection)
-<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>        ├─ Power section (ShowPowerSection)
-<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
-<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>        │   │   ShowIdleDisconnect, #162)
-<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
-<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>        │       QuickCharge_Click, #372)
-<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
-<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
-<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>        │   ├─ GunCalibrationStatus line
-<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
-<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>        │       ToolTip GunCalibrateTooltip) + reset
-<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>        │       (GunCalibration)
-<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>        ├─ Separator (ShowRawInputDivider)
-<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>        └─ Raw Input State section
-<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
-<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
-<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
-<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>            │   and while ShowNamedButtons)
-<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
-<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
-<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
-<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
-<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>            ├─ Keyboard layout (keyboard devices only)
-<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
-<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>            ├─ Mouse preview (mouse devices only)
-<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>            │   └─ Viewbox → MousePreviewControl
-<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>            ├─ MIDI preview (MIDI input devices)
-<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
-<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
-<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>            │       ├─ 36×36 Ellipse background + center dot
-<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
-<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
-<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
-<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
-<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
-<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
-<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>            │   VR controllers, Logitech G-Keys rows)
-<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
-<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
-<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>        ├─ Keyboard screen line and button (KeyboardScreenLine, and KeyboardScreen_Click on a
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>        │   button that reads KeyboardScreenButtonText, shown on ShowKeyboardScreen, #519)
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>        ├─ Falcon line, Calibrate Reach and its result (FalconLine, FalconCalibrate_Click,
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>        │   FalconCalibrationStatus as a polite live region, shown on ShowFalconCalibrate, #521)
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>        ├─ AnalogKeyboardLine (#468, collapsed when empty)
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>        ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>        ├─ Separator
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>        ├─ VC Assignment section
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>        ├─ Input Mode section (ShowInputModeSection)
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>        ├─ Input Hiding section (ShowInputHidingSection)
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>        ├─ Separator (ShowInputModeOrHidingSection)
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>        ├─ Power section (ShowPowerSection)
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>        │   │   ShowIdleDisconnect, #162)
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>        │       QuickCharge_Click, #372)
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>        │   ├─ GunCalibrationStatus line
+<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>        │       ToolTip GunCalibrateTooltip) + reset
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>        │       (GunCalibration)
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>        ├─ Separator (ShowRawInputDivider)
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>        └─ Raw Input State section
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>            ├─ Falcon handle (#521, IsFalconDevice): a dot in a square (FalconPreviewBorder,
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>            │   FalconDot) for Left/Right and Up/Down, beside the named axes
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
+<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
+<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>            │   and while ShowNamedButtons)
+<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
+<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
+<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
+<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            ├─ Keyboard layout (keyboard devices only)
+<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
+<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>            ├─ Mouse preview (mouse devices only)
+<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>            │   └─ Viewbox → MousePreviewControl
+<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>            ├─ MIDI preview (MIDI input devices)
+<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
+<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
+<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
+<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>            │       ├─ 36×36 Ellipse background + center dot
+<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
+<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
+<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
+<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
+<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
+<a id="__codelineno-12-103" name="__codelineno-12-103" href="#__codelineno-12-103"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+<a id="__codelineno-12-104" name="__codelineno-12-104" href="#__codelineno-12-104"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+<a id="__codelineno-12-105" name="__codelineno-12-105" href="#__codelineno-12-105"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
+<a id="__codelineno-12-106" name="__codelineno-12-106" href="#__codelineno-12-106"></a>            │   VR controllers, Logitech G-Keys rows)
+<a id="__codelineno-12-107" name="__codelineno-12-107" href="#__codelineno-12-107"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
+<a id="__codelineno-12-108" name="__codelineno-12-108" href="#__codelineno-12-108"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
+<a id="__codelineno-12-109" name="__codelineno-12-109" href="#__codelineno-12-109"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
 </code></pre></div>
 <h3 id="key-bindings_1">Key Bindings<a class="headerlink" href="#key-bindings_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -9702,76 +9715,90 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-13-34" name="__codelineno-13-34" href="#__codelineno-13-34"></a>      │   ├─ Background polling toggle (EnablePollingOnFocusLoss)
 <a id="__codelineno-13-35" name="__codelineno-13-35" href="#__codelineno-13-35"></a>      │   ├─ Flydigi Enhanced Protocol toggle (FlydigiEnhancedProtocol)
 <a id="__codelineno-13-36" name="__codelineno-13-36" href="#__codelineno-13-36"></a>      │   ├─ Read Logitech G-Keys toggle (GKeysEnabled, #454) + GKeysStatus line
-<a id="__codelineno-13-37" name="__codelineno-13-37" href="#__codelineno-13-37"></a>      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs) + &quot;ms&quot;
-<a id="__codelineno-13-38" name="__codelineno-13-38" href="#__codelineno-13-38"></a>      │   ├─ PollingOverrideNote (ember, shown only while the active profile
-<a id="__codelineno-13-39" name="__codelineno-13-39" href="#__codelineno-13-39"></a>      │   │   overrides the global value, #365)
-<a id="__codelineno-13-40" name="__codelineno-13-40" href="#__codelineno-13-40"></a>      │   └─ HM inactivity timeout: NumberBox 0-3600s
-<a id="__codelineno-13-41" name="__codelineno-13-41" href="#__codelineno-13-41"></a>      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
-<a id="__codelineno-13-42" name="__codelineno-13-42" href="#__codelineno-13-42"></a>      ├─ Assignment Prompts card
-<a id="__codelineno-13-43" name="__codelineno-13-43" href="#__codelineno-13-43"></a>      │   ├─ Icon E8DE + title + description
-<a id="__codelineno-13-44" name="__codelineno-13-44" href="#__codelineno-13-44"></a>      │   ├─ Offer on a new device (AssignOfferNewDevice)
-<a id="__codelineno-13-45" name="__codelineno-13-45" href="#__codelineno-13-45"></a>      │   └─ Offer on an empty slot (AssignOfferEmptySlot)
-<a id="__codelineno-13-46" name="__codelineno-13-46" href="#__codelineno-13-46"></a>      ├─ Handheld PC Buttons card (#343)
-<a id="__codelineno-13-47" name="__codelineno-13-47" href="#__codelineno-13-47"></a>      │   ├─ Icon E7F8 + title + description
-<a id="__codelineno-13-48" name="__codelineno-13-48" href="#__codelineno-13-48"></a>      │   └─ Enable toggle (HandheldButtonsEnabled). On, the Devices page gains
-<a id="__codelineno-13-49" name="__codelineno-13-49" href="#__codelineno-13-49"></a>      │      the machine&#39;s Hidden Buttons row and its System Motion row
-<a id="__codelineno-13-50" name="__codelineno-13-50" href="#__codelineno-13-50"></a>      ├─ Battery Alerts card (#293)
-<a id="__codelineno-13-51" name="__codelineno-13-51" href="#__codelineno-13-51"></a>      │   ├─ Icon E83F + title + description
-<a id="__codelineno-13-52" name="__codelineno-13-52" href="#__codelineno-13-52"></a>      │   ├─ &quot;Notify When Battery Runs Low&quot; toggle (BatteryNotifyEnabled)
-<a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a>      │   ├─ &quot;Notify at or Below&quot; NumberBox 5-50 % (BatteryNotifyThreshold)
-<a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a>      │   ├─ &quot;Also Vibrate the Controller&quot; toggle (BatteryNotifyVibrate)
-<a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>      │   └─ &quot;Test Notification&quot; Button (TestBatteryNotify_Click)
-<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>      ├─ HidHide Driver card
-<a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a>      │   ├─ Icon ED1A + title + description
-<a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a>      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
-<a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
-<a id="__codelineno-13-60" name="__codelineno-13-60" href="#__codelineno-13-60"></a>      │   ├─ Hide devices toggle (EnableInputHiding, only when installed)
-<a id="__codelineno-13-61" name="__codelineno-13-61" href="#__codelineno-13-61"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches, only when installed)
-<a id="__codelineno-13-62" name="__codelineno-13-62" href="#__codelineno-13-62"></a>      │   └─ Whitelist section (only when installed):
-<a id="__codelineno-13-63" name="__codelineno-13-63" href="#__codelineno-13-63"></a>      │       ├─ Title + description
-<a id="__codelineno-13-64" name="__codelineno-13-64" href="#__codelineno-13-64"></a>      │       ├─ ListBox of HidHideWhitelistPaths (telemetry mono, 12px)
-<a id="__codelineno-13-65" name="__codelineno-13-65" href="#__codelineno-13-65"></a>      │       └─ Add/Remove buttons
-<a id="__codelineno-13-66" name="__codelineno-13-66" href="#__codelineno-13-66"></a>      ├─ HIDMaestro Driver card
-<a id="__codelineno-13-67" name="__codelineno-13-67" href="#__codelineno-13-67"></a>      │   ├─ Icon E7FC + title + description
-<a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a>      │   └─ Status: ember flame lit while the driver is in the driver store + &quot;Installed&quot; or
-<a id="__codelineno-13-69" name="__codelineno-13-69" href="#__codelineno-13-69"></a>      │      &quot;Not Installed&quot; + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
-<a id="__codelineno-13-70" name="__codelineno-13-70" href="#__codelineno-13-70"></a>      ├─ BthPS3 Bluetooth Driver card
-<a id="__codelineno-13-71" name="__codelineno-13-71" href="#__codelineno-13-71"></a>      │   ├─ Icon E702 + title + description
-<a id="__codelineno-13-72" name="__codelineno-13-72" href="#__codelineno-13-72"></a>      │   └─ Status: ember flame lit while either BthPS3 driver is a service + &quot;Installed&quot; or
-<a id="__codelineno-13-73" name="__codelineno-13-73" href="#__codelineno-13-73"></a>      │      &quot;Not Installed&quot; + BthPS3Version, and Uninstall, which opens UninstallBthPS3Dialog
-<a id="__codelineno-13-74" name="__codelineno-13-74" href="#__codelineno-13-74"></a>      ├─ Windows MIDI Services card
-<a id="__codelineno-13-75" name="__codelineno-13-75" href="#__codelineno-13-75"></a>      │   ├─ Icon E8D6 + title + description
-<a id="__codelineno-13-76" name="__codelineno-13-76" href="#__codelineno-13-76"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
-<a id="__codelineno-13-77" name="__codelineno-13-77" href="#__codelineno-13-77"></a>      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
-<a id="__codelineno-13-78" name="__codelineno-13-78" href="#__codelineno-13-78"></a>      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
-<a id="__codelineno-13-79" name="__codelineno-13-79" href="#__codelineno-13-79"></a>      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
-<a id="__codelineno-13-80" name="__codelineno-13-80" href="#__codelineno-13-80"></a>      ├─ SteamVR card (#49)
-<a id="__codelineno-13-81" name="__codelineno-13-81" href="#__codelineno-13-81"></a>      │   ├─ Icon F119 + title + description
-<a id="__codelineno-13-82" name="__codelineno-13-82" href="#__codelineno-13-82"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
-<a id="__codelineno-13-83" name="__codelineno-13-83" href="#__codelineno-13-83"></a>      │   │   Installed, or the runtime / driver / live-controller state)
-<a id="__codelineno-13-84" name="__codelineno-13-84" href="#__codelineno-13-84"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
-<a id="__codelineno-13-85" name="__codelineno-13-85" href="#__codelineno-13-85"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
-<a id="__codelineno-13-86" name="__codelineno-13-86" href="#__codelineno-13-86"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
-<a id="__codelineno-13-87" name="__codelineno-13-87" href="#__codelineno-13-87"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
-<a id="__codelineno-13-88" name="__codelineno-13-88" href="#__codelineno-13-88"></a>      ├─ Community Configs card (#9)
-<a id="__codelineno-13-89" name="__codelineno-13-89" href="#__codelineno-13-89"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
-<a id="__codelineno-13-90" name="__codelineno-13-90" href="#__codelineno-13-90"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
-<a id="__codelineno-13-91" name="__codelineno-13-91" href="#__codelineno-13-91"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
-<a id="__codelineno-13-92" name="__codelineno-13-92" href="#__codelineno-13-92"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
-<a id="__codelineno-13-93" name="__codelineno-13-93" href="#__codelineno-13-93"></a>      ├─ Settings File card
-<a id="__codelineno-13-94" name="__codelineno-13-94" href="#__codelineno-13-94"></a>      │   ├─ Icon E8A5 + title + description
-<a id="__codelineno-13-95" name="__codelineno-13-95" href="#__codelineno-13-95"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
-<a id="__codelineno-13-96" name="__codelineno-13-96" href="#__codelineno-13-96"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
-<a id="__codelineno-13-97" name="__codelineno-13-97" href="#__codelineno-13-97"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
-<a id="__codelineno-13-98" name="__codelineno-13-98" href="#__codelineno-13-98"></a>      └─ Diagnostics card
-<a id="__codelineno-13-99" name="__codelineno-13-99" href="#__codelineno-13-99"></a>          ├─ Icon E9D9 + title + description
-<a id="__codelineno-13-100" name="__codelineno-13-100" href="#__codelineno-13-100"></a>          ├─ Grid (140px label + value):
-<a id="__codelineno-13-101" name="__codelineno-13-101" href="#__codelineno-13-101"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
-<a id="__codelineno-13-102" name="__codelineno-13-102" href="#__codelineno-13-102"></a>          │   ├─ .NET Runtime (RuntimeVersion)
-<a id="__codelineno-13-103" name="__codelineno-13-103" href="#__codelineno-13-103"></a>          │   └─ SDL Version (SdlVersion)
-<a id="__codelineno-13-104" name="__codelineno-13-104" href="#__codelineno-13-104"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
-<a id="__codelineno-13-105" name="__codelineno-13-105" href="#__codelineno-13-105"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
-<a id="__codelineno-13-106" name="__codelineno-13-106" href="#__codelineno-13-106"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
+<a id="__codelineno-13-37" name="__codelineno-13-37" href="#__codelineno-13-37"></a>      │   ├─ Read Analog Keyboards toggle (AnalogKeyboardsEnabled, #468) + AnalogKeyboardsStatus line
+<a id="__codelineno-13-38" name="__codelineno-13-38" href="#__codelineno-13-38"></a>      │   ├─ Read Bliss-Box Adapters toggle (BlissBoxEnabled, #469) + BlissBoxStatus line
+<a id="__codelineno-13-39" name="__codelineno-13-39" href="#__codelineno-13-39"></a>      │   ├─ Polling interval: NumberBox 1-16ms (PollingRateMs) + &quot;ms&quot;
+<a id="__codelineno-13-40" name="__codelineno-13-40" href="#__codelineno-13-40"></a>      │   ├─ PollingOverrideNote (ember, shown only while the active profile
+<a id="__codelineno-13-41" name="__codelineno-13-41" href="#__codelineno-13-41"></a>      │   │   overrides the global value, #365)
+<a id="__codelineno-13-42" name="__codelineno-13-42" href="#__codelineno-13-42"></a>      │   └─ HM inactivity timeout: NumberBox 0-3600s
+<a id="__codelineno-13-43" name="__codelineno-13-43" href="#__codelineno-13-43"></a>      │      (HmInactivityDestroyTimeoutSeconds, 0 = never)
+<a id="__codelineno-13-44" name="__codelineno-13-44" href="#__codelineno-13-44"></a>      ├─ Assignment Prompts card
+<a id="__codelineno-13-45" name="__codelineno-13-45" href="#__codelineno-13-45"></a>      │   ├─ Icon E8DE + title + description
+<a id="__codelineno-13-46" name="__codelineno-13-46" href="#__codelineno-13-46"></a>      │   ├─ Offer on a new device (AssignOfferNewDevice)
+<a id="__codelineno-13-47" name="__codelineno-13-47" href="#__codelineno-13-47"></a>      │   └─ Offer on an empty slot (AssignOfferEmptySlot)
+<a id="__codelineno-13-48" name="__codelineno-13-48" href="#__codelineno-13-48"></a>      ├─ Handheld PC Buttons card (#343)
+<a id="__codelineno-13-49" name="__codelineno-13-49" href="#__codelineno-13-49"></a>      │   ├─ Icon E7F8 + title + description
+<a id="__codelineno-13-50" name="__codelineno-13-50" href="#__codelineno-13-50"></a>      │   └─ Enable toggle (HandheldButtonsEnabled). On, the Devices page gains
+<a id="__codelineno-13-51" name="__codelineno-13-51" href="#__codelineno-13-51"></a>      │      the machine&#39;s Hidden Buttons row and its System Motion row
+<a id="__codelineno-13-52" name="__codelineno-13-52" href="#__codelineno-13-52"></a>      ├─ Keyboard Screens card (#519)
+<a id="__codelineno-13-53" name="__codelineno-13-53" href="#__codelineno-13-53"></a>      │   ├─ Drive Keyboard Screens toggle (KeyboardScreensEnabled) + KeyboardScreensStatus,
+<a id="__codelineno-13-54" name="__codelineno-13-54" href="#__codelineno-13-54"></a>      │   │   lines for the feature as a whole. Each screen&#39;s line and dialog are on its
+<a id="__codelineno-13-55" name="__codelineno-13-55" href="#__codelineno-13-55"></a>      │   │   Devices row
+<a id="__codelineno-13-56" name="__codelineno-13-56" href="#__codelineno-13-56"></a>      │   └─ S.T.R.I.K.E. 7 library buttons (DownloadStrike7LibraryCommand,
+<a id="__codelineno-13-57" name="__codelineno-13-57" href="#__codelineno-13-57"></a>      │      PickStrike7LibraryCommand, InstallVc2008RuntimeCommand)
+<a id="__codelineno-13-58" name="__codelineno-13-58" href="#__codelineno-13-58"></a>      ├─ Novint Falcon card (#521)
+<a id="__codelineno-13-59" name="__codelineno-13-59" href="#__codelineno-13-59"></a>      │   ├─ Drive Novint Falcon toggle (NovintFalconEnabled) + FalconStatus: the library
+<a id="__codelineno-13-60" name="__codelineno-13-60" href="#__codelineno-13-60"></a>      │   │   that loaded, and why no Falcon opened while none did. It names no Falcon
+<a id="__codelineno-13-61" name="__codelineno-13-61" href="#__codelineno-13-61"></a>      │   └─ Choose dhd64.dll… (PickFalconLibraryCommand), Install Falcon Driver
+<a id="__codelineno-13-62" name="__codelineno-13-62" href="#__codelineno-13-62"></a>      │      (InstallFalconDriverCommand, shown on FalconCanInstallDriver) and Get Force
+<a id="__codelineno-13-63" name="__codelineno-13-63" href="#__codelineno-13-63"></a>      │      Dimension&#39;s SDK (OpenFalconDownloadCommand)
+<a id="__codelineno-13-64" name="__codelineno-13-64" href="#__codelineno-13-64"></a>      ├─ Battery Alerts card (#293)
+<a id="__codelineno-13-65" name="__codelineno-13-65" href="#__codelineno-13-65"></a>      │   ├─ Icon E83F + title + description
+<a id="__codelineno-13-66" name="__codelineno-13-66" href="#__codelineno-13-66"></a>      │   ├─ &quot;Notify When Battery Runs Low&quot; toggle (BatteryNotifyEnabled)
+<a id="__codelineno-13-67" name="__codelineno-13-67" href="#__codelineno-13-67"></a>      │   ├─ &quot;Notify at or Below&quot; NumberBox 5-50 % (BatteryNotifyThreshold)
+<a id="__codelineno-13-68" name="__codelineno-13-68" href="#__codelineno-13-68"></a>      │   ├─ &quot;Also Vibrate the Controller&quot; toggle (BatteryNotifyVibrate)
+<a id="__codelineno-13-69" name="__codelineno-13-69" href="#__codelineno-13-69"></a>      │   └─ &quot;Test Notification&quot; Button (TestBatteryNotify_Click)
+<a id="__codelineno-13-70" name="__codelineno-13-70" href="#__codelineno-13-70"></a>      ├─ HidHide Driver card
+<a id="__codelineno-13-71" name="__codelineno-13-71" href="#__codelineno-13-71"></a>      │   ├─ Icon ED1A + title + description
+<a id="__codelineno-13-72" name="__codelineno-13-72" href="#__codelineno-13-72"></a>      │   ├─ Status: flame + HidHideStatusText + HidHideVersion
+<a id="__codelineno-13-73" name="__codelineno-13-73" href="#__codelineno-13-73"></a>      │   ├─ Install/Uninstall buttons (visibility-toggled by IsHidHideInstalled)
+<a id="__codelineno-13-74" name="__codelineno-13-74" href="#__codelineno-13-74"></a>      │   ├─ Hide devices toggle (EnableInputHiding, only when installed)
+<a id="__codelineno-13-75" name="__codelineno-13-75" href="#__codelineno-13-75"></a>      │   ├─ Keep cloaks between launches toggle (KeepHidHideCloaksBetweenLaunches, only when installed)
+<a id="__codelineno-13-76" name="__codelineno-13-76" href="#__codelineno-13-76"></a>      │   └─ Whitelist section (only when installed):
+<a id="__codelineno-13-77" name="__codelineno-13-77" href="#__codelineno-13-77"></a>      │       ├─ Title + description
+<a id="__codelineno-13-78" name="__codelineno-13-78" href="#__codelineno-13-78"></a>      │       ├─ ListBox of HidHideWhitelistPaths (telemetry mono, 12px)
+<a id="__codelineno-13-79" name="__codelineno-13-79" href="#__codelineno-13-79"></a>      │       └─ Add/Remove buttons
+<a id="__codelineno-13-80" name="__codelineno-13-80" href="#__codelineno-13-80"></a>      ├─ HIDMaestro Driver card
+<a id="__codelineno-13-81" name="__codelineno-13-81" href="#__codelineno-13-81"></a>      │   ├─ Icon E7FC + title + description
+<a id="__codelineno-13-82" name="__codelineno-13-82" href="#__codelineno-13-82"></a>      │   └─ Status: ember flame lit while the driver is in the driver store + &quot;Installed&quot; or
+<a id="__codelineno-13-83" name="__codelineno-13-83" href="#__codelineno-13-83"></a>      │      &quot;Not Installed&quot; + HIDMaestroVersion, and Uninstall, which opens UninstallHIDMaestroDialog
+<a id="__codelineno-13-84" name="__codelineno-13-84" href="#__codelineno-13-84"></a>      ├─ BthPS3 Bluetooth Driver card
+<a id="__codelineno-13-85" name="__codelineno-13-85" href="#__codelineno-13-85"></a>      │   ├─ Icon E702 + title + description
+<a id="__codelineno-13-86" name="__codelineno-13-86" href="#__codelineno-13-86"></a>      │   └─ Status: ember flame lit while either BthPS3 driver is a service + &quot;Installed&quot; or
+<a id="__codelineno-13-87" name="__codelineno-13-87" href="#__codelineno-13-87"></a>      │      &quot;Not Installed&quot; + BthPS3Version, and Uninstall, which opens UninstallBthPS3Dialog
+<a id="__codelineno-13-88" name="__codelineno-13-88" href="#__codelineno-13-88"></a>      ├─ Windows MIDI Services card
+<a id="__codelineno-13-89" name="__codelineno-13-89" href="#__codelineno-13-89"></a>      │   ├─ Icon E8D6 + title + description
+<a id="__codelineno-13-90" name="__codelineno-13-90" href="#__codelineno-13-90"></a>      │   ├─ Status: flame (lit while IsMidiAvailable) + MidiServicesStatusText + MidiServicesDetailText
+<a id="__codelineno-13-91" name="__codelineno-13-91" href="#__codelineno-13-91"></a>      │   │   (collapsed when empty, telemetry face while MidiDetailIsVersion)
+<a id="__codelineno-13-92" name="__codelineno-13-92" href="#__codelineno-13-92"></a>      │   ├─ Install button (InstallMidiRuntimeCommand, shown while CanInstallMidiRuntime)
+<a id="__codelineno-13-93" name="__codelineno-13-93" href="#__codelineno-13-93"></a>      │   └─ Uninstall button (UninstallMidiServicesCommand, shown while IsMidiRuntimeInstalled)
+<a id="__codelineno-13-94" name="__codelineno-13-94" href="#__codelineno-13-94"></a>      ├─ SteamVR card (#49)
+<a id="__codelineno-13-95" name="__codelineno-13-95" href="#__codelineno-13-95"></a>      │   ├─ Icon F119 + title + description
+<a id="__codelineno-13-96" name="__codelineno-13-96" href="#__codelineno-13-96"></a>      │   ├─ Status: flame (lit while IsSteamVrInstalled) + SteamVrStatusText (Not Installed,
+<a id="__codelineno-13-97" name="__codelineno-13-97" href="#__codelineno-13-97"></a>      │   │   Installed, or the runtime / driver / live-controller state)
+<a id="__codelineno-13-98" name="__codelineno-13-98" href="#__codelineno-13-98"></a>      │   ├─ Install directory TextBox + reset + Browse button (SteamVrBrowse_Click →
+<a id="__codelineno-13-99" name="__codelineno-13-99" href="#__codelineno-13-99"></a>      │   │   SteamVrInstallDir), shown only while SteamVR is not installed
+<a id="__codelineno-13-100" name="__codelineno-13-100" href="#__codelineno-13-100"></a>      │   └─ Install button (InstallSteamVrCommand, while not installed) and Uninstall button
+<a id="__codelineno-13-101" name="__codelineno-13-101" href="#__codelineno-13-101"></a>      │       (UninstallSteamVrCommand, while ShowSteamVrUninstall: installed and PadForge-owned)
+<a id="__codelineno-13-102" name="__codelineno-13-102" href="#__codelineno-13-102"></a>      ├─ Community Configs card (#9)
+<a id="__codelineno-13-103" name="__codelineno-13-103" href="#__codelineno-13-103"></a>      │   ├─ Icon E716 (EmberBrush) + title + description (the endpoint / privacy statement)
+<a id="__codelineno-13-104" name="__codelineno-13-104" href="#__codelineno-13-104"></a>      │   ├─ Enable Community Configs checkbox (EnableCommunityConfigLookup)
+<a id="__codelineno-13-105" name="__codelineno-13-105" href="#__codelineno-13-105"></a>      │   ├─ Show Legacy Workshop Configs checkbox (ShowLegacyWorkshopConfigs, visible only when enabled)
+<a id="__codelineno-13-106" name="__codelineno-13-106" href="#__codelineno-13-106"></a>      │   └─ Clear Cached Configs + Check Imported Profiles for Updates buttons
+<a id="__codelineno-13-107" name="__codelineno-13-107" href="#__codelineno-13-107"></a>      ├─ Settings File card
+<a id="__codelineno-13-108" name="__codelineno-13-108" href="#__codelineno-13-108"></a>      │   ├─ Icon E8A5 + title + description
+<a id="__codelineno-13-109" name="__codelineno-13-109" href="#__codelineno-13-109"></a>      │   ├─ SettingsFilePath (telemetry mono, wrapping)
+<a id="__codelineno-13-110" name="__codelineno-13-110" href="#__codelineno-13-110"></a>      │   ├─ Save / Reload / Reset to Defaults / Open Folder buttons
+<a id="__codelineno-13-111" name="__codelineno-13-111" href="#__codelineno-13-111"></a>      │   └─ &quot;Unsaved changes&quot; warning (orange, HasUnsavedChanges)
+<a id="__codelineno-13-112" name="__codelineno-13-112" href="#__codelineno-13-112"></a>      └─ Diagnostics card
+<a id="__codelineno-13-113" name="__codelineno-13-113" href="#__codelineno-13-113"></a>          ├─ Icon E9D9 + title + description
+<a id="__codelineno-13-114" name="__codelineno-13-114" href="#__codelineno-13-114"></a>          ├─ Grid (140px label + value):
+<a id="__codelineno-13-115" name="__codelineno-13-115" href="#__codelineno-13-115"></a>          │   ├─ App Version (ApplicationVersion = BuildIdentity.Display, e.g. &quot;4.5.3 (r3682@176208e)&quot;)
+<a id="__codelineno-13-116" name="__codelineno-13-116" href="#__codelineno-13-116"></a>          │   ├─ .NET Runtime (RuntimeVersion)
+<a id="__codelineno-13-117" name="__codelineno-13-117" href="#__codelineno-13-117"></a>          │   └─ SDL Version (SdlVersion)
+<a id="__codelineno-13-118" name="__codelineno-13-118" href="#__codelineno-13-118"></a>          ├─ &quot;Keep a Diagnostics Log&quot; toggle (DiagnosticsLoggingEnabled) (#303)
+<a id="__codelineno-13-119" name="__codelineno-13-119" href="#__codelineno-13-119"></a>          ├─ Log folder path readout (DiagnosticsFolderPath)
+<a id="__codelineno-13-120" name="__codelineno-13-120" href="#__codelineno-13-120"></a>          └─ &quot;Save Snapshot&quot; + &quot;Open Log Folder&quot; buttons (SaveDiagSnapshot_Click / OpenDiagFolder_Click)
 </code></pre></div>
 <h3 id="key-bindings_2">Key Bindings<a class="headerlink" href="#key-bindings_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -9867,6 +9894,36 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td><code>FlydigiEnhancedProtocol</code> / <code>GKeysEnabled</code> / <code>GKeysStatus</code></td>
 <td>CheckBox, CheckBox, string</td>
 <td>Input Engine card: Flydigi vendor protocol, Logitech G-Keys input, and the G-Keys status line</td>
+</tr>
+<tr>
+<td><code>AnalogKeyboardsEnabled</code> / <code>AnalogKeyboardsStatus</code></td>
+<td>CheckBox, string</td>
+<td>Input Engine card: Read Analog Keyboards (#468) and its line, which names no keyboard. A keyboard's own line is on its Devices row</td>
+</tr>
+<tr>
+<td><code>BlissBoxEnabled</code> / <code>BlissBoxStatus</code></td>
+<td>CheckBox, string</td>
+<td>Input Engine card: Read Bliss-Box Adapters (#469) and its line, which names no port. Each port's row names its controller</td>
+</tr>
+<tr>
+<td><code>KeyboardScreensEnabled</code> / <code>KeyboardScreensStatus</code></td>
+<td>CheckBox, string</td>
+<td>Keyboard Screens card (#519): the switch and the feature's lines</td>
+</tr>
+<tr>
+<td><code>DownloadStrike7LibraryCommand</code> / <code>PickStrike7LibraryCommand</code> / <code>InstallVc2008RuntimeCommand</code></td>
+<td>ICommand</td>
+<td>The S.T.R.I.K.E. 7 library buttons</td>
+</tr>
+<tr>
+<td><code>NovintFalconEnabled</code> / <code>FalconStatus</code> / <code>FalconCanInstallDriver</code></td>
+<td>CheckBox, string, bool</td>
+<td>Novint Falcon card (#521): the switch, the library line and why no Falcon opened, and Install Falcon Driver's visibility</td>
+</tr>
+<tr>
+<td><code>PickFalconLibraryCommand</code> / <code>InstallFalconDriverCommand</code> / <code>OpenFalconDownloadCommand</code></td>
+<td>ICommand</td>
+<td>Choose dhd64.dll…, Install Falcon Driver, Get Force Dimension's SDK</td>
 </tr>
 <tr>
 <td><code>BatteryNotifyEnabled</code> / <code>BatteryNotifyThreshold</code> / <code>BatteryNotifyVibrate</code></td>

@@ -6823,6 +6823,16 @@
 <td>Device enumeration and lifecycle</td>
 </tr>
 <tr>
+<td><code>InputManager.KeyboardScreens.cs</code></td>
+<td>Step 1</td>
+<td>Phase 1j2 (#519): a row per screen the screen host publishes, registered and retired on the poll thread. A row reads a static the screen engines fill and opens with no I/O. See <a href="../keyboard-screens-internals/">Keyboard Screens Internals</a></td>
+</tr>
+<tr>
+<td><code>InputManager.Falcon.cs</code></td>
+<td>Steps 1, 2</td>
+<td>Phase 1j3 (#521): a sweep every 3 s on a worker opens Falcons through Force Dimension's library, and the poll thread registers and retires their rows. Step 2 hands each Falcon the force combined over every slot it feeds, under the first slot's settings, the silence edges drop the game force and keep the feel, and the quiesce closes every Falcon at zero force. See <a href="../novint-falcon-internals/">Novint Falcon Internals</a></td>
+</tr>
+<tr>
 <td><code>InputManager.BlissBox.cs</code></td>
 <td>Step 1</td>
 <td>Phase 1l (#469): one API sidecar per online Bliss-Box row while Read Bliss-Box Adapters is on. A change of the switch brings the pass forward to the next poll cycle, and motor hand-offs that a busy output gate or a refused SDL stop deferred are retried every 100 ms</td>
@@ -7750,6 +7760,14 @@
 <td>Logitech G-keys (#454)</td>
 </tr>
 <tr>
+<td>1j2</td>
+<td>Keyboard screens, a row each: every monochrome keyboard and G19 the screen host finds, plus Arx Control and the S.T.R.I.K.E. 7 while their libraries load (#519)</td>
+</tr>
+<tr>
+<td>1j3</td>
+<td>Novint Falcons opened through Force Dimension's library (#521)</td>
+</tr>
+<tr>
 <td>1m</td>
 <td>Vendor rows for peripheral outputs: Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa, and the unit rows of lit devices no mouse or keyboard row reaches (#494)</td>
 </tr>
@@ -7771,7 +7789,7 @@
 </tr>
 </tbody>
 </table>
-<p>The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j, 1m and 1n retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, <code>FlydigiServiceWatch.Refresh()</code> flags a change when Flydigi's Space Station service starts or stops (#395). The pass ends by noting its run as enumerated (<code>NoteDevicesEnumerated</code>, the answer <code>DevicesEnumerated</code> gives) and then raises <code>DevicesUpdated</code> when anything changed.</p>
+<p>The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j3, 1m and 1n retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, <code>FlydigiServiceWatch.Refresh()</code> flags a change when Flydigi's Space Station service starts or stops (#395). The pass ends by noting its run as enumerated (<code>NoteDevicesEnumerated</code>, the answer <code>DevicesEnumerated</code> gives) and then raises <code>DevicesUpdated</code> when anything changed.</p>
 <p>Phases 1e through 1j share one shape: an <code>_opened*</code> dictionary keyed by the source's stable id (a single device field in 1h, 1i, and 1j), an open that runs through <code>FindOrCreateUserDevice</code> then <code>LoadFromExternalDevice</code> then <code>IsOnline = true</code>, a vanished-entry sweep that marks offline and neutralizes mapped outputs, and a <code>Shutdown*</code> method that suppresses the phase for the rest of the session. The shared <code>NfcReaderService</code> monitor is a separate object with its own lifecycle (started lazily from phase 1f, retried about every 5 s while the Smart Card service is absent), but each visible reader still becomes an <code>NfcReaderDevice</code> registered here like any other source.</p>
 <p>Phases 1g and 1h split their work by cost. Blocking I/O (feature-report qualification, vendor HID enumeration, the sensor-stack probe) runs on a worker. The poll thread only registers what the worker finished and retires what vanished. Phase 1i needs no worker: a UDP bind and a file mapping do not block, and the OpenXR source starts its own thread, so the poll thread runs the whole lifecycle itself. Retiring the row does wait, up to 50 ms for the UDP receive thread and up to 2 s for the OpenXR thread. Phase 1j follows the 1i shape.</p>
 <p>The Flydigi Space Station check (#395) splits like 1g and 1h. <code>FlydigiWatchTick</code> starts its process scan on a worker every 10 s (<code>FlydigiWatchIntervalMs</code>), one scan at a time, and a later sweep marks the rows changed when the set of running Flydigi processes changed. <code>RecordFlydigiArrival</code> writes a Flydigi pad's arrival record from a worker after a scan of its own. The scan once walked every process, 230 to 290 ms on a PC with about 480 processes, and on the poll thread it stopped the loop that long every 10 s. It now names the running processes from the list of process IDs (<code>RunningProcessList</code>: one <code>K32EnumProcesses</code> call, then <code>ProcessImage.PathOf</code> for each ID), about 7 ms where the walk cost 240 to 360 ms of CPU. Every check for a running program reads it: the peripheral link, the Flydigi and handheld watches, the Razer Synapse and Logitech checks, and the SteamVR check behind <strong>Uninstall</strong>. <code>ProcessPresenceTests.NoProductionCode_WalksTheKernelsProcessRecords</code> fails on any production call that walks every process.</p>
@@ -8133,9 +8151,9 @@ The same loop without the online filter. Phase 2 uses it to finish off a device 
 </code></pre></div>
 <p>Applies rumble to a physical device based on vibration data from games via HIDMaestro.</p>
 <p><strong>Pre-conditions:</strong>
-- <code>ud.ForceFeedbackState != null</code> (device has FFB tracking). A haptic mouse, keyboard or the Razer Sensa row (#494) reports no SDL rumble, so loading it makes no cache. <code>ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes one on the poll thread when <code>PeripheralOutputs.TakesHaptics(ud)</code> holds, and zeroes the row's stored level first, since a new cache starts from zero
+- <code>ud.ForceFeedbackState != null</code> (device has FFB tracking). A haptic mouse, keyboard or the Razer Sensa row (#494) reports no SDL rumble, so loading it makes no cache. <code>ApplyForceFeedback</code> (<code>InputManager.Step2.UpdateInputStates.cs</code> line 671) makes one on the poll thread when <code>PeripheralOutputs.TakesHaptics(ud)</code> holds, and zeroes the row's stored level first, since a new cache starts from zero. A Novint Falcon row (#521) reports no SDL rumble either and gets its cache the same way, without the stop, since its haptic thread renders the force each pass hands it
 - <code>OutputsQuiesced</code> is false (the abnormal-exit quiesce, discussion #179)
-- Xbox One+ impulse pads, the Padix PSX/USB converter, a Bliss-Box port and a haptic peripheral need <code>ud.Device != null</code>. Vendor wheels and pedals need no device handle. Every other device needs <code>ud.Device != null</code> and <code>HasRumble || HasHaptic</code></p>
+- Xbox One+ impulse pads, the Padix PSX/USB converter, a Bliss-Box port, a haptic peripheral and a Novint Falcon need <code>ud.Device != null</code>. Vendor wheels and pedals need no device handle. Every other device needs <code>ud.Device != null</code> and <code>HasRumble || HasHaptic</code></p>
 <p>A device with no slot left takes a separate branch: it gets one final zero on the tick its last slot goes (#402), unless a Remote Link peer holds its output.</p>
 <p><strong>Multi-slot vibration combination:</strong></p>
 <p>A physical device can map to multiple VC slots. Each slot's vibration runs through this device's own chain for that slot, and the results combine via <code>max()</code> per motor:</p>
@@ -9848,9 +9866,18 @@ Clamps <code>short.MinValue</code> to <code>short.MaxValue</code> to avoid overf
 <a id="__codelineno-77-75" name="__codelineno-77-75" href="#__codelineno-77-75"></a><span class="w">    </span><span class="c1">// Appended in 5.0.0</span>
 <a id="__codelineno-77-76" name="__codelineno-77-76" href="#__codelineno-77-76"></a><span class="w">    </span><span class="n">SetChromaColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">56</span><span class="p">,</span><span class="w">       </span><span class="c1">// Paint the Razer devices assigned to the macro&#39;s slot one</span>
 <a id="__codelineno-77-77" name="__codelineno-77-77" href="#__codelineno-77-77"></a><span class="w">                               </span><span class="c1">// color while the action runs (#468, #494). See below</span>
-<a id="__codelineno-77-78" name="__codelineno-77-78" href="#__codelineno-77-78"></a><span class="w">    </span><span class="n">ShowDreamcastScreen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">57</span><span class="w">   </span><span class="c1">// Play one to eight pictures on the VMU of each Dreamcast pad</span>
+<a id="__codelineno-77-78" name="__codelineno-77-78" href="#__codelineno-77-78"></a><span class="w">    </span><span class="n">ShowDreamcastScreen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">57</span><span class="p">,</span><span class="w">  </span><span class="c1">// Play one to eight pictures on the VMU of each Dreamcast pad</span>
 <a id="__codelineno-77-79" name="__codelineno-77-79" href="#__codelineno-77-79"></a><span class="w">                               </span><span class="c1">// in a Bliss-Box port that feeds the slot (#469). One-shot</span>
-<a id="__codelineno-77-80" name="__codelineno-77-80" href="#__codelineno-77-80"></a><span class="p">}</span>
+<a id="__codelineno-77-80" name="__codelineno-77-80" href="#__codelineno-77-80"></a><span class="w">    </span><span class="c1">// Appended in 5.2.0</span>
+<a id="__codelineno-77-81" name="__codelineno-77-81" href="#__codelineno-77-81"></a><span class="w">    </span><span class="n">ShowKeyboardScreen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">58</span><span class="p">,</span><span class="w">   </span><span class="c1">// Play one to eight pictures on each keyboard screen of the</span>
+<a id="__codelineno-77-82" name="__codelineno-77-82" href="#__codelineno-77-82"></a><span class="w">                               </span><span class="c1">// chosen kind whose row feeds the slot (#519). One-shot</span>
+<a id="__codelineno-77-83" name="__codelineno-77-83" href="#__codelineno-77-83"></a><span class="w">    </span><span class="n">KeyboardScreenMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">59</span><span class="p">,</span><span class="w">   </span><span class="c1">// Switch those screens to a mode, kept as each screen&#39;s</span>
+<a id="__codelineno-77-84" name="__codelineno-77-84" href="#__codelineno-77-84"></a><span class="w">                               </span><span class="c1">// setting (#519). One-shot</span>
+<a id="__codelineno-77-85" name="__codelineno-77-85" href="#__codelineno-77-85"></a><span class="w">    </span><span class="n">Stopwatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">            </span><span class="c1">// Start or pause, or reset, the keyboard screens&#39; one</span>
+<a id="__codelineno-77-86" name="__codelineno-77-86" href="#__codelineno-77-86"></a><span class="w">                               </span><span class="c1">// stopwatch (#519). One-shot</span>
+<a id="__codelineno-77-87" name="__codelineno-77-87" href="#__codelineno-77-87"></a><span class="w">    </span><span class="n">PanKeyboardScreen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">61</span><span class="w">     </span><span class="c1">// Move the window of each keyboard screen that feeds the slot</span>
+<a id="__codelineno-77-88" name="__codelineno-77-88" href="#__codelineno-77-88"></a><span class="w">                               </span><span class="c1">// over its picture, stopping at the edges (#519). One-shot</span>
+<a id="__codelineno-77-89" name="__codelineno-77-89" href="#__codelineno-77-89"></a><span class="p">}</span>
 </code></pre></div>
 <p>The cursor actions, the rumble/trigger overrides, the sound actions, and the lightbar / pointer / gyro-engage actions each have their own execution path documented in the sections above and in <a href="../../features/mappings/">Button and Axis Mappings</a>.</p>
 <h3 id="action-execution-architecture">Action Execution Architecture<a class="headerlink" href="#action-execution-architecture" title="Permanent link">&para;</a></h3>

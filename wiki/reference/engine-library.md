@@ -1225,6 +1225,10 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 | `LogitechGKeys` | 37 | The G-keys on a Logitech keyboard and a Logitech mouse's buttons 6 through 20, read through the G-key SDK (#454). 102 buttons, no axes |
 | `AnalogKeyboard` | 38 | An analog keyboard (#468), Hall-effect or analog optical, read over its vendor interface. Every key's press depth rides `CustomInputState.AnalogKeys`, not the numbered arrays |
 | `WebMenus` | 39 | A phone on the web controller's Web Menus layout (#471). No axes or buttons. A tap fires a menu cell directly |
+| `PeripheralLighting` | 40 | Output a vendor's software delivers (#494): the Razer Chroma and Logitech LIGHTSYNC rows, and the row of a lit device no mouse or keyboard row reaches, such as a headset or a light strip Windows lists as a HID LampArray. No inputs. The row is assigned for its Lighting tab |
+| `PeripheralHaptics` | 41 | The Razer Sensa row, which plays rumble on Sensa HD devices (#494). No inputs. The row is assigned for its Force Feedback tab |
+| `KeyboardScreenKeys` | 42 | One keyboard screen's row (#519), with the keys beside that screen: the four under a Logitech monochrome screen and its applet key (5 buttons), or the G19's seven display keys and its settings key (8). The Arx Control and S.T.R.I.K.E. 7 rows carry no keys |
+| `NovintFalcon` | 43 | A Novint Falcon opened through Force Dimension's library (#521): the handle's three axes and the grip's four buttons |
 
 ### AnswersAnyDeviceSources
 
@@ -1234,7 +1238,7 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 public static bool AnswersAnyDeviceSources(int capType)
 ```
 
-It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController`, `LogitechGKeys`, `AnalogKeyboard` and `WebMenus`.
+It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController`, `LogitechGKeys`, `AnalogKeyboard`, `WebMenus`, `PeripheralLighting`, `PeripheralHaptics`, `KeyboardScreenKeys` and `NovintFalcon`.
 
 Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose `DeviceGuid` is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.
 
@@ -2177,6 +2181,21 @@ Per device, per slot, so each binding config carries its own gyro feel and its o
 | `RotationRangeEnabled` | `string` | `[XmlElement]` | `"1"` | "0" leaves the range to the wheel and its own software: no range is sent (#512) |
 | `AutoCenterStrength` | `string` | `[XmlElement]` | `"0"` | Wheel auto-center spring 0–100% (0 = off). Also drives the software spring for generic SDL wheels |
 | `WheelRpmLeds` | `string` | `[XmlElement]` | `"0"` | "1" drives a Logitech or Fanatec wheel's RPM LEDs from racing-game telemetry |
+
+### Novint Falcon (#521)
+
+Kept per slot, so a profile carries them per game. See [Novint Falcon Internals](novint-falcon-internals.md).
+
+| Property | Type | Serialization | Default | Description |
+|----------|------|---------------|---------|-------------|
+| `FalconFeel` | `string` | `[XmlElement]` | `"0"` | 0 = Joystick (a centering spring, the stick follows the handle's position), 1 = Aim (a free handle, the stick follows its speed) |
+| `FalconSpring` | `string` | `[XmlElement]` | `"100"` | The Joystick feel's spring, % of 3 N at full deflection (0–200) |
+| `FalconKickButton` | `string` | `[XmlElement]` | `"1"` | The grip button (1–4, 0 none) whose hold, and 250 ms after, turns rumble into a push toward the player |
+| `FalconKick` / `FalconShake` | `string` | `[XmlElement]` | `"100"` | Kick and shake strength, % (0–200) |
+| `FalconBraceButton` | `string` | `[XmlElement]` | `"0"` | The Aim feel's brace button (1–4, 0 none): the aim at 0.3 while held |
+| `FalconPreloadButton` | `string` | `[XmlElement]` | `"0"` | The Aim feel's preload button (1–4, 0 none): 1.6 N along In/Out while held |
+| `FalconGravity` | `string` | `[XmlElement]` | `"100"` | Gravity compensation, % of standard gravity (0–200) |
+| `FalconForceCap` | `string` | `[XmlElement]` | `"8"` | The force cap in newtons (1–8), 8 being the Falcon's rated force |
 
 ### Steering At-Lock Feedback (#94)
 

@@ -81,6 +81,8 @@ The pipeline is a `partial class InputManager` split across twenty-one files:
 | `InputManager.cs` | Main | Fields, Start/Stop, PollingLoop, trigger-route settle, motion snapshots, DSU broadcast |
 | `InputManager.MenuRuntime.cs` | Steps 2–4b | Radial / touch menu runtime (#9): `MenuContexts` keyed (slot, device, menu), ticked in Step 2, fired items read by Step 3 rows and activators, direct bindings delivered in Step 4b. Web Menus phone presses (#471) are marked in Step 2 beside the contexts |
 | `InputManager.Step1.UpdateDevices.cs` | Step 1 | Device enumeration and lifecycle |
+| `InputManager.KeyboardScreens.cs` | Step 1 | Phase 1j2 (#519): a row per screen the screen host publishes, registered and retired on the poll thread. A row reads a static the screen engines fill and opens with no I/O. See [Keyboard Screens Internals](keyboard-screens-internals.md) |
+| `InputManager.Falcon.cs` | Steps 1, 2 | Phase 1j3 (#521): a sweep every 3 s on a worker opens Falcons through Force Dimension's library, and the poll thread registers and retires their rows. Step 2 hands each Falcon the force combined over every slot it feeds, under the first slot's settings, the silence edges drop the game force and keep the feel, and the quiesce closes every Falcon at zero force. See [Novint Falcon Internals](novint-falcon-internals.md) |
 | `InputManager.BlissBox.cs` | Step 1 | Phase 1l (#469): one API sidecar per online Bliss-Box row while Read Bliss-Box Adapters is on. A change of the switch brings the pass forward to the next poll cycle, and motor hand-offs that a busy output gate or a refused SDL stop deferred are retried every 100 ms |
 | `InputManager.PeripheralRows.cs` | Step 1 | Phase 1m (#494): the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa vendor rows, each open while its vendor's software is installed, and the unit rows of lit devices no mouse or keyboard row reaches. See [Step 1](#step-1-updatedevices) |
 | `InputManager.TouchSenseMice.cs` | Step 1 | Phase 1n (#494): the rows of Logitech iFeel mice bound to WinUSB, which PadForge reads itself. See [Step 1](#step-1-updatedevices) |
@@ -663,13 +665,15 @@ Enumerates connected devices at 2-second intervals (5-second in idle mode). Open
 | 1h | Handheld PC hidden buttons plus the system motion sensor (#343) |
 | 1i | Head tracker: OpenTrack UDP and FreeTrack shared memory (#355), plus an OpenXR headset and its left and right controller rows (#403) |
 | 1j | Logitech G-keys (#454) |
+| 1j2 | Keyboard screens, a row each: every monochrome keyboard and G19 the screen host finds, plus Arx Control and the S.T.R.I.K.E. 7 while their libraries load (#519) |
+| 1j3 | Novint Falcons opened through Force Dimension's library (#521) |
 | 1m | Vendor rows for peripheral outputs: Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa, and the unit rows of lit devices no mouse or keyboard row reaches (#494) |
 | 1n | Logitech iFeel mice bound to WinUSB, read over WinUSB (#494) |
 | 1k | Analog keyboards (#468) |
 | 1l | Bliss-Box ports, beside their SDL rows (#469) |
 | 2 | Debounced disconnect detection for SDL devices |
 
-The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j, 1m and 1n retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, `FlydigiServiceWatch.Refresh()` flags a change when Flydigi's Space Station service starts or stops (#395). The pass ends by noting its run as enumerated (`NoteDevicesEnumerated`, the answer `DevicesEnumerated` gives) and then raises `DevicesUpdated` when anything changed.
+The Raw Input disconnect sweep (2b, 2c) runs inside the 1b/1c block, before the tablet phase. Phases 1d through 1j3, 1m and 1n retire their own vanished rows. Raw Input Consumer Control HID collections (#168) ride the same background pass as keyboards and mice and are consumed alongside them in phases 1b/1c. Every 10 s after Phase 2, `FlydigiServiceWatch.Refresh()` flags a change when Flydigi's Space Station service starts or stops (#395). The pass ends by noting its run as enumerated (`NoteDevicesEnumerated`, the answer `DevicesEnumerated` gives) and then raises `DevicesUpdated` when anything changed.
 
 Phases 1e through 1j share one shape: an `_opened*` dictionary keyed by the source's stable id (a single device field in 1h, 1i, and 1j), an open that runs through `FindOrCreateUserDevice` then `LoadFromExternalDevice` then `IsOnline = true`, a vanished-entry sweep that marks offline and neutralizes mapped outputs, and a `Shutdown*` method that suppresses the phase for the rest of the session. The shared `NfcReaderService` monitor is a separate object with its own lifecycle (started lazily from phase 1f, retried about every 5 s while the Smart Card service is absent), but each visible reader still becomes an `NfcReaderDevice` registered here like any other source.
 
@@ -1011,9 +1015,9 @@ private void ApplyForceFeedback(UserDevice ud)
 Applies rumble to a physical device based on vibration data from games via HIDMaestro.
 
 **Pre-conditions:**
-- `ud.ForceFeedbackState != null` (device has FFB tracking). A haptic mouse, keyboard or the Razer Sensa row (#494) reports no SDL rumble, so loading it makes no cache. `ApplyForceFeedback` (`InputManager.Step2.UpdateInputStates.cs` line 671) makes one on the poll thread when `PeripheralOutputs.TakesHaptics(ud)` holds, and zeroes the row's stored level first, since a new cache starts from zero
+- `ud.ForceFeedbackState != null` (device has FFB tracking). A haptic mouse, keyboard or the Razer Sensa row (#494) reports no SDL rumble, so loading it makes no cache. `ApplyForceFeedback` (`InputManager.Step2.UpdateInputStates.cs` line 671) makes one on the poll thread when `PeripheralOutputs.TakesHaptics(ud)` holds, and zeroes the row's stored level first, since a new cache starts from zero. A Novint Falcon row (#521) reports no SDL rumble either and gets its cache the same way, without the stop, since its haptic thread renders the force each pass hands it
 - `OutputsQuiesced` is false (the abnormal-exit quiesce, discussion #179)
-- Xbox One+ impulse pads, the Padix PSX/USB converter, a Bliss-Box port and a haptic peripheral need `ud.Device != null`. Vendor wheels and pedals need no device handle. Every other device needs `ud.Device != null` and `HasRumble || HasHaptic`
+- Xbox One+ impulse pads, the Padix PSX/USB converter, a Bliss-Box port, a haptic peripheral and a Novint Falcon need `ud.Device != null`. Vendor wheels and pedals need no device handle. Every other device needs `ud.Device != null` and `HasRumble || HasHaptic`
 
 A device with no slot left takes a separate branch: it gets one final zero on the tick its last slot goes (#402), unless a Remote Link peer holds its output.
 
@@ -2283,8 +2287,17 @@ public enum MacroActionType
     // Appended in 5.0.0
     SetChromaColor = 56,       // Paint the Razer devices assigned to the macro's slot one
                                // color while the action runs (#468, #494). See below
-    ShowDreamcastScreen = 57   // Play one to eight pictures on the VMU of each Dreamcast pad
+    ShowDreamcastScreen = 57,  // Play one to eight pictures on the VMU of each Dreamcast pad
                                // in a Bliss-Box port that feeds the slot (#469). One-shot
+    // Appended in 5.2.0
+    ShowKeyboardScreen = 58,   // Play one to eight pictures on each keyboard screen of the
+                               // chosen kind whose row feeds the slot (#519). One-shot
+    KeyboardScreenMode = 59,   // Switch those screens to a mode, kept as each screen's
+                               // setting (#519). One-shot
+    Stopwatch = 60,            // Start or pause, or reset, the keyboard screens' one
+                               // stopwatch (#519). One-shot
+    PanKeyboardScreen = 61     // Move the window of each keyboard screen that feeds the slot
+                               // over its picture, stopping at the edges (#519). One-shot
 }
 ```
 

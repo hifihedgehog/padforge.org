@@ -4162,6 +4162,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#novint-falcon-521" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon (#521)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#steering-at-lock-feedback-94" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7651,6 +7662,17 @@
     <span class="md-ellipsis">
       
         Force Feedback Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#novint-falcon-521" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon (#521)
       
     </span>
   </a>
@@ -11262,13 +11284,33 @@
 <td>39</td>
 <td>A phone on the web controller's Web Menus layout (#471). No axes or buttons. A tap fires a menu cell directly</td>
 </tr>
+<tr>
+<td><code>PeripheralLighting</code></td>
+<td>40</td>
+<td>Output a vendor's software delivers (#494): the Razer Chroma and Logitech LIGHTSYNC rows, and the row of a lit device no mouse or keyboard row reaches, such as a headset or a light strip Windows lists as a HID LampArray. No inputs. The row is assigned for its Lighting tab</td>
+</tr>
+<tr>
+<td><code>PeripheralHaptics</code></td>
+<td>41</td>
+<td>The Razer Sensa row, which plays rumble on Sensa HD devices (#494). No inputs. The row is assigned for its Force Feedback tab</td>
+</tr>
+<tr>
+<td><code>KeyboardScreenKeys</code></td>
+<td>42</td>
+<td>One keyboard screen's row (#519), with the keys beside that screen: the four under a Logitech monochrome screen and its applet key (5 buttons), or the G19's seven display keys and its settings key (8). The Arx Control and S.T.R.I.K.E. 7 rows carry no keys</td>
+</tr>
+<tr>
+<td><code>NovintFalcon</code></td>
+<td>43</td>
+<td>A Novint Falcon opened through Force Dimension's library (#521): the handle's three axes and the grip's four buttons</td>
+</tr>
 </tbody>
 </table>
 <h3 id="answersanydevicesources">AnswersAnyDeviceSources<a class="headerlink" href="#answersanydevicesources" title="Permanent link">&para;</a></h3>
 <p><code>InputDeviceType</code> carries one predicate beside its constants:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">AnswersAnyDeviceSources</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">capType</span><span class="p">)</span>
 </code></pre></div>
-<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code>, <code>LogitechGKeys</code>, <code>AnalogKeyboard</code> and <code>WebMenus</code>.</p>
+<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code>, <code>LogitechGKeys</code>, <code>AnalogKeyboard</code>, <code>WebMenus</code>, <code>PeripheralLighting</code>, <code>PeripheralHaptics</code>, <code>KeyboardScreenKeys</code> and <code>NovintFalcon</code>.</p>
 <p>Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose <code>DeviceGuid</code> is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.</p>
 <p>The rule also holds for each input. A row that answers the wildcard still reads rest for a source that takes a numbered axis the device does not have. A device holds 0 where it has no axis, and 0 reads as full deflection on a stick read, so a touchpad, keyboard or motion sensor beside a controller pinned an "(Any Device)" stick row, won Step 4's merge and engaged a device-free stick menu.</p>
 <p><code>SourceCoercion.NumberedAxesRead</code> names the axes one descriptor takes: "Axis N" and its Gamepad aliases, "Slider N" as overflow axis 24 + N, and a stick ring's or flick stick's pair. It keeps the answer per descriptor, so the poll allocates nothing. A source takes its <code>Descriptor</code> when its kind reads it. Incremental and Ramped never do, reading <code>ParamUp</code> and <code>ParamDown</code>, and the motion kinds read gravity or the shake envelope on a stick target but fall to the Direct read, which takes <code>Descriptor</code>, on a button or trigger target. It also takes its two gate legs, which read the same device. On a stick target a steering source (<code>WindingStick</code>, <code>AngleToAxisX</code>, <code>AngleToAxisY</code>) reads <code>Descriptor</code> and <code>ParamYDescriptor</code> as one stick, and on a button or trigger target it falls to the Direct read of <code>Descriptor</code>. A Direct stick read with a Steam Circle deadzone (shape 2) takes the stick axis's partner too (<code>SourceCoercion.CompanionAxisRead</code>). The steering reader and the button and trigger reads never take the partner.</p>
@@ -13927,6 +13969,77 @@
 <td><code>[XmlElement]</code></td>
 <td><code>"0"</code></td>
 <td>"1" drives a Logitech or Fanatec wheel's RPM LEDs from racing-game telemetry</td>
+</tr>
+</tbody>
+</table>
+<h3 id="novint-falcon-521">Novint Falcon (#521)<a class="headerlink" href="#novint-falcon-521" title="Permanent link">&para;</a></h3>
+<p>Kept per slot, so a profile carries them per game. See <a href="../novint-falcon-internals/">Novint Falcon Internals</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Serialization</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FalconFeel</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"0"</code></td>
+<td>0 = Joystick (a centering spring, the stick follows the handle's position), 1 = Aim (a free handle, the stick follows its speed)</td>
+</tr>
+<tr>
+<td><code>FalconSpring</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"100"</code></td>
+<td>The Joystick feel's spring, % of 3 N at full deflection (0–200)</td>
+</tr>
+<tr>
+<td><code>FalconKickButton</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"1"</code></td>
+<td>The grip button (1–4, 0 none) whose hold, and 250 ms after, turns rumble into a push toward the player</td>
+</tr>
+<tr>
+<td><code>FalconKick</code> / <code>FalconShake</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"100"</code></td>
+<td>Kick and shake strength, % (0–200)</td>
+</tr>
+<tr>
+<td><code>FalconBraceButton</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"0"</code></td>
+<td>The Aim feel's brace button (1–4, 0 none): the aim at 0.3 while held</td>
+</tr>
+<tr>
+<td><code>FalconPreloadButton</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"0"</code></td>
+<td>The Aim feel's preload button (1–4, 0 none): 1.6 N along In/Out while held</td>
+</tr>
+<tr>
+<td><code>FalconGravity</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"100"</code></td>
+<td>Gravity compensation, % of standard gravity (0–200)</td>
+</tr>
+<tr>
+<td><code>FalconForceCap</code></td>
+<td><code>string</code></td>
+<td><code>[XmlElement]</code></td>
+<td><code>"8"</code></td>
+<td>The force cap in newtons (1–8), 8 being the Falcon's rated force</td>
 </tr>
 </tbody>
 </table>
