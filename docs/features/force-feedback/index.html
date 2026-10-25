@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1648,6 +1650,17 @@
     <span class="md-ellipsis">
       
         Haptic mice and the Razer Sensa row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon
       
     </span>
   </a>
@@ -2273,6 +2286,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2814,6 +2855,8 @@
       
         
           
+        
+      
         
       
         
@@ -3787,6 +3830,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4119,6 +4190,17 @@
     <span class="md-ellipsis">
       
         Haptic mice and the Razer Sensa row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon
       
     </span>
   </a>
@@ -4655,6 +4737,9 @@
 <p>The line is empty while PadForge's input engine is stopped, and on a virtual controller that is not live, such as one that is turned off. Only <em>Not Available on ARM64</em> still shows then.</p>
 <p>See <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a> for the vendor rows and the lighting these devices take.</p>
 <hr />
+<h2 id="novint-falcon">Novint Falcon<a class="headerlink" href="#novint-falcon" title="Permanent link">&para;</a></h2>
+<p>A Novint Falcon has no motors of its own to rumble. Its slot's rumble and force feedback become force on the handle, which PadForge computes about a thousand times a second. The tab gains a <strong>Novint Falcon</strong> section for the Falcon's feel, which button turns rumble into a kick toward you, the kick and shake strengths, the Aim feel's Brace and Preload buttons, gravity compensation and the force limit. The Falcon's <strong>Calibrate Reach</strong> belongs to the device, so it is on its row on the Devices page. The rumble settings above apply first, as for any controller. See <a href="../novint-falcon/">Novint Falcon</a>.</p>
+<hr />
 <h2 id="constant-force">Constant Force<a class="headerlink" href="#constant-force" title="Permanent link">&para;</a></h2>
 <p>A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. The dot marks the side the force comes from: Y at +1 (dot below center) pushes forward, and X at +1 (dot right of center) pushes left.</p>
 <p><strong>Override-with-resume rule.</strong> While the toggle is on, PadForge keeps applying the configured force as long as no game or program is sending non-zero force to that device/slot pair. The moment a game sends non-zero motor rumble or a force feedback effect, the game's force takes over. Rumble aimed only at the trigger motors leaves the constant force running. The moment the game returns to silence, the constant force resumes. Macro rumble counts as game force here, so a macro pulse takes over the same way, and the constant force resumes once the pulse ends.</p>
@@ -4968,6 +5053,7 @@
 <li><a href="../adaptive-triggers/">Adaptive Triggers</a>: DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.</li>
 <li><a href="../devices/">Devices</a>: check rumble and haptic capability per device.</li>
 <li><a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>: rumble and lighting on the mice, keyboards and vendor rows assigned to a virtual controller.</li>
+<li><a href="../novint-falcon/">Novint Falcon</a>: rumble and force feedback as force on the Falcon's handle.</li>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: wider help with rumble issues.</li>
 </ul>
 <hr />

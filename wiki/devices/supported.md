@@ -758,6 +758,7 @@ as a generic joystick.
 | **Xbox One, Elite, Series** | Impulse triggers, Guide LED brightness, paddles | [Impulse Triggers](../features/impulse-triggers.md) |
 | **Buffalo BSGC101, BSGC201 (Padix PSX/USB converter)** | Rumble on the PS1 or PS2 pad behind the converter, without Buffalo's driver package | [Force Feedback](../features/force-feedback.md#playstation-pads-through-a-padix-converter) |
 | **3Dconnexion SpaceMouse** | All six axes of the puck, as ordinary mapping sources | [SpaceMouse](spacemouse.md) |
+| **Novint Falcon** | The handle's three axes and the grip's four buttons, with rumble and force feedback played as force on the handle, through Force Dimension's SDK | [Novint Falcon](../features/novint-falcon.md) |
 | **Handheld gaming PCs and gaming laptops** | The rear paddles, menu keys and wheels the firmware hides from games, learned by pressing them, plus the machine's own gyroscope and accelerometer | [Handheld PC Buttons](../features/handheld-buttons.md) |
 | **VR headsets and controllers** | The headset pose as six axes, and each hand controller's pose, stick, trigger, grip and buttons, through any OpenXR runtime with or without SteamVR. While SteamVR runs, also the headset and every controller it tracks, each as its own device | [VR Controller Input](../features/vr-controller-input.md), [Virtual VR Controllers Internals](../reference/vr-controllers-internals.md#the-other-direction-consuming-real-vr-devices-287) |
 | **Sony wireless headsets** | Head rotation as a motion source | [Headset Motion](../features/headset-motion.md) |

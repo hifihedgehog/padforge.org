@@ -473,7 +473,7 @@ The engine half of the "Continue Polling When Window Loses Focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20326), `MoveSlot(int, int)` (line 20359), and `MoveSlotToGroupTail(int)` (line 20406). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20360), `MoveSlot(int, int)` (line 20393), and `MoveSlotToGroupTail(int)` (line 20440). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
@@ -496,7 +496,7 @@ private void UpdateMotionSnapshots()
 
 Called after Step 2 (`InputManager.cs` line 2225). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into `Ds5StatusBytes` (#433).
 
-**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, `BuildMotionRowCandidates` (`InputManager.cs` line 3779) returns no rows and the channel sends nothing. Otherwise `ReconcileMappedMotion` (`InputManager.cs` line 4017) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
+**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, `BuildMotionRowCandidates` (`InputManager.cs` line 3785) returns no rows and the channel sends nothing. Otherwise `ReconcileMappedMotion` (`InputManager.cs` line 4025) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
 
 ```csharp
 var gyro = _motionHasGyroRow[padIndex]
@@ -647,7 +647,7 @@ private const uint ES_CONTINUOUS = 0x80000000;
 
 **File:** `InputManager.Step1.UpdateDevices.cs`
 
-Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (`InputManager.Step1.UpdateDevices.cs` lines 134-601):
+Enumerates connected devices at 2-second intervals (5-second in idle mode). Opens new devices, marks disconnected ones offline, and fires `DevicesUpdated` on changes. It returns at once when SDL is not initialized. Otherwise it runs these phases in order (`InputManager.Step1.UpdateDevices.cs` lines 134-603):
 
 | Phase | Source |
 |---|---|
@@ -747,9 +747,9 @@ Same pattern as keyboards using `SdlMouseWrapper`, with one extra skip: a mouse 
 
 **Enumerate Consumer Controls** via `EnumerateConsumerControls()`
 
-Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 259 and 252). `EnumerateConsumerControls` (lines 1539-1577) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
+Consumer Control HID collections (media / browser keys, issue #168) enumerate on the same background Raw Input pass as keyboards and mice, cached in `_cachedConsumerControls` and consumed in `UpdateDevices` (`InputManager.Step1.UpdateDevices.cs` lines 259 and 252). `EnumerateConsumerControls` (lines 1541-1579) mirrors `EnumerateKeyboards`: for each new handle not in `_openedConsumerHandles`, it opens a `ConsumerControlWrapper`, runs `FindOrCreateUserDevice`, calls `ud.LoadFromConsumerDevice(wrapper)`, and marks the device online. `DetectDisconnectedHandles(_openedConsumerHandles, ...)` marks removed collections offline.
 
-`FindOnlineDeviceByHandle` (line 4104) resolves a Raw Input handle back to its `UserDevice` by testing `RawInputHandle` on each raw-input wrapper kind. `ConsumerControlWrapper` was missing from that list, so `PruneOrphanedHandles` found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising `DevicesUpdated` and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.
+`FindOnlineDeviceByHandle` (line 4106) resolves a Raw Input handle back to its `UserDevice` by testing `RawInputHandle` on each raw-input wrapper kind. `ConsumerControlWrapper` was missing from that list, so `PruneOrphanedHandles` found no online record for any consumer handle, dropped every one, and the lane re-opened them on the same pass: three device flips every five seconds on an idle bench, each raising `DevicesUpdated` and a full hiding apply. The wrapper is in the list now, and the DEVCHG trace line that named the flap stays in the prune path.
 
 **Tablet phase** via `UpdateTabletDevices(ref changed)` (`InputManager.Tablets.cs`)
 
@@ -1077,7 +1077,7 @@ A mouse, keyboard, lit unit or vendor row assigned to a virtual controller takes
 
 #### Rumble
 
-`isPeripheralHaptic` is `PeripheralOutputs.TakesHaptics(ud)` (line 269): a row with a haptic path now, or one whose record says it has one while its device sleeps. Such a row runs the per-slot chain above like any device, so its own Force Feedback settings scale the slot's rumble, then takes the sole-writer branch (`InputManager.Step2.UpdateInputStates.cs` line 1234). Trigger Rumble Fold applies as on SDL's path, since none of these devices has trigger motors. A level that differs from the snapshot goes to `PeripheralOutputs.SetMotors` (line 463), which keeps the stronger motor as one 0 to 1 level, and the first nonzero level wakes the HID++, GameSense and TouchSense workers at once. The level is kept whether or not a path answers now, so a device that wakes plays what the game holds, and a stop sent while it slept is never lost. A row with no slot left gets one final zero, unless a Remote Link peer holds it, and a row that goes offline, retires or is removed is zeroed at once. Over Remote Link, the PC that owns a haptic mouse or keyboard advertises rumble for it, so the other PC's row ships the slot's rumble back like any forwarded pad, and the owner hands the relayed level to `SetMotors` marked as relayed. The vendor rows are never shared.
+`isPeripheralHaptic` is `PeripheralOutputs.TakesHaptics(ud)` (line 269): a row with a haptic path now, or one whose record says it has one while its device sleeps. Such a row runs the per-slot chain above like any device, so its own Force Feedback settings scale the slot's rumble, then takes the sole-writer branch (`InputManager.Step2.UpdateInputStates.cs` line 1265). Trigger Rumble Fold applies as on SDL's path, since none of these devices has trigger motors. A level that differs from the snapshot goes to `PeripheralOutputs.SetMotors` (line 463), which keeps the stronger motor as one 0 to 1 level, and the first nonzero level wakes the HID++, GameSense and TouchSense workers at once. The level is kept whether or not a path answers now, so a device that wakes plays what the game holds, and a stop sent while it slept is never lost. A row with no slot left gets one final zero, unless a Remote Link peer holds it, and a row that goes offline, retires or is removed is zeroed at once. Over Remote Link, the PC that owns a haptic mouse or keyboard advertises rumble for it, so the other PC's row ships the slot's rumble back like any forwarded pad, and the owner hands the relayed level to `SetMotors` marked as relayed. The vendor rows are never shared.
 
 Four workers play it. A Logitech unit with HID++ feature 0x19B0, such as the MX Master 4, plays one fixed waveform per pulse: `HapticRumbleShaper` picks subtle, damp or sharp collision for three strength levels with hysteresis, and the repeat interval shortens from 250 ms at the faintest to 80 ms at full strength. A Logitech iFeel mouse bound to WinUSB buzzes at the level's own strength through the TouchSense worker: one frame of pulses 300 ms long, sent again every 100 ms while the level holds and ended by a stop frame when it falls silent. The tactile Rival 500, 700 and 710 play through the GameSense tactile handler in SteelSeries GG, which drives every tactile Rival at once, so the Rival on the virtual controller with the smallest displayed player number sets the level. A row Identify buzzes rules that path for the length of its train, ahead of every rank (`PeripheralOutputs.BeginIdentify`). The Razer Sensa row streams its level into the Interhaptics engine.
 
@@ -1269,7 +1269,7 @@ if (routedLT > combinedLT) combinedLT = routedLT;   // routed layers onto the
 if (routedRT > combinedRT) combinedRT = routedRT;    // impulse-trigger output
 ```
 
-The routed amplitude layers onto the impulse-trigger output via `max()`, and the Redirect flags silence the physical main motors. A second call at line 1781, in `ComputeFinalVibrationStates`, mirrors the same math for the motor meters (the Force Feedback tab and the Controller preview), so the meter reflects what the Scale slider is being tuned against.
+The routed amplitude layers onto the impulse-trigger output via `max()`, and the Redirect flags silence the physical main motors. A second call at line 1812, in `ComputeFinalVibrationStates`, mirrors the same math for the motor meters (the Force Feedback tab and the Controller preview), so the meter reflects what the Scale slider is being tuned against.
 
 ### Sony Write
 
@@ -1317,7 +1317,7 @@ Game-written impulse triggers only ever arrive on Xbox-class VCs, so `raw.*Trigg
 
 ### PadSetting Fields
 
-Twelve string fields on `PadSetting` back the feature (`PadForge.Engine/Data/PadSetting.cs` lines 471-510), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
+Twelve string fields on `PadSetting` back the feature (`PadForge.Engine/Data/PadSetting.cs` lines 511-550), all serialized as `[XmlElement]`, included in `ComputeChecksum`, and listed in the dirty-tracking allowlist:
 
 | Field (Left / Right) | Default | Meaning |
 |---|---|---|
@@ -1682,7 +1682,7 @@ The steering math is original C# written from the geometry described in JoyShock
 
 Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2565 and 2570), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
 
-The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15778), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
+The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15812), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
 
 `ReadShakeEnvelope` (`SourceCoercion.cs` line 2595) applies the per-source sensitivity and clamps to `[0, 1]`. The envelope is unsigned by nature, so `HalfAxis` and `Invert` have nothing to point at and are not applied. Per target class:
 
@@ -2332,7 +2332,7 @@ The macro QOL work (#112) moved copy, paste, and duplicate onto a shared seriali
 
 #### Macro clipboard codec (#112)
 
-Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5488):
+Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5493):
 
 ```csharp
 public sealed class MacroClipboardEnvelope
@@ -2360,15 +2360,15 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 | Path | Site | Flow |
 |---|---|---|
-| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8538) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
-| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8597) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
+| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8547) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
+| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8606) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
 | Duplicate | `DuplicateMacroCommand` (`PadViewModel.cs` ~5732) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
 
 `LoadMacroFromData` rebinds only the display side to the destination: button naming (`ButtonStyle`), the custom-button width, and the raw profile id. Trigger and action button values travel verbatim, so an Xbox-slot macro copied into an Extended slot keeps its Xbox bitmask and reads as inert until it is re-bound.
 
 #### Cursor-write macro actions (#108 / #109 / #110)
 
-Three `MacroActionType` members (#108/#109/#110) drive the desktop cursor through `CursorControlService`, and `MoveMouseToScreenPosition` (#9) is a fourth (`MoveCursorTo`, one `SetCursorPos` per fire). They are handled in `ExecuteSequentialAction` (the standard-slot path, `InputManager.Step4b.EvaluateMacros.cs` cases from line 3268) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, cases from line 5484), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (`_currentMacroSlotRestricted`, #138), it calls into `CursorControlService.Active` (the running service, null while the engine is stopped), then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
+Three `MacroActionType` members (#108/#109/#110) drive the desktop cursor through `CursorControlService`, and `MoveMouseToScreenPosition` (#9) is a fourth (`MoveCursorTo`, one `SetCursorPos` per fire). They are handled in `ExecuteSequentialAction` (the standard-slot path, `InputManager.Step4b.EvaluateMacros.cs` cases from line 3270) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, cases from line 5487), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (`_currentMacroSlotRestricted`, #138), it calls into `CursorControlService.Active` (the running service, null while the engine is stopped), then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
 
 | `MacroActionType` | Service call | Behavior |
 |---|---|---|
@@ -2397,7 +2397,7 @@ A macro must fire only from a device assigned to its own slot. `FindSlotDeviceBy
 
 ### Switch Layer
 
-`MacroActionType.SwitchLayer` (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: `ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs`, case at line 3185) for standard slots and `ExecuteSequentialActionRaw` (case at line 5719) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with `CurrentActionIndex` frozen. Both cases call `AdvanceAction(macro)`, so the action is one-shot per fire.
+`MacroActionType.SwitchLayer` (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: `ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs`, case at line 3187) for standard slots and `ExecuteSequentialActionRaw` (case at line 5722) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with `CurrentActionIndex` frozen. Both cases call `AdvanceAction(macro)`, so the action is one-shot per fire.
 
 The work happens in `ApplyMacroLayerSwitch(slotIndex, mask)` (`InputManager.Step3.MappingSetEval.cs` line 1249), which lives with the shift runtime rather than with the macro engine. The slot is always the macro's own `PadIndex`, the #254 per-layer macro scope identity:
 
@@ -2411,7 +2411,7 @@ Combined with the #254 per-layer macro scope, the same physical button can jump 
 
 ### Set Chroma Color
 
-`MacroActionType.SetChromaColor` (#468) has the `AxisHold` duration shape. Both evaluators run it on every frame it is current (`ExecuteSequentialAction`, case at `InputManager.Step4b.EvaluateMacros.cs` line 2964, and `ExecuteSequentialActionRaw`, case at line 5332) and advance once `DurationMs` passes. The case sends nothing itself. `NoteChromaColor` (line 2831) records the color in `_frameChroma`, one packed `0x00RRGGBB` entry per slot, so two macros current in one frame leave the last one evaluated. `FlushChromaColors` (line 2840) runs at the end of `EvaluateSlotMacros` and of `EvaluateSlotMacrosExtended` (the calls at lines 928 and 4957) and hands each recorded color to `MacroChromaSink` once, which is `PeripheralOutputs.AssertChromaMacro` (#494, `PeripheralOutputs.cs` line 895).
+`MacroActionType.SetChromaColor` (#468) has the `AxisHold` duration shape. Both evaluators run it on every frame it is current (`ExecuteSequentialAction`, case at `InputManager.Step4b.EvaluateMacros.cs` line 2965, and `ExecuteSequentialActionRaw`, case at line 5334) and advance once `DurationMs` passes. The case sends nothing itself. `NoteChromaColor` (line 2831) records the color in `_frameChroma`, one packed `0x00RRGGBB` entry per slot, so two macros current in one frame leave the last one evaluated. `FlushChromaColors` (line 2840) runs at the end of `EvaluateSlotMacros` and of `EvaluateSlotMacrosExtended` (the calls at lines 928 and 4959) and hands each recorded color to `MacroChromaSink` once, which is `PeripheralOutputs.AssertChromaMacro` (#494, `PeripheralOutputs.cs` line 895).
 
 The assertion stamps the slot's color with the tick and wakes the Chroma worker only for a new color, or for the first frame after a gap longer than `MacroAssertWindowMs` (120 ms, line 879). The worker paints the Chroma categories of the Razer devices assigned to the macro's slot, every category when the Razer Chroma row is, over any Lighting-tab claim and whether or not those tabs control the devices. Chroma addresses categories, so every other Razer device of those kinds takes the color too. The color lapses 120 ms after the last assertion and the categories go back to their claims or to Synapse. When two slots' macros paint one category, the smaller displayed player number wins. See [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 

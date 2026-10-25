@@ -129,6 +129,10 @@
          <lastmod>2026-10-25</lastmod>
     </url>
     <url>
+         <loc>https://padforge.org/docs/features/novint-falcon/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
          <loc>https://padforge.org/docs/features/peripherals/</loc>
          <lastmod>2026-10-25</lastmod>
     </url>
@@ -314,6 +318,10 @@
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/midi-input-internals/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://padforge.org/docs/reference/novint-falcon-internals/</loc>
          <lastmod>2026-10-25</lastmod>
     </url>
     <url>

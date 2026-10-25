@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen Keys, Analog Keyboard, Web Menus, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card, with a rumble, gyro, o
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and keyboard screen rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -208,7 +208,7 @@ Small circles in a wrap layout, labeled by index (0, 1, 2...).
 
 Gamepad mode shows the standard buttons the pad has (0 is A, 1 is B, on through Guide at 10, and a partial pad such as the PS Move Navigation skips the ones it lacks) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.
 
-Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows show a named button list instead, with no axis bars. See their sections below.
+Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, Logitech G-Keys, and keyboard screen rows show a named button list instead, with no axis bars. See their sections below. A Novint Falcon adds a **Handle** square above its axes, with a dot where the handle is, and names its axes Left/Right, Up/Down and In/Out.
 
 ### Keyboards
 
@@ -298,6 +298,18 @@ The card reads a vendor interface beside the keyboard, so it has no Input Mode o
 
 With **Read Bliss-Box Adapters** on in [Settings](settings.md), a Bliss-Box port's detail pane carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, assigning the port maps that controller the way SDL maps its console's pad, and a DualShock 2 adds a **DualShock 2 Pressure** panel to the detail pane. See [Bliss-Box Adapters](bliss-box.md).
 
+## Keyboard screens
+
+With **Drive Keyboard Screens** on in [Settings](settings.md), each keyboard screen is its own row: one for each monochrome keyboard and G19 plugged in, one for Logitech Arx Control and one for the S.T.R.I.K.E. 7. A screen's detail pane carries a line that says what draws the screen or why nothing does, and a button named for the kind of screen, **Monochrome Screen…**, **Color Screen…**, **Arx Control…** or **S.T.R.I.K.E. 7…**, which opens the dialog that sets what that screen shows. Two keyboards with screens keep their own settings. See [Keyboard Screens](keyboard-screens.md).
+
+## Novint Falcons
+
+With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's detail pane carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and **Calibrate Reach**, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every slot it feeds uses it. See [Novint Falcon](novint-falcon.md).
+
+## Analog keyboards
+
+With **Read Analog Keyboards** on in [Settings](settings.md), a Razer keyboard that waits for Razer Synapse says so in its own detail pane. See [Analog Keyboards](analog-keyboards.md).
+
 ---
 
 ## Consumer Control devices
@@ -347,7 +359,8 @@ Seven rows on this page come from the PC itself or from a program on it, not fro
 | **Head Tracker (OpenTrack)**, or **Head Tracker (OpenXR)** when OpenXR is its only input | Head Tracker | Any of the three inputs in the Head Tracking section of the [Dashboard](dashboard.md) | Six absolute axes, Head Yaw through Head Z, with a status line that says which source is live |
 | **VR Controller (Left)** and **VR Controller (Right)** | VR Controller | **Enable OpenXR Headset Input** on the [Dashboard](dashboard.md) | Six pose axes in the head tracker's convention, plus a thumbstick, a trigger, a grip and four buttons. Each hand is its own row, so one going to sleep leaves the other alone. See [VR Controller Input](vr-controller-input.md). |
 | **Logitech G-Keys** | Logitech G-Keys | **Read Logitech G-Keys** in [Settings](settings.md) | The G-keys and extra mouse buttons on Logitech gaming gear, read through the vendor SDK. See [Logitech G-Keys](logitech-g-keys.md). |
-| **Keyboard Screen Keys** | Keyboard Screen Keys | **Drive Keyboard Screens** in [Settings](settings.md) | The keys beside the screens on Logitech's GamePanel keyboards and the G19, in one fixed layout of 13 buttons. See [Keyboard Screens](keyboard-screens.md). |
+| **Logitech G15 Screen**, **Logitech G19 Screen**, **Logitech Arx Control**, **Mad Catz S.T.R.I.K.E. 7 Screen** and the like | Keyboard Screen | **Drive Keyboard Screens** in [Settings](settings.md) | One row per screen: the keys beside it, five on a monochrome screen and eight on a G19, none on Arx Control or the S.T.R.I.K.E. 7, and the button that sets what it shows. See [Keyboard Screens](keyboard-screens.md). |
+| **Novint Falcon** | Novint Falcon | **Drive Novint Falcon** in [Settings](settings.md) | The handle's Left/Right, Up/Down and In/Out and the grip's four buttons, one row per Falcon, opened through Force Dimension's library, with its line and **Calibrate Reach** in its detail pane. See [Novint Falcon](novint-falcon.md). |
 
 The machine name in the first two rows is the product name the firmware reports, or the family name when the product name is a bare model code. See [Handheld PC Buttons](handheld-buttons.md) and [Head Tracking](head-tracking.md) for setup.
 
@@ -534,7 +547,7 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 ### How to turn it on
 
 1. Select the device card
-2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)
+2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)
 3. Check **Force Raw Joystick Mode (Bypass Gamepad Remapping)**
 4. Saved right away. Persists across restarts.
 
@@ -643,7 +656,7 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 ### HidHide toggle grayed out or missing
 
 - **Grayed out**: HidHide is not installed. Install it from [Driver Management](driver-management.md).
-- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.
+- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.
 
 ---
 

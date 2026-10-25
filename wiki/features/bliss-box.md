@@ -10,7 +10,7 @@ A Bliss-Box adapter (the 4-Play, Gamer-Pro and Gamer-Pro jr., and the Advanced m
 
 Open **Settings**, find the **Input Engine** card, and tick **Read Bliss-Box Adapters**. It is off by default.
 
-The line under the checkbox names each port and what is in it, for example *Reading port 1 (DualShock 2), port 2 (no controller).*, or says *No Bliss-Box port found.*
+Each port's row names the controller in it, on its detail pane on the Devices page. The line under the checkbox says *No Bliss-Box port found.* when there is none.
 
 Close the Bliss-Box API Tool and DeviceBuddy while the switch is on, since they talk to the adapter over the same channel.
 

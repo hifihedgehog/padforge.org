@@ -15,7 +15,7 @@ Open **Settings**, find the **Input Engine** card, and tick **Read Analog Keyboa
 <!-- SCREENSHOT: settings-input-engine -->
 ![The Input Engine card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters](../images/settings-input-engine.png)
 
-With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. The line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Razer Synapse.
+With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. A Razer keyboard waiting for Razer Synapse says so in its row's detail pane. The line under the checkbox says when no supported keyboard was found.
 
 Most keyboards are read by asking them over the channel their own configurator uses. Close that configurator, whether an app or a browser tab, while the switch is on. Both asking the same questions confuses the keyboard and the configurator alike, and on some keyboards PadForge holds the channel alone, so the configurator cannot open it while PadForge reads.
 

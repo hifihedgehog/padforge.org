@@ -1133,6 +1133,8 @@
       
         
       
+        
+      
     
     
     
@@ -1866,6 +1868,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2409,6 +2439,8 @@
       
         
           
+        
+      
         
       
         
@@ -4668,6 +4700,34 @@
     
   
     Keyboard Screens Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
   
 
     
@@ -9449,21 +9509,21 @@
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6905).</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6922).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6912).</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6929).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6920).</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6937).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -11229,7 +11289,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7897, 7903 and 7910).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7914, 7920 and 7927).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>
@@ -12090,7 +12150,7 @@
 <ul>
 <li>In the live settings, from the active profile's opinion or else the global value. <code>AssignLive</code> (line 223) adds the row's record, offline, when the file has none, and assigns it to the live slot with the setting a drag-and-drop gives.</li>
 <li>In every stored profile, and in the default's stored state while a named profile is active, from the profile's opinion or else the global value. <code>AddToProfile</code> (line 261) adds a <code>ProfileEntry</code> on the slot that profile's own topology and saved order pick, with a default <code>PadSetting</code> for that slot's controller type.</li>
-<li>In an imported profile file, from its own opinion alone, since the file carries no global value. <code>ProfileTransfer.Import</code> calls <code>MigrateImported</code> (line 63).</li>
+<li>In an imported profile file, from its own opinion alone, since the file carries no global value. <code>ProfileTransfer.Import</code> calls <code>MigrateImported</code>, <code>PeripheralSwitchMigration.cs</code> line 63.</li>
 </ul>
 <p>Each profile's opinion is cleared once read, and the switches are never written again, so the migration runs once per file. A topology without the slot a row needs gets no assignment, as the old lane had nothing to read there either. A build that cannot load the Interhaptics engine (<code>PlatformSupport.SensaAvailable</code> is false on ARM64) only clears the Sensa switch. A migrated lighting row starts at Player Number, so it shows the game's lightbar as the mirror did, and the controller's player color while no game writes one.</p>
 <hr />

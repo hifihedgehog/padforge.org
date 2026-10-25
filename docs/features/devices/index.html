@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1640,6 +1642,39 @@
     <span class="md-ellipsis">
       
         Bliss-Box ports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-screens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboard screens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analog-keyboards_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analog keyboards
       
     </span>
   </a>
@@ -2732,6 +2767,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -3273,6 +3336,8 @@
       
         
           
+        
+      
         
       
         
@@ -4246,6 +4311,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4766,6 +4859,39 @@
     <span class="md-ellipsis">
       
         Bliss-Box ports
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-screens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keyboard screens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analog-keyboards_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analog keyboards
       
     </span>
   </a>
@@ -5317,7 +5443,7 @@
 <tbody>
 <tr>
 <td><strong>Type</strong></td>
-<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen Keys, Analog Keyboard, Web Menus, or plain Device for anything unclassified.</td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, or plain Device for anything unclassified.</td>
 </tr>
 <tr>
 <td><strong>VID:PID</strong></td>
@@ -5398,7 +5524,7 @@
 </table>
 <p>A row of capability icons sits at the bottom of the card, with a rumble, gyro, or touchpad mark for each of those the device has. Click the rumble mark to vibrate the device and identify it.</p>
 <h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
-<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
+<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and keyboard screen rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
 <p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
 <ul>
 <li>Device name</li>
@@ -5541,7 +5667,7 @@
 </tbody>
 </table>
 <p>Gamepad mode shows the standard buttons the pad has (0 is A, 1 is B, on through Guide at 10, and a partial pad such as the PS Move Navigation skips the ones it lacks) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.</p>
-<p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows show a named button list instead, with no axis bars. See their sections below.</p>
+<p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, Logitech G-Keys, and keyboard screen rows show a named button list instead, with no axis bars. See their sections below. A Novint Falcon adds a <strong>Handle</strong> square above its axes, with a dot where the handle is, and names its axes Left/Right, Up/Down and In/Out.</p>
 <h3 id="keyboards">Keyboards<a class="headerlink" href="#keyboards" title="Permanent link">&para;</a></h3>
 <p>A QWERTY layout replaces axes and buttons. Main keys, navigation cluster, arrows, numpad. Keys light up in the same cold blue as the button circles as you press them.</p>
 <h3 id="mice">Mice<a class="headerlink" href="#mice" title="Permanent link">&para;</a></h3>
@@ -5645,6 +5771,12 @@
 <hr />
 <h2 id="bliss-box-ports">Bliss-Box ports<a class="headerlink" href="#bliss-box-ports" title="Permanent link">&para;</a></h2>
 <p>With <strong>Read Bliss-Box Adapters</strong> on in <a href="../settings/">Settings</a>, a Bliss-Box port's detail pane carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: <strong>Player Number…</strong>, <strong>Dreamcast Screen…</strong> for a Dreamcast pad, <strong>Back Up Controller Pak…</strong> and <strong>Restore Controller Pak…</strong> for an N64 controller on an adapter with firmware 3.0 or later, and <strong>Read Arrows One by One</strong> for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, assigning the port maps that controller the way SDL maps its console's pad, and a DualShock 2 adds a <strong>DualShock 2 Pressure</strong> panel to the detail pane. See <a href="../bliss-box/">Bliss-Box Adapters</a>.</p>
+<h2 id="keyboard-screens">Keyboard screens<a class="headerlink" href="#keyboard-screens" title="Permanent link">&para;</a></h2>
+<p>With <strong>Drive Keyboard Screens</strong> on in <a href="../settings/">Settings</a>, each keyboard screen is its own row: one for each monochrome keyboard and G19 plugged in, one for Logitech Arx Control and one for the S.T.R.I.K.E. 7. A screen's detail pane carries a line that says what draws the screen or why nothing does, and a button named for the kind of screen, <strong>Monochrome Screen…</strong>, <strong>Color Screen…</strong>, <strong>Arx Control…</strong> or <strong>S.T.R.I.K.E. 7…</strong>, which opens the dialog that sets what that screen shows. Two keyboards with screens keep their own settings. See <a href="../keyboard-screens/">Keyboard Screens</a>.</p>
+<h2 id="novint-falcons">Novint Falcons<a class="headerlink" href="#novint-falcons" title="Permanent link">&para;</a></h2>
+<p>With <strong>Drive Novint Falcon</strong> on in <a href="../settings/">Settings</a>, each open Falcon's detail pane carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and <strong>Calibrate Reach</strong>, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every slot it feeds uses it. See <a href="../novint-falcon/">Novint Falcon</a>.</p>
+<h2 id="analog-keyboards_1">Analog keyboards<a class="headerlink" href="#analog-keyboards_1" title="Permanent link">&para;</a></h2>
+<p>With <strong>Read Analog Keyboards</strong> on in <a href="../settings/">Settings</a>, a Razer keyboard that waits for Razer Synapse says so in its own detail pane. See <a href="../analog-keyboards/">Analog Keyboards</a>.</p>
 <hr />
 <h2 id="consumer-control-devices">Consumer Control devices<a class="headerlink" href="#consumer-control-devices" title="Permanent link">&para;</a></h2>
 <p>Media keys show up here as their own device card, typed <strong>Consumer Control</strong>. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.</p>
@@ -5707,10 +5839,16 @@
 <td>The G-keys and extra mouse buttons on Logitech gaming gear, read through the vendor SDK. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</td>
 </tr>
 <tr>
-<td><strong>Keyboard Screen Keys</strong></td>
-<td>Keyboard Screen Keys</td>
+<td><strong>Logitech G15 Screen</strong>, <strong>Logitech G19 Screen</strong>, <strong>Logitech Arx Control</strong>, <strong>Mad Catz S.T.R.I.K.E. 7 Screen</strong> and the like</td>
+<td>Keyboard Screen</td>
 <td><strong>Drive Keyboard Screens</strong> in <a href="../settings/">Settings</a></td>
-<td>The keys beside the screens on Logitech's GamePanel keyboards and the G19, in one fixed layout of 13 buttons. See <a href="../keyboard-screens/">Keyboard Screens</a>.</td>
+<td>One row per screen: the keys beside it, five on a monochrome screen and eight on a G19, none on Arx Control or the S.T.R.I.K.E. 7, and the button that sets what it shows. See <a href="../keyboard-screens/">Keyboard Screens</a>.</td>
+</tr>
+<tr>
+<td><strong>Novint Falcon</strong></td>
+<td>Novint Falcon</td>
+<td><strong>Drive Novint Falcon</strong> in <a href="../settings/">Settings</a></td>
+<td>The handle's Left/Right, Up/Down and In/Out and the grip's four buttons, one row per Falcon, opened through Force Dimension's library, with its line and <strong>Calibrate Reach</strong> in its detail pane. See <a href="../novint-falcon/">Novint Falcon</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -5979,7 +6117,7 @@
 <h3 id="how-to-turn-it-on">How to turn it on<a class="headerlink" href="#how-to-turn-it-on" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Select the device card</li>
-<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)</li>
+<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)</li>
 <li>Check <strong>Force Raw Joystick Mode (Bypass Gamepad Remapping)</strong></li>
 <li>Saved right away. Persists across restarts.</li>
 </ol>
@@ -6096,7 +6234,7 @@
 <h3 id="hidhide-toggle-grayed-out-or-missing">HidHide toggle grayed out or missing<a class="headerlink" href="#hidhide-toggle-grayed-out-or-missing" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Grayed out</strong>: HidHide is not installed. Install it from <a href="../driver-management/">Driver Management</a>.</li>
-<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.</li>
+<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>

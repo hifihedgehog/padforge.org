@@ -235,13 +235,13 @@ Two steps happen in Logitech Gaming Software, not in PadForge. Drag the **G-key*
 
 Reads how far every key is pressed on analog and Hall effect keyboards, and gives each supported keyboard its own device row. It is off by default. See [Analog Keyboards](analog-keyboards.md) for the keyboards it reads.
 
-Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs. The status line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Synapse.
+Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs, and a Razer keyboard waiting for Synapse says so on its own row's panel on the Devices page. The status line under the checkbox says when no supported keyboard was found.
 
 ### Read Bliss-Box Adapters
 
 Talks to Bliss-Box adapters through their API, so PadForge knows the controller in each port, reads a DualShock 2's pressure, rumbles through the adapter's own motor commands, and offers the Dreamcast screen, Controller Pak and player number actions in the port's detail pane on the Devices page. It is off by default. See [Bliss-Box Adapters](bliss-box.md).
 
-Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk to the adapter over the same channel. While it is on, each port reads in the adapter's own layout instead of through SDL's gamepad mapping, so map a port again after turning it on or off. The status line under the checkbox names each port and the controller in it.
+Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk to the adapter over the same channel. While it is on, each port reads in the adapter's own layout instead of through SDL's gamepad mapping, so map a port again after turning it on or off. Each port's row names the controller in it. The status line under the checkbox says when no port was found.
 
 ### Polling Interval
 
@@ -273,7 +273,7 @@ Range: 0–3600 seconds.
 
 ## Assignment Prompts
 
-When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.
+When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an **Assign** button, and **Not Now**. Nothing is assigned until you click Assign. Keyboards, keyboard screens, mice, touchpads, and media keys are never offered.
 
 <!-- SCREENSHOT: settings-assignment-prompts -->
 ![Settings page, Assignment Prompts card with both offer checkboxes](../images/settings-assignment-prompts.png)
@@ -293,9 +293,15 @@ PadForge never assigns a device on its own. Sim rigs and arcade setups carry man
 
 ## Keyboard Screens
 
-**Drive Keyboard Screens** is off by default. On, PadForge draws on the screens built into Logitech's GamePanel keyboards and the G19, on a phone through Logitech Arx Control, and on the Mad Catz S.T.R.I.K.E. 7's touchscreen, and the [Devices](devices.md) page gains a **Keyboard Screen Keys** row for the keys beside those screens. Turning it off gives a G19 screen PadForge bound to WinUSB back to Windows. See [Keyboard Screens](keyboard-screens.md).
+**Drive Keyboard Screens** is off by default. On, PadForge draws on the screens built into Logitech's GamePanel keyboards and the G19, on a phone through Logitech Arx Control, and on the Mad Catz S.T.R.I.K.E. 7's touchscreen, and the [Devices](devices.md) page gains a row for each screen. A screen's row sets what it shows and carries the keys beside it. Turning the switch off gives a G19 screen PadForge bound to WinUSB back to Windows. See [Keyboard Screens](keyboard-screens.md).
 
-While the engine runs, a line for each kind of screen says what draws it or what is missing. **Monochrome Screen…**, **Color Screen…**, **Arx Control…** and **S.T.R.I.K.E. 7…** open each kind's dialog, where its mode is set. **Download Strike7API.dll**, **Choose Strike7API.dll…** and **Install Visual C++ 2008 Runtime** get the S.T.R.I.K.E. 7's library and the runtime it needs.
+While the engine runs, the card names only what the feature as a whole is missing: the Arx Control or S.T.R.I.K.E. 7 library, or any screen at all. **Download Strike7API.dll**, **Choose Strike7API.dll…** and **Install Visual C++ 2008 Runtime** get the S.T.R.I.K.E. 7's library and the runtime it needs.
+
+## Novint Falcon
+
+**Drive Novint Falcon** is off by default. On, PadForge opens each Novint Falcon through Force Dimension's SDK, which you install from Force Dimension, and the [Devices](devices.md) page gains a row for each one. An open Falcon belongs to PadForge alone, so FalconJoyForce and Force Dimension's own tools cannot open it, and turning the switch off closes every Falcon. See [Novint Falcon](novint-falcon.md).
+
+While the engine runs, the card names the library that loaded, and when no Falcon opened, why. Each open Falcon's line and its **Calibrate Reach** are on its row's panel on the Devices page. **Choose dhd64.dll…** loads a copy of Force Dimension's library you pick before any other. **Install Falcon Driver** shows for a Falcon with no driver and installs Force Dimension's from the SDK folder. **Get Force Dimension's SDK** opens Force Dimension's download page.
 
 
 ## Battery Alerts

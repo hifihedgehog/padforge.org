@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1871,6 +1873,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2391,6 +2421,17 @@
     <span class="md-ellipsis">
       
         Keyboard Screens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon
       
     </span>
   </a>
@@ -3018,6 +3059,8 @@
       
         
           
+        
+      
         
       
         
@@ -3991,6 +4034,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4422,6 +4493,17 @@
     <span class="md-ellipsis">
       
         Keyboard Screens
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#novint-falcon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Novint Falcon
       
     </span>
   </a>
@@ -5488,10 +5570,10 @@
 <p>Two steps happen in Logitech Gaming Software, not in PadForge. Drag the <strong>G-key</strong> command onto each key in the PadForge profile there, or the key never reports. Then make that profile the <strong>persistent profile</strong>, or the keys only reach PadForge while its window is in front. Logitech's profiles have nothing to do with PadForge's own <a href="../../guides/profiles/">profiles</a>.</p>
 <h3 id="read-analog-keyboards">Read Analog Keyboards<a class="headerlink" href="#read-analog-keyboards" title="Permanent link">&para;</a></h3>
 <p>Reads how far every key is pressed on analog and Hall effect keyboards, and gives each supported keyboard its own device row. It is off by default. See <a href="../analog-keyboards/">Analog Keyboards</a> for the keyboards it reads.</p>
-<p>Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs. The status line under the checkbox names the keyboards being read, says when none was found, and says when a Razer keyboard is waiting for Synapse.</p>
+<p>Most keyboards are read over the channel their own configurator uses, so close the configurator while this is on. Razer keyboards report only while Razer Synapse runs, and a Razer keyboard waiting for Synapse says so on its own row's panel on the Devices page. The status line under the checkbox says when no supported keyboard was found.</p>
 <h3 id="read-bliss-box-adapters">Read Bliss-Box Adapters<a class="headerlink" href="#read-bliss-box-adapters" title="Permanent link">&para;</a></h3>
 <p>Talks to Bliss-Box adapters through their API, so PadForge knows the controller in each port, reads a DualShock 2's pressure, rumbles through the adapter's own motor commands, and offers the Dreamcast screen, Controller Pak and player number actions in the port's detail pane on the Devices page. It is off by default. See <a href="../bliss-box/">Bliss-Box Adapters</a>.</p>
-<p>Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk to the adapter over the same channel. While it is on, each port reads in the adapter's own layout instead of through SDL's gamepad mapping, so map a port again after turning it on or off. The status line under the checkbox names each port and the controller in it.</p>
+<p>Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk to the adapter over the same channel. While it is on, each port reads in the adapter's own layout instead of through SDL's gamepad mapping, so map a port again after turning it on or off. Each port's row names the controller in it. The status line under the checkbox says when no port was found.</p>
 <h3 id="polling-interval">Polling Interval<a class="headerlink" href="#polling-interval" title="Permanent link">&para;</a></h3>
 <p>How often the engine reads input, in milliseconds. Default: <strong>1 ms</strong> (~1000 Hz).</p>
 <table>
@@ -5539,7 +5621,7 @@
 <p>Range: 0–3600 seconds.</p>
 <hr />
 <h2 id="assignment-prompts">Assignment Prompts<a class="headerlink" href="#assignment-prompts" title="Permanent link">&para;</a></h2>
-<p>When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an <strong>Assign</strong> button, and <strong>Not Now</strong>. Nothing is assigned until you click Assign. Keyboards, mice, touchpads, and media keys are never offered.</p>
+<p>When a device connects while a virtual controller's page is open, PadForge can offer to assign it there. A banner appears under the device bar with the device's name, an <strong>Assign</strong> button, and <strong>Not Now</strong>. Nothing is assigned until you click Assign. Keyboards, keyboard screens, mice, touchpads, and media keys are never offered.</p>
 <!-- SCREENSHOT: settings-assignment-prompts -->
 <p><img alt="Settings page, Assignment Prompts card with both offer checkboxes" src="../../images/settings-assignment-prompts.png" /></p>
 <ul>
@@ -5551,8 +5633,11 @@
 <h2 id="handheld-pc-buttons">Handheld PC Buttons<a class="headerlink" href="#handheld-pc-buttons" title="Permanent link">&para;</a></h2>
 <p><strong>Enable Handheld PC Buttons</strong> is off by default, and off means nothing runs. On, the <a href="../devices/">Devices</a> page gains a row for the paddles, menu keys and hotkeys a handheld gaming PC or laptop hides from games, learned by pressing each one once, and a row for the machine's own gyroscope when Windows reports one. See <a href="../handheld-buttons/">Handheld PC Buttons</a>.</p>
 <h2 id="keyboard-screens">Keyboard Screens<a class="headerlink" href="#keyboard-screens" title="Permanent link">&para;</a></h2>
-<p><strong>Drive Keyboard Screens</strong> is off by default. On, PadForge draws on the screens built into Logitech's GamePanel keyboards and the G19, on a phone through Logitech Arx Control, and on the Mad Catz S.T.R.I.K.E. 7's touchscreen, and the <a href="../devices/">Devices</a> page gains a <strong>Keyboard Screen Keys</strong> row for the keys beside those screens. Turning it off gives a G19 screen PadForge bound to WinUSB back to Windows. See <a href="../keyboard-screens/">Keyboard Screens</a>.</p>
-<p>While the engine runs, a line for each kind of screen says what draws it or what is missing. <strong>Monochrome Screen…</strong>, <strong>Color Screen…</strong>, <strong>Arx Control…</strong> and <strong>S.T.R.I.K.E. 7…</strong> open each kind's dialog, where its mode is set. <strong>Download Strike7API.dll</strong>, <strong>Choose Strike7API.dll…</strong> and <strong>Install Visual C++ 2008 Runtime</strong> get the S.T.R.I.K.E. 7's library and the runtime it needs.</p>
+<p><strong>Drive Keyboard Screens</strong> is off by default. On, PadForge draws on the screens built into Logitech's GamePanel keyboards and the G19, on a phone through Logitech Arx Control, and on the Mad Catz S.T.R.I.K.E. 7's touchscreen, and the <a href="../devices/">Devices</a> page gains a row for each screen. A screen's row sets what it shows and carries the keys beside it. Turning the switch off gives a G19 screen PadForge bound to WinUSB back to Windows. See <a href="../keyboard-screens/">Keyboard Screens</a>.</p>
+<p>While the engine runs, the card names only what the feature as a whole is missing: the Arx Control or S.T.R.I.K.E. 7 library, or any screen at all. <strong>Download Strike7API.dll</strong>, <strong>Choose Strike7API.dll…</strong> and <strong>Install Visual C++ 2008 Runtime</strong> get the S.T.R.I.K.E. 7's library and the runtime it needs.</p>
+<h2 id="novint-falcon">Novint Falcon<a class="headerlink" href="#novint-falcon" title="Permanent link">&para;</a></h2>
+<p><strong>Drive Novint Falcon</strong> is off by default. On, PadForge opens each Novint Falcon through Force Dimension's SDK, which you install from Force Dimension, and the <a href="../devices/">Devices</a> page gains a row for each one. An open Falcon belongs to PadForge alone, so FalconJoyForce and Force Dimension's own tools cannot open it, and turning the switch off closes every Falcon. See <a href="../novint-falcon/">Novint Falcon</a>.</p>
+<p>While the engine runs, the card names the library that loaded, and when no Falcon opened, why. Each open Falcon's line and its <strong>Calibrate Reach</strong> are on its row's panel on the Devices page. <strong>Choose dhd64.dll…</strong> loads a copy of Force Dimension's library you pick before any other. <strong>Install Falcon Driver</strong> shows for a Falcon with no driver and installs Force Dimension's from the SDK folder. <strong>Get Force Dimension's SDK</strong> opens Force Dimension's download page.</p>
 <h2 id="battery-alerts">Battery Alerts<a class="headerlink" href="#battery-alerts" title="Permanent link">&para;</a></h2>
 <p>Get notified when a controller's battery runs low, before it dies mid-game.</p>
 <ul>

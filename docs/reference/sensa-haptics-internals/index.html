@@ -1133,6 +1133,8 @@
       
         
       
+        
+      
     
     
     
@@ -1866,6 +1868,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2409,6 +2439,8 @@
       
         
           
+        
+      
         
       
         
@@ -3570,6 +3602,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4162,7 +4222,7 @@
 <hr />
 <h2 id="persistence-and-migration">Persistence and migration<a class="headerlink" href="#persistence-and-migration" title="Permanent link">&para;</a></h2>
 <p>There is no switch. The row is a device like any other: its assignments and its Force Feedback settings per virtual controller persist with the settings and ride profiles as entries.</p>
-<p>The Dashboard's Razer Sensa section and its switch are gone. <code>AppSettingsData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6912) and the profile's <code>bool?</code> opinion, <code>ProfileData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7909), are read once by <code>PeripheralSwitchMigration</code> and never written, since <code>ShouldSerializeEnableSensaHaptics</code> returns false on both. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists the switch, and <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns one that was on into an assignment of the Razer Sensa row:</p>
+<p>The Dashboard's Razer Sensa section and its switch are gone. <code>AppSettingsData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 6929) and the profile's <code>bool?</code> opinion, <code>ProfileData.EnableSensaHaptics</code> (<code>SettingsService.cs</code> line 7926), are read once by <code>PeripheralSwitchMigration</code> and never written, since <code>ShouldSerializeEnableSensaHaptics</code> returns false on both. <code>PeripheralSwitchMigration.Switches</code> (<code>PeripheralSwitchMigration.cs</code> line 49) lists the switch, and <code>PeripheralSwitchMigration.Run</code> (<code>PeripheralSwitchMigration.cs</code> line 193) turns one that was on into an assignment of the Razer Sensa row:</p>
 <ul>
 <li>In the live settings when the active profile's opinion, else the global value, was on.</li>
 <li>In the default profile's stored state, while a named profile is active, and in each stored profile, each by its own opinion, else the global value.</li>

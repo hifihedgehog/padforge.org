@@ -2238,6 +2238,8 @@
       
         
       
+        
+      
     
     
     
@@ -2971,6 +2973,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -3512,6 +3542,8 @@
       
         
           
+        
+      
         
       
         
@@ -4465,6 +4497,34 @@
     
   
     Keyboard Screens Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
   
 
     
@@ -6328,7 +6388,7 @@
 </table>
 <p>It needs <strong>Read Bliss-Box Adapters</strong> on. See <a href="../../features/bliss-box/#dreamcast-screen">Bliss-Box Adapters</a>.</p>
 <h3 id="show-keyboard-screen">Show Keyboard Screen<a class="headerlink" href="#show-keyboard-screen" title="Permanent link">&para;</a></h3>
-<p>Plays one to eight pictures on every keyboard screen of the chosen kind, then returns each screen to its own mode. The action fires once and the macro moves on while the pictures play.</p>
+<p>Plays one to eight pictures on each keyboard screen of the chosen kind whose row is in this slot, then returns each screen to its own mode, the way <strong>Show Dreamcast Screen</strong> plays on the Dreamcast pads in its slot. The action fires once and the macro moves on while the pictures play.</p>
 <table>
 <thead>
 <tr>
@@ -6357,11 +6417,11 @@
 </table>
 <p>It needs <strong>Drive Keyboard Screens</strong> on. See <a href="../../features/keyboard-screens/#macros">Keyboard Screens</a>.</p>
 <h3 id="keyboard-screen-mode">Keyboard Screen Mode<a class="headerlink" href="#keyboard-screen-mode" title="Permanent link">&para;</a></h3>
-<p>Switches the chosen kind of screen to the mode under <strong>Show</strong> and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.</p>
+<p>Switches each keyboard screen of the chosen kind whose row is in this slot to the mode under <strong>Show</strong>, and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.</p>
 <h3 id="stopwatch">Stopwatch<a class="headerlink" href="#stopwatch" title="Permanent link">&para;</a></h3>
 <p><strong>Start or Pause Stopwatch</strong> starts the stopwatch or pauses it. <strong>Reset Stopwatch</strong> stops it at zero. Every keyboard screen in <strong>Stopwatch</strong> mode shows the same stopwatch.</p>
 <h3 id="pan-keyboard-screen-picture">Pan Keyboard Screen Picture<a class="headerlink" href="#pan-keyboard-screen-picture" title="Permanent link">&para;</a></h3>
-<p>Moves every keyboard screen that shows a chosen picture larger than itself across that picture, for a map. <strong>Direction</strong> is <strong>Left</strong>, <strong>Right</strong>, <strong>Up</strong> or <strong>Down</strong>, and <strong>Step</strong> is how far in pixels, 16 by default. The window stops at the picture's edges.</p>
+<p>Moves each keyboard screen whose row is in this slot and that shows a chosen picture larger than itself across that picture, for a map. <strong>Direction</strong> is <strong>Left</strong>, <strong>Right</strong>, <strong>Up</strong> or <strong>Down</strong>, and <strong>Step</strong> is how far in pixels, 16 by default. The window stops at the picture's edges.</p>
 <h3 id="clear-lightbar-override">Clear Lightbar Override<a class="headerlink" href="#clear-lightbar-override" title="Permanent link">&para;</a></h3>
 <p>Drop any active macro lightbar override on the slot. The base mode and Input Reactive overlay come back.</p>
 <h3 id="set-lightbar-mode">Set Lightbar Mode<a class="headerlink" href="#set-lightbar-mode" title="Permanent link">&para;</a></h3>

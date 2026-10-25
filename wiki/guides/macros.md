@@ -498,7 +498,7 @@ It needs **Read Bliss-Box Adapters** on. See [Bliss-Box Adapters](../features/bl
 
 ### Show Keyboard Screen
 
-Plays one to eight pictures on every keyboard screen of the chosen kind, then returns each screen to its own mode. The action fires once and the macro moves on while the pictures play.
+Plays one to eight pictures on each keyboard screen of the chosen kind whose row is in this slot, then returns each screen to its own mode, the way **Show Dreamcast Screen** plays on the Dreamcast pads in its slot. The action fires once and the macro moves on while the pictures play.
 
 | Field | Meaning |
 |---|---|
@@ -511,7 +511,7 @@ It needs **Drive Keyboard Screens** on. See [Keyboard Screens](../features/keybo
 
 ### Keyboard Screen Mode
 
-Switches the chosen kind of screen to the mode under **Show** and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.
+Switches each keyboard screen of the chosen kind whose row is in this slot to the mode under **Show**, and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.
 
 ### Stopwatch
 
@@ -519,7 +519,7 @@ Switches the chosen kind of screen to the mode under **Show** and keeps that mod
 
 ### Pan Keyboard Screen Picture
 
-Moves every keyboard screen that shows a chosen picture larger than itself across that picture, for a map. **Direction** is **Left**, **Right**, **Up** or **Down**, and **Step** is how far in pixels, 16 by default. The window stops at the picture's edges.
+Moves each keyboard screen whose row is in this slot and that shows a chosen picture larger than itself across that picture, for a map. **Direction** is **Left**, **Right**, **Up** or **Down**, and **Step** is how far in pixels, 16 by default. The window stops at the picture's edges.
 
 ### Clear Lightbar Override
 

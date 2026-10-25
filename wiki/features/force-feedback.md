@@ -213,6 +213,12 @@ See [Mice, Keyboards and Vendor Rows](peripherals.md) for the vendor rows and th
 
 ---
 
+## Novint Falcon
+
+A Novint Falcon has no motors of its own to rumble. Its slot's rumble and force feedback become force on the handle, which PadForge computes about a thousand times a second. The tab gains a **Novint Falcon** section for the Falcon's feel, which button turns rumble into a kick toward you, the kick and shake strengths, the Aim feel's Brace and Preload buttons, gravity compensation and the force limit. The Falcon's **Calibrate Reach** belongs to the device, so it is on its row on the Devices page. The rumble settings above apply first, as for any controller. See [Novint Falcon](novint-falcon.md).
+
+---
+
 ## Constant Force
 
 A per-device override that drives a continuous force on the assigned physical device until you turn it off. A toggle plus a 2D grid with signed X / Y sliders. Click or drag in the grid to set the direction and strength of the force vector. The grid origin is centered. The dot's distance from center sets magnitude. The dot marks the side the force comes from: Y at +1 (dot below center) pushes forward, and X at +1 (dot right of center) pushes left.
@@ -392,6 +398,7 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.
 - [Devices](devices.md): check rumble and haptic capability per device.
 - [Mice, Keyboards and Vendor Rows](peripherals.md): rumble and lighting on the mice, keyboards and vendor rows assigned to a virtual controller.
+- [Novint Falcon](novint-falcon.md): rumble and force feedback as force on the Falcon's handle.
 - [Troubleshooting](../troubleshooting.md): wider help with rumble issues.
 
 ---
