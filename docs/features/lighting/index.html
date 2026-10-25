@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -2175,6 +2177,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2716,6 +2746,8 @@
       
         
           
+        
+      
         
       
         
@@ -3719,6 +3751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4159,6 +4219,7 @@
 <h3 id="priority-chain">Priority chain<a class="headerlink" href="#priority-chain" title="Permanent link">&para;</a></h3>
 <p>A <a href="../../guides/web-controller/">web controller</a> showing the DualShock 4 or DualSense layout gets this tab too, and it behaves the same: the phone draws the pad's own lightbar in whatever color and mode you pick, animations included. The DualSense layout also carries its player indicator row.</p>
 <p>On a virtual DualSense, game writes always win at packet level. A virtual DualShock 4 does not forward the game's lightbar writes to the physical pad, so the settings on this tab stay in charge there. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.</p>
+<p>A <a href="../game-mods/">game mod made for DSX</a> sets the lightbar on a DualSense or DualShock 4, and the player lights and mute light on a DualSense, below a game's own writes and above macro overrides and this tab's settings. An orange line under the tab's hint names the program while it does. When the mod's effects end, this tab's settings return.</p>
 <hr />
 <h2 id="lightbar-base-modes">Lightbar base modes<a class="headerlink" href="#lightbar-base-modes" title="Permanent link">&para;</a></h2>
 <p>A single dropdown selects the active base mode. Fourteen entries. Player Number is the default and sits at the top of the list.</p>

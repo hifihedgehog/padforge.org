@@ -15,6 +15,7 @@ graph TB
         IS[InputService<br/>Engine lifecycle . 30Hz UI sync]
         SS[SettingsService<br/>XML load/save . auto-save . profiles]
         DS[DeviceService<br/>Device list sync . HidHide]
+        GMS[GameModServer #529<br/>DSX game mod UDP . loopback]
         RS[RecorderService<br/>Input mapping recorder]
         FMS[ForegroundMonitorService<br/>Per-app profile switching]
     end
@@ -55,6 +56,7 @@ graph TB
         BROWSER[Web Browsers<br/>Phone / tablet]
         PEER[Remote Link Peers<br/>Paired PadForge PCs, LAN or internet relay]
         VEND[Peripheral vendors<br/>Razer Synapse . Logitech G HUB . SteelSeries GG<br/>Logitech HID++ devices]
+        MODS[DSX game mods<br/>GTA V . RDR2 . Skyrim . Forza]
     end
 
     UI --> VM
@@ -65,6 +67,8 @@ graph TB
     IS --> DS
     IS --> FMS
     IS --> PH
+    IS --> GMS
+    MODS -.->|UDP, default 6969, loopback| GMS
     IM -.->|levels, claims| PH
     PH -.->|REST, LED SDK, GameSense, HID++| VEND
     RS --> IM
@@ -108,7 +112,7 @@ graph TB
 
 ## Solution Structure
 
-Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, and the two test projects):
+Seven projects (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, PadForge.DsxStandIn, and the two test projects). All but PadForge.DsxStandIn target .NET 10:
 
 | Project | Target | Role |
 |---|---|---|
@@ -118,6 +122,7 @@ Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorks
 | **PadForge.Tests** | `net10.0-windows10.0.26100.0` (xUnit) | Unit tests. References both App and Engine (`Microsoft.NET.Test.Sdk` + `xunit` + `coverlet.collector`) |
 | **PadForge.SteamWorkshop.Tests** | `net10.0-windows` (xUnit) | Parser, client, cache, and translator tests, including 30 golden Workshop fixtures |
 | **PadForge.NativeChecks** | `net10.0-windows` (console Exe) | Out-of-process checks the test suite runs against a bundled `SDL3.dll` (joystick, keyboard, and mouse enumeration, button mapping). References Engine |
+| **PadForge.DsxStandIn** | `net462` (WinExe, assembly name `DSX`) | The 5.5 KB DSX.exe stand-in for game mods that check for a running DSX (#529). It waits on PadForge's process and exits with it. PadForge.App builds it and embeds the exe as the resource `PadForge.DsxStandIn.exe`. See [Game Mods Internals](game-mods-internals.md) |
 
 `PadForge.App` references `PadForge.Engine` and `PadForge.SteamWorkshop`. The Engine has no WPF dependencies and is reusable. App, Engine, and SteamWorkshop use `GenerateAssemblyInfo=false` and share `AssemblyVersion` / `AssemblyFileVersion` via the repo-root `SharedVersion.cs` linked into each of their csproj files (`<Compile Include="..\SharedVersion.cs" Link="Properties\SharedVersion.cs" />`). Per-project `Properties/AssemblyInfo.cs` carries no version attributes.
 
@@ -667,6 +672,27 @@ A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an
 
 `ChromaLightbarService.cs` and `LightsyncLightbarService.cs` are gone.
 
+### Game mods (#529)
+
+Game mods written for DSX send DualSense trigger programs and lights as JSON over UDP on the same PC. With **Accept DSX Game Mods** on, PadForge listens in DSX's place and plays what the mods send on the PlayStation controllers on its virtual controllers. Detail on [Game Mods Internals](game-mods-internals.md).
+
+**App `Common/Input/`**
+
+- `GameModProtocol.cs`. The packet parser, the trigger encoder for DSX's 27 trigger modes and 17 custom modes, the light conversions, and the reply
+- `GameModEffects.cs`. What the mods hold on each of their controllers, which virtual controller each controller number reaches, and the trigger thresholds Step 5 applies
+- `GameModSender.cs`. The program that owns a mod's UDP port, found in the system's UDP tables, and the process handle that says when it exits
+
+**App `Services/`**
+
+- `GameModServer.cs`. The loopback UDP server: one receive thread, the reply to each packet, and the senders it watches
+- `GameModPortFiles.cs`. The two port files mods read, written when the server starts
+- `DsxStandIn.cs`. Extracts and runs the DSX.exe stand-in, tied to PadForge's lifetime by a kill-on-close job object
+- `InputService.GameMods.cs`. The server's lifetime, the Dashboard status line, and the Devices and pad page lines
+
+**`PadForge.DsxStandIn/`**
+
+- `Program.cs`. The stand-in: it waits on the process ID passed as its one argument and exits when that process does
+
 ### PadForge.SteamWorkshop
 
 ```
@@ -983,6 +1009,10 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 `InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s, walks the present HID collections for the direct backends, and runs the link pass every 500 ms. It starts eight workers: the `PeripheralHidpp` and `PeripheralGameSense` threads, the Razer Chroma and Logitech LED SDK loops on the thread pool, and one thread for each direct backend, `PeripheralLampArray`, `PeripheralSteelSeries`, `PeripheralRazer` and `PeripheralTouchSense`. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and each Logitech iFeel mouse bound to WinUSB has a `TouchSenseMouse` thread that reads its input reports. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
 
+### 13. Game Mod Server Thread (GameModServer, on demand)
+
+`GameModServer` (#529) runs a background thread named `PadForge.GameModServer` while **Accept DSX Game Mods** is on and the engine runs. It blocks in `Socket.ReceiveFrom` on a loopback socket with a 500 ms timeout, answers each packet, and applies its instructions to `GameModEffects`. Between packets, at most every 500 ms, it checks the senders: one whose process exited, or one with no process found that has been quiet for 15 seconds, loses everything it set. A change to a hold queues one effects pass on the thread pool for the slot it reaches, so the receive thread never waits on a HID write.
+
 ### Thread Safety Summary
 
 | Shared State | Writer | Reader | Sync |
@@ -1008,6 +1038,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 | `PeripheralOutputs` lighting claims | Effects dispatchers | Chroma, LED SDK, GameSense, HID++, LampArray, Razer and SteelSeries workers, the Pad page's route line | `ConcurrentDictionary`, leaf lock per claim |
 | `PeripheralOutputs` direct units and unit rows (#494) | `PeripheralLink` thread | Engine (Step 1 phase 1m), peripheral workers, UI | Immutable snapshots swapped whole (`Volatile.Write`) |
 | A direct backend's snapshot and crash record | Its worker thread | `PeripheralLink` thread, the crash path | Immutable, swapped whole |
+| `GameModEffects` holds (#529) | Game mod server thread, UI (Clear Mod Effects), server stop | Effects dispatchers, Engine (Step 5 thresholds), UI timer | Copy-on-write array published whole under a leaf lock, read with `Volatile.Read` |
 
 ---
 

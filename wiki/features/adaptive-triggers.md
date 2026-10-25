@@ -13,6 +13,8 @@ The Adaptive Triggers tab follows the device picked in the assigned-devices drop
 
 These settings drive the trigger when no game is writing to it. A game that programs the triggers itself writes through a separate path, and its effects override this tab while it runs.
 
+A [game mod made for DSX](game-mods.md) can set the triggers too. Its effects override this tab until the mod's program exits, the mod resets the controller, or you click **Clear Mod Effects** on the [Devices](devices.md) page, and an orange line under the tab's description names the program meanwhile. A game writing to the virtual DualSense still comes first. When the mod's effects end, this tab's settings return, and a trigger with no setting of its own is released.
+
 A DualSense holds its trigger program in firmware with no timeout, so an exiting game would otherwise leave its last effect loaded. After fifteen seconds with no packet from the game, PadForge sends a release frame that sets both triggers to Off and claims nothing else. Reconnecting the pad, or restarting PadForge, also reasserts this tab: a configured effect reloads and Off ships a release.
 
 ---

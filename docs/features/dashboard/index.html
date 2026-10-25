@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1426,6 +1428,17 @@
     <span class="md-ellipsis">
       
         Motion Server
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#game-mods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Mods
       
     </span>
   </a>
@@ -2153,6 +2166,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2694,6 +2735,8 @@
       
         
           
+        
+      
         
       
         
@@ -3697,6 +3740,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4036,6 +4107,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#game-mods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Mods
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4091,7 +4173,7 @@
 <p><img alt="Dashboard overview showing engine status, virtual controllers, and services" src="../../images/dashboard.png" /></p>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
-<p>Eight sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then the input services, the Motion Server, and the overlays.</p>
+<p>Nine sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then the input services, the Motion Server, Game Mods, and the overlays.</p>
 <table>
 <thead>
 <tr>
@@ -4125,6 +4207,10 @@
 <td><a href="../../reference/dsu-motion-server/">DSU/Cemuhook</a> gyro broadcasting for emulators.</td>
 </tr>
 <tr>
+<td><strong>Game Mods</strong></td>
+<td>Adaptive triggers and lights set by <a href="../game-mods/">game mods made for DSX</a>.</td>
+</tr>
+<tr>
 <td><strong>Overlays</strong></td>
 <td>On-screen indicators: the <a href="../../guides/menus/">menu</a> ring or grid, the shift layer flyout, and profile switch announcements.</td>
 </tr>
@@ -4135,7 +4221,7 @@
 </tbody>
 </table>
 <p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the <a href="../settings/">Settings</a> page. See <a href="../driver-management/">Driver Management</a>.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Game Mods, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, and the three ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -4479,6 +4565,36 @@
 <p>The DSU protocol caps at 4 slots, so only the first 4 virtual controllers broadcast motion data.</p>
 <p>See <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> for full details.</p>
 <hr />
+<h2 id="game-mods">Game Mods<a class="headerlink" href="#game-mods" title="Permanent link">&para;</a></h2>
+<p>Takes the trigger and light effects that game mods made for DSX send over UDP, and plays them on the DualSense, DualSense Edge and DualShock 4 controllers on your virtual controllers.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Accept DSX Game Mods</strong></td>
+<td>Starts and stops the server. Off by default. It listens only while the engine runs.</td>
+</tr>
+<tr>
+<td><strong>Port</strong></td>
+<td>UDP port. Default <code>6969</code>, the port DSX and the mods use. Range <code>1024-65535</code>.</td>
+</tr>
+<tr>
+<td><strong>Run a DSX.exe Stand-In</strong></td>
+<td>Runs a small program named DSX.exe while the server listens, for mods that stay silent unless a program by that name is running. Off by default.</td>
+</tr>
+<tr>
+<td><strong>Status indicator</strong></td>
+<td>A flame beside the status text. Ember while listening, a steel outline when stopped. The text names the program sending and the virtual controller it reaches, or says another program holds the port.</td>
+</tr>
+</tbody>
+</table>
+<p>While the server listens, PadForge writes its port to the files the mods read it from. See <a href="../game-mods/">Game Mods</a> for setup, which controller a mod drives, and how long its effects last.</p>
+<hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
 <p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
 <table>
@@ -4542,6 +4658,7 @@
 <li><a href="../settings/">Settings</a>: engine options, appearance, drivers.</li>
 <li><a href="../../guides/profiles/">Profiles</a>: per-app profile switching.</li>
 <li><a href="../../reference/dsu-motion-server/">DSU Motion Server</a>: gyro streaming for emulators.</li>
+<li><a href="../game-mods/">Game Mods</a>: adaptive triggers and lights from mods made for DSX.</li>
 <li><a href="../../guides/web-controller/">Web Controller</a>: browser-based virtual controller.</li>
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>
 <li><a href="../head-tracking/">Head Tracking</a>: OpenTrack setup for the Head Tracking section.</li>

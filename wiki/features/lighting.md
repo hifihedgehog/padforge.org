@@ -39,6 +39,8 @@ A [web controller](../guides/web-controller.md) showing the DualShock 4 or DualS
 
 On a virtual DualSense, game writes always win at packet level. A virtual DualShock 4 does not forward the game's lightbar writes to the physical pad, so the settings on this tab stay in charge there. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.
 
+A [game mod made for DSX](game-mods.md) sets the lightbar on a DualSense or DualShock 4, and the player lights and mute light on a DualSense, below a game's own writes and above macro overrides and this tab's settings. An orange line under the tab's hint names the program while it does. When the mod's effects end, this tab's settings return.
+
 ---
 
 ## Lightbar base modes

@@ -64,6 +64,9 @@ when that device has the matching hardware.
 | [Logitech G-Keys](logitech-g-keys.md) | The G-keys and extra mouse buttons on Logitech gaming gear as mapping sources |
 | [Analog Keyboards](analog-keyboards.md) | How far every key is pressed on analog and Hall effect keyboards, as mapping sources |
 | [Bliss-Box Adapters](bliss-box.md) | Retro controllers in Bliss-Box ports: their button names, DualShock 2 pressure, rumble, the Dreamcast screen and N64 Controller Pak saves |
+| [Keyboard Screens](keyboard-screens.md) | The screens on Logitech GamePanel keyboards, the Mad Catz S.T.R.I.K.E. 7 and Logitech Arx Control, and the keys beside them as buttons |
+| [Novint Falcon](novint-falcon.md) | The Falcon's handle as a stick, its grip buttons, and a game's rumble and force feedback as force on the handle |
+| [Game Mods](game-mods.md) | Adaptive triggers, lightbar, player lights and mute light set by game mods made for DSX |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [VR Controller Input](vr-controller-input.md) | The headset's pose and both hand controllers read as mapping sources through OpenXR |

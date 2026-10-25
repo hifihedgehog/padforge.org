@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2513,6 +2543,8 @@
       
         
       
+        
+      
     
     
     
@@ -2741,6 +2773,17 @@
     <span class="md-ellipsis">
       
         Peripheral outputs (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-mods-529" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game mods (#529)
       
     </span>
   </a>
@@ -3062,6 +3105,17 @@
     <span class="md-ellipsis">
       
         12. Peripheral Outputs (PeripheralOutputHost, with the engine)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-game-mod-server-thread-gamemodserver-on-demand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Game Mod Server Thread (GameModServer, on demand)
       
     </span>
   </a>
@@ -4150,6 +4204,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4421,6 +4503,17 @@
     <span class="md-ellipsis">
       
         Peripheral outputs (#494)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-mods-529" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game mods (#529)
       
     </span>
   </a>
@@ -4749,6 +4842,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#13-game-mod-server-thread-gamemodserver-on-demand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Game Mod Server Thread (GameModServer, on demand)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#thread-safety-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5006,97 +5110,101 @@
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        IS[InputService&lt;br/&gt;Engine lifecycle . 30Hz UI sync]
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        SS[SettingsService&lt;br/&gt;XML load/save . auto-save . profiles]
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        DS[DeviceService&lt;br/&gt;Device list sync . HidHide]
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        RS[RecorderService&lt;br/&gt;Input mapping recorder]
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        FMS[ForegroundMonitorService&lt;br/&gt;Per-app profile switching]
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    end
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    subgraph &quot;Engine. PadForge.App/Common/Input&quot;
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        IM[InputManager&lt;br/&gt;Polling loop . Steps 1-6]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        HMP[HM lifecycle thread pool&lt;br/&gt;Create / Destroy off polling thread]
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        ABD[AudioBassDetector&lt;br/&gt;WASAPI loopback . IIR filter]
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        RAS[RumbleAudioService&lt;br/&gt;Bass Shakers . WASAPI render]
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        PH[PeripheralOutputHost #494&lt;br/&gt;HID++ . LampArray . Razer . SteelSeries . TouchSense&lt;br/&gt;Chroma . LED SDK . GameSense . Sensa workers]
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    end
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    subgraph &quot;Virtual Controllers&quot;
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        MS[Xbox&lt;br/&gt;Xbox 360 / One / Series / Elite / Adaptive]
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        SONY[PlayStation&lt;br/&gt;DS3 / DS4 / DualSense / DualSense Edge]
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        NIN[Nintendo&lt;br/&gt;Switch Pro . Switch 2 Pro]
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        EXT[Extended&lt;br/&gt;Sticks . Wheels . Custom HID]
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        KBM[Keyboard+Mouse&lt;br/&gt;SendInput, no driver]
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        MIDI[MIDI&lt;br/&gt;Windows MIDI Services or WinMM]
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        VR[VR&lt;br/&gt;SteamVR left+right hand pair]
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    end
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    subgraph &quot;Data Layer. PadForge.Engine&quot;
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        PS[PadSetting . UserSetting . UserDevice&lt;br/&gt;Gamepad . RawHidState . Vibration]
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        SDL[SdlDeviceWrapper&lt;br/&gt;SDL3 P/Invoke]
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        RIL[RawInputListener&lt;br/&gt;Keyboard . Mouse]
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        IHM[InputHookManager&lt;br/&gt;LL hooks . input suppression]
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    end
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    subgraph &quot;External Systems&quot;
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        SDL3[SDL3.dll&lt;br/&gt;Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;ships 337 profiles, PadForge offers 239 with a captured descriptor&lt;br/&gt;+ native OpenVR driver for the VR slot]
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        HH[HidHide Driver]
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        WMS[Windows MIDI Services&lt;br/&gt;or legacy WinMM]
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        DSU_CLIENT[DSU Clients&lt;br/&gt;Cemu / Dolphin / Yuzu / Ryujinx]
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        BROWSER[Web Browsers&lt;br/&gt;Phone / tablet]
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        PEER[Remote Link Peers&lt;br/&gt;Paired PadForge PCs, LAN or internet relay]
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        VEND[Peripheral vendors&lt;br/&gt;Razer Synapse . Logitech G HUB . SteelSeries GG&lt;br/&gt;Logitech HID++ devices]
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    end
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    UI --&gt; VM
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    VM --&gt; IS
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    VM --&gt; SS
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    IS --&gt; IM
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    IS --&gt; ABD
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    IS --&gt; DS
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    IS --&gt; FMS
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    IS --&gt; PH
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    IM -.-&gt;|levels, claims| PH
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    PH -.-&gt;|REST, LED SDK, GameSense, HID++| VEND
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    RS --&gt; IM
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    IM --&gt; HMP
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    IM --&gt; KBM
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    IM --&gt; MIDI
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    IM --&gt; RAS
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    HMP --&gt; MS
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    HMP --&gt; SONY
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    HMP --&gt; NIN
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    HMP --&gt; EXT
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    HMP --&gt; VR
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    IM --&gt; SDL
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    IM --&gt; RIL
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    IM --&gt; IHM
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    ABD --&gt; WASAPI
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    RAS --&gt; WASAPI
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    SDL --&gt; SDL3
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    SDL --&gt; OXI
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    MS --&gt; HM
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    SONY --&gt; HM
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    NIN --&gt; HM
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    EXT --&gt; HM
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    VR --&gt; HM
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    MIDI --&gt; WMS
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    DS --&gt; HH
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    IM -.-&gt;|UDP, default 26760| DSU_CLIENT
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    IM -.-&gt;|HTTP+WS| BROWSER
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    IM -.-&gt;|TCP+UDP, crypto-paired| PEER
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    style UI fill:#e1f5fe
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    style IM fill:#f3e5f5
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    style HMP fill:#f3e5f5
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    style PS fill:#e8f5e9
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    style SDL3 fill:#fff3e0
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    style OXI fill:#fff3e0
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    style HM fill:#fff3e0
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        GMS[GameModServer #529&lt;br/&gt;DSX game mod UDP . loopback]
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        RS[RecorderService&lt;br/&gt;Input mapping recorder]
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        FMS[ForegroundMonitorService&lt;br/&gt;Per-app profile switching]
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    end
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    subgraph &quot;Engine. PadForge.App/Common/Input&quot;
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        IM[InputManager&lt;br/&gt;Polling loop . Steps 1-6]
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        HMP[HM lifecycle thread pool&lt;br/&gt;Create / Destroy off polling thread]
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        ABD[AudioBassDetector&lt;br/&gt;WASAPI loopback . IIR filter]
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        RAS[RumbleAudioService&lt;br/&gt;Bass Shakers . WASAPI render]
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        PH[PeripheralOutputHost #494&lt;br/&gt;HID++ . LampArray . Razer . SteelSeries . TouchSense&lt;br/&gt;Chroma . LED SDK . GameSense . Sensa workers]
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    end
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    subgraph &quot;Virtual Controllers&quot;
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        MS[Xbox&lt;br/&gt;Xbox 360 / One / Series / Elite / Adaptive]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        SONY[PlayStation&lt;br/&gt;DS3 / DS4 / DualSense / DualSense Edge]
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        NIN[Nintendo&lt;br/&gt;Switch Pro . Switch 2 Pro]
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        EXT[Extended&lt;br/&gt;Sticks . Wheels . Custom HID]
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        KBM[Keyboard+Mouse&lt;br/&gt;SendInput, no driver]
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        MIDI[MIDI&lt;br/&gt;Windows MIDI Services or WinMM]
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        VR[VR&lt;br/&gt;SteamVR left+right hand pair]
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    end
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    subgraph &quot;Data Layer. PadForge.Engine&quot;
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        PS[PadSetting . UserSetting . UserDevice&lt;br/&gt;Gamepad . RawHidState . Vibration]
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>        SDL[SdlDeviceWrapper&lt;br/&gt;SDL3 P/Invoke]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>        RIL[RawInputListener&lt;br/&gt;Keyboard . Mouse]
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        IHM[InputHookManager&lt;br/&gt;LL hooks . input suppression]
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    end
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    subgraph &quot;External Systems&quot;
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        SDL3[SDL3.dll&lt;br/&gt;Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        OXI[OpenXInput&lt;br/&gt;xinput1_4 shim]
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        HM[HIDMaestro&lt;br/&gt;UMDF2 user-mode driver&lt;br/&gt;ships 337 profiles, PadForge offers 239 with a captured descriptor&lt;br/&gt;+ native OpenVR driver for the VR slot]
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        HH[HidHide Driver]
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        WMS[Windows MIDI Services&lt;br/&gt;or legacy WinMM]
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        WASAPI[Windows Audio&lt;br/&gt;WASAPI Loopback + Render]
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        DSU_CLIENT[DSU Clients&lt;br/&gt;Cemu / Dolphin / Yuzu / Ryujinx]
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        BROWSER[Web Browsers&lt;br/&gt;Phone / tablet]
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        PEER[Remote Link Peers&lt;br/&gt;Paired PadForge PCs, LAN or internet relay]
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        VEND[Peripheral vendors&lt;br/&gt;Razer Synapse . Logitech G HUB . SteelSeries GG&lt;br/&gt;Logitech HID++ devices]
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        MODS[DSX game mods&lt;br/&gt;GTA V . RDR2 . Skyrim . Forza]
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    end
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    UI --&gt; VM
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    VM --&gt; IS
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    VM --&gt; SS
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    IS --&gt; IM
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    IS --&gt; ABD
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    IS --&gt; DS
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    IS --&gt; FMS
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    IS --&gt; PH
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    IS --&gt; GMS
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    MODS -.-&gt;|UDP, default 6969, loopback| GMS
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    IM -.-&gt;|levels, claims| PH
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    PH -.-&gt;|REST, LED SDK, GameSense, HID++| VEND
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    RS --&gt; IM
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    IM --&gt; HMP
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    IM --&gt; KBM
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    IM --&gt; MIDI
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    IM --&gt; RAS
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    HMP --&gt; MS
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    HMP --&gt; SONY
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    HMP --&gt; NIN
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    HMP --&gt; EXT
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    HMP --&gt; VR
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    IM --&gt; SDL
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    IM --&gt; RIL
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    IM --&gt; IHM
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    ABD --&gt; WASAPI
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    RAS --&gt; WASAPI
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    SDL --&gt; SDL3
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    SDL --&gt; OXI
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    MS --&gt; HM
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    SONY --&gt; HM
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    NIN --&gt; HM
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    EXT --&gt; HM
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    VR --&gt; HM
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    MIDI --&gt; WMS
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>    DS --&gt; HH
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    IM -.-&gt;|UDP, default 26760| DSU_CLIENT
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    IM -.-&gt;|HTTP+WS| BROWSER
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    IM -.-&gt;|TCP+UDP, crypto-paired| PEER
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    style UI fill:#e1f5fe
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    style IM fill:#f3e5f5
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    style HMP fill:#f3e5f5
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    style PS fill:#e8f5e9
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    style SDL3 fill:#fff3e0
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    style OXI fill:#fff3e0
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    style HM fill:#fff3e0
 </code></pre></div>
 <hr />
 <h2 id="solution-structure">Solution Structure<a class="headerlink" href="#solution-structure" title="Permanent link">&para;</a></h2>
-<p>Six-project .NET 10 solution (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, and the two test projects):</p>
+<p>Seven projects (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.NativeChecks, PadForge.DsxStandIn, and the two test projects). All but PadForge.DsxStandIn target .NET 10:</p>
 <table>
 <thead>
 <tr>
@@ -5135,6 +5243,11 @@
 <td><strong>PadForge.NativeChecks</strong></td>
 <td><code>net10.0-windows</code> (console Exe)</td>
 <td>Out-of-process checks the test suite runs against a bundled <code>SDL3.dll</code> (joystick, keyboard, and mouse enumeration, button mapping). References Engine</td>
+</tr>
+<tr>
+<td><strong>PadForge.DsxStandIn</strong></td>
+<td><code>net462</code> (WinExe, assembly name <code>DSX</code>)</td>
+<td>The 5.5 KB DSX.exe stand-in for game mods that check for a running DSX (#529). It waits on PadForge's process and exits with it. PadForge.App builds it and embeds the exe as the resource <code>PadForge.DsxStandIn.exe</code>. See <a href="../game-mods-internals/">Game Mods Internals</a></td>
 </tr>
 </tbody>
 </table>
@@ -5664,6 +5777,25 @@
 <li><code>PeripheralSwitchMigration.cs</code>. Turns the retired switches into vendor-row assignments, once per file</li>
 </ul>
 <p><code>ChromaLightbarService.cs</code> and <code>LightsyncLightbarService.cs</code> are gone.</p>
+<h3 id="game-mods-529">Game mods (#529)<a class="headerlink" href="#game-mods-529" title="Permanent link">&para;</a></h3>
+<p>Game mods written for DSX send DualSense trigger programs and lights as JSON over UDP on the same PC. With <strong>Accept DSX Game Mods</strong> on, PadForge listens in DSX's place and plays what the mods send on the PlayStation controllers on its virtual controllers. Detail on <a href="../game-mods-internals/">Game Mods Internals</a>.</p>
+<p><strong>App <code>Common/Input/</code></strong></p>
+<ul>
+<li><code>GameModProtocol.cs</code>. The packet parser, the trigger encoder for DSX's 27 trigger modes and 17 custom modes, the light conversions, and the reply</li>
+<li><code>GameModEffects.cs</code>. What the mods hold on each of their controllers, which virtual controller each controller number reaches, and the trigger thresholds Step 5 applies</li>
+<li><code>GameModSender.cs</code>. The program that owns a mod's UDP port, found in the system's UDP tables, and the process handle that says when it exits</li>
+</ul>
+<p><strong>App <code>Services/</code></strong></p>
+<ul>
+<li><code>GameModServer.cs</code>. The loopback UDP server: one receive thread, the reply to each packet, and the senders it watches</li>
+<li><code>GameModPortFiles.cs</code>. The two port files mods read, written when the server starts</li>
+<li><code>DsxStandIn.cs</code>. Extracts and runs the DSX.exe stand-in, tied to PadForge's lifetime by a kill-on-close job object</li>
+<li><code>InputService.GameMods.cs</code>. The server's lifetime, the Dashboard status line, and the Devices and pad page lines</li>
+</ul>
+<p><strong><code>PadForge.DsxStandIn/</code></strong></p>
+<ul>
+<li><code>Program.cs</code>. The stand-in: it waits on the process ID passed as its one argument and exits when that process does</li>
+</ul>
 <h3 id="padforgesteamworkshop">PadForge.SteamWorkshop<a class="headerlink" href="#padforgesteamworkshop" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>PadForge.SteamWorkshop/
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  ISteamWorkshopGate.cs      # Opt-in gate. Every client constructor throws when it is off
@@ -6063,6 +6195,8 @@
 <p><code>RumbleAudioService</code> (issue #236) renders each slot's inbound game feedback as low-frequency sine tones. Players are keyed by audio endpoint, not by slot: every slot routed to one endpoint shares a single NAudio <code>WasapiOut</code> (shared mode, event-sync, 30 ms buffers), one sample clock, and one composite limiter. Each <code>WasapiOut</code> runs its own render thread, and a 5-second reconcile <code>Timer</code> resolves configured endpoints and prunes dead players. The poll loop's <code>UpdateRumbleAudioLane</code> publishes a packed four-voice <code>LfeOutputState</code> long per slot each tick (<code>Volatile.Write</code>). <code>RumbleAudioSampleProvider</code> reads it on the render thread (<code>Volatile.Read</code>). Silence is an explicit edge, never an inference from callback inactivity: idle entry, engine stop, and slot delete publish it synchronously. A configured-but-unresolved endpoint fails closed (no fallback device).</p>
 <h3 id="12-peripheral-outputs-peripheraloutputhost-with-the-engine">12. Peripheral Outputs (PeripheralOutputHost, with the engine)<a class="headerlink" href="#12-peripheral-outputs-peripheraloutputhost-with-the-engine" title="Permanent link">&para;</a></h3>
 <p><code>InputService.Start()</code> starts <code>PeripheralOutputHost</code> (#494) beside the engine, and <code>Stop()</code> disposes it. The host owns a <code>PeripheralLink</code> thread, which reads vendor software presence every 5 s, walks the present HID collections for the direct backends, and runs the link pass every 500 ms. It starts eight workers: the <code>PeripheralHidpp</code> and <code>PeripheralGameSense</code> threads, the Razer Chroma and Logitech LED SDK loops on the thread pool, and one thread for each direct backend, <code>PeripheralLampArray</code>, <code>PeripheralSteelSeries</code>, <code>PeripheralRazer</code> and <code>PeripheralTouchSense</code>. A <code>SensaHaptics</code> thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and each Logitech iFeel mouse bound to WinUSB has a <code>TouchSenseMouse</code> thread that reads its input reports. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in <code>PeripheralOutputs</code>, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.</p>
+<h3 id="13-game-mod-server-thread-gamemodserver-on-demand">13. Game Mod Server Thread (GameModServer, on demand)<a class="headerlink" href="#13-game-mod-server-thread-gamemodserver-on-demand" title="Permanent link">&para;</a></h3>
+<p><code>GameModServer</code> (#529) runs a background thread named <code>PadForge.GameModServer</code> while <strong>Accept DSX Game Mods</strong> is on and the engine runs. It blocks in <code>Socket.ReceiveFrom</code> on a loopback socket with a 500 ms timeout, answers each packet, and applies its instructions to <code>GameModEffects</code>. Between packets, at most every 500 ms, it checks the senders: one whose process exited, or one with no process found that has been quiet for 15 seconds, loses everything it set. A change to a hold queues one effects pass on the thread pool for the slot it reaches, so the receive thread never waits on a HID write.</p>
 <h3 id="thread-safety-summary">Thread Safety Summary<a class="headerlink" href="#thread-safety-summary" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6199,6 +6333,12 @@
 <td>Its worker thread</td>
 <td><code>PeripheralLink</code> thread, the crash path</td>
 <td>Immutable, swapped whole</td>
+</tr>
+<tr>
+<td><code>GameModEffects</code> holds (#529)</td>
+<td>Game mod server thread, UI (Clear Mod Effects), server stop</td>
+<td>Effects dispatchers, Engine (Step 5 thresholds), UI timer</td>
+<td>Copy-on-write array published whole under a leaf lock, read with <code>Volatile.Read</code></td>
 </tr>
 </tbody>
 </table>

@@ -9,7 +9,7 @@
 
 ## Sections
 
-Eight sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, and the overlays.
+Nine sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, Game Mods, and the overlays.
 
 | Section | Purpose |
 |---------|---------|
@@ -19,12 +19,13 @@ Eight sections, stacked top to bottom: the engine and its slots, then a **Servic
 | **Remote Link** | [Share controllers](../guides/remote-link.md) with a paired PadForge on another PC. |
 | **Head Tracking** | A head pose from [OpenTrack](head-tracking.md) or from a [VR headset](vr-controller-input.md) as six mappable axes. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
+| **Game Mods** | Adaptive triggers and lights set by [game mods made for DSX](game-mods.md). |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Web Controller, and Touchpad Overlay toggles, the three Overlays checkboxes, and the two ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Game Mods, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, and the three ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
 
 ---
 
@@ -187,6 +188,21 @@ See [DSU Motion Server](../reference/dsu-motion-server.md) for full details.
 
 ---
 
+## Game Mods
+
+Takes the trigger and light effects that game mods made for DSX send over UDP, and plays them on the DualSense, DualSense Edge and DualShock 4 controllers on your virtual controllers.
+
+| Control | Description |
+|---------|-------------|
+| **Accept DSX Game Mods** | Starts and stops the server. Off by default. It listens only while the engine runs. |
+| **Port** | UDP port. Default `6969`, the port DSX and the mods use. Range `1024-65535`. |
+| **Run a DSX.exe Stand-In** | Runs a small program named DSX.exe while the server listens, for mods that stay silent unless a program by that name is running. Off by default. |
+| **Status indicator** | A flame beside the status text. Ember while listening, a steel outline when stopped. The text names the program sending and the virtual controller it reaches, or says another program holds the port. |
+
+While the server listens, PadForge writes its port to the files the mods read it from. See [Game Mods](game-mods.md) for setup, which controller a mod drives, and how long its effects last.
+
+---
+
 ## Overlays
 
 The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.
@@ -222,6 +238,7 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 - [Settings](settings.md): engine options, appearance, drivers.
 - [Profiles](../guides/profiles.md): per-app profile switching.
 - [DSU Motion Server](../reference/dsu-motion-server.md): gyro streaming for emulators.
+- [Game Mods](game-mods.md): adaptive triggers and lights from mods made for DSX.
 - [Web Controller](../guides/web-controller.md): browser-based virtual controller.
 - [Menus](../guides/menus.md): the radial and touch menus the Menu Overlay draws.
 - [Head Tracking](head-tracking.md): OpenTrack setup for the Head Tracking section.

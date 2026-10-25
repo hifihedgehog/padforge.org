@@ -341,6 +341,9 @@ public class SettingsFileData
     </SlotEnabled>
     <EnableDsuMotionServer>false</EnableDsuMotionServer>
     <DsuMotionServerPort>26760</DsuMotionServerPort>
+    <EnableGameModServer>false</EnableGameModServer>
+    <GameModServerPort>6969</GameModServerPort>
+    <GameModDsxStandIn>false</GameModDsxStandIn>
     <EnableWebController>false</EnableWebController>
     <WebControllerPort>8080</WebControllerPort>
     <EnableWebControllerPlainHttp>false</EnableWebControllerPlainHttp>
@@ -429,6 +432,9 @@ public class SettingsFileData
       </ProfileMidiConfigs>
       <EnableDsuMotionServer>false</EnableDsuMotionServer>
       <DsuMotionServerPort>26760</DsuMotionServerPort>
+      <EnableGameModServer>false</EnableGameModServer>
+      <GameModServerPort>6969</GameModServerPort>
+      <GameModDsxStandIn>false</GameModDsxStandIn>
       <EnableWebController>false</EnableWebController>
       <WebControllerPort>8080</WebControllerPort>
     </Profile>
@@ -1401,15 +1407,18 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `PlayStationSlotOrder` / `NintendoSlotOrder` / `ExtendedSlotOrder` / `KeyboardMouseSlotOrder` / `MidiSlotOrder` / `VrSlotOrder` | `int[]` | `[XmlArray][XmlArrayItem("PadIndex")]` | `null` | (v3.1. Nintendo added in 4.1.0, Vr in 4.2.0.) Per-group visual order. |
 | `EnableDsuMotionServer` | `bool` | `[XmlElement]` | `false` | DSU/Cemuhook motion server |
 | `DsuMotionServerPort` | `int` | `[XmlElement]` | `26760` | DSU server port |
+| `EnableGameModServer` | `bool` | `[XmlElement]` | `false` | (#529) The server for DSX game mods |
+| `GameModServerPort` | `int` | `[XmlElement]` | `6969` | (#529) Game mod server port. A stored value outside 1024-65535 loads as 6969 |
+| `GameModDsxStandIn` | `bool` | `[XmlElement]` | `false` | (#529) Run the DSX.exe stand-in while the game mod server listens |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
 | `WebControllerPort` | `int` | `[XmlElement]` | `8080` | Web controller port |
 | `EnableWebControllerPlainHttp` | `bool` | `[XmlElement]` | `false` | Also serve the web controller over plain HTTP on its own port, behind the access code. Machine-scoped, never in `ProfileData`, so a profile switch never opens or closes a port |
 | `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
-| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6924). |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6931). |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6939). |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6951). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6958). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6966). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -2025,6 +2034,9 @@ public class ProfileData
     // Server toggles
     [XmlElement] public bool EnableDsuMotionServer { get; set; }
     [XmlElement] public int DsuMotionServerPort { get; set; } = 26760;
+    [XmlElement] public bool EnableGameModServer { get; set; }                        // #529
+    [XmlElement] public int GameModServerPort { get; set; } = GameModServer.DefaultPort; // 6969
+    [XmlElement] public bool GameModDsxStandIn { get; set; }
     [XmlElement] public bool EnableWebController { get; set; }
     [XmlElement] public int WebControllerPort { get; set; } = 8080;
 
@@ -2084,13 +2096,16 @@ public class ProfileData
 | `XboxSlotOrder` / `PlayStationSlotOrder` / `NintendoSlotOrder` / `ExtendedSlotOrder` / `KeyboardMouseSlotOrder` / `MidiSlotOrder` / `VrSlotOrder` | `int[]` | Per-group visual slot order at profile-save time. Null on profiles predating per-group ordering. The Xbox array's XML name is `ProfileMicrosoftSlotOrder` for v2 back-compat. |
 | `EnableDsuMotionServer` | `bool` | DSU server state |
 | `DsuMotionServerPort` | `int` | DSU port (default: 26760) |
+| `EnableGameModServer` | `bool` | (#529) Game mod server state |
+| `GameModServerPort` | `int` | (#529) Game mod server port (default: 6969). A profile holding a value outside 1024-65535 leaves the port alone on apply |
+| `GameModDsxStandIn` | `bool` | (#529) DSX.exe stand-in state |
 | `EnableWebController` | `bool` | Web controller state |
 | `WebControllerPort` | `int` | Web controller port (default: 8080) |
 | `EnableTouchpadOverlay` | `bool` | (v3.2) Touchpad overlay window enable state |
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
-| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7916, 7922 and 7929). |
+| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7956, 7962 and 7969). |
 | `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |

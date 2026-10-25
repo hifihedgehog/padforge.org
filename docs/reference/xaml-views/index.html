@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2439,6 +2469,8 @@
       
         
           
+        
+      
         
       
         
@@ -5128,6 +5160,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -7301,13 +7361,19 @@
 <a id="__codelineno-1-52" name="__codelineno-1-52" href="#__codelineno-1-52"></a>            │      source line, footer
 <a id="__codelineno-1-53" name="__codelineno-1-53" href="#__codelineno-1-53"></a>            ├─ &quot;Motion Server&quot; section (E7AD glyph, DSU)
 <a id="__codelineno-1-54" name="__codelineno-1-54" href="#__codelineno-1-54"></a>            │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
-<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>            ├─ &quot;Overlays&quot; section (E700 glyph)
-<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
-<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
-<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>            └─ &quot;Touchpad Overlay&quot; section (EDA4 glyph)
-<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
-<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>                   NumberBox + reset, reset-position button, status flame +
-<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>                   TouchpadOverlayStatus
+<a id="__codelineno-1-55" name="__codelineno-1-55" href="#__codelineno-1-55"></a>            ├─ &quot;Game Mods&quot; section (EA86 glyph, #529)
+<a id="__codelineno-1-56" name="__codelineno-1-56" href="#__codelineno-1-56"></a>            │   └─ CardBorder: description, Accept DSX Game Mods toggle
+<a id="__codelineno-1-57" name="__codelineno-1-57" href="#__codelineno-1-57"></a>            │      (EnableGameModServer), port NumberBox (GameModServerPort) with
+<a id="__codelineno-1-58" name="__codelineno-1-58" href="#__codelineno-1-58"></a>            │      ResetGameModPortCommand, Run a DSX.exe Stand-In toggle (GameModDsxStandIn,
+<a id="__codelineno-1-59" name="__codelineno-1-59" href="#__codelineno-1-59"></a>            │      tooltip), each toggle with a reset button, status flame +
+<a id="__codelineno-1-60" name="__codelineno-1-60" href="#__codelineno-1-60"></a>            │      GameModServerStatus as a polite live region, footer
+<a id="__codelineno-1-61" name="__codelineno-1-61" href="#__codelineno-1-61"></a>            ├─ &quot;Overlays&quot; section (E700 glyph)
+<a id="__codelineno-1-62" name="__codelineno-1-62" href="#__codelineno-1-62"></a>            │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
+<a id="__codelineno-1-63" name="__codelineno-1-63" href="#__codelineno-1-63"></a>            │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
+<a id="__codelineno-1-64" name="__codelineno-1-64" href="#__codelineno-1-64"></a>            └─ &quot;Touchpad Overlay&quot; section (EDA4 glyph)
+<a id="__codelineno-1-65" name="__codelineno-1-65" href="#__codelineno-1-65"></a>                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+<a id="__codelineno-1-66" name="__codelineno-1-66" href="#__codelineno-1-66"></a>                   NumberBox + reset, reset-position button, status flame +
+<a id="__codelineno-1-67" name="__codelineno-1-67" href="#__codelineno-1-67"></a>                   TouchpadOverlayStatus
 </code></pre></div>
 <p>The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their outputs are the vendor rows on the Devices page, which a virtual controller drives through the Pad page's <a href="#lighting-tab-tab-7-peripheral-rows-494">Lighting</a> and Force Feedback tabs like any device.</p>
 <h3 id="key-bindings">Key Bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h3>
@@ -7364,6 +7430,16 @@
 <td><code>DsuServerStatus</code></td>
 <td><code>DashboardViewModel</code></td>
 <td>DSU status text</td>
+</tr>
+<tr>
+<td><code>EnableGameModServer</code> / <code>GameModServerPort</code> / <code>GameModDsxStandIn</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Game Mods toggle, port NumberBox and stand-in toggle (#529)</td>
+</tr>
+<tr>
+<td><code>GameModServerStatus</code> / <code>IsGameModServerRunning</code></td>
+<td><code>DashboardViewModel</code></td>
+<td>Game Mods status text and flame</td>
 </tr>
 <tr>
 <td><code>EnableWebController</code></td>
@@ -8739,28 +8815,30 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <p><code>PeripheralHapticsRoute</code> takes its sentence from the <code>Pad_ForceFeedback_Route*</code> strings: the HID++ unit the rumble plays on, haptic feedback turned off for it in Logi Options+, a device that has not answered yet, the iFeel mouse the rumble plays on as a buzz, the SteelSeries GG tactile handler, the virtual controller whose Rival sets every tactile Rival's rumble, the Razer Sensa path, or the software that is not answering yet. A Razer Sensa row on the ARM64 build reads <code>Common_NotAvailableOnArm64</code>, since that build cannot load the Interhaptics engine. Every other line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>) and on a slot that is not live (<code>PeripheralOutputs.SlotLive</code>). The ARM64 line shows either way.</p>
 <h3 id="lighting-tab-tab-7-peripheral-rows-494">Lighting Tab (Tab 7). Peripheral Rows (#494)<a class="headerlink" href="#lighting-tab-tab-7-peripheral-rows-494" title="Permanent link">&para;</a></h3>
 <p>A mouse, keyboard or vendor lighting row assigned to the slot gets the Lighting tab a DualSense gets, with the same modes. <code>SyncTabVisibility()</code> sets <code>hasPeripheralLighting</code> when the selected device has no lightbar and a lighting path links it (<code>PeripheralOutputs.HasLighting</code>) or its record says it has one (<code>UserDevice.HasPeripheralLighting</code>), so the tab stays up while the device sleeps.</p>
+<p>Three ember lines name a DSX game mod while it holds something on the slot (#529), each collapsed when empty: <code>GameModTriggersLine</code> under the Adaptive Triggers tab's subtitle, <code>GameModImpulseLine</code> under the Impulse Triggers tab's subtitle, and <code>GameModLightsLine</code> in the Lighting tree below.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>StackPanel
 <a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  ├─ &quot;Lighting&quot; page header (E781)
 <a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  ├─ LightingLightbarSubtitle + LightingPlayerIdleHint (lightbar devices only)
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  │   ├─ Pad_Lighting_PeripheralSubtitle
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  │   │   ├─ CheckBox &quot;Control This Device’s Lighting&quot; (DeviceConfig.PeripheralLightingEnabled,
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>  │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  │   ├─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  │   │   ├─ TextBlock &quot;Lighting Hold&quot; (Pad_Lighting_ClaimLevel)
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  │   │   │    &quot;Colors Only&quot;, &quot;Colors and Lighting Power&quot;,
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  │   │   │    &quot;Colors, Lighting Power, and On-Board Memory Mode Off&quot; (PeripheralClaimLevelHostModeItem)
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
-<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>  ├─ LightbarModeCard (the lightbar&#39;s mode picker and cards. Its LightbarPreviewPanel,
-<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>  │    the DualShock 4 / DualSense art, collapses for these rows)
-<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  ├─ GameModLightsLine (#529, ember, collapsed when empty)
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  │   ├─ Pad_Lighting_PeripheralSubtitle
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>  │   │   ├─ CheckBox &quot;Control This Device’s Lighting&quot; (DeviceConfig.PeripheralLightingEnabled,
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  │   ├─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │   │   ├─ TextBlock &quot;Lighting Hold&quot; (Pad_Lighting_ClaimLevel)
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  │   │   │    &quot;Colors Only&quot;, &quot;Colors and Lighting Power&quot;,
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>  │   │   │    &quot;Colors, Lighting Power, and On-Board Memory Mode Off&quot; (PeripheralClaimLevelHostModeItem)
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>  ├─ LightbarModeCard (the lightbar&#39;s mode picker and cards. Its LightbarPreviewPanel,
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>  │    the DualShock 4 / DualSense art, collapses for these rows)
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>  └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 </code></pre></div>
 <p>The Lighting Hold row shows for a mouse or keyboard that offers a hold above colors alone (<code>PadPage.OfferedLightingHold</code>: the row's <code>DeviceLinks.MaxClaimLevel</code> while a path of its own lights it, else what its record kept). <code>PadPage.ShowLightingHold</code> collapses and disables the last option for a device that does not offer the second hold. The option stays in the list, so a choice of it saved earlier still shows as the selection, and a closed ComboBox cannot step onto it with an arrow key, since it steps only to an enabled item. The picker then takes the tooltip <code>Pad_Lighting_ClaimLevel_TooltipNoHostMode</code>, which stops before the sentences about the last option, and the two options left report a set size of two to a screen reader. Typing a letter selects nothing in this picker, because it would select the last option where that one is out of the list.</p>
 <p><code>PeripheralLightingRoute</code> is <code>PeripheralRouteText.Lighting(device, PadIndex, lightsHere, claimLevel)</code> (<code>PeripheralRouteText.cs</code> line 155), where <code>lightsHere</code> is true for a vendor row or a unit row and otherwise follows the switch, in both cases only on a slot that is live (<code>PeripheralOutputs.SlotLive</code>), and <code>claimLevel</code> is the Lighting Hold this controller's claim carries. The line is empty while the engine is stopped (<code>PeripheralOutputs.Running</code>). Its sentence comes from the <code>Pad_Lighting_Route*</code> strings:</p>
@@ -9163,68 +9241,70 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>        │   button that reads KeyboardScreenButtonText, shown on ShowKeyboardScreen, #519)
 <a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>        ├─ Falcon line, Calibrate Reach and its result (FalconLine, FalconCalibrate_Click,
 <a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>        │   FalconCalibrationStatus as a polite live region, shown on ShowFalconCalibrate, #521)
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>        ├─ AnalogKeyboardLine (#468, collapsed when empty)
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>        ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>        ├─ Separator
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>        ├─ VC Assignment section
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>        ├─ Input Mode section (ShowInputModeSection)
-<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
-<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>        ├─ Input Hiding section (ShowInputHidingSection)
-<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
-<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
-<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
-<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
-<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>        ├─ Separator (ShowInputModeOrHidingSection)
-<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>        ├─ Power section (ShowPowerSection)
-<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
-<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>        │   │   ShowIdleDisconnect, #162)
-<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
-<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>        │       QuickCharge_Click, #372)
-<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
-<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
-<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>        │   ├─ GunCalibrationStatus line
-<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
-<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>        │       ToolTip GunCalibrateTooltip) + reset
-<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>        │       (GunCalibration)
-<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>        ├─ Separator (ShowRawInputDivider)
-<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>        └─ Raw Input State section
-<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>            ├─ Falcon handle (#521, IsFalconDevice): a dot in a square (FalconPreviewBorder,
-<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>            │   FalconDot) for Left/Right and Up/Down, beside the named axes
-<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
-<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
-<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
-<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
-<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>            │   and while ShowNamedButtons)
-<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
-<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
-<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
-<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
-<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
-<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            ├─ Keyboard layout (keyboard devices only)
-<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
-<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>            ├─ Mouse preview (mouse devices only)
-<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>            │   └─ Viewbox → MousePreviewControl
-<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>            ├─ MIDI preview (MIDI input devices)
-<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
-<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
-<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
-<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>            │       ├─ 36×36 Ellipse background + center dot
-<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
-<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
-<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
-<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
-<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
-<a id="__codelineno-12-103" name="__codelineno-12-103" href="#__codelineno-12-103"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
-<a id="__codelineno-12-104" name="__codelineno-12-104" href="#__codelineno-12-104"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
-<a id="__codelineno-12-105" name="__codelineno-12-105" href="#__codelineno-12-105"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
-<a id="__codelineno-12-106" name="__codelineno-12-106" href="#__codelineno-12-106"></a>            │   VR controllers, Logitech G-Keys rows)
-<a id="__codelineno-12-107" name="__codelineno-12-107" href="#__codelineno-12-107"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
-<a id="__codelineno-12-108" name="__codelineno-12-108" href="#__codelineno-12-108"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
-<a id="__codelineno-12-109" name="__codelineno-12-109" href="#__codelineno-12-109"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>        ├─ GameModLine and Clear Mod Effects (ClearModEffects_Click), both collapsed while
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>        │   GameModLine is empty (#529)
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>        ├─ AnalogKeyboardLine (#468, collapsed when empty)
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>        ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>        ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>        ├─ HeadTrackerStatus line (#355, collapsed when empty)
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>        ├─ Separator
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>        ├─ VC Assignment section
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>        │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>        │   └─ Devices_NoSlotsHint line while no slot exists
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>        ├─ Input Mode section (ShowInputModeSection)
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>        │   └─ &quot;Force raw joystick mode&quot; CheckBox (ForceRawJoystickMode)
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>        ├─ Input Hiding section (ShowInputHidingSection)
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>        │   ├─ &quot;Hide from Games (HidHide)&quot; CheckBox (HidHideEnabled, HidingToggle_Click,
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>        │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>        │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>        │   └─ &quot;Consume Mapped Inputs (Hooks)&quot; CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>        ├─ Separator (ShowInputModeOrHidingSection)
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>        ├─ Power section (ShowPowerSection)
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>        │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>        │   │   ShowIdleDisconnect, #162)
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>        │   └─ Quick Charge CheckBox (QuickChargeEnabled, ShowQuickCharge,
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>        │       QuickCharge_Click, #372)
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>        ├─ Light Gun section (ShowGunCalibration, SDL#33 Part 9, Wii Remote #485)
+<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>        │   ├─ Separator (ShowGunCalibrationDivider)
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>        │   ├─ GunCalibrationStatus line
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>        │   └─ Calibrate Button (GunCalibrate_Click, CanCalibrateGun,
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>        │       ToolTip GunCalibrateTooltip) + reset
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>        │       (GunCalibration)
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>        ├─ Separator (ShowRawInputDivider)
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>        └─ Raw Input State section
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>            ├─ Falcon handle (#521, IsFalconDevice): a dot in a square (FalconPreviewBorder,
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>            │   FalconDot) for Left/Right and Up/Down, beside the named axes
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>            ├─ Axes (joysticks/gamepads, hidden for keyboard/mouse)
+<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>            │   └─ ItemsControl → ProgressBar per axis (0-1, name + bar + raw value)
+<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>            ├─ Buttons (joysticks/gamepads. Hidden for keyboard, mouse, MIDI, NFC,
+<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>            │   microphone, consumer-control, motion-only, and head-tracker rows,
+<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>            │   and while ShowNamedButtons)
+<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>            │   └─ WrapPanel of 24×24 circles, accent fill when pressed
+<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>            ├─ NFC named-tag preview (#150, IsNfcDevice)
+<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>            │   └─ ItemsControl → NfcTags (registered named tags)
+<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>            ├─ Consumer Control named-chip preview (#168, IsConsumerDevice)
+<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>            │   └─ ItemsControl → ConsumerButtons (named button chips)
+<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>            ├─ Keyboard layout (keyboard devices only)
+<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>            │   └─ Viewbox → Canvas (556×136) with positioned key Borders
+<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>            ├─ Mouse preview (mouse devices only)
+<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>            │   └─ Viewbox → MousePreviewControl
+<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>            ├─ MIDI preview (MIDI input devices)
+<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>            │   └─ MidiPreviewView ×2 (MidiNotesPreview, MidiCcPreview)
+<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>            ├─ D-Pad / POV hats (conditional on RawPovs.Count &gt; 0)
+<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>            │   └─ WrapPanel of compass indicators, three to a row in the 340 pane
+<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>            │       ├─ 36×36 Ellipse background + center dot
+<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>            │       └─ Accent-colored Line with RotateTransform(AngleDegrees), hidden when IsCentered
+<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>            ├─ Gyroscope (HasGyroData, 3-column X/Y/Z grid, telemetry mono F3 format)
+<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>            ├─ Accelerometer (HasAccelData, same layout as gyro)
+<a id="__codelineno-12-103" name="__codelineno-12-103" href="#__codelineno-12-103"></a>            ├─ Aux Accelerometer (HasAccelAuxData, same layout, the Nunchuk sensor / combined pair&#39;s left-half accel, #199)
+<a id="__codelineno-12-104" name="__codelineno-12-104" href="#__codelineno-12-104"></a>            ├─ Aux Gyro (HasGyroAuxData, same layout, the combined pair&#39;s left Joy-Con, #252)
+<a id="__codelineno-12-105" name="__codelineno-12-105" href="#__codelineno-12-105"></a>            ├─ Touchpad preview (HasTouchpadData, up to 5 contact dots per pad,
+<a id="__codelineno-12-106" name="__codelineno-12-106" href="#__codelineno-12-106"></a>            │   TouchpadPreviewBorder, plus Touchpad2PreviewBorder on HasSecondTouchpadData)
+<a id="__codelineno-12-107" name="__codelineno-12-107" href="#__codelineno-12-107"></a>            ├─ Named button chips (ShowNamedButtons: handheld hidden buttons #343,
+<a id="__codelineno-12-108" name="__codelineno-12-108" href="#__codelineno-12-108"></a>            │   VR controllers, Logitech G-Keys rows)
+<a id="__codelineno-12-109" name="__codelineno-12-109" href="#__codelineno-12-109"></a>            │   └─ HandheldButtons chips, or the Handheld_NoneLearned line when empty
+<a id="__codelineno-12-110" name="__codelineno-12-110" href="#__codelineno-12-110"></a>            └─ Voice phrases (#317, ShowVoicePhrases)
+<a id="__codelineno-12-111" name="__codelineno-12-111" href="#__codelineno-12-111"></a>                └─ ItemsControl → VoicePhrases (registered phrase chips)
 </code></pre></div>
 <h3 id="key-bindings_1">Key Bindings<a class="headerlink" href="#key-bindings_1" title="Permanent link">&para;</a></h3>
 <table>

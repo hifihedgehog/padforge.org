@@ -32,6 +32,7 @@ Nothing here is required reading for using the app.
 | --- | --- |
 | [DSU Motion Server](dsu-motion-server.md) | The Cemuhook motion server |
 | [DSU Protocol](dsu-protocol.md) | The wire protocol itself |
+| [Game Mods Internals](game-mods-internals.md) | The DSX game mod packets, the trigger encodings, which controller each mod reaches, and when its effects end |
 | [Remote Link Internals](remote-link-internals.md) | Cross-PC device sharing on the wire |
 | [External Control Internals](external-control-internals.md) | The profile control pipe, its command grammar, and the held-profile state |
 | [Steam Workshop Import Internals](steam-workshop-import-internals.md) | The VDF parser and config translator |
@@ -48,6 +49,8 @@ Nothing here is required reading for using the app.
 | [Logitech G-Keys Internals](logitech-g-keys-internals.md) | Loading the vendor library, the callback, and the 32-bit key word |
 | [Analog Keyboards Internals](analog-keyboards-internals.md) | Routes, sessions and the HID channel behind analog keyboard rows, and every supported family's protocol |
 | [Bliss-Box Internals](bliss-box-internals.md) | The API sidecar beside each port's SDL row, every report, the native channel and the Controller Pak |
+| [Keyboard Screens Internals](keyboard-screens-internals.md) | Finding each screen, its row, the drawing engines, and the keys beside it |
+| [Novint Falcon Internals](novint-falcon-internals.md) | Force Dimension's library, the haptic thread per Falcon, and the driver install |
 | [Handheld PC Buttons Internals](handheld-buttons-internals.md) | The three delivery paths a hidden button can arrive on, and the learners |
 | [Wii Controllers Internals](wii-controllers-internals.md) | Extensions, Motion Plus, IR camera |
 | [2D Overlay System](2d-overlay-system.md) | The overlay renderer |

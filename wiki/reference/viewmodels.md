@@ -211,6 +211,22 @@ HIDMaestro ships inside the executable as a managed SDK, so it never had an inst
 |---------|-------------|
 | `ResetDsuPortCommand` | Resets `DsuMotionServerPort` to 26760. |
 
+### Game Mods (#529)
+
+The server for DSX game mods. All three settings ride profiles. See [Game Mods Internals](game-mods-internals.md).
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `EnableGameModServer` | `bool` | `false` | The server listens while this is on and the engine runs. |
+| `GameModServerPort` | `int` | `6969` | UDP port. Clamped to 1024–65535. |
+| `GameModDsxStandIn` | `bool` | `false` | Run the DSX.exe stand-in while the server listens. |
+| `GameModServerStatus` | `string` | `"Stopped"` | The card's line: listening, who sends to which virtual controller, the port in use, or the bind that failed. Set by `InputService` from `GameModServer.FormatStatus()`. |
+| `IsGameModServerRunning` | `bool` | `false` | Serving truth for the card's flame: the server listens, whatever the switch says. |
+
+| Command | Description |
+|---------|-------------|
+| `ResetGameModPortCommand` | Resets `GameModServerPort` to 6969. |
+
 ### Head Tracking (#355, #403)
 
 Three independent inputs feed the Head Tracker device row: a UDP listener on OpenTrack's port, a FreeTrack 2.0 shared-memory reader, and an OpenXR headset reader (#403) that also adds the two VR controller rows. The row exists while any of the three is on (`HeadTrackingRuntime.AnyEnabled`). Each setter mirrors into the static `PadForge.Common.Input.HeadTrackingRuntime` that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The UDP and FreeTrack toggles ride profiles as nullable legs (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`). The port, the OpenXR toggle and runtime, and the ranges are global. These properties moved here from `SettingsViewModel` on 2026-09-02. MainWindow's Dashboard dirty-gate allowlist moved with them, so a head-tracking edit still marks the settings file dirty. See [Head Tracking: Internals](head-tracking-internals.md) and [OpenXR Input Internals](openxr-input-internals.md).
@@ -882,6 +898,7 @@ The ALL chip binds `TotalCount`. `RefreshCounts()` recomputes every facet count 
 | `ToggleSlotCommand` | `HasSelectedDevice` | `RelayCommand<int>`. Toggles slot assignment. Raises `ToggleSlotRequested`. |
 | `HideDeviceCommand` | `HasSelectedDevice` | Raises `HideDeviceRequested` with the selected device's InstanceGuid. The row itself stays in the collection until the service refreshes the list. |
 | `RemoveDeviceCommand` | `HasSelectedDevice` | Removes the row from `Devices`, clears `SelectedDevice`, raises `RemoveDeviceRequested`, then `RefreshCounts()`. |
+| `ClearModEffects()` | method | Ends what DSX game mods hold on every virtual controller the selected device feeds (`GameModEffects.ClearDevice`, #529) and clears its `GameModLine`. Called by **Clear Mod Effects** on the panel. |
 | `ResetSelectedDeviceSettingCommand` | `HasSelectedDevice` and a name `DeviceRowViewModel.CanResetSetting` accepts | `RelayCommand<string>` (`DevicesViewModel.SettingResets.cs`). Runs the selected row's `ResetSettingCommand` for the named option, then clears `LastRawStateDeviceGuid` and raises `DeviceHidingChanged` so the option persists. Skips `HidHideEnabled` while HidHide is unavailable. |
 
 ### Events
@@ -1062,6 +1079,7 @@ Single device row on the Devices page. Shows identification, status, capabilitie
 | `StatusText` | `string` | - | Computed: `"Disabled"`, `"Online"`, or `"Offline"`. |
 | `SerialNumber` | `string` | `""` | Device serial, where the transport reports one. |
 | `HasVidPid` | `bool` | - | Computed: either `VendorId` or `ProductId` is non-zero. Gates the VID:PID line. |
+| `GameModLine` | `string` | `""` | (#529) What DSX game mods set on the virtual controllers this device feeds, as this device carries it, from `InputService.GameModDeviceLine`. Empty hides the line and **Clear Mod Effects**. |
 
 ### Battery (#167)
 
@@ -1275,6 +1293,14 @@ Drives the Adaptive Triggers and Lighting tabs. Keyed per physical device, so tw
 | `GetOrCreateDeviceConfig(Guid)` | Returns the per-device config, creating a fresh default entry if none exists. Empty Guid returns the anchor config. |
 | `EnumerateDeviceSlotConfigs()` | Snapshot of every per-device config on the slot. Used by macro fan-out. |
 | `EnsureDeviceSlotConfigsForMappedDevices()` | Adds a default config entry for every currently-mapped device. |
+
+Three lines name a DSX game mod (#529) while it holds something on the slot. `InputService.SetGameModPadLines` sets them, and each is empty otherwise:
+
+| Property | Type | Shown on |
+|----------|------|----------|
+| `GameModTriggersLine` | `string` | The Adaptive Triggers tab, while the mod holds a trigger program |
+| `GameModImpulseLine` | `string` | The Impulse Triggers tab, while the mod holds a trigger program |
+| `GameModLightsLine` | `string` | The Lighting tab, while the mod holds the lightbar, the player lights or the mute light |
 
 ### Keyboard + Mouse Configuration (#205)
 

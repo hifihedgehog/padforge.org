@@ -407,7 +407,7 @@ The poll-wide `UpdateSensaLane` is gone (#494). The Razer Sensa row is a device 
 
 **Poll-frame gate:**
 
-`SourceCoercion.BeginPollFrame(int)` (`SourceCoercion.cs` line 795) is called once per active cycle with the loop's run token, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 2196). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only. `InputManager.Start` registers each run before it starts the loop's thread (`SourceCoercion.BeginPollRun`) and hands the loop the token, which `BeginPollFrame` checks under the lock the registration takes. A loop Stop retired after a stalled join advances no frame once its replacement has started, and the registration ends the old loop's claim to be the poll thread. An IR pointer forget makes its poll-thread check and its immediate clear under the same lock. The same boundary applies the IR pointer forgets other threads asked for ([Wii Controllers Internals](wii-controllers-internals.md)).
+`SourceCoercion.BeginPollFrame(int)` (`SourceCoercion.cs` line 795) is called once per active cycle with the loop's run token, right after `SDL_UpdateJoysticks()` and before Step 1 (`InputManager.cs` line 2201). The idle branch does not call it. It increments a shared `_pollFrameSeq` counter that gates every state-carrying evaluator cache in `SourceCoercion`: the dual-threshold gyro smoothing ring, the legacy gyro EMA, the IR pointer EMA, the Joy-Con 2 mouse velocity window, the trackball momentum state, and the touchpad relative-delta trackers. Each cache compares its stored sequence against `_pollFrameSeq` and re-serves the frame's value on repeat reads, so it advances once per poll no matter how many mapping rows read the same source. Without the gate, two gyro rows would halve the smoothing window the Gyro tab promises, and a second relative-touchpad row would consume the first one's delta. The counter and the caches it gates are polling-thread only. `InputManager.Start` registers each run before it starts the loop's thread (`SourceCoercion.BeginPollRun`) and hands the loop the token, which `BeginPollFrame` checks under the lock the registration takes. A loop Stop retired after a stalled join advances no frame once its replacement has started, and the registration ends the old loop's claim to be the poll thread. An IR pointer forget makes its poll-thread check and its immediate clear under the same lock. The same boundary applies the IR pointer forgets other threads asked for ([Wii Controllers Internals](wii-controllers-internals.md)).
 
 **3-Tier Polling Sleep Strategy:**
 
@@ -475,14 +475,14 @@ The engine half of the "Continue Polling When Window Loses Focus" setting. When 
 
 Pad indices are data identity. A slot's mappings, profile, devices, and settings live at its pad index and never move. Visual position is the kernel-slot anchor: in an HM-backed group the VC at visual position V holds kernel slot V. There is no per-slot data-array shuffle. Nothing in `InputManager` swaps `SlotControllerTypes[]`, `VibrationStates[]`, or the `Combined*States` arrays between pad indices, and there is no `SwapSlots` / `SwapSlotData` method on `InputManager`.
 
-The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20362), `MoveSlot(int, int)` (line 20395), and `MoveSlotToGroupTail(int)` (line 20442). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
+The UI-facing reorder verbs live on `InputService`: `SwapSlots(int, int)` (`InputService.cs` line 20408), `MoveSlot(int, int)` (line 20441), and `MoveSlotToGroupTail(int)` (line 20488). `SwapSlots` and `MoveSlot` mutate `SettingsManager.SlotOrders` for the new visual order, then route through `InputService.RebuildKernelOrderAfterReorder` to the sole `InputManager` reorder entry point. `MoveSlotToGroupTail` changes only the group order (see below):
 
 ```csharp
 public void RerouteVirtualControllersForReorder(
     VirtualControllerType groupType, IReadOnlyList<int> oldOrder, IReadOnlyList<int> newOrder)
 ```
 
-`InputManager.Step5.VirtualDevices.cs` line 3568. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
+`InputManager.Step5.VirtualDevices.cs` line 3595. It runs on the UI thread under the VC lifecycle lock. Intra-group only, and only for the four HM-backed groups (Xbox / PlayStation / Nintendo / Extended). It early-returns for any other group and for null or length-mismatched orders. For each visual position V it decides per position:
 
 - **Same profile at V**: reuse the kernel VC in place. The pad-index pointer in `_virtualControllers[]` moves so the new pad-at-position-V feeds V's kernel slot, and `FeedbackPadIndex` is updated on the surviving VC so the rumble callback writes the right `VibrationStates[]` entry. No teardown.
 - **Different profile at V**: destroy the old VC via the regular async-dispose path. Pass 2's visual-order gate plus `ApplyAscendingIndexPreemption` recreate it with the new pad's profile at the lowest free kernel slot, which is V because every surviving VC at positions below V keeps its slot.
@@ -496,9 +496,9 @@ Same-profile cycles collapse to a pure pointer rotation across `_virtualControll
 private void UpdateMotionSnapshots()
 ```
 
-Called after Step 2 (`InputManager.cs` line 2225). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into `Ds5StatusBytes` (#433).
+Called after Step 2 (`InputManager.cs` line 2230). Iterates all 16 pad slots. A slot with `!SlotCreated` clears any stale snapshot and skips. The same walk also runs the per-slot battery scan (first-online-with-data reading into `BatteryPercents` / `BatteryCharging`, plus an all-device change signature that kicks the Battery lightbar repaint), independent of motion, and reads the first assigned DualSense's trigger-feedback bytes into `Ds5StatusBytes` (#433).
 
-**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, `BuildMotionRowCandidates` (`InputManager.cs` line 3785) returns no rows and the channel sends nothing. Otherwise `ReconcileMappedMotion` (`InputManager.cs` line 4025) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
+**Source resolution.** The gyro channel and the accel channel resolve **separately** from the slot's `MappingSet` rows. The row that applies is the engaged layer's own row for the target, or the Base row when the layer has none, so a layer with no motion row of its own leaves Base driving. When that row has no motion input, because it was emptied or is a Do Not Inherit row with no source, `BuildMotionRowCandidates` (`InputManager.cs` line 3790) returns no rows and the channel sends nothing. Otherwise `ReconcileMappedMotion` (`InputManager.cs` line 4030) tries the row that applies, then the Base row, then any other row naming the target, and keeps the first whose combined sample has motion, so a row whose devices are all offline hands off to a row with a live device. Inside a row, `ReconcileMotionRow` reads every motion source. A source pinned to a device reads it while it is online, and a source with no device reads every enabled, online device assigned to the slot. The values combine per axis by the row's `CombineMode`: largest magnitude by default, or Sum, Average, or a Custom expression:
 
 ```csharp
 var gyro = _motionHasGyroRow[padIndex]
@@ -1089,11 +1089,11 @@ Step 2 writes no level on three edges, so each zeroes the levels itself through 
 
 #### Lighting
 
-The slot's `UserEffectsDispatcher` colors each lit mouse, keyboard, unit row and vendor row assigned to the slot, with no Sony report written for them. `IsLitPeripheral` (`UserEffectsDispatcher.cs` line 1783) takes a row whose record says it has lighting or that a lighting path links now. `LightPeripheral` (line 1808) releases this slot's claim when the device's config is missing or, for a mouse or keyboard, its Control This Device’s Lighting switch (`PeripheralLightingEnabled`) is off. A vendor row or a unit row has no switch and lights from its config alone. Otherwise `PeripheralLightingColor.Resolve` (`PeripheralLightingColor.cs` line 21) takes the DualSense's order: a lightbar the game wrote to the slot's virtual controller within the last 1.5 s wins, a device left at the Player Number default keeps the game's last color until the game has been silent for 15 s, and anything else runs the Lighting tab's mode through `Ds4EffectSynthesizer.ResolveLightbarRgb` with this slot's own player number. Battery mode reads a Logitech unit's HID++ charge (`PeripheralOutputs.BatteryOf`), and holds the full-charge color for any other device. The color goes to `PeripheralOutputs.SetLighting` (line 625) as this slot's claim on the device, with the device's Lighting Hold (`PeripheralClaimLevel`), which says how firmly a worker may hold the device while it lights it.
+The slot's `UserEffectsDispatcher` colors each lit mouse, keyboard, unit row and vendor row assigned to the slot, with no Sony report written for them. `IsLitPeripheral` (`UserEffectsDispatcher.cs` line 1962) takes a row whose record says it has lighting or that a lighting path links now. `LightPeripheral` (line 1987) releases this slot's claim when the device's config is missing or, for a mouse or keyboard, its Control This Device’s Lighting switch (`PeripheralLightingEnabled`) is off. A vendor row or a unit row has no switch and lights from its config alone. Otherwise `PeripheralLightingColor.Resolve` (`PeripheralLightingColor.cs` line 21) takes the DualSense's order: a lightbar the game wrote to the slot's virtual controller within the last 1.5 s wins, a device left at the Player Number default keeps the game's last color until the game has been silent for 15 s, and anything else runs the Lighting tab's mode through `Ds4EffectSynthesizer.ResolveLightbarRgb` with this slot's own player number. Battery mode reads a Logitech unit's HID++ charge (`PeripheralOutputs.BatteryOf`), and holds the full-charge color for any other device. The color goes to `PeripheralOutputs.SetLighting` (line 625) as this slot's claim on the device, with the device's Lighting Hold (`PeripheralClaimLevel`), which says how firmly a worker may hold the device while it lights it.
 
-Each claim belongs to one device on one slot. Where several claims meet on a device or a shared path, `PeripheralOutputs.Rules` (line 743) decides: a device's own claim beats a vendor row, then the smaller displayed player number wins, then the lower slot. A device leaving the slot, going offline or having its switch turned off releases the slot's claim, and the peripheral link pass drops the claims of devices no longer assigned and of slots with neither a live dispatcher (`HasLiveDispatcher`, `UserEffectsDispatcher.cs` line 1212) nor a virtual controller.
+Each claim belongs to one device on one slot. Where several claims meet on a device or a shared path, `PeripheralOutputs.Rules` (line 743) decides: a device's own claim beats a vendor row, then the smaller displayed player number wins, then the lower slot. A device leaving the slot, going offline or having its switch turned off releases the slot's claim, and the peripheral link pass drops the claims of devices no longer assigned and of slots with neither a live dispatcher (`HasLiveDispatcher`, `UserEffectsDispatcher.cs` line 1345) nor a virtual controller.
 
-The game's color comes from `GameLightbarCapture` (`GameLightbarCapture.cs` line 137). A DualShock 4 or DualSense virtual controller's output reader checks each frame's declared length and checksum. A trusted frame whose validity flag marks a lightbar write records the decoded `lightbar` color, and any other trusted frame notes that the game is still there. `GraceMs` (1500, line 141) and `LapseMs` (15000, line 145) time the record, and it moves with its controller through a reorder. A dispatcher computes colors only when it runs, so a new game color, the end of the grace window, the lapse, a controller leaving the slot, a charge change and a new link each ask the slot's dispatcher for a pass over its lit peripherals alone (`RequestPeripheralRefresh`, `UserEffectsDispatcher.cs` line 1117). One such pass runs at a time on the thread pool, at most once per 33 ms animation tick. A mouse or keyboard whose switch is off keeps no animation timer running (`LightingDriven`, `UserEffectsDispatcher.cs` line 1314).
+The game's color comes from `GameLightbarCapture` (`GameLightbarCapture.cs` line 137). A DualShock 4 or DualSense virtual controller's output reader checks each frame's declared length and checksum. A trusted frame whose validity flag marks a lightbar write records the decoded `lightbar` color, and any other trusted frame notes that the game is still there. `GraceMs` (1500, line 141) and `LapseMs` (15000, line 145) time the record, and it moves with its controller through a reorder. A dispatcher computes colors only when it runs, so a new game color, the end of the grace window, the lapse, a controller leaving the slot, a charge change and a new link each ask the slot's dispatcher for a pass over its lit peripherals alone (`RequestPeripheralRefresh`, `UserEffectsDispatcher.cs` line 1250). One such pass runs at a time on the thread pool, at most once per 33 ms animation tick. A mouse or keyboard whose switch is off keeps no animation timer running (`LightingDriven`, `UserEffectsDispatcher.cs` line 1447).
 
 ### Idle Detection
 
@@ -1138,7 +1138,7 @@ Both paths write a `QUICKCHARGE` line to the diagnostics log, including the two 
 
 Routing sits on the force-feedback write path, not the input-mapping path. It reads each device's own post-gain main-motor amplitudes for each slot the device is on, the values Step 2's [Force Feedback](#force-feedback) already resolved, and injects a derived value into the trigger output. The math lives in `InputManager.cs` (`UpdateTriggerRouteEngageStates`, `FindRouteCell`, `ParseRouteSource`, `RouteSideActive`, `ParseRouteScale`, `ApplyTriggerRouting`, `RouteMain`, `MarkRedirect`, `SettleRouteActivator`, `ApplyTriggerRoutingForSony`, `GetTriggerRouteMainRedirect`). Step 2's physical write applies it for every non-Sony device in `InputManager.Step2.UpdateInputStates.cs`, so a Redirect also silences a generic pad's main motors. The routed LT/RT reaches an Xbox pad's impulse triggers through `XboxImpulseHidWriter`, `SDL_RumbleGamepadTriggers` on another device with trigger motors, or the body motors when `TriggerRumbleFold` is on. On Sony pads, `InputService.SlotImpulseTriggerForDeviceProvider` carries the routed amplitude to a DualSense's AT Vibration, and `SlotRumbleForDeviceProvider` applies the Redirect silencing on DualShock 4 and DualSense alike. Both feed `UserEffectsDispatcher`.
 
-State settles once per poll. `PollingLoop(int generation, int pollRun)` calls `UpdateTriggerRouteEngageStates()` at `InputManager.cs` line 2223, after `UpdateInputStates()`, the Remote Link poll tick, and `UpdateGyroEngageStates()`. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.
+State settles once per poll. `PollingLoop(int generation, int pollRun)` calls `UpdateTriggerRouteEngageStates()` at `InputManager.cs` line 2228, after `UpdateInputStates()`, the Remote Link poll tick, and `UpdateGyroEngageStates()`. Step 2's FFB write therefore consumes the engaged bits the previous poll settled. At 1000 Hz that is sub-millisecond staleness.
 
 ### Route Source
 
@@ -1686,7 +1686,7 @@ The steering math is original C# written from the geometry described in JoyShock
 
 Two descriptors read an accelerometer shake as a source (#364): `"Motion Shake"` on the body sensor and `"Motion Shake L"` on the aux sensor, which the picker labels contextually ("Nunchuk Shake" on a Wii Remote). Both constants live on `SourceCoercion` (`SourceCoercion.cs` lines 2565 and 2570), with `IsMotionShakeDescriptor` / `IsMotionShakeAuxDescriptor` as the predicates.
 
-The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15814), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
+The envelope is computed App-side, beside the gravity EMA on the same tick under the same lock (`InputService.UpdateShakeState`, `InputService.cs` line 15848), and handed to the engine through `SourceCoercion.ShakeEnvelopeProvider` / `ShakeEnvelopeProviderAux`. The math is a slow magnitude baseline (EMA, alpha 0.02) subtracted from the instantaneous accel magnitude, normalized against 2 g of deviation (19.6 m/s²) and clamped at 1, then max-combined with the previous envelope decayed at a 150 ms time constant. The decay is what bridges the magnitude's zero crossings during an oscillating shake: Dolphin's canonical emulated shake is 10 cm of travel at 6 Hz (`InputCommon` `Force.cpp`, `Shake::Shake`), so raw thresholding would flutter at twice that rate. An unknown device or a device with no accel yet reads 0.
 
 `ReadShakeEnvelope` (`SourceCoercion.cs` line 2595) applies the per-source sensitivity and clamps to `[0, 1]`. The envelope is unsigned by nature, so `HalfAxis` and `Invert` have nothing to point at and are not applied. Per target class:
 
@@ -2345,7 +2345,7 @@ The macro QOL work (#112) moved copy, paste, and duplicate onto a shared seriali
 
 #### Macro clipboard codec (#112)
 
-Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5494):
+Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5510):
 
 ```csharp
 public sealed class MacroClipboardEnvelope
@@ -2373,8 +2373,8 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 | Path | Site | Flow |
 |---|---|---|
-| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8548) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
-| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8607) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
+| Copy | `OnCopyMacro` (`MainWindow.xaml.cs` line 8551) | `BuildMacroDataForMacro` -> `SerializeMacrosToClipboard` -> `Clipboard.SetText` |
+| Paste | `OnPasteMacro` (`MainWindow.xaml.cs` line 8610) | `TryParseMacroClipboard` -> per-`MacroData` `LoadMacroFromData(.., padVm.OutputType, padVm.ExtendedConfig?.ButtonCount, padVm.ProfileId)` -> set `PadIndex` -> clear `LayerMask` unless `DestinationDeclaresLayer` -> add |
 | Duplicate | `DuplicateMacroCommand` (`PadViewModel.cs` ~5732) | `BuildMacroDataForMacro` -> `LoadMacroFromData` -> set `PadIndex` + copy name |
 
 `LoadMacroFromData` rebinds only the display side to the destination: button naming (`ButtonStyle`), the custom-button width, and the raw profile id. Trigger and action button values travel verbatim, so an Xbox-slot macro copied into an Extended slot keeps its Xbox bitmask and reads as inert until it is re-bound.
@@ -2665,31 +2665,45 @@ else if (SlotControllerTypes[padIndex] is VirtualControllerType.Extended
     var socdExt = ResolveSlotSocd(padIndex, extendedIndices: true);
     if (socdExt != null)
         socdExt.ApplyExtended(CombinedRawHidStates[padIndex].Buttons);
+    // A game mod's TriggerThreshold (#529) on the raw trigger axes, in
+    // a copy, so the pad page still reads the real pull. Every submit
+    // below takes rawOut.
+    var rawOut = CombinedRawHidStates[padIndex];
+    if (GameModEffects.AnyHeld)
+    {
+        GameModEffects.ThresholdsForSlot(padIndex, out byte modLeftPoint, out byte modRightPoint);
+        if (modLeftPoint != 0 || modRightPoint != 0)
+            rawOut = GameModEffects.ApplyRawThresholds(in rawOut, in layout,
+                modLeftPoint, modRightPoint, ref _modRawAxesScratch);
+    }
     var valvePacker = ValveReportPackers.ForProfile(hmExt.ProfileId);
     if (valvePacker != null)
     {
         // Valve personas (#338) submit the pad's native frame.
-        valvePacker.Pack(CombinedRawHidStates[padIndex], CombinedTouchpadStates[padIndex],
-            MotionSnapshots[padIndex], unchecked((uint)_deckFrameCounter++), _deckReportScratch);
+        valvePacker.Pack(rawOut, CombinedTouchpadStates[padIndex], MotionSnapshots[padIndex],
+            unchecked((uint)_deckFrameCounter++), ValveReportPackers.MicrosNow(), _deckReportScratch);
         hmExt.SubmitRawReport(new ReadOnlySpan<byte>(_deckReportScratch, 0, valvePacker.Size));
     }
     else if (!hmExt.BuildsItsOwnReports && ExtendedReportPacker.NeedsRawReport(layout))   // > 32 buttons or > 1 hat, never a persona that builds its own reports
     {
         int packedLen = ExtendedReportPacker.Pack(
-            CombinedRawHidStates[padIndex], layout, _extendedReportScratch);
+            rawOut, layout, _extendedReportScratch);
         if (packedLen > 0)
             hmExt.SubmitPackedExtendedReport(
                 new ReadOnlySpan<byte>(_extendedReportScratch, 0, packedLen));
     }
     else
-        hmExt.SubmitRawHidState(CombinedRawHidStates[padIndex], layout.Sticks,
+        hmExt.SubmitRawHidState(rawOut, layout.Sticks,
             layout.Triggers, MotionSnapshots[padIndex]);   // IMU channel (HM v1.3.18)
 }
 else
 {
     // Copy the combined Gamepad, OR the touchpad click into Gamepad.TOUCHPAD
-    // on PlayStation slots, apply Keep Controller Awake (live frames only) and
-    // button SOCD, then submit. A PlayStation USB profile (a Sony packer
+    // on PlayStation slots, apply Keep Controller Awake (live frames only),
+    // button SOCD and a game mod's trigger thresholds (#529), then submit.
+    // A trigger below a held threshold point reports 0, on this local copy
+    // only, so the pad page and the impulse translation still read the real
+    // pull. A PlayStation USB profile (a Sony packer
     // exists) sends only the packed Report 0x01 through SubmitRawReport, with
     // a DualSense's bytes 40..47 carried from the physical pad. A
     // PlayStation Bluetooth profile uses the extended SubmitGamepadState

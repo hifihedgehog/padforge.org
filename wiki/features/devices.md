@@ -306,6 +306,10 @@ With **Drive Keyboard Screens** on in [Settings](settings.md), each keyboard scr
 
 With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's detail pane carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and **Calibrate Reach**, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every slot it feeds uses it. See [Novint Falcon](novint-falcon.md).
 
+## Game mods
+
+While a [game mod made for DSX](game-mods.md) sets something that reaches a controller, the controller's detail pane names the mod's program and what it sets, such as *GTA5.exe is setting this controller's triggers and lights*. A DualSense shows its triggers and lights, a DualShock 4 its lightbar, and an Xbox controller with impulse triggers the trigger vibrations it plays while **Translate Adaptive Trigger Vibrations** is on. **Clear Mod Effects** below the line ends what the mods set on every virtual controller this device feeds, and the controllers' own settings return until a mod sends again.
+
 ## Analog keyboards
 
 With **Read Analog Keyboards** on in [Settings](settings.md), a Razer keyboard that waits for Razer Synapse says so in its own detail pane. See [Analog Keyboards](analog-keyboards.md).

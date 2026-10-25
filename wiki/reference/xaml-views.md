@@ -266,6 +266,12 @@ ScrollViewer
             │      source line, footer
             ├─ "Motion Server" section (E7AD glyph, DSU)
             │   └─ CardBorder: Enable toggle, port NumberBox, status flame, footer
+            ├─ "Game Mods" section (EA86 glyph, #529)
+            │   └─ CardBorder: description, Accept DSX Game Mods toggle
+            │      (EnableGameModServer), port NumberBox (GameModServerPort) with
+            │      ResetGameModPortCommand, Run a DSX.exe Stand-In toggle (GameModDsxStandIn,
+            │      tooltip), each toggle with a reset button, status flame +
+            │      GameModServerStatus as a polite live region, footer
             ├─ "Overlays" section (E700 glyph)
             │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
             │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
@@ -290,6 +296,8 @@ The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their 
 | `EnableDsuMotionServer` | `DashboardViewModel` | DSU enable checkbox |
 | `DsuMotionServerPort` | `DashboardViewModel` | DSU port NumberBox |
 | `DsuServerStatus` | `DashboardViewModel` | DSU status text |
+| `EnableGameModServer` / `GameModServerPort` / `GameModDsxStandIn` | `DashboardViewModel` | Game Mods toggle, port NumberBox and stand-in toggle (#529) |
+| `GameModServerStatus` / `IsGameModServerRunning` | `DashboardViewModel` | Game Mods status text and flame |
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
 | `HasWebControllerQr` / `WebControllerQr` / `WebControllerUrl` | `DashboardViewModel` | QR panel visibility, the QR bitmap, and the URL shown beside it (#296) |
@@ -904,10 +912,13 @@ All Audio Rumble controls bind `IsEnabled="{Binding AudioRumbleEnabled}"`. Graye
 
 A mouse, keyboard or vendor lighting row assigned to the slot gets the Lighting tab a DualSense gets, with the same modes. `SyncTabVisibility()` sets `hasPeripheralLighting` when the selected device has no lightbar and a lighting path links it (`PeripheralOutputs.HasLighting`) or its record says it has one (`UserDevice.HasPeripheralLighting`), so the tab stays up while the device sleeps.
 
+Three ember lines name a DSX game mod while it holds something on the slot (#529), each collapsed when empty: `GameModTriggersLine` under the Adaptive Triggers tab's subtitle, `GameModImpulseLine` under the Impulse Triggers tab's subtitle, and `GameModLightsLine` in the Lighting tree below.
+
 ```
 StackPanel
   ├─ "Lighting" page header (E781)
   ├─ LightingLightbarSubtitle + LightingPlayerIdleHint (lightbar devices only)
+  ├─ GameModLightsLine (#529, ember, collapsed when empty)
   ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
   │   ├─ Pad_Lighting_PeripheralSubtitle
   │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
@@ -1165,6 +1176,8 @@ Grid (Margin="24,16")
         │   button that reads KeyboardScreenButtonText, shown on ShowKeyboardScreen, #519)
         ├─ Falcon line, Calibrate Reach and its result (FalconLine, FalconCalibrate_Click,
         │   FalconCalibrationStatus as a polite live region, shown on ShowFalconCalibrate, #521)
+        ├─ GameModLine and Clear Mod Effects (ClearModEffects_Click), both collapsed while
+        │   GameModLine is empty (#529)
         ├─ AnalogKeyboardLine (#468, collapsed when empty)
         ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)

@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2513,6 +2543,8 @@
       
         
       
+        
+      
     
     
     
@@ -2942,6 +2974,17 @@
     <span class="md-ellipsis">
       
         DSU Motion Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-mods-529" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Mods (#529)
       
     </span>
   </a>
@@ -6075,6 +6118,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -6435,6 +6506,17 @@
     <span class="md-ellipsis">
       
         DSU Motion Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-mods-529" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Mods (#529)
       
     </span>
   </a>
@@ -9348,6 +9430,64 @@
 </tr>
 </tbody>
 </table>
+<h3 id="game-mods-529">Game Mods (#529)<a class="headerlink" href="#game-mods-529" title="Permanent link">&para;</a></h3>
+<p>The server for DSX game mods. All three settings ride profiles. See <a href="../game-mods-internals/">Game Mods Internals</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnableGameModServer</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The server listens while this is on and the engine runs.</td>
+</tr>
+<tr>
+<td><code>GameModServerPort</code></td>
+<td><code>int</code></td>
+<td><code>6969</code></td>
+<td>UDP port. Clamped to 1024–65535.</td>
+</tr>
+<tr>
+<td><code>GameModDsxStandIn</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Run the DSX.exe stand-in while the server listens.</td>
+</tr>
+<tr>
+<td><code>GameModServerStatus</code></td>
+<td><code>string</code></td>
+<td><code>"Stopped"</code></td>
+<td>The card's line: listening, who sends to which virtual controller, the port in use, or the bind that failed. Set by <code>InputService</code> from <code>GameModServer.FormatStatus()</code>.</td>
+</tr>
+<tr>
+<td><code>IsGameModServerRunning</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Serving truth for the card's flame: the server listens, whatever the switch says.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResetGameModPortCommand</code></td>
+<td>Resets <code>GameModServerPort</code> to 6969.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="head-tracking-355-403">Head Tracking (#355, #403)<a class="headerlink" href="#head-tracking-355-403" title="Permanent link">&para;</a></h3>
 <p>Three independent inputs feed the Head Tracker device row: a UDP listener on OpenTrack's port, a FreeTrack 2.0 shared-memory reader, and an OpenXR headset reader (#403) that also adds the two VR controller rows. The row exists while any of the three is on (<code>HeadTrackingRuntime.AnyEnabled</code>). Each setter mirrors into the static <code>PadForge.Common.Input.HeadTrackingRuntime</code> that the poll thread's device sweep reads, so a write lands whatever its source (global load, profile apply, the user). The UDP and FreeTrack toggles ride profiles as nullable legs (<code>ProfileData.EnableHeadTracking</code>, <code>ProfileData.EnableHeadTrackingFreeTrack</code>). The port, the OpenXR toggle and runtime, and the ranges are global. These properties moved here from <code>SettingsViewModel</code> on 2026-09-02. MainWindow's Dashboard dirty-gate allowlist moved with them, so a head-tracking edit still marks the settings file dirty. See <a href="../head-tracking-internals/">Head Tracking: Internals</a> and <a href="../openxr-input-internals/">OpenXR Input Internals</a>.</p>
 <table>
@@ -11959,6 +12099,11 @@
 <td>Removes the row from <code>Devices</code>, clears <code>SelectedDevice</code>, raises <code>RemoveDeviceRequested</code>, then <code>RefreshCounts()</code>.</td>
 </tr>
 <tr>
+<td><code>ClearModEffects()</code></td>
+<td>method</td>
+<td>Ends what DSX game mods hold on every virtual controller the selected device feeds (<code>GameModEffects.ClearDevice</code>, #529) and clears its <code>GameModLine</code>. Called by <strong>Clear Mod Effects</strong> on the panel.</td>
+</tr>
+<tr>
 <td><code>ResetSelectedDeviceSettingCommand</code></td>
 <td><code>HasSelectedDevice</code> and a name <code>DeviceRowViewModel.CanResetSetting</code> accepts</td>
 <td><code>RelayCommand&lt;string&gt;</code> (<code>DevicesViewModel.SettingResets.cs</code>). Runs the selected row's <code>ResetSettingCommand</code> for the named option, then clears <code>LastRawStateDeviceGuid</code> and raises <code>DeviceHidingChanged</code> so the option persists. Skips <code>HidHideEnabled</code> while HidHide is unavailable.</td>
@@ -12505,6 +12650,12 @@
 <td><code>bool</code></td>
 <td>-</td>
 <td>Computed: either <code>VendorId</code> or <code>ProductId</code> is non-zero. Gates the VID:PID line.</td>
+</tr>
+<tr>
+<td><code>GameModLine</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>(#529) What DSX game mods set on the virtual controllers this device feeds, as this device carries it, from <code>InputService.GameModDeviceLine</code>. Empty hides the line and <strong>Clear Mod Effects</strong>.</td>
 </tr>
 </tbody>
 </table>
@@ -13273,6 +13424,33 @@
 <tr>
 <td><code>EnsureDeviceSlotConfigsForMappedDevices()</code></td>
 <td>Adds a default config entry for every currently-mapped device.</td>
+</tr>
+</tbody>
+</table>
+<p>Three lines name a DSX game mod (#529) while it holds something on the slot. <code>InputService.SetGameModPadLines</code> sets them, and each is empty otherwise:</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Shown on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GameModTriggersLine</code></td>
+<td><code>string</code></td>
+<td>The Adaptive Triggers tab, while the mod holds a trigger program</td>
+</tr>
+<tr>
+<td><code>GameModImpulseLine</code></td>
+<td><code>string</code></td>
+<td>The Impulse Triggers tab, while the mod holds a trigger program</td>
+</tr>
+<tr>
+<td><code>GameModLightsLine</code></td>
+<td><code>string</code></td>
+<td>The Lighting tab, while the mod holds the lightbar, the player lights or the mute light</td>
 </tr>
 </tbody>
 </table>

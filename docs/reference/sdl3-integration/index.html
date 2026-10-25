@@ -1135,6 +1135,8 @@
       
         
       
+        
+      
     
     
     
@@ -1896,6 +1898,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2439,6 +2469,8 @@
       
         
           
+        
+      
         
       
         
@@ -4559,6 +4591,34 @@
     
   
     Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
   
 
     
@@ -7892,8 +7952,8 @@
 <p><strong>Motion Plus, as the driver leaves it.</strong> The driver identifies a Motion Plus from the extension's six ID bytes, read at <code>0xA400FA</code> while one is active and at <code>0xA600FA</code> while one is inactive (<code>GetMotionPlusState</code>, <code>SDL_hidapi_wii.c:669-714</code> at <code>77cf0379f5</code>). It writes the mode to <code>0xA600FE</code> before activation and to <code>0xA400FE</code> once a mode is set (<code>:770</code>). It converts the gyro words with fixed constants, 440 degrees per second per 8192 counts in slow mode and 2000 in fast mode, per axis (<code>HandleMotionPlusData</code>, <code>:2049-2087</code>). It reads no Motion Plus calibration block from the remote. The Balance Board calibration (<code>ReadBalanceBoardCalibration</code>, register <code>0xA40024</code>) is the only calibration it reads, and the stick ranges are learned from the values seen (<code>PostStickCalibrated</code>). The 4.4.0 grip rotations (sideways, Wii Wheel, upright, #392) are applied by PadForge to the frame SDL delivers, so the fork carries no change for them. The gyro conversion has not changed since the July Motion Plus fixes (<code>98cd0e237d</code>, <code>4a5e03f727</code>, <code>5c73f284de</code>, the <code>SDL#11</code> / <code>SDL#12</code> / <code>SDL#13</code> rows above). Since then <code>4f9c90ff41</code> reads all six ID bytes, where the old read took two at <code>0xFE</code>, <code>85a0117bf7</code> (<code>SDL#36</code>) registers the gyro with a Classic Controller attached, and <code>77cf0379f5</code> (<code>SDL#40</code>) sends the mode write and the deactivation through the driver's write queue.</p>
 <p>PadForge needs no code change for the extension swap. <code>SdlDeviceWrapper.BuildInstanceGuid</code> keys the device on <code>serial:VID:PID:&lt;BT-MAC&gt;</code>, which stays stable across the extension change, and the device's capabilities and <code>DeviceObjects</code> refresh when SDL re-adds it.</p>
 <h4 id="sdl-hint-sdl_hint_joystick_hidapi_wii">SDL Hint: <code>SDL_HINT_JOYSTICK_HIDAPI_WII</code><a class="headerlink" href="#sdl-hint-sdl_hint_joystick_hidapi_wii" title="Permanent link">&para;</a></h4>
-<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> (<code>InputManager.cs:938</code>) before <code>SDL_Init()</code>, next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:54</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
-<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1461</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes, and only when a Wii pairing landed (<code>dialog.PairedWii</code>, <code>MainWindow.xaml.cs:951-952</code>), because the rescan drops every connected Wii Remote.</p>
+<p>Gates the <code>hidapi_wii</code> driver. <code>InputManager.InitializeSdl</code> sets it to <code>"1"</code> (<code>InputManager.cs:943</code>) before <code>SDL_Init()</code>, next to the Switch 2 hint. The constant resolves to <code>"SDL_JOYSTICK_HIDAPI_WII"</code> (<code>SDL3Minimal.cs:54</code>). Enabling the driver also lights the player LED, which stops the remote's idle flashing.</p>
+<p><code>InputManager.RescanWiiControllers()</code> (<code>InputManager.cs:1466</code>) re-uses the hint as a per-driver restart after a pair. The <code>BluetoothSetServiceState</code> change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint <code>"0"</code> then <code>"1"</code> eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so <code>SDL_HIDAPIDriverHintChanged</code> tears down the dead handle and re-enumerates the now-stable device. <code>MainWindow</code> calls it through <code>InputService</code> after the <code>PairDeviceDialog</code> closes, and only when a Wii pairing landed (<code>dialog.PairedWii</code>, <code>MainWindow.xaml.cs:954-955</code>), because the rescan drops every connected Wii Remote.</p>
 <h3 id="build-instructions">Build Instructions<a class="headerlink" href="#build-instructions" title="Permanent link">&para;</a></h3>
 <p>Clone the fork, check out <code>feat/hidmaestro-filter</code>, then build with CMake from a Developer Command Prompt (<code>vcvarsall.bat x64</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hifihedgehog/SDL.git

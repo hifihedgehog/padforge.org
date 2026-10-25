@@ -81,6 +81,10 @@
          <lastmod>2026-10-25</lastmod>
     </url>
     <url>
+         <loc>https://padforge.org/docs/features/game-mods/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
          <loc>https://padforge.org/docs/features/handheld-buttons/</loc>
          <lastmod>2026-10-25</lastmod>
     </url>
@@ -282,6 +286,10 @@
     </url>
     <url>
          <loc>https://padforge.org/docs/reference/external-control-internals/</loc>
+         <lastmod>2026-10-25</lastmod>
+    </url>
+    <url>
+         <loc>https://padforge.org/docs/reference/game-mods-internals/</loc>
          <lastmod>2026-10-25</lastmod>
     </url>
     <url>

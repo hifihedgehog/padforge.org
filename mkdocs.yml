@@ -119,6 +119,7 @@ nav:
       - Bliss-Box Adapters: features/bliss-box.md
       - Keyboard Screens: features/keyboard-screens.md
       - Novint Falcon: features/novint-falcon.md
+      - Game Mods: features/game-mods.md
       - Virtual VR Controllers: features/vr-controllers.md
       - Headset Head Tracking: features/headset-motion.md
       - Head Tracking: features/head-tracking.md
@@ -170,6 +171,7 @@ nav:
       - Bliss-Box Internals: reference/bliss-box-internals.md
       - Keyboard Screens Internals: reference/keyboard-screens-internals.md
       - Novint Falcon Internals: reference/novint-falcon-internals.md
+      - Game Mods Internals: reference/game-mods-internals.md
       - Wii Controllers Internals: reference/wii-controllers-internals.md
       - Handheld PC Buttons Internals: reference/handheld-buttons-internals.md
       - 2D Overlay System: reference/2d-overlay-system.md
