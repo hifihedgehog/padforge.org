@@ -1264,7 +1264,7 @@ The `ProfileId` setter, in order. Steps 1 and 2 run on a live re-target only: th
 3. Reseeds `ExtendedConfig` from the profile (`SyncExtendedConfigFromProfile`): `ThumbstickCount` and `TriggerCount` from `HMProfile.StickCount` / `TriggerCount`, `PovCount` from `HasHat`, `ButtonCount` from `HMProfile.ButtonCount`, or on a Nintendo lettered profile from its own lettered count. That lettered count is authoritative rather than a `Min` against the SDK-reported one: taking a `Min` let a low reported count truncate the surface, which is how Capture, GR, GL, and C went missing from the Switch 2 Pro grid. A Valve lettered profile takes all four counts from `NintendoPreviewMap` instead, because those descriptors declare almost nothing and the real shape lives in the extended report. Picking the synthetic Custom entry also forces `ExtendedConfig.Customize` on.
 4. Rebuilds mappings, stick configs, and trigger configs, re-derives macro and menu button lettering (`SyncMacroButtonStyle`), and re-gates the Bass Shakers tab.
 
-Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (`SyncMacroButtonStyle`). On a PlayStation slot, a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (`DeviceService.FillEmptyPresetMappingsForSlot`): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: `MacroButtonNames.DeriveStyle` returns `DualShock3` for a PlayStation slot on either DualShock 3 preset (`HMaestroProfileCatalog.IsDualShock3`).
+Xbox and PlayStation slots have fixed layouts, so they skip the reseed. They rebuild mappings and re-derive the macro and menu lettering (`SyncMacroButtonStyle`, which also stamps each macro's `CarriesPressure`, #530). On a PlayStation slot, a live preset change first fills, from the slot's pads, what the new preset's default maps and the outgoing one's does not (`DeviceService.FillEmptyPresetMappingsForSlot`): the Full preset's pressure rows, and the touchpad, Mic Mute and Edge rows a DualShock 3 preset withheld. A field the outgoing default mapped and the user cleared on that wire stays cleared. Profile-gated rows exist inside those fixed layouts too (Xbox Series adds Share, the DualSense family adds Mic Mute, the Edge adds its paddle and Fn pairs, the Full preset adds the ten pressure rows, and both DualShock 3 presets drop the touchpad rows and label Back and Start as Select and Start), so a profile change within the category still has to rebuild the row list. The lettering follows for the same reason: `MacroButtonNames.DeriveStyle` returns `DualShock3` for a PlayStation slot on either DualShock 3 preset (`HMaestroProfileCatalog.IsDualShock3`).
 
 ### Extended Configuration
 
@@ -1894,7 +1894,7 @@ Drive the `ItemsControl`-based Sticks and Triggers tabs. Gamepad presets: 2 stic
 
 | Command | CanExecute | Description |
 |---------|-----------|-------------|
-| `AddMacroCommand` | always | Adds a new macro named `"Macro N"`, with the slot's derived `ButtonStyle` and `RawProfileId`, and selects it. |
+| `AddMacroCommand` | always | Adds a new macro named `"Macro N"`, with the slot's derived `ButtonStyle`, `RawProfileId` and `CarriesPressure` (#530), and selects it. |
 | `RemoveMacroCommand` | `HasSelectedMacro` | Removes the selected macro, then selects the last remaining one. |
 | `DuplicateMacroCommand` | `HasSelectedMacro` | Clones the selected macro within the slot (#112) by round-tripping it through the macro DTO, so it is a deep copy and the runtime-only execution state drops away. A macro mid-fire keeps firing. The clone starts cold. |
 | `CopyMacroCommand` | `HasSelectedMacro` | Raises `CopyMacroRequested`. MainWindow owns the clipboard. |
@@ -2359,6 +2359,7 @@ A trigger combination of inputs that produces a sequence of output actions. Eval
 | `TriggerDisplayText` | `string` | - | Computed: readable trigger combo with device name. |
 | `ButtonStyle` | `MacroButtonStyle` | `Xbox360` | Display name style. Not serialized. |
 | `CustomButtonCount` | `int` | `11` | Custom Extended button count. Not serialized. |
+| `CarriesPressure` | `bool` | `false` | (#530) True on a PlayStation slot whose preset `HMaestroProfileCatalog.ReportCarriesPressure` names, the DualShock 3 (SIXAXIS): Full. Stamped with `ButtonStyle` (`PadViewModel.SyncMacroButtonStyle`, the add commands, `SettingsService.LoadMacroFromData`) and handed to every action. Not serialized. |
 
 ### Trigger Condition (Raw Device Button)
 
@@ -2484,6 +2485,7 @@ One `Is*Type` flag per action family, plus the rolled-up families the editor gat
 | `ButtonFlags` | `ushort` | `0` | Xbox bitmask for gamepad presets. |
 | `ButtonStyle` | `MacroButtonStyle` | `Xbox360` | Display name style. Not serialized. |
 | `CustomButtonCount` | `int` | `11` | Numbered style button count. Not serialized. |
+| `CarriesPressure` | `bool` | `false` | (#530) The owning macro's flag, set by Add Action and Duplicate Action too. The axis pickers show the ten pressure targets only while it is true. Not serialized. |
 | `CustomButtonWords` | `uint[]` | `new uint[4]` | Wide bitmask for Extended slots (128 buttons). Not serialized. |
 | `CustomButtons` | `string` | `null` | Serializable hex form. |
 | `ButtonOptions` | `IReadOnlyList<GamepadButtonOption>` | - | Computed: checkbox-bindable list. Lazy-built from style and count. |
@@ -2609,7 +2611,7 @@ The editor's type picker is grouped, not a flat list of these members. See `Macr
 
 **MacroMouseButton:** `Left`, `Right`, `Middle`, `X1`, `X2`
 
-**MacroAxisTarget:** `None`, `LeftStickX`, `LeftStickY`, `RightStickX`, `RightStickY`, `LeftTrigger`, `RightTrigger`
+**MacroAxisTarget:** `None`, `LeftStickX`, `LeftStickY`, `RightStickX`, `RightStickY`, `LeftTrigger`, `RightTrigger`, then the virtual DualShock 3's ten button pressures (#530, values 7 to 16, in `ButtonPressureState` order): `PressureButtonA`, `PressureButtonB`, `PressureButtonX`, `PressureButtonY`, `PressureLeftShoulder`, `PressureRightShoulder`, `PressureDPadUp`, `PressureDPadDown`, `PressureDPadLeft`, `PressureDPadRight`. Append-only. `MacroAxisTargetNames.PressureIndex` gives a target's pressure index or -1, and `DisplayName` gives a pressure target the pressure mapping row's label (`PressureName`). `MacroPressureLabels.Instance` serves the same labels to the axis pickers, raised again on a language change.
 
 **MacroAxisDirection:** `Any`, `Positive`, `Negative`
 

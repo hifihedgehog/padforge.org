@@ -674,7 +674,7 @@ Grid (3 columns)
 | `ButtonPress` / `ButtonRelease` (plus `RepeatVcButtonWhileHeld`, `ToggleVcButton`) | `IsAnyVcButtonType` | WrapPanel of CheckBox items from `ButtonOptions` |
 | `KeyPress` / `KeyRelease` (plus `RepeatKeyWhileHeld`, `ToggleKey`) | `IsAnyKeyType` | `KeyString` TextBox (telemetry mono font), `VirtualKeyChoices` ComboBox picker, Clear button |
 | `ButtonPress` / `KeyPress` / `Delay` / `MouseButtonPress` / `AxisHold` / `AxisAdd` / `AxisScale` | `IsDurationType` | `DurationMs` TextBox + "ms" label |
-| `AxisSet` / `AxisHold` / `AxisSetLatched` / `AxisScale` (plus `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, `AxisAdd`) | `IsAnyAxisValueType` | Axis target ComboBox (None, LStickX/Y, RStickX/Y, LT, RT) + `AxisValuePercent` TextBox |
+| `AxisSet` / `AxisHold` / `AxisSetLatched` / `AxisScale` (plus `ToggleVcAxis`, `RepeatVcAxisWhileHeld`, `AxisAdd`) | `IsAnyAxisValueType` | Axis target ComboBox (None, LStickX/Y, RStickX/Y, LT, RT, then the ten button pressure targets, shown by the action's `CarriesPressure` and labeled from `MacroPressureLabels.Instance`, #530) + `AxisValuePercent` TextBox. Release Axis Latches' picker (`IsAxisLatchReleaseType`) carries the same ten |
 | `SystemVolume` | `IsSystemVolumeType` | Axis source (Output/Input), axis selector, device picker, volume limit slider, invert toggle, OSD toggle |
 | `AppVolume` | `IsAppVolumeType` | Process ComboBox (editable, refreshes on dropdown), axis source, device picker, volume limit, invert toggle |
 | `MouseMove` / `MouseScroll` | `IsMouseMoveType` | Axis source (Output/Input), axis selector, device picker, sensitivity slider |

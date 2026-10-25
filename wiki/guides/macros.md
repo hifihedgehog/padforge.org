@@ -333,6 +333,7 @@ Force a virtual controller axis to a fixed value for one frame. **Hold Axis** ke
 |---|---|
 | Stick (LX, LY, RX, RY) | -100 to 100 percent. 0 is center. |
 | Trigger (LT, RT) | Percent of pull. 0 is released and 100 is a full pull. |
+| Button pressure (✕, ○, ◻, △, L1, R1, D-pad) | Percent of a full press, on the **DualShock 3 (SIXAXIS): Full** preset. 0 releases the button. See [Button pressure](#button-pressure). |
 
 ### Hold Axis
 
@@ -365,6 +366,19 @@ Axis turbo. While the trigger is held, asserts the axis value on an on/off squar
 ### Yield to Physical Input
 
 Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
+
+### Button pressure
+
+On a PlayStation slot set to the **DualShock 3 (SIXAXIS): Full** preset, the axis actions offer ten more targets: **✕ Pressure**, **○ Pressure**, **◻ Pressure**, **△ Pressure**, **L1 Pressure**, **R1 Pressure**, and one for each D-pad direction. They set how hard the virtual DualShock 3 presses that button, so a controller or keyboard with plain digital buttons can press one partway. L2 and R2 need none of their own: the Left Trigger and Right Trigger targets are their pressure.
+
+A pressure target sets the press along with the pressure. Any value above 0 presses the button at that pressure, and 0 releases it, the way PCSX2 reads the pad, which counts any pressure as a press. The **Value** box runs from 0 (released) to 100 percent (a full press), like a trigger's pull.
+
+- **Set Axis**, **Hold Axis**, **Set Axis (Latched)**, **Toggle Axis** and **Repeat Axis While Held** press the button at the value.
+- **Axis Add (Relative)** adds to the pressure the button has now, and **Scale Axis** multiplies it. A press with no pressure behind it, from a digital button or a key, counts as a full press, so **Scale Axis** at -60 percent turns it into a 40 percent press. A pressed button scaled down stays pressed, at the lightest pressure at least.
+- **Yield to Physical Input** hands the button back when you press it yourself.
+- **Release Axis Latches** can name a single pressure target.
+
+The ten targets are hidden on other presets. A macro that already names one still presses and releases the button on an Xbox slot or another PlayStation preset, and the pressure goes nowhere, since only the Full preset sends it. On an Extended or Nintendo slot it does nothing. See [Button pressure](../features/mappings.md#button-pressure) for the pressure rows on the mapping grid.
 
 ### System Volume
 
@@ -742,6 +756,18 @@ A presses about every 80 ms (30 ms press plus 50 ms delay) while the trigger is 
 - Action: App Volume. Axis: Left Stick Y. Process: Spotify. Volume Limit 80 percent.
 
 Hold LB and move the left stick up or down to set Spotify volume. The game never sees LB. The level stays where you leave it.
+
+### A light press on a digital pad
+
+On a slot set to the **DualShock 3 (SIXAXIS): Full** preset:
+
+- Fire mode: While Held
+- Trigger: LB
+- Consume trigger buttons: On
+- Repeat: Until Release, delay 0
+- Action: Scale Axis. Axis: ✕ Pressure. Value: -60 percent. Duration: 1000 ms.
+
+Hold LB and every ✕ press goes out at 40 percent pressure, the way PCSX2's Pressure Modifier works. Let go of LB for full presses again.
 
 ### Quick chat combo
 

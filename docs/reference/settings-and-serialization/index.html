@@ -9600,21 +9600,21 @@
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6951).</td>
+<td>(v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by <code>PeripheralSwitchMigration</code> (#494), and <code>ShouldSerializeEnableChromaLightbar</code> returns false, so it is never written again (<code>SettingsService.cs</code> line 6955).</td>
 </tr>
 <tr>
 <td><code>EnableSensaHaptics</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6958).</td>
+<td>(v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6962).</td>
 </tr>
 <tr>
 <td><code>EnableLightsyncLightbar</code></td>
 <td><code>bool</code></td>
 <td><code>[XmlElement]</code>, read only</td>
 <td><code>false</code></td>
-<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6966).</td>
+<td>(v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6970).</td>
 </tr>
 <tr>
 <td><code>HeadTrackingEnabled</code></td>
@@ -10728,7 +10728,7 @@
 <td><code>AxisTarget</code></td>
 <td><code>MacroAxisTarget</code></td>
 <td>none</td>
-<td>Which axis to target: <code>None</code>, <code>LeftStickX</code>, <code>LeftStickY</code>, <code>RightStickX</code>, <code>RightStickY</code>, <code>LeftTrigger</code>, <code>RightTrigger</code></td>
+<td>Which axis to target: <code>None</code>, <code>LeftStickX</code>, <code>LeftStickY</code>, <code>RightStickX</code>, <code>RightStickY</code>, <code>LeftTrigger</code>, <code>RightTrigger</code>, or a DualShock 3 button pressure (#530): <code>PressureButtonA</code>, <code>PressureButtonB</code>, <code>PressureButtonX</code>, <code>PressureButtonY</code>, <code>PressureLeftShoulder</code>, <code>PressureRightShoulder</code>, <code>PressureDPadUp</code>, <code>PressureDPadDown</code>, <code>PressureDPadLeft</code>, <code>PressureDPadRight</code>. Saved by member name</td>
 </tr>
 <tr>
 <td><code>AxisSource</code></td>
@@ -11398,7 +11398,7 @@
 <tr>
 <td><code>EnableChromaLightbar</code> / <code>EnableLightsyncLightbar</code> / <code>EnableSensaHaptics</code></td>
 <td><code>bool?</code></td>
-<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7956, 7962 and 7969).</td>
+<td>(v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. <code>PeripheralSwitchMigration</code> (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each <code>ShouldSerialize</code> method returns false (<code>SettingsService.cs</code> lines 7960, 7966 and 7973).</td>
 </tr>
 <tr>
 <td><code>EnableHeadTracking</code></td>

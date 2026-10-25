@@ -1354,6 +1354,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#button-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#system-volume" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1881,6 +1892,17 @@
     <span class="md-ellipsis">
       
         Per-app music volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-light-press-on-a-digital-pad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A light press on a digital pad
       
     </span>
   </a>
@@ -5231,6 +5253,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#button-pressure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Button pressure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#system-volume" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5758,6 +5791,17 @@
     <span class="md-ellipsis">
       
         Per-app music volume
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-light-press-on-a-digital-pad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A light press on a digital pad
       
     </span>
   </a>
@@ -6318,6 +6362,10 @@
 <td>Trigger (LT, RT)</td>
 <td>Percent of pull. 0 is released and 100 is a full pull.</td>
 </tr>
+<tr>
+<td>Button pressure (✕, ○, ◻, △, L1, R1, D-pad)</td>
+<td>Percent of a full press, on the <strong>DualShock 3 (SIXAXIS): Full</strong> preset. 0 releases the button. See <a href="#button-pressure">Button pressure</a>.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="hold-axis">Hold Axis<a class="headerlink" href="#hold-axis" title="Permanent link">&para;</a></h3>
@@ -6336,6 +6384,16 @@
 <p>Axis turbo. While the trigger is held, asserts the axis value on an on/off square wave at the set interval.</p>
 <h3 id="yield-to-physical-input">Yield to Physical Input<a class="headerlink" href="#yield-to-physical-input" title="Permanent link">&para;</a></h3>
 <p>Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a <strong>Yield to Physical Input</strong> checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.</p>
+<h3 id="button-pressure">Button pressure<a class="headerlink" href="#button-pressure" title="Permanent link">&para;</a></h3>
+<p>On a PlayStation slot set to the <strong>DualShock 3 (SIXAXIS): Full</strong> preset, the axis actions offer ten more targets: <strong>✕ Pressure</strong>, <strong>○ Pressure</strong>, <strong>◻ Pressure</strong>, <strong>△ Pressure</strong>, <strong>L1 Pressure</strong>, <strong>R1 Pressure</strong>, and one for each D-pad direction. They set how hard the virtual DualShock 3 presses that button, so a controller or keyboard with plain digital buttons can press one partway. L2 and R2 need none of their own: the Left Trigger and Right Trigger targets are their pressure.</p>
+<p>A pressure target sets the press along with the pressure. Any value above 0 presses the button at that pressure, and 0 releases it, the way PCSX2 reads the pad, which counts any pressure as a press. The <strong>Value</strong> box runs from 0 (released) to 100 percent (a full press), like a trigger's pull.</p>
+<ul>
+<li><strong>Set Axis</strong>, <strong>Hold Axis</strong>, <strong>Set Axis (Latched)</strong>, <strong>Toggle Axis</strong> and <strong>Repeat Axis While Held</strong> press the button at the value.</li>
+<li><strong>Axis Add (Relative)</strong> adds to the pressure the button has now, and <strong>Scale Axis</strong> multiplies it. A press with no pressure behind it, from a digital button or a key, counts as a full press, so <strong>Scale Axis</strong> at -60 percent turns it into a 40 percent press. A pressed button scaled down stays pressed, at the lightest pressure at least.</li>
+<li><strong>Yield to Physical Input</strong> hands the button back when you press it yourself.</li>
+<li><strong>Release Axis Latches</strong> can name a single pressure target.</li>
+</ul>
+<p>The ten targets are hidden on other presets. A macro that already names one still presses and releases the button on an Xbox slot or another PlayStation preset, and the pressure goes nowhere, since only the Full preset sends it. On an Extended or Nintendo slot it does nothing. See <a href="../../features/mappings/#button-pressure">Button pressure</a> for the pressure rows on the mapping grid.</p>
 <h3 id="system-volume">System Volume<a class="headerlink" href="#system-volume" title="Permanent link">&para;</a></h3>
 <p>Map an axis to Windows master volume. Updates every frame.</p>
 <ul>
@@ -6765,6 +6823,16 @@
 <li>Action: App Volume. Axis: Left Stick Y. Process: Spotify. Volume Limit 80 percent.</li>
 </ul>
 <p>Hold LB and move the left stick up or down to set Spotify volume. The game never sees LB. The level stays where you leave it.</p>
+<h3 id="a-light-press-on-a-digital-pad">A light press on a digital pad<a class="headerlink" href="#a-light-press-on-a-digital-pad" title="Permanent link">&para;</a></h3>
+<p>On a slot set to the <strong>DualShock 3 (SIXAXIS): Full</strong> preset:</p>
+<ul>
+<li>Fire mode: While Held</li>
+<li>Trigger: LB</li>
+<li>Consume trigger buttons: On</li>
+<li>Repeat: Until Release, delay 0</li>
+<li>Action: Scale Axis. Axis: ✕ Pressure. Value: -60 percent. Duration: 1000 ms.</li>
+</ul>
+<p>Hold LB and every ✕ press goes out at 40 percent pressure, the way PCSX2's Pressure Modifier works. Let go of LB for full presses again.</p>
 <h3 id="quick-chat-combo">Quick chat combo<a class="headerlink" href="#quick-chat-combo" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fire mode: On Press</li>

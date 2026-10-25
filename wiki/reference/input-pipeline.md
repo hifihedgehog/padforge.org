@@ -578,6 +578,7 @@ Other threads post requests with `Interlocked.Or` on `s_motionRowsRequests`, and
 - **Gate.** `SlotCarriesPressure` is a PlayStation slot on a profile `HMaestroProfileCatalog.ReportCarriesPressure` names, today only `dualshock-3-full`. `PressureRowsActive` adds the Motion rows' 250 ms row-presence check (`HasSourcedPressureRow`), rescanned at once on a new set or a changed row count.
 - **Step 3.** While the gate is open, every device pass reads the ten rows through `TryEvaluateMappingSetRawTrigger`, the trigger evaluator, into `UserSetting.PressureOutputState` as rounded bytes (`PressureByte`). The gamepad row loop skips the targets. A device's value holds while the device is briefly unavailable and rests when it leaves, in the removed-device branch and in `NeutralizeMappedOutputsFor`, the rule `OutputState` follows.
 - **Step 4.** `CombinePressureRows` takes the harder press per button across the slot's devices into `CombinedPressureStates[slot]`, the trigger rule. A closed gate rests the slot's state.
+- **Step 4b.** Macros write the state too (#530). `EvaluateMacros` passes each gamepad slot's entry to `EvaluateSlotMacros(ref Gamepad, MacroItem[], ref ButtonPressureState)`, which copies it into the pass (`_macroPressure`, with `_preMacroPressure` kept for the yield gate), runs the evaluator and copies it back. The ten `MacroAxisTarget` pressure targets write the press with the pressure through `WritePressure`: above 0 sets the button bit and adds it to the pass's output overlay, 0 clears both, because PCSX2 counts any pressure as a press and HIDMaestro sends a pressed button at 0 as full. Set Axis, Hold Axis, the latched and toggled axes, Repeat Axis While Held and Cycle Tap List axis steps write the pull-scale value (`PressureFromPull`, at least 1 above 0). Axis Add and Scale Axis start from `CurrentPressure`, where a press with pressure 0 counts as 255, and a pressed button scaled by a factor above 0 stays at 1 at the least. The raw lane resolves the targets to no channel, and the two-argument evaluator writes nothing for them.
 - **Step 5.** The extended `SubmitGamepadState` overload takes the combined state beside the final frame. `PressureOnTheWire` passes a button's pressure only while that frame presses the button, and a D-pad direction's only while the hat `MapHat` builds includes it. `WritePressure` fills `PressureA` (cross, `HMButton.A`) through `PressureDpadRight`. A pressed button sent with 0 goes out fully pressed, HIDMaestro's rule, so a macro or a key presses it all the way. The inactive-slot edge and `NeutralizeCombinedOutputs` rest the state.
 
 The gate on the frame is there for PCSX2, which binds these ten buttons to the pressure axes alone (`SDLInputSource` `s_sdl_ps3_binding_pressure_mapping`) and counts any value above its button deadzone, 0 by default, as a press (`PadDualshock2::Set`). A pressure left up while a turbo, a consumed macro trigger, SOCD or a shift layer released the button would hold it down there.
@@ -2128,7 +2129,7 @@ For each slot (0–15):
 1. Read `MacroSnapshots[i]`. If null or empty, skip
 2. Set `_currentMacroSlotRestricted = IsSlotRestricted(i) || AnyMacroTriggerRestricted(macros)` (#138). It suppresses keyboard, mouse, cursor, and text output for that slot
 3. Delegate to type-specific evaluator:
-   - `EvaluateSlotMacros(ref Gamepad, MacroItem[])` for every slot without the raw-HID surface (Xbox / PlayStation / KBM / MIDI / VR)
+   - `EvaluateSlotMacros(ref Gamepad, MacroItem[], ref ButtonPressureState)` for every slot without the raw-HID surface (Xbox / PlayStation / KBM / MIDI / VR), with the slot's `CombinedPressureStates` entry for the button pressure targets (#530, see [Button pressure](#button-pressure))
    - `EvaluateSlotMacrosExtended(ref RawHidState, MacroItem[])` for raw-surface slots, which are every Extended and Nintendo slot (operates on `uint[]` button words instead of `ushort` Gamepad.Buttons)
 
 Before the per-slot pass, `CollectMenuDirectOutputs()` delivers menu direct bindings. After it, `ReconcileLatchedKeys()` and `ReconcileLatchedMouseButtons()` settle the frame's latched sets once for all slots (all below).
@@ -2345,7 +2346,7 @@ The macro QOL work (#112) moved copy, paste, and duplicate onto a shared seriali
 
 #### Macro clipboard codec (#112)
 
-Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5510):
+Copy and paste cross the Windows clipboard as JSON. The envelope is defined in `SettingsService.cs` (line 5514):
 
 ```csharp
 public sealed class MacroClipboardEnvelope
@@ -2381,7 +2382,7 @@ Copy uses only the serialize half. Paste and Duplicate run the full roundtrip an
 
 #### Cursor-write macro actions (#108 / #109 / #110)
 
-Three `MacroActionType` members (#108/#109/#110) drive the desktop cursor through `CursorControlService`, and `MoveMouseToScreenPosition` (#9) is a fourth (`MoveCursorTo`, one `SetCursorPos` per fire). They are handled in `ExecuteSequentialAction` (the standard-slot path, `InputManager.Step4b.EvaluateMacros.cs` cases from line 3270) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, cases from line 5487), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (`_currentMacroSlotRestricted`, #138), it calls into `CursorControlService.Active` (the running service, null while the engine is stopped), then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
+Three `MacroActionType` members (#108/#109/#110) drive the desktop cursor through `CursorControlService`, and `MoveMouseToScreenPosition` (#9) is a fourth (`MoveCursorTo`, one `SetCursorPos` per fire). They are handled in `ExecuteSequentialAction` (the standard-slot path, `InputManager.Step4b.EvaluateMacros.cs` cases from line 3300) and mirrored in `ExecuteSequentialActionRaw` (the custom-Extended path, cases from line 5633), so they work on Xbox/PlayStation/KBM slots and on custom Extended HID slots alike. Each is a one-shot sequential action: unless the slot is restricted (`_currentMacroSlotRestricted`, #138), it calls into `CursorControlService.Active` (the running service, null while the engine is stopped), then `AdvanceAction(macro)`, so with an `OnPress` trigger it fires once per press.
 
 | `MacroActionType` | Service call | Behavior |
 |---|---|---|
@@ -2401,7 +2402,7 @@ Because the pin/clamp writes and the source sample run on this one thread in tha
 
 #### Slot device fire-guard (`FindSlotDeviceByInstanceGuid`)
 
-A macro must fire only from a device assigned to its own slot. `FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)` (`InputManager.Step4b.EvaluateMacros.cs:1860`) enforces this with two checks before returning a device:
+A macro must fire only from a device assigned to its own slot. `FindSlotDeviceByInstanceGuid(Guid instanceGuid, int slotIndex)` (`InputManager.Step4b.EvaluateMacros.cs:1890`) enforces this with two checks before returning a device:
 
 1. `SettingsManager.FindSettingByInstanceGuidAndSlot(instanceGuid, slotIndex)` must be non-null, confirming the device is assigned to this macro's slot.
 2. `FindOnlineDeviceByInstanceGuid(instanceGuid)` must find the device in `UserDevices`. It matches on GUID alone, so the trigger checks then require `IsOnline` and a live `InputState` with a `Buttons` / `Povs` array.
@@ -2410,7 +2411,7 @@ A macro must fire only from a device assigned to its own slot. `FindSlotDeviceBy
 
 ### Switch Layer
 
-`MacroActionType.SwitchLayer` (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: `ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs`, case at line 3187) for standard slots and `ExecuteSequentialActionRaw` (case at line 5722) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with `CurrentActionIndex` frozen. Both cases call `AdvanceAction(macro)`, so the action is one-shot per fire.
+`MacroActionType.SwitchLayer` (#377, asked in discussion #370) writes the slot's engaged shift layer from a macro. Both evaluators carry it: `ExecuteSequentialAction` (`InputManager.Step4b.EvaluateMacros.cs`, case at line 3217) for standard slots and `ExecuteSequentialActionRaw` (case at line 5868) for raw-HID surface slots. Slot routing is exclusive, so a raw-HID surface runs only the second one, and without that case the macro editor still offered the action on an Extended slot while it did nothing. Worse than inert, in fact: with no case the default branch never advanced the action, so the run re-dispatched the same no-op every tick with `CurrentActionIndex` frozen. Both cases call `AdvanceAction(macro)`, so the action is one-shot per fire.
 
 The work happens in `ApplyMacroLayerSwitch(slotIndex, mask)` (`InputManager.Step3.MappingSetEval.cs` line 1249), which lives with the shift runtime rather than with the macro engine. The slot is always the macro's own `PadIndex`, the #254 per-layer macro scope identity:
 
@@ -2424,7 +2425,7 @@ Combined with the #254 per-layer macro scope, the same physical button can jump 
 
 ### Set Chroma Color
 
-`MacroActionType.SetChromaColor` (#468) has the `AxisHold` duration shape. Both evaluators run it on every frame it is current (`ExecuteSequentialAction`, case at `InputManager.Step4b.EvaluateMacros.cs` line 2965, and `ExecuteSequentialActionRaw`, case at line 5334) and advance once `DurationMs` passes. The case sends nothing itself. `NoteChromaColor` (line 2831) records the color in `_frameChroma`, one packed `0x00RRGGBB` entry per slot, so two macros current in one frame leave the last one evaluated. `FlushChromaColors` (line 2840) runs at the end of `EvaluateSlotMacros` and of `EvaluateSlotMacrosExtended` (the calls at lines 928 and 4959) and hands each recorded color to `MacroChromaSink` once, which is `PeripheralOutputs.AssertChromaMacro` (#494, `PeripheralOutputs.cs` line 895).
+`MacroActionType.SetChromaColor` (#468) has the `AxisHold` duration shape. Both evaluators run it on every frame it is current (`ExecuteSequentialAction`, case at `InputManager.Step4b.EvaluateMacros.cs` line 2995, and `ExecuteSequentialActionRaw`, case at line 5480) and advance once `DurationMs` passes. The case sends nothing itself. `NoteChromaColor` (line 2861) records the color in `_frameChroma`, one packed `0x00RRGGBB` entry per slot, so two macros current in one frame leave the last one evaluated. `FlushChromaColors` (line 2870) runs at the end of `EvaluateSlotMacros` and of `EvaluateSlotMacrosExtended` (the calls at lines 958 and 5105) and hands each recorded color to `MacroChromaSink` once, which is `PeripheralOutputs.AssertChromaMacro` (#494, `PeripheralOutputs.cs` line 895).
 
 The assertion stamps the slot's color with the tick and wakes the Chroma worker only for a new color, or for the first frame after a gap longer than `MacroAssertWindowMs` (120 ms, line 879). The worker paints the Chroma categories of the Razer devices assigned to the macro's slot, every category when the Razer Chroma row is, over any Lighting-tab claim and whether or not those tabs control the devices. Chroma addresses categories, so every other Razer device of those kinds takes the color too. The color lapses 120 ms after the last assertion and the categories go back to their claims or to Synapse. When two slots' macros paint one category, the smaller displayed player number wins. See [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 
