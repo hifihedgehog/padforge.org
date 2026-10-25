@@ -223,7 +223,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
 | **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
 | **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration |
-| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Show Dreamcast Screen |
+| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Show Dreamcast Screen, Show Keyboard Screen, Keyboard Screen Mode, Stopwatch, Pan Keyboard Screen Picture |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
 | **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay |
@@ -495,6 +495,31 @@ Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port
 | **Repeat Count** | How many times the set plays. |
 
 It needs **Read Bliss-Box Adapters** on. See [Bliss-Box Adapters](../features/bliss-box.md#dreamcast-screen).
+
+### Show Keyboard Screen
+
+Plays one to eight pictures on every keyboard screen of the chosen kind, then returns each screen to its own mode. The action fires once and the macro moves on while the pictures play.
+
+| Field | Meaning |
+|---|---|
+| **Screen** | **Monochrome Screen**, **Color Screen**, **Arx Control** or **S.T.R.I.K.E. 7**. |
+| **Pictures** | Up to eight, added with **Add Picture…** from a PNG, JPEG, BMP or GIF. Each is fitted to the screen chosen when it is added, so choose the screen first. Click a picture to remove it. |
+| **Frame Time** | How long each picture shows, in ms. A tenth of a second at least. |
+| **Repeat Count** | How many times the set plays. |
+
+It needs **Drive Keyboard Screens** on. See [Keyboard Screens](../features/keyboard-screens.md#macros).
+
+### Keyboard Screen Mode
+
+Switches the chosen kind of screen to the mode under **Show** and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.
+
+### Stopwatch
+
+**Start or Pause Stopwatch** starts the stopwatch or pauses it. **Reset Stopwatch** stops it at zero. Every keyboard screen in **Stopwatch** mode shows the same stopwatch.
+
+### Pan Keyboard Screen Picture
+
+Moves every keyboard screen that shows a chosen picture larger than itself across that picture, for a map. **Direction** is **Left**, **Right**, **Up** or **Down**, and **Step** is how far in pixels, 16 by default. The window stops at the picture's edges.
 
 ### Clear Lightbar Override
 

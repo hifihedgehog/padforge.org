@@ -1133,6 +1133,8 @@
       
         
       
+        
+      
     
     
     
@@ -2702,6 +2704,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../keyboard-screens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -3243,6 +3273,8 @@
       
         
           
+        
+      
         
       
         
@@ -4166,6 +4198,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/keyboard-screens-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens Internals
   
 
     
@@ -5257,7 +5317,7 @@
 <tbody>
 <tr>
 <td><strong>Type</strong></td>
-<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Analog Keyboard, Web Menus, or plain Device for anything unclassified.</td>
+<td>Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen Keys, Analog Keyboard, Web Menus, or plain Device for anything unclassified.</td>
 </tr>
 <tr>
 <td><strong>VID:PID</strong></td>
@@ -5338,7 +5398,7 @@
 </table>
 <p>A row of capability icons sits at the bottom of the card, with a rumble, gyro, or touchpad mark for each of those the device has. Click the rumble mark to vibrate the device and identify it.</p>
 <h3 id="submit-device-mapping-button">Submit Device Mapping button<a class="headerlink" href="#submit-device-mapping-button" title="Permanent link">&para;</a></h3>
-<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
+<p>Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.</p>
 <p>Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:</p>
 <ul>
 <li>Device name</li>
@@ -5481,7 +5541,7 @@
 </tbody>
 </table>
 <p>Gamepad mode shows the standard buttons the pad has (0 is A, 1 is B, on through Guide at 10, and a partial pad such as the PS Move Navigation skips the ones it lacks) plus every extended button the pad actually has: Misc1 at 11, paddles at 12–15, touchpad click at 16, Misc2–6 at 17–21. Physical buttons the mapping leaves unclaimed follow from 22 up. Each circle is numbered by its real index, the same number the mapping picker and recorder use, so gaps are normal. A DualSense shows a button 16 for its touchpad click with nothing at 12–15. Raw mode shows every physical button instead, densely numbered from 0. Either way the circles read as numbers, not letters.</p>
-<p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, and Logitech G-Keys rows show a named button list instead, with no axis bars. See their sections below.</p>
+<p>Consumer Control and NFC Reader devices replace the numbered grid with named chips (media keys) or named tags, and a microphone replaces it with its voice phrases. The Hidden Buttons, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows show a named button list instead, with no axis bars. See their sections below.</p>
 <h3 id="keyboards">Keyboards<a class="headerlink" href="#keyboards" title="Permanent link">&para;</a></h3>
 <p>A QWERTY layout replaces axes and buttons. Main keys, navigation cluster, arrows, numpad. Keys light up in the same cold blue as the button circles as you press them.</p>
 <h3 id="mice">Mice<a class="headerlink" href="#mice" title="Permanent link">&para;</a></h3>
@@ -5605,7 +5665,7 @@
 <p>A phone that opens the web controller's <a href="../../guides/web-controller/#web-menus">Web Menus</a> layout shows up as a device card typed <strong>Web Menus</strong>, named <strong>Web Menus 1</strong>, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a slot and its tiles fire that slot's Touch Grid <a href="../../guides/menus/#on-a-phone">menus</a>. Remote Link does not offer it to a paired PC.</p>
 <hr />
 <h2 id="machine-and-tracker-rows">Machine and tracker rows<a class="headerlink" href="#machine-and-tracker-rows" title="Permanent link">&para;</a></h2>
-<p>Six rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers <strong>Submit Device Mapping</strong>.</p>
+<p>Seven rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers <strong>Submit Device Mapping</strong>.</p>
 <table>
 <thead>
 <tr>
@@ -5645,6 +5705,12 @@
 <td>Logitech G-Keys</td>
 <td><strong>Read Logitech G-Keys</strong> in <a href="../settings/">Settings</a></td>
 <td>The G-keys and extra mouse buttons on Logitech gaming gear, read through the vendor SDK. See <a href="../logitech-g-keys/">Logitech G-Keys</a>.</td>
+</tr>
+<tr>
+<td><strong>Keyboard Screen Keys</strong></td>
+<td>Keyboard Screen Keys</td>
+<td><strong>Drive Keyboard Screens</strong> in <a href="../settings/">Settings</a></td>
+<td>The keys beside the screens on Logitech's GamePanel keyboards and the G19, in one fixed layout of 13 buttons. See <a href="../keyboard-screens/">Keyboard Screens</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -5913,7 +5979,7 @@
 <h3 id="how-to-turn-it-on">How to turn it on<a class="headerlink" href="#how-to-turn-it-on" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Select the device card</li>
-<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)</li>
+<li>In the detail pane, find the <strong>Input Mode</strong> section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)</li>
 <li>Check <strong>Force Raw Joystick Mode (Bypass Gamepad Remapping)</strong></li>
 <li>Saved right away. Persists across restarts.</li>
 </ol>
@@ -6030,7 +6096,7 @@
 <h3 id="hidhide-toggle-grayed-out-or-missing">HidHide toggle grayed out or missing<a class="headerlink" href="#hidhide-toggle-grayed-out-or-missing" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Grayed out</strong>: HidHide is not installed. Install it from <a href="../driver-management/">Driver Management</a>.</li>
-<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, and Logitech G-Keys rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.</li>
+<li><strong>Missing</strong>: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and Keyboard Screen Keys rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled.</li>
 </ul>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>

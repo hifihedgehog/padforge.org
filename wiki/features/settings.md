@@ -291,6 +291,13 @@ PadForge never assigns a device on its own. Sim rigs and arcade setups carry man
 **Enable Handheld PC Buttons** is off by default, and off means nothing runs. On, the [Devices](devices.md) page gains a row for the paddles, menu keys and hotkeys a handheld gaming PC or laptop hides from games, learned by pressing each one once, and a row for the machine's own gyroscope when Windows reports one. See [Handheld PC Buttons](handheld-buttons.md).
 
 
+## Keyboard Screens
+
+**Drive Keyboard Screens** is off by default. On, PadForge draws on the screens built into Logitech's GamePanel keyboards and the G19, on a phone through Logitech Arx Control, and on the Mad Catz S.T.R.I.K.E. 7's touchscreen, and the [Devices](devices.md) page gains a **Keyboard Screen Keys** row for the keys beside those screens. Turning it off gives a G19 screen PadForge bound to WinUSB back to Windows. See [Keyboard Screens](keyboard-screens.md).
+
+While the engine runs, a line for each kind of screen says what draws it or what is missing. **Monochrome Screen…**, **Color Screen…**, **Arx Control…** and **S.T.R.I.K.E. 7…** open each kind's dialog, where its mode is set. **Download Strike7API.dll**, **Choose Strike7API.dll…** and **Install Visual C++ 2008 Runtime** get the S.T.R.I.K.E. 7's library and the runtime it needs.
+
+
 ## Battery Alerts
 
 Get notified when a controller's battery runs low, before it dies mid-game.
