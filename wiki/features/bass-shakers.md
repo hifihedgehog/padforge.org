@@ -11,6 +11,12 @@ The tab is per slot. It works with Xbox, DualShock 3, DualShock 4, DualSense,
 and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
 with force feedback, such as racing wheels, and the Steam Deck Controller (Composite) profile. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
+A game that supports the DualSense's haptics over USB plays them through the
+controller's audio rather than as rumble. On a **DualSense (PS5): Full** or
+**DualSense Edge (PS5): Full** virtual controller, **Low Motor** follows the
+loudness of the left haptic channel and **High Motor** the right, so those
+games reach the shaker too.
+
 ---
 
 ## Rumble to Audio card

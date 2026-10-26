@@ -248,7 +248,7 @@ A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadFor
 
 ### Do Bass Shakers play the soundtrack or simulator telemetry?
 
-Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. Macro rumble stays on the controller. More: [Rumble to Audio card](features/bass-shakers.md#rumble-to-audio-card).
+Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. On a DualSense (PS5): Full or DualSense Edge (PS5): Full virtual controller, it also follows the haptics a game plays through the controller's audio. Macro rumble stays on the controller. More: [Rumble to Audio card](features/bass-shakers.md#rumble-to-audio-card).
 
 ### Why does Constant Force pull my wheel to one side?
 

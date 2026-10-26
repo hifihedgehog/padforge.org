@@ -320,7 +320,7 @@ Every slider has its own reset button. Reset All restores everything in its sect
 <!-- SCREENSHOT: pad-bass-shakers -->
 ![Rumble to Audio routing game feedback to a bass shaker](../images/pad-bass-shakers.png)
 
-The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
+The **Bass Shakers** tab routes the game rumble and force feedback this virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller. On a **DualSense (PS5): Full** or **DualSense Edge (PS5): Full** virtual controller, the haptics a game plays through the controller's audio drive **Low Motor** and **High Motor** too.
 
 Unlike the Force Feedback tab, Bass Shakers settings are **per slot**, not per device. The tab shows on Xbox, PlayStation, and Nintendo slots, plus Extended slots that advertise force feedback (the **Force Feedback** toggle with **Customize** on, or a catalog profile that ships with it) and the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes directly. Other Extended slots, Keyboard + Mouse, MIDI, and VR hide it.
 
