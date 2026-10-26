@@ -9,7 +9,7 @@
 
 ## Sections
 
-Nine sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, Game Mods, and the overlays.
+Ten sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, Game Mods, Game Telemetry, and the overlays.
 
 | Section | Purpose |
 |---------|---------|
@@ -20,12 +20,13 @@ Nine sections, stacked top to bottom: the engine and its slots, then a **Service
 | **Head Tracking** | A head pose from [OpenTrack](head-tracking.md) or from a [VR headset](vr-controller-input.md) as six mappable axes. |
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Game Mods** | Adaptive triggers and lights set by [game mods made for DSX](game-mods.md). |
+| **Game Telemetry** | The speed, RPM, gear and pedals [driving games send](game-telemetry.md), as a device row and macro triggers. |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Game Mods, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, and the three ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Game Mods, Game Telemetry, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, the ports beside them, and Game Telemetry's game, forward port and Full Speed are stored in every profile and follow it on each switch. The custom telemetry formats are one list for every profile. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
 
 ---
 
@@ -203,6 +204,24 @@ While the server listens, PadForge writes its port to the files the mods read it
 
 ---
 
+## Game Telemetry
+
+Reads the telemetry driving games send over UDP, and Assetto Corsa's shared memory, onto the **Game Telemetry** row on the [Devices](devices.md) page.
+
+| Control | Description |
+|---------|-------------|
+| **Listen for Game Telemetry** | Opens the Game Telemetry row and its listener. Off by default. It listens only while the engine runs. |
+| **Game** | **Auto-Detect**, one entry per game family, then each custom format by name. Picking Project CARS 2 and Automobilista 2 sets the port to `5606`, and the truck simulators set `49001`. |
+| **Port** | UDP port. Default `20777`, the port F1, the Codemasters games and EA SPORTS WRC use. Range `1024-65535`. |
+| **Forward to Port** | Copies every packet to this port on 127.0.0.1, for another tool such as SimHub. `0` forwards nothing. |
+| **Full Speed (km/h)** | The speed that moves the row's Speed axis all the way. Default `300`. |
+| **Custom Formats…** | Opens the window where you describe a game PadForge does not know, field by field. |
+| **Status indicator** | A flame beside the status text. Ember while the row is open, a steel outline when stopped or when another program holds the port. The text names the game and the address it sends from. |
+
+See [Game Telemetry](game-telemetry.md) for each game's setup, the row's axes and buttons, the Custom Expression channels and the Adaptive Trigger Effect action.
+
+---
+
 ## Overlays
 
 The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.
@@ -238,6 +257,7 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 - [Settings](settings.md): engine options, appearance, drivers.
 - [Profiles](../guides/profiles.md): per-app profile switching.
 - [DSU Motion Server](../reference/dsu-motion-server.md): gyro streaming for emulators.
+- [Game Telemetry](game-telemetry.md): driving games' telemetry as a device row and macro triggers.
 - [Game Mods](game-mods.md): adaptive triggers and lights from mods made for DSX.
 - [Web Controller](../guides/web-controller.md): browser-based virtual controller.
 - [Menus](../guides/menus.md): the radial and touch menus the Menu Overlay draws.

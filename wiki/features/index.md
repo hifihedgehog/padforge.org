@@ -67,6 +67,7 @@ when that device has the matching hardware.
 | [Keyboard Screens](keyboard-screens.md) | The screens on Logitech GamePanel keyboards, the Mad Catz S.T.R.I.K.E. 7 and Logitech Arx Control, and the keys beside them as buttons |
 | [Novint Falcon](novint-falcon.md) | The Falcon's handle as a stick, its grip buttons, and a game's rumble and force feedback as force on the handle |
 | [Game Mods](game-mods.md) | Adaptive triggers, lightbar, player lights and mute light set by game mods made for DSX |
+| [Game Telemetry](game-telemetry.md) | The speed, RPM, gear and pedals driving games send, as a device row, macro triggers and adaptive trigger effects |
 | [Input Precision](input-precision.md) | Polling rate, resolution, and latency across the whole pipeline |
 | [Virtual VR Controllers](vr-controllers.md) | A SteamVR left and right hand pair driven from one slot |
 | [VR Controller Input](vr-controller-input.md) | The headset's pose and both hand controllers read as mapping sources through OpenXR |

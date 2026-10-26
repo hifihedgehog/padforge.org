@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1926,6 +1928,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2545,6 +2575,8 @@
       
         
       
+        
+      
     
     
     
@@ -2985,6 +3017,17 @@
     <span class="md-ellipsis">
       
         Game Mods (#529)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-telemetry-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry (#531)
       
     </span>
   </a>
@@ -4573,6 +4616,17 @@
     <span class="md-ellipsis">
       
         Disconnect Action Properties (#162)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-trigger-effect-properties-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Trigger Effect Properties (#531)
       
     </span>
   </a>
@@ -6146,6 +6200,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -6517,6 +6599,17 @@
     <span class="md-ellipsis">
       
         Game Mods (#529)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-telemetry-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry (#531)
       
     </span>
   </a>
@@ -8112,6 +8205,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#adaptive-trigger-effect-properties-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Trigger Effect Properties (#531)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#supporting-enums-macroitemcs" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -9485,6 +9589,126 @@
 <tr>
 <td><code>ResetGameModPortCommand</code></td>
 <td>Resets <code>GameModServerPort</code> to 6969.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="game-telemetry-531">Game Telemetry (#531)<a class="headerlink" href="#game-telemetry-531" title="Permanent link">&para;</a></h3>
+<p>The listener behind the Game Telemetry row. Each setter mirrors into the static <code>GameTelemetryRuntime</code>, the head tracking card's shape, so a write lands whatever its source. The switch, the port, the game, the forward port and Full Speed ride profiles. The custom formats are one list for every profile. See <a href="../game-telemetry-internals/">Game Telemetry Internals</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EnableGameTelemetry</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>The row listens while this is on and the engine runs. Mirrors to <code>GameTelemetryRuntime.Enabled</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryPort</code></td>
+<td><code>int</code></td>
+<td><code>20777</code></td>
+<td>The UDP port the games send to. Clamped to 1024–65535. Mirrors to <code>GameTelemetryRuntime.Port</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryFormat</code></td>
+<td><code>GameTelemetryFormat</code></td>
+<td><code>Auto</code></td>
+<td>The game picked, or Auto-Detect. Mirrors to <code>GameTelemetryRuntime.Format</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryCustomFormat</code></td>
+<td><code>string</code></td>
+<td><code>""</code></td>
+<td>The custom format read while the game is <code>Custom</code>. Null writes empty. Mirrors to <code>GameTelemetryRuntime.CustomFormatName</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryOptions</code></td>
+<td><code>ObservableCollection&lt;GameTelemetryOption&gt;</code></td>
+<td>-</td>
+<td>The picker: Auto, each game family, then each custom format with a valid name. A <code>GameTelemetryOption</code> is the pair of a <code>GameTelemetryFormat</code> and a custom format's name. Its <code>Display</code> is renamed in place on a language change.</td>
+</tr>
+<tr>
+<td><code>SelectedGameTelemetryOption</code></td>
+<td><code>GameTelemetryOption</code></td>
+<td>Auto</td>
+<td>The picker's selection, read from the game and the custom name, or the first option. Picking Project CARS 2 moves the port to 5606 and the ETS2 plugin to 49001, the two senders whose port cannot change. A null write is ignored.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryForwardPort</code></td>
+<td><code>int</code></td>
+<td><code>0</code></td>
+<td>The port every packet is copied to on 127.0.0.1, 0 for none. Clamped to 0–65535. Mirrors to <code>GameTelemetryRuntime.ForwardPort</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryFullSpeed</code></td>
+<td><code>int</code></td>
+<td><code>300</code></td>
+<td>The speed, in km/h, that moves the Speed axis all the way. Clamped to 10–1000. Mirrors to <code>GameTelemetryRuntime.FullSpeedKmh</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryFormats</code></td>
+<td><code>List&lt;CustomTelemetryFormat&gt;</code></td>
+<td>empty</td>
+<td>The custom formats. A set mirrors them to <code>GameTelemetryRuntime.Formats</code>, which reopens the row, refreshes the expression variables' <code>TelemetryChannelOptions</code> and rebuilds <code>GameTelemetryOptions</code>. A picked custom format that is gone sends the picker back to Auto-Detect. The Dashboard's Formats button sets it from <code>CustomTelemetryFormatsDialog.Result</code>.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryStatus</code></td>
+<td><code>string</code></td>
+<td><code>"Stopped"</code></td>
+<td>The card's line: the game it hears, or why it hears nothing. Set by <code>InputService.UpdateGameTelemetryStatus</code>. Null coalesces back to <code>"Stopped"</code>.</td>
+</tr>
+<tr>
+<td><code>IsGameTelemetryRunning</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Serving truth for the card's flame: the row is open, whatever the switch says. False while the port is in use.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ResetGameTelemetryPortCommand</code></td>
+<td>Resets the port to 20777.</td>
+</tr>
+<tr>
+<td><code>ResetGameTelemetryGameCommand</code></td>
+<td>Back to Auto-Detect, with no custom format.</td>
+</tr>
+<tr>
+<td><code>ResetGameTelemetryForwardPortCommand</code></td>
+<td>Sets the forward port to 0, forwarding nothing.</td>
+</tr>
+<tr>
+<td><code>ResetGameTelemetryFullSpeedCommand</code></td>
+<td>Resets Full Speed to 300.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ApplyGameTelemetrySettings(GameTelemetryFormat format, string customName, int port, int forwardPort, int fullSpeed)</code></td>
+<td>Applies a saved game, port, forward port and Full Speed, from the settings file or a profile. The switch is excluded, and its caller sets it last. An undefined format, or a custom one whose format is gone, reads as Auto-Detect. An out-of-range port, forward port or Full Speed keeps the current value.</td>
 </tr>
 </tbody>
 </table>
@@ -11855,7 +12079,7 @@
 <tr>
 <td><code>HeadTrackerStatus</code></td>
 <td><code>string</code></td>
-<td>Which head-tracking source is live, for the details pane (#355). Written by the preview loop. Null coalesces to empty.</td>
+<td>Which head-tracking source is live, for the details pane (#355). Written by <code>InputService.UpdateDevicePanelLines</code>, which runs on the Devices page tick, on a selection change while the engine is off, and once after an engine stop, so a retired device's line clears. Null coalesces to empty.</td>
 </tr>
 <tr>
 <td><code>HeadTrackerStatusVersion</code></td>
@@ -11866,6 +12090,21 @@
 <td><code>HeadTrackerStatusDevice</code></td>
 <td><code>object</code></td>
 <td>Internal. The device instance that version belongs to. A reopen (port change, FreeTrack toggle) builds a new device whose <code>StatusVersion</code> restarts at 0 and collides with the cached 0, so the cache compares instance as well as version.</td>
+</tr>
+<tr>
+<td><code>IsGameTelemetryDevice</code></td>
+<td><code>bool</code></td>
+<td>Selected device is the Game Telemetry row (#531): named axes, the Driving, Reverse and Neutral buttons, a button per gear, plus the listener's line.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryStatus</code></td>
+<td><code>string</code></td>
+<td>What the listener hears, for the details pane (#531), the same line as the Dashboard card's. Written by <code>InputService.UpdateDevicePanelLines</code> like <code>HeadTrackerStatus</code>. Null coalesces to empty.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryStatusVersion</code> / <code>GameTelemetryStatusDevice</code></td>
+<td><code>int</code> / <code>object</code></td>
+<td>Internal. The cache pair, the head tracker's shape: the row's <code>StatusVersion</code> and the row instance it belongs to.</td>
 </tr>
 <tr>
 <td><code>HandheldButtons</code></td>
@@ -12875,6 +13114,11 @@
 <td>Computed: <code>DeviceTypeKey == "HeadTracker"</code>. The head tracker row (#355).</td>
 </tr>
 <tr>
+<td><code>IsGameTelemetryDevice</code></td>
+<td><code>bool</code></td>
+<td>Computed: <code>DeviceTypeKey == "GameTelemetry"</code>. The Game Telemetry row (#531).</td>
+</tr>
+<tr>
 <td><code>ShowLearnHandheldButton</code></td>
 <td><code>bool</code></td>
 <td>Computed: <code>IsHandheldDevice</code> and the path is not <code>peer://</code>. A peer row's buttons are learned on the machine that has them.</td>
@@ -13104,7 +13348,7 @@
 <td><code>IsInternalVirtual</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: true for PadForge-internal virtual sources, identified by a URI-scheme <code>DevicePath</code> instead of a real Windows HID path. Nineteen schemes: <code>web://</code>, <code>overlay://</code>, <code>midi://</code>, <code>peer://</code>, <code>nfc://</code>, <code>mic://</code>, <code>handheld://</code>, <code>sensor://</code>, <code>headtrack://</code>, <code>openxr://</code>, <code>logigkeys://</code>, <code>keyboardscreen://</code>, <code>falcon://</code>, <code>analogkb://</code>, <code>razerchroma://</code>, <code>logilightsync://</code>, <code>steelseriesgg://</code>, <code>razersensa://</code>, <code>lightunit://</code>. Those cover web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, PC/SC readers, WASAPI microphone endpoints, the handheld hidden-buttons row, the machine's own sensor row, the head tracker, the OpenXR hand-controller rows, the Logitech G-Keys row, the keyboard screen rows (#519), the Novint Falcon rows (#521), the analog keyboard rows, the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, and the unit rows of lit devices no mouse or keyboard row reaches (#494). <code>DeviceDetailDividerTests</code> reads every scheme the source assigns and checks each one here. HidHide cannot blacklist a non-HID path, so the "Hide from games" toggle hides itself for these.</td>
+<td>Computed: true for PadForge-internal virtual sources, identified by a URI-scheme <code>DevicePath</code> instead of a real Windows HID path. Twenty schemes: <code>web://</code>, <code>overlay://</code>, <code>midi://</code>, <code>peer://</code>, <code>nfc://</code>, <code>mic://</code>, <code>handheld://</code>, <code>sensor://</code>, <code>headtrack://</code>, <code>openxr://</code>, <code>logigkeys://</code>, <code>keyboardscreen://</code>, <code>falcon://</code>, <code>telemetry://</code>, <code>analogkb://</code>, <code>razerchroma://</code>, <code>logilightsync://</code>, <code>steelseriesgg://</code>, <code>razersensa://</code>, <code>lightunit://</code>. Those cover web controllers, the touchpad overlay, MIDI-input devices, Remote Link peers, PC/SC readers, WASAPI microphone endpoints, the handheld hidden-buttons row, the machine's own sensor row, the head tracker, the OpenXR hand-controller rows, the Logitech G-Keys row, the keyboard screen rows (#519), the Novint Falcon rows (#521), the Game Telemetry row (#531), the analog keyboard rows, the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, and the unit rows of lit devices no mouse or keyboard row reaches (#494). <code>DeviceDetailDividerTests</code> reads every scheme the source assigns and checks each one here. HidHide cannot blacklist a non-HID path, so the "Hide from games" toggle hides itself for these.</td>
 </tr>
 <tr>
 <td><code>IsAggregate</code></td>
@@ -13189,7 +13433,7 @@
 <tr>
 <td><code>ShowSubmitMapping</code></td>
 <td><code>bool</code></td>
-<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"HeadsetMotion"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, <code>"LogitechGKeys"</code>, <code>"AnalogKeyboard"</code>, <code>"WebMenus"</code>, <code>"PeripheralLighting"</code>, <code>"PeripheralHaptics"</code>, <code>"KeyboardScreenKeys"</code>, and <code>"NovintFalcon"</code>.</td>
+<td>Computed: the device can have a community mapping submitted. True for everything except <code>"Gamepad"</code>, <code>"Mouse"</code>, <code>"Keyboard"</code>, <code>"Touchpad"</code>, <code>"Tablet"</code>, <code>"Midi"</code>, <code>"Nfc"</code>, <code>"HeadsetMotion"</code>, <code>"Microphone"</code>, <code>"ConsumerControl"</code>, <code>"HandheldButtons"</code>, <code>"SystemMotion"</code>, <code>"HeadTracker"</code>, <code>"VrController"</code>, <code>"LogitechGKeys"</code>, <code>"AnalogKeyboard"</code>, <code>"WebMenus"</code>, <code>"PeripheralLighting"</code>, <code>"PeripheralHaptics"</code>, <code>"KeyboardScreenKeys"</code>, <code>"NovintFalcon"</code>, and <code>"GameTelemetry"</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -18186,12 +18430,81 @@
 </tr>
 </tbody>
 </table>
+<h3 id="adaptive-trigger-effect-properties-531">Adaptive Trigger Effect Properties (#531)<a class="headerlink" href="#adaptive-trigger-effect-properties-531" title="Permanent link">&para;</a></h3>
+<p>For <code>MacroActionType.TriggerEffect</code> (<code>IsTriggerEffectType</code>) and <code>MacroActionType.TriggerEffectStop</code> (<code>IsTriggerEffectStopType</code>). The effects are the DSX trigger modes, encoded by the game mods' encoder (<code>GameModProtocol.TryEncodeTrigger</code>, #529). <code>TriggerEffectCatalog</code> (<code>PadForge.App/ViewModels/TriggerEffectCatalog.cs</code>) lists the 20 kinds, each with its mode number, label and parameters. How a held effect reaches the triggers is on <a href="../game-telemetry-internals/">Game Telemetry Internals</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TriggerEffectSide</code></td>
+<td><code>MacroTriggerEffectSide</code></td>
+<td><code>Right</code></td>
+<td>The trigger the effect plays on, or that Stop ends: <code>Right</code>, <code>Left</code> or <code>Both</code>.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectMode</code></td>
+<td><code>int</code></td>
+<td><code>13</code></td>
+<td>The DSX trigger mode. 13 is the one the editor calls Feedback. A change of effect starts the values at the new effect's defaults, except while a settings file loads them (<code>LoadTriggerEffect</code>).</td>
+</tr>
+<tr>
+<td><code>TriggerEffectKind</code></td>
+<td><code>TriggerEffectKind</code></td>
+<td>-</td>
+<td>Computed (<code>[XmlIgnore]</code>): the picker's selection, the catalog entry for <code>TriggerEffectMode</code>.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectParameters</code></td>
+<td><code>string</code></td>
+<td>the effect's defaults</td>
+<td>The values in the encoder's order, comma-separated, as the settings file stores them. A list shorter than the effect's takes the effect's defaults for the rest.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectRows</code></td>
+<td><code>ObservableCollection&lt;TriggerEffectParameterValue&gt;</code></td>
+<td>-</td>
+<td>Computed (<code>[XmlIgnore]</code>): the editor's rows, one per parameter of the effect, rebuilt when the effect changes.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectIsValid</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed (<code>[XmlIgnore]</code>): false when the encoder refuses the values, an end zone not past its start or a second foot not past the first. The action then plays nothing and the editor says why.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectHold</code></td>
+<td><code>MacroTriggerEffectHold</code></td>
+<td><code>UntilRelease</code></td>
+<td><code>Duration</code> (for <code>TriggerEffectMs</code>), <code>UntilRelease</code> (until the macro's trigger is let go) or <code>UntilStopped</code> (until a Stop Adaptive Trigger Effect action).</td>
+</tr>
+<tr>
+<td><code>IsTriggerEffectTimed</code></td>
+<td><code>bool</code></td>
+<td>-</td>
+<td>Computed (<code>[XmlIgnore]</code>): <code>TriggerEffectHold == Duration</code>. Shows the time field.</td>
+</tr>
+<tr>
+<td><code>TriggerEffectMs</code></td>
+<td><code>int</code></td>
+<td><code>500</code></td>
+<td>The effect's length for <code>Duration</code>. Clamped to 1–60,000 ms.</td>
+</tr>
+</tbody>
+</table>
+<p><code>MacroTriggerEffectSide</code> and <code>MacroTriggerEffectHold</code> live in <code>TriggerEffectCatalog.cs</code>. Both are saved by name and append-only.</p>
 <hr />
 <h3 id="supporting-enums-macroitemcs">Supporting Enums (MacroItem.cs)<a class="headerlink" href="#supporting-enums-macroitemcs" title="Permanent link">&para;</a></h3>
 <p><strong>MacroTriggerMode</strong> (ordinals pinned): <code>OnPress</code> (0), <code>OnRelease</code> (1), <code>WhileHeld</code> (2), <code>Always</code> (3), <code>CustomExpression</code> (4, v3.2), <code>HoldForMs</code> (5, On Long Press), <code>DoublePress</code> (6), <code>TriplePress</code> (7), <code>SinglePress</code> (8, deferred single), <code>Toggle</code> (9), <code>Turbo</code> (10), <code>ShortPress</code> (11, On Short Press, #253. Shares <code>TriggerHoldMs</code> with <code>HoldForMs</code> to compose tap-vs-hold on one button)</p>
-<p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code></p>
+<p><strong>MacroTriggerSource:</strong> <code>InputDevice</code>, <code>OutputController</code>, <code>GameTelemetry</code> (#531). The last one is offered for Custom Expression variables alone, which then read a game's telemetry in its own units. Appended, since the clipboard writes this enum as a number.</p>
 <p><strong>MacroRepeatMode:</strong> <code>Once</code>, <code>FixedCount</code>, <code>UntilRelease</code></p>
-<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317), <code>SwitchLayer</code> (55, #377), <code>SetChromaColor</code> (56, #468), <code>ShowDreamcastScreen</code> (57, #469), <code>ShowKeyboardScreen</code> (58, #519), <code>KeyboardScreenMode</code> (59, #519), <code>Stopwatch</code> (60, #519), <code>PanKeyboardScreen</code> (61, #519). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. <code>SwitchLayer</code> is one-shot: it writes the shift runtime's <code>CustomLayer</code> override under the Latch activator's own lock-and-version discipline, so the layer stays engaged until another switch, a Latch or Cycle transition, or a profile switch. Its parameter is <code>MacroAction.SwitchLayerMask</code> (default <code>"Base"</code>) and its gate is <code>IsSwitchLayerType</code>. <code>SetChromaColor</code> has the <code>AxisHold</code> duration shape: Step 4b asserts its color (<code>LightbarR</code>, <code>LightbarG</code>, <code>LightbarB</code>) for the macro's slot on every frame the action is current, through <code>PeripheralOutputs.AssertChromaMacro</code> (#494). The Chroma worker paints the categories of the Razer devices assigned to that slot, every category when the Razer Chroma row is, over every Lighting tab, and lets go within 120 ms of the action ending. Two macros current in one frame resolve to the last one evaluated. Its gate is <code>IsSetChromaColorType</code>. The append-only rule is stated in code beside the enum.</p>
+<p><strong>MacroActionType</strong> (append-only, since the clipboard serializes these as ints, so members are never reordered): <code>ButtonPress</code>, <code>ButtonRelease</code>, <code>KeyPress</code>, <code>KeyRelease</code>, <code>Delay</code>, <code>AxisSet</code>, <code>SystemVolume</code>, <code>AppVolume</code>, <code>MouseMove</code>, <code>MouseButtonPress</code>, <code>MouseButtonRelease</code>, <code>MouseScroll</code>, <code>ToggleTouchpadOverlay</code> (v3.2), <code>LightbarColor</code> / <code>LightbarColorClear</code> / <code>LightbarModeSet</code> / <code>LightbarModeCycle</code> (v3.1+), <code>SetGyroEngaged</code> (#120), <code>Rumble</code> / <code>RumbleStop</code> (v3.1+), <code>RumbleTrigger</code> / <code>RumbleTriggerStop</code> (#102), <code>PlaySound</code> / <code>SoundStop</code> (#83), <code>MouseRecenter</code> (#108), <code>MouseFixPosition</code> (#109), <code>MouseLimitRegion</code> (#110), <code>DisconnectController</code> (#162), <code>RunProgram</code> (launch an external program/file), <code>TextBlock</code> (#201, Unicode text injection), <code>PointerModeCycle</code> / <code>PointerModeSet</code> (#203, Wii pointer mode), <code>GuideLedBrightness</code> (#209), <code>MoveMouseToScreenPosition</code> (33, #9), <code>RepeatKeyWhileHeld</code> (34), <code>RepeatVcButtonWhileHeld</code> (35), <code>ToggleVcButton</code> (36), <code>ToggleKey</code> (37), <code>GyroRecenter</code> (38), <code>AxisHold</code> (39), <code>MouseWheelTap</code> (40), <code>MouseNudge</code> (41), <code>CycleTapList</code> (42), <code>ToggleMouseButton</code> (43), <code>ToggleVcAxis</code> (44), <code>RepeatVcAxisWhileHeld</code> (45), <code>ToggleWheel</code> (46), <code>AxisAdd</code> (47, #237), <code>ComboBreak</code> (48, #237), <code>AxisSetLatched</code> (49, #251), <code>AxisLatchRelease</code> (50, #251), <code>AxisScale</code> (51, #251), <code>HeadphoneVolumeUp</code> (52), <code>HeadphoneVolumeDown</code> (53), <code>VoiceListenWhileHeld</code> (54, #317), <code>SwitchLayer</code> (55, #377), <code>SetChromaColor</code> (56, #468), <code>ShowDreamcastScreen</code> (57, #469), <code>ShowKeyboardScreen</code> (58, #519), <code>KeyboardScreenMode</code> (59, #519), <code>Stopwatch</code> (60, #519), <code>PanKeyboardScreen</code> (61, #519), <code>TriggerEffect</code> (62, #531), <code>TriggerEffectStop</code> (63, #531). <code>TriggerEffect</code> plays a DSX trigger mode on the slot's DualSense triggers, and <code>TriggerEffectStop</code> ends one (see <a href="#adaptive-trigger-effect-properties-531">Adaptive Trigger Effect Properties</a>). The volume pair steps <code>DeviceSlotConfig.HeadphoneVolume</code> by 10% and clamps at the ends, persisting like any other Audio-tab edit. <code>SwitchLayer</code> is one-shot: it writes the shift runtime's <code>CustomLayer</code> override under the Latch activator's own lock-and-version discipline, so the layer stays engaged until another switch, a Latch or Cycle transition, or a profile switch. Its parameter is <code>MacroAction.SwitchLayerMask</code> (default <code>"Base"</code>) and its gate is <code>IsSwitchLayerType</code>. <code>SetChromaColor</code> has the <code>AxisHold</code> duration shape: Step 4b asserts its color (<code>LightbarR</code>, <code>LightbarG</code>, <code>LightbarB</code>) for the macro's slot on every frame the action is current, through <code>PeripheralOutputs.AssertChromaMacro</code> (#494). The Chroma worker paints the categories of the Razer devices assigned to that slot, every category when the Razer Chroma row is, over every Lighting tab, and lets go within 120 ms of the action ending. Two macros current in one frame resolve to the last one evaluated. Its gate is <code>IsSetChromaColorType</code>. The append-only rule is stated in code beside the enum.</p>
 <p>The editor's type picker is grouped, not a flat list of these members. See <code>MacroTypeCatalog</code> under <a href="#macros">PadViewModel's Macros section</a>.</p>
 <p><strong>MacroDisconnectTarget</strong> (#162): <code>TriggeringDevice</code> (0), <code>SpecificDevice</code> (1), <code>SlotDevices</code> (2), <code>AllDevices</code> (3). Picks the disconnect victim: the trigger's device(s), one picked device, every Bluetooth device on the pad's slot, or every Bluetooth device PadForge knows.</p>
 <p><strong>MacroLightbarHoldMode:</strong> <code>Reactive</code>, <code>Sticky</code> (v3.1)</p>

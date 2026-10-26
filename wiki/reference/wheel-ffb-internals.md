@@ -141,10 +141,11 @@ When `WheelRpmLeds` is on and the device is a vendor wheel, Step 2 requests tele
 
 `TelemetryHub` is demand-driven. `RequestActive` (called each frame a wheel wants LEDs) starts a 60 Hz background poll and auto-stops three seconds after the last request. It polls the registered sources in order and publishes the first with a non-zero max RPM. `RpmLedMap` turns the rev fraction into a bit-0-first LED mask, with a redline blink, and holds the LED counts (5 Logitech, 9 Fanatec, 15 Thrustmaster).
 
-Each per-game source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnapshot`) and reads RPM and max RPM from a shared-memory map or a UDP feed:
+Each source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnapshot`) and reads RPM and max RPM from a shared-memory map or a UDP feed. `BuildSources` sets the order:
 
 | Source | Game | Channel |
 |---|---|---|
+| `GameTelemetryRowSource(learnedMax: false)` (#531) | the game the Game Telemetry row reads, when it sends a max RPM | the row |
 | `ForzaUdpTelemetrySource` | Forza Horizon and Motorsport | UDP |
 | `AssettoCorsaTelemetrySource` | Assetto Corsa and Competizione | shared memory |
 | `IRacingTelemetrySource` | iRacing | shared memory |
@@ -155,6 +156,13 @@ Each per-game source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnap
 | `RFactor1TelemetrySource` | rFactor 1 and Automobilista 1 | shared memory |
 | `CodemastersUdpTelemetrySource` | F1 23 and F1 24, DiRT, GRID | UDP |
 | `OutGaugeTelemetrySource` | BeamNG and Live for Speed | UDP |
+| `GameTelemetryRowSource(learnedMax: true)` (#531) | the game the Game Telemetry row reads, when it sends no max RPM | the row |
+
+`GameTelemetryRowSource` opens nothing. It hands the hub the engine values the [Game Telemetry](game-telemetry-internals.md) row last decoded, through `GameTelemetryRuntime.TryGetEngine`. That answers only while the row is live, the car is on track (or the format never says), the max RPM is above zero, and the row published within `EngineStaleMs` (1000 ms).
+
+The hub holds two of them. The first answers when the game sent its max RPM. For a game that sends none, the row learns the max from the highest RPM seen, and the second answers, last in the order, so a source with the game's own max answers before it. For Euro Truck Simulator 2, that is scs-sdk-plugin's. A learned max equals the RPM on the first frame at idle and each time the engine passes its old peak. The second source therefore raises it to 1.05 times the RPM (`LearnedHeadroom`), the headroom `OutGaugeTelemetrySource` keeps. At those moments the strip lights in full but does not blink the shift cue, and it reads true once the engine has revved out.
+
+Two sockets cannot share a port, so the row takes its port from the hub. The three UDP sources implement `IUdpTelemetrySource`, which adds their `Port`. Before the row binds, it calls `TelemetryHub.YieldPort`, which stops the source on that port and keeps it closed until `ReclaimPort`, across hub restarts too. The row calls `ReclaimPort` when its bind fails and when it closes, and a running hub starts that source again. The row decodes every format those three sources read, so the LEDs keep working while it holds the port.
 
 The telemetry readers are original. Where a game's memory layout came from a published SDK or community header, only field offsets and wire facts were used, with no source carried across.
 
@@ -173,6 +181,7 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 - [Input Pipeline](input-pipeline.md): where `ApplyForceFeedback` runs in Step 2.
 - [Engine Library](engine-library.md): `ForceFeedbackState` and the `Vibration` struct.
 - [Remote Link Internals](remote-link-internals.md): relaying a shared wheel's force feedback.
+- [Game Telemetry Internals](game-telemetry-internals.md): the row whose engine values the hub reads first.
 
 ---
 

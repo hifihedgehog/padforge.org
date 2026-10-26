@@ -35,7 +35,7 @@ The impulse data arrives on the virtual controller's HID lane, so the slot needs
 | Left Trigger | 0–100% | 100% | Scales the left trigger motor magnitude. |
 | Right Trigger | 0–100% | 100% | Scales the right trigger motor magnitude. |
 | Swap Left and Right Trigger Motors | On/Off | Off | Flips which physical trigger motor receives the left vs. right signal. Use when the trigger pulses feel reversed. |
-| Translate Adaptive Trigger Vibrations | On/Off | Off | When a game drives this slot as a virtual DualSense, or a [game mod made for DSX](game-mods.md) sends trigger effects, the vibration-style adaptive trigger effects play on this controller's impulse trigger motors. Resistance-style effects have no vibration equivalent and are ignored. |
+| Translate Adaptive Trigger Vibrations | On/Off | Off | When a game drives this slot as a virtual DualSense, a [game mod made for DSX](game-mods.md) sends trigger effects, or a macro plays an [Adaptive Trigger Effect](game-telemetry.md#adaptive-trigger-effect), the vibration-style adaptive trigger effects play on this controller's impulse trigger motors. Resistance-style effects have no vibration equivalent and are ignored. |
 
 While a game mod sends trigger effects to this virtual controller, an orange line under the tab's description names its program.
 

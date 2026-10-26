@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1926,6 +1928,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2469,6 +2499,8 @@
       
         
           
+        
+      
         
       
         
@@ -6073,6 +6105,34 @@
     
   
     Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
   
 
     
@@ -11364,13 +11424,18 @@
 <td>43</td>
 <td>A Novint Falcon opened through Force Dimension's library (#521): the handle's three axes and the grip's four buttons</td>
 </tr>
+<tr>
+<td><code>GameTelemetry</code></td>
+<td>44</td>
+<td>The Game Telemetry row (#531): Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, one axis per custom variable, and Driving, Reverse, Neutral and Gear 1 to Gear 18 as buttons</td>
+</tr>
 </tbody>
 </table>
 <h3 id="answersanydevicesources">AnswersAnyDeviceSources<a class="headerlink" href="#answersanydevicesources" title="Permanent link">&para;</a></h3>
 <p><code>InputDeviceType</code> carries one predicate beside its constants:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">AnswersAnyDeviceSources</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">capType</span><span class="p">)</span>
 </code></pre></div>
-<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code>, <code>LogitechGKeys</code>, <code>AnalogKeyboard</code>, <code>WebMenus</code>, <code>PeripheralLighting</code>, <code>PeripheralHaptics</code>, <code>KeyboardScreenKeys</code> and <code>NovintFalcon</code>.</p>
+<p>It returns <strong>false</strong> for <code>HeadTracker</code>, <code>Nfc</code>, <code>Microphone</code>, <code>HandheldButtons</code>, <code>ConsumerControl</code>, <code>Tablet</code>, <code>VrController</code>, <code>LogitechGKeys</code>, <code>AnalogKeyboard</code>, <code>WebMenus</code>, <code>PeripheralLighting</code>, <code>PeripheralHaptics</code>, <code>KeyboardScreenKeys</code>, <code>NovintFalcon</code> and <code>GameTelemetry</code>.</p>
 <p>Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose <code>DeviceGuid</code> is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.</p>
 <p>The rule also holds for each input. A row that answers the wildcard still reads rest for a source that takes a numbered axis the device does not have. A device holds 0 where it has no axis, and 0 reads as full deflection on a stick read, so a touchpad, keyboard or motion sensor beside a controller pinned an "(Any Device)" stick row, won Step 4's merge and engaged a device-free stick menu.</p>
 <p><code>SourceCoercion.NumberedAxesRead</code> names the axes one descriptor takes: "Axis N" and its Gamepad aliases, "Slider N" as overflow axis 24 + N, and a stick ring's or flick stick's pair. It keeps the answer per descriptor, so the poll allocates nothing. A source takes its <code>Descriptor</code> when its kind reads it. Incremental and Ramped never do, reading <code>ParamUp</code> and <code>ParamDown</code>, and the motion kinds read gravity or the shake envelope on a stick target but fall to the Direct read, which takes <code>Descriptor</code>, on a button or trigger target. It also takes its two gate legs, which read the same device. On a stick target a steering source (<code>WindingStick</code>, <code>AngleToAxisX</code>, <code>AngleToAxisY</code>) reads <code>Descriptor</code> and <code>ParamYDescriptor</code> as one stick, and on a button or trigger target it falls to the Direct read of <code>Descriptor</code>. A Direct stick read with a Steam Circle deadzone (shape 2) takes the stick axis's partner too (<code>SourceCoercion.CompanionAxisRead</code>). The steering reader and the button and trigger reads never take the partner.</p>

@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1926,6 +1928,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2469,6 +2499,8 @@
       
         
           
+        
+      
         
       
         
@@ -3712,6 +3744,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4188,7 +4248,7 @@
 <h2 id="rpm-led-telemetry">RPM-LED telemetry<a class="headerlink" href="#rpm-led-telemetry" title="Permanent link">&para;</a></h2>
 <p>When <code>WheelRpmLeds</code> is on and the device is a vendor wheel, Step 2 requests telemetry, computes the rev fraction, and writes the matching <code>WriteRpmLeds</code> mask only when it changes.</p>
 <p><code>TelemetryHub</code> is demand-driven. <code>RequestActive</code> (called each frame a wheel wants LEDs) starts a 60 Hz background poll and auto-stops three seconds after the last request. It polls the registered sources in order and publishes the first with a non-zero max RPM. <code>RpmLedMap</code> turns the rev fraction into a bit-0-first LED mask, with a redline blink, and holds the LED counts (5 Logitech, 9 Fanatec, 15 Thrustmaster).</p>
-<p>Each per-game source implements <code>ITelemetrySource</code> (<code>Start</code>, <code>Stop</code>, <code>TryGetSnapshot</code>) and reads RPM and max RPM from a shared-memory map or a UDP feed:</p>
+<p>Each source implements <code>ITelemetrySource</code> (<code>Start</code>, <code>Stop</code>, <code>TryGetSnapshot</code>) and reads RPM and max RPM from a shared-memory map or a UDP feed. <code>BuildSources</code> sets the order:</p>
 <table>
 <thead>
 <tr>
@@ -4198,6 +4258,11 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><code>GameTelemetryRowSource(learnedMax: false)</code> (#531)</td>
+<td>the game the Game Telemetry row reads, when it sends a max RPM</td>
+<td>the row</td>
+</tr>
 <tr>
 <td><code>ForzaUdpTelemetrySource</code></td>
 <td>Forza Horizon and Motorsport</td>
@@ -4248,8 +4313,16 @@
 <td>BeamNG and Live for Speed</td>
 <td>UDP</td>
 </tr>
+<tr>
+<td><code>GameTelemetryRowSource(learnedMax: true)</code> (#531)</td>
+<td>the game the Game Telemetry row reads, when it sends no max RPM</td>
+<td>the row</td>
+</tr>
 </tbody>
 </table>
+<p><code>GameTelemetryRowSource</code> opens nothing. It hands the hub the engine values the <a href="../game-telemetry-internals/">Game Telemetry</a> row last decoded, through <code>GameTelemetryRuntime.TryGetEngine</code>. That answers only while the row is live, the car is on track (or the format never says), the max RPM is above zero, and the row published within <code>EngineStaleMs</code> (1000 ms).</p>
+<p>The hub holds two of them. The first answers when the game sent its max RPM. For a game that sends none, the row learns the max from the highest RPM seen, and the second answers, last in the order, so a source with the game's own max answers before it. For Euro Truck Simulator 2, that is scs-sdk-plugin's. A learned max equals the RPM on the first frame at idle and each time the engine passes its old peak. The second source therefore raises it to 1.05 times the RPM (<code>LearnedHeadroom</code>), the headroom <code>OutGaugeTelemetrySource</code> keeps. At those moments the strip lights in full but does not blink the shift cue, and it reads true once the engine has revved out.</p>
+<p>Two sockets cannot share a port, so the row takes its port from the hub. The three UDP sources implement <code>IUdpTelemetrySource</code>, which adds their <code>Port</code>. Before the row binds, it calls <code>TelemetryHub.YieldPort</code>, which stops the source on that port and keeps it closed until <code>ReclaimPort</code>, across hub restarts too. The row calls <code>ReclaimPort</code> when its bind fails and when it closes, and a running hub starts that source again. The row decodes every format those three sources read, so the LEDs keep working while it holds the port.</p>
 <p>The telemetry readers are original. Where a game's memory layout came from a published SDK or community header, only field offsets and wire facts were used, with no source carried across.</p>
 <hr />
 <h2 id="remote-link-wheel-relay">Remote Link wheel relay<a class="headerlink" href="#remote-link-wheel-relay" title="Permanent link">&para;</a></h2>
@@ -4262,6 +4335,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a>: where <code>ApplyForceFeedback</code> runs in Step 2.</li>
 <li><a href="../engine-library/">Engine Library</a>: <code>ForceFeedbackState</code> and the <code>Vibration</code> struct.</li>
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: relaying a shared wheel's force feedback.</li>
+<li><a href="../game-telemetry-internals/">Game Telemetry Internals</a>: the row whose engine values the hub reads first.</li>
 </ul>
 <hr />
 <p><em>Last updated for PadForge 5.1.0.</em></p>

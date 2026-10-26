@@ -344,6 +344,18 @@ public class SettingsFileData
     <EnableGameModServer>false</EnableGameModServer>
     <GameModServerPort>6969</GameModServerPort>
     <GameModDsxStandIn>false</GameModDsxStandIn>
+    <EnableGameTelemetry>false</EnableGameTelemetry>
+    <GameTelemetryPort>20777</GameTelemetryPort>
+    <GameTelemetryFormat>Auto</GameTelemetryFormat>
+    <GameTelemetryCustomFormat />
+    <GameTelemetryForwardPort>0</GameTelemetryForwardPort>
+    <GameTelemetryFullSpeed>300</GameTelemetryFullSpeed>
+    <GameTelemetryFormats>
+      <Format Name="Rig" Kind="Binary" Length="16" Key="" BigEndian="false" UseGearValues="false" GearReverse="-1" GearNeutral="0">
+        <Field Target="Rpm" Name="" Offset="4" Type="F32" Key="" Scale="1" Min="0" Max="1" />
+        <Field Target="Variable" Name="Boost" Offset="8" Type="F32" Key="" Scale="1" Min="0" Max="2" />
+      </Format>
+    </GameTelemetryFormats>
     <EnableWebController>false</EnableWebController>
     <WebControllerPort>8080</WebControllerPort>
     <EnableWebControllerPlainHttp>false</EnableWebControllerPlainHttp>
@@ -435,6 +447,12 @@ public class SettingsFileData
       <EnableGameModServer>false</EnableGameModServer>
       <GameModServerPort>6969</GameModServerPort>
       <GameModDsxStandIn>false</GameModDsxStandIn>
+      <EnableGameTelemetry>false</EnableGameTelemetry>
+      <GameTelemetryPort>20777</GameTelemetryPort>
+      <GameTelemetryFormat>Auto</GameTelemetryFormat>
+      <GameTelemetryCustomFormat />
+      <GameTelemetryForwardPort>0</GameTelemetryForwardPort>
+      <GameTelemetryFullSpeed>300</GameTelemetryFullSpeed>
       <EnableWebController>false</EnableWebController>
       <WebControllerPort>8080</WebControllerPort>
     </Profile>
@@ -488,7 +506,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapAxisIndices` | `int[]` | `<CapAxisIndices>` | (v4.3.2) Axis twin of `CapButtonIndices`: the populated axis positions (a Move Navigation fills three of the first six and seven of the ten extras). Null/empty = dense fallback. |
 | `HasExtraGenericAxes` | `bool` | `<HasExtraGenericAxes>` | (#193) Device carries raw axes past the standard six that should surface as generic "Axis N" sources. Not derivable from the counts: it excludes devices whose extras are already sensor sources. |
 | `CapPovCount` | `int` | `<CapPovCount>` | POV hat count. |
-| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics). 18–25 match DirectInput. 26–41 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles. |
+| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics, 42=KeyboardScreenKeys, 43=NovintFalcon, 44=GameTelemetry). 18–25 match DirectInput. 26–44 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles. |
 | `HasGyro` | `bool` | `<HasGyro>` | Has gyroscope (DualSense, Switch Pro, DS4, Switch 2 Pro, Steam Controller, Steam Deck). |
 | `HasAccel` | `bool` | `<HasAccel>` | Has accelerometer. |
 | `HasAccelAux` | `bool` | `<HasAccelAux>` | (#199) Has an auxiliary (left-side) accelerometer: the Nunchuk's own sensor, or the left half of a combined Joy-Con pair. Mirrors `ISdlInputDevice.HasAccelAux`. |
@@ -1410,15 +1428,22 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `EnableGameModServer` | `bool` | `[XmlElement]` | `false` | (#529) The server for DSX game mods |
 | `GameModServerPort` | `int` | `[XmlElement]` | `6969` | (#529) Game mod server port. A stored value outside 1024-65535 loads as 6969 |
 | `GameModDsxStandIn` | `bool` | `[XmlElement]` | `false` | (#529) Run the DSX.exe stand-in while the game mod server listens |
+| `EnableGameTelemetry` | `bool` | `[XmlElement]` | `false` | (#531) The Game Telemetry row and its listener |
+| `GameTelemetryPort` | `int` | `[XmlElement]` | `20777` | (#531) The UDP port games send to. A stored value outside 1024-65535 keeps the current port |
+| `GameTelemetryFormat` | `GameTelemetryFormat` | `[XmlElement]` | `Auto` | (#531) The game picked, or `Auto`, by name. Append-only. `Custom` reads `GameTelemetryCustomFormat` |
+| `GameTelemetryCustomFormat` | `string` | `[XmlElement]` | `""` | (#531) The custom format read while the game is `Custom`. A name no format carries loads as `Auto` |
+| `GameTelemetryForwardPort` | `int` | `[XmlElement]` | `0` | (#531) The port every packet is copied to on 127.0.0.1, `0` for none |
+| `GameTelemetryFullSpeed` | `int` | `[XmlElement]` | `300` | (#531) The speed, km/h, that moves the Speed axis all the way. 10-1000 |
+| `GameTelemetryFormats` | `List<CustomTelemetryFormat>` | `[XmlArray][XmlArrayItem("Format")]` | empty | (#531) The custom formats, one list for every profile. Each `Format` carries `Name`, `Kind`, `Length`, `Key`, `BigEndian`, `UseGearValues`, `GearReverse` and `GearNeutral` as attributes and one `Field` per field (`Target`, `Name`, `Offset`, `Type`, `Key`, `Scale`, `Min`, `Max`). A non-finite number leaves the default |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
 | `WebControllerPort` | `int` | `[XmlElement]` | `8080` | Web controller port |
 | `EnableWebControllerPlainHttp` | `bool` | `[XmlElement]` | `false` | Also serve the web controller over plain HTTP on its own port, behind the access code. Machine-scoped, never in `ProfileData`, so a profile switch never opens or closes a port |
 | `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
-| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 6955). |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 6962). |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 6970). |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 7018). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 7025). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 7033). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -1736,7 +1761,7 @@ public class MacroData
 | `ReleaseLingerMs` | `int` | Release linger for `UntilRelease` macros (Steam's activator `delay_end` on autofire). Default `0` = stop at release. |
 | `TriggerInputs` | `string` | (v3.2) Pipe-separated `TriggerInputEntry.Spec` entries for the multi-device trigger combo. When non-empty, authoritative over the legacy fields above. |
 | `TriggerExpression` | `string` | (v3.2) Custom-expression formula. Used when `TriggerMode == CustomExpression`. |
-| `TriggerExpressionVariables` | `string` | (v3.2) Pipe-separated `MacroExpressionVariable.Spec` entries in `a`/`b`/`c`/... order. |
+| `TriggerExpressionVariables` | `string` | (v3.2) Pipe-separated `MacroExpressionVariable.Spec` entries in `a`/`b`/`c`/... order. A Game Telemetry variable (#531) is `tel:<TelemetryChannel>`, such as `tel:SpeedKmh`, or `tel:var:<name>` for a custom variable. |
 | `Actions` | `ActionData[]` | Ordered action sequence run when the macro fires. |
 
 ### ActionData
@@ -1797,6 +1822,25 @@ public class ActionData
     [XmlElement] public string SwitchLayerMask { get; set; } = "Base";
     // Guide/Home LED brightness action (#209)
     [XmlElement] public int GuideLedPercent { get; set; } = 100;
+    // Show Dreamcast Screen (#469)
+    [XmlElement] public string DreamcastFrames { get; set; }
+    [XmlElement] public int DreamcastFrameMs { get; set; } = 1000;
+    [XmlElement] public int DreamcastRepeat { get; set; } = 1;
+    // Keyboard screen actions (#519)
+    [XmlElement] public KeyboardScreenKind ScreenKind { get; set; }
+    [XmlElement] public string ScreenFrames { get; set; }
+    [XmlElement] public int ScreenFrameMs { get; set; } = 1000;
+    [XmlElement] public int ScreenRepeat { get; set; } = 1;
+    [XmlElement] public KeyboardScreenMode ScreenMode { get; set; } = KeyboardScreenData.DefaultMode;
+    [XmlElement] public KeyboardScreenStopwatchAction StopwatchAction { get; set; }
+    [XmlElement] public KeyboardScreenPanDirection PanDirection { get; set; } = KeyboardScreenPanDirection.Right;
+    [XmlElement] public int PanStep { get; set; } = MacroAction.DefaultPanStep;
+    // Adaptive Trigger Effect and its Stop (#531)
+    [XmlElement] public MacroTriggerEffectSide TriggerEffectSide { get; set; } = MacroTriggerEffectSide.Right;
+    [XmlElement] public int TriggerEffectMode { get; set; } = TriggerEffectCatalog.ResistanceMode;
+    [XmlElement] public string TriggerEffectParameters { get; set; }
+    [XmlElement] public MacroTriggerEffectHold TriggerEffectHold { get; set; } = MacroTriggerEffectHold.UntilRelease;
+    [XmlElement] public int TriggerEffectMs { get; set; } = 500;
 
     // Sound actions (#83)
     [XmlElement] public string SoundFilePath { get; set; }
@@ -1857,7 +1901,7 @@ public class ActionData
 
 **`MacroActionType`** is **APPEND-ONLY** (`PadForge.App/ViewModels/MacroItem.cs`): the macro clipboard leg writes the enum numerically via `System.Text.Json` defaults, so inserting a member re-meanings every previously copied clipboard payload. The settings XML writes names and is insertion-safe, the clipboard is not. New members go at the end. The full ordered set (index in parentheses):
 
-`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40, translator v15), `MouseNudge` (41, translator v16), `CycleTapList` (42, translator v16), `ToggleMouseButton` (43, translator v18), `ToggleVcAxis` (44, translator v18), `RepeatVcAxisWhileHeld` (45, translator v18), `ToggleWheel` (46, translator v18), `AxisAdd` (47, #237 relative deflection), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251), `HeadphoneVolumeUp` (52), `HeadphoneVolumeDown` (53), `VoiceListenWhileHeld` (54, #317 push-to-talk: while the macro is held, the voice recognizer's listen gate is open), `SwitchLayer` (55, #377: engages the shift layer named by `SwitchLayerMask`).
+`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40, translator v15), `MouseNudge` (41, translator v16), `CycleTapList` (42, translator v16), `ToggleMouseButton` (43, translator v18), `ToggleVcAxis` (44, translator v18), `RepeatVcAxisWhileHeld` (45, translator v18), `ToggleWheel` (46, translator v18), `AxisAdd` (47, #237 relative deflection), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251), `HeadphoneVolumeUp` (52), `HeadphoneVolumeDown` (53), `VoiceListenWhileHeld` (54, #317 push-to-talk: while the macro is held, the voice recognizer's listen gate is open), `SwitchLayer` (55, #377: engages the shift layer named by `SwitchLayerMask`), `SetChromaColor` (56, #468), `ShowDreamcastScreen` (57, #469), `ShowKeyboardScreen` (58, #519), `KeyboardScreenMode` (59, #519), `Stopwatch` (60, #519), `PanKeyboardScreen` (61, #519), `TriggerEffect` (62, #531: plays a DSX trigger mode on the slot's DualSense triggers), `TriggerEffectStop` (63, #531).
 
 `HeadphoneVolumeUp` / `HeadphoneVolumeDown` step the slot's headphone-jack hardware volume (`DeviceSlotConfig.HeadphoneVolume`) by 10%, clamped to 0–100, and persist like any other Audio-tab edit.
 
@@ -1910,6 +1954,22 @@ The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`Rumb
 | `PointerSetMode` | `string` | `"Mouse"` | (#203) Target mode name for `PointerModeSet`. |
 | `SwitchLayerMask` | `string` | `"Base"` | (#377) Layer mask a `SwitchLayer` action engages. `"Base"` returns to the base layer and clears the activator stack. A mask the slot no longer declares makes the action a no-op, and a layer rename retags this field. |
 | `GuideLedPercent` | `int` | `100` | (#209) Brightness percent for `GuideLedBrightness`. |
+| `DreamcastFrames` | `string` | `null` | (#469) Show Dreamcast Screen: the pictures in the order they show, each 192 bytes in image order as base64, joined by commas. |
+| `DreamcastFrameMs` | `int` | `1000` | (#469) How long each picture shows, ms. The action holds it to a second at least, the adapter's EEPROM guard. |
+| `DreamcastRepeat` | `int` | `1` | (#469) How many times the pictures play, 1 at least. |
+| `ScreenKind` | `KeyboardScreenKind` | `Monochrome` | (#519) The kind of keyboard screen Show Keyboard Screen and Keyboard Screen Mode act on. |
+| `ScreenFrames` | `string` | `null` | (#519) Show Keyboard Screen: the pictures in the order they show, each a PNG at the kind's size in base64, joined by commas. |
+| `ScreenFrameMs` | `int` | `1000` | (#519) How long each picture shows, ms. |
+| `ScreenRepeat` | `int` | `1` | (#519) How many times the pictures play, 1 at least. |
+| `ScreenMode` | `KeyboardScreenMode` | `Lightbar` | (#519) The mode Keyboard Screen Mode switches to. |
+| `StopwatchAction` | `KeyboardScreenStopwatchAction` | `StartPause` | (#519) Stopwatch: start or pause, or reset. |
+| `PanDirection` | `KeyboardScreenPanDirection` | `Right` | (#519) Pan Keyboard Screen Picture's direction. |
+| `PanStep` | `int` | `16` | (#519) How far one pan moves, in the picture's pixels. |
+| `TriggerEffectSide` | `MacroTriggerEffectSide` | `Right` | (#531) The trigger an Adaptive Trigger Effect plays on, or its Stop ends: `Right`, `Left`, `Both`. Append-only. |
+| `TriggerEffectMode` | `int` | `13` | (#531) The DSX trigger mode, as `GameModProtocol.TryEncodeTrigger` takes it. 13 is Feedback. |
+| `TriggerEffectParameters` | `string` | `null` | (#531) The effect's values in the encoder's order, comma-separated. Saved for `TriggerEffect` alone. A short list takes the effect's starting values for the rest. |
+| `TriggerEffectHold` | `MacroTriggerEffectHold` | `UntilRelease` | (#531) `Duration`, `UntilRelease` or `UntilStopped`. Append-only. |
+| `TriggerEffectMs` | `int` | `500` | (#531) The effect's length for `Duration`, 1 to 60,000 ms. |
 | `SoundFilePath` | `string` | `null` | (#83) Sound file path for `PlaySound`. |
 | `SoundVolume` | `int` | `100` | (#83) Per-action sound volume percentage (0–100). `0` is muted and survives a load. |
 | `SoundLoop` | `bool` | `false` | (#83) Loop the sound until `SoundStop` / trigger release. |
@@ -2037,6 +2097,12 @@ public class ProfileData
     [XmlElement] public bool EnableGameModServer { get; set; }                        // #529
     [XmlElement] public int GameModServerPort { get; set; } = GameModServer.DefaultPort; // 6969
     [XmlElement] public bool GameModDsxStandIn { get; set; }
+    [XmlElement] public bool EnableGameTelemetry { get; set; }                        // #531
+    [XmlElement] public int GameTelemetryPort { get; set; } = 20777;
+    [XmlElement] public GameTelemetryFormat GameTelemetryFormat { get; set; }
+    [XmlElement] public string GameTelemetryCustomFormat { get; set; } = string.Empty;
+    [XmlElement] public int GameTelemetryForwardPort { get; set; }
+    [XmlElement] public int GameTelemetryFullSpeed { get; set; } = 300;
     [XmlElement] public bool EnableWebController { get; set; }
     [XmlElement] public int WebControllerPort { get; set; } = 8080;
 
@@ -2099,13 +2165,15 @@ public class ProfileData
 | `EnableGameModServer` | `bool` | (#529) Game mod server state |
 | `GameModServerPort` | `int` | (#529) Game mod server port (default: 6969). A profile holding a value outside 1024-65535 leaves the port alone on apply |
 | `GameModDsxStandIn` | `bool` | (#529) DSX.exe stand-in state |
+| `EnableGameTelemetry` | `bool` | (#531) Game Telemetry state |
+| `GameTelemetryPort` / `GameTelemetryFormat` / `GameTelemetryCustomFormat` / `GameTelemetryForwardPort` / `GameTelemetryFullSpeed` | `int` / `GameTelemetryFormat` / `string` / `int` / `int` | (#531) The game, ports and Full Speed, applied before the switch. Out-of-range numbers leave the current values alone, and a custom format the list lacks reads as `Auto`. The custom formats themselves stay global |
 | `EnableWebController` | `bool` | Web controller state |
 | `WebControllerPort` | `int` | Web controller port (default: 8080) |
 | `EnableTouchpadOverlay` | `bool` | (v3.2) Touchpad overlay window enable state |
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
-| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 7960, 7966 and 7973). |
+| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 8052, 8058 and 8065). |
 | `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |

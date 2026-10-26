@@ -272,6 +272,15 @@ ScrollViewer
             │      ResetGameModPortCommand, Run a DSX.exe Stand-In toggle (GameModDsxStandIn,
             │      tooltip), each toggle with a reset button, status flame +
             │      GameModServerStatus as a polite live region, footer
+            ├─ "Game Telemetry" section (EC4A glyph, #531)
+            │   └─ CardBorder: description, Listen for Game Telemetry toggle
+            │      (GameTelemetryCheckBox, EnableGameTelemetry) with a reset button, then a
+            │      Grid enabled with the switch: Game ComboBox (GameTelemetryGameCombo over
+            │      GameTelemetryOptions, SelectedGameTelemetryOption) with
+            │      ResetGameTelemetryGameCommand, Game Telemetry Port, Forward to Port and
+            │      Full Speed (km/h) NumberBoxes, each with its reset command, then the
+            │      Custom Formats… button (GameTelemetryFormatsButton, outside the Grid),
+            │      status flame + GameTelemetryStatus as a polite live region, footer
             ├─ "Overlays" section (E700 glyph)
             │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
             │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
@@ -298,6 +307,9 @@ The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their 
 | `DsuServerStatus` | `DashboardViewModel` | DSU status text |
 | `EnableGameModServer` / `GameModServerPort` / `GameModDsxStandIn` | `DashboardViewModel` | Game Mods toggle, port NumberBox and stand-in toggle (#529) |
 | `GameModServerStatus` / `IsGameModServerRunning` | `DashboardViewModel` | Game Mods status text and flame |
+| `EnableGameTelemetry` / `GameTelemetryOptions` / `SelectedGameTelemetryOption` | `DashboardViewModel` | Game Telemetry toggle and game picker (#531) |
+| `GameTelemetryPort` / `GameTelemetryForwardPort` / `GameTelemetryFullSpeed` | `DashboardViewModel` | NumberBoxes ranged 1024-65535, 0-65535 and 10-1000, each with a reset command |
+| `GameTelemetryStatus` / `IsGameTelemetryRunning` | `DashboardViewModel` | Game Telemetry status text and flame |
 | `EnableWebController` | `DashboardViewModel` | Web controller enable checkbox |
 | `WebControllerPort` / `WebControllerStatus` | `DashboardViewModel` | Web controller port and status text |
 | `HasWebControllerQr` / `WebControllerQr` / `WebControllerUrl` | `DashboardViewModel` | QR panel visibility, the QR bitmap, and the URL shown beside it (#296) |
@@ -375,6 +387,7 @@ Rows are in trigger order. A later row wins when several hold.
 |---------|-------|--------|
 | `EngineToggle_Click` | Button.Click | Raises `EngineToggleRequested` |
 | `AddControllerCard_Click` | ClickBorder.Click | Raises `AddControllerRequested` |
+| `GameTelemetryFormatsButton_Click` | Button.Click | Opens `CustomTelemetryFormatsDialog` over `GameTelemetryFormats` and, when the dialog returns true, writes its `Result` back (#531) |
 | `DeleteSlot_Click` | Button.Click | Raises `DeleteSlotRequested(slotIndex)` |
 | `PowerToggle_Click` | Button.Click | Raises `SlotEnabledToggled(slotIndex, !SettingsManager.SlotEnabled[slotIndex])`, inverting the live setting rather than the summary VM |
 | `XboxType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Xbox)`. HIDMaestro is embedded so no install gate |
@@ -644,6 +657,11 @@ Grid (3 columns)
         │   └─ Consume trigger buttons CheckBox
         ├─ Always mode description note
         ├─ Custom Expression formula editor (CustomExpression mode): a-z variable chips (gated on VariableCount) plus operator / comparison / logic / function chips
+        │   └─ Variable rows, one per letter: Source ComboBox (Assigned Devices / Virtual
+        │      Controller / Game Telemetry, #531), then by source the Record + Clear
+        │      buttons (device and virtual controller only), the output channel
+        │      ComboBox, or the telemetry ComboBox (TelemetryChannelOptions.Items,
+        │      SelectedItem TelemetryOption), each with a reset button
         ├─ Separator
         └─ Action Sequence section
             ├─ Add Action / Remove buttons
@@ -653,7 +671,7 @@ Grid (3 columns)
                 └─ Type-specific panels (conditional visibility):
 ```
 
-**Grouped Action Type Picker.** The picker binds `ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"` with `SelectedValuePath="Type"` and `DisplayMemberPath="Label"`. `MacroTypeCatalog` (`PadForge.App/ViewModels/MacroTypeCatalog.cs`) carries all 56 `MacroActionType` values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes & Wheel, Keyboard & Text, Mouse, Timing & Flow, Rumble, Lightbar & LEDs, Sound & Volume, Motion & Pointer, Layers & Overlays, System & Apps. `MacroTypeCatalog.View` is a `ListCollectionView` grouped on `Category`, and the ComboBox draws each shelf through a `GroupStyle.HeaderTemplate`, the arrangement the cross-device input picker uses. Item tooltips ride the `ItemContainerStyle`. The list is one instance for the process lifetime, refilled in place on `Strings.CultureChanged` so an `x:Static`-bound view never strands on a stale list. `PadForge.Tests/MacroTypeCatalogTests.cs` pins the census: every enum member appears exactly once, `Choices.Count` equals `Enum.GetValues<MacroActionType>().Length`, the categories stay eleven contiguous blocks, and the picker still binds `MacroTypeCatalog.View`.
+**Grouped Action Type Picker.** The picker binds `ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"` with `SelectedValuePath="Type"` and `DisplayMemberPath="Label"`. `MacroTypeCatalog` (`PadForge.App/ViewModels/MacroTypeCatalog.cs`) carries all 64 `MacroActionType` values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes & Wheel, Keyboard & Text, Mouse, Timing & Flow, Rumble, Lightbar & LEDs, Sound & Volume, Motion & Pointer, Layers & Overlays, System & Apps. `MacroTypeCatalog.View` is a `ListCollectionView` grouped on `Category`, and the ComboBox draws each shelf through a `GroupStyle.HeaderTemplate`, the arrangement the cross-device input picker uses. Item tooltips ride the `ItemContainerStyle`. The list is one instance for the process lifetime, refilled in place on `Strings.CultureChanged` so an `x:Static`-bound view never strands on a stale list. `PadForge.Tests/MacroTypeCatalogTests.cs` pins the census: every enum member appears exactly once, `Choices.Count` equals `Enum.GetValues<MacroActionType>().Length`, the categories stay eleven contiguous blocks, and the picker still binds `MacroTypeCatalog.View`.
 
 **Macro Trigger Section:**
 
@@ -681,6 +699,8 @@ Grid (3 columns)
 | `MouseButtonPress` / `MouseButtonRelease` (plus `ToggleMouseButton`) | `IsAnyMouseButtonType` | Mouse button ComboBox (Left/Right/Middle/X1/X2) |
 | `DisconnectController` | `IsDisconnectControllerType` | Target-mode ComboBox (`DisconnectTarget`: Triggering Device / Specific Device / Slot Devices / All Devices) + specific-device picker ComboBox (`DisconnectDeviceOptions`, gated on `IsDisconnectSpecificDevice`) |
 | `SwitchLayer` | `IsSwitchLayerType` | A `CardBorder` with `MacroAction_Type_SwitchLayer` as its title, the `Macro_SwitchLayer_Hint` line, and a 240px ComboBox over the slot's own `LayerTabs` (`SelectedValuePath="LayerMask"`, `DisplayMemberPath="LayerName"`) writing `SwitchLayerMask`. Choices are Base plus every authored layer, the same name/mask pairs the layer-scope picker uses (#377) |
+| `TriggerEffect` | `IsTriggerEffectType` | A `CardBorder` titled `MacroAction_Type_TriggerEffect` (#531): Trigger ComboBox (`TriggerEffectSide`: Right / Left / Both), Effect ComboBox over `TriggerEffectCatalog.Kinds` (`TriggerEffectKind`), one Slider + TextBox row per parameter (`TriggerEffectRows`), the invalid-values line while `TriggerEffectIsValid` is false, Holds ComboBox (`TriggerEffectHold`), the Time Slider + TextBox in ms while `IsTriggerEffectTimed`, each with a reset button, and the `MacroAction_TriggerEffect_Hint` line |
+| `TriggerEffectStop` | `IsTriggerEffectStopType` | A `CardBorder` titled `MacroAction_Type_TriggerEffectStop` with the Trigger ComboBox alone (#531) |
 
 **Device Axis Picker (shared by SystemVolume, AppVolume, MouseMove):**
 - Device ComboBox: `DropDownOpened` populates from devices assigned to current slot.
@@ -1182,6 +1202,7 @@ Grid (Margin="24,16")
         ├─ HandheldDaemonWarning line (HasHandheldDaemonWarning, #343)
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
         ├─ HeadTrackerStatus line (#355, collapsed when empty)
+        ├─ GameTelemetryStatus line (#531, a polite live region, collapsed when empty)
         ├─ Separator
         ├─ VC Assignment section
         │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
@@ -1308,7 +1329,7 @@ Grid (Margin="24,16")
 | `GyroX/Y/Z` / `AccelX/Y/Z` / `AccelAuxX/Y/Z` | Motion sensor values (aux accel is #199, aux gyro is #252) |
 | `HasTouchpadData` / `HasSecondTouchpadData` / `TouchpadLabel` | Touchpad preview visibility for each pad, and the caption |
 
-The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC, Voice, Consumer, and handheld previews do the same: `IsNfcDevice` / `NfcTags`, `ShowVoicePhrases` / `VoicePhrases` (#317, the voice twin of the NFC tag rows), `IsConsumerDevice` / `ConsumerButtons`, and `IsHandheldDevice` (#343). `HeadTrackerStatus` is page-scoped too. Everything under the dossier and the sections below it, including `ShowRegisterNfcTag`, `ShowQuickCharge`, and `IdleDisconnectMinutes`, is `SelectedDevice`-scoped and binds through the `SelectedDevice.` prefix.
+The raw-state rows above bind to the page DataContext (`DevicesViewModel`), which republishes the selected device's live state. The NFC, Voice, Consumer, and handheld previews do the same: `IsNfcDevice` / `NfcTags`, `ShowVoicePhrases` / `VoicePhrases` (#317, the voice twin of the NFC tag rows), `IsConsumerDevice` / `ConsumerButtons`, and `IsHandheldDevice` (#343). `HeadTrackerStatus` and `GameTelemetryStatus` are page-scoped too. Everything under the dossier and the sections below it, including `ShowRegisterNfcTag`, `ShowQuickCharge`, and `IdleDisconnectMinutes`, is `SelectedDevice`-scoped and binds through the `SelectedDevice.` prefix.
 
 ### Selection Bar
 
@@ -2078,6 +2099,12 @@ Remote device assignment (#138). `FluentWindow` (Mica, 620x500, min 480x360) tit
 **Files:** `WorkshopBrowseDialog.xaml`, `WorkshopBrowseDialog.xaml.cs`
 
 The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080x640) with a three-state flow: cold-forge opt-in panel, game-search shelf, game room (config cards plus the translation manifest pane). Search debounces 500 ms. Preset chips re-run the translation live. Art crossfades 240 ms through steel and honors the Windows animation setting. On Save it hands the materialized profile to MainWindow's `AddWorkshopProfile` import sink. The config card's pad art is `WorkshopControllerPreview` (`Views/WorkshopControllerPreview.xaml`), a `UserControl` wrapping a `Viewbox` over a code-built `Canvas` so callouts stay in the art's own pixel space, which is what `ControllerOverlayLayout`'s coordinates are expressed in. Full anatomy on [Steam Workshop Config Import Internals](steam-workshop-import-internals.md).
+
+### CustomTelemetryFormatsDialog
+
+**Files:** `CustomTelemetryFormatsDialog.xaml`, `CustomTelemetryFormatsDialog.xaml.cs`
+
+The custom telemetry formats (#531), opened by the Dashboard's Custom Formats… button. `FluentWindow` (Mica, 1040x680, not resizable, dragged by its inert chrome since it has no title bar) titled `Telemetry_Formats_Title`. `FormatList` on the left lists the formats with Add, Duplicate and Delete buttons. `EditorPanel` on the right edits the selected one: its name, its packets (binary or JSON), the length and byte order for binary packets, the Required Key a JSON packet must carry, the optional gear values, and its `Fields` rows (name, target, offset or key, type, scale, min, max), with Add Field and a remove button per row. The dialog edits copies (`TelemetryFormatEdit`), so Cancel keeps the saved list. Save first pushes a focused text box's value, then shows the first problem in `ProblemText` and stays open, or sets `Result` and closes. A duplicate name is a problem, since the picker and the profiles name a format by it. New and duplicated formats take the first free name from `UniqueName`. Detail on [Game Telemetry Internals](game-telemetry-internals.md).
 
 ---
 

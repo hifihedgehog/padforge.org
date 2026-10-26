@@ -1139,6 +1139,8 @@
       
         
       
+        
+      
     
     
     
@@ -2116,6 +2118,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2657,6 +2687,8 @@
       
         
           
+        
+      
         
       
         
@@ -3690,6 +3722,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4020,6 +4080,7 @@
 <p>The Adaptive Triggers tab follows the device picked in the assigned-devices dropdown, the same way the <a href="../lighting/">Lighting</a> tab does. It appears when that device is a DualSense or DualSense Edge and hides for anything else. On a slot with a DualSense plus another pad, the tab hides while the other pad is selected. Switch the dropdown back to the DualSense and the tab reappears.</p>
 <p>These settings drive the trigger when no game is writing to it. A game that programs the triggers itself writes through a separate path, and its effects override this tab while it runs.</p>
 <p>A <a href="../game-mods/">game mod made for DSX</a> can set the triggers too. Its effects override this tab until the mod's program exits, the mod resets the controller, or you click <strong>Clear Mod Effects</strong> on the <a href="../devices/">Devices</a> page, and an orange line under the tab's description names the program meanwhile. A game writing to the virtual DualSense still comes first. When the mod's effects end, this tab's settings return, and a trigger with no setting of its own is released.</p>
+<p>A macro's <strong>Adaptive Trigger Effect</strong> action can set the triggers as well (see <a href="../game-telemetry/#adaptive-trigger-effect">Game Telemetry</a>). It comes after a game and a mod and before this tab, and when its effect ends this tab's settings return.</p>
 <p>A DualSense holds its trigger program in firmware with no timeout, so an exiting game would otherwise leave its last effect loaded. After fifteen seconds with no packet from the game, PadForge sends a release frame that sets both triggers to Off and claims nothing else. Reconnecting the pad, or restarting PadForge, also reasserts this tab: a configured effect reloads and Off ships a release.</p>
 <hr />
 <h2 id="effect-modes">Effect modes<a class="headerlink" href="#effect-modes" title="Permanent link">&para;</a></h2>

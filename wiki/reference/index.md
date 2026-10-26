@@ -33,6 +33,7 @@ Nothing here is required reading for using the app.
 | [DSU Motion Server](dsu-motion-server.md) | The Cemuhook motion server |
 | [DSU Protocol](dsu-protocol.md) | The wire protocol itself |
 | [Game Mods Internals](game-mods-internals.md) | The DSX game mod packets, the trigger encodings, which controller each mod reaches, and when its effects end |
+| [Game Telemetry Internals](game-telemetry-internals.md) | The telemetry decoders, Auto-Detect, the Game Telemetry row, the wheel lights' hand-off and the Adaptive Trigger Effect action |
 | [Remote Link Internals](remote-link-internals.md) | Cross-PC device sharing on the wire |
 | [External Control Internals](external-control-internals.md) | The profile control pipe, its command grammar, and the held-profile state |
 | [Steam Workshop Import Internals](steam-workshop-import-internals.md) | The VDF parser and config translator |

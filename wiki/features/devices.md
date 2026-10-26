@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, Game Telemetry, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
@@ -91,7 +91,7 @@ A row of capability icons sits at the bottom of the card, with a rumble, gyro, o
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, and keyboard screen rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Game Telemetry rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -187,7 +187,7 @@ Each axis row has:
 
 | Element | Description |
 |---------|-------------|
-| **Name** | Axis N, numbered by the axis's real slot. In gamepad mode a pad that lacks a stick or trigger skips those numbers, so gaps are normal (a PS Move Navigation reads Axis 0, 1, 2, then 6, 7, 10, and 12 through 15). Raw mode numbers densely from 0. The row never switches to friendly names like LX or LT. The Head Tracker row is the one exception: its axes read Head Yaw through Head Z. |
+| **Name** | Axis N, numbered by the axis's real slot. In gamepad mode a pad that lacks a stick or trigger skips those numbers, so gaps are normal (a PS Move Navigation reads Axis 0, 1, 2, then 6, 7, 10, and 12 through 15). Raw mode numbers densely from 0. The row never switches to friendly names like LX or LT. The Head Tracker and Game Telemetry rows are the exceptions: the Head Tracker's axes read Head Yaw through Head Z, and Game Telemetry's read Speed, RPM, Throttle, Brake, Clutch, Handbrake, Steering and each custom variable by name. |
 | **Progress bar** | Horizontal, 0-1 range. A centered stick reads ~50%. |
 | **Raw value** | Exact integer (0-65535) in monospace |
 
@@ -305,6 +305,10 @@ With **Drive Keyboard Screens** on in [Settings](settings.md), each keyboard scr
 ## Novint Falcons
 
 With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's detail pane carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and **Calibrate Reach**, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every slot it feeds uses it. See [Novint Falcon](novint-falcon.md).
+
+## Game Telemetry
+
+With **Listen for Game Telemetry** on, on the [Dashboard](dashboard.md), the **Game Telemetry** row carries the speed, RPM, gear and pedals a driving game sends. Its axes are Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, then one per custom variable, and its buttons are Driving, Reverse, Neutral and Gear 1 to Gear 18. The detail pane shows the same status line as the Dashboard, such as *Listening on UDP port 20777. F1 25 from 127.0.0.1.* The row stays listed with no game running, so you can map it first. See [Game Telemetry](game-telemetry.md).
 
 ## Game mods
 

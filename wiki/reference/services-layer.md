@@ -47,6 +47,8 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 
 > **Head tracking (4.4.0, #355).** `HeadTrackingRuntime` and `HeadTrackerDevice` live in `PadForge.App/Common/Input/`, not in `Services/`, and `InputService` starts nothing for them. See [Head Tracking Internals](head-tracking-internals.md) for the runtime.
 
+> **Game Telemetry (#531).** `GameTelemetryRuntime` and `GameTelemetryDevice` live in `PadForge.App/Common/Input/Telemetry/`. `InputManager` opens the row in Step 1, and `InputService` builds only its status lines (see [Game Telemetry Status](#game-telemetry-status-531)). See [Game Telemetry Internals](game-telemetry-internals.md) for the runtime.
+
 > **App-side helpers (3.6.0).** Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as `static` P/Invoke surfaces. `HapticToneService` and `WiiSpeakerService` turn macro sounds into HD-haptic tones and Wii-speaker PCM. `NfcReaderService` (with `WinScard`) owns the PC/SC monitor for NFC macro triggers. `BluetoothLinkHelper` performs per-family Bluetooth disconnect. They live in `PadForge.Common.Input` (and `PadForge.Services` for `NfcReaderService`), and are documented in [App-Side Services and Helpers (3.6.0)](#app-side-services-and-helpers-360) below. 4.1.0 added three more to the same section: `TouchpadPulseService` (#219), `SwitchHomeLedSetter` (#226), and `RumbleAudioService` (#236, the Bass Shakers renderer). 4.3.0 added `SpaceMouseService` (#288), which opens 3Dconnexion 6DoF pucks directly and attaches them to SDL as virtual joysticks, because SDL's raw-input backend subscribes to the gamepad usage only and never turns a multi-axis controller into a joystick. It is owned by `InputManager`, not by `InputService`.
 
 ```mermaid
@@ -109,6 +111,7 @@ graph TB
   - [Macro Trigger Recording](#macro-trigger-recording)
   - [DSU Server Lifecycle](#dsu-server-lifecycle)
   - [Game Mod Server Lifecycle (#529)](#game-mod-server-lifecycle-529)
+  - [Game Telemetry Status (#531)](#game-telemetry-status-531)
   - [Web Controller Server Lifecycle](#web-controller-server-lifecycle)
   - [Audio Bass Detector Lifecycle](#audio-bass-detector-lifecycle)
   - [Peripheral Outputs Lifecycle (#494)](#peripheral-outputs-lifecycle-494)
@@ -224,7 +227,7 @@ PadForge uses three primary threads. Knowing which thread owns what prevents rac
 
 ## InputService
 
-**File:** `PadForge.App/Services/InputService.cs`, plus the `InputService.Tablets.cs` partial (pen tablet capture)
+**File:** `PadForge.App/Services/InputService.cs`, plus six partials: `InputService.Tablets.cs` (pen tablet capture, #484), `InputService.BlissBox.cs` (#469), `InputService.KeyboardScreens.cs` (#519), `InputService.Falcon.cs` (#521), `InputService.GameMods.cs` (#529) and `InputService.GameTelemetry.cs` (#531)
 **Implements:** `IDisposable`
 
 Central service bridging the InputManager engine with WPF ViewModels. Owns the InputManager instance, runs the 30 Hz UI timer, and manages all subsystem lifecycles (DSU, web server, audio bass detector, foreground monitor, device hiding).
@@ -279,7 +282,7 @@ Raw Input enumeration is not part of this sequence. Keyboards, mice, and consume
 4. Unsubscribes `ForegroundMonitorService.ProfileSwitchRequired` and drops the instance.
 5. Stops external control and the peripheral host (`StopPeripheralOutputs`), then the DSU server, the game mod server, the web controller server, Remote Link, and the audio bass detector.
 6. Calls `RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)`, so the persistent-cloaks setting is honored on shutdown while a mid-session `EnableInputHiding` toggle still decloaks immediately.
-7. Unsubscribes all four source registries (`NfcTagRegistry.RegistryChanged`, `VoicePhraseRegistry.RegistryChanged`, `HandheldButtonRegistry.RegistryChanged` and `.ActivityChanged`) and the engine events, drops the per-pad device-config and assign-offer handlers, calls `_inputManager.Stop()` and `_inputManager.Dispose()`, then nulls every static provider it wired in `Start()`, disarms the Switch NFC and Joy-Con IR hints, and disposes `CursorControlService`. `UpdateHeadTrackingStatus()` is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.
+7. Unsubscribes all four source registries (`NfcTagRegistry.RegistryChanged`, `VoicePhraseRegistry.RegistryChanged`, `HandheldButtonRegistry.RegistryChanged` and `.ActivityChanged`) and the engine events, drops the per-pad device-config and assign-offer handlers, calls `_inputManager.Stop()` and `_inputManager.Dispose()`, then nulls every static provider it wired in `Start()`, disarms the Switch NFC and Joy-Con IR hints, and disposes `CursorControlService`. The dashboard tick stops with the engine, so a dispatcher callback queued after `_inputManager` is nulled re-runs the head tracking and game telemetry cards' status (both settle to Stopped), the G-Keys, analog keyboard, Bliss-Box, keyboard screen and Falcon lines, and `UpdateDevicePanelLines` for the selected Devices row. Queued after the null, it cannot be overwritten by a tick that raced the teardown.
 8. Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.
 
 The v2 `preserveExtendedNodes` parameter is gone. HIDMaestro creates and destroys virtual devices dynamically, so there's no need for the v2-era "keep the vJoy node alive across a restart" path.
@@ -604,6 +607,26 @@ Disposes the server, which stops the stand-in, closes the socket, joins the rece
 
 Runs on the dashboard cadence. When `GameModEffects.Version` changed, or once a second while the mods hold anything, it refreshes the card's status and sets the three pad page lines (`GameModTriggersLine`, `GameModImpulseLine`, `GameModLightsLine`) on every pad. The Devices page's tick sets the selected row's `GameModLine` through `GameModDeviceLine`.
 
+### Game Telemetry Status (#531)
+
+In `InputService.GameTelemetry.cs`. `InputService` opens no socket for Game Telemetry: `InputManager` opens the row (`GameTelemetryDevice`) in Step 1, and its runtime is on [Game Telemetry Internals](game-telemetry-internals.md). This partial builds the two status lines.
+
+#### `UpdateGameTelemetryStatus()` (private)
+
+Runs on the dashboard cadence, beside `UpdateHeadTrackingStatus`, and keeps the same cache. The key is the row instance, its `StatusVersion` and `GameTelemetryRuntime.ForwardPort`, so the line is rebuilt only when one of them moves. A reopen restarts `StatusVersion` at 0, which is why the instance is part of the key. While the switch is off, the engine is down or the row has not opened, it sets `GameTelemetryStatus` to Stopped. Otherwise it sets the line from `BuildGameTelemetryStatus` and `IsGameTelemetryRunning` (the card's flame) to false only while the port is in use.
+
+#### `ResetGameTelemetryStatusCache()` (private)
+
+Drops the cache on a language change, so the next update rebuilds the line in the new language, Stopped included.
+
+#### `BuildGameTelemetryStatus(TelemetryStatus status, GameTelemetryFormat format)` (internal static) -> `string`
+
+The line the Dashboard card and the Devices row share: why nothing arrives, or which game sends and from where. It names the forward port whenever packets go on to one.
+
+#### `UpdateGameTelemetryDevicePanel(DevicesViewModel devVm, UserDevice ud)` (private static)
+
+Called from `UpdateDevicePanelLines`, the selected row's panel, with `UpdateHeadTrackerDevicePanel` beside it. It rebuilds the row's `GameTelemetryStatus` only when the row instance or its `StatusVersion` moved, and clears the line once a stopped engine has retired the row. Both run there, rather than on the live-input path, so the engine-stop refresh clears them too.
+
 ### Web Controller Server Lifecycle
 
 #### `StartWebServerIfEnabled()` (private)
@@ -666,19 +689,19 @@ A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an
 
 #### `StartPeripheralOutputs()` (private)
 
-`InputService.cs` line 10912, step 13 of `Start()`. Returns when there is no engine or a host already runs. It builds the host, hands it `SlotHasController` (`InputManager.HasVirtualControllerAt`, `InputManager.Step5.VirtualDevices.cs` line 3549) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes `CapabilitiesChanged`, and starts it.
+`InputService.cs` line 10936, step 13 of `Start()`. Returns when there is no engine or a host already runs. It builds the host, hands it `SlotHasController` (`InputManager.HasVirtualControllerAt`, `InputManager.Step5.VirtualDevices.cs` line 3549) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes `CapabilitiesChanged`, and starts it.
 
 `PeripheralOutputHost.Start` (line 212) starts the HID++, GameSense, Razer Chroma and LED SDK workers, the four direct backends (LampArray, SteelSeries, Razer and TouchSense) and the `PeripheralLink` thread. That thread reads which vendor software is present every 5 s (`PresenceMs`), walks the present HID collections for the direct backends every 30 s (`RescanMs`) and sooner when a device comes or goes, and runs a link pass every 500 ms (`LinkMs`): it ties each online vendor row, each online unit row, and each online mouse or keyboard on this PC, to its output paths, drops the lighting claims of devices no longer assigned to their slot, and keeps each row's recorded outputs current. The GameSense, Chroma and LED SDK workers reach the vendor's software only while something assigned uses it, and GameSense also while Identify buzzes a Rival. The HID++ worker scans the Logitech HID++ collections on its own, and plays or lights only a unit a linked row asks for. A direct backend finds its devices from the walk with nothing written to any of them, and opens only a unit a linked row asks for. `SensaLifecycle` (line 716) runs the `SensaHapticsService` worker only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and starts a worker that ended on its own again after 30 s (`SensaRestartMs`).
 
 #### `StopPeripheralOutputs()` (private)
 
-`InputService.cs` line 10923, step 5 of `Stop()`. Unsubscribes and disposes the host. `PeripheralOutputHost.Stop` (line 296) joins the link thread, stops the Sensa worker, the direct backends, and the LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.
+`InputService.cs` line 10947, step 5 of `Stop()`. Unsubscribes and disposes the host. `PeripheralOutputHost.Stop` (line 296) joins the link thread, stops the Sensa worker, the direct backends, and the LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.
 
 #### `OnPeripheralCapabilitiesChanged()` (private)
 
-`InputService.cs` line 10943. Raised from the link thread when a row's recorded outputs (`UserDevice.PeripheralOutputs`) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.
+`InputService.cs` line 10967. Raised from the link thread when a row's recorded outputs (`UserDevice.PeripheralOutputs`) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.
 
-`OnDevicesUpdated` tells the host that a device row came or went (`PeripheralOutputHost.DevicesChanged`), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. `RequestPeripheralRescan` passes on Windows' notice of a HID interface arriving, which `MainWindow.OnDeviceChangeMessage` receives, so a lit device with no row of its own is found when it is plugged in. `PanicQuiesceOutputs` (`InputService.cs` line 13881) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (`PeripheralOutputHost.WaitForSilence`). It then hands every device lit on its own back to its own effect (`ReleaseLightingNow`): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. `IsShareableDevice` (`InputService.cs` line 12448) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.
+`OnDevicesUpdated` tells the host that a device row came or went (`PeripheralOutputHost.DevicesChanged`), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. `RequestPeripheralRescan` passes on Windows' notice of a HID interface arriving, which `MainWindow.OnDeviceChangeMessage` receives, so a lit device with no row of its own is found when it is plugged in. `PanicQuiesceOutputs` (`InputService.cs` line 13911) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (`PeripheralOutputHost.WaitForSilence`). It then hands every device lit on its own back to its own effect (`ReleaseLightingNow`): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. `IsShareableDevice` (`InputService.cs` line 12474) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.
 
 The Dashboard switches the vendor rows replaced are read once at load. `LoadFromFile` runs `PeripheralSwitchMigration` (`PeripheralSwitchMigration.cs` line 38) at `SettingsService.cs` line 538, and `ProfileTransfer.Import` runs it at `ProfileTransfer.cs` line 150. [Settings and Serialization](settings-and-serialization.md) has the rules.
 
@@ -738,7 +761,7 @@ Restores a profile, in this order:
 7. **Slot orders**. `SlotOrders.RebuildFromCurrentTopology` rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.
 8. **Extended, MIDI and KB+M configs**. Restores per-slot Extended config (`Customize` toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile records a choice for it, **None** included), and the KB+M slot's `Surfaces` (#408) and `SocdMode` / `SocdPairs` (#205).
 9. **Macros**. When `profile.Macros` is non-null, replaces the live macro set via `LoadMacros(profile.Macros)`. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.
-10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` (`SettingsService.cs` line 4387) applies the head-tracking opinions a profile carries, `EnableHeadTracking` and `EnableHeadTrackingFreeTrack`. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.
+10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` (`SettingsService.cs` line 4405) applies the head-tracking opinions a profile carries, `EnableHeadTracking` and `EnableHeadTrackingFreeTrack`. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.
 11. **Server and overlay settings**. DSU and web controller enable and port (ports validated to 1024-65535), plus `EnableTouchpadOverlay`, `EnableMenuOverlay`, `EnableShiftLayerFlyout`, `EnableProfileOverlay` and the touchpad overlay's monitor, position, size and opacity.
 12. **Rebuilds UI**. Applies the profile's slot appearances, then `UpdatePadDeviceInfo()`, reloads PadSettings, refreshes mapping rows per pad through `RefreshMappingsToViewModel` and `PopulateAvailableInputs`, then `SyncDevicesList()`. The whole reconciliation runs under `VmMappingsStale = true` in a `try` / `finally`. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.
 

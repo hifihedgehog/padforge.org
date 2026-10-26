@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1926,6 +1928,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2469,6 +2499,8 @@
       
         
           
+        
+      
         
       
         
@@ -3514,6 +3546,67 @@
     <span class="md-ellipsis">
       
         UpdateGameModLines() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-telemetry-status-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry Status (#531)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Game Telemetry Status (#531)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#updategametelemetrystatus-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateGameTelemetryStatus() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resetgametelemetrystatuscache-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResetGameTelemetryStatusCache() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildgametelemetrystatustelemetrystatus-status-gametelemetryformat-format-internal-static-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BuildGameTelemetryStatus(TelemetryStatus status, GameTelemetryFormat format) (internal static) -&gt; string
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updategametelemetrydevicepaneldevicesviewmodel-devvm-userdevice-ud-private-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateGameTelemetryDevicePanel(DevicesViewModel devVm, UserDevice ud) (private static)
       
     </span>
   </a>
@@ -5878,6 +5971,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -6806,6 +6927,67 @@
     <span class="md-ellipsis">
       
         UpdateGameModLines() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#game-telemetry-status-531" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry Status (#531)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Game Telemetry Status (#531)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#updategametelemetrystatus-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateGameTelemetryStatus() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resetgametelemetrystatuscache-private" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ResetGameTelemetryStatusCache() (private)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildgametelemetrystatustelemetrystatus-status-gametelemetryformat-format-internal-static-string" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BuildGameTelemetryStatus(TelemetryStatus status, GameTelemetryFormat format) (internal static) -&gt; string
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updategametelemetrydevicepaneldevicesviewmodel-devvm-userdevice-ud-private-static" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        UpdateGameTelemetryDevicePanel(DevicesViewModel devVm, UserDevice ud) (private static)
       
     </span>
   </a>
@@ -8547,6 +8729,7 @@
 <blockquote>
 <p><strong>Engine-side subsystems (3.4).</strong> Two more runtime subsystems sit alongside these services. <code>AudioPassthroughService</code> drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through <code>InputService</code> and documented on their own pages: <a href="../controller-audio-internals/">Controller Audio Internals</a> and <a href="../remote-link-internals/">Remote Link Internals</a>.</p>
 <p><strong>Head tracking (4.4.0, #355).</strong> <code>HeadTrackingRuntime</code> and <code>HeadTrackerDevice</code> live in <code>PadForge.App/Common/Input/</code>, not in <code>Services/</code>, and <code>InputService</code> starts nothing for them. See <a href="../head-tracking-internals/">Head Tracking Internals</a> for the runtime.</p>
+<p><strong>Game Telemetry (#531).</strong> <code>GameTelemetryRuntime</code> and <code>GameTelemetryDevice</code> live in <code>PadForge.App/Common/Input/Telemetry/</code>. <code>InputManager</code> opens the row in Step 1, and <code>InputService</code> builds only its status lines (see <a href="#game-telemetry-status-531">Game Telemetry Status</a>). See <a href="../game-telemetry-internals/">Game Telemetry Internals</a> for the runtime.</p>
 <p><strong>App-side helpers (3.6.0).</strong> Five more App-side services and helpers, added in 3.6.0, run off the dispatcher thread on their own workers or as <code>static</code> P/Invoke surfaces. <code>HapticToneService</code> and <code>WiiSpeakerService</code> turn macro sounds into HD-haptic tones and Wii-speaker PCM. <code>NfcReaderService</code> (with <code>WinScard</code>) owns the PC/SC monitor for NFC macro triggers. <code>BluetoothLinkHelper</code> performs per-family Bluetooth disconnect. They live in <code>PadForge.Common.Input</code> (and <code>PadForge.Services</code> for <code>NfcReaderService</code>), and are documented in <a href="#app-side-services-and-helpers-360">App-Side Services and Helpers (3.6.0)</a> below. 4.1.0 added three more to the same section: <code>TouchpadPulseService</code> (#219), <code>SwitchHomeLedSetter</code> (#226), and <code>RumbleAudioService</code> (#236, the Bass Shakers renderer). 4.3.0 added <code>SpaceMouseService</code> (#288), which opens 3Dconnexion 6DoF pucks directly and attaches them to SDL as virtual joysticks, because SDL's raw-input backend subscribes to the gamepad usage only and never turns a multi-axis controller into a joystick. It is owned by <code>InputManager</code>, not by <code>InputService</code>.</p>
 </blockquote>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph TB
@@ -8606,6 +8789,7 @@
 <li><a href="#macro-trigger-recording">Macro Trigger Recording</a></li>
 <li><a href="#dsu-server-lifecycle">DSU Server Lifecycle</a></li>
 <li><a href="#game-mod-server-lifecycle-529">Game Mod Server Lifecycle (#529)</a></li>
+<li><a href="#game-telemetry-status-531">Game Telemetry Status (#531)</a></li>
 <li><a href="#web-controller-server-lifecycle">Web Controller Server Lifecycle</a></li>
 <li><a href="#audio-bass-detector-lifecycle">Audio Bass Detector Lifecycle</a></li>
 <li><a href="#peripheral-outputs-lifecycle-494">Peripheral Outputs Lifecycle (#494)</a></li>
@@ -8789,7 +8973,7 @@
 </table>
 <hr />
 <h2 id="inputservice">InputService<a class="headerlink" href="#inputservice" title="Permanent link">&para;</a></h2>
-<p><strong>File:</strong> <code>PadForge.App/Services/InputService.cs</code>, plus the <code>InputService.Tablets.cs</code> partial (pen tablet capture)
+<p><strong>File:</strong> <code>PadForge.App/Services/InputService.cs</code>, plus six partials: <code>InputService.Tablets.cs</code> (pen tablet capture, #484), <code>InputService.BlissBox.cs</code> (#469), <code>InputService.KeyboardScreens.cs</code> (#519), <code>InputService.Falcon.cs</code> (#521), <code>InputService.GameMods.cs</code> (#529) and <code>InputService.GameTelemetry.cs</code> (#531)
 <strong>Implements:</strong> <code>IDisposable</code></p>
 <p>Central service bridging the InputManager engine with WPF ViewModels. Owns the InputManager instance, runs the 30 Hz UI timer, and manages all subsystem lifecycles (DSU, web server, audio bass detector, foreground monitor, device hiding).</p>
 <h3 id="constructor-and-initialization">Constructor and Initialization<a class="headerlink" href="#constructor-and-initialization" title="Permanent link">&para;</a></h3>
@@ -8835,7 +9019,7 @@
 <li>Unsubscribes <code>ForegroundMonitorService.ProfileSwitchRequired</code> and drops the instance.</li>
 <li>Stops external control and the peripheral host (<code>StopPeripheralOutputs</code>), then the DSU server, the game mod server, the web controller server, Remote Link, and the audio bass detector.</li>
 <li>Calls <code>RemoveDeviceHiding(keepCloaks: Settings.KeepHidHideCloaksBetweenLaunches)</code>, so the persistent-cloaks setting is honored on shutdown while a mid-session <code>EnableInputHiding</code> toggle still decloaks immediately.</li>
-<li>Unsubscribes all four source registries (<code>NfcTagRegistry.RegistryChanged</code>, <code>VoicePhraseRegistry.RegistryChanged</code>, <code>HandheldButtonRegistry.RegistryChanged</code> and <code>.ActivityChanged</code>) and the engine events, drops the per-pad device-config and assign-offer handlers, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>. <code>UpdateHeadTrackingStatus()</code> is re-run on the dispatcher so the Dashboard's head-tracking row goes cold with the engine.</li>
+<li>Unsubscribes all four source registries (<code>NfcTagRegistry.RegistryChanged</code>, <code>VoicePhraseRegistry.RegistryChanged</code>, <code>HandheldButtonRegistry.RegistryChanged</code> and <code>.ActivityChanged</code>) and the engine events, drops the per-pad device-config and assign-offer handlers, calls <code>_inputManager.Stop()</code> and <code>_inputManager.Dispose()</code>, then nulls every static provider it wired in <code>Start()</code>, disarms the Switch NFC and Joy-Con IR hints, and disposes <code>CursorControlService</code>. The dashboard tick stops with the engine, so a dispatcher callback queued after <code>_inputManager</code> is nulled re-runs the head tracking and game telemetry cards' status (both settle to Stopped), the G-Keys, analog keyboard, Bliss-Box, keyboard screen and Falcon lines, and <code>UpdateDevicePanelLines</code> for the selected Devices row. Queued after the null, it cannot be overwritten by a tick that raced the teardown.</li>
 <li>Marshals back to the dispatcher for the final ViewModel state: engine status "Stopped", zeroed frequency and counts, cleared initializing / create-failed indicators, and every device row marked offline.</li>
 </ol>
 <p>The v2 <code>preserveExtendedNodes</code> parameter is gone. HIDMaestro creates and destroys virtual devices dynamically, so there's no need for the v2-era "keep the vJoy node alive across a restart" path.</p>
@@ -9233,6 +9417,16 @@
 <p>Disposes the server, which stops the stand-in, closes the socket, joins the receive thread and ends everything the mods hold, then sets the card to Stopped.</p>
 <h4 id="updategamemodlines-private"><code>UpdateGameModLines()</code> (private)<a class="headerlink" href="#updategamemodlines-private" title="Permanent link">&para;</a></h4>
 <p>Runs on the dashboard cadence. When <code>GameModEffects.Version</code> changed, or once a second while the mods hold anything, it refreshes the card's status and sets the three pad page lines (<code>GameModTriggersLine</code>, <code>GameModImpulseLine</code>, <code>GameModLightsLine</code>) on every pad. The Devices page's tick sets the selected row's <code>GameModLine</code> through <code>GameModDeviceLine</code>.</p>
+<h3 id="game-telemetry-status-531">Game Telemetry Status (#531)<a class="headerlink" href="#game-telemetry-status-531" title="Permanent link">&para;</a></h3>
+<p>In <code>InputService.GameTelemetry.cs</code>. <code>InputService</code> opens no socket for Game Telemetry: <code>InputManager</code> opens the row (<code>GameTelemetryDevice</code>) in Step 1, and its runtime is on <a href="../game-telemetry-internals/">Game Telemetry Internals</a>. This partial builds the two status lines.</p>
+<h4 id="updategametelemetrystatus-private"><code>UpdateGameTelemetryStatus()</code> (private)<a class="headerlink" href="#updategametelemetrystatus-private" title="Permanent link">&para;</a></h4>
+<p>Runs on the dashboard cadence, beside <code>UpdateHeadTrackingStatus</code>, and keeps the same cache. The key is the row instance, its <code>StatusVersion</code> and <code>GameTelemetryRuntime.ForwardPort</code>, so the line is rebuilt only when one of them moves. A reopen restarts <code>StatusVersion</code> at 0, which is why the instance is part of the key. While the switch is off, the engine is down or the row has not opened, it sets <code>GameTelemetryStatus</code> to Stopped. Otherwise it sets the line from <code>BuildGameTelemetryStatus</code> and <code>IsGameTelemetryRunning</code> (the card's flame) to false only while the port is in use.</p>
+<h4 id="resetgametelemetrystatuscache-private"><code>ResetGameTelemetryStatusCache()</code> (private)<a class="headerlink" href="#resetgametelemetrystatuscache-private" title="Permanent link">&para;</a></h4>
+<p>Drops the cache on a language change, so the next update rebuilds the line in the new language, Stopped included.</p>
+<h4 id="buildgametelemetrystatustelemetrystatus-status-gametelemetryformat-format-internal-static-string"><code>BuildGameTelemetryStatus(TelemetryStatus status, GameTelemetryFormat format)</code> (internal static) -&gt; <code>string</code><a class="headerlink" href="#buildgametelemetrystatustelemetrystatus-status-gametelemetryformat-format-internal-static-string" title="Permanent link">&para;</a></h4>
+<p>The line the Dashboard card and the Devices row share: why nothing arrives, or which game sends and from where. It names the forward port whenever packets go on to one.</p>
+<h4 id="updategametelemetrydevicepaneldevicesviewmodel-devvm-userdevice-ud-private-static"><code>UpdateGameTelemetryDevicePanel(DevicesViewModel devVm, UserDevice ud)</code> (private static)<a class="headerlink" href="#updategametelemetrydevicepaneldevicesviewmodel-devvm-userdevice-ud-private-static" title="Permanent link">&para;</a></h4>
+<p>Called from <code>UpdateDevicePanelLines</code>, the selected row's panel, with <code>UpdateHeadTrackerDevicePanel</code> beside it. It rebuilds the row's <code>GameTelemetryStatus</code> only when the row instance or its <code>StatusVersion</code> moved, and clears the line once a stopped engine has retired the row. Both run there, rather than on the live-input path, so the engine-stop refresh clears them too.</p>
 <h3 id="web-controller-server-lifecycle">Web Controller Server Lifecycle<a class="headerlink" href="#web-controller-server-lifecycle" title="Permanent link">&para;</a></h3>
 <h4 id="startwebserverifenabled-private"><code>StartWebServerIfEnabled()</code> (private)<a class="headerlink" href="#startwebserverifenabled-private" title="Permanent link">&para;</a></h4>
 <ol>
@@ -9268,13 +9462,13 @@
 <h3 id="peripheral-outputs-lifecycle-494">Peripheral Outputs Lifecycle (#494)<a class="headerlink" href="#peripheral-outputs-lifecycle-494" title="Permanent link">&para;</a></h3>
 <p>A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an output device of that controller, with its own Lighting tab when PadForge can light it and its own Force Feedback tab when it can rumble. <code>PeripheralOutputHost</code> (<code>PeripheralOutputHost.cs</code> line 23) runs that subsystem for as long as the engine runs. It replaced <code>ChromaLightbarService</code>, <code>LightsyncLightbarService</code> and the Sensa switch's service lifecycle, and no peripheral output has a Dashboard setting anymore. Detail on <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
 <h4 id="startperipheraloutputs-private"><code>StartPeripheralOutputs()</code> (private)<a class="headerlink" href="#startperipheraloutputs-private" title="Permanent link">&para;</a></h4>
-<p><code>InputService.cs</code> line 10912, step 13 of <code>Start()</code>. Returns when there is no engine or a host already runs. It builds the host, hands it <code>SlotHasController</code> (<code>InputManager.HasVirtualControllerAt</code>, <code>InputManager.Step5.VirtualDevices.cs</code> line 3549) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes <code>CapabilitiesChanged</code>, and starts it.</p>
+<p><code>InputService.cs</code> line 10936, step 13 of <code>Start()</code>. Returns when there is no engine or a host already runs. It builds the host, hands it <code>SlotHasController</code> (<code>InputManager.HasVirtualControllerAt</code>, <code>InputManager.Step5.VirtualDevices.cs</code> line 3549) so a slot keeps its lighting claims while a reorder rebuilds its effects dispatcher, subscribes <code>CapabilitiesChanged</code>, and starts it.</p>
 <p><code>PeripheralOutputHost.Start</code> (line 212) starts the HID++, GameSense, Razer Chroma and LED SDK workers, the four direct backends (LampArray, SteelSeries, Razer and TouchSense) and the <code>PeripheralLink</code> thread. That thread reads which vendor software is present every 5 s (<code>PresenceMs</code>), walks the present HID collections for the direct backends every 30 s (<code>RescanMs</code>) and sooner when a device comes or goes, and runs a link pass every 500 ms (<code>LinkMs</code>): it ties each online vendor row, each online unit row, and each online mouse or keyboard on this PC, to its output paths, drops the lighting claims of devices no longer assigned to their slot, and keeps each row's recorded outputs current. The GameSense, Chroma and LED SDK workers reach the vendor's software only while something assigned uses it, and GameSense also while Identify buzzes a Rival. The HID++ worker scans the Logitech HID++ collections on its own, and plays or lights only a unit a linked row asks for. A direct backend finds its devices from the walk with nothing written to any of them, and opens only a unit a linked row asks for. <code>SensaLifecycle</code> (line 716) runs the <code>SensaHapticsService</code> worker only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and starts a worker that ended on its own again after 30 s (<code>SensaRestartMs</code>).</p>
 <h4 id="stopperipheraloutputs-private"><code>StopPeripheralOutputs()</code> (private)<a class="headerlink" href="#stopperipheraloutputs-private" title="Permanent link">&para;</a></h4>
-<p><code>InputService.cs</code> line 10923, step 5 of <code>Stop()</code>. Unsubscribes and disposes the host. <code>PeripheralOutputHost.Stop</code> (line 296) joins the link thread, stops the Sensa worker, the direct backends, and the LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.</p>
+<p><code>InputService.cs</code> line 10947, step 5 of <code>Stop()</code>. Unsubscribes and disposes the host. <code>PeripheralOutputHost.Stop</code> (line 296) joins the link thread, stops the Sensa worker, the direct backends, and the LED SDK, Chroma, GameSense and HID++ workers, each releasing what it holds so the devices go back to their own software or effect, then clears every lighting claim and publishes an empty link table.</p>
 <h4 id="onperipheralcapabilitieschanged-private"><code>OnPeripheralCapabilitiesChanged()</code> (private)<a class="headerlink" href="#onperipheralcapabilitieschanged-private" title="Permanent link">&para;</a></h4>
-<p><code>InputService.cs</code> line 10943. Raised from the link thread when a row's recorded outputs (<code>UserDevice.PeripheralOutputs</code>) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.</p>
-<p><code>OnDevicesUpdated</code> tells the host that a device row came or went (<code>PeripheralOutputHost.DevicesChanged</code>), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. <code>RequestPeripheralRescan</code> passes on Windows' notice of a HID interface arriving, which <code>MainWindow.OnDeviceChangeMessage</code> receives, so a lit device with no row of its own is found when it is plugged in. <code>PanicQuiesceOutputs</code> (<code>InputService.cs</code> line 13881) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (<code>PeripheralOutputHost.WaitForSilence</code>). It then hands every device lit on its own back to its own effect (<code>ReleaseLightingNow</code>): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. <code>IsShareableDevice</code> (<code>InputService.cs</code> line 12448) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.</p>
+<p><code>InputService.cs</code> line 10967. Raised from the link thread when a row's recorded outputs (<code>UserDevice.PeripheralOutputs</code>) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.</p>
+<p><code>OnDevicesUpdated</code> tells the host that a device row came or went (<code>PeripheralOutputHost.DevicesChanged</code>), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. <code>RequestPeripheralRescan</code> passes on Windows' notice of a HID interface arriving, which <code>MainWindow.OnDeviceChangeMessage</code> receives, so a lit device with no row of its own is found when it is plugged in. <code>PanicQuiesceOutputs</code> (<code>InputService.cs</code> line 13911) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (<code>PeripheralOutputHost.WaitForSilence</code>). It then hands every device lit on its own back to its own effect (<code>ReleaseLightingNow</code>): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. <code>IsShareableDevice</code> (<code>InputService.cs</code> line 12474) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.</p>
 <p>The Dashboard switches the vendor rows replaced are read once at load. <code>LoadFromFile</code> runs <code>PeripheralSwitchMigration</code> (<code>PeripheralSwitchMigration.cs</code> line 38) at <code>SettingsService.cs</code> line 538, and <code>ProfileTransfer.Import</code> runs it at <code>ProfileTransfer.cs</code> line 150. <a href="../settings-and-serialization/">Settings and Serialization</a> has the rules.</p>
 <h3 id="device-hiding">Device Hiding<a class="headerlink" href="#device-hiding" title="Permanent link">&para;</a></h3>
 <h4 id="applydevicehiding-public"><code>ApplyDeviceHiding()</code> (public)<a class="headerlink" href="#applydevicehiding-public" title="Permanent link">&para;</a></h4>
@@ -9316,7 +9510,7 @@
 <li><strong>Slot orders</strong>. <code>SlotOrders.RebuildFromCurrentTopology</code> rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.</li>
 <li><strong>Extended, MIDI and KB+M configs</strong>. Restores per-slot Extended config (<code>Customize</code> toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile records a choice for it, <strong>None</strong> included), and the KB+M slot's <code>Surfaces</code> (#408) and <code>SocdMode</code> / <code>SocdPairs</code> (#205).</li>
 <li><strong>Macros</strong>. When <code>profile.Macros</code> is non-null, replaces the live macro set via <code>LoadMacros(profile.Macros)</code>. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.</li>
-<li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> (<code>SettingsService.cs</code> line 4387) applies the head-tracking opinions a profile carries, <code>EnableHeadTracking</code> and <code>EnableHeadTrackingFreeTrack</code>. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.</li>
+<li><strong>Service toggles</strong>. <code>SettingsService.ApplyProfileServiceToggles(profile)</code> (<code>SettingsService.cs</code> line 4405) applies the head-tracking opinions a profile carries, <code>EnableHeadTracking</code> and <code>EnableHeadTrackingFreeTrack</code>. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.</li>
 <li><strong>Server and overlay settings</strong>. DSU and web controller enable and port (ports validated to 1024-65535), plus <code>EnableTouchpadOverlay</code>, <code>EnableMenuOverlay</code>, <code>EnableShiftLayerFlyout</code>, <code>EnableProfileOverlay</code> and the touchpad overlay's monitor, position, size and opacity.</li>
 <li><strong>Rebuilds UI</strong>. Applies the profile's slot appearances, then <code>UpdatePadDeviceInfo()</code>, reloads PadSettings, refreshes mapping rows per pad through <code>RefreshMappingsToViewModel</code> and <code>PopulateAvailableInputs</code>, then <code>SyncDevicesList()</code>. The whole reconciliation runs under <code>VmMappingsStale = true</code> in a <code>try</code> / <code>finally</code>. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.</li>
 </ol>

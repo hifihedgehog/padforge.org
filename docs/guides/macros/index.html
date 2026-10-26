@@ -1684,6 +1684,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#adaptive-trigger-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Trigger Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-adaptive-trigger-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Adaptive Trigger Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#toggle-touchpad-overlay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2192,6 +2214,8 @@
       
         
           
+        
+      
         
       
         
@@ -3053,6 +3077,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -3594,6 +3646,8 @@
       
         
           
+        
+      
         
       
         
@@ -4627,6 +4681,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -5583,6 +5665,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#adaptive-trigger-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Trigger Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-adaptive-trigger-effect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop Adaptive Trigger Effect
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#toggle-touchpad-overlay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6023,12 +6127,13 @@
 <p>Pick <strong>Custom Expression</strong> in the <strong>Fire</strong> dropdown when the shape you want is bigger than a fixed combo. Chords across two pads. "Press this only if that other thing isn't pressed." Axes crossing a threshold that depends on another axis. Anything you can write as a small expression.</p>
 <h3 id="variables">Variables<a class="headerlink" href="#variables" title="Permanent link">&para;</a></h3>
 <p>Add up to 32 variables. Each one becomes a letter: <code>a</code> for the first, <code>b</code> for the second, and so on through <code>z</code>. Variables 27 through 32 go by index, <code>s[26]</code> through <code>s[31]</code>. The formula refers to those names.</p>
-<p>Each variable binds to one of two things:</p>
+<p>Each variable binds to one of three things:</p>
 <ul>
 <li>An <strong>Assigned Devices</strong> input: any button or POV direction, or one of the first six axes (the stick and trigger axes), on any physical device assigned to the slot.</li>
 <li>A <strong>Virtual Controller</strong> channel: a standard button, D-pad direction, trigger, or stick axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.</li>
+<li>A <strong>Game Telemetry</strong> channel: the speed, RPM, gear, pedals or steering a driving game sends, or a custom telemetry variable, in its own unit (km/h, percent, gear number). See <a href="../../features/game-telemetry/#telemetry-in-custom-expression-triggers">Game Telemetry</a>.</li>
 </ul>
-<p>Click the record icon (tooltip <strong>Record Trigger</strong>) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip <strong>Clear</strong>) to wipe a binding.</p>
+<p>Click the record icon (tooltip <strong>Record Trigger</strong>) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip <strong>Clear</strong>) to wipe a binding. A Game Telemetry variable has no record icon: pick its channel from the list.</p>
 <h3 id="trigger-formula">Trigger Formula<a class="headerlink" href="#trigger-formula" title="Permanent link">&para;</a></h3>
 <p>The <strong>Trigger Formula</strong> text box accepts:</p>
 <ul>
@@ -6226,7 +6331,7 @@
 </tr>
 <tr>
 <td><strong>Rumble</strong></td>
-<td>Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration</td>
+<td>Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration, Adaptive Trigger Effect, Stop Adaptive Trigger Effect</td>
 </tr>
 <tr>
 <td><strong>Lightbar &amp; LEDs</strong></td>
@@ -6559,6 +6664,10 @@
 <p>Drive the trigger motors directly from a macro. This is the macro counterpart to the <a href="../../features/force-feedback/#trigger-routing">Trigger Routing</a> card, sending strength straight to the trigger channel: Xbox impulse triggers or DualSense Adaptive Trigger Vibration.</p>
 <h3 id="stop-trigger-vibration">Stop Trigger Vibration<a class="headerlink" href="#stop-trigger-vibration" title="Permanent link">&para;</a></h3>
 <p>End any active Rumble Trigger Override on the slot. Pair it with a Rumble Trigger Override the way Stop Rumble pairs with a Sticky Rumble action.</p>
+<h3 id="adaptive-trigger-effect">Adaptive Trigger Effect<a class="headerlink" href="#adaptive-trigger-effect" title="Permanent link">&para;</a></h3>
+<p>Play a DualSense adaptive trigger effect on <strong>Right (R2)</strong>, <strong>Left (L2)</strong> or <strong>Both (L2 and R2)</strong>, on every DualSense and DualSense Edge on the slot. The effects are the ones game mods for DSX send: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration and ten named presets. The editor shows the chosen effect's settings with their ranges. <strong>Holds</strong> picks how long it lasts: <strong>While the Macro's Trigger Is Held</strong>, <strong>For a Set Time</strong>, or <strong>Until Stopped</strong>. A game's own trigger effect and a game mod's come first. See <a href="../../features/game-telemetry/#adaptive-trigger-effect">Game Telemetry</a>.</p>
+<h3 id="stop-adaptive-trigger-effect">Stop Adaptive Trigger Effect<a class="headerlink" href="#stop-adaptive-trigger-effect" title="Permanent link">&para;</a></h3>
+<p>End the adaptive trigger effect a macro holds on the chosen trigger. Pair it with an effect that holds <strong>Until Stopped</strong>.</p>
 <h3 id="toggle-touchpad-overlay">Toggle Touchpad Overlay<a class="headerlink" href="#toggle-touchpad-overlay" title="Permanent link">&para;</a></h3>
 <p>Toggles the on-screen <a href="../../features/dashboard/#touchpad-overlay">Touchpad Overlay</a> visibility. Each fire flips it: open if closed, close if open. Useful for binding a controller chord to "show me a touchpad on screen for the next gesture" without leaving the game.</p>
 <h3 id="switch-layer">Switch Layer<a class="headerlink" href="#switch-layer" title="Permanent link">&para;</a></h3>

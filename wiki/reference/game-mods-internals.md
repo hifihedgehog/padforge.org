@@ -97,7 +97,7 @@ A packet from a port whose sender has exited is identified anew, so a new progra
 
 ## The effects pass
 
-`UserEffectsDispatcher.DispatchSnapshot` reads the slot's hold under the devices lock, beside `GetActiveOverrides`, so a release and a pass are ordered like everything else it writes. For each Sony pad, `FillFromModHold` places the hold into the per-device overrides wherever a game is not writing within its 1.5-second grace window: both triggers, the mute light and the player row on a DualSense, the lightbar on every Sony pad. The order is a game's own write, then the mod's hold, then PadForge's injected effects (the impulse-to-adaptive-trigger route and the steering cues, which fill only an empty slot), then the pad page's settings.
+`UserEffectsDispatcher.DispatchSnapshot` reads the slot's hold under the devices lock, beside `GetActiveOverrides`, so a release and a pass are ordered like everything else it writes. For each Sony pad, `FillFromModHold` places the hold into the per-device overrides wherever a game is not writing within its 1.5-second grace window: both triggers, the mute light and the player row on a DualSense, the lightbar on every Sony pad. The order is a game's own write, then the mod's hold, then a macro's Adaptive Trigger Effect (`FillFromMacroEffects`, #531, on the triggers alone), then PadForge's injected effects (the impulse-to-adaptive-trigger route and the steering cues, which fill only an empty slot), then the pad page's settings. See [Game Telemetry Internals](game-telemetry-internals.md#the-adaptive-trigger-effect-action).
 
 Two placements are deliberate:
 
@@ -108,7 +108,7 @@ The pad keeps a trigger program, a mute light or a player row until something ov
 
 A change to a hold calls `NotifyModEffectsChanged` for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (`ModChangeTimerMs`, a `HasTimerDemand` term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through `LightPeripheral` where no game color is live, and a change requests their refresh through `GameLightbarCapture.NotifyChanged`.
 
-`TryGetInboundTriggerEffects` hands `AtToImpulseTranslator` the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers.
+`TryGetInboundTriggerEffects` hands `AtToImpulseTranslator` the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.
 
 ## The threshold
 

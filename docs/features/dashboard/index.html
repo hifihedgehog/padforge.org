@@ -1139,6 +1139,8 @@
       
         
       
+        
+      
     
     
     
@@ -1439,6 +1441,17 @@
     <span class="md-ellipsis">
       
         Game Mods
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#game-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry
       
     </span>
   </a>
@@ -2194,6 +2207,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../vr-controllers/" class="md-nav__link">
         
   
@@ -2735,6 +2776,8 @@
       
         
           
+        
+      
         
       
         
@@ -3768,6 +3811,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4118,6 +4189,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#game-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Game Telemetry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overlays" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4173,7 +4255,7 @@
 <p><img alt="Dashboard overview showing engine status, virtual controllers, and services" src="../../images/dashboard.png" /></p>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
-<p>Nine sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then the input services, the Motion Server, Game Mods, and the overlays.</p>
+<p>Ten sections, stacked top to bottom: the engine and its slots, then a <strong>Services</strong> header, then the input services, the Motion Server, Game Mods, Game Telemetry, and the overlays.</p>
 <table>
 <thead>
 <tr>
@@ -4211,6 +4293,10 @@
 <td>Adaptive triggers and lights set by <a href="../game-mods/">game mods made for DSX</a>.</td>
 </tr>
 <tr>
+<td><strong>Game Telemetry</strong></td>
+<td>The speed, RPM, gear and pedals <a href="../game-telemetry/">driving games send</a>, as a device row and macro triggers.</td>
+</tr>
+<tr>
 <td><strong>Overlays</strong></td>
 <td>On-screen indicators: the <a href="../../guides/menus/">menu</a> ring or grid, the shift layer flyout, and profile switch announcements.</td>
 </tr>
@@ -4221,7 +4307,7 @@
 </tbody>
 </table>
 <p>Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the <a href="../settings/">Settings</a> page. See <a href="../driver-management/">Driver Management</a>.</p>
-<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Game Mods, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, and the three ports beside them are stored in every profile and follow it on each switch. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
+<p>The on/off toggles on this page ride the active <a href="../../guides/profiles/">profile</a>, in two shapes. The Motion Server, Game Mods, Game Telemetry, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, the ports beside them, and Game Telemetry's game, forward port and Full Speed are stored in every profile and follow it on each switch. The custom telemetry formats are one list for every profile. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.</p>
 <hr />
 <h2 id="input-engine">Input Engine<a class="headerlink" href="#input-engine" title="Permanent link">&para;</a></h2>
 <p>The engine card sits at the top with four elements in a row.</p>
@@ -4595,6 +4681,48 @@
 </table>
 <p>While the server listens, PadForge writes its port to the files the mods read it from. See <a href="../game-mods/">Game Mods</a> for setup, which controller a mod drives, and how long its effects last.</p>
 <hr />
+<h2 id="game-telemetry">Game Telemetry<a class="headerlink" href="#game-telemetry" title="Permanent link">&para;</a></h2>
+<p>Reads the telemetry driving games send over UDP, and Assetto Corsa's shared memory, onto the <strong>Game Telemetry</strong> row on the <a href="../devices/">Devices</a> page.</p>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Listen for Game Telemetry</strong></td>
+<td>Opens the Game Telemetry row and its listener. Off by default. It listens only while the engine runs.</td>
+</tr>
+<tr>
+<td><strong>Game</strong></td>
+<td><strong>Auto-Detect</strong>, one entry per game family, then each custom format by name. Picking Project CARS 2 and Automobilista 2 sets the port to <code>5606</code>, and the truck simulators set <code>49001</code>.</td>
+</tr>
+<tr>
+<td><strong>Port</strong></td>
+<td>UDP port. Default <code>20777</code>, the port F1, the Codemasters games and EA SPORTS WRC use. Range <code>1024-65535</code>.</td>
+</tr>
+<tr>
+<td><strong>Forward to Port</strong></td>
+<td>Copies every packet to this port on 127.0.0.1, for another tool such as SimHub. <code>0</code> forwards nothing.</td>
+</tr>
+<tr>
+<td><strong>Full Speed (km/h)</strong></td>
+<td>The speed that moves the row's Speed axis all the way. Default <code>300</code>.</td>
+</tr>
+<tr>
+<td><strong>Custom Formats…</strong></td>
+<td>Opens the window where you describe a game PadForge does not know, field by field.</td>
+</tr>
+<tr>
+<td><strong>Status indicator</strong></td>
+<td>A flame beside the status text. Ember while the row is open, a steel outline when stopped or when another program holds the port. The text names the game and the address it sends from.</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../game-telemetry/">Game Telemetry</a> for each game's setup, the row's axes and buttons, the Custom Expression channels and the Adaptive Trigger Effect action.</p>
+<hr />
 <h2 id="overlays">Overlays<a class="headerlink" href="#overlays" title="Permanent link">&para;</a></h2>
 <p>The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.</p>
 <table>
@@ -4658,6 +4786,7 @@
 <li><a href="../settings/">Settings</a>: engine options, appearance, drivers.</li>
 <li><a href="../../guides/profiles/">Profiles</a>: per-app profile switching.</li>
 <li><a href="../../reference/dsu-motion-server/">DSU Motion Server</a>: gyro streaming for emulators.</li>
+<li><a href="../game-telemetry/">Game Telemetry</a>: driving games' telemetry as a device row and macro triggers.</li>
 <li><a href="../game-mods/">Game Mods</a>: adaptive triggers and lights from mods made for DSX.</li>
 <li><a href="../../guides/web-controller/">Web Controller</a>: browser-based virtual controller.</li>
 <li><a href="../../guides/menus/">Menus</a>: the radial and touch menus the Menu Overlay draws.</li>

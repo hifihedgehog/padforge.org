@@ -63,6 +63,10 @@ When RPM shift LEDs are on and a supported racing game is running, PadForge read
 
 Telemetry comes from the game, so the LEDs only light for titles PadForge can read: Assetto Corsa and Competizione, the Codemasters F1 23, F1 24, DiRT, and GRID games, Forza, iRacing, Automobilista 1 and 2, Project CARS 2 and 3, rFactor 1 and 2, Le Mans Ultimate, RaceRoom, the SCS trucks (Euro Truck Simulator 2, American Truck Simulator), BeamNG.drive, and Live for Speed. Other games leave the LEDs dark.
 
+The games that send over the network send to fixed ports here: Forza's Data Out to 5300, F1 and the Codemasters games to 20777, and BeamNG.drive's and Live for Speed's OutGauge to 4444. Assetto Corsa, Assetto Corsa Competizione, iRacing and RaceRoom need nothing set. Automobilista 2 and Project CARS 2 and 3 need their shared memory turned on in the Project CARS 2 format (in Automobilista 2, Options, System, Shared Memory). The rest read a plugin installed in the game: rFactor 2 and Le Mans Ultimate need rF2SharedMemoryMapPlugin, the SCS trucks need RenCloud's scs-sdk-plugin, and rFactor 1 and Automobilista 1 need rFactorSharedMemoryMap.
+
+While [Game Telemetry](game-telemetry.md) listens, the LEDs read the game from its row instead, on whatever port it listens on. That adds F1 22, F1 25, EA SPORTS WRC and any custom format, and lets Forza and OutGauge send to a port of your choice. A game that sends no max RPM, such as BeamNG.drive or Euro Truck Simulator 2 through its UDP plugin, lights the LEDs against the highest RPM seen, and the strip reads true once the engine has revved out. When scs-sdk-plugin is installed too, its truck max RPM comes first.
+
 ---
 
 ## Force-feedback effects by vendor

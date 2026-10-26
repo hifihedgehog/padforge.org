@@ -16,7 +16,7 @@
         <link rel="prev" href="../novint-falcon-internals/">
       
       
-        <link rel="next" href="../wii-controllers-internals/">
+        <link rel="next" href="../game-telemetry-internals/">
       
       
         
@@ -1137,6 +1137,8 @@
       
         
       
+        
+      
     
     
     
@@ -1926,6 +1928,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/vr-controllers/" class="md-nav__link">
         
   
@@ -2469,6 +2499,8 @@
       
         
           
+        
+      
         
       
         
@@ -3696,6 +3728,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../wii-controllers-internals/" class="md-nav__link">
         
   
@@ -4244,7 +4304,7 @@
 </ul>
 <p>A packet from a port whose sender has exited is identified anew, so a new program that reuses the port does not inherit the old one's values.</p>
 <h2 id="the-effects-pass">The effects pass<a class="headerlink" href="#the-effects-pass" title="Permanent link">&para;</a></h2>
-<p><code>UserEffectsDispatcher.DispatchSnapshot</code> reads the slot's hold under the devices lock, beside <code>GetActiveOverrides</code>, so a release and a pass are ordered like everything else it writes. For each Sony pad, <code>FillFromModHold</code> places the hold into the per-device overrides wherever a game is not writing within its 1.5-second grace window: both triggers, the mute light and the player row on a DualSense, the lightbar on every Sony pad. The order is a game's own write, then the mod's hold, then PadForge's injected effects (the impulse-to-adaptive-trigger route and the steering cues, which fill only an empty slot), then the pad page's settings.</p>
+<p><code>UserEffectsDispatcher.DispatchSnapshot</code> reads the slot's hold under the devices lock, beside <code>GetActiveOverrides</code>, so a release and a pass are ordered like everything else it writes. For each Sony pad, <code>FillFromModHold</code> places the hold into the per-device overrides wherever a game is not writing within its 1.5-second grace window: both triggers, the mute light and the player row on a DualSense, the lightbar on every Sony pad. The order is a game's own write, then the mod's hold, then a macro's Adaptive Trigger Effect (<code>FillFromMacroEffects</code>, #531, on the triggers alone), then PadForge's injected effects (the impulse-to-adaptive-trigger route and the steering cues, which fill only an empty slot), then the pad page's settings. See <a href="../game-telemetry-internals/#the-adaptive-trigger-effect-action">Game Telemetry Internals</a>.</p>
 <p>Two placements are deliberate:</p>
 <ul>
 <li>The fill runs after <code>ShouldAssertLightbar</code>. A mod's color counted as a game's would stand the pass down on a pass-through target and nothing would light, while a game driving the bar through the pass-through still owns it.</li>
@@ -4252,7 +4312,7 @@
 </ul>
 <p>The pad keeps a trigger program, a mute light or a player row until something overwrites it, and the pass leaves an idle subsystem unasserted (<code>GateMirroredSubsystem</code>), so a game's last program persists after the game stops writing. A mod's hold ends on purpose, so <code>ModHoldEnded</code> asserts each of those subsystems once more on the pass after a hold ends, carrying PadForge's own value: Off for a trigger or a mute light the pad page leaves unset.</p>
 <p>A change to a hold calls <code>NotifyModEffectsChanged</code> for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (<code>ModChangeTimerMs</code>, a <code>HasTimerDemand</code> term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through <code>LightPeripheral</code> where no game color is live, and a change requests their refresh through <code>GameLightbarCapture.NotifyChanged</code>.</p>
-<p><code>TryGetInboundTriggerEffects</code> hands <code>AtToImpulseTranslator</code> the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers.</p>
+<p><code>TryGetInboundTriggerEffects</code> hands <code>AtToImpulseTranslator</code> the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.</p>
 <h2 id="the-threshold">The threshold<a class="headerlink" href="#the-threshold" title="Permanent link">&para;</a></h2>
 <p>Step 5 applies the held thresholds right before submit, after button SOCD, on a copy, so the pad page's preview and the impulse translation still read the real pull. Two paths carry it:</p>
 <ul>
@@ -4330,13 +4390,13 @@
         
         
           
-          <a href="../wii-controllers-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Wii Controllers Internals">
+          <a href="../game-telemetry-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Game Telemetry Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Wii Controllers Internals
+                Game Telemetry Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -1229,6 +1229,7 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 | `PeripheralHaptics` | 41 | The Razer Sensa row, which plays rumble on Sensa HD devices (#494). No inputs. The row is assigned for its Force Feedback tab |
 | `KeyboardScreenKeys` | 42 | One keyboard screen's row (#519), with the keys beside that screen: the four under a Logitech monochrome screen and its applet key (5 buttons), or the G19's seven display keys and its settings key (8). The Arx Control and S.T.R.I.K.E. 7 rows carry no keys |
 | `NovintFalcon` | 43 | A Novint Falcon opened through Force Dimension's library (#521): the handle's three axes and the grip's four buttons |
+| `GameTelemetry` | 44 | The Game Telemetry row (#531): Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, one axis per custom variable, and Driving, Reverse, Neutral and Gear 1 to Gear 18 as buttons |
 
 ### AnswersAnyDeviceSources
 
@@ -1238,7 +1239,7 @@ Integer constants. 18–24 match the DirectInput device type values (`DI8DEVTYPE
 public static bool AnswersAnyDeviceSources(int capType)
 ```
 
-It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController`, `LogitechGKeys`, `AnalogKeyboard`, `WebMenus`, `PeripheralLighting`, `PeripheralHaptics`, `KeyboardScreenKeys` and `NovintFalcon`.
+It returns **false** for `HeadTracker`, `Nfc`, `Microphone`, `HandheldButtons`, `ConsumerControl`, `Tablet`, `VrController`, `LogitechGKeys`, `AnalogKeyboard`, `WebMenus`, `PeripheralLighting`, `PeripheralHaptics`, `KeyboardScreenKeys`, `NovintFalcon` and `GameTelemetry`.
 
 Those rows publish their own vocabulary through the numbered Axis and Button arrays, or leave the arrays at zero, so a mapping whose `DeviceGuid` is empty, the "(Any Device)" wildcard, must not read them. A resting head tracker otherwise held both triggers at half pull, which is what discussion #431 reported. Three call sites honor it: the device-free macro trigger path, the mapping-set evaluator, and the menu runtime.
 

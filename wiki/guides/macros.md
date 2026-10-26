@@ -119,12 +119,13 @@ Pick **Custom Expression** in the **Fire** dropdown when the shape you want is b
 
 Add up to 32 variables. Each one becomes a letter: `a` for the first, `b` for the second, and so on through `z`. Variables 27 through 32 go by index, `s[26]` through `s[31]`. The formula refers to those names.
 
-Each variable binds to one of two things:
+Each variable binds to one of three things:
 
 - An **Assigned Devices** input: any button or POV direction, or one of the first six axes (the stick and trigger axes), on any physical device assigned to the slot.
 - A **Virtual Controller** channel: a standard button, D-pad direction, trigger, or stick axis on the slot's combined virtual controller output. The macro reacts to what the slot is emitting after merge, so a macro can fire on its own virtual controller's behavior.
+- A **Game Telemetry** channel: the speed, RPM, gear, pedals or steering a driving game sends, or a custom telemetry variable, in its own unit (km/h, percent, gear number). See [Game Telemetry](../features/game-telemetry.md#telemetry-in-custom-expression-triggers).
 
-Click the record icon (tooltip **Record Trigger**) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip **Clear**) to wipe a binding.
+Click the record icon (tooltip **Record Trigger**) on a variable row, push the input you want it to follow, and PadForge fills it in. Click the clear icon (tooltip **Clear**) to wipe a binding. A Game Telemetry variable has no record icon: pick its channel from the list.
 
 ### Trigger Formula
 
@@ -222,7 +223,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Keyboard & Text** | Key Press, Key Release, Toggle Key, Repeat Key While Held, Text Block |
 | **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
 | **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
-| **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration |
+| **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration, Adaptive Trigger Effect, Stop Adaptive Trigger Effect |
 | **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Show Dreamcast Screen, Show Keyboard Screen, Keyboard Screen Mode, Stopwatch, Pan Keyboard Screen Picture |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
@@ -567,6 +568,14 @@ Drive the trigger motors directly from a macro. This is the macro counterpart to
 ### Stop Trigger Vibration
 
 End any active Rumble Trigger Override on the slot. Pair it with a Rumble Trigger Override the way Stop Rumble pairs with a Sticky Rumble action.
+
+### Adaptive Trigger Effect
+
+Play a DualSense adaptive trigger effect on **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**, on every DualSense and DualSense Edge on the slot. The effects are the ones game mods for DSX send: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration and ten named presets. The editor shows the chosen effect's settings with their ranges. **Holds** picks how long it lasts: **While the Macro's Trigger Is Held**, **For a Set Time**, or **Until Stopped**. A game's own trigger effect and a game mod's come first. See [Game Telemetry](../features/game-telemetry.md#adaptive-trigger-effect).
+
+### Stop Adaptive Trigger Effect
+
+End the adaptive trigger effect a macro holds on the chosen trigger. Pair it with an effect that holds **Until Stopped**.
 
 ### Toggle Touchpad Overlay
 

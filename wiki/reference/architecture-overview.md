@@ -26,6 +26,7 @@ graph TB
         ABD[AudioBassDetector<br/>WASAPI loopback . IIR filter]
         RAS[RumbleAudioService<br/>Bass Shakers . WASAPI render]
         PH[PeripheralOutputHost #494<br/>HID++ . LampArray . Razer . SteelSeries . TouchSense<br/>Chroma . LED SDK . GameSense . Sensa workers]
+        GTD[GameTelemetryDevice #531<br/>game telemetry UDP . Assetto Corsa shared memory]
     end
 
     subgraph "Virtual Controllers"
@@ -57,6 +58,7 @@ graph TB
         PEER[Remote Link Peers<br/>Paired PadForge PCs, LAN or internet relay]
         VEND[Peripheral vendors<br/>Razer Synapse . Logitech G HUB . SteelSeries GG<br/>Logitech HID++ devices]
         MODS[DSX game mods<br/>GTA V . RDR2 . Skyrim . Forza]
+        GAMES[Driving games<br/>Forza . F1 . WRC . BeamNG . AMS2 . ACC]
     end
 
     UI --> VM
@@ -69,6 +71,8 @@ graph TB
     IS --> PH
     IS --> GMS
     MODS -.->|UDP, default 6969, loopback| GMS
+    IM --> GTD
+    GAMES -.->|UDP, default 20777, every address| GTD
     IM -.->|levels, claims| PH
     PH -.->|REST, LED SDK, GameSense, HID++| VEND
     RS --> IM
@@ -157,8 +161,9 @@ PadForge.App/
     VirtualKey.cs                     # Windows VK code → display name lookup table
 
     Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs
-      TelemetryHub.cs                 # Demand-driven owner of the sources, publishes one current snapshot for FFB dispatch
-      ITelemetrySource.cs             # Source interface
+      TelemetryHub.cs                 # Demand-driven owner of the sources, publishes one current snapshot for FFB dispatch. Keeps a source closed on a port the Game Telemetry row holds (YieldPort, ReclaimPort)
+      ITelemetrySource.cs             # Source interface, and IUdpTelemetrySource for the sources that bind a port
+      GameTelemetryRowSource.cs       # The Game Telemetry row's engine values, first in the hub's order (#531)
       ForzaUdpTelemetrySource.cs      # Forza Data Out (default port 5300)
       CodemastersUdpTelemetrySource.cs / OutGaugeTelemetrySource.cs / ScsTruckTelemetrySource.cs
       AssettoCorsaTelemetrySource.cs / IRacingTelemetrySource.cs / MadnessTelemetrySource.cs
@@ -571,7 +576,7 @@ The `Common/Input/`, `Services/`, `Engine/Data/`, and `Engine/RemoteLink/` trees
 
 - `Haptics/` (`HapticToneEncoder`, `HapticToneReducer`, `WiiSpeakerAdpcm`, and since 4.4.0 `TritonPcmEncoder` for the 2026 Steam Controller's native PCM haptics, #381). Since 4.1.0: `Menus/` (`MenuDefinitionEntry`, `MenuEvaluator`, `MenuSelectionMath`) and `Touchpad/SwipeHapticsEvaluator.cs`. The `RemoteLink/` subtree is listed in full above.
 
-New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, `LogitechGKeys = 37`, `AnalogKeyboard = 38`, `WebMenus = 39`, and the vendor rows' `PeripheralLighting = 40` and `PeripheralHaptics = 41` (#494) under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
+New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, `LogitechGKeys = 37`, `AnalogKeyboard = 38`, `WebMenus = 39`, the vendor rows' `PeripheralLighting = 40` and `PeripheralHaptics = 41` (#494), `KeyboardScreenKeys = 42` (#519), `NovintFalcon = 43` (#521) and `GameTelemetry = 44` (#531) under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
 
 ### Since 4.1.0
 
@@ -692,6 +697,25 @@ Game mods written for DSX send DualSense trigger programs and lights as JSON ove
 **`PadForge.DsxStandIn/`**
 
 - `Program.cs`. The stand-in: it waits on the process ID passed as its one argument and exits when that process does
+
+Driving games send their telemetry over UDP, and Assetto Corsa publishes it in shared memory. With **Listen for Game Telemetry** on, the Game Telemetry row reads it, Custom Expression variables read it in its own units, and the wheel RPM lights read the game from the row (#531). Detail on [Game Telemetry Internals](game-telemetry-internals.md).
+
+**App `Common/Input/Telemetry/`**
+
+- `TelemetryFrame.cs`, `TelemetryDecoders.cs`, `TelemetryReader.cs`. The frame, one decoder per game family, and the format choice with Auto-Detect's hold
+- `KunosSharedMemory.cs`. Assetto Corsa's three pages, opened read-only
+- `CustomTelemetryFormat.cs`. The user's packet formats and their readers
+- `GameTelemetryRuntime.cs`. The Dashboard mirror, the expression values and the wheel lights' engine values
+- `GameTelemetryDevice.cs`. The row: the socket, the forward socket, the axes and buttons
+
+**App `Common/Input/`**
+
+- `InputManager.GameTelemetry.cs`. Step 1 phase 1i2
+- `MacroTriggerEffects.cs`. The adaptive trigger effects macros hold, one store per slot
+
+**App `Services/`**
+
+- `InputService.GameTelemetry.cs`. The Dashboard status line and flame, and the Devices panel line
 
 ### PadForge.SteamWorkshop
 
@@ -880,7 +904,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Twelve documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
+Fourteen documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
 
 ### 1. Engine Thread (InputManager, 1000 Hz)
 
@@ -1013,6 +1037,10 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 `GameModServer` (#529) runs a background thread named `PadForge.GameModServer` while **Accept DSX Game Mods** is on and the engine runs. It blocks in `Socket.ReceiveFrom` on a loopback socket with a 500 ms timeout, answers each packet, and applies its instructions to `GameModEffects`. Between packets, at most every 500 ms, it checks the senders: one whose process exited, or one with no process found that has been quiet for 15 seconds, loses everything it set. A change to a hold queues one effects pass on the thread pool for the slot it reaches, so the receive thread never waits on a HID write.
 
+### 14. Game Telemetry Receive Thread (GameTelemetryDevice, on demand)
+
+The Game Telemetry row (#531) runs a background thread named `PadForge.GameTelemetryUdp` while **Listen for Game Telemetry** is on, the engine runs, and the Game list holds anything but Assetto Corsa, which only shared memory carries. It blocks in `Socket.ReceiveFrom`, copies each packet to the forward port, and decodes it under the row's state lock. The poll thread reads the frame in Step 2 and polls Assetto Corsa's shared memory there itself. Closing the socket ends the thread, and retiring the row waits up to 50 ms for it.
+
 ### Thread Safety Summary
 
 | Shared State | Writer | Reader | Sync |
@@ -1039,6 +1067,9 @@ Injected mouse movement is processed synchronously: it traverses every process's
 | `PeripheralOutputs` direct units and unit rows (#494) | `PeripheralLink` thread | Engine (Step 1 phase 1m), peripheral workers, UI | Immutable snapshots swapped whole (`Volatile.Write`) |
 | A direct backend's snapshot and crash record | Its worker thread | `PeripheralLink` thread, the crash path | Immutable, swapped whole |
 | `GameModEffects` holds (#529) | Game mod server thread, UI (Clear Mod Effects), server stop | Effects dispatchers, Engine (Step 5 thresholds), UI timer | Copy-on-write array published whole under a leaf lock, read with `Volatile.Read` |
+| Game Telemetry row frame (#531) | Game telemetry receive thread, Engine (Step 2, shared memory) | Engine (Step 2), UI timer (status) | The row's `_stateLock` |
+| `GameTelemetryRuntime` engine values (#531) | Engine (Step 2) | `TelemetryHub` poll thread | Leaf lock (`_engineLock`) |
+| `MacroTriggerEffectState` per slot (#531) | Engine (Step 4b) | Effects dispatchers, Engine (Step 2, Xbox trigger translation) | Leaf lock per slot, volatile flags for the empty check |
 
 ---
 
