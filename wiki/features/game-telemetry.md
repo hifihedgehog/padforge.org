@@ -160,7 +160,7 @@ Two macro actions in the **Rumble** group play adaptive trigger effects on the D
 **Adaptive Trigger Effect** plays one effect:
 
 - **Trigger**: **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**.
-- **Effect**: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse.
+- **Effect**: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is **Vibration** with the **Start Zone** at 0 and the **Strength** at 8, the same bytes a mod sends for it.
 - The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.
 - **Holds**: **While the Macro's Trigger Is Held**, **For a Set Time** (with a **Time** in milliseconds), or **Until Stopped**.
 
