@@ -899,7 +899,8 @@ ScrollViewer
       │   haptic mouse, keyboard or the Razer Sensa row
       ├─ "Test Rumble" Button (TestRumbleCommand)
       ├─ "Motor Activity" header
-      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game's request)
+      ├─ Left Motor bars (ProgressBar 0-1): RawLeftMotorDisplay (the game's request,
+      │   with haptics played as audio on a DualSense persona, #522)
       │   over DeviceLeftMotorDisplay (the selected device's output after its settings)
       ├─ Right Motor bars: RawRightMotorDisplay over DeviceRightMotorDisplay
       ├─ "Steering Angle Rumble" card (SteeringAngleRumbleEnabled, axis LX / LY / RX / RY,

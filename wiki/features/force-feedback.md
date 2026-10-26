@@ -44,6 +44,12 @@ The same slot rumble reaches a haptic mouse or the Razer Sensa row assigned to t
 
 When one physical controller is assigned to several virtual slots, PadForge takes the highest motor value from any active slot. No rumble signals are lost.
 
+### DualSense haptics played as audio
+
+A game that supports the DualSense's haptics over USB plays them through the controller's audio and sends no rumble. On a **DualSense (PS5): Full** or **DualSense Edge (PS5): Full** virtual controller, PadForge turns the loudness of the left haptic channel into left motor rumble and the right channel into right motor rumble. Every controller on the slot gets it the way it gets game rumble: through its own Overall Gain, motor strengths and swap, and combined with any game rumble by taking the stronger of the two. Overall Gain at 0% turns it off for that controller.
+
+Two kinds of controller get none of it, because they play the haptics themselves: a DualSense or DualSense Edge on the slot, and a Steam or Switch controller with **Play DualSense Haptics on This Controller** on. A DualSense that PadForge cannot send the haptics to, because its audio is unavailable, gets the rumble instead.
+
 ---
 
 ## Rumble settings
@@ -95,7 +101,7 @@ If several physical devices share a slot, the test pulse only fires on the devic
 
 Each motor (Left, Right) shows two stacked bars in real time as games send rumble:
 
-- **RAW** (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it.
+- **RAW** (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it. It includes [haptics played as audio](#dualsense-haptics-played-as-audio).
 - **OUT** (ember orange): what the selected physical device receives.
 
 The gap between the two bars is what this device's own settings did to the game's command. At defaults, with no audio rumble, constant force, or trigger routing, they match. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.
@@ -163,6 +169,8 @@ The Extended virtual controller advertises DirectInput force feedback by default
 ## PlayStation pads
 
 When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.
+
+On a DualSense (PS5): Full slot, a DualShock 4 rumbles with the [haptics a game plays as audio](#dualsense-haptics-played-as-audio), and a DualSense plays them on its own actuators.
 
 ### PlayStation pads through a Padix converter
 

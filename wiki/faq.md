@@ -234,6 +234,10 @@ The game has to send trigger rumble, and the slot has to carry it. That needs an
 
 Partly. **Translate Adaptive Trigger Vibrations**, a per-device setting that is off by default, plays a virtual DualSense's vibration effects on an Xbox controller's trigger motors. Resistance effects have nothing to play on and are left out. More: [Impulse Triggers](features/impulse-triggers.md).
 
+### Does an Xbox controller rumble when a game uses DualSense haptics?
+
+Yes, on a DualSense (PS5): Full or DualSense Edge (PS5): Full virtual controller. A game that plays the DualSense's haptics through the controller's audio sends no rumble, so PadForge turns the haptics' loudness into rumble for every controller on the slot that does not play them itself. The controller's Force Feedback settings apply to it. More: [DualSense haptics played as audio](features/force-feedback.md#dualsense-haptics-played-as-audio).
+
 ### How do a game's own DualSense haptics differ from audio mirroring?
 
 A game that supports the DualSense sends its own haptics and speaker sound to a virtual DualSense that carries audio. Mirroring is separate: it captures a Windows audio output and plays that sound on the controller. Speaker sound, rumble, trigger effects and haptics are separate things to check. More: [Mirror a Windows audio output](features/controller-audio.md#mirror-a-windows-audio-output).

@@ -1522,6 +1522,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dualsense-haptics-played-as-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DualSense haptics played as audio
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4178,6 +4189,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#dualsense-haptics-played-as-audio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DualSense haptics played as audio
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4572,6 +4594,9 @@
 <p>The same slot rumble reaches a haptic mouse or the Razer Sensa row assigned to the slot. See <a href="#haptic-mice-and-the-razer-sensa-row">Haptic mice and the Razer Sensa row</a>.</p>
 <h3 id="multi-slot-rumble">Multi-slot rumble<a class="headerlink" href="#multi-slot-rumble" title="Permanent link">&para;</a></h3>
 <p>When one physical controller is assigned to several virtual slots, PadForge takes the highest motor value from any active slot. No rumble signals are lost.</p>
+<h3 id="dualsense-haptics-played-as-audio">DualSense haptics played as audio<a class="headerlink" href="#dualsense-haptics-played-as-audio" title="Permanent link">&para;</a></h3>
+<p>A game that supports the DualSense's haptics over USB plays them through the controller's audio and sends no rumble. On a <strong>DualSense (PS5): Full</strong> or <strong>DualSense Edge (PS5): Full</strong> virtual controller, PadForge turns the loudness of the left haptic channel into left motor rumble and the right channel into right motor rumble. Every controller on the slot gets it the way it gets game rumble: through its own Overall Gain, motor strengths and swap, and combined with any game rumble by taking the stronger of the two. Overall Gain at 0% turns it off for that controller.</p>
+<p>Two kinds of controller get none of it, because they play the haptics themselves: a DualSense or DualSense Edge on the slot, and a Steam or Switch controller with <strong>Play DualSense Haptics on This Controller</strong> on. A DualSense that PadForge cannot send the haptics to, because its audio is unavailable, gets the rumble instead.</p>
 <hr />
 <h2 id="rumble-settings">Rumble settings<a class="headerlink" href="#rumble-settings" title="Permanent link">&para;</a></h2>
 <table>
@@ -4669,7 +4694,7 @@
 <p><img alt="Motor activity panel showing stacked RAW and OUT bars for the left and right motors" src="../../images/pad-motor-activity.png" /></p>
 <p>Each motor (Left, Right) shows two stacked bars in real time as games send rumble:</p>
 <ul>
-<li><strong>RAW</strong> (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it.</li>
+<li><strong>RAW</strong> (cold color): the rumble the game sent to the virtual controller, before this device's gain, strength, swap, constant force, trigger routing, or audio rumble touch it. It includes <a href="#dualsense-haptics-played-as-audio">haptics played as audio</a>.</li>
 <li><strong>OUT</strong> (ember orange): what the selected physical device receives.</li>
 </ul>
 <p>The gap between the two bars is what this device's own settings did to the game's command. At defaults, with no audio rumble, constant force, or trigger routing, they match. Each bar has its own percentage readout. Left is the low-frequency motor, right is the high-frequency motor.</p>
@@ -4766,6 +4791,7 @@
 <hr />
 <h2 id="playstation-pads">PlayStation pads<a class="headerlink" href="#playstation-pads" title="Permanent link">&para;</a></h2>
 <p>When the physical device you mapped is a DualShock 4, DualSense, or DualSense Edge, PadForge sends rumble and lightbar together in one update to the pad, whatever the slot's output type. On the DualSense family that same update carries the adaptive triggers, the player row, and the mic LED. A DualShock 4 has none of those. Game rumble and your effect settings arrive in sync, so nothing fights over the device.</p>
+<p>On a DualSense (PS5): Full slot, a DualShock 4 rumbles with the <a href="#dualsense-haptics-played-as-audio">haptics a game plays as audio</a>, and a DualSense plays them on its own actuators.</p>
 <h3 id="playstation-pads-through-a-padix-converter">PlayStation pads through a Padix converter<a class="headerlink" href="#playstation-pads-through-a-padix-converter" title="Permanent link">&para;</a></h3>
 <p>PS1 and PS2 pads reach the PC through Padix PSX/USB converter boards, sold by Buffalo as the BSGC101 (one port) and BSGC201 (two ports). PadForge drives the pad's two motors directly: the low-frequency channel sets the big motor's strength and the high-frequency channel switches the small motor on and off, the same split SDL uses for a DualShock 3. Buffalo's driver package is not needed, and installing it changes nothing here, because PadForge never goes through its DirectInput plug-in. The Force Feedback tab appears for the converter whether or not that package is installed.</p>
 <hr />

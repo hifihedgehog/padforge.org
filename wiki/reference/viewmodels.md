@@ -3303,7 +3303,7 @@ Filters the single (pitch, amplitude) pair the haptic-tone sinks reduce everythi
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `AudioPersonaHapticsEnabled` | `bool` | `false` | Render the virtual DualSense's authored haptic audio (persona UAC channels 3/4) on this device's actuators through the haptic-tone chain. Off by default because the derived tones only approximate the designer's track. |
+| `AudioPersonaHapticsEnabled` | `bool` | `false` | Render the virtual DualSense's authored haptic audio (persona UAC channels 3/4) on this device's actuators through the haptic-tone chain. Off by default because the derived tones only approximate the designer's track. While it is off the device takes the track as rumble instead (`PersonaHapticRumble`, #522). |
 | `AudioPersonaHapticsGain` | `int` | `100` | Input gain percent (25–300) applied before the tone reducer, so a quiet authored track can still reach the actuators. |
 
 Reset commands: `ResetPersonaHapticsCommand`, `ResetPersonaHapticsGainCommand` (both on `PadViewModel`, alongside the Audio tab's other row resets).

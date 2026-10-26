@@ -1027,7 +1027,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 ### 11. Bass Shakers WASAPI Render (RumbleAudioService, on demand)
 
-`RumbleAudioService` (issue #236) renders each slot's inbound game feedback as low-frequency sine tones. Players are keyed by audio endpoint, not by slot: every slot routed to one endpoint shares a single NAudio `WasapiOut` (shared mode, event-sync, 30 ms buffers), one sample clock, and one composite limiter. Each `WasapiOut` runs its own render thread, and a 5-second reconcile `Timer` resolves configured endpoints and prunes dead players. The poll loop's `UpdateRumbleAudioLane` publishes a packed four-voice `LfeOutputState` long per slot each tick (`Volatile.Write`). `RumbleAudioSampleProvider` reads it on the render thread (`Volatile.Read`). On a composite DualSense persona the lane also merges the loudness of the persona's haptic channels, which HIDMaestro's pacing thread follows in `AudioPassthroughService.FollowPersonaHapticsForShakers` (discussion #522). Silence is an explicit edge, never an inference from callback inactivity: idle entry, engine stop, and slot delete publish it synchronously. A configured-but-unresolved endpoint fails closed (no fallback device).
+`RumbleAudioService` (issue #236) renders each slot's inbound game feedback as low-frequency sine tones. Players are keyed by audio endpoint, not by slot: every slot routed to one endpoint shares a single NAudio `WasapiOut` (shared mode, event-sync, 30 ms buffers), one sample clock, and one composite limiter. Each `WasapiOut` runs its own render thread, and a 5-second reconcile `Timer` resolves configured endpoints and prunes dead players. The poll loop's `UpdateRumbleAudioLane` publishes a packed four-voice `LfeOutputState` long per slot each tick (`Volatile.Write`). `RumbleAudioSampleProvider` reads it on the render thread (`Volatile.Read`). On a composite DualSense persona the lane also merges the loudness of the persona's haptic channels, which HIDMaestro's pacing thread follows in `AudioPassthroughService.FollowPersonaHaptics` (discussion #522). The slot's rumble readers take the same level through `InputManager.WithPersonaHaptics`. Silence is an explicit edge, never an inference from callback inactivity: idle entry, engine stop, and slot delete publish it synchronously. A configured-but-unresolved endpoint fails closed (no fallback device).
 
 ### 12. Peripheral Outputs (PeripheralOutputHost, with the engine)
 
@@ -1158,6 +1158,8 @@ HIDMaestro feedback packet (UMDF2 driver → HMController.OutputReceived)
   ▼
 Step 2: ApplyForceFeedback() (engine thread)
   │  Reads VibrationStates[slot] for each device in that slot
+  │  Merges a DualSense persona's haptics played as audio (max, #522), unless
+  │    the device plays them itself
   │  Merges with audio-bass rumble (max), macro rumble (max), and Constant Force
   │  Routes by source-pad VID/PID to the per-family writer:
   │    Sony (DS4/DualSense) → UserEffectsDispatcher (sole writer, SDL skipped)

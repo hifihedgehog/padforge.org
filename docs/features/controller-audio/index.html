@@ -4380,7 +4380,7 @@
 </tr>
 <tr>
 <td>While the Game Rumbles</td>
-<td>The tone plays only while the slot's game vibration is active.</td>
+<td>The tone plays only while the slot's game vibration is active, including haptics a game plays through a DualSense (PS5): Full controller's audio.</td>
 </tr>
 </tbody>
 </table>
@@ -4411,7 +4411,7 @@
 </table>
 <p><strong>Tone Limit</strong> sets the cutoff, default 800 Hz. That keeps engine and impact rumble while catching high-pitched beeps. Folding is the gentler choice.</p>
 <h3 id="play-dualsense-haptics-on-this-controller">Play DualSense Haptics on This Controller<a class="headerlink" href="#play-dualsense-haptics-on-this-controller" title="Permanent link">&para;</a></h3>
-<p>Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a <strong>Haptics Gain</strong> slider, 25 to 300%, default 100%.</p>
+<p>Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a <strong>Haptics Gain</strong> slider, 25 to 300%, default 100%. With it off, the pad feels the track as <a href="../force-feedback/#dualsense-haptics-played-as-audio">rumble</a> instead, through its Force Feedback settings.</p>
 <p>On a Steam Controller 2026 over USB or the dongle the same toggle feeds the haptic track into the actuator stream as audio rather than as a tone, so the game's authored haptics play as the designer mixed them, below the low-pass cutoff.</p>
 <h3 id="actuator-low-pass-cutoff">Actuator Low-Pass Cutoff<a class="headerlink" href="#actuator-low-pass-cutoff" title="Permanent link">&para;</a></h3>
 <p>Shown only for a Steam Controller 2026 on a USB cable or its dongle. Keeps the haptic stream below this frequency so the pads vibrate instead of audibly playing sound. Around 250 Hz the actuators start to become audible. Raise it for sharper detail, lower it for quieter play. Range 60 to 1000 Hz, default 250, with a reset button whose tooltip reads "Reset to 250 Hz". The High Tones setting does nothing on this pad over those two transports. The cutoff takes its place.</p>

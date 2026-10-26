@@ -25,7 +25,7 @@ The interim milestones a successor should know, each one PadForge's own call sit
 | v1.3.21 (HM#37) | Switch Pro Bluetooth descriptor corrected to the real pad's wire shape | The Nintendo category's BT report shape |
 | v1.3.22 (HM#38) | Input worker survives foreign stop signals, the structural fix for the frozen-output bug | `App.xaml.cs:431` (the startup orphan sweep's ordering barrier) |
 | v1.4.0 (HM#39) | Composite USB personas with audio surfaces (speaker and haptic PCM out, mic in) | `AudioPassthroughService.cs:1494`, `HMaestroVirtualController.cs:97` |
-| v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2553` |
+| v1.4.1 (HM#41) | Ring-side audio truncation fixed | `AudioPassthroughService.cs:2586` |
 | v1.4.3 (HM#42) | The usbip-vhci node HM owns is stamped, so the persona guard can identify it | `InputManager.Step1.UsbipVhciGuard.cs:21` |
 | v1.5.1 (HM#48) | Second DS5 Edge paddle/Fn pair | `HMaestroVirtualController.cs:1995-1996` |
 | v1.6.0 (HM#32) | Native OpenVR driver behind `HMVRController` | `HMaestroVRController.cs:9` |

@@ -63,7 +63,7 @@ Choose when the mirror tone plays.
 |---|---|
 | Always | The tone tracks the mirrored audio the whole time the mirror is on. Default. |
 | While an Input Is Held | The tone plays only while a button or trigger you pick is held. An **Engage Input** picker with a record button sets that input. |
-| While the Game Rumbles | The tone plays only while the slot's game vibration is active. |
+| While the Game Rumbles | The tone plays only while the slot's game vibration is active, including haptics a game plays through a DualSense (PS5): Full controller's audio. |
 
 Whenever the tone is gated to an input or to rumble, a **Release Delay** box keeps it playing for a moment after that source stops, so it does not clip off the instant the source drops. Default 500 ms.
 
@@ -81,7 +81,7 @@ Decide what happens to pitches above a limit you set. This applies to the mirror
 
 ### Play DualSense Haptics on This Controller
 
-Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a **Haptics Gain** slider, 25 to 300%, default 100%.
+Off by default. When a game drives the slot as a virtual DualSense and sends authored haptic audio, that track plays on this pad's actuators as tones. It is derived from the audio, so it approximates the designer's feel rather than reproducing it. Turning it on reveals a **Haptics Gain** slider, 25 to 300%, default 100%. With it off, the pad feels the track as [rumble](force-feedback.md#dualsense-haptics-played-as-audio) instead, through its Force Feedback settings.
 
 On a Steam Controller 2026 over USB or the dongle the same toggle feeds the haptic track into the actuator stream as audio rather than as a tone, so the game's authored haptics play as the designer mixed them, below the low-pass cutoff.
 
