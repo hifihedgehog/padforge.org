@@ -17,7 +17,7 @@ PadForge speaks the same interface as DSX and as the open programs that took it 
 
 While a mod sends, the line names it and the virtual controller its effects reach, for example *Listening on :6969. GTA5.exe is sending to virtual controller 1.* A mod that runs inside the game shows the game's program.
 
-DSX and PadForge cannot both listen on one port. With DSX running on 6969 the line reads *Port 6969 is in use by another program, such as DSX. Close it or choose another port.* Close DSX, or give PadForge another port and set the mod to it.
+DSX and PadForge cannot both listen on one port. With DSX running on 6969 the line reads *Port 6969 is in use by another program, such as DSX. Close it or choose another port.* Close DSX, or give PadForge another port and set the mod to it. While the switch is on and the engine runs, PadForge tries the port again every 3 seconds, so the server starts on its own once DSX closes.
 
 ### Where mods find the port
 
@@ -31,7 +31,7 @@ Some mods check that a program named DSX is running before they send anything. D
 
 ## Which controller a mod drives
 
-Mods name the controller they drive by number, and every mod checked for this release sends controller 1 (number 0 in the packets). PadForge counts the virtual controllers that have an online DualSense, DualSense Edge or DualShock 4 on them, in the order the Dashboard numbers them. A mod's controller 1 is the first of those, its controller 2 the second, and so on. A DualSense on virtual controller 2, behind a wheel on virtual controller 1, is still the mod's controller 1.
+Mods name the controller they drive by number, and every mod checked for this release sends controller 1 (number 0 in the packets). PadForge counts the virtual controllers that have an online DualSense, DualSense Edge or DualShock 4 on them, in the order the Dashboard numbers them. A mod's controller 1 is the first of those, its controller 2 the second, and so on. A DualSense on virtual controller 2, behind a wheel on virtual controller 1, is still the mod's controller 1. When that list changes, because a virtual controller is turned on or off or a PlayStation controller arrives or leaves, a mod's effects move at once to the controller its number now names, and the controller they left drops them. A mod that sends to a number past the last of them gets a line that says so, for example *Listening on :6969. GTA5.exe is sending to controller index 1, and no virtual controller with a PlayStation controller on it has that index.*
 
 What a mod sets goes to every PlayStation controller on that virtual controller:
 
@@ -65,7 +65,7 @@ When they end, your own settings return: the trigger settings on the [Adaptive T
 
 ### What you see while a mod holds something
 
-- On the [Devices](devices.md) page, the controller's panel names the program and what it sets, such as *GTA5.exe is setting this controller's triggers and lights*, with a **Clear Mod Effects** button below.
+- On the [Devices](devices.md) page, the controller's panel names the program and what it sets, such as *GTA5.exe is setting this controller's triggers and lights*, with a **Clear Mod Effects** button below. A mouse, keyboard or lighting row the virtual controller lights reads *GTA5.exe is setting this device's lights*.
 - On the virtual controller's page, the **Adaptive Triggers**, **Impulse Triggers** and **Lighting** tabs each show an orange line while a mod sets something there.
 
 ### Games and mods together

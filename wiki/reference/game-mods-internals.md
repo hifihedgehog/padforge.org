@@ -82,7 +82,7 @@ An instruction that sets a value already held changes nothing, so a mod that res
 
 ### Which virtual controller an index reaches
 
-`GameModEffects.OrderedSlots` lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order `SettingsManager.SlotOrders.GetGlobalSlotNumber` numbers them on the Dashboard. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use `ForSlotCached`, which resolves the order at most every 250 ms.
+`GameModEffects.OrderedSlots` lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order `SettingsManager.SlotOrders.GetGlobalSlotNumber` numbers them on the Dashboard. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use `ForSlotCached`, which resolves the order at most every 250 ms. `RefreshOrder` resolves it and swaps the cached copy, and when the order changed while a mod holds anything, every virtual controller in the old order and the new one is told (`NotifySlot`): the pad an index left gives the mod's values back and the pad it reached takes them, with no new packet. The Dashboard tick calls it too, once a second, which covers a moment when no virtual controller polls.
 
 ### Releases
 
@@ -93,7 +93,7 @@ A hold's values end when:
 - **The user clicks Clear Mod Effects** on a controller's Devices panel, which resets every index that reaches a virtual controller the controller feeds.
 - **The server stops**, with the switch, the port, the engine or PadForge.
 
-A packet from a port whose sender has exited is identified anew, so a new program that reuses the port does not inherit the old one's values.
+Senders are kept per process. A packet's source port leads to the live sender of the process that owns it (`FindUdpOwner`, then the sender with that `ProcessId`), so a mod that opens a new socket every tick is one sender holding one process handle, however many ports it sends from. A port quiet for 15 seconds is forgotten, and a sender whose process cannot be opened stays one per port. A packet from a port whose sender has exited is identified anew, so a new program that reuses the port does not inherit the old one's values.
 
 ## The effects pass
 
@@ -123,7 +123,7 @@ Step 5 applies the held thresholds right before submit, after button SOCD, on a 
 
 Every packet gets a reply at once, sent before the packet is applied, because the mods that wait for one block on `Receive` with no timeout. The reply carries DSX's fields and casing: `Status` ("DSX Received UDP Instructions", DSX's own text), `TimeReceived`, `isControllerConnected`, `BatteryLevel`, and the v3 `Devices` list. `GameModStatusDevices` builds that list at most every 250 ms: one entry per controller index, describing the first online Sony pad on that virtual controller, with DSX's `DeviceType` (0 DualSense, 1 Edge, 2 and 3 DualShock 4 v1 and v2, 4 the wireless adapter) and `ConnectionType` (0 USB, 1 Bluetooth, 2 the adapter).
 
-The Dashboard line comes from `GameModServer.FormatStatus`: why the server is not listening, or the last sender's program and the Dashboard number of the virtual controller its index reaches.
+The Dashboard line comes from `GameModServer.FormatStatus`: why the server is not listening, or the last sender's program and the Dashboard number of the virtual controller its index reaches. An index past every virtual controller with a PlayStation controller, while some have one, gets its own line naming the index (`GameMods_SendingPastControllers_Format`). A start that found the port bound by another program is tried again every 3 seconds (`InputService.PortInUseRetryMs`) from the Dashboard tick, while the switch is on and the engine runs, and a language change keeps a failed start's reason on the card.
 
 ### Port files
 

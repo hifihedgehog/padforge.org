@@ -46,7 +46,7 @@ When one physical controller is assigned to several virtual slots, PadForge take
 
 ### DualSense haptics played as audio
 
-A game that supports the DualSense's haptics over USB plays them through the controller's audio and sends no rumble. On a **DualSense (PS5): Full** or **DualSense Edge (PS5): Full** virtual controller, PadForge turns the loudness of the left haptic channel into left motor rumble and the right channel into right motor rumble. Every controller on the slot gets it the way it gets game rumble: through its own Overall Gain, motor strengths and swap, and combined with any game rumble by taking the stronger of the two. Overall Gain at 0% turns it off for that controller.
+A game that supports the DualSense's haptics over USB plays them through the controller's audio and sends no rumble. On a **DualSense (PS5): Full** or **DualSense Edge (PS5): Full** virtual controller, PadForge turns the loudness of the left haptic channel into left motor rumble and the right channel into right motor rumble. Every controller on the slot gets it the way it gets game rumble: through its own Overall Gain, motor strengths and swap, and combined with any game rumble by taking the stronger of the two. Overall Gain at 0% turns it off for that controller. On a real DualSense that a game also writes through the virtual one, PadForge's rumble rides the game's own frames, so the game's writes do not cut it off. When a game hands its rumble back to the haptics, a DualSense that cannot play them gets the converted rumble at once.
 
 Two kinds of controller get none of it, because they play the haptics themselves: a DualSense or DualSense Edge on the slot, and a Steam or Switch controller with **Play DualSense Haptics on This Controller** on. A DualSense that PadForge cannot send the haptics to, because its audio is unavailable, gets the rumble instead.
 
@@ -80,7 +80,7 @@ With Split by Direction, negative axis movement drives the left, low-frequency m
 
 The cue follows the final mapped output, including curves, inversion, layers, macros, and the combination of assigned sources. Each physical device keeps its own settings. Overall Gain, motor strength, Swap Left and Right Motors, and trigger routing apply afterward, as they do to game rumble. With Swap on, the picked motor swaps too. Game rumble and the steering cue combine by taking the stronger value on each motor.
 
-This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers and devices reporting native constant-force support keep their existing feedback. Extended, Nintendo, Keyboard + Mouse, MIDI, and VR outputs get no steering cue. It reads the stick axes of an Xbox or PlayStation virtual controller only. Physical motor placement depends on the device.
+This produces vibration rather than steering torque. Native Logitech, Fanatec, and Thrustmaster wheel writers, Fanatec pedals, and devices reporting native constant-force support keep their existing feedback and get no steering cue. Extended, Nintendo, Keyboard + Mouse, MIDI, and VR outputs get no steering cue. It reads the stick axes of an Xbox or PlayStation virtual controller only. Physical motor placement depends on the device.
 
 The [steering-lock pulse](../guides/steering.md#at-lock-feedback) remains a separate option for a brief cue at full lock. Ordinary wheel-axis mappings can use Steering Angle Rumble without enabling Winding, Angle to Axis, or Motion Lean.
 

@@ -9638,7 +9638,13 @@
 <td><code>SelectedGameTelemetryOption</code></td>
 <td><code>GameTelemetryOption</code></td>
 <td>Auto</td>
-<td>The picker's selection, read from the game and the custom name, or the first option. Picking Project CARS 2 moves the port to 5606 and the ETS2 plugin to 49001, the two senders whose port cannot change. A null write is ignored.</td>
+<td>The picker's selection, read from the game and the custom name, or the first option. Picking Project CARS 2 moves the port to 5606 and the ETS2 plugin to 49001, the two senders whose port cannot change. Picking another game afterward, or the reset, puts 20777 back while the port is still that sender's (<code>PickGameTelemetry</code>). A load or a profile applies its saved port as saved. A null write is ignored.</td>
+</tr>
+<tr>
+<td><code>GameTelemetryReadsUdp</code></td>
+<td><code>bool</code></td>
+<td><code>true</code></td>
+<td>Whether the picked game is read over UDP (<code>TelemetryReader.FormatReadsUdp</code>). False while Assetto Corsa is picked, which grays out Port and Forward to Port. Raised with <code>GameTelemetryFormat</code>.</td>
 </tr>
 <tr>
 <td><code>GameTelemetryForwardPort</code></td>
@@ -9656,7 +9662,7 @@
 <td><code>GameTelemetryFormats</code></td>
 <td><code>List&lt;CustomTelemetryFormat&gt;</code></td>
 <td>empty</td>
-<td>The custom formats. A set mirrors them to <code>GameTelemetryRuntime.Formats</code>, which reopens the row, refreshes the expression variables' <code>TelemetryChannelOptions</code> and rebuilds <code>GameTelemetryOptions</code>. A picked custom format that is gone sends the picker back to Auto-Detect. The Dashboard's Formats button sets it from <code>CustomTelemetryFormatsDialog.Result</code>.</td>
+<td>The custom formats. A set mirrors them to <code>GameTelemetryRuntime.Formats</code>, which reopens the row, writes each variable field's axis slot back with <code>WriteAxes</code> so the settings file saves it, refreshes the expression variables' <code>TelemetryChannelOptions</code> and rebuilds <code>GameTelemetryOptions</code>. A picked custom format that is gone sends the picker back to Auto-Detect. The Dashboard's Formats button sets it from <code>CustomTelemetryFormatsDialog.Result</code>.</td>
 </tr>
 <tr>
 <td><code>GameTelemetryStatus</code></td>

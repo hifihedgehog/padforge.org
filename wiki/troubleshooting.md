@@ -775,7 +775,7 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | MIDI button dimmed | No MIDI API started. Read the Windows MIDI Services card on Settings |
 | No MIDI output | Select "PadForge MIDI N" in the DAW, or under the legacy MIDI API the port picked on the slot's page |
 | No motion in emulator | Enable DSU server, match port, use 127.0.0.1 |
-| DSU port in use | Close conflicting app or change port |
+| DSU port in use | Close the other program, and the server starts within 3 seconds, or change the port |
 | Web controller disconnected | Same network, check firewall, change the port on the Dashboard |
 | iOS Safari drops the web controller | Keep Safari in the foreground or install the page as a PWA |
 | Remote Link PC not appearing | Same network, enable on both, allow firewall, or connect by address |

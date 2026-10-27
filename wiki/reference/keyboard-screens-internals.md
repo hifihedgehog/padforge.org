@@ -43,7 +43,7 @@ A kind is a class of screen: Monochrome (160 by 43), Color (320 by 240), Arx (48
 
 The service ticks on the UI thread, where WPF draws: four times a second, on every UI tick (33 ms) while a show plays, and at once after a change. It runs whether or not PadForge has focus, the Dreamcast screens' rule, so a clock keeps time behind a game. Each tick hands the host one picture per present screen with `Publish`, as top-down B, G, R, A pixels at the screen's size, or null when PadForge shows nothing there. A picture equal to the last one changes nothing.
 
-The host keeps the latest picture per screen and runs every engine on one worker thread, `PadForge.KeyboardScreens`, every 20 ms and at once when a picture arrives. Each engine's pass has its own exception handler, so one that throws leaves the others drawing. After each pass the host lists the present screens in id order and publishes the list for the rows when it changes. Every vendor library call is made on that thread. The vendors' callbacks arrive on their own threads and only set flags or queue events. The monochrome keys arrive on the HID readers' threads, and each G19's keys on a reader thread of their own.
+The host keeps the latest picture per screen and runs every engine on one worker thread, `PadForge.KeyboardScreens`, every 20 ms and at once when a picture arrives. Each picture takes the next version from one counter for the whole host, so a screen that takes over as the kind's leader never presents a version the LGS session already wrote. Dispose stops, cancels, wakes and joins the worker for up to 5 seconds, and the worker shuts every engine down at the end of its own run, since Arx and the LCD library start and end on one thread, so a wait that runs out still ends in that shutdown. A stopping host publishes no screen list, and a new host's worker waits up to 5 seconds for the last one, `HidppBackend`'s predecessor rule. Each engine's pass has its own exception handler, so one that throws leaves the others drawing. After each pass the host lists the present screens in id order and publishes the list for the rows when it changes. Every vendor library call is made on that thread. The vendors' callbacks arrive on their own threads and only set flags or queue events. The monochrome keys arrive on the HID readers' threads, and each G19's keys on a reader thread of their own.
 
 ---
 
@@ -70,6 +70,8 @@ LGS's library names no device (`LogitechLCDLib.h`), so LGS takes one picture for
 
 `LgsLcdScreens` registers the applet only for the kinds whose leading screen has a picture, so a kind set to Off stays with LGS's own applets, and a change in that set registers the applet again. It calls `LogiLcdUpdate` on every pass, as logitech-lcd's examples call it every frame. A monochrome picture goes out as 160 by 43 bytes, a pixel lit at 128 or more, and a color picture as 320 by 240 B, G, R, A pixels. After 2 seconds with nothing to show, the applet shuts down, so a mode changed in passing does not take it down and up again. `LogiLcdIsConnected` is read once a second for the rows' lines.
 
+No reference on hand documents what the LCD library does when LGS restarts under a session (logitech-lcd, dcspy, LogitechStuff, foo_logitech_lcd and the lgLcd wrappers say nothing), so PadForge follows the Arx SDK's rule for the same LGS: a broken connection takes no further call and wants a shutdown (LogitechGArxControl.pdf, page 15), then a new init on a timer (page 8). Every 10 seconds while the session is up (`LgsCheckMs`), the worker reads the ids of LGS's running processes, `lgs` or `LCore`. When the process the session first saw is gone, the session shuts down and the init is tried again on its 10-second timer, the direct writers drawing meanwhile. When another LGS process replaced it, the session shuts down and opens again at once. A process list that cannot be read changes nothing. This has not run against a real LGS restart.
+
 LGS reports the screen keys only to the applet in front, and it keeps the round applet key and the G19's settings key for itself. The button flags are `LogitechLCDLib.h`'s: `0x0001` to `0x0008` for the four monochrome keys, and `0x0100` to `0x4000` for the G19's Left, Right, OK, Cancel, Up, Down and Menu. LGS does not say which keyboard a key came from either, so `LgsLcdScreens` hands its flags to the host, which deals them (`DealLgsKeys`): a monochrome key goes to each keyboard whose own HID reader saw that key held, or go down within 350 ms (twice the pulse), and to the leading monochrome screen when none did. A color key goes to the leading G19.
 
 ---
@@ -78,7 +80,7 @@ LGS reports the screen keys only to the applet in front, and it keeps the round 
 
 The G15, G15 v2, G510, G510s, G13, Z-10 and GamePanel take a frame as one 992-byte output report. Byte 0 is report ID 3 and bytes 1 to 31 are zero. From byte 32 come six bands of eight rows, one byte per column of a band, with the band's top row in bit 0 and a set bit lighting the pixel. That is libg15's `dumpPixmapIntoLCDFormat`, and lcdproc, G15Interface and ecraven/g13 build the same bytes. The five rows of the last band below row 42 stay dark. A pixel lights where the picture's luminance is below half, the Dreamcast screen's threshold.
 
-`G15HidScreens` scans every 3 seconds for HID interfaces whose path carries Logitech's VID and a monochrome PID, with the devnode of each for its container. It probes each collection through an open that asks for no access, as `VendorHidRuntime` does, and keeps the verdict until the path goes. The collections of one container are one keyboard. The keyboard's collection whose output report is 992 bytes is its screen, written through `RawHidOutput`, the wheel writers' path, with that keyboard's own picture. A collection of any other output length is never written. Every collection with input reports, except a keyboard or mouse collection that Windows keeps for itself, gets a `VendorHidReader`, and its keys reach that keyboard's row. When a keyboard's picture goes away without LGS, one blank frame clears its screen, since nothing else draws it.
+`G15HidScreens` scans every 3 seconds for HID interfaces whose path carries Logitech's VID and a monochrome PID, with the devnode of each for its container. It probes each collection through an open that asks for no access, as `VendorHidRuntime` does, and keeps the verdict until the path goes. The collections of one container are one keyboard. The keyboard's collection whose output report is 992 bytes is its screen, written through `RawHidOutput`, the wheel writers' path, with that keyboard's own picture. A collection of any other output length is never written. Every collection with input reports, except a keyboard or mouse collection that Windows keeps for itself, gets a `VendorHidReader`, and its keys reach that keyboard's row. When a keyboard's picture goes away without LGS, one blank frame clears its screen, since nothing else draws it. A keyboard unplugged and plugged in again inside one scan's 3 seconds lost its picture, so every collection of it forgets what was written and its cached handle, and the next pass draws the picture again.
 
 The keys come from each model's input report, as Linux's hid-lg-g15 and libg15 decode them:
 
@@ -91,7 +93,7 @@ The keys come from each model's input report, as Linux's hid-lg-g15 and libg15 d
 
 The kernel does not bind the GamePanel, so its row rests on libg15, which reads it with the G15's 9-byte decoder. Linux hands over each report at its own length, and both decoders check that length. Windows pads every read to the longest input report of the collection, so here a report is told by its ID and needs at least its own length.
 
-While LGS draws, the readers pass on the applet key alone, and keep each keyboard's held keys and the time each went down for LGS's keys to be dealt by.
+While LGS draws the monochrome screens (`AppletKeyOnly`, the reverse of `MonoDrawsDirectly`), the readers pass on the applet key alone, and keep each keyboard's held keys and the time each went down for LGS's keys to be dealt by. While PadForge draws them, LGS included when it sees no monochrome screen, the readers pass on all five keys, since nothing else reports them.
 
 ---
 
@@ -102,12 +104,12 @@ The G19's screen is interface 0 of `046D:C229`. Frames go to bulk OUT endpoint `
 `G19UsbScreens` lists the USB nodes every 5 seconds and keeps a `G19UsbScreen` for each interface 0 of `046D:C229`, by its instance ID. A G19 that leaves takes its screen and its keys with it. Each `G19UsbScreen` looks at its own node:
 
 - On WinUSB with PadForge's device interface, it opens the interface and draws that G19's picture.
-- On no driver or the generic HID driver, and only while LGS is not active, it binds WinUSB through `VendorUsbDriverInstaller`, the installer behind PadForge's other WinUSB bindings: one INF that names the VID, PID and MI the way libwdi writes them. The bind takes seconds, so it runs on its own task while the other screens keep drawing. A failed bind is tried again after a minute.
-- On any other driver, LGS's or another program's WinUSB binding, it leaves the interface alone, and the row's line names the driver.
+- On no driver or the generic HID driver, and only while LGS is not active, it binds WinUSB through `VendorUsbDriverInstaller`, the installer behind PadForge's other WinUSB bindings: one INF that names the VID, PID and MI the way libwdi writes them. The bind takes seconds, so it runs on its own task while the other screens keep drawing. A failed bind is tried again after a minute, three times at most for one plug-in, `VendorUsbBindingService`'s count. A bind and `Restore` share one gate, and a bind waiting at it while the host stopped binds nothing.
+- On any other driver, LGS's or another program's WinUSB binding, it leaves the interface alone. The row's line names the driver, by the provider its INF names (`DEVPKEY_Device_DriverProvider`): a Logitech driver, or one whose provider cannot be read, gets the line that says to start Logitech Gaming Software, and any other, such as libusbK from Zadig, gets a line that says PadForge leaves it alone.
 
 Interface 1, the G-keys, stays with Windows throughout.
 
-The open follows `Ds3DirectService`'s USB path: an overlapped handle, `WinUsb_Initialize`, the pipes found by ID and type, and a transfer timeout on each. A frame write gets 1000 ms, gnome15's and G19USB's timeout. A key read gets 100 ms, so the reader notices a closed screen. A failed frame write closes the screen, and the next look opens it again.
+The open follows `Ds3DirectService`'s USB path: an overlapped handle, `WinUsb_Initialize`, the pipes found by ID and type, and a transfer timeout on each. A frame write gets 1000 ms, gnome15's and G19USB's timeout. A key read gets 100 ms, so the reader notices a closed screen. A failed frame write closes the screen, and the next look opens it again. So does a key read that fails, which is how a G19 unplugged and plugged in again inside one look's wait gets its picture back. The reader's loss is tied to its own handle, so a reader that outlived its session never closes the next one.
 
 The display keys arrive as a 2-byte report whose byte 1 is always `0x80`. Bits 0 to 7 of byte 0 are Settings, Cancel, Menu, OK, Right, Left, Down and Up.
 
@@ -123,6 +125,8 @@ Arx Control's row is there while the library loads, so it can be set before a ph
 
 After 2 seconds with nothing to show, `LogiArxShutdown` ends the applet.
 
+A call that fails with LGS's connection broken (error 6) or the SDK not initialized (error 4) means LGS takes no further call, so the session shuts down and the init is tried again after 10 seconds, the SDK guide's procedure (pages 15 and 8). The callback does not report LGS exiting, and a still picture makes no call after it goes out, so while a picture stands, one `LogiArxSetTagPropertyById` every 5 seconds points the page's image at the picture it already shows, which changes nothing while LGS answers (page 13).
+
 ---
 
 ## The S.T.R.I.K.E. 7
@@ -131,7 +135,7 @@ Mad Catz's `Strike7API.dll` reaches the keyboard's own software over a named pip
 
 The S.T.R.I.K.E. 7's row is there while the library loads. The applet is open only while the screen has something to show, so its icon leaves the V.E.N.O.M. screen when the screen is set to Off. A finger dragged across the screen pans a chosen picture the way Mad Catz's map applet scrolls its map: each touch event moves the picture by the distance from the last one, until the finger lifts.
 
-The library is x64 code, so the ARM64 build reports it unavailable and never tries to load it. It links MSVCR90 and MSVCP90 through a manifest dependency on `Microsoft.VC90.CRT` 9.0.21022.8, and a load that fails while that runtime is missing from the side-by-side store names the runtime as the reason.
+The library is x64 code, so the ARM64 build reports it unavailable and never tries to load it. It links MSVCR90 and MSVCP90 through a manifest dependency on `Microsoft.VC90.CRT` 9.0.21022.8, and a load that fails while that runtime is missing from the side-by-side store names the runtime as the reason. Until the runtime is there, the engine loads nothing and checks the store once a minute, and a finished install of the runtime makes it load at once.
 
 **Download Strike7API.dll** fetches Mad Catz's SDK, strike7_api 1.1, from AIDA64's server, checks it, extracts one file, checks that, and keeps it in the temp folder:
 

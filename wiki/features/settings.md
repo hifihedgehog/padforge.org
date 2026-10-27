@@ -301,7 +301,7 @@ While the engine runs, the card names only what the feature as a whole is missin
 
 **Drive Novint Falcon** is off by default. On, PadForge opens each Novint Falcon through Force Dimension's SDK, which you install from Force Dimension, and the [Devices](devices.md) page gains a row for each one. An open Falcon belongs to PadForge alone, so FalconJoyForce and Force Dimension's own tools cannot open it, and turning the switch off closes every Falcon. See [Novint Falcon](novint-falcon.md).
 
-While the engine runs, the card names the library that loaded, and when no Falcon opened, why. Each open Falcon's line and its **Calibrate Reach** are on its row's panel on the Devices page. **Choose dhd64.dll…** loads a copy of Force Dimension's library you pick before any other. **Install Falcon Driver** shows for a Falcon with no driver and installs Force Dimension's from the SDK folder. **Get Force Dimension's SDK** opens Force Dimension's download page.
+While the engine runs, the card names the library that loaded, and when no Falcon opened, why. Each open Falcon's line and its **Calibrate Reach** are on its row's panel on the Devices page. **Choose dhd64.dll…** loads a copy of Force Dimension's library you pick in place of any other, within a few seconds, and a Falcon open on another copy opens again on it. **Install Falcon Driver** shows for a Falcon with no driver and installs Force Dimension's from the SDK folder. **Get Force Dimension's SDK** opens Force Dimension's download page.
 
 
 ## Battery Alerts

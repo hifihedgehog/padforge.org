@@ -57,7 +57,7 @@ Click a card. A vertical accent bar appears on the left edge. The detail pane fi
 
 ### Removing a device
 
-The X button opens a **Remove Device** confirmation. Click **Remove** and the device and all its settings (mappings, slot assignments, hiding) are deleted. The [slot](controller-slots.md) stays. It just becomes unassigned.
+The X button opens a **Remove Device** confirmation. Click **Remove** and the device and all its settings (mappings, slot assignments, hiding) are deleted. A keyboard screen's choices go with it, and a Bliss-Box port's go back to the defaults. The [slot](controller-slots.md) stays. It just becomes unassigned.
 
 If the device is still plugged in, it comes back on the next scan as a fresh device with no settings.
 

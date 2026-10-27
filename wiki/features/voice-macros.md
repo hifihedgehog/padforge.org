@@ -15,9 +15,9 @@ Phrases follow the microphone that hears them.
 | System microphone (headset, webcam, USB mic) | Its own **Microphone** device row on the [Devices](devices.md) page |
 | Wired DualSense | The DualSense's mic surfaces as a system microphone, so its **Microphone** row carries the buttons, and the pad's own **Voice Phrase** sources fire too |
 | Bluetooth DualSense | No system microphone exists, so PadForge opens the controller's mic itself and the phrases ride the pad directly |
-| Bluetooth DualShock 4 (added after 5.1.0) | A headset plugged into the controller's jack. PadForge reads its microphone from the controller, so the phrases ride the pad directly |
+| Bluetooth DualShock 4 (added after 5.1.0) | A headset plugged into the controller's jack. PadForge reads its microphone from the controller and keeps it switched on, whether or not the pad drives a virtual controller, so the phrases ride the pad directly |
 
-Every microphone row exposes **Any Phrase** plus one button per registered phrase. A DualSense row, or a Bluetooth DualShock 4 row, additionally offers **Any Voice Phrase** and one **Voice Phrase** source per phrase in its mapping dropdown, alongside its sticks and buttons.
+Every microphone row exposes **Any Phrase** plus one button per registered phrase. A DualSense row, or a Bluetooth DualShock 4 row, additionally offers **Any Voice Phrase** and one **Voice Phrase** source per phrase in its mapping dropdown, alongside its sticks and buttons. A Bluetooth DualShock 4 shared over [Remote Link](../guides/remote-link.md) offers the same sources on the other PC when both PCs run a build newer than 5.1.0.
 
 ---
 

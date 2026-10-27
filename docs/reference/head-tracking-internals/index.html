@@ -4278,7 +4278,7 @@
 </tr>
 </tbody>
 </table>
-<p>The socket is IPv4 UDP bound to <code>IPAddress.Any</code> on the port (<code>HeadTrackerDevice.UdpBindAddress</code>, which the tests set to loopback), with <code>ExclusiveAddressUse</code> so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and <code>SIO_UDP_CONNRESET</code> cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is <code>PadForge.HeadTrackerUdp</code>, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets <code>UdpBindFailed</code>.</p>
+<p>The socket is IPv4 UDP bound to <code>IPAddress.Any</code> on the port (<code>HeadTrackerDevice.UdpBindAddress</code>, which the tests set to loopback), with <code>ExclusiveAddressUse</code> so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and <code>SIO_UDP_CONNRESET</code> cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is <code>PadForge.HeadTrackerUdp</code>, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets <code>UdpBindFailed</code>, and <code>GetCurrentState</code> tries the bind again every 3 seconds (<code>UdpRetryMs</code>, <code>RetryUdpBind</code>), one attempt at a time and never after <code>Dispose</code>, so closing the program that held the port brings the listener up without the row reopening.</p>
 <p>The peer is recorded as <code>address:port</code> of the last sender, and a change of peer bumps <code>StatusVersion</code>.</p>
 <hr />
 <h2 id="source-two-freetrack-20-shared-memory">Source two: FreeTrack 2.0 shared memory<a class="headerlink" href="#source-two-freetrack-20-shared-memory" title="Permanent link">&para;</a></h2>
@@ -4478,11 +4478,11 @@
 <tbody>
 <tr>
 <td><code>Head tracker: listening on UDP port &lt;port&gt;</code></td>
-<td>Bind succeeded</td>
+<td>Bind succeeded, at open or on a retry</td>
 </tr>
 <tr>
 <td><code>Head tracker: UDP port &lt;port&gt; bind failed: &lt;message&gt;</code></td>
-<td>Bind failed</td>
+<td>Bind failed at open. A retry that fails writes nothing</td>
 </tr>
 <tr>
 <td><code>Head tracker: FreeTrack shared memory open</code></td>

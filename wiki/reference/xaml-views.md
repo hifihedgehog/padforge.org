@@ -278,7 +278,8 @@ ScrollViewer
             │      Grid enabled with the switch: Game ComboBox (GameTelemetryGameCombo over
             │      GameTelemetryOptions, SelectedGameTelemetryOption) with
             │      ResetGameTelemetryGameCommand, Game Telemetry Port, Forward to Port and
-            │      Full Speed (km/h) NumberBoxes, each with its reset command, then the
+            │      Full Speed (km/h) NumberBoxes, each with its reset command (the two port
+            │      rows also enabled by GameTelemetryReadsUdp), then the
             │      Custom Formats… button (GameTelemetryFormatsButton, outside the Grid),
             │      status flame + GameTelemetryStatus as a polite live region, footer
             ├─ "Overlays" section (E700 glyph)

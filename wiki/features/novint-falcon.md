@@ -14,7 +14,7 @@ The two ways the handle can feel follow two community programs for the Falcon: F
 - Force Dimension's SDK for Windows, from [Force Dimension's download page](https://www.forcedimension.com/software/sdk). Novint's own software and drivers are no longer available, and Force Dimension's library loads the Falcon's firmware itself. PadForge loads the library you install and ships none of it.
 - The x64 build of PadForge. Force Dimension's library is 64-bit x86 code, which the ARM64 build cannot load.
 
-PadForge finds `dhd64.dll` in this order: a copy you chose with **Choose dhd64.dll…**, the folder the `FDSDK` environment variable names, the folder Force Dimension's installer recorded, each `sdk-*` folder under `Program Files\Force Dimension` or `Program Files\ForceDimension`, newest first, and System32, where the installer also puts a copy.
+PadForge finds `dhd64.dll` in this order: a copy you chose with **Choose dhd64.dll…**, the folder the `FDSDK` environment variable names, the folder Force Dimension's installer recorded, each `sdk-*` folder under `Program Files\Force Dimension` or `Program Files\ForceDimension`, newest first, and System32, where the installer also puts a copy. A copy you choose takes over within a few seconds with no restart, and a Falcon open on another copy closes and opens again on it.
 
 ---
 
@@ -39,9 +39,10 @@ Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, 
 |---|---|
 | *A Falcon is plugged in with no driver* | Click **Install Falcon Driver**. It installs Force Dimension's package from the SDK folder onto the Falcon. Windows may first ask whether to trust Force Dimension. |
 | *The Falcon is on another driver (…)* | PadForge leaves a device on another driver alone, such as Novint's old driver. In Device Manager, open the Falcon, choose **Update driver**, then **Browse my computer for drivers**, and pick the `drivers\usb` folder in the SDK folder. |
+| *The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)* | The driver is right. The line ends with the library's own reason. Check the Falcon's power and its USB cable. |
 | *No Falcon found* | Plug in its power and its USB cable. |
 
-**Install Falcon Driver** shows only when the SDK folder holds the driver package with its signed catalog.
+**Install Falcon Driver** shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the card says *The dhd64.dll you chose did not load, so PadForge uses the copy above.*, and the copy in use keeps its Falcons.
 
 ---
 
@@ -60,7 +61,7 @@ The Devices page draws the handle as a dot in a square beside the axes. The row 
 
 ### Calibrate Reach
 
-**Calibrate Reach** in the row's detail pane measures how far the handle travels. Move it to every edge of its reach during the four-second sweep, while the forces rest. Each axis takes 95% of half the distance it traveled as its reach, when that comes to between 25 and 120 mm. An axis outside that keeps its old reach. Until a sweep, the reach is 60 mm on every axis. Each Falcon keeps its own, by serial number, and every slot it feeds uses it. The line under the button gives the reach in use, or how the last sweep went.
+**Calibrate Reach** in the row's detail pane measures how far the handle travels. Move it to every edge of its reach during the four-second sweep, while the forces rest. Each axis takes 95% of half the distance it traveled as its reach, when that comes to between 25 and 120 mm. An axis outside that keeps its old reach. Until a sweep, the reach is 60 mm on every axis. Each Falcon keeps its own, by serial number, and every slot it feeds uses it. The line under the button gives the reach in use, or how the last sweep went. A sweep asked for on a Falcon that closed in the meantime ends at once and measures nothing.
 
 On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute firmware maps it: Left/Right and Up/Down on the right stick, and buttons 1 to 4 on the right trigger, the left trigger, the right bumper and the right stick's click. In/Out starts unmapped.
 
@@ -100,7 +101,9 @@ A game that plays force feedback effects, on a slot whose preset takes them, rea
 - A constant force, a ramp or a periodic effect pushes the handle away from the direction it comes from, the way SDL and USB force feedback devices define direction. An effect from the right pushes the handle left.
 - A spring, damper, friction or inertia acts on Left/Right and Up/Down around its center. A game's spring takes the Joystick feel's spring's place while it plays.
 
-A Falcon in no slot holds itself up and does nothing else. Every force fades in over half a second when a Falcon opens, when its slot takes it, and when its feel changes, so a spring never snaps a handle nobody is holding. Stopping the engine closes every Falcon at zero force.
+A Falcon in no slot holds itself up and does nothing else. Every force fades in over half a second when a Falcon opens, when its slot takes it, and when its feel changes, so a spring never snaps a handle nobody is holding. Stopping the engine closes every Falcon at zero force. A Falcon whose forces or gravity compensation will not turn on, or whose force writes fail three times in a row, closes, and PadForge opens it again on its next look.
+
+A Falcon shared over [Remote Link](../guides/remote-link.md) feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run a build newer than 5.1.0. With an older PC on either end, it gets no force from the other PC.
 
 See the technical page, [Novint Falcon Internals](../reference/novint-falcon-internals.md).
 

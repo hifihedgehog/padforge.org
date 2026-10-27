@@ -4361,7 +4361,7 @@
 <li>No other DSU server (BetterJoy, DS4Windows) can hold the same port.</li>
 <li>PadForge binds to localhost only. No firewall rule needed when the emulator runs on the same PC.</li>
 </ul>
-<p>If the status line reads <strong>Port 26760 in use</strong>, another DSU server holds the port. Stop it, or set a different number in the Port box (try <code>26761</code>) and update the emulator to match.</p>
+<p>If the status line reads <strong>Port 26760 in use</strong>, another DSU server holds the port. Stop it, or set a different number in the Port box (try <code>26761</code>) and update the emulator to match. While the switch is on and the engine runs, PadForge tries the port again every 3 seconds, so the server starts on its own once the other one stops.</p>
 <hr />
 <h2 id="axis-convention">Axis convention<a class="headerlink" href="#axis-convention" title="Permanent link">&para;</a></h2>
 <p>PadForge orients the axes for the emulator. The packet negates accelerometer X, Y, and Z and gyro yaw and roll against the sensor frame it reads, and keeps pitch. Nothing to flip by hand.</p>
@@ -4382,7 +4382,7 @@
 </tr>
 <tr>
 <td>Status reads <strong>Port 26760 in use</strong></td>
-<td>Stop BetterJoy or DS4Windows, or set a different Port and change the emulator to match.</td>
+<td>Stop BetterJoy or DS4Windows, and the server starts within 3 seconds, or set a different Port and change the emulator to match.</td>
 </tr>
 <tr>
 <td>Motion directions are wrong</td>

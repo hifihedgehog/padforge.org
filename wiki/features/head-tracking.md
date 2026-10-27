@@ -113,7 +113,7 @@ The six axes bind anywhere an axis does. An Any Device source never reads them, 
 
 TrackIR's NPClient interface is a DLL the game loads by game ID, not a stream anything can subscribe to. Games that only speak TrackIR keep using OpenTrack's own output for that.
 
-Two listeners cannot share one UDP port. If OpenTrack's own *UDP over network* tracker input binds the port first, the status line says *UDP port 4242 is in use by another program.* If PadForge binds it first, OpenTrack's tracker reports the error instead. Either way, one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.
+Two listeners cannot share one UDP port. If OpenTrack's own *UDP over network* tracker input binds the port first, the status line says *UDP port 4242 is in use by another program.*, and PadForge tries the port again every 3 seconds until the other listener closes. If PadForge binds it first, OpenTrack's tracker reports the error instead. Either way, one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.
 
 Nothing here has run against a live OpenTrack yet. The wire formats come from OpenTrack's source, and the decoders are pinned by replay tests, but the sign of roll and of the three translations on real hardware is unconfirmed.
 

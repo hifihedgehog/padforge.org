@@ -353,7 +353,7 @@ public class SettingsFileData
     <GameTelemetryFormats>
       <Format Name="Rig" Kind="Binary" Length="16" Key="" BigEndian="false" UseGearValues="false" GearReverse="-1" GearNeutral="0">
         <Field Target="Rpm" Name="" Offset="4" Type="F32" Key="" Scale="1" Min="0" Max="1" />
-        <Field Target="Variable" Name="Boost" Offset="8" Type="F32" Key="" Scale="1" Min="0" Max="2" />
+        <Field Target="Variable" Name="Boost" Offset="8" Axis="0" Type="F32" Key="" Scale="1" Min="0" Max="2" />
       </Format>
     </GameTelemetryFormats>
     <EnableWebController>false</EnableWebController>
@@ -1434,7 +1434,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `GameTelemetryCustomFormat` | `string` | `[XmlElement]` | `""` | (#531) The custom format read while the game is `Custom`. A name no format carries loads as `Auto` |
 | `GameTelemetryForwardPort` | `int` | `[XmlElement]` | `0` | (#531) The port every packet is copied to on 127.0.0.1, `0` for none |
 | `GameTelemetryFullSpeed` | `int` | `[XmlElement]` | `300` | (#531) The speed, km/h, that moves the Speed axis all the way. 10-1000 |
-| `GameTelemetryFormats` | `List<CustomTelemetryFormat>` | `[XmlArray][XmlArrayItem("Format")]` | empty | (#531) The custom formats, one list for every profile. Each `Format` carries `Name`, `Kind`, `Length`, `Key`, `BigEndian`, `UseGearValues`, `GearReverse` and `GearNeutral` as attributes and one `Field` per field (`Target`, `Name`, `Offset`, `Type`, `Key`, `Scale`, `Min`, `Max`). A non-finite number leaves the default |
+| `GameTelemetryFormats` | `List<CustomTelemetryFormat>` | `[XmlArray][XmlArrayItem("Format")]` | empty | (#531) The custom formats, one list for every profile. Each `Format` carries `Name`, `Kind`, `Length`, `Key`, `BigEndian`, `UseGearValues`, `GearReverse` and `GearNeutral` as attributes and one `Field` per field (`Target`, `Name`, `Offset`, `Axis`, `Type`, `Key`, `Scale`, `Min`, `Max`). `Axis` is a variable's slot on the row, counted after the standard axes, and is written only for a variable that has one. A file without it gives the variables their slots in first-use order. A format that repeats an earlier one's name, ignoring case, is dropped on load. A non-finite number leaves the default |
 | `EnableWebController` | `bool` | `[XmlElement]` | `false` | Embedded web controller server |
 | `WebControllerPort` | `int` | `[XmlElement]` | `8080` | Web controller port |
 | `EnableWebControllerPlainHttp` | `bool` | `[XmlElement]` | `false` | Also serve the web controller over plain HTTP on its own port, behind the access code. Machine-scoped, never in `ProfileData`, so a profile switch never opens or closes a port |

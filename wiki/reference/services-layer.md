@@ -581,7 +581,7 @@ Axis detection: 25% threshold, 3-cycle hold confirmation (same as RecorderServic
 1. Checks `Dashboard.EnableDsuMotionServer` and engine existence.
 2. Creates `DsuMotionServer`, subscribes to `StatusChanged`.
 3. Validates port (1024-65535, default 26760).
-4. Starts server. On success it assigns to `_inputManager.DsuServer`. On failure it disposes.
+4. Starts server. On success it assigns to `_inputManager.DsuServer`. On failure it disposes. A start that found the port bound by another program (`DsuMotionServer.PortInUse`) is tried again every 3 seconds (`PortInUseRetryMs`) by `RetryDsuServerOnPortInUse` on the dashboard tick, while the switch is on and the engine runs.
 
 #### `StopDsuServer()` (private)
 
@@ -597,7 +597,7 @@ In `InputService.GameMods.cs`. The server is `GameModServer`, documented with th
 1. Checks `Dashboard.EnableGameModServer` and engine existence, and returns when a server already runs.
 2. Creates `GameModServer` and subscribes to `StatusChanged`, which refreshes the Dashboard line on the UI thread.
 3. Validates the port (1024-65535, default 6969).
-4. Starts the server with the stand-in switch. A failed start disposes the server and leaves its status on the card: the port in use, or the bind that failed.
+4. Starts the server with the stand-in switch. A failed start disposes the server and leaves its status on the card: the port in use, or the bind that failed. A port in use is tried again every 3 seconds (`PortInUseRetryMs`) from `UpdateGameModLines` on the dashboard tick, while the switch is on and the engine runs.
 
 #### `StopGameModServer()` (private)
 
@@ -621,7 +621,7 @@ Drops the cache on a language change, so the next update rebuilds the line in th
 
 #### `BuildGameTelemetryStatus(TelemetryStatus status, GameTelemetryFormat format)` (internal static) -> `string`
 
-The line the Dashboard card and the Devices row share: why nothing arrives, or which game sends and from where. It names the forward port whenever packets go on to one.
+The line the Dashboard card and the Devices row share: why nothing arrives, or which game sends and from where. It names the forward port whenever packets go on to one. A game's own name is never translated. A format two games send with nothing in it that tells them apart, Project CARS 2's (Automobilista 2 sends it too) and the ETS2 plugin's (American Truck Simulator loads it too), is named by the Game list's entry for both, which is translated.
 
 #### `UpdateGameTelemetryDevicePanel(DevicesViewModel devVm, UserDevice ud)` (private static)
 
@@ -636,6 +636,8 @@ Called from `UpdateDevicePanelLines`, the selected row's panel, with `UpdateHead
 3. Device connect/disconnect calls `_inputManager.RegisterExternalDevice()` / `UnregisterExternalDevice()`.
 4. Validates port (1024-65535, default 8080). Hands the server the access code with `SetPlainAccessCode` before the start, and builds `PlainHttpOptions(port, localOnly)` when **Also Serve Plain HTTP** is on.
 5. Calls `Start(port, plain)` on a `Task.Run`, not on the UI thread. `WebControllerTls.EnsureHttpsBinding` spawns `netsh` up to four times (show, delete, add, show), each capped at five seconds, and this method is reached straight from the checkbox's `PropertyChanged` handler. The firewall rule's own two spawns already run on the thread pool. It then hops back to the dispatcher, and if the start failed or the user has since toggled off or changed the port, it disposes the launching instance and clears `IsWebControllerRunning`.
+
+A start refused because another program holds the port is retried by `RetryWebServerOnPortInUse` on the dashboard tick, every 3 seconds (`PortInUseRetryMs`) while the switch is on and the engine runs. It first probes the port with `WebControllerServer.ProbePort`, a listener on `http://+:<port>/` started and closed at once, which is the prefix the start registers last, after any HTTPS fallback. The probe spawns nothing, and only a free port gets the full start with its `netsh` calls. On a running server whose plain address was refused for a port in use, the same tick calls `RetryPlainAddress`, which adds the prefix again on the running listener. A refused `AddPrefix` leaves the main address serving, so the add is its own probe. One log line marks each outage, and a language change keeps the reason on the card.
 
 `OnWebServerStatusChanged` publishes `WebControllerStatus`, `WebControllerClientCount`, and `IsWebControllerRunning` (from the lifecycle, never from the checkbox), then calls `RefreshWebControllerAddresses`. That publishes `WebControllerUrl`, `WebControllerHttpsWarning`, `WebControllerPlainStatus`, `IsWebControllerPlainRunning` and `WebControllerPlainUrl`, and rebuilds each QR through `WebControllerServer.RenderQr` only when its URL changed, since building a QR matrix is not free. The plain address gets no QR in This PC Only mode, where its URL names localhost. The same refresh runs after a language change, because the HTTPS note and the plain status are built from strings.
 

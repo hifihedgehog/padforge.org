@@ -55,7 +55,7 @@ The button under the line opens that screen's dialog. It is named for the kind o
 While Logitech Gaming Software (LGS) runs, PadForge draws the Logitech screens through it as an applet, the way games did, and LGS keeps its own applets beside it. The round applet key switches between them. Without LGS, PadForge writes each screen itself:
 
 - A monochrome screen takes each picture as one USB report, the format libg15 and lcdproc write on Linux.
-- The G19's screen is interface 0 of its USB connection. PadForge binds Windows' WinUSB driver to that interface alone, the first time it finds the G19 without LGS, and only when the interface has no driver or the generic HID driver. The G-keys on the other interface stay with Windows. Turning **Drive Keyboard Screens** off gives the interface back to Windows. While another program's driver holds it, the row's line names that driver, and starting LGS draws the screen through LGS.
+- The G19's screen is interface 0 of its USB connection. PadForge binds Windows' WinUSB driver to that interface alone, the first time it finds the G19 without LGS, and only when the interface has no driver or the generic HID driver. The G-keys on the other interface stay with Windows. Turning **Drive Keyboard Screens** off gives the interface back to Windows. While Logitech's own driver holds it, the row's line names that driver, and starting LGS draws the screen through LGS. Another program's driver, such as libusbK from Zadig, is left alone, and the line says so.
 
 LGS takes one picture for all of its monochrome screens and one for all of its color screens. With two screens of one kind under LGS, both show the picture set for the first of them in PadForge's order, and each one's line names that screen. Without LGS, every screen shows its own.
 
@@ -67,9 +67,9 @@ Arx Control is a phone app that shows applets from Logitech Gaming Software 8.52
 
 ### S.T.R.I.K.E. 7
 
-The S.T.R.I.K.E. 7 draws through Mad Catz's Strike7API.dll, which talks to the keyboard's own software, so that software has to be running. PadForge does not ship the library. **Download Strike7API.dll** on the Settings card fetches Mad Catz's SDK from AIDA64's server, where AIDA64 points its users for the same file, checks the download against its known SHA-256 and keeps only the 64-bit library in PadForge's temporary folder. PadForge checks that copy again each time it loads it. **Choose Strike7API.dll…** uses a copy you already have instead.
+The S.T.R.I.K.E. 7 draws through Mad Catz's Strike7API.dll, which talks to the keyboard's own software, so that software has to be running. PadForge does not ship the library. **Download Strike7API.dll** on the Settings card fetches Mad Catz's SDK from AIDA64's server, where AIDA64 points its users for the same file, checks the download against its known SHA-256 and keeps only the 64-bit library in PadForge's temporary folder. PadForge checks that copy again each time it loads it. **Choose Strike7API.dll…** uses a copy you already have instead. A download that finishes takes the place of a copy you chose, and one that fails leaves your choice as it was.
 
-The library needs Microsoft's Visual C++ 2008 runtime. When the row's line says so, **Install Visual C++ 2008 Runtime** on the Settings card downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
+The library needs Microsoft's Visual C++ 2008 runtime, and PadForge loads it once the runtime is there. When the row's line says so, **Install Visual C++ 2008 Runtime** on the Settings card downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
 
 PadForge's applet shows on the V.E.N.O.M. screen as an icon. Pick it there to show PadForge's picture, and the home key leaves it. On a picture larger than the screen, drag a finger across the screen to move the picture.
 
@@ -111,7 +111,7 @@ Each screen's row carries the keys beside that screen, in one fixed layout per k
 | A G19 | **Screen Left**, **Screen Right**, **Screen OK**, **Screen Cancel**, **Screen Up**, **Screen Down**, **Screen Menu** and **Screen Settings** |
 | Arx Control, the S.T.R.I.K.E. 7 | None |
 
-Under LGS, the screen keys reach PadForge only while its applet is the one on the screen, LGS's own rule, so a screen whose keys you map needs a mode other than **Off**. LGS keeps the applet key and the G19's settings key for itself. PadForge reads the applet key from the keyboard directly, and the settings key only while it draws the G19 itself. LGS does not say which keyboard a key came from, so PadForge gives a monochrome key to the keyboard whose own key report saw it go down, and to the first monochrome screen when none did. A G19 key under LGS goes to the first G19. A tap shorter than one poll still presses the button once.
+Under LGS, the screen keys reach PadForge only while its applet is the one on the screen, LGS's own rule, so a screen whose keys you map needs a mode other than **Off**. LGS keeps the applet key and the G19's settings key for itself. PadForge reads the applet key from the keyboard directly, and the settings key only while it draws the G19 itself. A monochrome screen LGS does not see is one PadForge draws, and PadForge then reads all five of its keys from the keyboard. LGS does not say which keyboard a key came from, so PadForge gives a monochrome key to the keyboard whose own key report saw it go down, and to the first monochrome screen when none did. A G19 key under LGS goes to the first G19. A tap shorter than one poll still presses the button once.
 
 ---
 

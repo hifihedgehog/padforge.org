@@ -142,7 +142,7 @@ The **Port** box sits under the DSU toggle on the Dashboard. It accepts 1024 to 
 - No other DSU server (BetterJoy, DS4Windows) can hold the same port.
 - PadForge binds to localhost only. No firewall rule needed when the emulator runs on the same PC.
 
-If the status line reads **Port 26760 in use**, another DSU server holds the port. Stop it, or set a different number in the Port box (try `26761`) and update the emulator to match.
+If the status line reads **Port 26760 in use**, another DSU server holds the port. Stop it, or set a different number in the Port box (try `26761`) and update the emulator to match. While the switch is on and the engine runs, PadForge tries the port again every 3 seconds, so the server starts on its own once the other one stops.
 
 ---
 
@@ -159,7 +159,7 @@ If a direction reads backward on your controller, say which one on the [issue tr
 | Problem | Fix |
 |---|---|
 | Emulator does not see motion | Check the DSU status line reads **Listening on :26760**. Check the engine is running (play button). |
-| Status reads **Port 26760 in use** | Stop BetterJoy or DS4Windows, or set a different Port and change the emulator to match. |
+| Status reads **Port 26760 in use** | Stop BetterJoy or DS4Windows, and the server starts within 3 seconds, or set a different Port and change the emulator to match. |
 | Motion directions are wrong | Open an issue with the controller model and what's flipped. |
 | Only one controller has motion | DSU caps at 4 slots. Move the motion device to slots 1–4. |
 | Device has no motion sensors | Some controllers (Xbox) ship without a gyro. Check the [Devices](../features/devices.md) page. |

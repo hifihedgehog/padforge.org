@@ -3984,7 +3984,7 @@
 <li>Force Dimension's SDK for Windows, from <a href="https://www.forcedimension.com/software/sdk">Force Dimension's download page</a>. Novint's own software and drivers are no longer available, and Force Dimension's library loads the Falcon's firmware itself. PadForge loads the library you install and ships none of it.</li>
 <li>The x64 build of PadForge. Force Dimension's library is 64-bit x86 code, which the ARM64 build cannot load.</li>
 </ul>
-<p>PadForge finds <code>dhd64.dll</code> in this order: a copy you chose with <strong>Choose dhd64.dll…</strong>, the folder the <code>FDSDK</code> environment variable names, the folder Force Dimension's installer recorded, each <code>sdk-*</code> folder under <code>Program Files\Force Dimension</code> or <code>Program Files\ForceDimension</code>, newest first, and System32, where the installer also puts a copy.</p>
+<p>PadForge finds <code>dhd64.dll</code> in this order: a copy you chose with <strong>Choose dhd64.dll…</strong>, the folder the <code>FDSDK</code> environment variable names, the folder Force Dimension's installer recorded, each <code>sdk-*</code> folder under <code>Program Files\Force Dimension</code> or <code>Program Files\ForceDimension</code>, newest first, and System32, where the installer also puts a copy. A copy you choose takes over within a few seconds with no restart, and a Falcon open on another copy closes and opens again on it.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
 <p>Open <strong>Settings</strong>, find the <strong>Novint Falcon</strong> card and tick <strong>Drive Novint Falcon</strong>. It is off by default. While the engine runs, the card says which library loaded, for example <em>Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll</em>.</p>
@@ -4014,12 +4014,16 @@
 <td>PadForge leaves a device on another driver alone, such as Novint's old driver. In Device Manager, open the Falcon, choose <strong>Update driver</strong>, then <strong>Browse my computer for drivers</strong>, and pick the <code>drivers\usb</code> folder in the SDK folder.</td>
 </tr>
 <tr>
+<td><em>The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)</em></td>
+<td>The driver is right. The line ends with the library's own reason. Check the Falcon's power and its USB cable.</td>
+</tr>
+<tr>
 <td><em>No Falcon found</em></td>
 <td>Plug in its power and its USB cable.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Install Falcon Driver</strong> shows only when the SDK folder holds the driver package with its signed catalog.</p>
+<p><strong>Install Falcon Driver</strong> shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the card says <em>The dhd64.dll you chose did not load, so PadForge uses the copy above.</em>, and the copy in use keeps its Falcons.</p>
 <hr />
 <h2 id="the-row">The row<a class="headerlink" href="#the-row" title="Permanent link">&para;</a></h2>
 <p>The Falcon's row on the <a href="../devices/">Devices</a> page has three axes and four buttons:</p>
@@ -4051,7 +4055,7 @@
 </table>
 <p>The Devices page draws the handle as a dot in a square beside the axes. The row answers no (Any Device) source, since a Falcon at rest reads centered on every axis.</p>
 <h3 id="calibrate-reach">Calibrate Reach<a class="headerlink" href="#calibrate-reach" title="Permanent link">&para;</a></h3>
-<p><strong>Calibrate Reach</strong> in the row's detail pane measures how far the handle travels. Move it to every edge of its reach during the four-second sweep, while the forces rest. Each axis takes 95% of half the distance it traveled as its reach, when that comes to between 25 and 120 mm. An axis outside that keeps its old reach. Until a sweep, the reach is 60 mm on every axis. Each Falcon keeps its own, by serial number, and every slot it feeds uses it. The line under the button gives the reach in use, or how the last sweep went.</p>
+<p><strong>Calibrate Reach</strong> in the row's detail pane measures how far the handle travels. Move it to every edge of its reach during the four-second sweep, while the forces rest. Each axis takes 95% of half the distance it traveled as its reach, when that comes to between 25 and 120 mm. An axis outside that keeps its old reach. Until a sweep, the reach is 60 mm on every axis. Each Falcon keeps its own, by serial number, and every slot it feeds uses it. The line under the button gives the reach in use, or how the last sweep went. A sweep asked for on a Falcon that closed in the meantime ends at once and measures nothing.</p>
 <p>On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute firmware maps it: Left/Right and Up/Down on the right stick, and buttons 1 to 4 on the right trigger, the left trigger, the right bumper and the right stick's click. In/Out starts unmapped.</p>
 <hr />
 <h2 id="how-it-feels">How it feels<a class="headerlink" href="#how-it-feels" title="Permanent link">&para;</a></h2>
@@ -4126,7 +4130,8 @@
 <li>A constant force, a ramp or a periodic effect pushes the handle away from the direction it comes from, the way SDL and USB force feedback devices define direction. An effect from the right pushes the handle left.</li>
 <li>A spring, damper, friction or inertia acts on Left/Right and Up/Down around its center. A game's spring takes the Joystick feel's spring's place while it plays.</li>
 </ul>
-<p>A Falcon in no slot holds itself up and does nothing else. Every force fades in over half a second when a Falcon opens, when its slot takes it, and when its feel changes, so a spring never snaps a handle nobody is holding. Stopping the engine closes every Falcon at zero force.</p>
+<p>A Falcon in no slot holds itself up and does nothing else. Every force fades in over half a second when a Falcon opens, when its slot takes it, and when its feel changes, so a spring never snaps a handle nobody is holding. Stopping the engine closes every Falcon at zero force. A Falcon whose forces or gravity compensation will not turn on, or whose force writes fail three times in a row, closes, and PadForge opens it again on its next look.</p>
+<p>A Falcon shared over <a href="../../guides/remote-link/">Remote Link</a> feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run a build newer than 5.1.0. With an older PC on either end, it gets no force from the other PC.</p>
 <p>See the technical page, <a href="../../reference/novint-falcon-internals/">Novint Falcon Internals</a>.</p>
 <hr />
 <p><em>Last updated for PadForge 5.1.0.</em></p>

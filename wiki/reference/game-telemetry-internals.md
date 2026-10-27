@@ -39,7 +39,7 @@ Every decoder fills one `TelemetryFrame`:
 | `Driving`, `DrivingReported` | Whether the game says it is driving, and whether it says anything |
 | `Variables` | The custom variables, by their index in the global list |
 
-`Clamp` holds the pedals to 0 to 1 and the steering to -1 to 1, and turns a NaN into 0, so a game that overshoots cannot push an axis past its end.
+`Clamp` holds the pedals to 0 to 1 and the steering to -1 to 1, and turns a NaN or an infinity into 0, so a game that overshoots cannot push an axis past its end.
 
 ## The decoders
 
@@ -48,7 +48,7 @@ Little-endian throughout, offsets in bytes.
 | Format | Packets | Fields |
 |---|---|---|
 | Forza | 232 (Sled), 311 (Motorsport 7 Dash), 331 (Motorsport 2023 Dash), 323 or 324 (Horizon) | IsRaceOn s32 at 0, max RPM f32 at 8, RPM at 16. From the Dash on, with a shift of 12 for Horizon: speed f32 at 244, throttle, brake, clutch, handbrake u8 at 303 to 306, gear u8 at 307 (0 reverse, 11 neutral), steer s8 at 308. A Sled packet takes its speed from the velocity vector at 32, 36 and 40. |
-| F1 22 to F1 25 | The year u16 at 0. F1 22: a 24-byte header, packet id at 5, player car at 22, one of its twelve sizes. F1 23 on: a 29-byte header with the year less 2000 at 2, packet id at 6, player car at 27. | Car Telemetry (id 6), 60-byte entries: speed u16 km/h, throttle +2, steer +6, brake +10, clutch u8 +14 (0 to 100), gear s8 +15, RPM u16 +16. Car Status (id 7), 47-byte entries in F1 22 and 55 later: max RPM u16 +17. |
+| F1 22 to F1 25 | The packet format u16 at 0, 2022 to 2025, and one of that format's sizes for the packet id: twelve for 2022, fourteen for 2023, fifteen for 2024 and sixteen for 2025, from vAzhure F12022.cs to F12025.cs. Format 2022: a 24-byte header, packet id at 5, player car at 22. Format 2023 on: a 29-byte header with the game's year less 2000 at 2, packet id at 6, player car at 27. The layout follows the format alone, so F1 24 or F1 25 on an older format reads too. The status line names the game by the year at 2 when it is not 0, and by the format otherwise. | Car Telemetry (id 6), 60-byte entries: speed u16 km/h, throttle +2, steer +6, brake +10, clutch u8 +14 (0 to 100), gear s8 +15, RPM u16 +16. Car Status (id 7), 47-byte entries in F1 22 and 55 later: max RPM u16 +17. |
 | Codemasters | 264 or 280 | Speed f32 at 28, throttle 116, steer 120, brake 124, clutch 128, gear 132 (-1 and 10 reverse), RPM 148 and max RPM 252 in tenths. |
 | EA SPORTS WRC | 237, 240 with a 3-byte pad after byte 36, 241 or 244 with a 4-byte `packet_4cc` header | Gear index at 37 with the neutral and reverse indexes at 38 and 39, speed 41, max RPM 185, RPM 193, throttle 197, brake 201, clutch 205, steering 209, handbrake 213. |
 | OutGauge | 92, or 96 with an OutGauge ID | Car name at 4 (`beam` is BeamNG.drive), gear u8 at 10 (0 reverse, 1 neutral), speed 12, RPM 16, the dash lights u32 at 44 (mask 4 is the handbrake), throttle 48, brake 52, clutch 56. |
@@ -56,7 +56,7 @@ Little-endian throughout, offsets in bytes.
 | Assetto Corsa | Shared memory | Physics: gas 4, brake 8, gear s32 16 (0 reverse, 1 neutral), RPM 20, steer 24, speed km/h 28, clutch as 1 less the value at 364. Static: `smVersion` UTF-16 at 0, 1.8 or later is ACC, max RPM s32 at 412. Graphics: status at 4, 2 while live. |
 | ETS2 and ATS | One JSON object per change from MrHokss's plugin | `speed` (absolute), `rpm`, `gear` (negative is reverse), `steer` (counterclockwise, so negated), `throttle`, `brake`, `clutch`. |
 
-F1 claims every packet with its year and a known id, read or not, so F1 24's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.
+F1 claims every packet with its format, a known id and that id's size, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.
 
 ## Auto-Detect
 
@@ -81,12 +81,14 @@ Every packet that arrives, read or not, is copied to 127.0.0.1 at the forward po
 | Device type | `InputDeviceType.GameTelemetry` = 44 |
 | Path, identity | `telemetry://game`, instance GUID MD5 of `pftelemetry:game`, VID 0x4754, PID 0x5544. The identity never changes, so mappings survive a change of game, port or format. |
 | Axes 0 to 6 | Speed (0 at rest to Full Speed), RPM (share of max RPM), Throttle, Brake, Clutch, Handbrake, Steering (32768 at rest) |
-| Axes 7 on | One per custom variable, from its Min to its Max, up to the state's 24 axes |
+| Axes 7 on | Each custom variable at 7 plus the slot it keeps, from its Min to its Max, up to the state's 24 axes. A slot a deleted variable gave up stays empty until a new variable takes it. |
 | Buttons | Driving 0, Reverse 1, Neutral 2, Gear 1 to Gear 18 at 3 to 20 |
+
+Speed to Handbrake carry the X, Y, Z, Rx, Ry and Rz axis GUIDs, and Steering and every variable the Z axis GUID. A Slider GUID would make the mapping picker offer *Slider N*, which reads the state's slider array, and the row writes only its axis array, the rule `SdlDeviceWrapper.GetDeviceObjects` keeps for its extra axes.
 
 Driving reads `!DrivingReported || Driving`. After `SilenceMs` (1000) with no frame everything rests. The truck plugin sends only on a change, so its frames hold for `TruckSimulatorHoldMs` (10,000).
 
-Step 1 phase 1i2 (`UpdateGameTelemetryDevice`) opens the row while the switch is on. It retires the row with `NeutralizeMappedOutputsFor` when the switch goes off, recreates it when the user removes it, and reopens it when `GameTelemetryRuntime.Version` moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live.
+Step 1 phase 1i2 (`UpdateGameTelemetryDevice`) opens the row while the switch is on. It retires the row with `NeutralizeMappedOutputsFor` when the switch goes off, recreates it when the user removes it, and reopens it when `GameTelemetryRuntime.Version` moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live. While another program holds the port, each sweep tries it again (`RetryBind`, every 2 seconds), so the row listens once the port is free, with no toggle. The failure is logged once per run of failures.
 
 The row joins the lists that name synthetic rows: out of `InputDeviceType.AnswersAnyDeviceSources`, internal in `DeviceRowViewModel.IsInternalVirtual`, no Submit Mapping, the type key and label `GameTelemetry`, the glyph U+EC4A, named axes in `MappingDisplayResolver`, and the Remote Link list of rows that send their names. No slot maps it on its own.
 
@@ -98,7 +100,7 @@ The row joins the lists that name synthetic rows: out of `InputDeviceType.Answer
 - `GameTelemetryRowSource` reads the row's engine values from `GameTelemetryRuntime.TryGetEngine`. The row publishes them on every poll under a lock, since the hub polls on its own thread. They count while the row is live, the game says it is driving, a max RPM is known, and the last publish is under a second old.
 - The hub holds two row sources. `GameTelemetryRowSource(learnedMax: false)`, first in its order, answers when the game sent its max RPM. `GameTelemetryRowSource(learnedMax: true)`, last, answers when the max was learned, so a hub source with the game's own max answers first: scs-sdk-plugin's for Euro Truck Simulator 2. It raises a learned max to 1.05 times the RPM (`LearnedHeadroom`), the headroom `OutGaugeTelemetrySource` keeps, so a strip on a fresh engine or a new peak does not blink the shift cue.
 
-While the row is live, the lights therefore read the game the user set the row up for, including F1 22, F1 25, EA SPORTS WRC and the custom formats, which the hub's own sources do not read. Shared memory games the row does not read (iRacing, rFactor, RaceRoom and the rest) still reach the lights through the hub.
+While the row is live, the lights therefore read the game the user set the row up for, including EA SPORTS WRC and the custom formats, which the hub's own sources do not read. Shared memory games the row does not read (iRacing, rFactor, RaceRoom and the rest) still reach the lights through the hub.
 
 ---
 
@@ -117,13 +119,13 @@ While the row is live, the lights therefore read the game the user set the row u
 | Driving | 0 or 1 | `tel:Driving` |
 | Variable | The custom variable's value after its scale | `tel:var:Boost` |
 
-`TelemetryChannel` is append-only and saved by name. A spec with an unknown channel, or `Variable` without a name, is unbound. Both expression readers, `ReadExpressionVariable` for the gamepad lane and `ReadExpressionVariableRaw` for Extended and Nintendo slots, read `GameTelemetryRuntime.Read`, which returns 0 while nothing is live. The values are published by the row on the poll thread and read later in the same pass, so they take no lock.
+`TelemetryChannel` is append-only and saved by name. A spec with an unknown channel, or `Variable` without a name, is unbound. Both expression readers, `ReadExpressionVariable` for the gamepad lane and `ReadExpressionVariableRaw` for Extended and Nintendo slots, read `GameTelemetryRuntime.Read`, which returns 0 while nothing is live. The row publishes each frame with the variable list it opened with (`Publish`), and `Read` looks a name up in that list, so a format list saved in the window cannot pair a name with another variable's value before the row reopens. The values are published by the row on the poll thread and read later in the same pass, so they take no lock.
 
 ## Custom formats
 
 `CustomTelemetryFormat` is saved in `PadForge.xml` under `GameTelemetryFormats`, one `Format` element per format with `Field` children. A format has a name (no `:` or `|`, the characters the spec splits on), a kind, a length or a key for Auto-Detect, a byte order and an optional pair of gear values. A field has a target, a name for a variable, an offset and type or a dotted JSON key, a scale, and a Min and Max. A hand-edited NaN or infinity in the file leaves the number as it was, the `MappingSource` rule, and a scaled value past a double's range leaves its target alone.
 
-`GameTelemetryRuntime.Formats` builds the global variable list (each name once, in the order first used, with its first span) and one `CompiledTelemetryFormat` per format. JSON reads numbers, booleans as 1 or 0, and numeric strings.
+`GameTelemetryRuntime.Formats` drops a format whose name cannot be read or repeats an earlier one's name, ignoring case, since the picker, the profiles and the reader name a format by it. It builds the global variable list (each name once, in the order first used, with its first span) and gives each variable the axis slot it keeps (`AssignAxes`, the rule the voice phrase and NFC tag registries keep for their buttons). A name in use keeps its slot. A new name takes the slot its fields carry when no name in use holds it, and otherwise the lowest free slot, in first-use order, so a file from before the slots were saved keeps its old order. A name past the 17th slot reads as an expression channel alone, and a name no format uses gives its slot up. The slot is saved as the field's `Axis` attribute (`WriteAxes`), and the window carries it through an edit, so a renamed variable keeps its old name's slot. Then it compiles one `CompiledTelemetryFormat` per format. A binary field whose offset lies past the end of the packet, however large the offset, is skipped. JSON reads numbers, booleans as 1 or 0, and numeric strings.
 
 ---
 

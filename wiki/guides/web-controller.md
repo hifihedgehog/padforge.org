@@ -59,7 +59,7 @@ The web controller is built into PadForge. Nothing extra to install. The phone o
 
 - Confirm both devices share the same Wi-Fi network
 - Confirm the firewall allows port 8080
-- Try a different port if 8080 is already in use
+- Try a different port if 8080 is already in use. While the switch is on and the engine runs, PadForge checks the port again every 3 seconds and starts the controller once the other program lets it go
 
 Stopping PadForge stops the server.
 

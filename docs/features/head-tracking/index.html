@@ -4176,7 +4176,7 @@
 <hr />
 <h2 id="what-it-does-not-do">What it does not do<a class="headerlink" href="#what-it-does-not-do" title="Permanent link">&para;</a></h2>
 <p>TrackIR's NPClient interface is a DLL the game loads by game ID, not a stream anything can subscribe to. Games that only speak TrackIR keep using OpenTrack's own output for that.</p>
-<p>Two listeners cannot share one UDP port. If OpenTrack's own <em>UDP over network</em> tracker input binds the port first, the status line says <em>UDP port 4242 is in use by another program.</em> If PadForge binds it first, OpenTrack's tracker reports the error instead. Either way, one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.</p>
+<p>Two listeners cannot share one UDP port. If OpenTrack's own <em>UDP over network</em> tracker input binds the port first, the status line says <em>UDP port 4242 is in use by another program.</em>, and PadForge tries the port again every 3 seconds until the other listener closes. If PadForge binds it first, OpenTrack's tracker reports the error instead. Either way, one of them needs a different port. If the FreeTrack block could not be opened, the status line says so too.</p>
 <p>Nothing here has run against a live OpenTrack yet. The wire formats come from OpenTrack's source, and the decoders are pinned by replay tests, but the sign of roll and of the three translations on real hardware is unconfirmed.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>

@@ -4125,7 +4125,7 @@
 <ol>
 <li>On the <a href="../dashboard/">Dashboard</a>, find the <strong>Game Telemetry</strong> section and tick <strong>Listen for Game Telemetry</strong>. It is off by default.</li>
 <li>Pick your game under <strong>Game</strong>, or leave it on <strong>Auto-Detect</strong>, which tells the game from its packets.</li>
-<li>Set <strong>Port</strong> to the port the game sends to. It starts at <strong>20777</strong>, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking <strong>Project CARS 2 and Automobilista 2</strong> sets it to 5606, and picking <strong>Euro Truck Simulator 2 and American Truck Simulator</strong> sets it to 49001, since those games always send there.</li>
+<li>Set <strong>Port</strong> to the port the game sends to. It starts at <strong>20777</strong>, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking <strong>Project CARS 2 and Automobilista 2</strong> sets it to 5606, and picking <strong>Euro Truck Simulator 2 and American Truck Simulator</strong> sets it to 49001, since those games always send there. Picking another game afterward puts 20777 back, unless you changed the port in the meantime. With <strong>Assetto Corsa and Assetto Corsa Competizione</strong> picked, <strong>Port</strong> and <strong>Forward to Port</strong> are grayed out, since PadForge reads those games from shared memory.</li>
 <li>Turn on the game's telemetry output and point it at this PC and that port (see <a href="#setting-up-each-game">Setting up each game</a>).</li>
 <li>Start the input engine with the play button.</li>
 </ol>
@@ -4149,7 +4149,7 @@
 </tr>
 <tr>
 <td><em>UDP port 20777 is in use by another program.</em></td>
-<td>Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below).</td>
+<td>Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds and listens as soon as the other program lets it go.</td>
 </tr>
 <tr>
 <td><em>Reading Assetto Corsa Competizione from shared memory.</em></td>
@@ -4190,7 +4190,7 @@
 </tr>
 <tr>
 <td>F1 22, F1 23, F1 24, F1 25</td>
-<td>In the game's telemetry settings, turn UDP telemetry on. Leave the UDP format at the game's own year.</td>
+<td>In the game's telemetry settings, turn UDP telemetry on. PadForge reads UDP formats 2022 to 2025, the game's own year or an older one.</td>
 <td>20777</td>
 </tr>
 <tr>
@@ -4265,7 +4265,7 @@
 </tr>
 </tbody>
 </table>
-<p>A custom variable adds an axis after Steering, running from the variable's Min to its Max. The row holds up to 17 of them.</p>
+<p>A custom variable adds an axis after Steering, running from the variable's Min to its Max. The row holds up to 17 of them. A variable keeps its axis as long as a format uses its name, and a variable renamed in <strong>Custom Formats…</strong> keeps it too, so deleting one variable leaves the mappings on the others as they were. A new variable takes the lowest free axis.</p>
 <table>
 <thead>
 <tr>
@@ -4476,7 +4476,7 @@
 </tbody>
 </table>
 <p>A format with a length or a key is found by Auto-Detect, ahead of the built-in games. Pick a format by name in the <strong>Game</strong> list (it shows as <em>Name (Custom)</em>) to read every packet with it. A format with neither a length nor a key is read only when picked. Each variable becomes an axis on the row and a channel for Custom Expression triggers.</p>
-<p>Save checks every format and names the first problem: a name with <code>:</code> or <code>|</code>, two formats with one name, a variable with no name, a JSON field with no key, or a field that reads past the end of its packet.</p>
+<p>Save checks every format and names the first problem: a name with <code>:</code> or <code>|</code>, two formats with one name, a variable with no name, a JSON field with no key, or a field that reads past the end of its packet. When a settings file edited by hand holds two formats with one name, ignoring case, PadForge keeps the first.</p>
 <hr />
 <h2 id="adaptive-trigger-effect">Adaptive Trigger Effect<a class="headerlink" href="#adaptive-trigger-effect" title="Permanent link">&para;</a></h2>
 <p>Two macro actions in the <strong>Rumble</strong> group play adaptive trigger effects on the DualSense and DualSense Edge controllers on the macro's slot, the effects game mods for DSX use (see <a href="../game-mods/">Game Mods</a>).</p>
@@ -4485,7 +4485,7 @@
 <li><strong>Trigger</strong>: <strong>Right (R2)</strong>, <strong>Left (L2)</strong> or <strong>Both (L2 and R2)</strong>.</li>
 <li><strong>Effect</strong>: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is <strong>Vibration</strong> with the <strong>Start Zone</strong> at 0 and the <strong>Strength</strong> at 8, the same bytes a mod sends for it.</li>
 <li>The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.</li>
-<li><strong>Holds</strong>: <strong>While the Macro's Trigger Is Held</strong>, <strong>For a Set Time</strong> (with a <strong>Time</strong> in milliseconds), or <strong>Until Stopped</strong>.</li>
+<li><strong>Holds</strong>: <strong>While the Macro's Trigger Is Held</strong>, <strong>For a Set Time</strong> (with a <strong>Time</strong> from 1 to 60,000 milliseconds), or <strong>Until Stopped</strong>.</li>
 </ul>
 <p><strong>Stop Adaptive Trigger Effect</strong> ends what a macro holds on the chosen trigger, for an effect that holds until stopped.</p>
 <p>An end zone has to be past its start zone, and Galloping's second foot past its first. Values that break that rule play nothing, and the action says so.</p>

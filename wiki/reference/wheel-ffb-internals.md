@@ -154,7 +154,7 @@ Each source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnapshot`) an
 | `ScsTruckTelemetrySource` | Euro Truck Simulator 2 and American Truck Simulator | shared memory |
 | `MadnessTelemetrySource` | Automobilista 2 and Project CARS 2 and 3 | shared memory |
 | `RFactor1TelemetrySource` | rFactor 1 and Automobilista 1 | shared memory |
-| `CodemastersUdpTelemetrySource` | F1 23 and F1 24, DiRT, GRID | UDP |
+| `CodemastersUdpTelemetrySource` | F1 22 to F1 25 (UDP formats 2022 to 2025), DiRT, GRID | UDP |
 | `OutGaugeTelemetrySource` | BeamNG and Live for Speed | UDP |
 | `GameTelemetryRowSource(learnedMax: true)` (#531) | the game the Game Telemetry row reads, when it sends no max RPM | the row |
 

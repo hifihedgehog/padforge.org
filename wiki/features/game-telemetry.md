@@ -10,7 +10,7 @@ Most driving games can send their telemetry to other programs. Forza, F1, the Co
 
 1. On the [Dashboard](dashboard.md), find the **Game Telemetry** section and tick **Listen for Game Telemetry**. It is off by default.
 2. Pick your game under **Game**, or leave it on **Auto-Detect**, which tells the game from its packets.
-3. Set **Port** to the port the game sends to. It starts at **20777**, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking **Project CARS 2 and Automobilista 2** sets it to 5606, and picking **Euro Truck Simulator 2 and American Truck Simulator** sets it to 49001, since those games always send there.
+3. Set **Port** to the port the game sends to. It starts at **20777**, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking **Project CARS 2 and Automobilista 2** sets it to 5606, and picking **Euro Truck Simulator 2 and American Truck Simulator** sets it to 49001, since those games always send there. Picking another game afterward puts 20777 back, unless you changed the port in the meantime. With **Assetto Corsa and Assetto Corsa Competizione** picked, **Port** and **Forward to Port** are grayed out, since PadForge reads those games from shared memory.
 4. Turn on the game's telemetry output and point it at this PC and that port (see [Setting up each game](#setting-up-each-game)).
 5. Start the input engine with the play button.
 
@@ -22,7 +22,7 @@ PadForge listens on every network address, so a game on another PC or on an Xbox
 |---|---|
 | *Waiting for a game on UDP port 20777.* | Listening. No game has sent anything PadForge reads in the last second. |
 | *Listening on UDP port 20777. F1 25 from 127.0.0.1.* | A game is sending. The line names the game and the address it sends from. |
-| *UDP port 20777 is in use by another program.* | Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). |
+| *UDP port 20777 is in use by another program.* | Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds and listens as soon as the other program lets it go. |
 | *Reading Assetto Corsa Competizione from shared memory.* | Assetto Corsa or Assetto Corsa Competizione is running. |
 | *Waiting for Assetto Corsa or Assetto Corsa Competizione.* | **Assetto Corsa and Assetto Corsa Competizione** is picked and neither game is running. |
 | *Stopped* | The switch is off or the engine is stopped. |
@@ -48,7 +48,7 @@ The switch, the game, the port, the forward port and Full Speed are saved in eac
 | Game | Where to turn telemetry on | Port |
 |---|---|---|
 | Forza Motorsport 7, Forza Motorsport (2023), Forza Horizon 4, 5 and 6 | In the HUD and Gameplay settings (Forza Horizon) or the HUD options (Forza Motorsport): **Data Out** on, **Data Out IP Address** 127.0.0.1, **Data Out IP Port** the port you set in PadForge. In Forza Motorsport, set **Data Out Packet Format** to **Car Dash**. | Your choice |
-| F1 22, F1 23, F1 24, F1 25 | In the game's telemetry settings, turn UDP telemetry on. Leave the UDP format at the game's own year. | 20777 |
+| F1 22, F1 23, F1 24, F1 25 | In the game's telemetry settings, turn UDP telemetry on. PadForge reads UDP formats 2022 to 2025, the game's own year or an older one. | 20777 |
 | DiRT Rally 2.0 and the other Codemasters games | In `Documents\My Games\DiRT Rally 2.0\hardwaresettings\hardware_settings_config.xml`, set the `udp` line to `<udp enabled="true" extradata="3" ip="127.0.0.1" port="20777" delay="1" />`. PadForge reads the `extradata="3"` layout. | 20777 |
 | EA SPORTS WRC | Run the game once so it writes `Documents\My Games\WRC\telemetry\config.json`. Under `udp`, `packets`, enable the entry with `"structure": "wrc"` and `"packet": "session_update"`, with `ip` 127.0.0.1 and `port` 20777, then restart the game. | 20777 |
 | BeamNG.drive | Turn on OutGauge support in the game's options (Options, Other, Utilities) and set its IP and port. | Your choice |
@@ -72,7 +72,7 @@ While the switch is on, the [Devices](devices.md) page lists a **Game Telemetry*
 | Throttle, Brake, Clutch, Handbrake | Released | Fully pressed |
 | Steering | Centered | Full left or right |
 
-A custom variable adds an axis after Steering, running from the variable's Min to its Max. The row holds up to 17 of them.
+A custom variable adds an axis after Steering, running from the variable's Min to its Max. The row holds up to 17 of them. A variable keeps its axis as long as a format uses its name, and a variable renamed in **Custom Formats…** keeps it too, so deleting one variable leaves the mappings on the others as they were. A new variable takes the lowest free axis.
 
 | Button | Pressed while |
 |---|---|
@@ -149,7 +149,7 @@ Each field reads a number and multiplies it by its **Scale**:
 
 A format with a length or a key is found by Auto-Detect, ahead of the built-in games. Pick a format by name in the **Game** list (it shows as *Name (Custom)*) to read every packet with it. A format with neither a length nor a key is read only when picked. Each variable becomes an axis on the row and a channel for Custom Expression triggers.
 
-Save checks every format and names the first problem: a name with `:` or `|`, two formats with one name, a variable with no name, a JSON field with no key, or a field that reads past the end of its packet.
+Save checks every format and names the first problem: a name with `:` or `|`, two formats with one name, a variable with no name, a JSON field with no key, or a field that reads past the end of its packet. When a settings file edited by hand holds two formats with one name, ignoring case, PadForge keeps the first.
 
 ---
 
@@ -162,7 +162,7 @@ Two macro actions in the **Rumble** group play adaptive trigger effects on the D
 - **Trigger**: **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**.
 - **Effect**: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is **Vibration** with the **Start Zone** at 0 and the **Strength** at 8, the same bytes a mod sends for it.
 - The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.
-- **Holds**: **While the Macro's Trigger Is Held**, **For a Set Time** (with a **Time** in milliseconds), or **Until Stopped**.
+- **Holds**: **While the Macro's Trigger Is Held**, **For a Set Time** (with a **Time** from 1 to 60,000 milliseconds), or **Until Stopped**.
 
 **Stop Adaptive Trigger Effect** ends what a macro holds on the chosen trigger, for an effect that holds until stopped.
 

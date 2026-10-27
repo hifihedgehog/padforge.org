@@ -71,7 +71,7 @@ OpenTrack's "UDP over network" output (`proto-udp/ftnoir_protocol_ftn.cpp`) send
 | Long datagram | Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with `MessageSize` and is dropped. |
 | NaN or infinity in any field | The whole datagram is dropped (`tracker-udp` rule) |
 
-The socket is IPv4 UDP bound to `IPAddress.Any` on the port (`HeadTrackerDevice.UdpBindAddress`, which the tests set to loopback), with `ExclusiveAddressUse` so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and `SIO_UDP_CONNRESET` cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is `PadForge.HeadTrackerUdp`, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets `UdpBindFailed`.
+The socket is IPv4 UDP bound to `IPAddress.Any` on the port (`HeadTrackerDevice.UdpBindAddress`, which the tests set to loopback), with `ExclusiveAddressUse` so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and `SIO_UDP_CONNRESET` cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is `PadForge.HeadTrackerUdp`, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets `UdpBindFailed`, and `GetCurrentState` tries the bind again every 3 seconds (`UdpRetryMs`, `RetryUdpBind`), one attempt at a time and never after `Dispose`, so closing the program that held the port brings the listener up without the row reopening.
 
 The peer is recorded as `address:port` of the last sender, and a change of peer bumps `StatusVersion`.
 
@@ -190,8 +190,8 @@ Real UDP and uniquely named shared-memory fixtures verify all four input combina
 
 | Line | When |
 |---|---|
-| `Head tracker: listening on UDP port <port>` | Bind succeeded |
-| `Head tracker: UDP port <port> bind failed: <message>` | Bind failed |
+| `Head tracker: listening on UDP port <port>` | Bind succeeded, at open or on a retry |
+| `Head tracker: UDP port <port> bind failed: <message>` | Bind failed at open. A retry that fails writes nothing |
 | `Head tracker: FreeTrack shared memory open` | Mapping opened |
 | `Head tracker: FreeTrack mapping failed <message>` | Mapping failed |
 | `Head tracker: FreeTrack mutex failed <message>` | The mutex failed to open, so the mapping is closed |
