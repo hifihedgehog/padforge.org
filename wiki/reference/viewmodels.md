@@ -3169,7 +3169,7 @@ Per-slot Extended-controller configuration. Drives stick/trigger/POV/button coun
 | `ComputeAxisLayout(out int[], out int[], out int[])` | Computes interleaved axis indices per group. |
 | `ResetToDefaults()` | Resets every field to its fresh-install default in place. Never replaces the instance (MainWindow's autosave hook binds to this object's `PropertyChanged`). Triggers drop to `0` first so the stick default isn't clamped away by the shared-axis budget. |
 
-The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 2.0.2 ships 337 profiles in 59 vendor folders, and PadForge's pickers offer 239 of the 240 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles and withholds the GameCube adapter's Full persona). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
+The v2 `ExtendedPreset` enum (`Xbox360` / `DualShock4` / `Custom`) and the `ApplyPresetDefaults()` method that paired with it were dropped in v3 (commit `824b4224`). v3 picks layouts from HIDMaestro.Core's embedded catalog instead. HIDMaestro 2.1.0 ships 337 profiles in 59 vendor folders, and PadForge's pickers offer 239 of the 240 that carry a captured HID descriptor (`HMaestroProfileCatalog` keeps only `IsDeployable` profiles and withholds the GameCube adapter's Full persona). `Customize` is the single boolean that gates user overrides on top of the catalog profile.
 
 ### ExtendedSlotConfigData
 
