@@ -4459,7 +4459,6 @@
 <p>The drop runs once for each time you plug the cable in. If you re-link Bluetooth on purpose while the cable stays in, PadForge leaves that link alone until the next unplug. A pad that was never on Bluetooth is unaffected. The fix was verified end to end on a DualSense: the dual state formed live, the drop fired within five seconds, and the mirror measured on the pad's own microphone at the same level as a USB-only pad.</p>
 <hr />
 <h2 id="dualshock-4-headset-jack">DualShock 4 headset jack<a class="headerlink" href="#dualshock-4-headset-jack" title="Permanent link">&para;</a></h2>
-<p><em>Added after 5.1.0.</em></p>
 <p>A DualShock 4 on Bluetooth gets two of the DualSense's rows under Master Volume, Headphone Volume and Output Path, and they work the same way. Its stream plays on the built-in speaker or on the headphone jack, never both at once, so Output Path leaves Headphones + Speaker out of its list. Audio Buffer Length stays DualSense-only, since the DualShock 4 has no such setting.</p>
 <table>
 <thead>
@@ -4591,7 +4590,7 @@
 <h2 id="limits">Limits<a class="headerlink" href="#limits" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>A first-model DualShock 4 (CUH-ZCT1) plays over Bluetooth only.</strong> It has no audio on a cable. On a cable the second model plays through its headphone jack only, and so does any DualShock 4 on Sony's USB wireless adapter, because their USB audio device is a headset. Headphone Volume and Output Path are Bluetooth rows.</li>
-<li><strong>A DualShock 4 streams while audio routes to it.</strong> Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it. (Added after 5.1.0.)</li>
+<li><strong>A DualShock 4 streams while audio routes to it.</strong> Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it.</li>
 <li><strong>The mirror is endpoint-level, not per-app.</strong> It mirrors a Windows output device, not one program's sound.</li>
 <li><strong>The pad speaker is small.</strong> It suits voice, prompts, and effects more than music.</li>
 <li><strong>Haptic-tone pads render one pitch, not audio.</strong> Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.</li>

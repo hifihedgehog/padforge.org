@@ -107,7 +107,7 @@ A game that plays force feedback effects, on a slot whose preset takes them, rea
 
 A Falcon in no slot holds itself up and does nothing else. Every force fades in over half a second when a Falcon opens, when its slot takes it, and when its feel changes, so a spring never snaps a handle nobody is holding. Stopping the engine closes every Falcon at zero force. A Falcon whose forces or gravity compensation will not turn on, or whose force writes fail three times in a row, closes, and PadForge opens it again on its next look.
 
-A Falcon shared over [Remote Link](../guides/remote-link.md) feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run a build newer than 5.1.0. With an older PC on either end, it gets no force from the other PC.
+A Falcon shared over [Remote Link](../guides/remote-link.md) feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run 5.2.0 or later. With an older PC on either end, it gets no force from the other PC.
 
 See the technical page, [Novint Falcon Internals](../reference/novint-falcon-internals.md).
 

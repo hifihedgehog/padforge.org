@@ -132,8 +132,6 @@ The drop runs once for each time you plug the cable in. If you re-link Bluetooth
 
 ## DualShock 4 headset jack
 
-*Added after 5.1.0.*
-
 A DualShock 4 on Bluetooth gets two of the DualSense's rows under Master Volume, Headphone Volume and Output Path, and they work the same way. Its stream plays on the built-in speaker or on the headphone jack, never both at once, so Output Path leaves Headphones + Speaker out of its list. Audio Buffer Length stays DualSense-only, since the DualShock 4 has no such setting.
 
 | Output Path | Where a DualShock 4 plays |
@@ -240,7 +238,7 @@ Every setting row has its own reset button that returns just that setting to its
 ## Limits
 
 - **A first-model DualShock 4 (CUH-ZCT1) plays over Bluetooth only.** It has no audio on a cable. On a cable the second model plays through its headphone jack only, and so does any DualShock 4 on Sony's USB wireless adapter, because their USB audio device is a headset. Headphone Volume and Output Path are Bluetooth rows.
-- **A DualShock 4 streams while audio routes to it.** Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it. (Added after 5.1.0.)
+- **A DualShock 4 streams while audio routes to it.** Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it.
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
 - **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.

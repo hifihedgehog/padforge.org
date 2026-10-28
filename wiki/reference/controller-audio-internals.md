@@ -119,7 +119,7 @@ The jack watch reads a Bluetooth DualShock 4 too: reports 0x11 to 0x19 with byte
 
 ### Headset microphone
 
-*Added after 5.1.0. It runs on the SDL build from fork e0b84e3498 (hifihedgehog/SDL#41), which PadForge took in 865966da.*
+*It runs on the SDL build from fork e0b84e3498 (hifihedgehog/SDL#41), which PadForge took in 865966da.*
 
 With the microphone armed the controller sends input reports 0x11 to 0x19 that carry audio, flagged by input byte 2 bit 7. The audio block follows the 75-byte controller state when byte 1 bit 7 is set and starts at byte 3 when it is clear, and the state-prefixed spot is checked again for firmware that leaves the flag stale. The block holds a 16-bit frame number, the target (0x01 on a genuine CUH-ZCT2, 0x03 in older notes) and the frames: 0xAD starts a 57-byte mSBC frame, 0x9C an SBC frame whose header gives its length. SDL accepts state from those IDs (067630aef3, 2020). Until fork e0b84e3498 it also checked every Bluetooth state report's CRC at byte 78 and read 128 bytes, which dropped the larger reports and stopped the pad's input. That build reads 547 bytes and checks each report at its own length, and `Ds4BtAudioTests.MicLane_IsOn_WithAnSdlBuildThatKeepsInputFlowing` reads both shipped SDL3.dll files for its table of report lengths.
 
@@ -159,7 +159,7 @@ Configuration arrives through `AudioPassthroughService.DspConfigProvider`, a `(s
 
 The band list persists as one attribute, `AudioEqBands`, in `EqBandCodec`'s form: `PK:1050:-3.5:1.2:1|LSC:105:5.5:0.7:1`, fields type token, frequency, gain, Q, enabled, invariant culture. `AutoEqProfile.Parse` reads AutoEq's published parametric format (`Preamp: -6.8 dB` then `Filter N: ON PK Fc 21 Hz Gain 4.7 dB Q 0.66`) and maps its type tokens (PK, LSC, HSC, HPQ, LPQ, and the variants) onto `EqBandType`. AutoEq's Graphic Eq export has no `Filter` lines and parses to zero bands, which the UI reports rather than silently declining.
 
-The follow-jack reader that feeds `ResolveOutputPath` is sink-owned as of 4.3.2 (`JackWatch` in phase 3b). It used to hang off the composite-persona feed alone, so with no virtual DualSense on the slot the jack bit was never observed and Follow Headphone Jack resolved to Default forever (#346). The watch reads USB report `0x01` raw byte 54 or Bluetooth report `0x31` raw byte 55, both duaLib's `/*53.0*/ PluggedHeadphones`, and a failed open stays registered with a 5-second retry deadline (`JackWatchRetryMs`), so the reconcile retries it at most every 5 s rather than respawning a reader every pass. A changed path or transport restarts it at once. Since #528 it also reads a Bluetooth DualShock 4, as described under DualShock 4 Bluetooth, and a DualShock 4 on USB (added after 5.1.0).
+The follow-jack reader that feeds `ResolveOutputPath` is sink-owned as of 4.3.2 (`JackWatch` in phase 3b). It used to hang off the composite-persona feed alone, so with no virtual DualSense on the slot the jack bit was never observed and Follow Headphone Jack resolved to Default forever (#346). The watch reads USB report `0x01` raw byte 54 or Bluetooth report `0x31` raw byte 55, both duaLib's `/*53.0*/ PluggedHeadphones`, and a failed open stays registered with a 5-second retry deadline (`JackWatchRetryMs`), so the reconcile retries it at most every 5 s rather than respawning a reader every pass. A changed path or transport restarts it at once. Since #528 it also reads a Bluetooth DualShock 4, as described under DualShock 4 Bluetooth, and a DualShock 4 on USB.
 
 ---
 
