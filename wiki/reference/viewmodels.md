@@ -1732,7 +1732,7 @@ Audio-tab surface over the per-device crossfeed / EQ / limiter fields on `Device
 
 | Member | Type | Description |
 |--------|------|-------------|
-| `SelectedDeviceHasDspChain` | `bool` (computed, `PadViewModel.cs`) | True when the selected device is a Sony pad whose audio rides an `AudioPassthroughService` sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), or a DualShock 4 over Bluetooth. |
+| `SelectedDeviceHasDspChain` | `bool` (computed, `PadViewModel.cs`) | True when the selected device is a Sony pad whose audio rides an `AudioPassthroughService` sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), a second-model DualShock 4 (PID 09CC) on a cable, or any DualShock 4 over Bluetooth (`AudioPassthroughService.Ds4HasAudio`). |
 | `EqBands` | `ObservableCollection<EqBandVm>` | Grid rows decoded from `DeviceSlotConfig.AudioEqBands`. Every row edit re-encodes the whole list back into the config (`PushEqBands`). |
 | `RefreshEqBands()` | method | Rebuilds the rows from the selected device's config on every device switch and clears the import status. |
 | `AddEqBandCommand` / `RemoveEqBandCommand` / `ClearEqBandsCommand` | `RelayCommand` (`RemoveEqBandCommand` takes the `EqBandVm` row) | Add a default band, remove one row, or clear the list. Each pushes the encoded list. |
@@ -3568,4 +3568,4 @@ One PadForge PC discovered on the LAN (#138), shown in the "Nearby PCs" list. Im
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

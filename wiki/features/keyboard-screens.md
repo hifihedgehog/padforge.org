@@ -29,6 +29,8 @@ Open **Settings**, find the **Keyboard Screens** card and tick **Drive Keyboard 
 
 The card also holds the S.T.R.I.K.E. 7 library's buttons. Everything about one screen is on that screen's row.
 
+![The Keyboard Screens card in Settings, with Drive Keyboard Screens on and the lines a PC with no screen shows](../images/settings-keyboard-screens.png)
+
 ## Each screen's row
 
 The Devices page lists a row for each screen PadForge finds:
@@ -69,7 +71,7 @@ Arx Control is a phone app that shows applets from Logitech Gaming Software 8.52
 
 The S.T.R.I.K.E. 7 draws through Mad Catz's Strike7API.dll, which talks to the keyboard's own software, so that software has to be running. PadForge does not ship the library. **Download Strike7API.dll** on the Settings card fetches Mad Catz's SDK from AIDA64's server, where AIDA64 points its users for the same file, checks the download against its known SHA-256 and keeps only the 64-bit library in PadForge's temporary folder. PadForge checks that copy again each time it loads it. **Choose Strike7API.dll…** uses a copy you already have instead. A download that finishes takes the place of a copy you chose, and one that fails leaves your choice as it was.
 
-The library needs Microsoft's Visual C++ 2008 runtime, and PadForge loads it once the runtime is there. When the row's line says so, **Install Visual C++ 2008 Runtime** on the Settings card downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
+The library needs Microsoft's Visual C++ 2008 runtime, and PadForge loads it once the runtime is there. When the Settings card says it needs Microsoft's Visual C++ 2008 runtime, **Install Visual C++ 2008 Runtime** on the card downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
 
 PadForge's applet shows on the V.E.N.O.M. screen as an icon. Pick it there to show PadForge's picture, and the home key leaves it. On a picture larger than the screen, drag a finger across the screen to move the picture.
 
@@ -130,4 +132,4 @@ See [Macros](../guides/macros.md) and the technical page, [Keyboard Screens Inte
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

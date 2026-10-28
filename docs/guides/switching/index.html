@@ -4499,7 +4499,7 @@
 <li>Hide the pad before the game starts. A program that already has the pad open keeps it until the pad reconnects.</li>
 <li>Leave the old tool's drivers installed during the trial. Closing a program, turning off a mapping and uninstalling a driver are different things, and uninstalling is not an easy way back.</li>
 </ol>
-<p>To remap a few keys without hiding a whole keyboard, use <strong>Consume Mapped Inputs</strong>. It swallows only the mapped keys and mouse buttons, on every keyboard and mouse at once, since Windows does not say which device a key came from. More: <a href="../../features/devices/#input-hiding">Input hiding</a>.</p>
+<p>To remap a few keys without hiding a whole keyboard, use <strong>Consume Mapped Inputs (Hooks)</strong>. It swallows only the mapped keys and mouse buttons, on every keyboard and mouse at once, since Windows does not say which device a key came from. More: <a href="../../features/devices/#input-hiding">Input hiding</a>.</p>
 <h2 id="rebuild-in-layers">Rebuild in layers<a class="headerlink" href="#rebuild-in-layers" title="Permanent link">&para;</a></h2>
 <p>Build from the bottom up, and save after each stage that works:</p>
 <ol>
@@ -4508,7 +4508,7 @@
 <li>Add <a href="../shift-layers/">shift layers</a>. Test entering and leaving each one before you hang actions on it.</li>
 <li>Add <a href="../macros/">macros</a> last. Decide whether each macro's trigger is the virtual controller's output or the physical device's own input. An extra button on your pad can be a trigger even when the virtual controller has no button for it.</li>
 </ol>
-<p>Match the behavior, not the numbers. <strong>On Press</strong> fires at once, while <strong>On Single Press</strong> waits to rule out a double press. A row in <strong>Toggle</strong> mode holds its output until the next press. A latched macro that pulses and <strong>Repeat While Held</strong> stop at different moments. Copy the old sensitivity values only as notes for calibrating again. More: <a href="../macros/#fire-modes">Fire modes</a>.</p>
+<p>Match the behavior, not the numbers. <strong>On Press</strong> fires at once, while <strong>On Single Press</strong> waits to rule out a double press. A row in <strong>Toggle</strong> mode holds its output until the next press. A latched macro that pulses and a <strong>Repeat Key While Held</strong> action stop at different moments. Copy the old sensitivity values only as notes for calibrating again. More: <a href="../macros/#fire-modes">Fire modes</a>.</p>
 <p>A pedal that only changes what other buttons do belongs in a layer activator, and the buttons whose meaning changes belong on that layer. Test the pedal alone, the button alone, both together, and both orders of release.</p>
 <hr />
 <h2 id="from-steam-input">From Steam Input<a class="headerlink" href="#from-steam-input" title="Permanent link">&para;</a></h2>
@@ -4632,7 +4632,7 @@
 </tr>
 <tr>
 <td>A muted original control</td>
-<td>Consume Mapped Inputs or hiding</td>
+<td>Consume Mapped Inputs (Hooks) or hiding</td>
 <td>The exact original input</td>
 </tr>
 </tbody>
@@ -4719,7 +4719,7 @@
 </table>
 <p>Mark a check "not tested" when you lack the hardware or the game. When a required behavior fails, stop adding and keep the last working stage, or restore the old setup. Click <strong>Save Snapshot</strong> right after a failure and note the time and the exact step. More: <a href="../../troubleshooting/#logs-and-diagnostics">Logs and diagnostics</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

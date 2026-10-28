@@ -2470,4 +2470,4 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

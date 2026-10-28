@@ -281,4 +281,4 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

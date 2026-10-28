@@ -4130,6 +4130,7 @@
 <li>Start the input engine with the play button.</li>
 </ol>
 <p>PadForge listens on every network address, so a game on another PC or on an Xbox can send to this PC's address. The first time it listens, PadForge adds a Windows Firewall rule named <strong>PadForge Game Telemetry</strong> for the port.</p>
+<p><img alt="The Game Telemetry section on the Dashboard with Listen for Game Telemetry on" src="../../images/dashboard-game-telemetry.png" /></p>
 <h3 id="the-status-line">The status line<a class="headerlink" href="#the-status-line" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4149,7 +4150,7 @@
 </tr>
 <tr>
 <td><em>UDP port 20777 is in use by another program.</em></td>
-<td>Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds and listens as soon as the other program lets it go.</td>
+<td>Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds, or every 5 while the input engine idles, and listens as soon as the other program lets it go.</td>
 </tr>
 <tr>
 <td><em>Reading Assetto Corsa Competizione from shared memory.</em></td>
@@ -4440,6 +4441,7 @@
 <li><strong>Big-Endian</strong>, for a packet that writes each number with its most significant byte first. Games on a PC almost always write the least significant byte first.</li>
 <li><strong>Gear Values</strong>, for a gear field with its own numbers for reverse and neutral, as Forza's 0 and 11 are. Without them, a negative gear is reverse and 0 is neutral.</li>
 </ul>
+<p><img alt="The Custom Telemetry Formats window open on a binary format named My Rally Game" src="../../images/telemetry-format-editor.png" /></p>
 <p>Each field reads a number and multiplies it by its <strong>Scale</strong>:</p>
 <table>
 <thead>
@@ -4483,7 +4485,7 @@
 <p><strong>Adaptive Trigger Effect</strong> plays one effect:</p>
 <ul>
 <li><strong>Trigger</strong>: <strong>Right (R2)</strong>, <strong>Left (L2)</strong> or <strong>Both (L2 and R2)</strong>.</li>
-<li><strong>Effect</strong>: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is <strong>Vibration</strong> with the <strong>Start Zone</strong> at 0 and the <strong>Strength</strong> at 8, the same bytes a mod sends for it.</li>
+<li><strong>Effect</strong>: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is <strong>Vibration</strong> with the <strong>Start Zone</strong> at 0, the <strong>Strength</strong> at 8 and the <strong>Frequency</strong> the mod gives, 10 when it gives none, the same bytes a mod sends for it.</li>
 <li>The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.</li>
 <li><strong>Holds</strong>: <strong>While the Macro's Trigger Is Held</strong>, <strong>For a Set Time</strong> (with a <strong>Time</strong> from 1 to 60,000 milliseconds), or <strong>Until Stopped</strong>.</li>
 </ul>
@@ -4507,7 +4509,7 @@
 </ul>
 <p>See the technical page, <a href="../../reference/game-telemetry-internals/">Game Telemetry Internals</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

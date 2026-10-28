@@ -1,11 +1,11 @@
 PadForge
-Product information | October 24, 2026
+Product information | October 27, 2026
 
 PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,110 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
-Version: 5.1.0
+Version: 5.2.0
 Downloads and release notes: https://github.com/hifihedgehog/PadForge/releases/latest
 Platforms: Windows 10 and 11 on x64. Preliminary build for Windows 11 on ARM64.
 Price: Free. No subscriptions or paid feature packs.
@@ -14,14 +14,14 @@ Source license: CC BY-NC-SA 4.0.
 Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICENSE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
-New in 5.1.0
-HIDMaestro 2.0: PadForge's virtual controllers move to HIDMaestro 2.0, which describes each of its 337 devices entirely in data and keeps no device-specific code in its driver. In HIDMaestro's tests against its last 1.x release, a virtual DualShock 4 appears in 217 ms instead of 467 and an Xbox 360 controller in 358 ms instead of 674. Settings can now remove HIDMaestro and the PlayStation Bluetooth drivers.
-Works with screen readers: Blind and low-vision players can now use PadForge with a screen reader. Every control the Tab key reaches has a name the screen reader speaks, in PadForge's language, status messages are read as they happen, and tiles, chips and dialogs work from the keyboard. Tested with NVDA. Mouse users see no change.
-109 languages: The interface comes in 109 languages, up from 10, and 42 of them are complete, British English among them. Arabic, Persian, Urdu and Central Kurdish lay it out right to left, and Chinese, Japanese and Korean draw in their own fonts.
-Lighting for mice and keyboards: A mouse or keyboard assigned to a virtual controller takes the controller's lighting, in any mode a DualSense lightbar has, and glows the color a game gives a PlayStation controller. PadForge lights Logitech, Razer and SteelSeries gear itself while their apps are closed, and through those apps while they run. Vendor rows carry the lighting to headsets and mousepads.
-Rumble in a mouse: The Logitech MX Master 4 and the SteelSeries Rival 500, 700 and 710 rumble with their virtual controller, as do Logitech's iFeel mice on PadForge's driver. The Razer Sensa row brings the rumble to Sensa HD gear.
-Virtual keyboards and mice: A Keyboard + Mouse slot can type and point through a virtual keyboard and mouse that programs see as one of 51 keyboard and 52 mouse models.
-1,110 devices: PadForge knows 1,110 devices by USB identity, the PS VR Aim Controller among them, and the NYXI Hyperion 3 and console-protocol Joy-Con 2 clones connect over Bluetooth.
+New in 5.2.0
+Game Telemetry: Driving games send PadForge their speed, RPM, gear, pedals and steering, from Forza, F1, EA SPORTS WRC and the Codemasters rally games to Assetto Corsa, Project CARS 2 and the truck simulators. They appear as a controller row of their own, to map, to start macros with, or to light a DualSense's adaptive triggers. Custom Formats reads a game PadForge does not know.
+Game mods without DSX: Fan mods that give the Grand Theft Auto games, Red Dead Redemption 2, Skyrim and others adaptive triggers send to a program named DSX. PadForge takes its place: their trigger effects, lightbar, player lights and mute light play on the PlayStation controllers on PadForge's virtual controllers, with no DSX installed.
+Novint Falcon: The Falcon's handle becomes a stick and its grip's buttons become buttons, and a game's rumble and force feedback push back on the handle, through Force Dimension's SDK. No Falcon has run against PadForge yet.
+Keyboard screens: The screens on Logitech's GamePanel keyboards, the Mad Catz S.T.R.I.K.E. 7 and a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color, and the keys beside them map as buttons. None of these screens has run against PadForge yet.
+Haptics as rumble: A game that plays a DualSense's haptics as audio now rumbles every rumble pad on that virtual controller, and bass shakers follow it.
+HIDMaestro 2.1.0: Virtual Xbox 360 controllers keep working through sleep, and every frame arrives once and in order. In HIDMaestro's own test with every processor busy, a virtual DualShock 4's slowest frame took 1.4 ms instead of 360.
+DualShock 4 headset: Over Bluetooth, a DualShock 4 plays through its headphone jack and its headset microphone works. A second-model DualShock 4 on a cable now plays PadForge's sound through its headphone jack too.
 
 Setup
 PadForge runs as administrator. Its runtime is included in the executable.
@@ -34,6 +34,10 @@ Product references
 Specifications: https://padforge.org/specs.html
 Supported devices: https://padforge.org/docs/devices/supported/
 Languages: https://padforge.org/docs/features/settings/#language
+Game telemetry: https://padforge.org/docs/features/game-telemetry/
+Game mods: https://padforge.org/docs/features/game-mods/
+Novint Falcon: https://padforge.org/docs/features/novint-falcon/
+Keyboard screens: https://padforge.org/docs/features/keyboard-screens/
 Screen readers and the keyboard: https://padforge.org/docs/guides/accessibility/
 Mice, keyboards and vendor rows: https://padforge.org/docs/features/peripherals/
 Haptic mice: https://padforge.org/docs/features/force-feedback/#haptic-mice-and-the-razer-sensa-row
@@ -52,6 +56,10 @@ against them. They have not run on the devices themselves.
 No native speaker has reviewed the translations. A partial translation
 shows English wherever it has no string.
 No NYXI Hyperion 3 has run against PadForge.
+No Novint Falcon and none of the supported keyboard screens has run
+against PadForge. No Fanatec base has run the report 0x01 fix.
+No wired second-model DualShock 4 or Sony USB wireless adapter has run
+the 5.2.0 audio routing.
 DualSense audio over Bluetooth uses a virtual USB DualSense for compatible
 games. The game supplies its native speaker audio and haptic effects.
 Steam imports include a translation report. Some bindings are approximated
@@ -60,14 +68,16 @@ The ARM64 build has not run on ARM64 hardware.
 
 Images
 dualsense-cobalt.jpg: DualSense controller preview in the Deep Earth Cobalt finish. 2560 x 1528 JPG.
-mice-and-keyboards.jpg: The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller. 2560 x 1528 JPG. New in 5.1.0.
-mouse-rumble.jpg: The Force Feedback tab of a SteelSeries Rival 710 assigned to an Xbox virtual controller. 2560 x 1528 JPG. New in 5.1.0.
-languages.jpg: The Language list in Settings, each language under its own name. 2560 x 1528 JPG. New in 5.1.0.
-right-to-left.jpg: The Settings page in Arabic, laid out right to left. 2560 x 1528 JPG. New in 5.1.0.
-button-mappings.jpg: Button mappings and combined inputs. 2560 x 1528 JPG.
-macros.jpg: Macro conditions and actions. 2560 x 1528 JPG.
-controller-audio.jpg: Controller speaker output, crossfeed and EQ. 2560 x 1528 JPG.
-steam-community-layouts.jpg: Steam community layout translation. 2560 x 1528 JPG.
+game-telemetry.jpg: The Dashboard's Game Telemetry card, waiting for a game on UDP port 20777. 2560 x 1528 JPG. New in 5.2.0.
+telemetry-formats.jpg: The Custom Telemetry Formats window with a rally game's speed, RPM, gear and throttle fields. 2560 x 1528 JPG. New in 5.2.0.
+game-mods.jpg: The Dashboard's Game Mods card, listening for DSX game mods on port 6969. 2560 x 1528 JPG. New in 5.2.0.
+novint-falcon.jpg: The Novint Falcon settings on an Xbox virtual controller's Force Feedback tab. 2560 x 1528 JPG. New in 5.2.0.
+mice-and-keyboards.jpg: The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller. 2560 x 1528 JPG.
+languages.jpg: The Language list in Settings, each language under its own name with its English name beside it. 2560 x 1528 JPG.
+button-mappings.jpg: The mapping table with combined physical inputs and layer controls. 2560 x 1528 JPG.
+macros.jpg: A macro with its trigger conditions and a sequence of actions. 2560 x 1528 JPG.
+controller-audio.jpg: Sound output for a DualSense speaker, with crossfeed and a parametric EQ curve. 2560 x 1528 JPG.
+steam-community-layouts.jpg: A community configuration and its binding translation report. 2560 x 1528 JPG.
 padforge-logo.png: Logo with wordmark. 800 x 800 transparent PNG.
 padforge-icon.png: App icon. 571 x 533 transparent PNG.
 

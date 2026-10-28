@@ -834,4 +834,4 @@ An Extended slot carries up to 128 buttons, set in its **Buttons** field with **
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

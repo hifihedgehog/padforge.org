@@ -4813,7 +4813,7 @@
 <h3 id="this-pc-only">This PC Only<a class="headerlink" href="#this-pc-only" title="Permanent link">&para;</a></h3>
 <p><strong>This PC Only</strong> admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at <code>http://localhost:8081</code>. Share the tunnel's public address with <code>/?code=</code> and the access code on the end. The card shows the local address with the code, and no QR code, since a phone cannot open <code>localhost</code>.</p>
 <h3 id="what-plain-http-gives-up">What plain HTTP gives up<a class="headerlink" href="#what-plain-http-gives-up" title="Permanent link">&para;</a></h3>
-<p>Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows <strong>Motion needs HTTPS</strong>. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.</p>
+<p>Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address on a touch device shows <strong>Motion needs HTTPS</strong>, or <strong>Motion: open over HTTPS</strong> when PadForge also serves HTTPS. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.</p>
 <p>Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.</p>
 <p>The <a href="#browser-gamepad-a-controller-paired-to-the-phone">Browser Gamepad</a> page's request to keep the screen on needs HTTPS as well, and a browser that blocks cookies loads the first page and nothing after it.</p>
 <h2 id="touch-controls">Touch controls<a class="headerlink" href="#touch-controls" title="Permanent link">&para;</a></h2>
@@ -4919,7 +4919,7 @@
 <li><a href="../../features/visualization/">3D and 2D Visualization</a>: the same controller art powers both the web controller and the desktop 2D view.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

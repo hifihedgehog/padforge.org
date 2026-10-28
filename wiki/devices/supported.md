@@ -903,4 +903,4 @@ The preview draws each keyboard as its board's key set. A board drawn as the nea
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

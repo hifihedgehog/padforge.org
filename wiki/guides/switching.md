@@ -51,7 +51,7 @@ Start the game with the old tool stopped and only PadForge's output on. Otherwis
 3. Hide the pad before the game starts. A program that already has the pad open keeps it until the pad reconnects.
 4. Leave the old tool's drivers installed during the trial. Closing a program, turning off a mapping and uninstalling a driver are different things, and uninstalling is not an easy way back.
 
-To remap a few keys without hiding a whole keyboard, use **Consume Mapped Inputs**. It swallows only the mapped keys and mouse buttons, on every keyboard and mouse at once, since Windows does not say which device a key came from. More: [Input hiding](../features/devices.md#input-hiding).
+To remap a few keys without hiding a whole keyboard, use **Consume Mapped Inputs (Hooks)**. It swallows only the mapped keys and mouse buttons, on every keyboard and mouse at once, since Windows does not say which device a key came from. More: [Input hiding](../features/devices.md#input-hiding).
 
 ## Rebuild in layers
 
@@ -62,7 +62,7 @@ Build from the bottom up, and save after each stage that works:
 3. Add [shift layers](shift-layers.md). Test entering and leaving each one before you hang actions on it.
 4. Add [macros](macros.md) last. Decide whether each macro's trigger is the virtual controller's output or the physical device's own input. An extra button on your pad can be a trigger even when the virtual controller has no button for it.
 
-Match the behavior, not the numbers. **On Press** fires at once, while **On Single Press** waits to rule out a double press. A row in **Toggle** mode holds its output until the next press. A latched macro that pulses and **Repeat While Held** stop at different moments. Copy the old sensitivity values only as notes for calibrating again. More: [Fire modes](macros.md#fire-modes).
+Match the behavior, not the numbers. **On Press** fires at once, while **On Single Press** waits to rule out a double press. A row in **Toggle** mode holds its output until the next press. A latched macro that pulses and a **Repeat Key While Held** action stop at different moments. Copy the old sensitivity values only as notes for calibrating again. More: [Fire modes](macros.md#fire-modes).
 
 A pedal that only changes what other buttons do belongs in a layer activator, and the buttons whose meaning changes belong on that layer. Test the pedal alone, the button alone, both together, and both orders of release.
 
@@ -153,7 +153,7 @@ For a soft press and a full press on an analog key, decide whether the soft acti
 | A device group | Several devices on one slot | Which device sends what, and pressing them together |
 | A shift or activator | A layer and its activator | Entering, releasing, what carries over, priority |
 | A combo | Macro actions and a fire mode | Timing, repeat, interruption and latches |
-| A muted original control | Consume Mapped Inputs or hiding | The exact original input |
+| A muted original control | Consume Mapped Inputs (Hooks) or hiding | The exact original input |
 
 ### Test it, then keep it or go back
 
@@ -222,4 +222,4 @@ Mark a check "not tested" when you lack the hardware or the game. When a require
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

@@ -138,4 +138,4 @@ Because the exe is elevated, this form prompts UAC when called from a normal pro
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

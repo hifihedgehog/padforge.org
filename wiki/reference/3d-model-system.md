@@ -1729,4 +1729,4 @@ Three light sources in XAML:
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

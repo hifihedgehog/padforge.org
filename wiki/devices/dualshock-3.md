@@ -140,4 +140,4 @@ When PadForge starts and finds a PlayStation Bluetooth driver older than the one
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

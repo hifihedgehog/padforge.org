@@ -155,12 +155,12 @@ The engine checks the kept copy's hash again before it loads it, so a damaged co
 
 `Compose` turns a screen's mode into a picture at its kind's size:
 
-- Profile Name, Profile Number, Clock (`HH:mm`), Play Time and Stopwatch draw text with `RenderText`: Segoe UI Bold, centered, from the screen's height down one pixel at a time until it fits. A monochrome screen gets aliased black text on white with no margin, cut to one bit at half luminance. A color screen gets white on black inside a margin of a twentieth of its width.
+- Profile Name, Profile Number, Clock (`HH:mm`), Play Time and Stopwatch draw text with `RenderText`: Segoe UI Bold, centered, from the height inside the margin down one pixel at a time, to a floor of 6, until it fits. A monochrome screen gets aliased black text on white with no margin, cut to one bit at half luminance. A color screen gets white on black inside a margin of a twentieth of its width.
 - Chosen Picture draws the picture at its own size with `RenderWindow`. Where the picture is larger than the screen, a screen-sized window shows it from the pan position, held to the picture's edges. Where it is smaller, it is centered.
 - Profile Picture draws the active profile's picture with `RenderFitted`, scaled down to fit and centered, never scaled up. Without a picture it shows the profile's name.
 - Lightbar Color fills the screen with the color through `RenderColor`. A monochrome screen shows the color's luminance, by the BT.601 weights, through a 4 by 4 Bayer matrix: white lights no pixel, black lights all and a mid gray half.
 
-Each screen keeps its last composed picture and what it shows, and draws again only when that changes, since a frame of the larger screens is over half a megabyte and the tick runs four times a second. Pictures are read through a 16 MB cap and decoded no larger than 2048 pixels on a side by `BoundedBitmap`. A picture that fails to load is not read again until a screen's settings change.
+Each screen keeps its last composed picture and what it shows, and draws again only when that changes, since a frame of the larger screens is over half a megabyte and the tick runs four times a second. Pictures are read through a 16 MB cap and decoded no larger than 2048 pixels on a side by `BoundedBitmap`. A picture that fails to load is read again after 5 seconds, or at once when a screen's settings change.
 
 Play Time counts from when the active profile switched in, and starts over when the engine starts.
 
@@ -172,7 +172,7 @@ Play Time counts from when the active profile switched in, and starts over when 
 
 ## Macros
 
-The four actions are appended at the end of `MacroActionType`, 58 to 61: Show Keyboard Screen, Keyboard Screen Mode, Stopwatch and Pan Keyboard Screen Picture. Each fires once and advances, the Dreamcast screen's shape, and sits in both of `EvaluateMacros`' dispatch switches. They queue requests for the service with the macro's slot, at most 64 waiting and none while the feature is off, and the service applies them on its next tick to the screens whose rows feed that slot (`Feeding`, by each row's `UserSetting.MapTo`), the Show Dreamcast Screen macro's rule.
+The four actions are numbered 58 to 61 in `MacroActionType`: Show Keyboard Screen, Keyboard Screen Mode, Stopwatch and Pan Keyboard Screen Picture. Each fires once and advances, the Dreamcast screen's shape, and sits in both of `EvaluateMacros`' dispatch switches. They queue requests for the service with the macro's slot, at most 64 waiting and none while the feature is off, and the service applies them on its next tick to the screens whose rows feed that slot (`Feeding`, by each row's `UserSetting.MapTo`), the Show Dreamcast Screen macro's rule.
 
 - Show Keyboard Screen carries up to eight frames as base64 PNGs, each fitted to the kind's size when it is added, a frame time of at least 100 ms and a repeat count. The show plays on each screen of that kind in the slot, over its mode, and hands the screen back when it ends.
 - Keyboard Screen Mode writes the mode of each screen of that kind in the slot to the settings, where it stays.
@@ -183,7 +183,7 @@ The four actions are appended at the end of `MacroActionType`, 58 to 61: Show Ke
 
 ## Settings
 
-`AppSettings` holds `KeyboardScreensEnabled` (off by default), `Strike7LibraryPath` (absent for PadForge's download) and the `KeyboardScreens` list. The list holds one `Screen` element per screen whose choices differ from the defaults, the way `BlissBoxPorts` keeps a Dreamcast pad's: a `Device` attribute holding the row's InstanceGuid, `Mode` (Lightbar Color by default), `Picture`, `PanX` and `PanY`. Loading drops an entry with no readable device and a second entry for one device, puts an unknown mode back to the default and a negative pan to zero. Each profile keeps its own `KeyboardScreenPicture`, which every screen in Profile Picture mode shows, and the Default profile's is `DefaultProfileKeyboardScreenPicture`.
+`AppSettingsData` holds `KeyboardScreensEnabled` (off by default), `Strike7LibraryPath` (absent for PadForge's download) and the `KeyboardScreens` list. The list holds one `Screen` element per screen whose choices differ from the defaults, the way `BlissBoxPorts` keeps a Dreamcast pad's: a `Device` attribute holding the row's InstanceGuid, `Mode` (Lightbar Color by default), `Picture`, `PanX` and `PanY`. Loading drops an entry with no readable device and a second entry for one device, puts an unknown mode back to the default and a negative pan to zero. Each profile keeps its own `KeyboardScreenPicture`, which every screen in Profile Picture mode shows, and the Default profile's is `DefaultProfileKeyboardScreenPicture`.
 
 The Settings card holds the switch, the S.T.R.I.K.E. 7 library's buttons and lines for the feature as a whole (`SubsystemLines`): Arx Control's or the S.T.R.I.K.E. 7's library while neither has a row, and no screen found when there is no row at all. It sets nothing for one screen and names none. Each screen's line and dialog are on its row's panel.
 
@@ -222,4 +222,4 @@ No keyboard with a screen, phone with Arx Control or S.T.R.I.K.E. 7 is on the be
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

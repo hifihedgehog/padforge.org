@@ -64,7 +64,7 @@ Hiding applies when a program opens a device, so a program that already had the 
 
 ### Do I have to hide a whole keyboard to remap a few keys?
 
-No. **Consume Mapped Inputs** swallows only the keys and mouse buttons you mapped and leaves the rest working. Windows does not say which keyboard a key came from, so consuming a key consumes it on every keyboard. PadForge's own output is never consumed. More: [Input hiding](features/devices.md#input-hiding).
+No. **Consume Mapped Inputs (Hooks)** swallows only the keys and mouse buttons you mapped and leaves the rest working. Windows does not say which keyboard a key came from, so consuming a key consumes it on every keyboard. PadForge's own output is never consumed. More: [Input hiding](features/devices.md#input-hiding).
 
 ### Does picking a preset unlock every control on my controller?
 
@@ -152,7 +152,7 @@ Between slots with the same layout, such as an Xbox slot and a PlayStation slot,
 
 ### How do I send a keyboard shortcut from a controller chord in one game only?
 
-Load that game's profile, add a macro on its slot, and pick the chord as the trigger, from the virtual controller or from the assigned devices. Add a **Key Press** action with the shortcut. Macros belong to their profile, so the shortcut runs only while that profile is active. **Consume Trigger Buttons** keeps the chord's buttons out of the game. More: [Triggers](guides/macros.md#triggers).
+Load that game's profile, add a macro on its slot, and pick the chord as the trigger, from the virtual controller or from the assigned devices. Add a **Key Press** action with the shortcut. Macros belong to their profile, so the shortcut runs only while that profile is active. **Consume Trigger Buttons (Hide from Game)** keeps the chord's buttons out of the game. More: [Triggers](guides/macros.md#triggers).
 
 ### Why does On Single Press wait when On Press does not?
 
@@ -160,7 +160,7 @@ Load that game's profile, add a macro on its slot, and pick the chord as the tri
 
 ### Can autofire keep going after I let go of the trigger?
 
-Yes. Use a **Toggle Button**, **Toggle Key**, **Toggle Mouse Button** or **Toggle Axis** action with **Pulse While Latched**. One press starts the repeating output and the next stops it. **Repeat While Held** and the **Turbo** fire mode stop when you let go. More: [Toggle Button / Toggle Key](guides/macros.md#toggle-button-toggle-key).
+Yes. Use a **Toggle Button**, **Toggle Key**, **Toggle Mouse Button** or **Toggle Axis** action with **Pulse While Latched**. One press starts the repeating output and the next stops it. The **Repeat Key While Held**, **Repeat Button While Held** and **Repeat Axis While Held** actions and the **Turbo** fire mode stop when you let go. More: [Toggle Button / Toggle Key](guides/macros.md#toggle-button-toggle-key).
 
 ### Why does Text Block type in a chat box but not move my character?
 
@@ -200,7 +200,7 @@ No. It replaces the engine's polling interval while the profile is active, and e
 
 ### The gyro moves on screen, but holding the aim trigger does not turn the camera. What is missing?
 
-The engage trigger decides when gyro is on, and the mapping table decides where it goes. Map the gyro to **Mouse X** and **Y** for a mouse-aimed game, or to the aiming stick for a controller-aimed one. With both **Easy Aim** and an aim engage set, both have to be active. More: [Output routing](guides/gyro.md#output-routing).
+The engage trigger decides when gyro is on, and the mapping table decides where it goes. Map the gyro to **Mouse X** and **Y** for a mouse-aimed game, or to the aiming stick for a controller-aimed one. With both an **Easy Aim Threshold** and an **Aim Engage Button** set, both have to be active. More: [Output routing](guides/gyro.md#output-routing).
 
 ### Which input keeps steering while I hold the controller tilted?
 
@@ -212,7 +212,7 @@ No. **Motion Pitch**, **Yaw** and **Roll** rows make motion from any input, a st
 
 ### Are Momentum and Flick Stick the same thing?
 
-No. **Momentum** lets the mouse cursor coast after a flick on a touchpad or a mouse stick. **Flick Stick** turns the camera to wherever the stick points and keeps turning as the stick rolls around its rim, and it needs the game's **Dots per 360** calibrated. More: [Flick Stick](features/stick-deadzones.md#flick-stick).
+No. **Momentum** lets the mouse cursor coast after a flick on a touchpad or a mouse stick. **Flick Stick** turns the camera to wherever the stick points and keeps turning as the stick rolls around its rim, and it needs the game's **Dots per 360°** calibrated. More: [Flick Stick](features/stick-deadzones.md#flick-stick).
 
 ### Does reading an OpenXR headset put input into my VR game?
 
@@ -244,11 +244,11 @@ A game that supports the DualSense sends its own haptics and speaker sound to a 
 
 ### Will a longer Bluetooth audio buffer fix every crackle?
 
-No. **Bluetooth Audio Buffer Length** sets the DualSense's Bluetooth buffer, shared by speaker, haptics and microphone. Mirroring and other paths have their own queues. Work out which sound path crackles before changing it. More: [DualSense headset jack](features/controller-audio.md#dualsense-headset-jack).
+No. **Audio Buffer Length** sets the DualSense's Bluetooth buffer, shared by speaker, haptics and microphone. Mirroring and other paths have their own queues. Work out which sound path crackles before changing it. More: [DualSense headset jack](features/controller-audio.md#dualsense-headset-jack).
 
 ### Why does Bluetooth drop when I plug in USB, with Quick Charge off?
 
-A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadForge drops the Bluetooth link once when it sets up wired audio. **Quick Charge** is separate: it drops Bluetooth when the controller starts charging. More: [DualSense headset jack](features/controller-audio.md#dualsense-headset-jack).
+A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadForge drops the Bluetooth link once when it sets up wired audio. **Disconnect Bluetooth When Plugged In over USB** (Quick Charge) is separate: it drops Bluetooth when the controller starts charging. More: [DualSense headset jack](features/controller-audio.md#dualsense-headset-jack).
 
 ### Do Bass Shakers play the soundtrack or simulator telemetry?
 
@@ -260,7 +260,7 @@ Neither. Bass Shakers turns the rumble and force feedback a game sends to a virt
 
 ### Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?
 
-The tab also drives the physical device assigned to the slot. **Audio Bass Rumble** turns the PC's sound into rumble, and **Test Rumble** checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: [Audio Bass Rumble](features/force-feedback.md#audio-bass-rumble).
+The tab also drives the physical device assigned to the slot. **Audio Rumble** turns the PC's sound into rumble, and **Test Rumble** checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: [Audio Rumble](features/force-feedback.md#audio-rumble).
 
 ---
 
@@ -286,7 +286,7 @@ No. A copied identity moves pairings to a new PC, but two PCs running the same i
 
 No. On a local network the PCs find each other by broadcast. Over the internet, a connection code lets them try a direct path, and n0's free public relays carry the session when no direct path works. A connection code only finds the other PC. The pairing check decides trust. More: [Remote Link](guides/remote-link.md).
 
-### Does Gamepad Only block every non-gamepad action from a remote PC?
+### Does Limit This PC to Gamepad Input Only block every non-gamepad action from a remote PC?
 
 No. It blocks keyboard and mouse output, scrolling, cursor moves and VR slots for that PC. **Run Program** and MIDI still work. More: [Staying safe: gamepad-only](guides/remote-link.md#staying-safe-gamepad-only).
 
@@ -320,4 +320,4 @@ A recognized phrase is a 175 ms press, not a held key. To make a phrase change s
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

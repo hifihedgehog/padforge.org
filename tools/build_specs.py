@@ -109,7 +109,7 @@ CATS = [
    "multi-source mappings", "multi-source mapping", "shift layers", "starter profiles",
    "socd cleaning", "stick-assisted triggers", "mouse gestures", "media keys as inputs",
    "macros with action sequences", "per-app profiles", "six deadzone shapes",
-   "unknown hardware welcome"]),
+   "unknown hardware welcome", "game telemetry as inputs"]),
  ("virtual", "Virtual controllers", [
    "nintendo virtual controller", "nintendo output", "virtual vr controllers",
    "midi virtual output", "hide physical controllers", "steam workshop config import"]),
@@ -118,7 +118,8 @@ CATS = [
    "trigger motors that feel the game", "adaptive triggers and lightbar",
    "dualsense effects in any game", "guide led brightness", "bass shaker output",
    "bass shakers", "controller speaker audio", "audio through the controller speaker",
-   "headphone dsp chain", "rumble and lighting in mice and keyboards"]),
+   "headphone dsp chain", "rumble and lighting in mice and keyboards",
+   "dsx game mods without dsx", "dualsense haptics as rumble", "novint falcon"]),
  ("motion", "Motion", [
    "gyro at steam input parity", "flick stick", "headset head tracking",
    "dsu motion server", "motion to emulators", "wii pointer modes",
@@ -130,7 +131,8 @@ CATS = [
    "remote link", "share controllers across your pcs", "phone-as-controller",
    "midi input", "a midi keyboard as a controller", "midi from a gamepad",
    "nfc tag triggers", "wii controllers", "wii controllers, paired in-app",
-   "dualshock 3, paired in-app", "battery and idle disconnect", "1000 hz polling"]),
+   "dualshock 3, paired in-app", "battery and idle disconnect", "1000 hz polling",
+   "keyboard screens"]),
 ]
 
 used = set()
@@ -212,7 +214,7 @@ page = '''<!DOCTYPE html>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=v6">
+    <link rel="stylesheet" href="style.css?v=v8">
     <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>

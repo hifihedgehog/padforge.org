@@ -16,13 +16,15 @@ Most driving games can send their telemetry to other programs. Forza, F1, the Co
 
 PadForge listens on every network address, so a game on another PC or on an Xbox can send to this PC's address. The first time it listens, PadForge adds a Windows Firewall rule named **PadForge Game Telemetry** for the port.
 
+![The Game Telemetry section on the Dashboard with Listen for Game Telemetry on](../images/dashboard-game-telemetry.png)
+
 ### The status line
 
 | Line | What it means |
 |---|---|
 | *Waiting for a game on UDP port 20777.* | Listening. No game has sent anything PadForge reads in the last second. |
 | *Listening on UDP port 20777. F1 25 from 127.0.0.1.* | A game is sending. The line names the game and the address it sends from. |
-| *UDP port 20777 is in use by another program.* | Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds and listens as soon as the other program lets it go. |
+| *UDP port 20777 is in use by another program.* | Another program, SimHub for one, holds the port. Close it, or give PadForge the port and forward to the other program (below). PadForge tries the port again every 2 seconds, or every 5 while the input engine idles, and listens as soon as the other program lets it go. |
 | *Reading Assetto Corsa Competizione from shared memory.* | Assetto Corsa or Assetto Corsa Competizione is running. |
 | *Waiting for Assetto Corsa or Assetto Corsa Competizione.* | **Assetto Corsa and Assetto Corsa Competizione** is picked and neither game is running. |
 | *Stopped* | The switch is off or the engine is stopped. |
@@ -136,6 +138,8 @@ The values are in those units. With `a` on Speed (km/h) and `b` on Gear, `a > 12
 - **Big-Endian**, for a packet that writes each number with its most significant byte first. Games on a PC almost always write the least significant byte first.
 - **Gear Values**, for a gear field with its own numbers for reverse and neutral, as Forza's 0 and 11 are. Without them, a negative gear is reverse and 0 is neutral.
 
+![The Custom Telemetry Formats window open on a binary format named My Rally Game](../images/telemetry-format-editor.png)
+
 Each field reads a number and multiplies it by its **Scale**:
 
 | Column | What it holds |
@@ -160,7 +164,7 @@ Two macro actions in the **Rumble** group play adaptive trigger effects on the D
 **Adaptive Trigger Effect** plays one effect:
 
 - **Trigger**: **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**.
-- **Effect**: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is **Vibration** with the **Start Zone** at 0 and the **Strength** at 8, the same bytes a mod sends for it.
+- **Effect**: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is **Vibration** with the **Start Zone** at 0, the **Strength** at 8 and the **Frequency** the mod gives, 10 when it gives none, the same bytes a mod sends for it.
 - The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.
 - **Holds**: **While the Macro's Trigger Is Held**, **For a Set Time** (with a **Time** from 1 to 60,000 milliseconds), or **Until Stopped**.
 
@@ -191,4 +195,4 @@ See the technical page, [Game Telemetry Internals](../reference/game-telemetry-i
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

@@ -546,4 +546,4 @@ Opens the folder holding `diagnostics.log` and any snapshots.
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

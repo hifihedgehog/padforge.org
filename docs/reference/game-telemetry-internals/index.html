@@ -4167,7 +4167,7 @@
 </tr>
 <tr>
 <td>F1 22 to F1 25</td>
-<td>The packet format u16 at 0, 2022 to 2025, and one of that format's sizes for the packet id: twelve for 2022, fourteen for 2023, fifteen for 2024 and sixteen for 2025, from vAzhure F12022.cs to F12025.cs. Format 2022: a 24-byte header, packet id at 5, player car at 22. Format 2023 on: a 29-byte header with the game's year less 2000 at 2, packet id at 6, player car at 27. The layout follows the format alone, so F1 24 or F1 25 on an older format reads too. The status line names the game by the year at 2 when it is not 0, and by the format otherwise.</td>
+<td>The packet format u16 at 0, 2022 to 2025, and one of that format's packet sizes (twelve for 2022, fourteen for 2023, fifteen for 2024 and sixteen for 2025), from vAzhure F12022.cs to F12025.cs. Format 2022: a 24-byte header, packet id at 5, player car at 22. Format 2023 on: a 29-byte header with the game's year less 2000 at 2, packet id at 6, player car at 27. The layout follows the format alone, so F1 24 or F1 25 on an older format reads too. The status line names the game by the year at 2 when it is not 0, and by the format otherwise.</td>
 <td>Car Telemetry (id 6), 60-byte entries: speed u16 km/h, throttle +2, steer +6, brake +10, clutch u8 +14 (0 to 100), gear s8 +15, RPM u16 +16. Car Status (id 7), 47-byte entries in F1 22 and 55 later: max RPM u16 +17.</td>
 </tr>
 <tr>
@@ -4202,7 +4202,7 @@
 </tr>
 </tbody>
 </table>
-<p>F1 claims every packet with its format, a known id and that id's size, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.</p>
+<p>F1 claims every packet whose format is 2022 to 2025, whose length is one of that format's packet sizes and whose id is 0 to 15, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.</p>
 <h2 id="auto-detect">Auto-Detect<a class="headerlink" href="#auto-detect" title="Permanent link">&para;</a></h2>
 <p><code>TelemetryReader</code> tries, in order: the custom formats that name a length or a key, JSON (the truck plugin), F1, Project CARS 2, OutGauge, EA SPORTS WRC, Codemasters, Forza. Formats with a signature come ahead of formats known only by their length.</p>
 <p>Once a format sends a frame it holds. Another format takes over after <code>ChallengerFrames</code> (3) frames in a row, or after <code>HoldReleaseMs</code> (1000) with no frame from the held one. A game with no max RPM gets the highest RPM seen since that format started sending, tm-bt-led's <code>detectedMaxRpm</code>, and the frame sets <code>MaxRpmLearned</code>. tm-bt-led starts its peak at 5000, which would hold a truck governed near 2,500 RPM to half scale, so this one starts at 0.</p>
@@ -4244,7 +4244,7 @@
 </table>
 <p>Speed to Handbrake carry the X, Y, Z, Rx, Ry and Rz axis GUIDs, and Steering and every variable the Z axis GUID. A Slider GUID would make the mapping picker offer <em>Slider N</em>, which reads the state's slider array, and the row writes only its axis array, the rule <code>SdlDeviceWrapper.GetDeviceObjects</code> keeps for its extra axes.</p>
 <p>Driving reads <code>!DrivingReported || Driving</code>. After <code>SilenceMs</code> (1000) with no frame everything rests. The truck plugin sends only on a change, so its frames hold for <code>TruckSimulatorHoldMs</code> (10,000).</p>
-<p>Step 1 phase 1i2 (<code>UpdateGameTelemetryDevice</code>) opens the row while the switch is on. It retires the row with <code>NeutralizeMappedOutputsFor</code> when the switch goes off, recreates it when the user removes it, and reopens it when <code>GameTelemetryRuntime.Version</code> moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live. While another program holds the port, each sweep tries it again (<code>RetryBind</code>, every 2 seconds), so the row listens once the port is free, with no toggle. The failure is logged once per run of failures.</p>
+<p>Step 1 phase 1i2 (<code>UpdateGameTelemetryDevice</code>) opens the row while the switch is on. It retires the row with <code>NeutralizeMappedOutputsFor</code> when the switch goes off, recreates it when the user removes it, and reopens it when <code>GameTelemetryRuntime.Version</code> moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live. While another program holds the port, each sweep tries it again (<code>RetryBind</code>, every 2 seconds, every 5 while the engine idles), so the row listens once the port is free, with no toggle. The failure is logged once per run of failures.</p>
 <p>The row joins the lists that name synthetic rows: out of <code>InputDeviceType.AnswersAnyDeviceSources</code>, internal in <code>DeviceRowViewModel.IsInternalVirtual</code>, no Submit Mapping, the type key and label <code>GameTelemetry</code>, the glyph U+EC4A, named axes in <code>MappingDisplayResolver</code>, and the Remote Link list of rows that send their names. No slot maps it on its own.</p>
 <h2 id="the-wheel-rpm-lights">The wheel RPM lights<a class="headerlink" href="#the-wheel-rpm-lights" title="Permanent link">&para;</a></h2>
 <p><code>TelemetryHub</code> drives the wheel RPM lights. It runs only while a wheel asks for them, and its UDP sources listen on 5300 (Forza), 20777 (Codemasters) and 4444 (OutGauge). Two sockets cannot share a port, so the row and the hub share them this way:</p>
@@ -4357,7 +4357,7 @@
 <li>The test host binds no real telemetry port and opens no <code>acpmf</code> mapping: <code>GameTelemetryPortOffLimits</code> and <code>KunosOffLimits</code> in <code>TestHostFences.cs</code>, both pinned in <code>TestHostFenceTests</code>, and the row in the listener census of <code>TestHostListenerTests</code>.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

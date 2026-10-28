@@ -3317,10 +3317,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
+  <a href="#does-limit-this-pc-to-gamepad-input-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Does Gamepad Only block every non-gamepad action from a remote PC?
+        Does Limit This PC to Gamepad Input Only block every non-gamepad action from a remote PC?
       
     </span>
   </a>
@@ -5515,10 +5515,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
+  <a href="#does-limit-this-pc-to-gamepad-input-only-block-every-non-gamepad-action-from-a-remote-pc" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Does Gamepad Only block every non-gamepad action from a remote PC?
+        Does Limit This PC to Gamepad Input Only block every non-gamepad action from a remote PC?
       
     </span>
   </a>
@@ -5669,7 +5669,7 @@
 <h3 id="why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on">Why does Steam or Windows still react to a controller after Hide from Games is on?<a class="headerlink" href="#why-does-steam-or-windows-still-react-to-a-controller-after-hide-from-games-is-on" title="Permanent link">&para;</a></h3>
 <p>Hiding applies when a program opens a device, so a program that already had the controller open keeps it. When PadForge hides a USB controller that is already connected, it reconnects it in Windows so those programs lose it. A Bluetooth controller, or a receiver that carries several controllers, stays with whatever opened it until it next connects, so reconnect that one yourself. <strong>Keep Devices Cloaked Between Launches</strong> keeps the hides in place while PadForge is closed. More: <a href="../features/devices/#input-hiding">Input hiding</a>.</p>
 <h3 id="do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys">Do I have to hide a whole keyboard to remap a few keys?<a class="headerlink" href="#do-i-have-to-hide-a-whole-keyboard-to-remap-a-few-keys" title="Permanent link">&para;</a></h3>
-<p>No. <strong>Consume Mapped Inputs</strong> swallows only the keys and mouse buttons you mapped and leaves the rest working. Windows does not say which keyboard a key came from, so consuming a key consumes it on every keyboard. PadForge's own output is never consumed. More: <a href="../features/devices/#input-hiding">Input hiding</a>.</p>
+<p>No. <strong>Consume Mapped Inputs (Hooks)</strong> swallows only the keys and mouse buttons you mapped and leaves the rest working. Windows does not say which keyboard a key came from, so consuming a key consumes it on every keyboard. PadForge's own output is never consumed. More: <a href="../features/devices/#input-hiding">Input hiding</a>.</p>
 <h3 id="does-picking-a-preset-unlock-every-control-on-my-controller">Does picking a preset unlock every control on my controller?<a class="headerlink" href="#does-picking-a-preset-unlock-every-control-on-my-controller" title="Permanent link">&para;</a></h3>
 <p>No. The preset decides what the game sees. What PadForge can read from your controller depends on the controller and how it connects. A matching name on both sides does not by itself carry pressure, touch, paddles, motion or feedback through, so check the controls you need. More: <a href="../features/controller-slots/">Controller Slots</a>.</p>
 <h3 id="a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check">A virtual controller works in a tester but not in an older game. What should I check?<a class="headerlink" href="#a-virtual-controller-works-in-a-tester-but-not-in-an-older-game-what-should-i-check" title="Permanent link">&para;</a></h3>
@@ -5713,11 +5713,11 @@
 <hr />
 <h2 id="macros-layers-and-profiles">Macros, layers and profiles<a class="headerlink" href="#macros-layers-and-profiles" title="Permanent link">&para;</a></h2>
 <h3 id="how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only">How do I send a keyboard shortcut from a controller chord in one game only?<a class="headerlink" href="#how-do-i-send-a-keyboard-shortcut-from-a-controller-chord-in-one-game-only" title="Permanent link">&para;</a></h3>
-<p>Load that game's profile, add a macro on its slot, and pick the chord as the trigger, from the virtual controller or from the assigned devices. Add a <strong>Key Press</strong> action with the shortcut. Macros belong to their profile, so the shortcut runs only while that profile is active. <strong>Consume Trigger Buttons</strong> keeps the chord's buttons out of the game. More: <a href="../guides/macros/#triggers">Triggers</a>.</p>
+<p>Load that game's profile, add a macro on its slot, and pick the chord as the trigger, from the virtual controller or from the assigned devices. Add a <strong>Key Press</strong> action with the shortcut. Macros belong to their profile, so the shortcut runs only while that profile is active. <strong>Consume Trigger Buttons (Hide from Game)</strong> keeps the chord's buttons out of the game. More: <a href="../guides/macros/#triggers">Triggers</a>.</p>
 <h3 id="why-does-on-single-press-wait-when-on-press-does-not">Why does On Single Press wait when On Press does not?<a class="headerlink" href="#why-does-on-single-press-wait-when-on-press-does-not" title="Permanent link">&para;</a></h3>
 <p><strong>On Press</strong> fires as soon as the trigger goes down. <strong>On Single Press</strong> waits through the <strong>Press Window</strong>, 442 ms by default, to be sure no second press is coming. <strong>On Short Press</strong> fires on release before the <strong>Hold Time</strong>, and <strong>On Long Press</strong> fires once the hold passes it, 500 ms by default. Pair a Short and a Long macro on one trigger to get tap and hold. More: <a href="../guides/macros/#fire-modes">Fire modes</a>.</p>
 <h3 id="can-autofire-keep-going-after-i-let-go-of-the-trigger">Can autofire keep going after I let go of the trigger?<a class="headerlink" href="#can-autofire-keep-going-after-i-let-go-of-the-trigger" title="Permanent link">&para;</a></h3>
-<p>Yes. Use a <strong>Toggle Button</strong>, <strong>Toggle Key</strong>, <strong>Toggle Mouse Button</strong> or <strong>Toggle Axis</strong> action with <strong>Pulse While Latched</strong>. One press starts the repeating output and the next stops it. <strong>Repeat While Held</strong> and the <strong>Turbo</strong> fire mode stop when you let go. More: <a href="../guides/macros/#toggle-button-toggle-key">Toggle Button / Toggle Key</a>.</p>
+<p>Yes. Use a <strong>Toggle Button</strong>, <strong>Toggle Key</strong>, <strong>Toggle Mouse Button</strong> or <strong>Toggle Axis</strong> action with <strong>Pulse While Latched</strong>. One press starts the repeating output and the next stops it. The <strong>Repeat Key While Held</strong>, <strong>Repeat Button While Held</strong> and <strong>Repeat Axis While Held</strong> actions and the <strong>Turbo</strong> fire mode stop when you let go. More: <a href="../guides/macros/#toggle-button-toggle-key">Toggle Button / Toggle Key</a>.</p>
 <h3 id="why-does-text-block-type-in-a-chat-box-but-not-move-my-character">Why does Text Block type in a chat box but not move my character?<a class="headerlink" href="#why-does-text-block-type-in-a-chat-box-but-not-move-my-character" title="Permanent link">&para;</a></h3>
 <p><strong>Text Block</strong> sends text as characters, which chat boxes accept and many games' movement controls ignore, since those read the keys' up and down state. Use <strong>Key Press</strong> for keys a game reads as controls. More: <a href="../guides/macros/#text-block">Text Block</a>.</p>
 <h3 id="can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle">Can Limit Mouse Region keep a game's cursor inside its rectangle?<a class="headerlink" href="#can-limit-mouse-region-keep-a-games-cursor-inside-its-rectangle" title="Permanent link">&para;</a></h3>
@@ -5737,13 +5737,13 @@
 <hr />
 <h2 id="motion-and-gyro">Motion and gyro<a class="headerlink" href="#motion-and-gyro" title="Permanent link">&para;</a></h2>
 <h3 id="the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing">The gyro moves on screen, but holding the aim trigger does not turn the camera. What is missing?<a class="headerlink" href="#the-gyro-moves-on-screen-but-holding-the-aim-trigger-does-not-turn-the-camera-what-is-missing" title="Permanent link">&para;</a></h3>
-<p>The engage trigger decides when gyro is on, and the mapping table decides where it goes. Map the gyro to <strong>Mouse X</strong> and <strong>Y</strong> for a mouse-aimed game, or to the aiming stick for a controller-aimed one. With both <strong>Easy Aim</strong> and an aim engage set, both have to be active. More: <a href="../guides/gyro/#output-routing">Output routing</a>.</p>
+<p>The engage trigger decides when gyro is on, and the mapping table decides where it goes. Map the gyro to <strong>Mouse X</strong> and <strong>Y</strong> for a mouse-aimed game, or to the aiming stick for a controller-aimed one. With both an <strong>Easy Aim Threshold</strong> and an <strong>Aim Engage Button</strong> set, both have to be active. More: <a href="../guides/gyro/#output-routing">Output routing</a>.</p>
 <h3 id="which-input-keeps-steering-while-i-hold-the-controller-tilted">Which input keeps steering while I hold the controller tilted?<a class="headerlink" href="#which-input-keeps-steering-while-i-hold-the-controller-tilted" title="Permanent link">&para;</a></h3>
 <p><strong>Gyro Tilt X</strong> and <strong>Y</strong>. They hold their deflection for as long as the controller stays tilted, across a range of angles you set. <strong>Gyro Pitch</strong>, <strong>Yaw</strong> and <strong>Roll</strong> report turning speed and fall back to zero when the turning stops. More: <a href="../guides/gyro/#gyro-tilt">Gyro Tilt</a>.</p>
 <h3 id="does-a-nintendo-virtual-controller-need-a-physical-gyro">Does a Nintendo virtual controller need a physical gyro?<a class="headerlink" href="#does-a-nintendo-virtual-controller-need-a-physical-gyro" title="Permanent link">&para;</a></h3>
 <p>No. <strong>Motion Pitch</strong>, <strong>Yaw</strong> and <strong>Roll</strong> rows make motion from any input, a stick or buttons included. The game gets it through presets whose reports carry motion. The plain Switch 2 Pro preset carries none, while <strong>Nintendo Switch 2 Pro Controller: Full</strong> carries both sensors for Steam and SDL built with libusb. More: <a href="../features/mappings/#motion-pitch-yaw-and-roll">Motion Pitch, Yaw and Roll</a>.</p>
 <h3 id="are-momentum-and-flick-stick-the-same-thing">Are Momentum and Flick Stick the same thing?<a class="headerlink" href="#are-momentum-and-flick-stick-the-same-thing" title="Permanent link">&para;</a></h3>
-<p>No. <strong>Momentum</strong> lets the mouse cursor coast after a flick on a touchpad or a mouse stick. <strong>Flick Stick</strong> turns the camera to wherever the stick points and keeps turning as the stick rolls around its rim, and it needs the game's <strong>Dots per 360</strong> calibrated. More: <a href="../features/stick-deadzones/#flick-stick">Flick Stick</a>.</p>
+<p>No. <strong>Momentum</strong> lets the mouse cursor coast after a flick on a touchpad or a mouse stick. <strong>Flick Stick</strong> turns the camera to wherever the stick points and keeps turning as the stick rolls around its rim, and it needs the game's <strong>Dots per 360°</strong> calibrated. More: <a href="../features/stick-deadzones/#flick-stick">Flick Stick</a>.</p>
 <h3 id="does-reading-an-openxr-headset-put-input-into-my-vr-game">Does reading an OpenXR headset put input into my VR game?<a class="headerlink" href="#does-reading-an-openxr-headset-put-input-into-my-vr-game" title="Permanent link">&para;</a></h3>
 <p>No. PadForge reads the headset and its controllers through the OpenXR runtime as input for your mappings. It does not create a headset or join a VR game's session. A Quest on Link has to go through SteamVR's runtime. More: <a href="../features/head-tracking/#setting-up-an-openxr-headset">Setting up an OpenXR headset</a>.</p>
 <hr />
@@ -5759,15 +5759,15 @@
 <h3 id="how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring">How do a game's own DualSense haptics differ from audio mirroring?<a class="headerlink" href="#how-do-a-games-own-dualsense-haptics-differ-from-audio-mirroring" title="Permanent link">&para;</a></h3>
 <p>A game that supports the DualSense sends its own haptics and speaker sound to a virtual DualSense that carries audio. Mirroring is separate: it captures a Windows audio output and plays that sound on the controller. Speaker sound, rumble, trigger effects and haptics are separate things to check. More: <a href="../features/controller-audio/#mirror-a-windows-audio-output">Mirror a Windows audio output</a>.</p>
 <h3 id="will-a-longer-bluetooth-audio-buffer-fix-every-crackle">Will a longer Bluetooth audio buffer fix every crackle?<a class="headerlink" href="#will-a-longer-bluetooth-audio-buffer-fix-every-crackle" title="Permanent link">&para;</a></h3>
-<p>No. <strong>Bluetooth Audio Buffer Length</strong> sets the DualSense's Bluetooth buffer, shared by speaker, haptics and microphone. Mirroring and other paths have their own queues. Work out which sound path crackles before changing it. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
+<p>No. <strong>Audio Buffer Length</strong> sets the DualSense's Bluetooth buffer, shared by speaker, haptics and microphone. Mirroring and other paths have their own queues. Work out which sound path crackles before changing it. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
 <h3 id="why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off">Why does Bluetooth drop when I plug in USB, with Quick Charge off?<a class="headerlink" href="#why-does-bluetooth-drop-when-i-plug-in-usb-with-quick-charge-off" title="Permanent link">&para;</a></h3>
-<p>A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadForge drops the Bluetooth link once when it sets up wired audio. <strong>Quick Charge</strong> is separate: it drops Bluetooth when the controller starts charging. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
+<p>A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadForge drops the Bluetooth link once when it sets up wired audio. <strong>Disconnect Bluetooth When Plugged In over USB</strong> (Quick Charge) is separate: it drops Bluetooth when the controller starts charging. More: <a href="../features/controller-audio/#dualsense-headset-jack">DualSense headset jack</a>.</p>
 <h3 id="do-bass-shakers-play-the-soundtrack-or-simulator-telemetry">Do Bass Shakers play the soundtrack or simulator telemetry?<a class="headerlink" href="#do-bass-shakers-play-the-soundtrack-or-simulator-telemetry" title="Permanent link">&para;</a></h3>
 <p>Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. On a DualSense (PS5): Full or DualSense Edge (PS5): Full virtual controller, it also follows the haptics a game plays through the controller's audio. Macro rumble stays on the controller. More: <a href="../features/bass-shakers/#rumble-to-audio-card">Rumble to Audio card</a>.</p>
 <h3 id="why-does-constant-force-pull-my-wheel-to-one-side">Why does Constant Force pull my wheel to one side?<a class="headerlink" href="#why-does-constant-force-pull-my-wheel-to-one-side" title="Permanent link">&para;</a></h3>
 <p><strong>Constant Force</strong> applies a fixed push in one direction, wherever the wheel points. <strong>Auto Centering Strength</strong> on the Wheel tab is the spring that returns it. On the generic force feedback path the two share one effect, so turning on Constant Force stops the spring. More: <a href="../features/force-feedback/#constant-force">Constant Force</a>.</p>
 <h3 id="why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab">Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?<a class="headerlink" href="#why-do-keyboard-mouse-and-midi-slots-have-a-force-feedback-tab" title="Permanent link">&para;</a></h3>
-<p>The tab also drives the physical device assigned to the slot. <strong>Audio Bass Rumble</strong> turns the PC's sound into rumble, and <strong>Test Rumble</strong> checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: <a href="../features/force-feedback/#audio-bass-rumble">Audio Bass Rumble</a>.</p>
+<p>The tab also drives the physical device assigned to the slot. <strong>Audio Rumble</strong> turns the PC's sound into rumble, and <strong>Test Rumble</strong> checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: <a href="../features/force-feedback/#audio-rumble">Audio Rumble</a>.</p>
 <hr />
 <h2 id="phones-browsers-and-remote-link">Phones, browsers and Remote Link<a class="headerlink" href="#phones-browsers-and-remote-link" title="Permanent link">&para;</a></h2>
 <h3 id="are-browser-gamepad-phone-motion-and-web-menus-the-same-thing">Are Browser Gamepad, phone motion and Web Menus the same thing?<a class="headerlink" href="#are-browser-gamepad-phone-motion-and-web-menus-the-same-thing" title="Permanent link">&para;</a></h3>
@@ -5780,7 +5780,7 @@
 <p>No. A copied identity moves pairings to a new PC, but two PCs running the same identity at the same time cannot see each other. Give each running PC its own identity. More: <a href="../guides/remote-link/#identity-protection">Identity protection</a>.</p>
 <h3 id="does-remote-link-need-a-port-forward-or-a-padforge-server">Does Remote Link need a port forward or a PadForge server?<a class="headerlink" href="#does-remote-link-need-a-port-forward-or-a-padforge-server" title="Permanent link">&para;</a></h3>
 <p>No. On a local network the PCs find each other by broadcast. Over the internet, a connection code lets them try a direct path, and n0's free public relays carry the session when no direct path works. A connection code only finds the other PC. The pairing check decides trust. More: <a href="../guides/remote-link/">Remote Link</a>.</p>
-<h3 id="does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc">Does Gamepad Only block every non-gamepad action from a remote PC?<a class="headerlink" href="#does-gamepad-only-block-every-non-gamepad-action-from-a-remote-pc" title="Permanent link">&para;</a></h3>
+<h3 id="does-limit-this-pc-to-gamepad-input-only-block-every-non-gamepad-action-from-a-remote-pc">Does Limit This PC to Gamepad Input Only block every non-gamepad action from a remote PC?<a class="headerlink" href="#does-limit-this-pc-to-gamepad-input-only-block-every-non-gamepad-action-from-a-remote-pc" title="Permanent link">&para;</a></h3>
 <p>No. It blocks keyboard and mouse output, scrolling, cursor moves and VR slots for that PC. <strong>Run Program</strong> and MIDI still work. More: <a href="../guides/remote-link/#staying-safe-gamepad-only">Staying safe: gamepad-only</a>.</p>
 <hr />
 <h2 id="steam-community-layouts">Steam community layouts<a class="headerlink" href="#steam-community-layouts" title="Permanent link">&para;</a></h2>
@@ -5797,7 +5797,7 @@
 <h3 id="why-cant-a-spoken-phrase-hold-a-button">Why can't a spoken phrase hold a button?<a class="headerlink" href="#why-cant-a-spoken-phrase-hold-a-button" title="Permanent link">&para;</a></h3>
 <p>A recognized phrase is a 175 ms press, not a held key. To make a phrase change something that stays changed, use it as a <strong>Toggle</strong> layer activator. The model is US English, so a word outside its vocabulary cannot fire. More: <a href="../features/voice-macros/">Voice Macros</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

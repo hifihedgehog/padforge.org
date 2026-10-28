@@ -316,4 +316,4 @@ The ARM64 build has no Razer Sensa row, because Razer ships no ARM64 engine. Log
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

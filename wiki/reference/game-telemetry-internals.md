@@ -48,7 +48,7 @@ Little-endian throughout, offsets in bytes.
 | Format | Packets | Fields |
 |---|---|---|
 | Forza | 232 (Sled), 311 (Motorsport 7 Dash), 331 (Motorsport 2023 Dash), 323 or 324 (Horizon) | IsRaceOn s32 at 0, max RPM f32 at 8, RPM at 16. From the Dash on, with a shift of 12 for Horizon: speed f32 at 244, throttle, brake, clutch, handbrake u8 at 303 to 306, gear u8 at 307 (0 reverse, 11 neutral), steer s8 at 308. A Sled packet takes its speed from the velocity vector at 32, 36 and 40. |
-| F1 22 to F1 25 | The packet format u16 at 0, 2022 to 2025, and one of that format's sizes for the packet id: twelve for 2022, fourteen for 2023, fifteen for 2024 and sixteen for 2025, from vAzhure F12022.cs to F12025.cs. Format 2022: a 24-byte header, packet id at 5, player car at 22. Format 2023 on: a 29-byte header with the game's year less 2000 at 2, packet id at 6, player car at 27. The layout follows the format alone, so F1 24 or F1 25 on an older format reads too. The status line names the game by the year at 2 when it is not 0, and by the format otherwise. | Car Telemetry (id 6), 60-byte entries: speed u16 km/h, throttle +2, steer +6, brake +10, clutch u8 +14 (0 to 100), gear s8 +15, RPM u16 +16. Car Status (id 7), 47-byte entries in F1 22 and 55 later: max RPM u16 +17. |
+| F1 22 to F1 25 | The packet format u16 at 0, 2022 to 2025, and one of that format's packet sizes (twelve for 2022, fourteen for 2023, fifteen for 2024 and sixteen for 2025), from vAzhure F12022.cs to F12025.cs. Format 2022: a 24-byte header, packet id at 5, player car at 22. Format 2023 on: a 29-byte header with the game's year less 2000 at 2, packet id at 6, player car at 27. The layout follows the format alone, so F1 24 or F1 25 on an older format reads too. The status line names the game by the year at 2 when it is not 0, and by the format otherwise. | Car Telemetry (id 6), 60-byte entries: speed u16 km/h, throttle +2, steer +6, brake +10, clutch u8 +14 (0 to 100), gear s8 +15, RPM u16 +16. Car Status (id 7), 47-byte entries in F1 22 and 55 later: max RPM u16 +17. |
 | Codemasters | 264 or 280 | Speed f32 at 28, throttle 116, steer 120, brake 124, clutch 128, gear 132 (-1 and 10 reverse), RPM 148 and max RPM 252 in tenths. |
 | EA SPORTS WRC | 237, 240 with a 3-byte pad after byte 36, 241 or 244 with a 4-byte `packet_4cc` header | Gear index at 37 with the neutral and reverse indexes at 38 and 39, speed 41, max RPM 185, RPM 193, throttle 197, brake 201, clutch 205, steering 209, handbrake 213. |
 | OutGauge | 92, or 96 with an OutGauge ID | Car name at 4 (`beam` is BeamNG.drive), gear u8 at 10 (0 reverse, 1 neutral), speed 12, RPM 16, the dash lights u32 at 44 (mask 4 is the handbrake), throttle 48, brake 52, clutch 56. |
@@ -56,7 +56,7 @@ Little-endian throughout, offsets in bytes.
 | Assetto Corsa | Shared memory | Physics: gas 4, brake 8, gear s32 16 (0 reverse, 1 neutral), RPM 20, steer 24, speed km/h 28, clutch as 1 less the value at 364. Static: `smVersion` UTF-16 at 0, 1.8 or later is ACC, max RPM s32 at 412. Graphics: status at 4, 2 while live. |
 | ETS2 and ATS | One JSON object per change from MrHokss's plugin | `speed` (absolute), `rpm`, `gear` (negative is reverse), `steer` (counterclockwise, so negated), `throttle`, `brake`, `clutch`. |
 
-F1 claims every packet with its format, a known id and that id's size, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.
+F1 claims every packet whose format is 2022 to 2025, whose length is one of that format's packet sizes and whose id is 0 to 15, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.
 
 ## Auto-Detect
 
@@ -88,7 +88,7 @@ Speed to Handbrake carry the X, Y, Z, Rx, Ry and Rz axis GUIDs, and Steering and
 
 Driving reads `!DrivingReported || Driving`. After `SilenceMs` (1000) with no frame everything rests. The truck plugin sends only on a change, so its frames hold for `TruckSimulatorHoldMs` (10,000).
 
-Step 1 phase 1i2 (`UpdateGameTelemetryDevice`) opens the row while the switch is on. It retires the row with `NeutralizeMappedOutputsFor` when the switch goes off, recreates it when the user removes it, and reopens it when `GameTelemetryRuntime.Version` moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live. While another program holds the port, each sweep tries it again (`RetryBind`, every 2 seconds), so the row listens once the port is free, with no toggle. The failure is logged once per run of failures.
+Step 1 phase 1i2 (`UpdateGameTelemetryDevice`) opens the row while the switch is on. It retires the row with `NeutralizeMappedOutputsFor` when the switch goes off, recreates it when the user removes it, and reopens it when `GameTelemetryRuntime.Version` moves. The switch, the port, the game, the custom format and the format list move it. The forward port and Full Speed are read live. While another program holds the port, each sweep tries it again (`RetryBind`, every 2 seconds, every 5 while the engine idles), so the row listens once the port is free, with no toggle. The failure is logged once per run of failures.
 
 The row joins the lists that name synthetic rows: out of `InputDeviceType.AnswersAnyDeviceSources`, internal in `DeviceRowViewModel.IsInternalVirtual`, no Submit Mapping, the type key and label `GameTelemetry`, the glyph U+EC4A, named axes in `MappingDisplayResolver`, and the Remote Link list of rows that send their names. No slot maps it on its own.
 
@@ -159,4 +159,4 @@ The effects dispatcher reads the store once per pass, beside a mod's hold. `Fill
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

@@ -144,4 +144,4 @@ The Dashboard line comes from `GameModServer.FormatStatus`: why the server is no
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

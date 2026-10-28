@@ -70,4 +70,4 @@ Under Windows MIDI Services, PadForge's own MIDI virtual controllers show up in 
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

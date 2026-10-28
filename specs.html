@@ -107,6 +107,10 @@
                     <dt>Unknown hardware welcome</dt>
                     <dd>If Windows sees it, you can map it. For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Device Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release.</dd>
                 </div>
+                <div class="spec-row">
+                    <dt>Game telemetry as inputs</dt>
+                    <dd>Driving games' telemetry as a controller row: speed, RPM, throttle, brake, clutch, handbrake and steering as axes, and the gear as buttons, from Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2, the truck simulators, Assetto Corsa and Assetto Corsa Competizione. Map them, start macros with them, or play adaptive trigger effects from them. Custom Formats reads a game PadForge does not know, and Forward to Port passes the packets on to SimHub or another program.</dd>
+                </div>
             </dl>
         </section>
 
@@ -182,6 +186,18 @@
                 <div class="spec-row">
                     <dt>Rumble and lighting in mice and keyboards</dt>
                     <dd>A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights Logitech, Razer and SteelSeries devices directly while their software is closed, and through Synapse, G HUB or GG while it runs.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>DSX game mods without DSX</dt>
+                    <dd>Fan mods that give the Grand Theft Auto games, Red Dead Redemption 2, Skyrim, Fallout 4 and others adaptive triggers send to a program named DSX. PadForge takes its place: their trigger effects, lightbar, player lights and mute light play on the PlayStation controllers on your virtual controllers, with no DSX installed. Mods for DualSenseY, DSZ and the DS4Windows fork that speaks the same protocol work too.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>DualSense haptics as rumble</dt>
+                    <dd>A game that plays a DualSense's haptics as audio rumbles every rumble pad on that virtual controller, and Bass Shakers follow the haptic track too. A DualSense that plays the track itself keeps it.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Novint Falcon</dt>
+                    <dd>The Novint Falcon through Force Dimension's SDK: the handle as a stick, the grip's four buttons as buttons, and a game's rumble and force feedback as force on the handle about a thousand times a second, with a self-centering Joystick feel or an Aim feel that moves like a mouse. Not yet run on a Falcon.</dd>
                 </div>
             </dl>
         </section>
@@ -280,6 +296,10 @@
                 <div class="spec-row">
                     <dt>1000 Hz polling</dt>
                     <dd>Sub-millisecond jitter via high-resolution waitable timers. Bit-perfect axis passthrough at defaults. Built on SDL3.</dd>
+                </div>
+                <div class="spec-row">
+                    <dt>Keyboard screens</dt>
+                    <dd>The screens on Logitech's GamePanel devices, among them the G15, G19, G510 and G13, on the Mad Catz S.T.R.I.K.E. 7 and on a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color, and the keys beside each screen map as buttons. Macros play pictures, switch modes and run the stopwatch. Not yet run on a screen.</dd>
                 </div>
             </dl>
         </section>

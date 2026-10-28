@@ -250,7 +250,7 @@ The code is stored in `PadForge.xml` encrypted for this PC, so a copy of the fil
 
 ### What plain HTTP gives up
 
-Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address shows **Motion needs HTTPS**. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.
+Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address on a touch device shows **Motion needs HTTPS**, or **Motion: open over HTTPS** when PadForge also serves HTTPS. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.
 
 Plain HTTP is unencrypted. Anyone who can watch the network sees the input and the access code. Across the internet, use a tunnel or proxy that adds HTTPS.
 
@@ -319,4 +319,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

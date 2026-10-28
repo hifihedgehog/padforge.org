@@ -315,6 +315,10 @@
                 <div class="detail-body">Turn on <b>Read Bliss-Box Adapters</b> and each port of a Bliss-Box adapter names the console controller in it and maps it the way SDL maps that console's pad. A DualShock 2's pressure-sensitive buttons read as analog, rumble reaches the pads with motors, a Dreamcast pad's VMU shows your pictures, and an N64 Controller Pak backs up and restores.</div>
             </details>
             <details class="detail">
+                <summary>The screen on your keyboard, and the keys beside it</summary>
+                <div class="detail-body">Turn on <b>Drive Keyboard Screens</b> in Settings, and the screens on Logitech's GamePanel devices, the G15, G19, G510 and G13 among them, the Mad Catz S.T.R.I.K.E. 7 and a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color. Each gets a row of its own, and the keys beside the screen map as buttons. A macro can play pictures on a screen, switch its mode and run its stopwatch. None of these screens has run against PadForge yet.</div>
+            </details>
+            <details class="detail">
                 <summary>Controllers Windows cannot read on its own</summary>
                 <div class="detail-body">Bluetooth LE pads, the iCade, serial I-Force wheels with their force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards: PadForge's SDL3 build reads them, and binds the driver most of them need on its own. 289 more pads get a named layout from the community SDL_GameControllerDB.</div>
             </details>
@@ -384,6 +388,10 @@
                         <summary>Rapid Trigger and Toggle</summary>
                         <div class="detail-body">Rapid Trigger presses and releases on movement instead of at one fixed point: lift a little and it lets go, push a little and it presses again. It works on any input with depth, analog keys, triggers, sticks, MIDI controls and the Ring-Con among them. Toggle latches any button: one press holds the output on, the next releases it.</div>
                     </details>
+                    <details class="detail">
+                        <summary>A racing game's telemetry, as inputs</summary>
+                        <div class="detail-body">Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2 and the truck simulators send their telemetry over the network, and Assetto Corsa and Assetto Corsa Competizione through shared memory. Turn on <b>Listen for Game Telemetry</b> on the Dashboard, and speed, RPM, pedals, steering and gear arrive as a <b>Game Telemetry</b> row on the Devices page. Map them like any controller's inputs, start a macro when the RPM passes a mark, or play an adaptive trigger effect near the limiter. <b>Custom Formats</b> reads a game PadForge does not know, and <b>Forward to Port</b> passes every packet on to a program such as SimHub.</div>
+                    </details>
                 </div>
             </div>
             <div class="moment-media stage reveal" data-d="2">
@@ -446,12 +454,20 @@
                 <div class="detail-body">Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fourteen lightbar modes, six of them driven by your system audio (three Audio Pulse variants and three that follow the level). The DualSense lights and triggers light up in games that have never heard of a DualSense.</div>
             </details>
             <details class="detail">
+                <summary>Game mods made for DSX, with no DSX</summary>
+                <div class="detail-body">Fan mods give the Grand Theft Auto games, Red Dead Redemption 2, Skyrim, Fallout 4 and others adaptive triggers, and they send their effects to a program named DSX. Turn on <b>Accept DSX Game Mods</b> on the Dashboard and PadForge takes its place: a mod's trigger effects, lightbar, player lights and mute light play on the PlayStation controllers on your virtual controllers, with no DSX installed. Mods written for DualSenseY, DSZ or the DS4Windows fork that speaks the same protocol work too.</div>
+            </details>
+            <details class="detail">
                 <summary>Sound through the controller speaker</summary>
-                <div class="detail-body">The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone, and a combined Joy-Con pair plays it through the coil the game drives. A Wii Remote plays them through its own speaker.<br><br>The DualSense and DualShock 4 get a processing chain of their own: bs2b crossfeed for the headset jack with the classic presets, Jan Meier, and a custom cutoff and feed, a graphic parametric EQ you drag into shape or load from an AutoEq profile for your exact headphones, and a limiter so a boosted band never clips the pad's encoder. Follow Headphone Jack switches the pad's output the moment you plug in, with or without a virtual DualSense on the slot.</div>
+                <div class="detail-body">The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth through its speaker or its headphone jack, with its headset microphone, and the second-model DualShock 4 through its headphone jack on a cable. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone, and a combined Joy-Con pair plays it through the coil the game drives. A Wii Remote plays them through its own speaker.<br><br>The DualSense and DualShock 4 get a processing chain of their own: bs2b crossfeed for the headset jack with the classic presets, Jan Meier, and a custom cutoff and feed, a graphic parametric EQ you drag into shape or load from an AutoEq profile for your exact headphones, and a limiter so a boosted band never clips the pad's encoder. Follow Headphone Jack switches the pad's output the moment you plug in, with or without a virtual DualSense on the slot.</div>
             </details>
             <details class="detail">
                 <summary>Bass shakers and rumble-to-audio</summary>
                 <div class="detail-body">Route a slot's rumble to any Windows audio device as a low-frequency channel, so a transducer under the seat moves with the game. Independent low and high motor routing, per-voice gain, and a carrier frequency from 20 to 120 Hz with a sweep to find where your shaker responds. The pad keeps its own rumble.</div>
+            </details>
+            <details class="detail">
+                <summary>DualSense haptics on every rumble pad</summary>
+                <div class="detail-body">Some games play a DualSense's haptics as audio, which a plain rumble pad never felt. PadForge turns that haptic track into rumble for every rumble pad on the virtual controller, and Bass Shakers follow it too. A DualSense that plays the track itself keeps it.</div>
             </details>
             <details class="detail">
                 <summary>The rest of the desk follows the pad</summary>
@@ -464,6 +480,10 @@
             <details class="detail">
                 <summary>The 2026 Steam Controller's own haptics</summary>
                 <div class="detail-body">A pad with haptic coils and no speaker normally gets a reduction. PadForge measures the loudest frequency in the sound each tick and plays that single tone, which lands beeps and cues and loses everything else. The 2026 Steam Controller does not need the reduction. Its four coils, two in the grips and two under the trackpads, take 8 kHz stereo audio over the pad's own reports, and PadForge streams the mix into them. A low-pass cutoff, 250 Hz by default, keeps the coils vibrating instead of audibly playing the sound, and you can raise it for sharper detail. Wired and over the dongle. A Bluetooth link falls back to the tone.</div>
+            </details>
+            <details class="detail">
+                <summary>A Novint Falcon that pushes back</summary>
+                <div class="detail-body">The Falcon's handle moves in three dimensions and pushes back with three motors. Turn on <b>Drive Novint Falcon</b> in Settings, and through Force Dimension's SDK the handle reads as a stick and the grip's four buttons as buttons, while a game's rumble and force feedback push back on the handle about a thousand times a second. The <b>Joystick</b> feel centers the handle like a stick, and the <b>Aim</b> feel aims like a mouse. No Falcon has run against PadForge yet.</div>
             </details>
             <details class="detail">
                 <summary>Which wheels, by name</summary>

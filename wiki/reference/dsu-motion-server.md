@@ -178,4 +178,4 @@ If a direction reads backward on your controller, say which one on the [issue tr
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

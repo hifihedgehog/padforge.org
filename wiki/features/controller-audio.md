@@ -23,7 +23,7 @@ Switch 2 controllers are not included: no known method plays an audible tone on 
 Inside the tab, the mirror controls appear for any device with a reachable speaker or actuator:
 
 - **DualSense and DualSense Edge:** USB or Bluetooth.
-- **DualShock 4:** Bluetooth, or the Sony USB wireless adapter. A cable-connected DS4 has no audio interface, so the mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
+- **DualShock 4:** Bluetooth, the Sony USB wireless adapter, or a cable for the second model (CUH-ZCT2). On the adapter or a cable the pad plays through its own USB audio device, the way a DualSense on USB does. That device is a headset, so the pad plays through its headphone jack only, and the slot's macro sounds go to it only while headphones are plugged in. With nothing plugged in they skip it and play on the system default output or another controller on the slot, which the tab notes when that pad is selected. The first model (CUH-ZCT1) has no audio on a cable, so its mirror controls do not appear and the tab notes that the selected device has no built-in speaker.
 - **Wii Remote:** mirrors into its built-in speaker at the same low rate as its macro sounds.
 - **Haptic-tone pads:** mirror the captured audio as a tracking haptic tone, the same reduction a macro sound gets. Expect a pitch-following buzz, not the source audio.
 - **Steam Controller 2026 over USB or the dongle:** mirror the captured audio into the actuators as a low-passed stream. Bass and rumble come through as vibration. Content above the cutoff you set falls off at 24 dB per octave.
@@ -40,7 +40,7 @@ Turn on **Mirror System Audio to the Controller Speaker** and pick a source. Pad
 |---|---|
 | Mirror System Audio to the Controller Speaker | Per-device toggle. Off by default. |
 | Mirror Source | "System Default" or any active output device on the PC. |
-| Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. It also sets the level of macro sounds that fall back to the PC's default output. |
+| Master Volume | 0–100. Slot-wide: one level for every device on the slot, unlike the per-device mirror and tone settings. Sets the level on DualSense, DualSense Edge, and the haptic-tone pads. On a DualShock 4 and a Wii Remote it sets the level of macro sounds, as it does for macro sounds that fall back to the PC's default output. Each Play Sound action's own volume multiplies with it. |
 
 On a DualSense or DualShock 4, picking "System Default" follows whatever Windows is using at the moment. Switch from speakers to headphones and the mirror follows, with nothing to reconfigure. A Wii Remote or haptic-tone pad keeps capturing the output that was the default when its mirror started. Pick a specific output instead when you want one particular device's sound on the pad.
 
@@ -156,7 +156,7 @@ The stream to the pad keeps running through quiet stretches instead of stopping 
 
 ![Audio tab scrolled to the crossfeed picker, the graphic EQ, and the limiter](../images/pad-audio-dsp.png)
 
-Under Output Path (under Master Volume on a DualShock 4 on Sony's USB wireless adapter), the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
+Under Output Path (under Master Volume on a DualShock 4 on a cable or on Sony's USB wireless adapter), the DualSense, DualSense Edge, and DualShock 4 get a short processing chain that runs on everything the slot plays, mirror audio and macro sounds alike, before it is encoded for the pad. Pads that play sound as a haptic tone, and the Wii Remote, do not get these rows. Three stages, in this order: crossfeed, then the parametric EQ, then the limiter. All three are per pad per slot, and every row has its own reset button.
 
 ### Crossfeed
 
@@ -207,7 +207,7 @@ Supported files for a macro's own sound: WAV, MP3, M4A, AAC, WMA, and FLAC, play
 
 The two kinds of output sound very different.
 
-**Real speaker (higher fidelity).** DualSense, DualSense Edge, and DualShock 4 (over Bluetooth) play through their actual pad speaker. The Wii Remote plays through its built-in speaker at a low sample rate, so expect beeps and short cues, not music or speech.
+**Real speaker (higher fidelity).** DualSense, DualSense Edge, and DualShock 4 play through their actual pad speaker. A DualShock 4 reaches its speaker over Bluetooth. On a cable the second model plays through its headphone jack, and so does a pad on Sony's USB wireless adapter. The Wii Remote plays through its built-in speaker at a low sample rate, so expect beeps and short cues, not music or speech.
 
 **Haptic tone (lower fidelity).** Joy-Con, Pro, Steam, Deck, and Steam Controller 2026 pads have no speaker, only haptic actuators. PadForge reduces the sound to a single vibrating tone: one dominant pitch with a volume envelope. Beeps, alerts, and simple melodic cues come through. Speech and music do not. A haptic actuator plays one frequency at a time, so however many a pad has (one on a lone Joy-Con, two on a Pro or Steam Controller, four on the Steam Controller 2026) it still plays that one mono tone. A combined Joy-Con pair plays it through both Joy-Cons, and while a game is rumbling, the tone follows the side the rumble drives: left motor plays the left Joy-Con, right motor the right, both or neither play both. Pick short, distinct sounds for these pads.
 
@@ -239,9 +239,8 @@ Every setting row has its own reset button that returns just that setting to its
 
 ## Limits
 
-- **DualShock 4 audio is Bluetooth only.** A wired DS4 exposes no audio interface. The exception is the Sony USB wireless adapter, which presents a real USB audio endpoint.
+- **A first-model DualShock 4 (CUH-ZCT1) plays over Bluetooth only.** It has no audio on a cable. On a cable the second model plays through its headphone jack only, and so does any DualShock 4 on Sony's USB wireless adapter, because their USB audio device is a headset. Headphone Volume and Output Path are Bluetooth rows.
 - **A DualShock 4 streams while audio routes to it.** Its stream runs through silence for as long as the slot plays anything to it, which keeps its radio busy and draws on its battery. Turn Mirror System Audio off when you do not need it. (Added after 5.1.0.)
-- **Master Volume does not reach the DualShock 4 or Wii Remote.** Their speakers play at a fixed level, so the slider changes loudness only on DualSense-family and haptic-tone pads, plus the PC fallback output. Each macro's Play Sound action still carries its own volume. A DualShock 4's headphone jack follows Headphone Volume (added after 5.1.0).
 - **The mirror is endpoint-level, not per-app.** It mirrors a Windows output device, not one program's sound.
 - **The pad speaker is small.** It suits voice, prompts, and effects more than music.
 - **Haptic-tone pads render one pitch, not audio.** Joy-Con, Pro, Steam, Deck, and the Steam Controller 2026 over Bluetooth reduce a sound to a single vibrating tone. Use them for beeps and short cues. Speech and music will not survive the trip.
@@ -265,4 +264,4 @@ Every setting row has its own reset button that returns just that setting to its
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

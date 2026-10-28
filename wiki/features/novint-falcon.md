@@ -22,6 +22,8 @@ PadForge finds `dhd64.dll` in this order: a copy you chose with **Choose dhd64.d
 
 Open **Settings**, find the **Novint Falcon** card and tick **Drive Novint Falcon**. It is off by default. While the engine runs, the card says which library loaded, for example *Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll*.
 
+![The Novint Falcon card in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension's SDK buttons](../images/settings-novint-falcon.png)
+
 Each open Falcon gets a row on the [Devices](devices.md) page, and the row's detail pane says how that Falcon is doing:
 
 - *Falcon 1234: pull the handle all the way out, then push it all the way in, to home it*
@@ -39,7 +41,7 @@ Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, 
 |---|---|
 | *A Falcon is plugged in with no driver* | Click **Install Falcon Driver**. It installs Force Dimension's package from the SDK folder onto the Falcon. Windows may first ask whether to trust Force Dimension. |
 | *The Falcon is on another driver (…)* | PadForge leaves a device on another driver alone, such as Novint's old driver. In Device Manager, open the Falcon, choose **Update driver**, then **Browse my computer for drivers**, and pick the `drivers\usb` folder in the SDK folder. |
-| *The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)* | The driver is right. The line ends with the library's own reason. Check the Falcon's power and its USB cable. |
+| *The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)* | The driver is right. The line gives the library's own reason, then says to check the Falcon's power and its USB cable. |
 | *No Falcon found* | Plug in its power and its USB cable. |
 
 **Install Falcon Driver** shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the card says *The dhd64.dll you chose did not load, so PadForge uses the copy above.*, and the copy in use keeps its Falcons.
@@ -57,7 +59,7 @@ The Falcon's row on the [Devices](devices.md) page has three axes and four butto
 | **In/Out** | The handle toward and away from you, out toward you at the high end |
 | **Button 1** to **Button 4** | The grip's buttons, in Force Dimension's order |
 
-The Devices page draws the handle as a dot in a square beside the axes. The row answers no (Any Device) source, since a Falcon at rest reads centered on every axis.
+The Devices page draws the handle as a dot in a square above the axes. The row answers no (Any Device) source, since a Falcon at rest reads centered on every axis.
 
 ### Calibrate Reach
 
@@ -70,6 +72,8 @@ On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute f
 ## How it feels
 
 A slot with a Falcon shows a **Novint Falcon** section on its [Force Feedback](force-feedback.md) tab. Each slot keeps its own settings, so a profile carries them per game.
+
+![The Novint Falcon section on an Xbox slot's Force Feedback tab, above the slot's rumble settings](../images/pad-forcefeedback-falcon.png)
 
 | Setting | Range | What it does |
 |---|---|---|
@@ -94,7 +98,7 @@ A slot with a Falcon shows a **Novint Falcon** section on its [Force Feedback](f
 Rumble reaches the Falcon after the tab's **Overall Gain**, **Left Motor**, **Right Motor**, **Swap Left and Right Motors** and **Fold Trigger Rumble into Main Motors**, as it reaches any controller. **Overall Gain** then scales the kick, the shake and the effects below.
 
 - **The kick** is 8 N at full rumble and at least 4.5 N, held while the rumble keeps coming, and it fades faster after a weak shot than after a strong one.
-- **The shake** wanders in direction every 140 milliseconds and stays between 3.2 and 9 N.
+- **The shake** wanders in direction every 140 milliseconds and runs between 3.2 and 9 N, under the 7.8 N cap on the handle's left/right and up/down force.
 
 A game that plays force feedback effects, on a slot whose preset takes them, reaches the handle too:
 
@@ -109,4 +113,4 @@ See the technical page, [Novint Falcon Internals](../reference/novint-falcon-int
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

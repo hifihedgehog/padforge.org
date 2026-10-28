@@ -95,4 +95,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

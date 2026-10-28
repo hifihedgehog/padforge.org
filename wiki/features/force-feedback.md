@@ -68,6 +68,8 @@ Two kinds of controller get none of it, because they play the haptics themselves
 
 The **Steering Angle Rumble** card adds continuous feedback as the selected virtual stick axis moves away from center. It works with a non-FFB wheel mapped to a virtual Xbox or PlayStation controller. Select the wheel in the assigned-devices dropdown, enable the option, and select the virtual axis used for steering.
 
+![The Steering Angle Rumble card on an Xbox slot's Force Feedback tab](../images/pad-steering-angle-rumble.png)
+
 | Setting | Default | Range |
 | --- | --- | --- |
 | Enable Steering Angle Rumble | Off | On / Off |
@@ -248,7 +250,7 @@ The Motor Activity meter reflects the constant force when it is the active sourc
 
 ---
 
-## Audio Bass Rumble
+## Audio Rumble
 
 PadForge can drive controller vibration from any system audio (games, music, video). It follows your system audio output, isolates the bass frequencies, and turns bass energy into motor speed. The result is vibration that pulses with bass-heavy sounds.
 
@@ -412,4 +414,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

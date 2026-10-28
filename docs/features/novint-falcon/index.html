@@ -3988,6 +3988,7 @@
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
 <p>Open <strong>Settings</strong>, find the <strong>Novint Falcon</strong> card and tick <strong>Drive Novint Falcon</strong>. It is off by default. While the engine runs, the card says which library loaded, for example <em>Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll</em>.</p>
+<p><img alt="The Novint Falcon card in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension's SDK buttons" src="../../images/settings-novint-falcon.png" /></p>
 <p>Each open Falcon gets a row on the <a href="../devices/">Devices</a> page, and the row's detail pane says how that Falcon is doing:</p>
 <ul>
 <li><em>Falcon 1234: pull the handle all the way out, then push it all the way in, to home it</em></li>
@@ -4015,7 +4016,7 @@
 </tr>
 <tr>
 <td><em>The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)</em></td>
-<td>The driver is right. The line ends with the library's own reason. Check the Falcon's power and its USB cable.</td>
+<td>The driver is right. The line gives the library's own reason, then says to check the Falcon's power and its USB cable.</td>
 </tr>
 <tr>
 <td><em>No Falcon found</em></td>
@@ -4053,13 +4054,14 @@
 </tr>
 </tbody>
 </table>
-<p>The Devices page draws the handle as a dot in a square beside the axes. The row answers no (Any Device) source, since a Falcon at rest reads centered on every axis.</p>
+<p>The Devices page draws the handle as a dot in a square above the axes. The row answers no (Any Device) source, since a Falcon at rest reads centered on every axis.</p>
 <h3 id="calibrate-reach">Calibrate Reach<a class="headerlink" href="#calibrate-reach" title="Permanent link">&para;</a></h3>
 <p><strong>Calibrate Reach</strong> in the row's detail pane measures how far the handle travels. Move it to every edge of its reach during the four-second sweep, while the forces rest. Each axis takes 95% of half the distance it traveled as its reach, when that comes to between 25 and 120 mm. An axis outside that keeps its old reach. Until a sweep, the reach is 60 mm on every axis. Each Falcon keeps its own, by serial number, and every slot it feeds uses it. The line under the button gives the reach in use, or how the last sweep went. A sweep asked for on a Falcon that closed in the meantime ends at once and measures nothing.</p>
 <p>On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute firmware maps it: Left/Right and Up/Down on the right stick, and buttons 1 to 4 on the right trigger, the left trigger, the right bumper and the right stick's click. In/Out starts unmapped.</p>
 <hr />
 <h2 id="how-it-feels">How it feels<a class="headerlink" href="#how-it-feels" title="Permanent link">&para;</a></h2>
 <p>A slot with a Falcon shows a <strong>Novint Falcon</strong> section on its <a href="../force-feedback/">Force Feedback</a> tab. Each slot keeps its own settings, so a profile carries them per game.</p>
+<p><img alt="The Novint Falcon section on an Xbox slot's Force Feedback tab, above the slot's rumble settings" src="../../images/pad-forcefeedback-falcon.png" /></p>
 <table>
 <thead>
 <tr>
@@ -4123,7 +4125,7 @@
 <p>Rumble reaches the Falcon after the tab's <strong>Overall Gain</strong>, <strong>Left Motor</strong>, <strong>Right Motor</strong>, <strong>Swap Left and Right Motors</strong> and <strong>Fold Trigger Rumble into Main Motors</strong>, as it reaches any controller. <strong>Overall Gain</strong> then scales the kick, the shake and the effects below.</p>
 <ul>
 <li><strong>The kick</strong> is 8 N at full rumble and at least 4.5 N, held while the rumble keeps coming, and it fades faster after a weak shot than after a strong one.</li>
-<li><strong>The shake</strong> wanders in direction every 140 milliseconds and stays between 3.2 and 9 N.</li>
+<li><strong>The shake</strong> wanders in direction every 140 milliseconds and runs between 3.2 and 9 N, under the 7.8 N cap on the handle's left/right and up/down force.</li>
 </ul>
 <p>A game that plays force feedback effects, on a slot whose preset takes them, reaches the handle too:</p>
 <ul>
@@ -4134,7 +4136,7 @@
 <p>A Falcon shared over <a href="../../guides/remote-link/">Remote Link</a> feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run a build newer than 5.1.0. With an older PC on either end, it gets no force from the other PC.</p>
 <p>See the technical page, <a href="../../reference/novint-falcon-internals/">Novint Falcon Internals</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

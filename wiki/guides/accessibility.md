@@ -51,4 +51,4 @@ Tab reaches each curve. The point the keys move is drawn orange while the curve 
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

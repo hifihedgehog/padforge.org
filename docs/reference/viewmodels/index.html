@@ -15204,7 +15204,7 @@
 <tr>
 <td><code>SelectedDeviceHasDspChain</code></td>
 <td><code>bool</code> (computed, <code>PadViewModel.cs</code>)</td>
-<td>True when the selected device is a Sony pad whose audio rides an <code>AudioPassthroughService</code> sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), or a DualShock 4 over Bluetooth.</td>
+<td>True when the selected device is a Sony pad whose audio rides an <code>AudioPassthroughService</code> sink, the only place the chain runs: DualSense family, Sony's DS4 USB wireless adapter (PID 0BA0), a second-model DualShock 4 (PID 09CC) on a cable, or any DualShock 4 over Bluetooth (<code>AudioPassthroughService.Ds4HasAudio</code>).</td>
 </tr>
 <tr>
 <td><code>EqBands</code></td>
@@ -21369,7 +21369,7 @@
 <li><a href="../3d-model-system/">3D Model System</a>: <code>ControllerModelView</code> bound to <code>PadViewModel</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

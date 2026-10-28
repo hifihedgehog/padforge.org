@@ -19,6 +19,8 @@ While a mod sends, the line names it and the virtual controller its effects reac
 
 DSX and PadForge cannot both listen on one port. With DSX running on 6969 the line reads *Port 6969 is in use by another program, such as DSX. Close it or choose another port.* Close DSX, or give PadForge another port and set the mod to it. While the switch is on and the engine runs, PadForge tries the port again every 3 seconds, so the server starts on its own once DSX closes.
 
+![The Game Mods section on the Dashboard with Accept DSX Game Mods on](../images/dashboard-game-mods.png)
+
 ### Where mods find the port
 
 Mods read the port from a file DSX writes. Mods made for DSX 2 read `C:\Temp\DualSenseX\DualSenseX_PortNumber.txt`, and some of them stop without it. Mods made for DSX 3.1 read `DSX_UDP_PortNumber.txt` in `%LOCALAPPDATA%\DSX` and use 6969 when it is missing. When the server starts, PadForge creates the first file if it is missing and corrects either file if it names another port. It makes the second file only for a port other than 6969, and it leaves both alone while DSX itself is running.
@@ -101,4 +103,4 @@ See the technical page, [Game Mods Internals](../reference/game-mods-internals.m
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

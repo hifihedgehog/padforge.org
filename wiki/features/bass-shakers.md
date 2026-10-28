@@ -83,4 +83,4 @@ toggle as you set it, since the enable row has its own reset.
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

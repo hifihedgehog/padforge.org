@@ -4065,6 +4065,7 @@
 </ol>
 <p>While a mod sends, the line names it and the virtual controller its effects reach, for example <em>Listening on :6969. GTA5.exe is sending to virtual controller 1.</em> A mod that runs inside the game shows the game's program.</p>
 <p>DSX and PadForge cannot both listen on one port. With DSX running on 6969 the line reads <em>Port 6969 is in use by another program, such as DSX. Close it or choose another port.</em> Close DSX, or give PadForge another port and set the mod to it. While the switch is on and the engine runs, PadForge tries the port again every 3 seconds, so the server starts on its own once DSX closes.</p>
+<p><img alt="The Game Mods section on the Dashboard with Accept DSX Game Mods on" src="../../images/dashboard-game-mods.png" /></p>
 <h3 id="where-mods-find-the-port">Where mods find the port<a class="headerlink" href="#where-mods-find-the-port" title="Permanent link">&para;</a></h3>
 <p>Mods read the port from a file DSX writes. Mods made for DSX 2 read <code>C:\Temp\DualSenseX\DualSenseX_PortNumber.txt</code>, and some of them stop without it. Mods made for DSX 3.1 read <code>DSX_UDP_PortNumber.txt</code> in <code>%LOCALAPPDATA%\DSX</code> and use 6969 when it is missing. When the server starts, PadForge creates the first file if it is missing and corrects either file if it names another port. It makes the second file only for a port other than 6969, and it leaves both alone while DSX itself is running.</p>
 <h3 id="run-a-dsxexe-stand-in">Run a DSX.exe Stand-In<a class="headerlink" href="#run-a-dsxexe-stand-in" title="Permanent link">&para;</a></h3>
@@ -4182,7 +4183,7 @@
 </ul>
 <p>See the technical page, <a href="../../reference/game-mods-internals/">Game Mods Internals</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.1.0.</em></p>
+<p><em>Last updated for PadForge 5.2.0.</em></p>
 
 
 

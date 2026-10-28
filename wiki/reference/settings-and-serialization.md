@@ -1442,8 +1442,8 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
 | `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 7018). |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 7025). |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 7033). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 7026). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 7034). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -2781,4 +2781,4 @@ Each profile's opinion is cleared once read, and the switches are never written 
 
 ---
 
-*Last updated for PadForge 5.1.0.*
+*Last updated for PadForge 5.2.0.*

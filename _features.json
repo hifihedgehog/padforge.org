@@ -29,7 +29,7 @@
   },
   {
     "t": "Controller speaker audio",
-    "d": "Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker."
+    "d": "Play sound through the DualSense or DualShock 4 speaker. Mirror a Windows output or route a slot's macro sounds to the pad. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth through its speaker or its headphone jack, with its headset microphone, and the second-model DualShock 4 through its headphone jack on a cable. Pads with haptic actuators but no speaker (Joy-Con, Switch Pro, Steam Controller, Steam Deck) play the sound as a haptic tone, and a Wii Remote through its own speaker."
   },
   {
     "t": "Headphone DSP chain",
@@ -194,5 +194,25 @@
   {
     "t": "Works with screen readers",
     "d": "Blind and low-vision players can use PadForge with a screen reader, tested with NVDA. Every control the Tab key reaches has a name the screen reader speaks, in the interface's language, status messages are read as they happen, and the keyboard reaches chips, tiles, curve points and dialogs. The app looks the same with or without a screen reader."
+  },
+  {
+    "t": "Game telemetry as inputs",
+    "d": "Driving games' telemetry as a controller row: speed, RPM, throttle, brake, clutch, handbrake and steering as axes, and the gear as buttons, from Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2, the truck simulators, Assetto Corsa and Assetto Corsa Competizione. Map them, start macros with them, or play adaptive trigger effects from them. Custom Formats reads a game PadForge does not know, and Forward to Port passes the packets on to SimHub or another program."
+  },
+  {
+    "t": "DSX game mods without DSX",
+    "d": "Fan mods that give the Grand Theft Auto games, Red Dead Redemption 2, Skyrim, Fallout 4 and others adaptive triggers send to a program named DSX. PadForge takes its place: their trigger effects, lightbar, player lights and mute light play on the PlayStation controllers on your virtual controllers, with no DSX installed. Mods for DualSenseY, DSZ and the DS4Windows fork that speaks the same protocol work too."
+  },
+  {
+    "t": "DualSense haptics as rumble",
+    "d": "A game that plays a DualSense's haptics as audio rumbles every rumble pad on that virtual controller, and Bass Shakers follow the haptic track too. A DualSense that plays the track itself keeps it."
+  },
+  {
+    "t": "Novint Falcon",
+    "d": "The Novint Falcon through Force Dimension's SDK: the handle as a stick, the grip's four buttons as buttons, and a game's rumble and force feedback as force on the handle about a thousand times a second, with a self-centering Joystick feel or an Aim feel that moves like a mouse. Not yet run on a Falcon."
+  },
+  {
+    "t": "Keyboard screens",
+    "d": "The screens on Logitech's GamePanel devices, among them the G15, G19, G510 and G13, on the Mad Catz S.T.R.I.K.E. 7 and on a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color, and the keys beside each screen map as buttons. Macros play pictures, switch modes and run the stopwatch. Not yet run on a screen."
   }
 ]
