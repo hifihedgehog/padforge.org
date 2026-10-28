@@ -1,0 +1,61 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:04.670
+Here's how to play a game controller as a MIDI device in PadForge.
+
+2
+00:00:05.260 --> 00:00:06.830
+You're hearing a generated voice.
+
+3
+00:00:08.250 --> 00:00:11.490
+This MIDI controller came from Add Controller's music note,
+
+4
+00:00:11.530 --> 00:00:13.240
+with a DualSense assigned.
+
+5
+00:00:13.790 --> 00:00:14.420
+Open it.
+
+6
+00:00:15.600 --> 00:00:19.990
+The bar at the top sets the channel, how many sliders and notes it sends,
+
+7
+00:00:20.140 --> 00:00:22.750
+where they start, and how hard each note plays.
+
+8
+00:00:24.125 --> 00:00:26.485
+The sticks and triggers send Control Change messages.
+
+9
+00:00:26.525 --> 00:00:30.015
+These bars move as the pad's sticks do.
+
+10
+00:00:31.250 --> 00:00:33.940
+The buttons play notes, starting at middle C.
+
+11
+00:00:35.245 --> 00:00:39.095
+In your music app, pick PadForge's MIDI port as an input.
+
+12
+00:00:39.645 --> 00:00:41.855
+The port needs Windows MIDI Services,
+
+13
+00:00:42.185 --> 00:00:46.095
+and its card in Settings installs it on a PC that doesn't have it.
+
+14
+00:00:46.565 --> 00:00:50.455
+Without it, an Output Port picker sends to a port you already have.
+
+15
+00:00:52.850 --> 00:00:55.380
+Find more guides at padforge.org.

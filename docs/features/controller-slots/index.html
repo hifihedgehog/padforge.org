@@ -4761,6 +4761,16 @@
 <p>Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pairs, with the same four modes. There it applies to the slot's final combined output, so physical, mapped, and macro presses are all cleaned. Xbox and PlayStation slots pick named buttons for each pair. Nintendo and Extended slots enter raw button indices.</p>
 <p><img alt="Keyboard and mouse controller preview" src="../../images/pad-kbm-preview.png" /></p>
 <h3 id="midi">MIDI<a class="headerlink" href="#midi" title="Permanent link">&para;</a></h3>
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-padforge-as-a-midi-device-poster.jpg"
+       aria-label="Video: a controller as a MIDI device, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-padforge-as-a-midi-device.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-padforge-as-a-midi-device.vtt" default>
+</video>
+<figcaption>A MIDI virtual controller fed by a DualSense: its channel, CC and note settings, the CC bars and note keys, and the Windows MIDI Services card, recorded live in PadForge 5.2.1 in 59 seconds. During the take the status bar reported that MIDI was not running, and no music app was connected. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-padforge-as-a-midi-device-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 <p>Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. A sustain pedal or other on/off controller (CC 64 to 69) that PadForge left on is turned off on its old channel and CC number when either changes, and when the slot stops. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.</p>
 <p>Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds <strong>Output Port</strong>, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. A slot that cannot open its port says why in the status bar: no port picked ("Virtual Controller <em>N</em> has no Output Port. Pick one on its page."), a port that is not connected, a port already in use, or a port that did not open. See <a href="../driver-management/#the-legacy-midi-api">The legacy MIDI API</a>.</p>
 <p><img alt="MIDI controller configuration" src="../../images/pad-midi-configbar.png" /></p>

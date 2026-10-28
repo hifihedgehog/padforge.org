@@ -1,0 +1,13 @@
+Here's how to play a game controller as a MIDI device in PadForge. You're hearing a generated voice.
+
+This MIDI controller came from Add Controller's music note, with a DualSense assigned. Open it.
+
+The bar at the top sets the channel, how many sliders and notes it sends, where they start, and how hard each note plays.
+
+The sticks and triggers send Control Change messages. These bars move as the pad's sticks do.
+
+The buttons play notes, starting at middle C.
+
+In your music app, pick PadForge's MIDI port as an input. The port needs Windows MIDI Services, and its card in Settings installs it on a PC that doesn't have it. Without it, an Output Port picker sends to a port you already have.
+
+Find more guides at padforge.org.
