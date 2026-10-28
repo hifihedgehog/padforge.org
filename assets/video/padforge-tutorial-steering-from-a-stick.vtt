@@ -1,0 +1,57 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:03.120
+Here's how to steer with a thumbstick in PadForge,
+
+2
+00:00:03.160 --> 00:00:05.890
+for driving games when you have no wheel.
+
+3
+00:00:06.420 --> 00:00:08.050
+You're hearing a generated voice.
+
+4
+00:00:09.450 --> 00:00:12.140
+Open the controller, and go to the Sticks tab.
+
+5
+00:00:12.610 --> 00:00:14.240
+Each stick has a Steering section.
+
+6
+00:00:15.939 --> 00:00:19.149
+Steering Mode starts on Off, which keeps it a normal stick.
+
+7
+00:00:19.619 --> 00:00:20.149
+Pick Winding.
+
+8
+00:00:21.514 --> 00:00:24.624
+Now turning the stick around winds a virtual wheel.
+
+9
+00:00:25.474 --> 00:00:30.424
+Wind Range is the travel from lock to lock: 900 degrees, two and a half turns.
+
+10
+00:00:31.839 --> 00:00:36.569
+Ease off the stick, and the wheel unwinds toward center, at the Unwind Rate.
+
+11
+00:00:38.294 --> 00:00:40.624
+Angle to Axis is the other mode.
+
+12
+00:00:41.114 --> 00:00:45.404
+The stick's angle maps straight to one axis, and letting go drops it to center.
+
+13
+00:00:46.769 --> 00:00:50.099
+With the pad in hand, turn the stick in circles to steer.
+
+14
+00:00:52.467 --> 00:00:54.977
+Find more guides at padforge.org.

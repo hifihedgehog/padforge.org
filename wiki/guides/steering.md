@@ -6,6 +6,16 @@ Winding and Angle to Axis live on the **Sticks** tab, one mode per stick, and wr
 
 Every mode is off by default. With the mode set to **Off**, the stick is a normal stick. Pick a mode to make it act like a steering wheel.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-steering-from-a-stick-poster.jpg"
+       aria-label="Video: steering from a thumbstick, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-steering-from-a-stick.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steering-from-a-stick.vtt" default>
+</video>
+<figcaption>The left stick's Steering Mode set to Winding, with Wind Range and Unwind Rate, then Angle to Axis in the same list, recorded live in PadForge 5.2.1 in 58 seconds. The controller sat on the desk, so nothing in the video steers. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steering-from-a-stick-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ## Modes
 
 ### Winding

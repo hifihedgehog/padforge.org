@@ -1,0 +1,15 @@
+Here's how to steer with a thumbstick in PadForge, for driving games when you have no wheel. You're hearing a generated voice.
+
+Open the controller, and go to the Sticks tab. Each stick has a Steering section.
+
+Steering Mode starts on Off, which keeps it a normal stick. Pick Winding.
+
+Now turning the stick around winds a virtual wheel. Wind Range is the travel from lock to lock: 900 degrees, two and a half turns.
+
+Ease off the stick, and the wheel unwinds toward center, at the Unwind Rate.
+
+Angle to Axis is the other mode. The stick's angle maps straight to one axis, and letting go drops it to center.
+
+With the pad in hand, turn the stick in circles to steer.
+
+Find more guides at padforge.org.

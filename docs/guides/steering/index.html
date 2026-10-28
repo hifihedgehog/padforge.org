@@ -3965,6 +3965,16 @@
 <p><em>Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.</em></p>
 <p>Winding and Angle to Axis live on the <strong>Sticks</strong> tab, one mode per stick, and write to the stick's virtual axis. Motion Lean is a separate input you map like a gyro source, tuned on the <strong>Gyro</strong> tab. The math follows JoyShockMapper's steering stick modes. The at-lock haptic feedback is PadForge's addition.</p>
 <p>Every mode is off by default. With the mode set to <strong>Off</strong>, the stick is a normal stick. Pick a mode to make it act like a steering wheel.</p>
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-steering-from-a-stick-poster.jpg"
+       aria-label="Video: steering from a thumbstick, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-steering-from-a-stick.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steering-from-a-stick.vtt" default>
+</video>
+<figcaption>The left stick's Steering Mode set to Winding, with Wind Range and Unwind Rate, then Angle to Axis in the same list, recorded live in PadForge 5.2.1 in 58 seconds. The controller sat on the desk, so nothing in the video steers. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steering-from-a-stick-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 <h2 id="modes">Modes<a class="headerlink" href="#modes" title="Permanent link">&para;</a></h2>
 <h3 id="winding">Winding<a class="headerlink" href="#winding" title="Permanent link">&para;</a></h3>
 <p>Rotating the stick winds a virtual wheel. Turn clockwise and the wheel turns right. <strong>Wind Range</strong> is the total lock-to-lock travel. The default 900 is 2.5 turns from one lock to the other, so full lock lands at 450 degrees (1.25 turns) each way from center. The accumulator tracks total angular travel, not the stick's current position, so you can keep winding past lock and then unwind back through the overshoot.</p>
