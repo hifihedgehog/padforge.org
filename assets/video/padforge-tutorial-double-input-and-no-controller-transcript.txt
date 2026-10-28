@@ -1,0 +1,13 @@
+Here's what to do when a game reacts twice to every press, or sees no controller at all. You're hearing a generated voice.
+
+If every press counts twice, the game reads both your pad and PadForge's virtual controller. HidHide fixes that. Open Settings and find the HidHide Driver card. Install it there if it's missing, and keep Hide Devices from Games on.
+
+Then open the Devices page, select your pad, and tick Hide from Games.
+
+A Bluetooth pad that a game or Steam opened first stays visible to it until the pad reconnects. Turn the pad off and on, or restart the game. If Steam starts before PadForge, turn on Keep Devices Cloaked Between Launches, in Settings.
+
+If a game sees no controller, check the Dashboard. The controller's flame should be lit, and the engine should say Forging. Some games look for controllers only when they start, so restart the game.
+
+If the Devices page is empty, try another port or cable, and connect a Bluetooth pad in Windows before you start PadForge.
+
+Find more fixes under Troubleshooting, at padforge.org.

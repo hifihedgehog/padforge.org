@@ -1,0 +1,13 @@
+Here's how to make a DualSense look like an Xbox controller to your games. You're hearing a generated voice.
+
+On the Dashboard, click Add Controller, and pick Xbox.
+
+Turn on your DualSense, by cable or Bluetooth, and open the Devices page. Drag the DualSense onto the new controller in the sidebar.
+
+PadForge knows the DualSense, so it maps it for you. Open the controller's Mappings tab. Cross drives A, Circle drives B, Square X, and Triangle Y. The sticks, triggers and D-pad go where an Xbox pad has them.
+
+Games now see an Xbox controller, and show Xbox prompts. A game's rumble still shakes the DualSense.
+
+If a game also sees the DualSense itself, tick Hide from Games on its panel in Devices. Once HidHide is installed, PadForge ticks it for you.
+
+That's it. Find more guides at padforge.org.

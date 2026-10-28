@@ -6,6 +6,16 @@
 
 Related pages: [Installation](start/installation.md), [Settings](features/settings.md), [Driver Management](features/driver-management.md), [Devices](features/devices.md).
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-double-input-and-no-controller-poster.jpg"
+       aria-label="Video: fixing double input, or a game that sees no controller, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-double-input-and-no-controller.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-double-input-and-no-controller.vtt" default>
+</video>
+<figcaption>Double input, a game that sees no controller, and an empty Devices page, recorded live in PadForge 5.2.0 in 1 minute 20 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-double-input-and-no-controller-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## No Devices Detected

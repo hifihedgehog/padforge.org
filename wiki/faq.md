@@ -22,6 +22,20 @@ Yes. Playing games with PadForge, streaming them, recording videos and using it 
 
 PadForge is one executable in a ZIP, and it keeps its settings in `PadForge.xml` beside it, so the folder moves as a unit. Drivers do not travel with it. Each PC installs HIDMaestro the first time a virtual controller is created there, and hiding, MIDI, Bluetooth DualShock 3 input and VR each bring their own installs. More: [Requirements](start/installation.md#requirements).
 
+### How do I make a DualSense look like an Xbox controller?
+
+Add an Xbox controller on the [Dashboard](features/dashboard.md), then on the [Devices](features/devices.md) page drag the DualSense onto it in the sidebar. PadForge knows the DualSense and maps it for you: Cross drives A, Circle B, Square X and Triangle Y, and the sticks, triggers and D-pad sit where an Xbox pad has them. Games see an Xbox controller, and a game's rumble still shakes the DualSense. More: [Your First Controller](start/first-controller.md).
+
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-dualsense-as-xbox-poster.jpg"
+       aria-label="Video: a DualSense as an Xbox controller, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-dualsense-as-xbox.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dualsense-as-xbox.vtt" default>
+</video>
+<figcaption>Recorded live in PadForge 5.2.0, 1 minute 8 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-as-xbox-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ### Can PadForge import my DS4Windows, reWASD or SimHub setup?
 
 No. PadForge imports its own profile packages and translates supported Steam community layouts, but it reads no DS4Windows, reWASD or SimHub file. Rebuild the setup in PadForge one game at a time, and keep the old tool until the new setup does everything the game needs. More: [Switching from Another Tool](guides/switching.md).
