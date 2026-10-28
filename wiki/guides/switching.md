@@ -6,6 +6,16 @@ Move one game at a time. Keep the old tool, its configuration and the game's bin
 
 Start from what the game should receive: a button, an axis, a key, a motion stream or a feedback effect. A setting with a similar name in two programs is only a place to start. What matters is what happens when you press, hold, release, change layers and reconnect.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-switching-from-another-tool-poster.jpg"
+       aria-label="Video: switching from another tool, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-switching-from-another-tool.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-switching-from-another-tool.vtt" default>
+</video>
+<figcaption>Export for a backup, Browse Community Configs for a Steam layout, HidHide's Hide Devices from Games, and the controller to rebuild on, recorded live in PadForge 5.2.1 in 59 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-switching-from-another-tool-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Before you start

@@ -1,0 +1,13 @@
+Here's how to move to PadForge from Steam Input, DS4Windows, reWASD, or SimHub, one game at a time. You're hearing a generated voice.
+
+First, back up. On the Profiles page, Export saves the profile you're working on.
+
+Coming from Steam Input? Browse Community Configs imports a Workshop layout.
+
+Give every input one owner. Stop the old tool for that game, and in Settings, let HidHide hide the real pad from games.
+
+Then rebuild in layers: the controller type, then the mappings, then layers and macros. Test each one in the game before the next.
+
+Keep the old tool and its setup until PadForge does everything the game needs.
+
+Find more guides at padforge.org.
