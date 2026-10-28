@@ -1,0 +1,89 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:04.240
+Here's how to put a second layout on one controller with a shift layer,
+
+2
+00:00:04.280 --> 00:00:07.670
+and a ring of commands on a stick with a radial menu.
+
+3
+00:00:08.280 --> 00:00:10.070
+You're hearing a generated voice.
+
+4
+00:00:11.500 --> 00:00:14.650
+On the controller's Mappings tab, click Shift Layer.
+
+5
+00:00:16.561 --> 00:00:18.951
+Name the layer, then pick what turns it on.
+
+6
+00:00:19.381 --> 00:00:20.631
+Here, it's the left shoulder.
+
+7
+00:00:22.472 --> 00:00:25.072
+Hold keeps the layer on while you hold the button.
+
+8
+00:00:25.112 --> 00:00:30.212
+Tick Inherit Unmapped Targets, so every button you leave alone keeps its usual job.
+
+9
+00:00:30.252 --> 00:00:31.702
+Then save.
+
+10
+00:00:32.947 --> 00:00:35.597
+The layer gets its own tab above the grid.
+
+11
+00:00:36.047 --> 00:00:38.917
+A row you bind on it works only while the layer is on.
+
+12
+00:00:40.190 --> 00:00:41.620
+Now the Menus tab.
+
+13
+00:00:41.790 --> 00:00:42.400
+Click Add.
+
+14
+00:00:43.640 --> 00:00:47.570
+The new menu is a radial ring on the right stick, with four cells.
+
+15
+00:00:49.132 --> 00:00:51.342
+Give each cell a label and a binding.
+
+16
+00:00:51.772 --> 00:00:52.742
+This one says Map.
+
+17
+00:00:54.477 --> 00:00:57.387
+Open its binding list, and choose Controller Button.
+
+18
+00:00:57.737 --> 00:00:59.867
+Then pick the button it presses: Back.
+
+19
+00:01:01.152 --> 00:01:04.372
+With the pad in hand, hold the left shoulder for the layer,
+
+20
+00:01:04.412 --> 00:01:06.842
+and push the right stick to open the menu.
+
+21
+00:01:07.412 --> 00:01:09.922
+Point at a cell, and click the stick to fire it.
+
+22
+00:01:10.800 --> 00:01:13.310
+Find more guides at padforge.org.

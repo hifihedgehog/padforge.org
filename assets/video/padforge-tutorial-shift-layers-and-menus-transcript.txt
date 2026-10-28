@@ -1,0 +1,21 @@
+Here's how to put a second layout on one controller with a shift layer, and a ring of commands on a stick with a radial menu. You're hearing a generated voice.
+
+On the controller's Mappings tab, click Shift Layer.
+
+Name the layer, then pick what turns it on. Here, it's the left shoulder.
+
+Hold keeps the layer on while you hold the button. Tick Inherit Unmapped Targets, so every button you leave alone keeps its usual job. Then save.
+
+The layer gets its own tab above the grid. A row you bind on it works only while the layer is on.
+
+Now the Menus tab. Click Add.
+
+The new menu is a radial ring on the right stick, with four cells.
+
+Give each cell a label and a binding. This one says Map.
+
+Open its binding list, and choose Controller Button. Then pick the button it presses: Back.
+
+With the pad in hand, hold the left shoulder for the layer, and push the right stick to open the menu. Point at a cell, and click the stick to fire it.
+
+Find more guides at padforge.org.

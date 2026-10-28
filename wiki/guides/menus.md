@@ -9,6 +9,16 @@ A menu puts a set of commands on an input surface. Engage the surface and a ring
 
 Each slot has its own menu list. Open a slot, switch to the **Menus** tab, and click **Add**. **Remove** and **Duplicate** manage the list.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-shift-layers-and-menus-poster.jpg"
+       aria-label="Video: a shift layer and a radial menu, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-shift-layers-and-menus.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-shift-layers-and-menus.vtt" default>
+</video>
+<figcaption>A Pit Stop shift layer held on the left shoulder, then a four-cell radial menu on the right stick whose first cell, Map, presses Back, recorded live in PadForge 5.2.1 in 1 minute 17 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-shift-layers-and-menus-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Style
