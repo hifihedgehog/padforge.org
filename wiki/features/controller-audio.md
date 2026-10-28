@@ -6,6 +6,16 @@
 
 Some controllers can make sound. A DualSense or DualShock 4 has a small speaker in the pad. A Wii Remote has a built-in speaker too. Other controllers have no speaker but can turn a sound into a single vibrating tone. PadForge drives whichever kind the assigned device provides, using a mirror of a Windows audio output and the sound effects your [Macros](../guides/macros.md) play. The Audio tab is **per pad per slot**, and it appears when the device selected on the slot can make sound.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-poster.jpg"
+       aria-label="Video: a DualSense's adaptive triggers, lightbar and speaker, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.vtt" default>
+</video>
+<figcaption>The left trigger set to Weapon, the lightbar to Rainbow Cycle, and the PC's sound mirrored to the DualSense speaker, recorded live in PadForge 5.2.1 in 57 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## When the tab shows

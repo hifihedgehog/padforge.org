@@ -5,6 +5,16 @@
 <!-- SCREENSHOT: pad-lighting -->
 ![Lighting tab with mode picker and audio-band cards](../images/pad-lighting.png)
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-poster.jpg"
+       aria-label="Video: a DualSense's adaptive triggers, lightbar and speaker, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.vtt" default>
+</video>
+<figcaption>The left trigger set to Weapon, the lightbar to Rainbow Cycle, and the PC's sound mirrored to the DualSense speaker, recorded live in PadForge 5.2.1 in 57 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## When the tab shows

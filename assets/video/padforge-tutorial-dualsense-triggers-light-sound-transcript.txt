@@ -1,0 +1,15 @@
+Here's how to set a DualSense's adaptive triggers, lightbar, and speaker in PadForge. You're hearing a generated voice.
+
+Open the controller, and go to the Adaptive Triggers tab.
+
+Pick an effect for each trigger. Weapon is a soft pull into a firm click, like a gun.
+
+Range sets where the effect starts and ends. Strength sets how hard it pushes back.
+
+On the Lighting tab, Mode sets the lightbar. Rainbow Cycle turns it through every color.
+
+On the Audio tab, tick Mirror System Audio, and the PC's sound plays from the pad's speaker.
+
+A game that drives the triggers or the lightbar itself takes over while it runs. Pick up the pad to feel it.
+
+Find more guides at padforge.org.
