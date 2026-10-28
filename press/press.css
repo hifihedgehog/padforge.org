@@ -47,6 +47,7 @@
 .film-section { padding-block: var(--pad-section) 0; }
 .film-figure .rig { display: block; width: 100%; }
 .film-figure video { background: #000; }
+.film-narrated { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
 .film-caption { flex-wrap: wrap; align-items: flex-start; }
 .film-downloads { display: flex; flex-wrap: wrap; gap: .7rem; }
 .film-downloads a { display: inline-flex; align-items: center; gap: .55rem; padding: .6rem 1rem; border: 1px solid var(--border); border-radius: 100px; font-size: .8rem; color: var(--text-hi); }

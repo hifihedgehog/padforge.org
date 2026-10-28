@@ -1,0 +1,21 @@
+Hi. I'm hifihedgehog, the developer of PadForge. You're hearing a generated voice.
+
+PadForge is a free Windows app that makes any input look like any controller. Many PC games only work properly with the controller they expect. PadForge creates virtual controllers that games treat as real hardware, and you choose what drives them.
+
+That can be a different controller, a keyboard and mouse, a flight stick, your phone's web browser, or your own voice. PadForge recognizes phrases you set up, offline, with no account. Every button, stick and trigger can be remapped or turned into a macro, and PadForge switches to a game's own profile when that game comes to the front.
+
+PadForge works with a screen reader and from the keyboard. Here is NVDA reading PadForge, one Tab key at a time.
+
+NVDA: Slot 1, data item, 4 of 5
+NVDA: Delete virtual controller, button
+NVDA: Enabled, toggle button, pressed, Awaiting devices
+NVDA: Xbox, radio button, not checked
+NVDA: PlayStation, radio button, not checked
+NVDA: Nintendo, radio button, checked
+NVDA: Settings saved to PadForge.xml.
+
+Every control the Tab key reaches has a spoken name. Buttons speak their state, status changes are announced as they happen, and Escape closes a dialog. The interface comes in 109 languages, and the spoken names follow the one you pick.
+
+PadForge is free, with no subscription, no paywall and no nag screens. It runs on Windows 10 and 11, with a preliminary build for Windows 11 on ARM. Windows asks for administrator permission each time it starts.
+
+Get it at padforge.org. That's P-A-D, forge, dot org. Thanks for listening.

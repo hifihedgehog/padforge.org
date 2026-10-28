@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=v9">
+    <link rel="stylesheet" href="style.css?v=v10">
     <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -826,11 +826,19 @@
 <div class="lb film-lb" id="film" role="dialog" aria-modal="true" aria-labelledby="filmTitle" aria-describedby="filmDesc">
     <button class="lb-close" id="filmClose" aria-label="Close the film">&#10005;</button>
     <h2 class="visually-hidden" id="filmTitle">PadForge 5.2 film</h2>
-    <p class="visually-hidden" id="filmDesc">A 140-second film with music and on-screen text, and no narration. An Xbox controller becomes the Xbox 360 pad, DualSense or Steam Controller a game expects. The film then shows what is new in PadForge 5.2: driving games' telemetry mapped like a controller's inputs, DSX game mods with no DSX installed, the Novint Falcon, the screens on Logitech keyboards, DualSense haptics on any rumble pad, a DualShock 4's headphone jack, and HIDMaestro 2.1, which holds input when every processor is busy. In HIDMaestro's own test, a virtual DualShock 4's slowest frame took 1.4 ms instead of 360. It tours mapping, force feedback, motion, phones and remote play, and ends on the price: free.</p>
+    <p class="visually-hidden" id="filmDesc">Two versions, chosen with the Film and Narrated buttons. The film runs 140 seconds, with music and on-screen text, and no narration. An Xbox controller becomes the Xbox 360 pad, DualSense or Steam Controller a game expects. The film then shows what is new in PadForge 5.2: driving games' telemetry mapped like a controller's inputs, DSX game mods with no DSX installed, the Novint Falcon, the screens on Logitech keyboards, DualSense haptics on any rumble pad, a DualShock 4's headphone jack, and HIDMaestro 2.1, which holds input when every processor is busy. In HIDMaestro's own test, a virtual DualShock 4's slowest frame took 1.4 ms instead of 360. It tours mapping, force feedback, motion, phones and remote play, and ends on the price: free. The narrated version runs 1 minute 59 seconds. A generated voice describes PadForge, English captions follow it, and its middle is a recording of the NVDA screen reader reading PadForge 5.1.0, the release that brought screen-reader support.</p>
+    <div class="film-switch" role="group" aria-label="Version">
+        <button type="button" class="film-pick on" data-film="film" aria-pressed="true">Film<span>2:20</span></button>
+        <button type="button" class="film-pick" data-film="narrated" aria-pressed="false">Narrated<span>1:59</span></button>
+    </div>
     <video id="filmVideo" controls playsinline preload="none" poster="assets/video/padforge-5.2-promo-poster.jpg?v=1" width="1920" height="1080">
         <source src="assets/video/padforge-5.2-promo-landscape.mp4?v=1" type="video/mp4">
     </video>
-    <div class="lb-cap">PadForge 5.2 &middot; 2:20 &middot; <a href="/press/#film">Portrait and square cuts on the press page</a></div>
+    <video id="filmNarrated" controls playsinline preload="none" poster="assets/video/padforge-5.2-narrated-poster.jpg?v=1" width="1920" height="1080" hidden>
+        <source src="assets/video/padforge-5.2-narrated.mp4?v=1" type="video/mp4">
+        <track kind="captions" srclang="en" label="English" src="assets/video/padforge-5.2-narrated.vtt?v=1" default>
+    </video>
+    <div class="lb-cap">PadForge 5.2 &middot; <a href="/press/#film">Downloads and the transcript on the press page</a></div>
 </div>
 
 <footer class="footer">
@@ -905,7 +913,24 @@
        Nothing loads until the button is pressed. While the player is
        open the rest of the page is inert, so focus stays inside it. */
     var film = document.getElementById("film"), filmVideo = document.getElementById("filmVideo"),
-        filmOpen = document.getElementById("filmOpen"), filmFocus = null;
+        filmOpen = document.getElementById("filmOpen"), filmFocus = null,
+        filmNarrated = document.getElementById("filmNarrated"), filmNow = filmVideo;
+    /* Film and Narrated swap the player. Only the shown one plays. */
+    function pickFilm(which) {
+        var next = which === "narrated" ? filmNarrated : filmVideo;
+        if (!next || next === filmNow) return;
+        filmNow.pause();
+        filmNow.hidden = true;
+        next.hidden = false;
+        filmNow = next;
+        [].forEach.call(film.querySelectorAll(".film-pick"), function (b) {
+            var on = b.getAttribute("data-film") === which;
+            b.classList.toggle("on", on);
+            b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        var p = next.play();
+        if (p && p.catch) p.catch(function () {});
+    }
     function pageInert(on) {
         [].forEach.call(document.body.children, function (el) { if (el !== film) el.inert = on; });
     }
@@ -915,11 +940,11 @@
         document.body.style.overflow = "hidden";
         pageInert(true);
         document.getElementById("filmClose").focus();
-        var p = filmVideo.play();
+        var p = filmNow.play();
         if (p && p.catch) p.catch(function () {});
     }
     function closeFilm() {
-        filmVideo.pause();
+        filmNow.pause();
         film.classList.remove("on");
         document.body.style.overflow = "";
         pageInert(false);
@@ -929,6 +954,9 @@
         filmOpen.addEventListener("click", openFilm);
         document.getElementById("filmClose").addEventListener("click", closeFilm);
         film.addEventListener("click", function (e) { if (e.target === film) closeFilm(); });
+        [].forEach.call(film.querySelectorAll(".film-pick"), function (b) {
+            b.addEventListener("click", function () { pickFilm(b.getAttribute("data-film")); });
+        });
         addEventListener("keydown", function (e) { if (e.key === "Escape" && film.classList.contains("on")) closeFilm(); });
     }
 

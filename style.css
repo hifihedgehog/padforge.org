@@ -687,11 +687,29 @@ a { color: inherit; text-decoration: none; }
     transform: scale(0.985); transition: transform 0.4s var(--ease);
 }
 .film-lb.on video { transform: none; }
+.film-lb video[hidden] { display: none; }
+/* Film or Narrated: a two-pill switch at the top of the room, level with
+   the close button. */
+.film-switch {
+    position: absolute; top: clamp(0.8rem, 2.5vw, 1.6rem); left: 50%; transform: translateX(-50%);
+    display: flex; gap: 0.4rem; padding: 0.3rem; border-radius: 100px;
+    border: 1px solid var(--hairline); background: rgba(255,255,255,0.04);
+}
+.film-pick {
+    display: inline-flex; align-items: baseline; gap: 0.55rem; padding: 0.45rem 0.95rem; border-radius: 100px;
+    border: 0; background: transparent; color: var(--text-muted); cursor: pointer;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 500;
+    transition: background 0.3s var(--ease), color 0.3s var(--ease);
+}
+.film-pick span { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; color: var(--text-dim); }
+.film-pick:hover { color: var(--text-hi); }
+.film-pick.on { background: rgba(255,255,255,0.1); color: var(--text-hi); }
+.film-pick:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
 .film-lb .lb-cap a { color: var(--text-hi); text-decoration: underline; text-underline-offset: 3px; }
 .btn-film svg { width: 14px; height: 14px; fill: currentColor; }
 .btn-meta { font-family: var(--font-mono); font-size: 0.74rem; font-weight: 400; color: var(--text-muted); }
 .rig-in > video { display: block; width: 100%; height: auto; }
-@media (prefers-reduced-motion: reduce) { .film-lb, .film-lb video { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .film-lb, .film-lb video, .film-pick { transition: none; } }
 
 
 /* ══════════════════════════════════════════════════════════════════════
