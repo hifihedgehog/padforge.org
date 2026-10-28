@@ -1,0 +1,61 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:05.210
+Here's how to bring a Steam Input layout from the Steam Workshop into PadForge.
+
+2
+00:00:05.860 --> 00:00:07.490
+You're hearing a generated voice.
+
+3
+00:00:08.925 --> 00:00:13.075
+First, open Settings, and tick Enable Community Configs.
+
+4
+00:00:13.585 --> 00:00:16.855
+PadForge then contacts Steam's servers only when you search,
+
+5
+00:00:17.185 --> 00:00:19.495
+open a config, or check for updates.
+
+6
+00:00:21.116 --> 00:00:25.866
+On the Profiles page, click Browse Community Configs, and search for your game.
+
+7
+00:00:27.785 --> 00:00:29.995
+Its configs are listed by rating.
+
+8
+00:00:30.505 --> 00:00:32.395
+A chip narrows them to your controller.
+
+9
+00:00:32.945 --> 00:00:35.315
+Open one to read its translation manifest.
+
+10
+00:00:37.195 --> 00:00:39.665
+Clean rows carry over as they are.
+
+11
+00:00:40.175 --> 00:00:41.445
+Partial ones work with a difference.
+
+12
+00:00:42.175 --> 00:00:44.785
+Skipped ones are left out, and each row says why.
+
+13
+00:00:46.281 --> 00:00:47.711
+Click Save Profile.
+
+14
+00:00:48.301 --> 00:00:53.031
+The new profile has no controller yet, so assign yours, and link the game's program.
+
+15
+00:00:55.442 --> 00:00:57.952
+Find more guides at padforge.org.

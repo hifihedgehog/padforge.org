@@ -6,6 +6,16 @@
 
 Steam Workshop holds years of community controller layouts built in Steam Input. PadForge reads those configs straight from Steam and translates them into its own mappings, shift layers, macros, and on-screen menus. Nothing applies blind. A manifest shows what became of the config's bindings before you save anything.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-steam-workshop-import-poster.jpg"
+       aria-label="Video: a Steam Workshop layout imported, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-steam-workshop-import.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steam-workshop-import.vtt" default>
+</video>
+<figcaption>Community Configs turned on, an Elden Ring config found and opened, its manifest read and saved as a profile, recorded live in PadForge 5.2.0 in 1 minute 2 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steam-workshop-import-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Turn it on

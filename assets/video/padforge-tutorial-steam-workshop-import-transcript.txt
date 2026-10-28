@@ -1,0 +1,13 @@
+Here's how to bring a Steam Input layout from the Steam Workshop into PadForge. You're hearing a generated voice.
+
+First, open Settings, and tick Enable Community Configs. PadForge then contacts Steam's servers only when you search, open a config, or check for updates.
+
+On the Profiles page, click Browse Community Configs, and search for your game.
+
+Its configs are listed by rating. A chip narrows them to your controller. Open one to read its translation manifest.
+
+Clean rows carry over as they are. Partial ones work with a difference. Skipped ones are left out, and each row says why.
+
+Click Save Profile. The new profile has no controller yet, so assign yours, and link the game's program.
+
+Find more guides at padforge.org.
