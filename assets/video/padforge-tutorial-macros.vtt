@@ -1,61 +1,73 @@
 WEBVTT
 
 1
-00:00:00.800 --> 00:00:03.310
-Here's how to make a macro in PadForge.
+00:00:00.800 --> 00:00:05.540
+Here's how to make two macros in PadForge: a button chord that sends a shortcut,
 
 2
-00:00:03.960 --> 00:00:07.430
-This one saves a screenshot when you click the DualSense's touchpad.
+00:00:05.580 --> 00:00:07.650
+and a button that types a message.
 
 3
-00:00:07.900 --> 00:00:09.510
+00:00:08.240 --> 00:00:09.870
 You're hearing a generated voice.
 
 4
-00:00:10.950 --> 00:00:14.560
+00:00:11.275 --> 00:00:14.885
 Open the controller, go to the Macros tab, and click Add.
 
 5
-00:00:16.388 --> 00:00:17.618
-Name it Screenshot.
+00:00:16.710 --> 00:00:18.200
+Name it Task Manager.
 
 6
-00:00:19.060 --> 00:00:21.350
-Under Trigger, open Add from List.
+00:00:19.601 --> 00:00:23.711
+Under Trigger, open Add from List, and pick Gamepad Left Shoulder.
 
 7
-00:00:21.960 --> 00:00:25.150
-Below the Any Device group, the DualSense has its own inputs.
+00:00:24.121 --> 00:00:26.161
+Open it again, and add Gamepad Right Shoulder.
 
 8
-00:00:25.740 --> 00:00:26.830
-Pick Touchpad Click.
+00:00:26.201 --> 00:00:28.911
+Holding both together is the chord.
 
 9
-00:00:28.593 --> 00:00:32.283
-Consume Trigger Buttons is on, so the game never sees that click.
+00:00:31.136 --> 00:00:33.306
+Add an action, and make it a Key Press.
 
 10
-00:00:32.953 --> 00:00:35.583
-Fire stays On Press: one click, one run.
+00:00:33.916 --> 00:00:38.366
+In Key Combo, type Control, Shift and Escape, each in curly braces.
 
 11
-00:00:37.274 --> 00:00:40.304
-Click Add Action, and change its type to Key Press.
+00:00:38.896 --> 00:00:40.966
+That shortcut opens Task Manager.
 
 12
-00:00:41.945 --> 00:00:47.095
-In Key Combo, type each key's name in curly braces: LWin, then PrintScreen.
+00:00:44.173 --> 00:00:46.223
+Click Add again for a second macro.
 
 13
-00:00:48.495 --> 00:00:50.465
-The macro saves as you go.
+00:00:46.693 --> 00:00:49.463
+Name it Good Game, and give it Gamepad D-Pad Up.
 
 14
-00:00:50.875 --> 00:00:54.745
-Click the touchpad, and Windows saves a screenshot to your Pictures folder.
+00:00:52.426 --> 00:00:54.316
+Its action is a Text Block.
 
 15
-00:00:55.983 --> 00:00:58.493
+00:00:54.646 --> 00:00:55.636
+Type the message here.
+
+16
+00:00:56.801 --> 00:01:00.641
+Press up on the pad, and PadForge types it out, letter by letter.
+
+17
+00:01:00.681 --> 00:01:03.051
+Both macros save as you go.
+
+18
+00:01:05.225 --> 00:01:07.755
 Find more guides at padforge.org.
