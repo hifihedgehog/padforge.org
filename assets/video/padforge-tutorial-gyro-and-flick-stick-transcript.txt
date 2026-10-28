@@ -1,0 +1,23 @@
+Here's how to aim with gyro and Flick Stick in PadForge. You're hearing a generated voice.
+
+This Keyboard + Mouse controller has a DualSense assigned. Open it, and go to the Gyro tab.
+
+Put the controller down, hands off, and click Calibrate Gyro. The live readout should then sit near zero.
+
+Below it, Sensitivity sets how far the pointer moves for each turn of the pad.
+
+On the Mappings tab, click the Mouse X row, and open its source list.
+
+Scroll to Flick Stick, for the right stick, and pick it.
+
+Then click the Mouse Y row, and open its list.
+
+Gyro Pitch sits right after the touchpad inputs, near the end of the list. Pick it.
+
+Now the stick turns you left and right, and tilting the pad aims up and down.
+
+On the Sticks tab, scroll to the end of the page. Flick Stick has a card of its own there, and its Flick Time sets how long a turn takes.
+
+Nothing moves while the pad sits on the desk. Pick it up, flick the right stick to turn, and tilt the pad to aim.
+
+Find more guides at padforge.org.

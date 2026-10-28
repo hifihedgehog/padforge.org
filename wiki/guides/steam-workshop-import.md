@@ -13,7 +13,7 @@ Steam Workshop holds years of community controller layouts built in Steam Input.
 <source src="/assets/video/padforge-tutorial-steam-workshop-import.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steam-workshop-import.vtt" default>
 </video>
-<figcaption>Community Configs turned on, an Elden Ring config found and opened, its manifest read and saved as a profile, recorded live in PadForge 5.2.0 in 1 minute 2 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steam-workshop-import-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Community Configs turned on, an Elden Ring config found and opened, its manifest read and saved as a profile, recorded live in PadForge 5.2.0 in 1 minute 1 second. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steam-workshop-import-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---

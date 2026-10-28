@@ -7,6 +7,16 @@
 
 The Gyro tab appears when the slot's assigned physical device exposes a gyroscope or an accelerometer. Tuning saves per pad per slot, so the same pad on two different slots can carry two different feels.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-gyro-and-flick-stick-poster.jpg"
+       aria-label="Video: gyro aim and Flick Stick, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-gyro-and-flick-stick.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-gyro-and-flick-stick.vtt" default>
+</video>
+<figcaption>Calibrate Gyro, then Flick Stick on Mouse X and Gyro Pitch on Mouse Y of a Keyboard + Mouse controller, recorded live in PadForge 5.2.0 in 1 minute 20 seconds. The DualSense sat on the desk, so nothing turns or aims on screen. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-gyro-and-flick-stick-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## When the tab shows
