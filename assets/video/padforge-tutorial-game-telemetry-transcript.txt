@@ -1,0 +1,17 @@
+Here's how to bring a driving game's telemetry into PadForge, and buzz the trigger at the redline. You're hearing a generated voice.
+
+On the Dashboard, tick Listen for Game Telemetry. Leave the game on Auto-Detect, and point the game's telemetry output at this PC and this port.
+
+The Devices page now lists a Game Telemetry row: speed, RPM, pedals, steering and gear, ready to map like a controller.
+
+For a redline buzz, open the controller's Macros tab, add a macro, and set Fire to Custom Expression.
+
+Add a variable. Set its source to Game Telemetry, and pick RPM, as a percent of the maximum.
+
+In the formula, type a > 95.
+
+Then add an action. Make it an Adaptive Trigger Effect on the right trigger, and pick Vibration.
+
+With a game sending, the trigger buzzes above 95 percent RPM. No game ran for this video.
+
+Find more guides at padforge.org.

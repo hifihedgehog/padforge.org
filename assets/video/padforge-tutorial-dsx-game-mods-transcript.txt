@@ -1,0 +1,11 @@
+Here's how to run game mods made for DSX with PadForge, with no DSX installed. You're hearing a generated voice.
+
+Fans have written DSX mods that give games like GTA V and Red Dead Redemption 2 adaptive triggers and lights. On the Dashboard, find Game Mods, and tick Accept DSX Game Mods.
+
+Leave the port at 6969. DSX and its mods use that port, so close DSX first if it's running.
+
+Some mods check that a program named DSX is running. For those, tick Run a DSX.exe Stand-In.
+
+Then start the game with its mod. While it sends, this line names the mod and the virtual controller its effects reach. No game ran for this video.
+
+Find more guides at padforge.org.

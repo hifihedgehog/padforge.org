@@ -1,0 +1,73 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:04.120
+Here's how to bring a driving game's telemetry into PadForge,
+
+2
+00:00:04.160 --> 00:00:06.450
+and buzz the trigger at the redline.
+
+3
+00:00:07.020 --> 00:00:08.710
+You're hearing a generated voice.
+
+4
+00:00:10.125 --> 00:00:13.295
+On the Dashboard, tick Listen for Game Telemetry.
+
+5
+00:00:13.925 --> 00:00:15.385
+Leave the game on Auto-Detect,
+
+6
+00:00:15.425 --> 00:00:19.355
+and point the game's telemetry output at this PC and this port.
+
+7
+00:00:20.864 --> 00:00:25.674
+The Devices page now lists a Game Telemetry row: speed, RPM,
+
+8
+00:00:26.384 --> 00:00:29.334
+pedals, steering and gear, ready to map like a controller.
+
+9
+00:00:31.957 --> 00:00:35.587
+For a redline buzz, open the controller's Macros tab,
+
+10
+00:00:35.917 --> 00:00:38.687
+add a macro, and set Fire to Custom Expression.
+
+11
+00:00:41.057 --> 00:00:42.267
+Add a variable.
+
+12
+00:00:42.677 --> 00:00:47.207
+Set its source to Game Telemetry, and pick RPM, as a percent of the maximum.
+
+13
+00:00:48.582 --> 00:00:51.372
+In the formula, type a > 95.
+
+14
+00:00:55.199 --> 00:00:56.649
+Then add an action.
+
+15
+00:00:57.179 --> 00:01:00.669
+Make it an Adaptive Trigger Effect on the right trigger, and pick Vibration.
+
+16
+00:01:02.149 --> 00:01:07.249
+With a game sending, the trigger buzzes above 95 percent RPM.
+
+17
+00:01:07.289 --> 00:01:08.659
+No game ran for this video.
+
+18
+00:01:11.075 --> 00:01:13.605
+Find more guides at padforge.org.

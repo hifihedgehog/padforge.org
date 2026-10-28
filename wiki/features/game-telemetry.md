@@ -4,6 +4,16 @@
 
 Most driving games can send their telemetry to other programs. Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2 and the truck simulators send it over the network, and Assetto Corsa and Assetto Corsa Competizione publish it in shared memory. Turn on **Listen for Game Telemetry** and PadForge reads it. The values appear on a **Game Telemetry** row on the [Devices](devices.md) page. From there you can map them like any input, trigger [macros](../guides/macros.md) with them, or compare them in a Custom Expression. While PadForge listens, a wheel's [RPM shift LEDs](wheel.md#rpm-shift-leds) read the game from here too.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-game-telemetry-poster.jpg"
+       aria-label="Video: game telemetry at the redline, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-game-telemetry.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-game-telemetry.vtt" default>
+</video>
+<figcaption>Listen for Game Telemetry, the Game Telemetry row, and a Custom Expression macro that vibrates the right trigger when a = RPM (% of Max) passes 95, recorded live in PadForge 5.2.1 in 1 minute 17 seconds. No game sent telemetry during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-game-telemetry-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Turning it on

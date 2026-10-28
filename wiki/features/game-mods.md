@@ -6,6 +6,16 @@ Fans have written mods that give games without DualSense support adaptive trigge
 
 PadForge speaks the same interface as DSX and as the open programs that took it up: DualSenseY, DSZ and a fork of DS4Windows. A mod written for any of them works with PadForge unchanged.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-dsx-game-mods-poster.jpg"
+       aria-label="Video: DSX game mods with no DSX, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-dsx-game-mods.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dsx-game-mods.vtt" default>
+</video>
+<figcaption>Accept DSX Game Mods on port 6969 and the DSX.exe stand-in, with the server listening, recorded live in PadForge 5.2.1 in 1 minute. No game or mod ran during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dsx-game-mods-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Turning it on
