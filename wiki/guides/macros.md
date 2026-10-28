@@ -6,6 +6,16 @@
 
 Each slot has its own macro list. Open a slot, switch to the **Macros** tab, and click **Add**.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-macros-poster.jpg"
+       aria-label="Video: making a macro, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-macros.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-macros.vtt" default>
+</video>
+<figcaption>A macro named Screenshot, with the DualSense's Touchpad Click as its trigger and Left Windows + Print Screen as its action, recorded live in PadForge 5.2.0 in 1 minute 2 seconds. The touchpad was not clicked during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-macros-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## Make a macro

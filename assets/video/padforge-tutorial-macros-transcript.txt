@@ -1,0 +1,17 @@
+Here's how to make a macro in PadForge. This one saves a screenshot when you click the DualSense's touchpad. You're hearing a generated voice.
+
+Open the controller, go to the Macros tab, and click Add.
+
+Name it Screenshot.
+
+Under Trigger, open Add from List. Below the Any Device group, the DualSense has its own inputs. Pick Touchpad Click.
+
+Consume Trigger Buttons is on, so the game never sees that click. Fire stays On Press: one click, one run.
+
+Click Add Action, and change its type to Key Press.
+
+In Key Combo, type each key's name in curly braces: LWin, then PrintScreen.
+
+The macro saves as you go. Click the touchpad, and Windows saves a screenshot to your Pictures folder.
+
+Find more guides at padforge.org.
