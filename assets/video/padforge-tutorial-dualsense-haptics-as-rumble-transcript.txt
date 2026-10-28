@@ -1,0 +1,11 @@
+Here's how to feel a game's DualSense haptics on a controller that only rumbles. You're hearing a generated voice.
+
+This PlayStation controller has an Xbox Series X Controller assigned. Open it. Its preset is DualSense (PS5): Full, the default, and the one that carries a game's haptics.
+
+Games that use the DualSense's haptics play them as sound, and send no rumble. PadForge turns that sound's loudness into rumble on the Xbox pad: the left channel drives the left motor, and the right channel the right.
+
+On the Force Feedback tab, Overall Gain sets how strong it feels. Zero turns it off for this pad.
+
+There's nothing else to set. No game ran for this video.
+
+Find more guides at padforge.org.
