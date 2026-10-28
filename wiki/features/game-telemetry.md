@@ -1,6 +1,6 @@
 # Game Telemetry
 
-*Driving games send PadForge their speed, RPM, gear, pedals and steering. Map them like a controller's inputs, start macros with them, and light a DualSense's triggers from them.*
+*Driving games send PadForge their speed, RPM, gear, pedals and steering. Map them like a controller's inputs, start macros with them, and use them to play adaptive trigger effects on a DualSense.*
 
 Most driving games can send their telemetry to other programs. Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2 and the truck simulators send it over the network, and Assetto Corsa and Assetto Corsa Competizione publish it in shared memory. Turn on **Listen for Game Telemetry** and PadForge reads it. The values appear on a **Game Telemetry** row on the [Devices](devices.md) page. From there you can map them like any input, trigger [macros](../guides/macros.md) with them, or compare them in a Custom Expression. While PadForge listens, a wheel's [RPM shift LEDs](wheel.md#rpm-shift-leds) read the game from here too.
 
