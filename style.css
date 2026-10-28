@@ -80,7 +80,10 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+/* clip on both: the root's value moves to the viewport, and body then clips
+   its own content without becoming a scroll container, so a glow wider than
+   the screen adds no sideways scroll and sticky elements still stick. */
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body {
     font-family: var(--font-body);
@@ -90,7 +93,7 @@ body {
     background: var(--bg);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 img { max-width: 100%; display: block; }
@@ -583,8 +586,10 @@ a { color: inherit; text-decoration: none; }
     padding-bottom: var(--pad-section);
     align-items: start;
 }
-@media (max-width: 900px) { .spec-wrap { grid-template-columns: 1fr; } .spec-nav { display: none; } }
+@media (max-width: 900px) { .spec-wrap { grid-template-columns: minmax(0, 1fr); } .spec-nav { display: none; } }
 
+/* The nav column spans the whole grid row, so its list has room to stick. */
+.spec-nav { align-self: stretch; }
 .spec-nav-in { position: sticky; top: 6.5rem; display: flex; flex-direction: column; gap: 0.55rem; }
 .spec-nav-in .mono-tag { margin-bottom: 0.5rem; }
 .spec-nav a {
