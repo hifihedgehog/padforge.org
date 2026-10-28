@@ -1,0 +1,53 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:05.330
+Here's how PadForge keeps itself up to date, and where you remove its drivers.
+
+2
+00:00:06.000 --> 00:00:07.610
+You're hearing a generated voice.
+
+3
+00:00:09.025 --> 00:00:11.815
+Open Settings, and find the Updates card.
+
+4
+00:00:12.385 --> 00:00:16.795
+PadForge checks GitHub 20 seconds after it starts, then every 12 hours.
+
+5
+00:00:18.443 --> 00:00:20.493
+Click Check Now to look right away.
+
+6
+00:00:21.103 --> 00:00:22.433
+When a newer version is out,
+
+7
+00:00:22.723 --> 00:00:25.733
+Install and Restart puts it in place, and starts it again.
+
+8
+00:00:27.329 --> 00:00:30.299
+Or turn on Install Updates Automatically,
+
+9
+00:00:30.609 --> 00:00:33.659
+and a new version goes in the next time PadForge starts.
+
+10
+00:00:37.934 --> 00:00:40.104
+Further down are the driver cards.
+
+11
+00:00:40.574 --> 00:00:46.544
+Uninstall removes a driver, HIDMaestro and BthPS3 included.
+
+12
+00:00:47.274 --> 00:00:50.004
+PadForge installs them again when something needs them.
+
+13
+00:00:52.325 --> 00:00:54.855
+Find more guides at padforge.org.

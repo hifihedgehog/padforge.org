@@ -1,0 +1,15 @@
+Here's how to change what a button does, quiet a drifting stick, and make a trigger reach full sooner. You're hearing a generated voice.
+
+Open your controller's page, then its Mappings tab. Each row is one output the game sees, and A comes first.
+
+To make your pad's B button drive A, click the A row, open its Source list, and pick B. It takes effect at once.
+
+Do the same on the B row, and pick A. The swap is done, and there is no save step.
+
+With the pad in hand, the record button is quicker. Click it, then press the button you want.
+
+On the Sticks tab, raise Deadzone X and Y a little, to ignore a drifting stick. The circle beside them shows the stick before and after.
+
+On the Triggers tab, pull the right end of Range in, and the trigger reads full before it bottoms out.
+
+Each change works at once, and PadForge saves it for you. Find more guides at padforge.org.

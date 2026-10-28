@@ -7,6 +7,16 @@
 
 Profiles can switch on their own when a game gains focus, or from a controller-button combo you record.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-profile-per-game-poster.jpg"
+       aria-label="Video: one profile per game, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-profile-per-game.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-profile-per-game.vtt" default>
+</video>
+<figcaption>Save As, a linked program and auto-switch, recorded live in PadForge 5.2.0 in 1 minute 1 second. Character Map stands in for a game, and a panel covers the file dialog, which lists the recording PC's own folders. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-profile-per-game-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## What a profile holds

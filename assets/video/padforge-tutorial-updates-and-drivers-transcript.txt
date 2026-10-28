@@ -1,0 +1,11 @@
+Here's how PadForge keeps itself up to date, and where you remove its drivers. You're hearing a generated voice.
+
+Open Settings, and find the Updates card. PadForge checks GitHub 20 seconds after it starts, then every 12 hours.
+
+Click Check Now to look right away. When a newer version is out, Install and Restart puts it in place, and starts it again.
+
+Or turn on Install Updates Automatically, and a new version goes in the next time PadForge starts.
+
+Further down are the driver cards. Uninstall removes a driver, HIDMaestro and BthPS3 included. PadForge installs them again when something needs them.
+
+Find more guides at padforge.org.

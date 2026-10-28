@@ -2,6 +2,16 @@
 
 *PadForge checks GitHub for new versions and installs them from its Settings page.*
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-updates-and-drivers-poster.jpg"
+       aria-label="Video: updates, and where drivers are removed, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-updates-and-drivers.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-updates-and-drivers.vtt" default>
+</video>
+<figcaption>The Updates card, then the driver cards' Uninstall buttons, recorded live in PadForge 5.2.0 in 58 seconds. Nothing was uninstalled. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-updates-and-drivers-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ![The Updates card in Settings, after a check](../images/settings-updates.png)
 
 The **Updates** card sits in **Settings**, between **Window** and **Input Engine**. It first shipped in PadForge 4.5.3. Version 4.5.2 and older have no updater, so updating from them takes one download from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest). Every version from 4.5.3 on updates itself.

@@ -1,0 +1,65 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:03.170
+Here's how to give a game its own profile,
+
+2
+00:00:03.380 --> 00:00:06.670
+so PadForge switches to it when the game comes to the front.
+
+3
+00:00:07.220 --> 00:00:08.850
+You're hearing a generated voice.
+
+4
+00:00:10.300 --> 00:00:12.910
+Set PadForge up the way you want for the game.
+
+5
+00:00:13.400 --> 00:00:16.350
+Then open the Profiles page, and click Save As.
+
+6
+00:00:19.152 --> 00:00:20.682
+Name it after the game.
+
+7
+00:00:21.092 --> 00:00:23.102
+Click Browse, and pick the game's program.
+
+8
+00:00:23.652 --> 00:00:25.882
+Here, Character Map stands in for a game.
+
+9
+00:00:26.092 --> 00:00:26.982
+Then click Save.
+
+10
+00:00:28.369 --> 00:00:32.059
+Tick Auto-Switch Profiles Based on Foreground Application.
+
+11
+00:00:32.609 --> 00:00:35.159
+The Foreground line shows the program in front.
+
+12
+00:00:37.168 --> 00:00:40.838
+Bring the game to the front, and PadForge loads its profile.
+
+13
+00:00:41.408 --> 00:00:43.538
+The program's name lights up while it matches.
+
+14
+00:00:45.508 --> 00:00:49.218
+Switch to anything else, and PadForge goes back to Default.
+
+15
+00:00:50.128 --> 00:00:52.738
+Changes you make save into whichever profile is loaded.
+
+16
+00:00:55.333 --> 00:00:57.843
+Find more guides at padforge.org.

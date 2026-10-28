@@ -1,0 +1,13 @@
+Here's how to give a game its own profile, so PadForge switches to it when the game comes to the front. You're hearing a generated voice.
+
+Set PadForge up the way you want for the game. Then open the Profiles page, and click Save As.
+
+Name it after the game. Click Browse, and pick the game's program. Here, Character Map stands in for a game. Then click Save.
+
+Tick Auto-Switch Profiles Based on Foreground Application. The Foreground line shows the program in front.
+
+Bring the game to the front, and PadForge loads its profile. The program's name lights up while it matches.
+
+Switch to anything else, and PadForge goes back to Default. Changes you make save into whichever profile is loaded.
+
+Find more guides at padforge.org.

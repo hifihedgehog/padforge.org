@@ -1,0 +1,73 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:03.030
+Here's how to change what a button does,
+
+2
+00:00:03.100 --> 00:00:06.370
+quiet a drifting stick, and make a trigger reach full sooner.
+
+3
+00:00:06.900 --> 00:00:08.530
+You're hearing a generated voice.
+
+4
+00:00:09.925 --> 00:00:13.135
+Open your controller's page, then its Mappings tab.
+
+5
+00:00:13.645 --> 00:00:16.935
+Each row is one output the game sees, and A comes first.
+
+6
+00:00:18.269 --> 00:00:20.129
+To make your pad's B button drive A,
+
+7
+00:00:20.169 --> 00:00:24.049
+click the A row, open its Source list, and pick B.
+
+8
+00:00:24.089 --> 00:00:25.399
+It takes effect at once.
+
+9
+00:00:27.126 --> 00:00:29.246
+Do the same on the B row, and pick A.
+
+10
+00:00:29.286 --> 00:00:31.776
+The swap is done, and there is no save step.
+
+11
+00:00:33.051 --> 00:00:35.721
+With the pad in hand, the record button is quicker.
+
+12
+00:00:36.291 --> 00:00:38.141
+Click it, then press the button you want.
+
+13
+00:00:42.032 --> 00:00:47.262
+On the Sticks tab, raise Deadzone X and Y a little, to ignore a drifting stick.
+
+14
+00:00:47.852 --> 00:00:50.742
+The circle beside them shows the stick before and after.
+
+15
+00:00:52.086 --> 00:00:55.376
+On the Triggers tab, pull the right end of Range in,
+
+16
+00:00:55.586 --> 00:00:58.036
+and the trigger reads full before it bottoms out.
+
+17
+00:00:59.025 --> 00:01:02.635
+Each change works at once, and PadForge saves it for you.
+
+18
+00:01:02.985 --> 00:01:05.115
+Find more guides at padforge.org.
