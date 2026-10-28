@@ -6,6 +6,8 @@ Put the controller down, hands off, and click Calibrate Gyro. The live readout s
 
 Below it, Sensitivity sets how far the pointer moves for each turn of the pad.
 
+Further down, Aim Engage Button turns gyro on only while you hold a button. Pick Left Trigger, the aim button in most shooters.
+
 On the Mappings tab, click the Mouse X row, and open its source list.
 
 Scroll to Flick Stick, for the right stick, and pick it.
@@ -18,6 +20,6 @@ Now the stick turns you left and right, and tilting the pad aims up and down.
 
 On the Sticks tab, scroll to the end of the page. Flick Stick has a card of its own there, and its Flick Time sets how long a turn takes.
 
-Nothing moves while the pad sits on the desk. Pick it up, flick the right stick to turn, and tilt the pad to aim.
+Nothing moves while the pad sits on the desk. Pick it up, hold the left trigger, flick the right stick to turn, and tilt the pad to aim.
 
 Find more guides at padforge.org.
