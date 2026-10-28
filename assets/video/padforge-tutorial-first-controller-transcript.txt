@@ -1,0 +1,15 @@
+Here's how to install PadForge, add a virtual controller, and give it your pad. You're hearing a generated voice.
+
+Download the win-x64 zip from the latest release on GitHub. It holds PadForge.exe, and nothing else. Extract it to any folder and run it. Windows asks for administrator permission each time PadForge starts.
+
+On the Dashboard, click Add Controller.
+
+Pick Xbox. Almost every PC game with controller support reads Xbox-style input, so pick it when you're not sure.
+
+Plug in your controller and open the Devices page. Select your pad, then click your slot under Virtual Controller Assignment. Click it again to take the pad off. You can also drag the pad onto your controller in the sidebar. Or take it off, and drag the controller onto the pad. The first time, PadForge installs its driver on its own. A recognized pad comes mapped, so the slot is ready to play.
+
+To check it, open the slot's Mappings tab and move a stick. The Value column shows exactly what the game gets.
+
+If a game reacts twice to every press, it sees both pads. Install HidHide in Settings, then tick Hide from Games on your pad. A pad you assign after the install comes ticked. With no double input, you don't need it.
+
+That's it. Your game now sees an Xbox controller. Find more guides at padforge.org.

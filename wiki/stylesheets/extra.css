@@ -237,3 +237,8 @@
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: 5px;
 }
+
+/* Tutorial videos: the column's full width, the frame's own proportions. */
+.md-typeset .pf-video { width: 100%; margin: 1.6em 0; }
+.md-typeset .pf-video video { display: block; width: 100%; height: auto; border-radius: 0.4rem; background: #000; }
+.md-typeset .pf-video figcaption { max-width: none; margin-top: 0.6em; font-size: 0.72rem; color: var(--md-default-fg-color--light); }

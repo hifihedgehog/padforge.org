@@ -1,0 +1,105 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:05.590
+Here's how to install PadForge, add a virtual controller, and give it your pad.
+
+2
+00:00:06.120 --> 00:00:07.730
+You're hearing a generated voice.
+
+3
+00:00:09.150 --> 00:00:13.300
+Download the win-x64 zip from the latest release on GitHub.
+
+4
+00:00:14.030 --> 00:00:17.620
+It holds PadForge.exe, and nothing else.
+
+5
+00:00:18.110 --> 00:00:20.400
+Extract it to any folder and run it.
+
+6
+00:00:20.910 --> 00:00:24.920
+Windows asks for administrator permission each time PadForge starts.
+
+7
+00:00:26.250 --> 00:00:28.560
+On the Dashboard, click Add Controller.
+
+8
+00:00:29.875 --> 00:00:31.045
+Pick Xbox.
+
+9
+00:00:31.755 --> 00:00:36.025
+Almost every PC game with controller support reads Xbox-style input,
+
+10
+00:00:36.255 --> 00:00:37.585
+so pick it when you're not sure.
+
+11
+00:00:38.825 --> 00:00:41.675
+Plug in your controller and open the Devices page.
+
+12
+00:00:42.305 --> 00:00:45.975
+Select your pad, then click your slot under Virtual Controller Assignment.
+
+13
+00:00:46.605 --> 00:00:48.395
+Click it again to take the pad off.
+
+14
+00:00:48.845 --> 00:00:51.795
+You can also drag the pad onto your controller in the sidebar.
+
+15
+00:00:52.165 --> 00:00:54.995
+Or take it off, and drag the controller onto the pad.
+
+16
+00:00:55.425 --> 00:00:59.235
+The first time, PadForge installs its driver on its own.
+
+17
+00:00:59.685 --> 00:01:03.395
+A recognized pad comes mapped, so the slot is ready to play.
+
+18
+00:01:06.387 --> 00:01:09.977
+To check it, open the slot's Mappings tab and move a stick.
+
+19
+00:01:10.427 --> 00:01:13.277
+The Value column shows exactly what the game gets.
+
+20
+00:01:14.587 --> 00:01:18.497
+If a game reacts twice to every press, it sees both pads.
+
+21
+00:01:19.207 --> 00:01:23.217
+Install HidHide in Settings, then tick Hide from Games on your pad.
+
+22
+00:01:23.707 --> 00:01:26.717
+A pad you assign after the install comes ticked.
+
+23
+00:01:26.987 --> 00:01:29.077
+With no double input, you don't need it.
+
+24
+00:01:31.450 --> 00:01:32.360
+That's it.
+
+25
+00:01:32.510 --> 00:01:34.380
+Your game now sees an Xbox controller.
+
+26
+00:01:34.970 --> 00:01:37.160
+Find more guides at padforge.org.

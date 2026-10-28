@@ -6,6 +6,16 @@ and nothing here assumes prior knowledge.*
 You need PadForge installed and running. If it is not,
 [Installation](installation.md) covers that in two minutes.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-first-controller-poster.jpg"
+       aria-label="Video: your first virtual controller, recorded live in PadForge 5.2.0">
+<source src="/assets/video/padforge-tutorial-first-controller.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-first-controller.vtt" default>
+</video>
+<figcaption>The install and every step on this page in 1 minute 40 seconds, recorded live in PadForge 5.2.0. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-first-controller-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## 1. Create the virtual controller
@@ -42,7 +52,9 @@ card.
 Click the pad's card to select it, then under **Virtual Controller
 Assignment** in the detail pane click the slot pill for the controller you
 created in step 1. A slot badge appears on the card, and the physical pad
-now routes through that virtual controller.
+now routes through that virtual controller. Clicking the pill again takes
+the pad off. You can also drag the pad's card onto the controller's card in
+the sidebar, or drag the controller's card onto the pad's card.
 
 Because your pad is a recognized gamepad, PadForge fills in the default
 mapping on assignment: sticks, triggers, buttons, and D-pad, all

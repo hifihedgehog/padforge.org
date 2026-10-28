@@ -2,6 +2,10 @@
 
 *Install PadForge, run it the first time, and set up the optional drivers.*
 
+Prefer to watch? [Your First Controller](first-controller.md) opens with a
+video of the install and a first virtual controller, recorded live in
+PadForge 5.2.0.
+
 ![Add Controller popup: pick a virtual controller type](../images/add-controller-popup.png)
 
 ## Quick start (2 minutes)
