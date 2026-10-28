@@ -82,7 +82,7 @@ padforge-logo.png: Logo with wordmark. 800 x 800 transparent PNG.
 padforge-icon.png: App icon. 571 x 533 transparent PNG.
 
 Film
-PadForge 5.1, 140 seconds, with music and on-screen text and no narration. Landscape 1920 x 1080, portrait 1080 x 1920 and square 1080 x 1080 MP4s at 60 fps: https://padforge.org/press/#film. New in 5.1.0.
+PadForge 5.2, 140 seconds, with music and on-screen text and no narration. Landscape 1920 x 1080, portrait 1080 x 1920 and square 1080 x 1080 MP4s at 60 fps: https://padforge.org/press/#film. New in 5.2.0.
 
 Images are supplied in their original proportions. Product names and artwork
 belong to their respective owners. See the source license and attributions.
