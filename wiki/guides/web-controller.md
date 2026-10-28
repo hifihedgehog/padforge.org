@@ -6,6 +6,16 @@ Open the URL PadForge shows on the [Dashboard](../features/dashboard.md) from a 
 
 Useful for an extra controller, a phone as a second pad, or touchscreen play on a tablet.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-web-controller-poster.jpg"
+       aria-label="Video: a browser as a controller, recorded live in PadForge 5.2.1">
+<source src="/assets/video/padforge-tutorial-web-controller.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-web-controller.vtt" default>
+</video>
+<figcaption>The server turned on, its address opened in a browser on the same PC, PadForge's certificate accepted once, the Xbox 360 layout assigned to a virtual controller and its stick dragged, recorded live in PadForge 5.2.1 in 1 minute 19 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-web-controller-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ![Web controller landing page](../images/web-landing.png)

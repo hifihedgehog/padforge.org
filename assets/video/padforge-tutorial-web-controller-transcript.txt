@@ -1,0 +1,17 @@
+Here's how to turn a phone, or anything with a web browser, into a controller for PadForge. You're hearing a generated voice.
+
+On the Dashboard, tick Enable Web Controller Server. The card then shows an address, and a QR code.
+
+Scan the code with your phone's camera, or open the address in any browser on the same network. Here, it's a browser on this PC.
+
+PadForge signs its own certificate, so the first visit shows a warning. Click Advanced, then Continue. The browser remembers the choice.
+
+Pick a layout. This is the Xbox 360 one. The page reloads once, and the controller appears.
+
+In PadForge, the Devices page lists the browser as an Xbox 360 web controller. Click it, and assign it to the virtual controller.
+
+Now drag the stick in the browser. Its axes move in PadForge, as a real controller's would.
+
+On a phone, the layout needs landscape. Add the page to your home screen to hide the address bar.
+
+Find more guides at padforge.org.

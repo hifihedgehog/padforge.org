@@ -1,0 +1,85 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:04.060
+Here's how to turn a phone, or anything with a web browser,
+
+2
+00:00:04.100 --> 00:00:06.050
+into a controller for PadForge.
+
+3
+00:00:06.740 --> 00:00:08.330
+You're hearing a generated voice.
+
+4
+00:00:09.750 --> 00:00:12.900
+On the Dashboard, tick Enable Web Controller Server.
+
+5
+00:00:13.510 --> 00:00:16.260
+The card then shows an address, and a QR code.
+
+6
+00:00:18.695 --> 00:00:20.795
+Scan the code with your phone's camera,
+
+7
+00:00:20.835 --> 00:00:24.225
+or open the address in any browser on the same network.
+
+8
+00:00:24.915 --> 00:00:26.765
+Here, it's a browser on this PC.
+
+9
+00:00:29.273 --> 00:00:33.803
+PadForge signs its own certificate, so the first visit shows a warning.
+
+10
+00:00:34.433 --> 00:00:36.063
+Click Advanced, then Continue.
+
+11
+00:00:36.573 --> 00:00:38.163
+The browser remembers the choice.
+
+12
+00:00:39.445 --> 00:00:40.495
+Pick a layout.
+
+13
+00:00:40.865 --> 00:00:42.955
+This is the Xbox 360 one.
+
+14
+00:00:43.405 --> 00:00:45.955
+The page reloads once, and the controller appears.
+
+15
+00:00:47.444 --> 00:00:53.194
+In PadForge, the Devices page lists the browser as an Xbox 360 web controller.
+
+16
+00:00:53.804 --> 00:00:56.354
+Click it, and assign it to the virtual controller.
+
+17
+00:00:57.941 --> 00:01:00.051
+Now drag the stick in the browser.
+
+18
+00:01:00.601 --> 00:01:04.211
+Its axes move in PadForge, as a real controller's would.
+
+19
+00:01:05.491 --> 00:01:08.081
+On a phone, the layout needs landscape.
+
+20
+00:01:08.631 --> 00:01:11.261
+Add the page to your home screen to hide the address bar.
+
+21
+00:01:13.567 --> 00:01:16.077
+Find more guides at padforge.org.
