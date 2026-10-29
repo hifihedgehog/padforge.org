@@ -1,0 +1,149 @@
+WEBVTT
+
+1
+00:00:00.800 --> 00:00:04.370
+Here's how to set up a controller in PadForge from the keyboard,
+
+2
+00:00:04.640 --> 00:00:06.470
+with NVDA reading along.
+
+3
+00:00:07.100 --> 00:00:09.850
+You're hearing a generated voice, and NVDA.
+
+4
+00:00:11.300 --> 00:00:16.750
+PadForge runs as administrator, so use the installed copy of NVDA.
+
+5
+00:00:17.360 --> 00:00:21.930
+A portable copy reads PadForge only when it runs as administrator too.
+
+6
+00:00:23.225 --> 00:00:26.195
+On the Dashboard, Tab moves to Add Controller.
+
+7
+00:00:26.985 --> 00:00:31.595
+Enter opens its list, and Enter again adds an Xbox 360 controller.
+
+8
+00:00:32.639 --> 00:00:34.913
+NVDA: Profiles, data item, 2 of 4
+
+9
+00:00:35.077 --> 00:00:37.291
+NVDA: Devices, data item, 3 of 4
+
+10
+00:00:37.460 --> 00:00:41.841
+NVDA: list Add Controller, data item, 1 of 1 Add Controller, button
+
+11
+00:00:42.006 --> 00:00:43.389
+NVDA: Xbox, button
+
+12
+00:00:43.854 --> 00:00:46.073
+NVDA: PadForge, window
+
+13
+00:00:47.283 --> 00:00:49.693
+Tab on to Devices, and press Enter.
+
+14
+00:00:50.383 --> 00:00:53.293
+Tab through the list to your controller, and Space picks it.
+
+15
+00:00:54.084 --> 00:00:57.101
+NVDA: Navigation Pane, toggle button, pressed
+
+16
+00:00:57.271 --> 00:01:00.288
+NVDA: Full Screen, toggle button, not pressed
+
+17
+00:01:00.467 --> 00:01:02.679
+NVDA: Devices, data item, 3 of 5
+
+18
+00:01:07.022 --> 00:01:09.170
+NVDA: Slot 1, data item, 4 of 5
+
+19
+00:01:09.344 --> 00:01:15.090
+NVDA: ALL, list DualSense Wireless Controller [Online], not selected, 1 of 15
+
+20
+00:01:15.256 --> 00:01:16.436
+NVDA: selected
+
+21
+00:01:17.248 --> 00:01:21.898
+Tab to the slot button marked 1, and Space assigns the pad to Slot 1.
+
+22
+00:01:22.779 --> 00:01:27.967
+NVDA: list 1, data item, 1 of 1 1, toggle button, not pressed, Toggle assignment
+
+23
+00:01:28.132 --> 00:01:33.551
+NVDA: pressed Assigned "DualSense Wireless Controller" to Virtual Controller 1.
+
+24
+00:01:35.067 --> 00:01:39.157
+In the sidebar, Tab to Slot 1, and Enter opens its page.
+
+25
+00:01:39.847 --> 00:01:42.177
+Then Tab to the Mappings tab, and press Space.
+
+26
+00:01:43.151 --> 00:01:45.300
+NVDA: Slot 1, data item, 4 of 5
+
+27
+00:01:50.155 --> 00:01:52.970
+NVDA: Mappings, radio button, not checked
+
+28
+00:01:58.672 --> 00:02:03.922
+Tab reaches each row of the table, and NVDA reads its output and its source.
+
+29
+00:02:04.712 --> 00:02:08.182
+Enter opens a row's settings, and Enter again folds them away.
+
+30
+00:02:09.130 --> 00:02:12.618
+NVDA: Mappings, data grid A ← A, data item, 1 of 22
+
+31
+00:02:12.800 --> 00:02:15.032
+NVDA: B ← B, data item, 2 of 22
+
+32
+00:02:15.202 --> 00:02:17.435
+NVDA: X ← X, data item, 3 of 22
+
+33
+00:02:17.619 --> 00:02:19.005
+NVDA: selected
+
+34
+00:02:24.216 --> 00:02:27.266
+On a row, the arrow keys and letters do nothing,
+
+35
+00:02:27.476 --> 00:02:30.486
+so a key your keyboard maps never changes the table.
+
+36
+00:02:31.435 --> 00:02:32.485
+NVDA: X
+
+37
+00:02:37.917 --> 00:02:40.427
+Find more guides at padforge.org.

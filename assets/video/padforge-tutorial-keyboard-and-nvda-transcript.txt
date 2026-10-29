@@ -1,0 +1,57 @@
+Here's how to set up a controller in PadForge from the keyboard, with NVDA reading along. You're hearing a generated voice, and NVDA.
+
+PadForge runs as administrator, so use the installed copy of NVDA. A portable copy reads PadForge only when it runs as administrator too.
+
+On the Dashboard, Tab moves to Add Controller. Enter opens its list, and Enter again adds an Xbox 360 controller.
+
+NVDA: Profiles, data item, 2 of 4
+
+NVDA: Devices, data item, 3 of 4
+
+NVDA: list Add Controller, data item, 1 of 1 Add Controller, button
+
+NVDA: Xbox, button
+
+NVDA: PadForge, window
+
+Tab on to Devices, and press Enter. Tab through the list to your controller, and Space picks it.
+
+NVDA: Navigation Pane, toggle button, pressed
+
+NVDA: Full Screen, toggle button, not pressed
+
+NVDA: Devices, data item, 3 of 5
+
+NVDA: Slot 1, data item, 4 of 5
+
+NVDA: ALL, list DualSense Wireless Controller [Online], not selected, 1 of 15
+
+NVDA: selected
+
+Tab to the slot button marked 1, and Space assigns the pad to Slot 1.
+
+NVDA: list 1, data item, 1 of 1 1, toggle button, not pressed, Toggle assignment
+
+NVDA: pressed Assigned "DualSense Wireless Controller" to Virtual Controller 1.
+
+In the sidebar, Tab to Slot 1, and Enter opens its page. Then Tab to the Mappings tab, and press Space.
+
+NVDA: Slot 1, data item, 4 of 5
+
+NVDA: Mappings, radio button, not checked
+
+Tab reaches each row of the table, and NVDA reads its output and its source. Enter opens a row's settings, and Enter again folds them away.
+
+NVDA: Mappings, data grid A ← A, data item, 1 of 22
+
+NVDA: B ← B, data item, 2 of 22
+
+NVDA: X ← X, data item, 3 of 22
+
+NVDA: selected
+
+On a row, the arrow keys and letters do nothing, so a key your keyboard maps never changes the table.
+
+NVDA: X
+
+Find more guides at padforge.org.

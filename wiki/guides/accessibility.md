@@ -4,6 +4,16 @@
 
 PadForge is tested with NVDA. Every control the Tab key reaches has a name a screen reader speaks, in the language the interface uses. The app looks the same with or without a screen reader, and the keys work without one.
 
+<figure class="pf-video">
+<video controls playsinline preload="none" width="1920" height="1080"
+       poster="/assets/video/padforge-tutorial-keyboard-and-nvda-poster.jpg"
+       aria-label="Video: a controller set up from the keyboard with NVDA, recorded live in PadForge 5.2.2">
+<source src="/assets/video/padforge-tutorial-keyboard-and-nvda.mp4" type="video/mp4">
+<track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-keyboard-and-nvda.vtt" default>
+</video>
+<figcaption>A controller added, a DualSense assigned and the Mappings table opened with the keyboard alone while NVDA reads each control, then a row opened and closed, recorded live in PadForge 5.2.2 in 2 minutes 44 seconds. Long runs of Tab presses are shortened. The narration is a generated voice and the other voice is NVDA, with English captions of both. <a href="/assets/video/padforge-tutorial-keyboard-and-nvda-transcript.txt">Read the transcript</a>.</figcaption>
+</figure>
+
 ---
 
 ## NVDA and administrator rights
