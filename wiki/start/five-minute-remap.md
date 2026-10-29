@@ -13,7 +13,7 @@ You need a virtual controller with a physical pad assigned to it. That is
 <source src="/assets/video/padforge-tutorial-five-minute-remap.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-five-minute-remap.vtt" default>
 </video>
-<figcaption>The A and B swap picked from each row's Source list, then a stick deadzone and a trigger's range, recorded live in PadForge 5.2.0 in 1 minute 8 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-five-minute-remap-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The A and B swap picked from each row's Source list, then a stick deadzone and a trigger's range, recorded live in PadForge 5.2.0 in 1 minute 10 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-five-minute-remap-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
