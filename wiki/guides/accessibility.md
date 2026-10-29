@@ -35,6 +35,17 @@ PadForge runs as administrator, and Windows lets a screen reader read an adminis
 
 A dialog opened from the keyboard starts with the focus on its first control. The Add Controller list and the profile list do the same: the arrow keys and Tab move through them, and Escape closes them and puts the focus back on what opened them.
 
+## The Mappings table
+
+Tab reaches each row of the table, and a row speaks its output and its source.
+
+| Key | What it does |
+| --- | --- |
+| Tab, Shift+Tab | Move to the next or previous row |
+| Enter, Space | Open the row's settings, or close them |
+
+On a row, the arrow keys, Page Up, Page Down, Home, End, letters and digits do nothing. A keyboard can feed the controller you are setting up, and those are the keys it maps, so pressing one to test a mapping never changes the table. The tab's closed pickers ignore the same keys.
+
 ## Sensitivity curves
 
 Tab reaches each curve. The point the keys move is drawn orange while the curve has the focus.
@@ -51,4 +62,4 @@ Tab reaches each curve. The point the keys move is drawn orange while the curve 
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.2.2.*
