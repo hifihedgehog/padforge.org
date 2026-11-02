@@ -768,8 +768,7 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `HasNfcReader` | `bool` | (set at open) | The hardware can read NFC tags. It says nothing about power: the reader is energized only while NFC is armed and the Switch NFC hint is set. Read via `SDL_GetGamepadNfcTagUid`. |
 | `HasAccelAux` / `HasGyroAux` | `bool` | (set at open) | Aux (left-side) sensors, #199 and #252. |
 | `SdlDevicePath` | `string` | `""` | The SDL path as SDL reported it. `BuildInstanceGuid` hashes this one, so a path enriched afterward never changes the identity. |
-| `GameInputInfo` | `GameInputDeviceMetadata` | `null` | GameInput details (device id, root id, PnP path, container id, firmware, runtime) read from the joystick's `SDL.joystick.gameinput.*` properties when the GameInput backend produced the device. Its PnP path, when present, replaces `DevicePath`. |
-| `Backend` | `string` | (computed) | `gameinput` when `GameInputInfo` is set, otherwise read from the SDL GUID's driver-signature byte: `xinput`, `hidapi`, `rawinput`, `wgi`, `virtual` (an SDL virtual joystick, the kind PadForge's own readers attach), `gameinput` or `dinput` (#395). Any other byte reads as `0x` and its hex value, and a GUID too short to carry the byte reads `unknown`. |
+| `Backend` | `string` | (computed) | Read from the SDL GUID's driver-signature byte: `xinput`, `hidapi`, `gameinput` (the Xbox One instruments SDL's GameInput driver lists by default), `virtual` (an SDL virtual joystick, the kind PadForge's own readers attach) or `dinput` (#395). Any other byte reads as `0x` and its hex value, and a GUID too short to carry the byte reads `unknown`. |
 
 `GetCurrentState` reads the IR pointer, the NIR scalar, and the Joy-Con 2 mouse counters straight off the raw joystick axes (`ReadIrPointer` / `ReadJoyConIr` / `ReadJoyCon2Mouse`) into the matching `CustomInputState` fields, alongside the standard gamepad decode. `ReadIrPointer` hands the dots, the remote's accelerometer and its B to `StepIrPointer`, which corrects the aim for twist, latches the light-gun calibration shot and applies `WiiPointerCalibration` ([Wii Controllers Internals](wii-controllers-internals.md#twist-compensation)). `ReadSwitch2Magnetometer` fills the wrapper-local magnetometer fields, and `ReadNfcTag` polls `SDL_GetGamepadNfcTagUid` only while NFC is armed. The Balance Board's corners need no extra read. Capsense channels come from SDL 3.6.0's `SDL_GamepadHasCapSense` / `SDL_GetGamepadCapSense` and are probed once at open into a private `_capSenseChannels` array, so a capsense-less device pays nothing per frame and never allocates `CustomInputState.CapSense`.
 
@@ -2664,8 +2663,6 @@ Minimal SDL3 P/Invoke declarations for joystick, gamepad, keyboard, mouse, and h
 | Constant | Value | Description |
 |----------|-------|-------------|
 | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` | `"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"` | Allow events when app not focused |
-| `SDL_HINT_JOYSTICK_RAWINPUT` | `"SDL_JOYSTICK_RAWINPUT"` | Do NOT set (conflicts with XInput enumeration) |
-| `SDL_HINT_JOYSTICK_GAMEINPUT` | `"SDL_JOYSTICK_GAMEINPUT"` | Declared. PadForge never sets it |
 | `SDL_HINT_JOYSTICK_XINPUT` | `"SDL_JOYSTICK_XINPUT"` | Set to `"1"` at init, but SDL 3 reads no hint by this name. XInput stays on through `SDL_HINT_XINPUT_ENABLED` (`"SDL_XINPUT_ENABLED"`), which defaults to on |
 | `SDL_HINT_HIDAPI_IGNORE_DEVICES` | `"SDL_HIDAPI_IGNORE_DEVICES"` | Comma-separated `0xVVVV/0xPPPP` list hidapi must never enumerate or probe (#235) |
 | `SDL_HINT_JOYSTICK_BLACKLIST_DEVICES` | `"SDL_JOYSTICK_BLACKLIST_DEVICES"` | Joystick-layer blacklist. Set to `InputManager.JoystickBlacklistDevices` to suppress the PS Move family junk rows (#277) |

@@ -10253,16 +10253,10 @@
 <td>The SDL path as SDL reported it. <code>BuildInstanceGuid</code> hashes this one, so a path enriched afterward never changes the identity.</td>
 </tr>
 <tr>
-<td><code>GameInputInfo</code></td>
-<td><code>GameInputDeviceMetadata</code></td>
-<td><code>null</code></td>
-<td>GameInput details (device id, root id, PnP path, container id, firmware, runtime) read from the joystick's <code>SDL.joystick.gameinput.*</code> properties when the GameInput backend produced the device. Its PnP path, when present, replaces <code>DevicePath</code>.</td>
-</tr>
-<tr>
 <td><code>Backend</code></td>
 <td><code>string</code></td>
 <td>(computed)</td>
-<td><code>gameinput</code> when <code>GameInputInfo</code> is set, otherwise read from the SDL GUID's driver-signature byte: <code>xinput</code>, <code>hidapi</code>, <code>rawinput</code>, <code>wgi</code>, <code>virtual</code> (an SDL virtual joystick, the kind PadForge's own readers attach), <code>gameinput</code> or <code>dinput</code> (#395). Any other byte reads as <code>0x</code> and its hex value, and a GUID too short to carry the byte reads <code>unknown</code>.</td>
+<td>Read from the SDL GUID's driver-signature byte: <code>xinput</code>, <code>hidapi</code>, <code>gameinput</code> (the Xbox One instruments SDL's GameInput driver lists by default), <code>virtual</code> (an SDL virtual joystick, the kind PadForge's own readers attach) or <code>dinput</code> (#395). Any other byte reads as <code>0x</code> and its hex value, and a GUID too short to carry the byte reads <code>unknown</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -15889,16 +15883,6 @@
 <td><code>SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS</code></td>
 <td><code>"SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"</code></td>
 <td>Allow events when app not focused</td>
-</tr>
-<tr>
-<td><code>SDL_HINT_JOYSTICK_RAWINPUT</code></td>
-<td><code>"SDL_JOYSTICK_RAWINPUT"</code></td>
-<td>Do NOT set (conflicts with XInput enumeration)</td>
-</tr>
-<tr>
-<td><code>SDL_HINT_JOYSTICK_GAMEINPUT</code></td>
-<td><code>"SDL_JOYSTICK_GAMEINPUT"</code></td>
-<td>Declared. PadForge never sets it</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_JOYSTICK_XINPUT</code></td>

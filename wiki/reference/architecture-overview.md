@@ -757,7 +757,6 @@ Key SDL3 hints:
 SDL_SetHint(SDL_HINT_JOYSTICK_XINPUT, "1");                // Xbox enumeration via XInput backend
 SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1"); // Background input without focus
 SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_SWITCH2, "1");         // Switch 2 Pro (custom fork)
-// NEVER set SDL_HINT_JOYSTICK_RAWINPUT. Conflicts with XInput enumeration
 ```
 
 ### Why HIDMaestro (not ViGEmBus + vJoy)
