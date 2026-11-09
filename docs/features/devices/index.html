@@ -6540,7 +6540,7 @@
 <p>After the switch a <strong>Keep This Keyboard in PadForge?</strong> prompt (or <strong>Keep This Mouse in PadForge?</strong>, or <strong>Keep This Touchpad in PadForge?</strong>) counts down 15 seconds. Click <strong>Keep</strong> to stay. Click <strong>Give It Back</strong>, or let the countdown end, and PadForge restores the Windows driver. The prompt exists because a person whose only keyboard or mouse was just taken cannot answer it. A one-shot Windows boot task also gives the device back after a crash, a power cut or a restart during the prompt.</p>
 <p>A program that holds the device open can refuse the switch. Windows then sets PadForge's driver for the next start of Windows and keeps the old driver running. PadForge takes that package back and reports that the switch failed, so nothing changes at the next start. A reported example is Lenovo Legion Toolkit holding a laptop's keyboard controller.</p>
 <p><strong>Restore the Windows Driver</strong> removes PadForge's driver package, and Windows installs the driver the device had before.</p>
-<p>Hardware status: the mouse switch has run on one mouse. The keyboard switch has not completed on a keyboard yet. On one laptop's keyboard controller it was refused and taken back.</p>
+<p>Hardware status: the switch, the Keep prompt and the restore have run on one keyboard and one mouse. No key or button read through PadForge has been confirmed yet. A device another program holds open cannot be switched until that program closes, and the attempt is taken back.</p>
 <h3 id="which-to-use">Which to use<a class="headerlink" href="#which-to-use" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

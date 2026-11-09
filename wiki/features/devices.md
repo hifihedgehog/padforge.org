@@ -495,7 +495,7 @@ A program that holds the device open can refuse the switch. Windows then sets Pa
 
 **Restore the Windows Driver** removes PadForge's driver package, and Windows installs the driver the device had before.
 
-Hardware status: the mouse switch has run on one mouse. The keyboard switch has not completed on a keyboard yet. On one laptop's keyboard controller it was refused and taken back.
+Hardware status: the switch, the Keep prompt and the restore have run on one keyboard and one mouse. No key or button read through PadForge has been confirmed yet. A device another program holds open cannot be switched until that program closes, and the attempt is taken back.
 
 ### Which to use
 

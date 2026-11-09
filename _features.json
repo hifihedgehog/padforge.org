@@ -133,7 +133,7 @@
   },
   {
     "t": "A keyboard or mouse for PadForge alone",
-    "d": "Use Only in PadForge moves a USB keyboard or mouse to WinUSB, so Windows stops using it and its keys and buttons reach only your mappings and macros. A precision touchpad does the same through HidHide while PadForge runs. A 15-second Keep prompt and a one-click restore give it back. Not yet completed on a keyboard."
+    "d": "Use Only in PadForge moves a USB keyboard or mouse to WinUSB, so Windows stops using it and its keys and buttons reach only your mappings and macros. A precision touchpad does the same through HidHide while PadForge runs. A 15-second Keep prompt and a one-click restore give it back. No key read through it has been confirmed on hardware yet."
   },
   {
     "t": "Wii controllers",

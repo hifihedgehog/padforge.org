@@ -71,8 +71,9 @@ No wired second-model DualShock 4 or Sony USB wireless adapter has run
 the 5.2.0 audio routing or the 5.3.0 speaker route.
 No Mayflash DolphinBar has run the 5.3.0 fix that keeps its empty slots
 from becoming Wii Remotes.
-Use Only in PadForge has run on one mouse and one precision touchpad. The
-keyboard switch has not completed on a keyboard yet.
+Use Only in PadForge has switched one keyboard and one mouse and given them
+back, and a precision touchpad taken this way clicked and scrolled. No key
+or button read through it has been confirmed yet.
 A reWASD or DS4Windows import marks a binding Clean when the translation
 keeps its behavior. Clean is not a play test.
 No native speaker has reviewed the translations. A partial translation
