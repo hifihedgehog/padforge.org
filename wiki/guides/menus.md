@@ -1,9 +1,9 @@
 # Menus
 
-*Turn a stick, a touchpad, or any two recorded axes into an on-screen ring or grid of commands.*
+*Turn a stick, a touchpad, the D-pad, the face buttons or any two recorded axes into an on-screen ring, grid or hotbar of commands, or open the On-Screen Keyboard.*
 
 <!-- SCREENSHOT: pad-menus -->
-![The Menus tab with the Combat Wheel menu selected and its cell bindings below](../images/pad-menus.png)
+![The Menus tab listing three menus, Combat Wheel, Text Chat and Ability Bar, with Combat Wheel selected and its cell bindings below](../images/pad-menus.png)
 
 A menu puts a set of commands on an input surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the [Steam Workshop](steam-workshop-import.md) bring theirs along.
 
@@ -27,6 +27,8 @@ Each slot has its own menu list. Open a slot, switch to the **Menus** tab, and c
 |---|---|
 | **Radial Ring** | By direction. The ring splits into equal wedges, straight up is the first cell, and the wedges run clockwise. Works best on a stick. A radial menu can also carry a **Center Cell**, selected while the stick rests inside the engage deadzone. |
 | **Touch Grid** | By position. Cells lay out on a near-square grid, wider than tall (4 cells make 2×2, 12 make 4×3), and your touch point picks the cell under it. Works best on a touchpad. |
+| **Keyboard** | No cells. It types the keys of the Windows layout in use. See [On-Screen Keyboard](../features/on-screen-keyboard.md). |
+| **Hotbar** | By stepping. A row of cells, shown, stepped along and fired by four controls of its own. See [Hotbar](#hotbar). |
 
 ---
 
@@ -37,6 +39,7 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 | Host | How it engages |
 |---|---|
 | **Left Stick** / **Right Stick** | When the stick leaves the **Engage Deadzone** (default 25). |
+| **D-Pad** / **Face Buttons** | On a press of one of the four directions. The face buttons count by position: Y up, A down, X left, B right. On a **Radial Ring** the press points at the cell in that direction, two held together point between, and the press itself is the click unless a **Click Input** is recorded. On a **Touch Grid** the presses step through the cells instead, Right or Down forward and Left or Up back, stopping at either end, and each newly selected cell fires once, without **Fire Mode** or **Click Input**. |
 | **Touchpad 1** and **Touchpad 2** | On touch. A **Pad Half** picker (**Whole Pad**, **Left Half**, **Right Half**) narrows the menu to half the pad, so one pad can carry two menus, the way Steam treats the PS touchpad as two. |
 | **Custom Axes** | Record any two axes as **Steer X** and **Steer Y**, then push past the deadzone like a stick. This is how joysticks, wheels, and other non-gamepad devices host menus. |
 
@@ -54,6 +57,53 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 | **On Click Release** | The hovered cell fires once when the click releases. |
 | **On Touch Release** | The last hovered cell fires once when you let go: the finger lifts, or the stick returns inside the deadzone. Letting go with nothing hovered dismisses the menu without firing. |
 | **While Hovered** | The hovered cell is active the entire time it is hovered. No click needed. |
+
+---
+
+## Hotbar
+
+The **Hotbar** style is Steam Input's hotbar: a single row of cells, run by four controls.
+
+<!-- SCREENSHOT: pad-menus-hotbar -->
+![The Menus tab with the Ability Bar menu selected, its Style set to Hotbar](../images/pad-menus-hotbar.png)
+
+| Control | What it does |
+|---|---|
+| **Show or Hide** | Shows the bar, and hides it on the next press. A bar hidden this way opens on its middle cell next time. |
+| **Previous** | Selects the cell to the left, skipping cells with nothing set. |
+| **Next** | Selects the cell to the right, skipping cells with nothing set. |
+| **Fire** | Fires the selected cell, as **Fire Mode** says. |
+
+**Previous** and **Next** act only while the bar is shown. When both are pressed at the same moment, **Previous** wins. The bar opens on its middle cell: Cell 3 of a bar of six, Cell 2 of five.
+
+Each control takes any button on the slot's devices, picked from its list or recorded. A control left empty shows **(host default)** and takes the **Opens With** direction: down for **Show or Hide**, left for **Previous**, right for **Next**, up for **Fire**.
+
+| Opens With | The four directions |
+|---|---|
+| **D-Pad** | D-pad down, left, right and up. |
+| **Face Buttons** | A, X, B and Y, by position. |
+| **Left Stick** / **Right Stick** | The stick pushed into the 90-degree span around each direction, past the **Engage Deadzone**. |
+| **Touchpad 1** / **Touchpad 2** | The finger in the same spans, past the **Engage Deadzone**, only while the pad is clicked. **Pad Half** narrows it to one half. |
+| **Custom Axes** | None. Empty controls show **(not set)** and read nothing, so record all four. |
+
+Switching a menu to **Hotbar** sets its **Engage Deadzone** to 61, Steam's hotbar dead zone, when it still holds the ring default of 25. A stick or touchpad direction engages 1.25 points past the deadzone and lets go 1.25 points below it.
+
+| Switch | Default | When on |
+|---|---|---|
+| **Wrap Around** | Off | Stepping past the last cell goes to the first, and back. Off, the selection stops at either end. |
+| **Hide After Firing** | On | **Fire** hides the bar. Off, the bar stays up and the same cell can fire again. |
+| **Re-Center Each Time** | On | While the bar is hidden, the selection goes back to the middle cell. Off, a bar that **Fire** hid opens on the cell it fired. |
+
+**Fire Mode** runs the way Steam's hotbar runs it. A short tap holds the cell for 1/30 of a second.
+
+| Mode | When a cell fires |
+|---|---|
+| **On Click** (default) | **Fire** presses the selected cell and holds it while **Fire** is held. With **Hide After Firing** on, the press is a short tap. |
+| **On Click Release** | The selected cell fires once, as a short tap, when **Fire** is released. With **Hide After Firing** on, it fires as soon as **Fire** hides the bar. |
+| **On Touch Release** | A cell fires once, as a short tap, when **Fire** hides the bar with **Hide After Firing** on. With **Re-Center Each Time** on, the middle cell is the one that fires. Hiding the bar with **Show or Hide** fires nothing. |
+| **While Hovered** | The selected cell is held the whole time the bar is shown. Stepping lets go of one cell and holds the next, 1/30 of a second later. |
+
+A hotbar has no **Click Input** or **Layer Holds the Menu Open** row. Its **Layer** still applies: while the layer is closed the bar is hidden and fires nothing, and it starts over hidden when the layer opens again. The overlay draws the bar as one row at the menu's **Screen Position**, with the selected cell highlighted. A hotbar from a [Steam Workshop](steam-workshop-import.md) config imports as this style, with its cells, its three switches and its place near the bottom of the screen.
 
 ---
 
@@ -164,7 +214,8 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ## Related pages
 
-- [Steam Workshop Config Import](steam-workshop-import.md): imported radial and touch menus land here.
+- [On-Screen Keyboard](../features/on-screen-keyboard.md): the Keyboard style.
+- [Steam Workshop Config Import](steam-workshop-import.md): imported radial menus, touch menus and hotbars land here.
 - [Shift Layers](shift-layers.md): layer-scoped menus and what layer cells become.
 - [Button and Axis Mappings](../features/mappings.md): menu cells as mapping sources.
 - [Macros](macros.md): a cell can name a macro directly, and any cell can trigger one as a source.
@@ -175,4 +226,4 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

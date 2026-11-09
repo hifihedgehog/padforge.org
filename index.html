@@ -217,7 +217,7 @@
                     </button>
                     <button class="dg-step" data-i="4">
                         <h3>Lightbar</h3>
-                        <p>Fourteen modes including audio-reactive, battery, player number, and pulse. Xbox, DualSense, DualShock 4, Switch Pro and Steam Controller lights all answer to the same tab.</p>
+                        <p>Fifteen modes including audio-reactive, battery, player number, and the colors on your screen. Xbox, DualSense, DualShock 4, Switch Pro and Steam Controller lights all answer to the same tab, and so does an RGB keyboard or mouse you assign.</p>
                     </button>
                     <button class="dg-step" data-i="5">
                         <h3>Inside the shell</h3>
@@ -255,7 +255,7 @@
                         </div>
                         <div class="callout" data-i="4" style="left:29.3%; top:42.9%">
                             <div class="callout-line" style="width:54px"></div>
-                            <div class="callout-txt"><b>Fourteen lighting modes</b><span>Lightbar</span></div>
+                            <div class="callout-txt"><b>Fifteen lighting modes</b><span>Lightbar</span></div>
                         </div>
                         <div class="callout" data-i="5" style="left:50.2%; top:70.2%">
                             <div class="callout-line" style="width:60px"></div>
@@ -272,7 +272,7 @@
     <div class="container">
         <div class="stat-grid">
             <div class="stat reveal"><div class="stat-n">16</div><div class="stat-l">Virtual controllers at once</div></div>
-            <div class="stat reveal" data-d="1"><div class="stat-n">1,110</div><div class="stat-l">Devices known by USB identity</div></div>
+            <div class="stat reveal" data-d="1"><div class="stat-n">2,667</div><div class="stat-l">Devices known by USB identity</div></div>
             <div class="stat reveal" data-d="2"><div class="stat-n">337</div><div class="stat-l">Device profiles</div></div>
             <div class="stat reveal" data-d="3"><div class="stat-n">1000<em>Hz</em></div><div class="stat-l">Polling, sub-ms jitter</div></div>
             <div class="stat reveal" data-d="4"><div class="stat-n">$0</div><div class="stat-l">Forever, no paywall</div></div>
@@ -286,13 +286,13 @@
         <div class="section-head section-head-c">
             <p class="kicker reveal">Compatibility</p>
             <h2 class="display-m reveal" data-d="1">Will it work with yours?</h2>
-            <p class="lede lede-center reveal" data-d="2">Type a controller, wheel, stick or adapter. It searches every device PadForge knows by name.</p>
+            <p class="lede lede-center reveal" data-d="2">Type a controller, wheel, stick, adapter, or an RGB keyboard or mouse. It searches every device PadForge knows by name.</p>
         </div>
         <div class="dc reveal" data-d="1">
             <label class="dc-field">
                 <span class="visually-hidden">Search supported devices</span>
                 <svg class="dc-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
-                <input id="dcq" type="search" autocomplete="off" spellcheck="false" placeholder="G29, DualSense, Warthog, Qanba, Switch Pro&#8230;">
+                <input id="dcq" type="search" autocomplete="off" spellcheck="false" placeholder="G29, DualSense, Warthog, BlackWidow, Switch Pro&#8230;">
             </label>
             <div id="dcout" class="dc-out" role="status" aria-live="polite"></div>
             <p class="dc-foot">Not finding it? It very likely still works. Anything Windows reads as an input device can be mapped, so this list is where the names, the correct layout and the extra capabilities come from rather than the limit of what PadForge accepts. <a href="/docs/devices/supported/">See the full list</a>.</p>
@@ -319,9 +319,64 @@
                 <div class="detail-body">Turn on <b>Drive Keyboard Screens</b> in Settings, and the screens on Logitech's GamePanel devices, the G15, G19, G510 and G13 among them, the Mad Catz S.T.R.I.K.E. 7 and a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color. Each gets a row of its own, and the keys beside the screen map as buttons. A macro can play pictures on a screen, switch its mode and run its stopwatch. None of these screens has run against PadForge yet.</div>
             </details>
             <details class="detail">
+                <summary>A keyboard screen, without the keyboard</summary>
+                <div class="detail-body">The <b>Screen Overlay</b> card on the Dashboard shows what a keyboard screen shows, a picture, a timer, the time or a lightbar's color, in a window above your game. While PadForge is in front, drag it with the right mouse button and size it from its corner. While another program is in front, clicks pass through it. The macros that drive a keyboard screen drive an overlay too.</div>
+            </details>
+            <details class="detail">
+                <summary>A keyboard or mouse for PadForge alone</summary>
+                <div class="detail-body"><b>Use Only in PadForge</b> on a USB keyboard's or mouse's row moves it to Windows' WinUSB driver, so it stops typing or moving the pointer in every other program and its keys and buttons reach only your mappings and macros: a second keyboard becomes a macro pad. A laptop's precision touchpad works the same way while PadForge runs, through HidHide. A 15-second <b>Keep</b> prompt gives the device back to Windows unless you keep it, and its row restores the Windows driver at any time.</div>
+            </details>
+            <details class="detail">
                 <summary>Controllers Windows cannot read on its own</summary>
                 <div class="detail-body">Bluetooth LE pads, the iCade, serial I-Force wheels with their force feedback, DJI RC remotes, clone Xbox 360 receivers, the Ring-Con, light guns, train controllers and arcade I/O boards: PadForge's SDL3 build reads them, and binds the driver most of them need on its own. 289 more pads get a named layout from the community SDL_GameControllerDB.</div>
             </details>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ MOMENT: IMPORT (flipped split) ═══════════════ -->
+<section class="section section-alt" id="import">
+    <div class="container-wide">
+        <div class="moment moment-split flip">
+            <div class="moment-copy">
+                <p class="kicker reveal">Switch</p>
+                <h2 class="display-m reveal" data-d="1">Your reWASD and DS4Windows profiles come with you.</h2>
+                <p class="lede reveal" data-d="2">
+                    Open a reWASD config or a DS4Windows profile. PadForge lists every binding
+                    before it changes anything, each one Clean, Partial or Skipped with its
+                    reason, and one click makes it an ordinary PadForge profile.
+                </p>
+
+                <div class="details reveal" data-d="3">
+                    <details class="detail">
+                        <summary>Every binding, before anything changes</summary>
+                        <div class="detail-body">The preview lists each binding with its status. Clean came across with the same behavior. Partial came across with a stated difference, or with one step left for you, and the reason says which. Skipped did not come across, and the reason says why. Nothing runs and nothing changes until you click Import, and the profile you have loaded stays loaded.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Layers, presses, macros and the lightbar</summary>
+                        <div class="detail-body">reWASD's shifts become shift layers under their own names. Single, double, triple and long presses become macros that keep the file's wait times, turbo and toggles stay turbo and toggles, radial menus stay radial menus, and the lightbar plays its color or its pattern on each layer. A DS4Windows profile brings its shift modifiers, the special actions in its Actions.xml, its gyro and touchpad output modes, its lightbar, its adaptive trigger effects and its two-stage triggers.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Keyboard and mouse work on any PC</summary>
+                        <div class="detail-body">Keyboard and mouse inputs read the merged keyboard and mouse rows, so they work the moment the profile loads, on this PC or another. You assign the controller yourself on the Devices page, and the preview says so when a profile needs it.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Programs named before they run</summary>
+                        <div class="detail-body">A profile whose buttons run programs or power commands, or that starts a program when it loads, names every one of them in the preview, before you accept anything.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>Where your files already are</summary>
+                        <div class="detail-body">The Import dialog lists reWASD's shared profile folder and DS4Windows' own when this PC has them. A file dragged onto the Profiles page imports the same way, and several dropped files import in turn. <a href="/docs/guides/profile-import/">How the import reads each tool, row by row</a>.</div>
+                    </details>
+                </div>
+            </div>
+            <div class="moment-media stage reveal" data-d="2">
+                <div class="rig"><div class="rig-in">
+                    <img class="zoom" src="assets/screenshot-import-preview.jpg" alt="The import preview for a reWASD config: ten bindings Clean, and one Skipped with its reason" loading="lazy">
+                </div>
+                <div class="rig-chip" style="right:-3%; bottom:18%"><b>Every binding,</b> <i>before it lands</i></div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -373,8 +428,12 @@
                         <div class="detail-body">The Nintendo slot type creates a virtual Switch Pro Controller through HIDMaestro. Games and emulators that speak Switch see the real thing: the full button set, and gyro passed through from your physical pad.</div>
                     </details>
                     <details class="detail">
-                        <summary>Radial menus, with your own icons</summary>
-                        <div class="detail-body">A radial or grid menu hangs off a button, and its cells fire a key, a controller button, or one of the slot's macros by name. A macro cell is an extra trigger rather than a copy, so a While Held macro runs for as long as the cell is held and the macro's own layer scope still applies. Every cell is also a mapping source in its own right, which means a cell with no binding of its own can still drive a row elsewhere. Icons come from a .pficons package, a zip of images PadForge reads without ever unpacking it. Add one someone made, or build one from loose files. An exported profile carries the packages its menus use.</div>
+                        <summary>Radial menus and hotbars, with your own icons</summary>
+                        <div class="detail-body">A radial or grid menu hangs off a button, and its cells fire a key, a controller button, or one of the slot's macros by name. A hotbar is Steam Input's: one row of cells that one input shows and hides, two step through and a fourth fires. A macro cell is an extra trigger rather than a copy, so a While Held macro runs for as long as the cell is held and the macro's own layer scope still applies. Every cell is also a mapping source in its own right, which means a cell with no binding of its own can still drive a row elsewhere. Icons come from a .pficons package, a zip of images PadForge reads without ever unpacking it. Add one someone made, or build one from loose files. An exported profile carries the packages its menus use.</div>
+                    </details>
+                    <details class="detail">
+                        <summary>A keyboard you type on with the controller</summary>
+                        <div class="detail-body">Set a menu's style to <b>Keyboard</b> and the controller types into any Windows program, in the keyboard layout of the window you type into: a <b>Grid</b> with one highlight, a <b>Split</b> keyboard with a half for each thumb, or a <b>Wheel</b> of eight letter groups. Any input you pick opens it, and <b>Open When a Text Box Is Selected</b> opens it when a text box takes focus. Word suggestions come from Windows' own text prediction, and the keys can type through a virtual keyboard that programs take for hardware. The Desktop starter profile opens one on X, and a Steam config's Show Keyboard imports as one.</div>
                     </details>
                     <details class="detail">
                         <summary>SOCD cleaning and mouse gestures</summary>
@@ -439,7 +498,7 @@
                 <div class="fig-l">Adaptive trigger modes</div>
             </div>
             <div>
-                <div class="fig-n">14<em class="cy">&#215;</em></div>
+                <div class="fig-n">15<em class="cy">&#215;</em></div>
                 <div class="fig-l">Lightbar modes, six audio-driven</div>
             </div>
         </div>
@@ -451,7 +510,7 @@
             </details>
             <details class="detail">
                 <summary>Adaptive triggers and lightbar in any game</summary>
-                <div class="detail-body">Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fourteen lightbar modes, six of them driven by your system audio (three Audio Pulse variants and three that follow the level). The lightbar and adaptive triggers work in games that have never heard of a DualSense.</div>
+                <div class="detail-body">Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fifteen lightbar modes, six of them driven by your system audio (three Audio Pulse variants and three that follow the level), and one that follows your screen. The lightbar and adaptive triggers work in games that have never heard of a DualSense.</div>
             </details>
             <details class="detail">
                 <summary>Game mods made for DSX, with no DSX</summary>
@@ -471,7 +530,11 @@
             </details>
             <details class="detail">
                 <summary>The rest of the desk follows the pad</summary>
-                <div class="detail-body">Assign a mouse or keyboard to a virtual controller, check <b>Control This Device’s Lighting</b> on its Lighting tab, and it takes the controller's lighting with the same modes a DualSense lightbar has. While its vendor's software is closed, PadForge lights it on its own: Logitech devices over HID++, Razer and SteelSeries devices through their own reports, and Windows Dynamic Lighting devices over HID LampArray. While Razer Synapse, SteelSeries GG, Logitech G HUB or Logitech Gaming Software runs, that brand's devices light through it. The Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG rows on the Devices page reach what PadForge does not read, such as headsets and mousepads. On a virtual DualSense, DualSense Edge or DualShock 4, a game that paints the lightbar paints every device the controller lights.</div>
+                <div class="detail-body">Assign a mouse or keyboard to a virtual controller, check <b>Control This Device’s Lighting</b> on its Lighting tab, and it takes the controller's lighting with the same modes a DualSense lightbar has. PadForge lights 1,563 RGB keyboards, mice, headsets and other devices over USB itself, in the protocols OpenRGB, OpenRazer, SignalRGB's plugins and QMK document, and Windows Dynamic Lighting devices over HID LampArray. Where a device's lights are known one by one, the <b>Key Colors</b> card paints them key by key on each shift layer, a <b>Set Key Colors</b> macro colors chosen keys for as long as you set, and <b>Map Key Lights</b> names a light by the key you press under it. While Razer Synapse, SteelSeries GG, Logitech G HUB or Logitech Gaming Software runs, that brand's devices light through it, and the ASUS Aura, MSI Mystic Light and Corsair iCUE rows light through those makers' SDKs. On a virtual DualSense, DualSense Edge or DualShock 4, a game that paints the lightbar paints every device the controller lights. <a href="/docs/devices/supported/#rgb-keyboards-mice-and-other-lit-devices">Every lit device, by name</a>.</div>
+            </details>
+            <details class="detail">
+                <summary>Lights that follow your screen</summary>
+                <div class="detail-body">Set a device's lighting to <b>Screen Color</b> and it follows one display: the whole screen, one of its edges, corners or center, or an area you set, read as its most common color or its average, with saturation, brightness and smoothing of your own. A keyboard or mouse whose lights are known one by one spreads the screen across them, so each key takes the color of the screen at its own place. PadForge reads the finished picture Windows composes, keeps none of it, and changes nothing in any game.</div>
             </details>
             <details class="detail">
                 <summary>Rumble on a Razer Sensa HD device</summary>
@@ -637,6 +700,10 @@
                 <div class="detail-body">Web Menus shows a slot's Touch Grid menus on a phone as pages of tiles, with emoji and picture icons. A tap fires the cell the way the overlay would, and the overlay stays out of the way on the PC.</div>
             </details>
             <details class="detail">
+                <summary>Your stream's chat, at the controls</summary>
+                <div class="detail-body">Turn on Read Twitch Chat on the Dashboard and a viewer's !a presses whatever !a is mapped to on the Twitch Chat row of the Devices page. Assign that row to a slot like any controller, and add your own words beside the sixteen preset ones. Viewers take turns with !claim and skip a command with !skip, only the newest 20 commands wait in line, and the plain HTTP address gives OBS a picture of the controller for the broadcast. PadForge reads chat without signing in and never posts in it.</div>
+            </details>
+            <details class="detail">
                 <summary>Share controllers across your PCs</summary>
                 <div class="detail-body">Remote Link shares devices between PadForge PCs, on your network or across the internet. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once with a six-digit code on your network, or an eight-character single-use code over the internet. No VPN, no port forwarding. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros.</div>
             </details>
@@ -724,7 +791,7 @@
         <div class="gal">
             <figure class="reveal"><img class="zoom" src="assets/screenshot-dashboard.jpg" alt="The dashboard" loading="lazy"><figcaption><b>Dashboard</b>Every slot, every device, live.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-macros.jpg" alt="The macro editor" loading="lazy"><figcaption><b>Macros</b>Record, edit, and fire on conditions.</figcaption></figure>
-            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-lighting.jpg" alt="Lighting controls" loading="lazy"><figcaption><b>Lighting</b>Fourteen modes, audio-reactive included.</figcaption></figure>
+            <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-lighting.jpg" alt="Lighting controls" loading="lazy"><figcaption><b>Lighting</b>Fifteen modes, audio-reactive included.</figcaption></figure>
             <figure class="reveal"><img class="zoom" src="assets/screenshot-devices.jpg" alt="The devices page" loading="lazy"><figcaption><b>Devices</b>Everything plugged in, identified.</figcaption></figure>
             <figure class="reveal" data-d="1"><img class="zoom" src="assets/screenshot-adaptive-triggers.jpg" alt="Adaptive trigger editor" loading="lazy"><figcaption><b>Adaptive triggers</b>Seven modes with a live curve.</figcaption></figure>
             <figure class="reveal" data-d="2"><img class="zoom" src="assets/screenshot-profiles.jpg" alt="Profiles" loading="lazy"><figcaption><b>Profiles</b>Per game, switched automatically.</figcaption></figure>
@@ -793,7 +860,8 @@
             <details class="detail"><summary>Will this get me banned?</summary><div class="detail-body">PadForge presents a normal HID device through a signed driver, the same way a physical controller does. It does not inject into games or read their memory. Kernel anti-cheat vendors still make their own rules about virtual input devices, and competitive titles change those rules without notice. Use your judgment in games with aggressive anti-cheat.</div></details>
             <details class="detail"><summary>Do I need HidHide?</summary><div class="detail-body">Most games do. Without it a game sees your physical controller and the virtual one at the same time and takes both, which usually shows up as doubled or fighting input. HidHide cloaks the physical device so only the virtual one reaches the game. PadForge offers to install it for you, and you can cloak per device rather than all at once.</div></details>
             <details class="detail"><summary>Does it work outside Steam?</summary><div class="detail-body">Yes. PadForge creates a real device at the driver level, so any game sees it, launcher or not. That is the difference from Steam Input, which only applies inside Steam.</div></details>
-            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">PadForge recognizes 1,110 devices by their USB identity: Xbox, PlayStation, Nintendo, Steam, 8BitDo, Flydigi, GameSir and other pads, plus racing wheels and pedals, flight sticks, throttles, arcade sticks, GameCube adapters and controllers Windows cannot read on its own, from light guns to arcade I/O boards. Analog keyboards report how far each key is pressed, and a Bliss-Box adapter names the retro controller in each port. Anything else Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, drawing tablets and 3D mice. The <a href="/docs/devices/supported/">supported devices list</a> names every one.</div></details>
+            <details class="detail"><summary>What controllers are supported?</summary><div class="detail-body">PadForge recognizes 2,667 devices by their USB identity: Xbox, PlayStation, Nintendo, Steam, 8BitDo, Flydigi, GameSir and other pads, plus racing wheels and pedals, flight sticks, throttles, arcade sticks, GameCube adapters and controllers Windows cannot read on its own, from light guns to arcade I/O boards, and 1,563 RGB keyboards, mice, headsets and other devices it lights itself. Analog keyboards report how far each key is pressed, and a Bliss-Box adapter names the retro controller in each port. Anything else Windows enumerates as an input device can usually be read, including keyboards, mice, MIDI devices, touchpads, drawing tablets and 3D mice. The <a href="/docs/devices/supported/">supported devices list</a> names every one.</div></details>
+            <details class="detail"><summary>Can I bring my reWASD or DS4Windows setup?</summary><div class="detail-body">Yes. Import a reWASD config or a DS4Windows profile from the Profiles page, with the Import button or by dragging the file onto the list. A preview lists every binding as Clean, Partial or Skipped, with the reason, before anything changes, and Import makes it an ordinary PadForge profile. <a href="/docs/guides/profile-import/">How the import works</a>.</div></details>
             <details class="detail"><summary>Can I use my phone?</summary><div class="detail-body">Yes. PadForge serves a web controller on your local network. Open the address in any phone browser, pick a layout, and it becomes a virtual pad with real rumble through the Vibration API. Up to sixteen at once, no app install.</div></details>
         </div>
         <p class="faq-more reveal" data-d="2">More answers, from setup to Remote Link, in the <a href="/docs/faq/">documentation's FAQ</a>.</p>

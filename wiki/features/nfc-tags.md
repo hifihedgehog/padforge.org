@@ -76,7 +76,7 @@ With the NFC reader selected, the Devices page lists your named tags, plus an **
 
 Tags work as ordinary mapping-row sources, so a tap can press a virtual button directly. In a [macro](../guides/macros.md) trigger, the tap runs the action sequence instead.
 
-Bindings follow the tag itself, not its name. Rename a tag and its bindings stay put.
+Bindings follow the tag itself, not its name. Rename a tag and its bindings stay put. **Remove** clears every mapping, macro and saved-profile entry that named the tag, because the next tag you register takes the lowest free button and would otherwise inherit them.
 
 ---
 
@@ -87,4 +87,4 @@ Bindings follow the tag itself, not its name. Rename a tag and its bindings stay
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

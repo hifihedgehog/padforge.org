@@ -113,4 +113,4 @@ See the technical page, [Game Mods Internals](../reference/game-mods-internals.m
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

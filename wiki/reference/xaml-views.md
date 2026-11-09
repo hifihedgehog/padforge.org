@@ -6,7 +6,7 @@
 
 ---
 
-All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` (`CurveEditor`, `TriggerTravelArc`, plus the code-only `RangeSlider`, `EqCurveControl`, and `SettingResetButton`, the per-setting reset button most setting rows carry) and `PadForge.App/Views/Controls/` (`LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph`). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
+All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `MainWindow.xaml` in `PadForge.App/`. Shared custom controls sit alongside them in `PadForge.App/Controls/` and `PadForge.App/Views/Controls/` (see [Custom Controls](#custom-controls)). Styled with [WPF UI 4.3 (Lepo.Wpf.Ui)](https://github.com/lepoco/wpfui) for Fluent 2 design.
 
 ## Contents
 
@@ -23,6 +23,7 @@ All views live in `PadForge.App/Views/` (`PadForge.Views` namespace), except `Ma
 - [ProfileSwitchOverlay](#profileswitchoverlay)
 - [AboutPage](#aboutpage)
 - [Dialog Windows](#dialog-windows)
+- [Custom Controls](#custom-controls)
 - [Value Converters](#value-converters)
 - [Resource Dictionaries and Theming](#resource-dictionaries-and-theming)
 - [Common XAML Patterns](#common-xaml-patterns)
@@ -112,7 +113,7 @@ NavigationView items use 48px height and 14px font size. Dashboard, Profiles, an
 Dynamic controller cards are appended after "Devices" (index 3 onward) via `RebuildControllerSection()`, followed by an "Add Controller" entry while any slot remains (`HasAnyControllerTypeCapacity()`). Each card is a fixed-width pill (233 px) inside its `NavigationViewItem` and contains:
 - Flame power toggle. Its heat shows the slot's state (ember live, gold waiting, outline cold) and its tooltip names it
 - Global slot number in telemetry mono
-- Mini type segment: Xbox / PlayStation / Nintendo / Extended / KB+M / MIDI / VR tiles in `VirtualControllerGroups.InOrder`, active type lit, plus a fixed-width "#N" instance token. The MIDI tile is disabled while no MIDI API starts and the VR tile without SteamVR, unless the slot already carries that type
+- Type chip (`Nav_SlotTypeChip`, `MiniTypeChipStyle`): the slot type's logo or MDL2 glyph on `EmberSegGradient`, then a fixed-width "#N" instance token, then the Preset name (a trimmed label that scrolls while the pointer is on the card, whole in its tooltip). A click on the chip calls `ShowControllerTypePopup(menuItem, PlacementMode.Right, padIndex, typeChip)`, the Add Controller bar with the slot's type lit (#543). The MIDI button there is disabled while no MIDI API starts and the VR button without SteamVR, unless the slot already carries that type
 - Delete button, revealed on card hover
 
 Called on slot create, delete, or reorder. Uses a `_rebuildingControllerSection` guard to prevent re-entrancy during selection changes.
@@ -134,7 +135,7 @@ Drag devices from the Devices page to a sidebar controller card:
 
 ### Add Controller Popup
 
-`Popup` with one button per output type, built in `ShowControllerTypePopup`. Re-invoking the method while the popup is open closes it rather than opening a duplicate, and a reopen inside 300 ms of the last close is suppressed, so the same click cannot dismiss and re-raise it. The seven buttons follow `VirtualControllerGroups.InOrder`:
+`Popup` with one button per output type, built in `ShowControllerTypePopup(anchor, placement, retypeSlot, opener)`. With no slot it is Add Controller's: a click creates a slot of that type and navigates to it. With `retypeSlot` set it is a Dashboard type chip's bar: the slot's type is lit, a click runs `ChangeSlotType`, and the keyboard focus returns to `opener`. Re-invoking the method while the popup is open closes it rather than opening a duplicate, and a reopen inside 300 ms of the last close is suppressed, so the same click cannot dismiss and re-raise it. The seven buttons follow `VirtualControllerGroups.InOrder`:
 
 | Button | AutomationId | Icon | Per-type cap |
 |--------|--------------|------|--------------|
@@ -146,7 +147,7 @@ Drag devices from the Devices page to a sidebar controller card:
 | MIDI | `AddMidiBtn` | `E8D6` glyph | `SettingsManager.MaxMidiSlots` (16) |
 | VR | `AddVrBtn` | `F119` glyph | `SettingsManager.MaxVrSlots` (1) |
 
-The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires a MIDI API that started, Windows MIDI Services or the legacy one (`SettingsViewModel.IsMidiAvailable`, the Settings card's cached answer) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The same seven types repeat, in the same order, in the sidebar card's type segment and on the dashboard slot cards.
+The method counts each type from `Pads[].OutputType` and disables a button (icon opacity 0.35) when the global slot total reaches 16 or that type hits its own per-type cap. A type at its own cap gets a "(max N)" tooltip, e.g. `Main_Nintendo_Max_Format` = "Nintendo (max {0})". MIDI additionally requires a MIDI API that started, Windows MIDI Services or the legacy one (`SettingsViewModel.IsMidiAvailable`, the Settings card's cached answer) and VR requires SteamVR (`HMaestroVRController.IsAvailable()`). `HasAnyControllerTypeCapacity()` is a separate check: it tallies created slots from `SettingsManager.SlotCreated` and returns true while the total stays under 16 (`MaxPads`). The sidebar card's type chip and the Dashboard card's type chip open this same bar.
 
 ### Status Bar
 
@@ -177,7 +178,7 @@ Four more full-window layers span all three rows (`Grid.RowSpan="3"`). `SteelLay
 
 ### Composition Root (Code-Behind)
 
-`MainWindow.xaml.cs` is the service wiring hub (~8800 lines). Constructor:
+`MainWindow.xaml.cs` is the service wiring hub (about 10,000 lines), split with the partial files `MainWindow.BlissBox.cs`, `MainWindow.Falcon.cs` and `MainWindow.KeyboardScreens.cs`. Constructor:
 
 1. Creates `MainViewModel` as root and sets `DataContext`.
 2. Sets child `DataContext` on Dashboard, Devices, Settings, Profiles pages.
@@ -190,6 +191,10 @@ Four more full-window layers span all three rows (`Grid.RowSpan="3"`). `SteelLay
    - Recording flow events per pad/mapping row.
    - Profile management (New, SaveAs, Edit, Load, Delete, RevertToDefault).
    - Device assignment via `DeviceService`.
+   - Profile import: `ImportForeignConfig(path)` runs `ForeignConfigImporter.Translate` on a `.rewasd` or `.xml` file, shows the [ImportConfigDialog](#importconfigdialog) and lands the profile through `AddWorkshopProfile` (#561).
+   - Keyboard screens and Screen Overlays: `MainWindow.KeyboardScreens.cs` answers the Dashboard's `ChooseScreenOverlayContentRequested` with `ConfigureScreenOverlay`, which opens [KeyboardScreenDialog](#keyboardscreendialog).
+   - Bliss-Box and Dreamcast prompts: `MainWindow.BlissBox.cs` opens [BlissBoxPlayerDialog](#blissboxplayerdialog) and [DreamcastScreenDialog](#dreamcastscreendialog).
+   - Keyboard, mouse and touchpad driver switches: `Views.KeepDriverDialog.Show` after the switch, `KeepDriverSeconds` = 15 ([KeepDriverDialog](#keepdriverdialog)).
 
 ### Timer Architecture
 
@@ -227,8 +232,10 @@ ScrollViewer
        │   ├─ DataTemplate: slot card Border (252px wide, 5 rows)
        │   │   ├─ Row 0: Power flame btn + "Slot" + SlotNumber, Delete button
        │   │   │    right-aligned (revealed on hover or keyboard focus)
-       │   │   ├─ Row 1: Type segment (Xbox / PlayStation / Nintendo / Extended /
-       │   │   │    KB+M / MIDI / VR) on a recessed track + "#N" instance label
+       │   │   ├─ Row 1: type chip (Dash_SlotTypeChip, the active type's logo or glyph on an
+       │   │   │    ember fill, steel on a card with no mapped devices) + "#N" instance label
+       │   │   │    (fixed 20 px box) + Preset name (MarqueeLabel, scrolls while the pointer
+       │   │   │    is on the card)
        │   │   ├─ Row 2: Device roster (per device: type glyph, name, E702 Bluetooth
        │   │   │    glyph on a Bluetooth link, battery glyph and percent, marquee on
        │   │   │    overflow) or the DeviceName empty-state line
@@ -282,14 +289,33 @@ ScrollViewer
             │      rows also enabled by GameTelemetryReadsUdp), then the
             │      Custom Formats… button (GameTelemetryFormatsButton, outside the Grid),
             │      status flame + GameTelemetryStatus as a polite live region, footer
+            ├─ "Twitch Chat" section (E8F2 glyph, #555)
+            │   └─ CardBorder: description, Read Twitch Chat toggle (TwitchChatCheckBox,
+            │      EnableTwitchChat) with a reset button, then a Grid of the Channel
+            │      TextBox (TwitchChatChannel, applied a second after the last key) and
+            │      the Who approves !claim ComboBox (TwitchChatClaimApprovalIndex: Only you /
+            │      You and your moderators / You, your moderators or two other viewers),
+            │      the streamer's buttons (Pause or Resume on TwitchChatPaused, Skip,
+            │      Clear Line, End Claim), status flame + TwitchChatStatus as a polite live
+            │      region, the broadcast picture's address with a copy button while
+            │      TwitchChatDisplayUrl is set (else the Dashboard_TwitchChatDisplayOff
+            │      line), footer
             ├─ "Overlays" section (E700 glyph)
             │   └─ CardBorder: Menu Overlay (EnableMenuOverlay), Shift Layer Flyout
             │      (EnableShiftLayerFlyout), Profile Overlay (EnableProfileOverlay) toggles
-            └─ "Touchpad Overlay" section (EDA4 glyph)
-                └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
-                   NumberBox + reset, reset-position button, status flame +
-                   TouchpadOverlayStatus
+            ├─ "Touchpad Overlay" section (EDA4 glyph)
+            │   └─ CardBorder: Enable toggle (EnableTouchpadOverlay), opacity slider +
+            │      NumberBox + reset, reset-position button, status flame +
+            │      TouchpadOverlayStatus
+            └─ "Screen Overlay" section (#560)
+                └─ CardBorder: description, an ItemsControl over ScreenOverlays (one group
+                   per ScreenOverlayItem: Enable Screen Overlay toggle, opacity slider +
+                   NumberBox + reset, Choose What It Shows…, Reset Position, Remove
+                   (shown while OneOfSeveral), status flame + Status), then Add Overlay
+                   (AddScreenOverlayCommand, enabled by CanAddScreenOverlay)
 ```
+
+`ScreenOverlayItem` (`ScreenOverlayItem.cs`) is one overlay's group. Its `Number` is its identity and stays when another overlay is removed, so a macro that names overlay 3 keeps meaning the same window. A new overlay takes the lowest free number (`DashboardViewModel.AddScreenOverlay`), up to `KeyboardScreenInfo.MaxOverlays` (8). Defaults are opacity 0.8 and a 320 x 240 window, minimum 80 x 60. Choose What It Shows… raises `ChooseScreenOverlayContentRequested`, which `MainWindow.ConfigureScreenOverlay` answers by opening `KeyboardScreenDialog` for the overlay. The window itself is [ScreenOverlay](#screenoverlay).
 
 The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their outputs are the vendor rows on the Devices page, which a virtual controller drives through the Pad page's [Lighting](#lighting-tab-tab-7-peripheral-rows-494) and Force Feedback tabs like any device.
 
@@ -327,7 +353,12 @@ The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their 
 | `HeadTrackingRangeYaw` / `Pitch` / `Roll` / `X` / `Y` / `Z` | `DashboardViewModel` | Per-axis range NumberBoxes, 0-180 for the rotation axes and 0-500 for the translation axes. 0 follows the family range |
 | `HeadTrackingRecenterCommand` | `DashboardViewModel` | Set Neutral button |
 | `HeadTrackingStatus` | `DashboardViewModel` | Which of the three head-tracking sources is live, or why none is |
+| `EnableTwitchChat` / `TwitchChatChannel` / `TwitchChatClaimApprovalIndex` | `DashboardViewModel` | Twitch Chat toggle, channel and the `!claim` approval choice (#555) |
+| `TwitchChatStatus` / `IsTwitchChatRunning` / `IsTwitchChatOpen` / `TwitchChatPaused` | `DashboardViewModel` | Status text, flame, whether the row is open, and the pause state that flips the Pause button to Resume |
+| `TwitchChatPauseCommand` / `TwitchChatSkipCommand` / `TwitchChatClearCommand` / `TwitchChatEndClaimCommand` | `DashboardViewModel` | The streamer's buttons |
+| `TwitchChatDisplayUrl` / `CopyTwitchChatDisplayUrlCommand` | `DashboardViewModel` | The broadcast picture's address and its copy button |
 | `EnableMenuOverlay` / `EnableShiftLayerFlyout` / `EnableProfileOverlay` | `DashboardViewModel` | Overlays-section toggles |
+| `ScreenOverlays` / `AddScreenOverlayCommand` / `CanAddScreenOverlay` | `DashboardViewModel` | The Screen Overlay groups and the Add Overlay button (#560) |
 | `EnableTouchpadOverlay` / `TouchpadOverlayOpacity` / `TouchpadOverlayStatus` | `DashboardViewModel` | Touchpad overlay enable, opacity, and status text |
 
 ### Slot Card DataTemplate Bindings (SlotSummary)
@@ -337,8 +368,10 @@ The Lightbar Mirrors and Razer Sensa HD Haptics sections are gone (#494). Their 
 | `PadIndex` | `int` | Used as `Tag` for button click routing |
 | `SlotNumber` | `int` | Global slot display number (1-based) |
 | `IsEnabled` | `bool` | Controls power toggle color |
-| `OutputType` | `VirtualControllerType` | Selects which type button is highlighted (ember fill vs tertiary text) |
-| `TypeInstanceLabel` | `string` | Per-type instance number |
+| `OutputType` | `VirtualControllerType` | Names the type chip's tooltip and automation name |
+| `TypeGeometry` / `TypeGlyph` | `Geometry` / `string` | The type chip's logo (four vector types) or MDL2 glyph (the other three), from `SlotTypeIconMap` |
+| `TypeInstanceLabel` | `string` | Per-type instance number, drawn as `#N` |
+| `PresetName` | `string` | The slot's Preset as its Pad page chip names it (`PadViewModel.PresetDisplayName`), shown after the instance label (#543) |
 | `MappedDevices` | `ObservableCollection<PadViewModel.MappedDeviceInfo>` | Row 2 device roster (type glyph, name, `TransportGlyph` on a Bluetooth link, battery glyph and percent, marquee on overflow) |
 | `DeviceName` | `string` | Empty-state line, shown only when `MappedDevices.Count` is 0 |
 | `StatusText` | `string` | e.g. "Forging", "Cold" (enabled with nothing mapped), "Awaiting devices", "Disabled", "Idle" |
@@ -366,9 +399,9 @@ Rows are in trigger order. A later row wins when several hold.
 | `IsEnabled=True` + `IsCreateFailed=True` | (fill unchanged) | "Virtual controller failed" |
 | `IsInitializing=True` | `EmberBrush` (flashing, steady with reduced motion) | "Initializing" |
 
-### Type Switch Buttons
+### Type Chip
 
-7 type buttons per slot card (Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR) using a custom `TypeSwitchButton` style, seated on a recessed `SegTrackBrush` segment. Transparent and borderless at rest, with a rounded subtle-fill background on hover. The active type fills with `EmberSegGradient` and a glow (steel `SteelRaisedBrush` on a card with no mapped devices). Inactive types use the tertiary text color. Unavailable types (missing prerequisite, e.g. MIDI while no MIDI API runs, VR without SteamVR) show `Cursor.No` and a tooltip that says why (`Main_MIDI_NotRunning`, `Main_VR_RequiresSteamVR`). Clicks are guarded in code-behind. The power button also uses the `TypeSwitchButton` style for visual consistency.
+Each slot card carries one type chip (`Dash_SlotTypeChip`), not a row of type buttons. It uses the `TypeSwitchButton` style with its own template: the slot type's logo or glyph on `EmberSegGradient`, steel (`SteelRaisedBrush`) on a card with no mapped devices, no glow at rest, and the color held on hover. Its tooltip and automation name are the type's `ControllerType_*` string, switched by `OutputType` triggers. `TypeChip_Click` finds the card `Border` tagged with the slot and raises `SlotTypeChipClicked(slotIndex, card, chip)`. `MainWindow` answers with `ShowControllerTypePopup(card, PlacementMode.Bottom, slotIndex, chip)`, the Add Controller bar opened under the card with the slot's type lit, and a click on a button there runs `ChangeSlotType`. The power button uses the `TypeSwitchButton` style too.
 
 ### UI Automation
 
@@ -391,13 +424,7 @@ Rows are in trigger order. A later row wins when several hold.
 | `GameTelemetryFormatsButton_Click` | Button.Click | Opens `CustomTelemetryFormatsDialog` over `GameTelemetryFormats` and, when the dialog returns true, writes its `Result` back (#531) |
 | `DeleteSlot_Click` | Button.Click | Raises `DeleteSlotRequested(slotIndex)` |
 | `PowerToggle_Click` | Button.Click | Raises `SlotEnabledToggled(slotIndex, !SettingsManager.SlotEnabled[slotIndex])`, inverting the live setting rather than the summary VM |
-| `XboxType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Xbox)`. HIDMaestro is embedded so no install gate |
-| `DS4Type_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, PlayStation)` |
-| `NintendoType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Nintendo)` |
-| `ExtendedType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Extended)` |
-| `KeyboardMouseType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, KeyboardMouse)` |
-| `MidiType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Midi)` |
-| `VrType_Click` | Button.Click | Raises `SlotTypeChangeRequested(slotIndex, Vr)` (#49) |
+| `TypeChip_Click` | Button.Click | Raises `SlotTypeChipClicked(slotIndex, card, chip)`, which opens the type bar under the card (#543) |
 | `SlotCard_Loaded` | Border.Loaded | Wires `PreviewMouseLeftButtonDown` for drag start |
 | `OnCardMouseDown` | PreviewMouseLeftButtonDown | Records drag start position. Skips if inside a Button |
 | `OnDragMove` | PreviewMouseMove | Begins/updates card drag with ghost adorner |
@@ -587,6 +614,12 @@ Inline `ComboBox` bound to `MappedDevices` / `SelectedMappedDevice`. Each item s
 | `AppVolumeProcessDropDown_Opened` | ComboBox.DropDownOpened | `action.RefreshAudioProcessesCommand.Execute()` |
 | `DeviceAxisPicker_DropDownOpened` | ComboBox.DropDownOpened | Populates ComboBox with devices assigned to current slot |
 | `DeviceAxisIndexPicker_DropDownOpened` | ComboBox.DropDownOpened | Populates ComboBox with axis-type DeviceObjects from selected device |
+| `SyncKeyColorsCard` / `SyncLedStripsCard` | `SyncTabVisibility()` | Attach or detach `KeyColors` and `LedStrips` for the lighting row and show or collapse `KeyColorsCard` and `LedStripsCard` (#557) |
+| `KeyColorLayer_Click` | RadioButton.Click | Sets `KeyColors.SelectedLayerMask` from the chip's `Tag`, the layer being colored |
+| `KeyColorSwatch_Click` | ClickBorder.Click | Sets `KeyColors.PaintHex` from the swatch's `Tag` (RRGGBB), which colors the selected lights at once |
+| `KeyColorsHexBox_KeyDown` | TextBox.KeyDown(Enter) | Pushes the hex box's text through its binding, as the Lightbar card's box does |
+| `ScreenColorDisplayBox_SelectionChanged` | ComboBox.SelectionChanged | Writes the pick to `DeviceConfig.ScreenColorDisplay` unless `_syncingScreenDisplay` is set (#559) |
+| `SyncScreenColorStatus` | one-second `DispatcherTimer`, tab and mode changes | Refreshes the Display list and the `ScreenColorStatus` line while the Lighting tab shows Screen Color |
 | `OnPadVmPropertyChanged` | PadViewModel.PropertyChanged | Syncs tab strip on `SelectedConfigTab`, resyncs config bars on `OutputType` |
 
 ### Preview Tab (Tab 0). Detailed
@@ -672,7 +705,9 @@ Grid (3 columns)
                 └─ Type-specific panels (conditional visibility):
 ```
 
-**Grouped Action Type Picker.** The picker binds `ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"` with `SelectedValuePath="Type"` and `DisplayMemberPath="Label"`. `MacroTypeCatalog` (`PadForge.App/ViewModels/MacroTypeCatalog.cs`) carries all 64 `MacroActionType` values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes & Wheel, Keyboard & Text, Mouse, Timing & Flow, Rumble, Lightbar & LEDs, Sound & Volume, Motion & Pointer, Layers & Overlays, System & Apps. `MacroTypeCatalog.View` is a `ListCollectionView` grouped on `Category`, and the ComboBox draws each shelf through a `GroupStyle.HeaderTemplate`, the arrangement the cross-device input picker uses. Item tooltips ride the `ItemContainerStyle`. The list is one instance for the process lifetime, refilled in place on `Strings.CultureChanged` so an `x:Static`-bound view never strands on a stale list. `PadForge.Tests/MacroTypeCatalogTests.cs` pins the census: every enum member appears exactly once, `Choices.Count` equals `Enum.GetValues<MacroActionType>().Length`, the categories stay eleven contiguous blocks, and the picker still binds `MacroTypeCatalog.View`.
+**Repeat section.** After the action editor, shown on `ShowsRepeatSection` (not in Turbo mode): a **Mode** ComboBox over `RepeatMode` (**Once**, **Fixed Count**, **Until Release**, **Until Next Press**), where Until Release is enabled only while `SupportsUntilReleaseRepeat` (While Held mode), then **Count** (`RepeatCount`) and **Delay** (`RepeatDelayMs`, in ms) rows. Until Next Press repeats until the trigger is pressed again, and the press that started the run does not count.
+
+**Grouped Action Type Picker.** The picker binds `ItemsSource="{Binding Source={x:Static vm:MacroTypeCatalog.View}}"` with `SelectedValuePath="Type"` and `DisplayMemberPath="Label"`. `MacroTypeCatalog` (`PadForge.App/ViewModels/MacroTypeCatalog.cs`) carries all 68 `MacroActionType` values exactly once, in display order, across eleven category shelves: Virtual Buttons, Virtual Axes & Wheel, Keyboard & Text, Mouse, Timing & Flow, Rumble, Lightbar & LEDs, Sound & Volume, Motion & Pointer, Layers & Overlays, System & Apps. `MacroTypeCatalog.View` is a `ListCollectionView` grouped on `Category`, and the ComboBox draws each shelf through a `GroupStyle.HeaderTemplate`, the arrangement the cross-device input picker uses. Item tooltips ride the `ItemContainerStyle`. The list is one instance for the process lifetime, refilled in place on `Strings.CultureChanged` so an `x:Static`-bound view never strands on a stale list. `PadForge.Tests/MacroTypeCatalogTests.cs` pins the census: every enum member appears exactly once, `Choices.Count` equals `Enum.GetValues<MacroActionType>().Length`, the categories stay eleven contiguous blocks, and the picker still binds `MacroTypeCatalog.View`.
 
 **Macro Trigger Section:**
 
@@ -702,6 +737,10 @@ Grid (3 columns)
 | `SwitchLayer` | `IsSwitchLayerType` | A `CardBorder` with `MacroAction_Type_SwitchLayer` as its title, the `Macro_SwitchLayer_Hint` line, and a 240px ComboBox over the slot's own `LayerTabs` (`SelectedValuePath="LayerMask"`, `DisplayMemberPath="LayerName"`) writing `SwitchLayerMask`. Choices are Base plus every authored layer, the same name/mask pairs the layer-scope picker uses (#377) |
 | `TriggerEffect` | `IsTriggerEffectType` | A `CardBorder` titled `MacroAction_Type_TriggerEffect` (#531): Trigger ComboBox (`TriggerEffectSide`: Right / Left / Both), Effect ComboBox over `TriggerEffectCatalog.Kinds` (`TriggerEffectKind`), one Slider + TextBox row per parameter (`TriggerEffectRows`), the invalid-values line while `TriggerEffectIsValid` is false, Holds ComboBox (`TriggerEffectHold`), the Time Slider + TextBox in ms while `IsTriggerEffectTimed`, each with a reset button, and the `MacroAction_TriggerEffect_Hint` line |
 | `TriggerEffectStop` | `IsTriggerEffectStopType` | A `CardBorder` titled `MacroAction_Type_TriggerEffectStop` with the Trigger ComboBox alone (#531) |
+| `SetKeyColors` | `IsSetKeyColorsType` | A `CardBorder` titled `MacroAction_Type_SetKeyColors` (#557): an **All Lights** check box and the key picker (`KeyTargetPicker`, one chip per group of lights, numbered in the order picked, with a pick-by-pressing mode), the color, a Style ComboBox (`MacroKeyColorStyle`: Steady, Fade, Countdown), a Hold ComboBox (`MacroKeyColorHold`: duration, until release, until cleared, shown by `IsKeyColorHoldShown`), the duration in ms while `IsKeyColorTimed`, and an Other Lights ComboBox (`MacroKeyColorRest`: keep, off, color) with its color while `IsKeyRestColorShown`. Keys go by HID usage, so the action lights the same keys on every keyboard the slot lights |
+| `ClearKeyColors` | `IsClearKeyColorsType` | A `CardBorder` titled `MacroAction_Type_ClearKeyColors` with the same key picker, so it ends the colors of the keys it names (#557) |
+| `ProfileShortcut` | `IsProfileShortcutType` | A mode ComboBox (`ProfileShortcutModeIndex`: Specific Profile, Next Profile, Previous Profile, Toggle Window, Toggle Virtual Controllers Disabled) and, while `ShowsProfileShortcutName`, an editable ComboBox of profile names (`ProfileShortcutChoices`, `ProfileShortcutName`). The Profile Shortcuts card's modes on a macro (#561) |
+| `ToggleScreenOverlay` (with Show Keyboard Screen, Keyboard Screen Mode and Pan Keyboard Screen Picture) | `IsScreenOverlayTargetType` | An **Overlay** ComboBox over `ScreenOverlayChoices` writing `ScreenOverlayNumber`, which names the Screen Overlay the action targets (#560). See [Screen Overlay](#screenoverlay) |
 
 **Device Axis Picker (shared by SystemVolume, AppVolume, MouseMove):**
 - Device ComboBox: `DropDownOpened` populates from devices assigned to current slot.
@@ -943,28 +982,40 @@ StackPanel
   ├─ GameModLightsLine (#529, ember, collapsed when empty)
   ├─ PeripheralLightingPanel (collapsed unless hasPeripheralLighting)
   │   ├─ Pad_Lighting_PeripheralSubtitle
-  │   ├─ PeripheralLightingControlRow (collapsed for a vendor row or a unit row, which lighting is all it carries)
+  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
+  ├─ PeripheralLightingCard "Lighting Control" (Pad_Lighting_ControlCard, E7E8, collapsed for a
+  │    vendor row or a unit row, which lighting is all it carries)
+  │   ├─ PeripheralLightingControlRow
   │   │   ├─ CheckBox "Control This Device’s Lighting" (DeviceConfig.PeripheralLightingEnabled,
   │   │   │    TwoWay, ToolTip Pad_Lighting_ControlDevice_Tooltip)
   │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralLightingEnabledCommand,
   │   │        AutomationId Reset_DeviceSlotConfig_PeripheralLightingEnabled)
-  │   ├─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
-  │   │   ├─ TextBlock "Lighting Hold" (Pad_Lighting_ClaimLevel)
-  │   │   ├─ ComboBox PeripheralClaimLevelPicker (DeviceConfig.PeripheralClaimLevel, TwoWay through
-  │   │   │    EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
-  │   │   │    "Colors Only", "Colors and Lighting Power",
-  │   │   │    "Colors, Lighting Power, and On-Board Memory Mode Off" (PeripheralClaimLevelHostModeItem)
-  │   │   └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
-  │   │        AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
-  │   └─ PeripheralLightingRoute (ember TextBlock, collapsed when empty)
-  ├─ LightbarModeCard (the lightbar's mode picker and cards. Its LightbarPreviewPanel,
-  │    the DualShock 4 / DualSense art, collapses for these rows)
+  │   └─ PeripheralClaimLevelRow (collapsed unless the device offers a Lighting Hold)
+  │       ├─ TextBlock "Lighting Hold" (Pad_Lighting_ClaimLevel, label column 210)
+  │       ├─ ComboBox PeripheralClaimLevelPicker (534 wide, DeviceConfig.PeripheralClaimLevel, TwoWay
+  │       │    through EnumIndexConverter, AutomationId PeripheralClaimLevelCombo, IsTextSearchEnabled off):
+  │       │    "Colors Only", "Colors and Lighting Power",
+  │       │    "Colors, Lighting Power, and On-Board Memory Mode Off" (PeripheralClaimLevelHostModeItem)
+  │       └─ SettingResetButton (DeviceConfig.ResetPeripheralClaimLevelCommand,
+  │            AutomationId Reset_DeviceSlotConfig_PeripheralClaimLevel)
+  ├─ LightbarModeCard (the Mode picker and its cards, with the Screen Color block. Its
+  │    LightbarPreviewPanel, the DualShock 4 / DualSense art, collapses for these rows)
+  ├─ LedStripsCard "LED Strips" (#557, collapsed unless the device has strips only its user can size)
+  ├─ KeyColorsCard "Key Colors" / "Zone Colors" (#557, collapsed unless the device's lights are known one by one)
   └─ IndicatorLedsCard, GuideLedCard (collapsed for these rows)
 ```
 
+`PadPage.SyncTabVisibility` shows `LightbarModeCard` for a lightbar or a lit peripheral, `PeripheralLightingCard` and its control row for a lit mouse or keyboard row (not a vendor row or unit row), `IndicatorLedsCard` when the device has indicator LEDs (`hasIndicatorLeds`), and `GuideLedCard` for a Guide-LED device. It then calls `SyncKeyColorsCard` and `SyncLedStripsCard` with the lighting row.
+
+**Screen Color (#559).** `Pad_Lighting_Mode_ScreenColor` ("Screen Color") is a `LightbarMode` item in the mode ComboBox, after Battery. Its block holds the `Pad_Lighting_ScreenHint` line, `ScreenColorStatus`, and the rows **Display** (`ScreenColorDisplayBox`), **Screen Area** (`ScreenColorArea`: Whole Screen, the eight edge and corner areas, Custom), the **Left Edge**, **Top Edge**, **Width** and **Height** rows while Custom, **Color** (`ScreenColorMethod`: Most Common Color, Average Color), **Saturation**, brightness, **Smoothing**, and the **Spread the Screen Across This Device's Lights** check box while `KeyColors.IsVisible`. Every row has a reset button bound to a `DeviceConfig.ResetScreenColor*Command`. `ScreenColorDisplayBox_SelectionChanged` writes `DeviceConfig.ScreenColorDisplay`. `SyncScreenColorStatus` runs a one-second `DispatcherTimer` while the tab shows the mode: it re-lists the displays through `ShowScreenDisplays` (a box that is open or already correct is left alone) and sets `ScreenColorStatus` from `ScreenColorSource.StateOf`, to `Pad_Lighting_ScreenWaiting` or `Pad_Lighting_ScreenUnavailable`, collapsed otherwise. The capture and color math are on [Screen Color Internals](screen-color-internals.md).
+
+**LED Strips card (#557).** One row per strip (`LedStripsCardViewModel.Rows`, from `LightMap.Strips`): a label, a `ui:NumberBox` from 0 to the strip's maximum bound to `Leds`, and a reset (`ResetCountCommand`). The card's **Reset All** runs `DeviceConfig.ResetLedStripCountsCommand`. With a count, each LED of the strip takes its own color on the Key Colors card. At 0 the header lights as one.
+
+**Key Colors card (#557).** `KeyColorsCardViewModel` (`PadPage.KeyColors`) attaches to `DeviceConfig`, the light map and the slot's `LayerTabs` in `SyncKeyColorsCard`, and detaches when the row has no map. Its `Title` reads `Pad_Lighting_KeyColors` for a map with keys and `Pad_Lighting_ZoneColors` ("Zone Colors") for zones. From the top: a chip per shift layer, the **Other Lights** ComboBox (`BackgroundChoices`: Same as Lightbar, Off, One Color, with a color picker block for One Color), then `KeyLightsView`, the group chips (**All Keys**, **Number Row**, **F Keys**, **Number Pad**, **Arrow Keys**, **WASD**, **Edge**, **Logo**, **All Lights**, **Clear Selection**, each shown only where the device has those lights), the **Select by Pressing Keys** check box, a color block (picker, eight swatches, hex box, R/G/B rows), and **Apply Color**, **Remove Color** and **Remove All Colors**. `KeyLightsView` (`KeyLightsView.cs`) draws the lights from the positions the device reports, else from the QMK layout (`KeyboardFamilies.g.cs`) that holds most of the device's keys, else as a row of chips. A click toggles a light, a drag adds the lights it covers, and the picture is one Tab stop with arrow-key movement inside it. With Select by Pressing Keys on, a key pressed in the picture toggles that key's lights, found by scan code (`KeyLightsView.ScanKey`), and Ctrl+Tab leaves it. **Map Key Lights** on the Devices page names keys the device's description leaves unnamed (see [MapKeyLightsDialog](#mapkeylightsdialog)).
+
 The Lighting Hold row shows for a mouse or keyboard that offers a hold above colors alone (`PadPage.OfferedLightingHold`: the row's `DeviceLinks.MaxClaimLevel` while a path of its own lights it, else what its record kept). `PadPage.ShowLightingHold` collapses and disables the last option for a device that does not offer the second hold. The option stays in the list, so a choice of it saved earlier still shows as the selection, and a closed ComboBox cannot step onto it with an arrow key, since it steps only to an enabled item. The picker then takes the tooltip `Pad_Lighting_ClaimLevel_TooltipNoHostMode`, which stops before the sentences about the last option, and the two options left report a set size of two to a screen reader. Typing a letter selects nothing in this picker, because it would select the last option where that one is out of the list.
 
-`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere, claimLevel)` (`PeripheralRouteText.cs` line 155), where `lightsHere` is true for a vendor row or a unit row and otherwise follows the switch, in both cases only on a slot that is live (`PeripheralOutputs.SlotLive`), and `claimLevel` is the Lighting Hold this controller's claim carries. The line is empty while the engine is stopped (`PeripheralOutputs.Running`). Its sentence comes from the `Pad_Lighting_Route*` strings:
+`PeripheralLightingRoute` is `PeripheralRouteText.Lighting(device, PadIndex, lightsHere, claimLevel)` (`PeripheralRouteText.cs`), where `lightsHere` is true for a vendor row or a unit row and otherwise follows the switch, in both cases only on a slot that is live (`PeripheralOutputs.SlotLive`), and `claimLevel` is the Lighting Hold this controller's claim carries. The line is empty while the engine is stopped (`PeripheralOutputs.Running`). Its sentence comes from the `Pad_Lighting_Route*` strings:
 
 | Key | When |
 |---|---|
@@ -1041,7 +1092,8 @@ Grid (3 columns)
     └─ ScrollViewer (DataContext=SelectedMenu, gated on HasSelectedMenu)
         └─ StackPanel
             ├─ Menu Name TextBox (UpdateSourceTrigger=PropertyChanged) + Enabled CheckBox
-            ├─ Style ComboBox (KindOptions → KindIndex: Radial Ring / Touch Grid)
+            ├─ Style ComboBox (KindOptions → KindIndex: Radial Ring / Touch Grid / Keyboard / Hotbar),
+            │   with the Menu_Style_Caption line
             ├─ Show on Web Controller CheckBox (ShowOnWebController, visible on
             │   ShowWebControllerRow: a Touch Grid, or the flag set, #471)
             │   + SettingResetButton
@@ -1087,6 +1139,10 @@ Grid (3 columns)
                 └─ IconPackagesList ListBox (MaxHeight 170, EmberSelectListItem,
                     per row: EB9F glyph + Name + Path)
 ```
+
+**Keyboard style (#566).** While `IsKeyboard` is true the editor swaps the cell rows for keyboard rows, built on `MenuEditorItem.Keyboard.cs`: **Layout** (`KeyboardLayoutOptions` over `KeyboardLayoutIndex`: Grid, Split and Wheel, each with a description line), **Opens With** (any input on the slot's devices, through `ChoicesView` and `OpenRow`), **Opens On** (`OpenPressOptions`: **On Press**, **On Release**, **While Held**, **On Long Press**), **Open When a Text Box Is Selected** (`OpenOnTextFocus`), a **Keyboard Controls** card (`KeyboardControlRows`, a **Map All** button (**Stop** while it records) on `MenuKeyboardMapAllCommand`, and the **Engage Deadzone** row), and a **Keyboard** card with **Types Through** (`TypesThroughOptions`), **Function Row**, **Word Suggestions** and **Symbols Page** check boxes. A keyboard control row whose input is analog carries a press point (`KeyboardThresholdTemplate`, shown on `ShowsThreshold`): an **Axis-to-Button Deadzone** slider from 1 to 99 percent bound to `ThresholdPercent`, with a reset (`ResetThresholdCommand`). The Menu Overlay geometry card keeps Screen Position, Size and Opacity and takes the `Menu_Keyboard_Overlay_Caption` line. The window the style drives is `OnScreenKeyboardWindow` (see [OnScreenKeyboardWindow](#onscreenkeyboardwindow)), and the engine side is on [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
+
+**Hotbar style.** While `IsHotbar` is true the editor shows four input rows with a Record button and a reset each: **Show or Hide**, **Previous**, **Next** and **Fire** (`HotbarShowChoicesView`, `HotbarPreviousChoicesView`, `HotbarNextChoicesView`, `HotbarFireChoicesView`, recorded through `MenuRecordTarget.HotbarShow` to `HotbarFire`), then the **Wrap Around**, **Hide After Firing** and **Re-Center Each Time** check boxes. A control left empty takes the Opens With direction. A Hotbar and a Keyboard never take a center cell (`HasCenter` is cleared when the style changes), and a Hotbar has no layer hold (`ShowLayerHold` excludes it).
 
 Every setting row carries the canonical Reset button, and the host row carries Record too (the Aim Engage cluster shape). The record button binds `MenuHostRecordCommand` on the PadViewModel through the TabItem's DataContext because the editor panel's own DataContext is the selected `MenuEditorItem`.
 
@@ -1175,17 +1231,23 @@ Grid (Margin="24,16")
         │   (CopyDossier_Click, E8C8) over a recessed telemetry-mono card whose
         │   token rows run PRODUCT / TYPE / CAPS / APP GUID / SDL GUID /
         │   PATH (HidHideInstancePath) / PATH (DossierConnectionPath) / VID:PID /
-        │   LINK / SERIAL / BATT. Rows whose fact is absent collapse. LINK reads
-        │   "BT" and shows only on IsBluetoothLink
+        │   LINK / SERIAL / FIRMWARE / REV / BATT. Rows whose fact is absent collapse. LINK reads
+        │   "BT" and shows only on IsBluetoothLink. FIRMWARE is `FirmwareVersion` (SDL's report,
+        │   or a Bluetooth LE pad's Device Information revision). REV is `ProductRevision` (the
+        │   USB release number, or the PnP ID version over Bluetooth LE)
         ├─ Capability chip strip (HasCapabilityIcons): rumble (E877, doubles as the
         │   identify button via IdentifyChip_Click, #293), gyro (E7AD), touchpad (EFA5)
         ├─ Submit Mapping Button (joysticks only, opens GitHub issue template)
         ├─ Register / Manage NFC Tags Button (RegisterNfcTag_Click, ShowRegisterNfcTag, #150)
         ├─ Manage Voice Macros Button (ManageVoicePhrases_Click, ShowManageVoicePhrases, #317)
+        ├─ Manage Chat Commands Button (ManageChatCommands_Click, ShowManageChatCommands, #555)
         ├─ Learn Handheld Buttons Button (LearnHandheldButton_Click,
         │   ShowLearnHandheldButton, #343)
-        ├─ Switch Driver Buttons (DriverBind_Click / DriverRestore_Click,
-        │   ShowDriverBind / ShowDriverRestore, SDL#33 Part 15)
+        ├─ Map Key Lights Button (MapKeyLights_Click, ShowMapKeyLights, #557)
+        ├─ Switch Driver Buttons for the kinds that move something from Windows only on request
+        │   (DriverBind_Click / DriverRestore_Click, ShowDriverBind / ShowDriverRestore,
+        │   SDL#33 Part 15: Xbox 360 pads and receiver, the Intel base station, the Prodikeys,
+        │   the TouchSense mice). A keyboard's or mouse's switch stands in Input Hiding below
         ├─ Read as iCade Controller / Read as Keyboard Buttons (ReadAsICade_Click /
         │   ReadAsKeyboard_Click, ShowReadAsICade / ShowReadAsKeyboard, SDL#33 Part 16)
         ├─ Read as Tekken Sticks / Read as Taiko Drums Buttons (UsioTekken_Click /
@@ -1205,6 +1267,7 @@ Grid (Margin="24,16")
         ├─ FlydigiServiceWarning line (HasFlydigiServiceWarning, #395)
         ├─ HeadTrackerStatus line (#355, collapsed when empty)
         ├─ GameTelemetryStatus line (#531, a polite live region, collapsed when empty)
+        ├─ TwitchChatStatus line (#555, a polite live region, collapsed when empty)
         ├─ Separator
         ├─ VC Assignment section
         │   ├─ WrapPanel of ToggleButtons (ActiveSlotItems, ToggleSlotCommand)
@@ -1215,7 +1278,12 @@ Grid (Margin="24,16")
         │   ├─ "Hide from Games (HidHide)" CheckBox (HidHideEnabled, HidingToggle_Click,
         │   │   shown on ShowHidHideToggle, enabled on IsHidHideAvailable)
         │   ├─ TabletInputStatus line (ShowTabletCaptureStatus)
-        │   └─ "Consume Mapped Inputs (Hooks)" CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+        │   ├─ "Consume Mapped Inputs (Hooks)" CheckBox (ConsumeInputEnabled, ShowConsumeToggle)
+        │   ├─ Driver switch buttons (DriverBindText / DriverRestoreText, DriverBind_Click /
+        │   │   DriverRestore_Click, ShowHidingDriverBind / ShowHidingDriverRestore, #549): a
+        │   │   keyboard's or mouse's switch, which hides the device from Windows, and a
+        │   │   precision touchpad's Use Only in PadForge and its give-back
+        │   └─ TouchpadInputStatus line (ShowTouchpadCaptureStatus) while the touchpad switch is on
         ├─ Separator (ShowInputModeOrHidingSection)
         ├─ Power section (ShowPowerSection)
         │   ├─ Idle Disconnect minutes TextBox (IdleDisconnectMinutes,
@@ -1321,7 +1389,12 @@ Grid (Margin="24,16")
 | `HasCapabilityIcons` / `HasRumble` / `HasGyro` / `ShowTouchpadCapability` | Capability chip strip and its three chips |
 | `ShowLearnHandheldButton` / `HandheldDaemonWarning` / `HasHandheldDaemonWarning` | Learn Handheld Buttons button and the vendor-daemon notice (#343) |
 | `ShowRegisterNfcTag` | Register/Manage NFC Tags button visibility (#150) |
+| `ShowHidingDriverBind` / `ShowHidingDriverRestore` / `DriverBindText` / `DriverRestoreText` | The Input Hiding section's driver switch buttons (#549). `DevicesViewModel` sets them from the keyboard, mouse or touchpad offer, and `DeviceRowViewModel.ShowsHidingDriverSwitch` keeps the section up for a switched device, whose two toggles leave the row |
+| `ShowRawInputState` | Shows the Raw Input State eyebrow and body for a row that has raw state to show |
+| `FirmwareVersion` / `ProductRevision` | The FIRMWARE and REV dossier rows |
 | `ShowManageVoicePhrases` | Manage Voice Macros button visibility (#317): a standalone microphone row, or a DualSense / DualSense Edge over Bluetooth where the pad itself carries the phrases. Never for a `peer://` path, since recognition runs on the owner |
+| `ShowManageChatCommands` | Manage Chat Commands button visibility (#555): the Twitch Chat row (`DeviceTypeKey == "TwitchChat"`), never for a `peer://` path, since the word list belongs to the PC that reads the chat |
+| `ShowMapKeyLights` | Map Key Lights button visibility (#557): a device whose lighting path (`PeripheralLightMaps.ForRow`) reports `HasKeys` and a `Product`, never for a `peer://` path. `RefreshKeyLights` re-raises it when the lights become known |
 | `RawAxes` | Axis ProgressBar items |
 | `RawButtons` | Button circle items |
 | `IsKeyboardDevice` / `IsMouseDevice` | Switches between button circles, keyboard canvas, or mouse graphic |
@@ -1353,6 +1426,8 @@ Custom `ListBoxItem` `ControlTemplate`:
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
 | `ManageVoicePhrases_Click` | Button.Click | Opens `RegisterVoicePhraseDialog` for the selected microphone-carrying device (#317) |
 | `LearnHandheldButton_Click` | Button.Click | Opens `LearnHandheldButtonDialog` for the machine's hidden buttons (#343) |
+| `ManageChatCommands_Click` | Button.Click | Opens `ChatCommandsDialog` for the Twitch Chat row (#555) |
+| `MapKeyLights_Click` | Button.Click | Resolves the selected device's light map and output path through `PeripheralLightMaps.ForRow`, then opens `MapKeyLightsDialog` (#557) |
 | `IdentifyChip_Click` | ClickBorder.Click | Forwards to `IdentifyDevice_Click`, which calls `InputService.IdentifyDevice(SelectedDevice.InstanceGuid)` to vibrate the pad (#293) |
 | `QuickCharge_Click` | CheckBox.Click | Persists the Quick Charge toggle. Click, not Checked, so the binding-driven refresh on a selection change never writes (#372) |
 | `IdleDisconnect_LostFocus` | TextBox.LostFocus | Applies the clamped idle-disconnect minutes (#162) |
@@ -1570,6 +1645,9 @@ ScrollViewer (Padding="24,0")
       │   ├─ "Notify When Battery Runs Low" toggle (BatteryNotifyEnabled)
       │   ├─ "Notify at or Below" NumberBox 5-50 % (BatteryNotifyThreshold)
       │   ├─ "Also Vibrate the Controller" toggle (BatteryNotifyVibrate)
+      │   ├─ "Repeat the Notice Every" NumberBox 0-60 minutes (BatteryNotifyRepeatMinutes, 0 = never,
+      │   │   the default) + reset, enabled with the low-battery toggle
+      │   ├─ "Notify When Fully Charged" toggle (BatteryNotifyFull, off by default) + reset
       │   └─ "Test Notification" Button (TestBatteryNotify_Click)
       ├─ HidHide Driver card
       │   ├─ Icon ED1A + title + description
@@ -1652,6 +1730,7 @@ ScrollViewer (Padding="24,0")
 | `NovintFalconEnabled` / `FalconStatus` / `FalconCanInstallDriver` | CheckBox, string, bool | Novint Falcon card (#521): the switch, the library line and why no Falcon opened, and Install Falcon Driver's visibility |
 | `PickFalconLibraryCommand` / `InstallFalconDriverCommand` / `OpenFalconDownloadCommand` | ICommand | Choose dhd64.dll…, Install Falcon Driver, Get Force Dimension's SDK |
 | `BatteryNotifyEnabled` / `BatteryNotifyThreshold` / `BatteryNotifyVibrate` | CheckBox, NumberBox (5-50), CheckBox | Battery Alerts card: low-battery toast on/off, the percent threshold, and the optional controller vibration (#293) |
+| `BatteryNotifyRepeatMinutes` / `BatteryNotifyFull` | NumberBox (0-60), CheckBox | Repeats the low notice every N minutes while the pad stays at or below the threshold and is not charging (0 never repeats), and notifies once when a charge reaches 100 percent. Both opt-in |
 | `IsHidHideInstalled` | bool | Controls status flame, button visibility, whitelist section |
 | `InstallHidHideCommand` / `UninstallHidHideCommand` | ICommand | Driver install/uninstall |
 | `HidHideWhitelistPaths` | Collection | Whitelist ListBox items |
@@ -1705,7 +1784,7 @@ ScrollViewer (Padding="24,0")
           │   plus the no-rules hint when NoProfileHasExecutables
           ├─ External Control CheckBox (EnableExternalControl, #366), off by default
           ├─ Drop-zone Grid (AllowDrop, ProfileList_DragEnter/DragOver/DragLeave/Drop
-          │   for .pfprofile import, ProfileDropOverlay cue)
+          │   for .pfprofile and foreign-config import, ProfileDropOverlay cue)
           │   └─ Profile card ListBox (ProfileListBox, WrapPanel of steel cards,
           │       MinHeight=92, MaxHeight=452, MouseDoubleClick loads)
           │       └─ ItemTemplate:
@@ -1740,7 +1819,7 @@ ScrollViewer (Padding="24,0")
 | `SaveAsProfileCommand` | Button | Save current config as profile |
 | `EditProfileCommand` | Button | Edit profile name/exes |
 | `LoadProfileCommand` | Button | Load selected profile |
-| `ExportProfileCommand` / `ImportProfileCommand` | Button | `.pfprofile` export and import |
+| `ExportProfileCommand` / `ImportProfileCommand` | Button | `.pfprofile` export, and import of a `.pfprofile` or another tool's config (a reWASD or DS4Windows file, #561). The open dialog's filter lists all three kinds and adds the tools' own profile folders (`ForeignConfigImporter.ProfileFolders`) as custom places |
 | `BrowseStarterProfilesCommand` | Button | Opens `StarterProfilesDialog` (#256) |
 | `BrowseCommunityConfigsCommand` | Button | Opens `WorkshopBrowseDialog` (#9) |
 | `DeleteProfileCommand` | Button | Delete selected profile |
@@ -1785,7 +1864,7 @@ CardBorder (Margin="0,20,0,0")
 | Handler | Trigger | Action |
 |---------|---------|--------|
 | `ProfileList_MouseDoubleClick` | ListBox.MouseDoubleClick | Executes `LoadProfileCommand` |
-| `ProfileList_DragEnter` / `DragOver` / `DragLeave` / `Drop` | Drop-zone Grid | Accepts a dropped `.pfprofile` file for import and drives the `ProfileDropOverlay` cue |
+| `ProfileList_DragEnter` / `DragOver` / `DragLeave` / `Drop` | Drop-zone Grid | Accepts a dropped file for import and drives the `ProfileDropOverlay` cue. `IsImportableFile` takes a `.pfprofile`, or a file `ForeignConfigImporter.HandlesFile` accepts, and `Drop` hands it to `ImportProfileFile` (`MainWindow.ImportProfileFromFile`), which opens the [ImportConfigDialog](#importconfigdialog) for a foreign file (#561) |
 | `ShortcutLearn_Click` | Learn button Click | Starts 5-second combo recording for the row's `ProfileShortcutViewModel` |
 | `ProfileChoices_DropDownOpened` / `DeviceChoices_DropDownOpened` | ComboBox.DropDownOpened | Rebuilds the shortcut row's profile and device lists on open |
 | `AddShortcut_Click` | "Add Shortcut" button Click | Creates a new `GlobalMacroData`, wraps in `ProfileShortcutViewModel`, adds to list |
@@ -1894,29 +1973,29 @@ ScrollViewer (Padding="24,0")
       │   ├─ Subtitle (14px)
       │   └─ Tagline (12px)
       ├─ "An Invitation" section header (About_Testimony, E734 icon)
-      ├─ Testimony card (Scripture + reference + doxology, italic)
+      ├─ Testimony card (Scripture + reference + doxology, italic, then `InviteLine`, the invitation sentence with ComeUntoChrist.org as an ember link)
       ├─ "Overview" section header (E7C3 icon)
       ├─ Description card (wrapping text, line height 22)
       ├─ "Built With" section header (E74C checkmark icon)
-      ├─ Technologies card (Grid, 164px label + description, 133 rows in alphabetical
+      ├─ Technologies card (Grid, 164px label + description, 148 rows in alphabetical
       │   order, case-insensitive, leading symbols ignored):
       │   ├─ 3doverstock
       │   ├─ AntiMicroX
       │   ├─ Arcade I/O references
       │   ├─ AudioEndPointLibrary
       │   ├─ AutoEq
-      │   └─ ...128 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
+      │   └─ ...143 more open-source attributions through ZstdSharp (HIDMaestro, SDL3,
       │       .NET 10, HidHide, NAudio, WPF UI, the Kaldi / OpenFst / OpenBLAS /
       │       CLAPACK row, and others)
       ├─ "License" section header (E8D7 icon)
       └─ License card (12px wrapping text, secondary brush)
 ```
 
-The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QMK Firmware. `Grid.Row` runs 0 (3doverstock) through 132 (ZstdSharp). Row 60, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
+The rows sort by label, ignoring case and a leading symbol, so `.NET 10` sits between nefcon and Nintendo_Switch_Reverse_Engineering and `$Q Recognizer` between psmoveapi and QMK Firmware. `Grid.Row` runs 0 (3doverstock) through 147 (ZstdSharp). Row 65, "Kaldi, OpenFst, OpenBLAS, and CLAPACK" (`About_Kaldi` / `About_KaldiDesc`), credits the speech decoder, transducer library, and linear algebra inside `libvosk.dll`. A new row takes its alphabetical place, and every `Grid.Row` after it moves down one.
 
 ### Code-Behind
 
-Constructor only. All text from localized string bindings.
+The constructor calls `BuildInviteLine`, which also runs on `Strings.CultureChanged`. It builds `InviteLine` from `About_TestimonyInvite` with only the marker `ComeUntoChrist.org` as a `Hyperlink` (`EmberBrush`, `https://www.comeuntochrist.org`), because inline runs cannot bind around a marker whose position moves per language. A translation without the literal marker gets a link carrying the whole sentence. `OnInviteNavigate` opens it through `ShellLaunch.Start`. All other text comes from localized string bindings.
 
 ---
 
@@ -2057,7 +2136,7 @@ Touchpad gesture recorder (#88). `FluentWindow` (640x660) that captures a stroke
 
 **Files:** `TouchpadOverlay.xaml`, `TouchpadOverlay.xaml.cs`
 
-Transparent, topmost `Window` that mirrors the touchpad surface with live finger dots and a fixed 32px click bar in the bottom row. Repositionable via the surface drag region, stylus press-and-hold / feedback suppressed.
+Transparent, topmost `Window` that mirrors the touchpad surface with live finger dots and a fixed 32px click bar in the bottom row. Repositionable via the surface drag region, stylus press-and-hold / feedback suppressed. `ShowActivated="False"`, so showing it takes no focus. `Surface_LostMouseCapture` and `ResizeGrip_LostMouseCapture` end a drag or resize whose button release never arrives. `MoveToMonitor`, `EnsureOnScreen` and `GetCurrentMonitor` forward to `OverlayPlacement`.
 
 ### MenuOverlayWindow
 
@@ -2065,7 +2144,7 @@ Transparent, topmost `Window` that mirrors the touchpad surface with live finger
 
 On-screen radial / touch menu HUD (#9). A click-through, never-activated `Window` (`WindowStyle="None"`, `AllowsTransparency`, `Topmost`, `ShowInTaskbar="False"`, `ShowActivated="False"`, `SizeToContent="WidthAndHeight"`) following the ShiftLayerFlyout precedent: `WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT` applied on Loaded, plus a `WndProc` hook answering `WM_MOUSEACTIVATE` with `MA_NOACTIVATE`, so it never steals focus from the game and never eats a click.
 
-Owned by `InputService`, which pulls `InputManager.ActiveMenuOverlay` on the ~30 Hz UI timer (created lazily on first engage, hidden when no menu is engaged or the Dashboard's `EnableMenuOverlay` is off) and calls `UpdateFromSnapshot`. Content is built in code on a bare `Canvas`: annular wedge `Path` geometries for radial rings (a single slot renders as the full donut), rounded `Rectangle` cells for grids. Geometry rebuilds only when the menu identity or its `GeometrySig` (kind, cell count, center, labels, scale, position, opacity, name, item labels) changes. The per-tick work is the hover restyle: the hovered cell fills with `SystemAccentColorPrimaryBrush` when resolvable, ember orange otherwise. `MaxRenderCells` (64) caps the visual build. A hand-hacked config past that still hovers and commits, the window just refuses to build an unbounded visual. The window is centered at the menu's `PosXPercent` / `PosYPercent` on the primary work area (50/50 = centered), clamped fully on screen. Theme-aware through dark / light brush pairs re-applied on every rebuild.
+Owned by `InputService`, which pulls `InputManager.ActiveMenuOverlay` on the ~30 Hz UI timer (created lazily on first engage, hidden when no menu is engaged or the Dashboard's `EnableMenuOverlay` is off) and calls `UpdateFromSnapshot`. Content is built in code on a bare `Canvas`: annular wedge `Path` geometries for radial rings (a single slot renders as the full donut), rounded `Rectangle` cells for grids. Geometry rebuilds only when the menu identity or its `GeometrySig` (kind, cell count, center, labels, scale, position, opacity, name, item labels) changes. The per-tick work is the hover restyle: the hovered cell fills with `SystemAccentColorPrimaryBrush` when resolvable, ember orange otherwise. `MaxRenderCells` (64) caps the visual build. A hand-hacked config past that still hovers and commits, the window just refuses to build an unbounded visual. A Hotbar menu lays its cells in one row (`GridShape` is bypassed: `cols = cellCount`, one row). The window is centered at the menu's `PosXPercent` / `PosYPercent` on the primary work area (50/50 = centered), clamped fully on screen. Theme-aware through dark / light brush pairs re-applied on every rebuild.
 
 ### IconPicker
 
@@ -2108,11 +2187,111 @@ The Steam Workshop config browser (#9). `FluentWindow` (Mica, 1280x760, min 1080
 
 The custom telemetry formats (#531), opened by the Dashboard's Custom Formats… button. `FluentWindow` (Mica, 1040x680, not resizable, dragged by its inert chrome since it has no title bar) titled `Telemetry_Formats_Title`. `FormatList` on the left lists the formats with Add, Duplicate and Delete buttons. `EditorPanel` on the right edits the selected one: its name, its packets (binary or JSON), the length and byte order for binary packets, the Required Key a JSON packet must carry, the optional gear values, and its `Fields` rows (name, target, offset or key, type, scale, min, max), with Add Field and a remove button per row. The dialog edits copies (`TelemetryFormatEdit`), so Cancel keeps the saved list. Save first pushes a focused text box's value, then shows the first problem in `ProblemText` and stays open, or sets `Result` and closes. A duplicate name is a problem, since the picker and the profiles name a format by it. New and duplicated formats take the first free name from `UniqueName`. Detail on [Game Telemetry Internals](game-telemetry-internals.md).
 
+### ImportConfigDialog
+
+**Files:** `ImportConfigDialog.xaml`, `ImportConfigDialog.xaml.cs`
+
+The preview before another tool's profile joins the list (#561). `FluentWindow` (Mica, 760x660, min 600x480, resizable) titled `Import_DialogTitle` ("Import Profile"), opened by `MainWindow.ImportForeignConfig` after `ForeignConfigImporter.Translate` accepts a `.rewasd` or `.xml` file from the Profiles page's Import button or its drop zone (`ImportProfileFromFile`, for any file that does not end in the `.pfprofile` extension). A refused file never reaches the dialog: `result.Refused` puts `RefusedKey` on the status bar. The constructor takes the file path and the `ForeignImportResult`.
+
+From the top: `SourceText` (`Import_Source_Format`, the file name and the tool), `ProfileNameText` (`Import_ProfileName_Format`, the name the profile will take, from `PreviewName`, which asks `SettingsManager.UniqueProfileName` so the preview and the landed name agree), three stat blocks (**Clean**, **Partial**, **Skipped**, from the report's counts, colored green, amber and gray), `NoteText`, and `ReportList`. `NoteText` joins the notes the result calls for: `Import_NothingToImport` when `HasSlots` is false, else what the profile starts (`Starts`) and runs (`Runs`), `Import_NoteController` when it reads a controller, and the keyboard and mouse notes naming **All Keyboards (Merged)** and **All Mice (Merged)**. Nothing the file names runs before the user accepts.
+
+`BuildRows` turns the `TranslationReport` into `ImportReportRow` items, skipped entries first, then partial, then clean, each in the file's order. A row is a colored dot, the source path, an arrow and the PadForge binding (`Source`, `Arrow`, `Target`), and the reason in full under it (`ReasonText` formats `Strings.Get(ReasonKey)` with `ReasonArgs`, and falls back to the raw string on a `FormatException`). **Import** (`Import_Confirm`) is disabled while `HasSlots` is false. It calls `ImportSink(profile, false)`, which `MainWindow` sets to `AddWorkshopProfile`, so an imported profile lands through the same sink as a Steam Workshop or starter profile and stays special in no way. `ImportedProfileName` carries the deduped name back for the status line. The translators and the report are on [Profile Import Internals](profile-import-internals.md).
+
+### ChatCommandsDialog
+
+**Files:** `ChatCommandsDialog.xaml`, `ChatCommandsDialog.xaml.cs`
+
+The Twitch Chat row's word list (#555), opened from the Devices page's **Manage Chat Commands** button (`ManageChatCommands_Click`). `FluentWindow` (560x600, `ResizeMode="NoResize"`) titled `TwitchChat_DialogTitle` ("Chat Commands"), modeled on `RegisterVoicePhraseDialog`. It holds the `TwitchChat_DialogHint` line, a **Word** TextBox (`WordBox`, Enter adds) with **Add**, `MessageText` as a polite live region, the **Words** list (`WordListBox`, each row `!word` with **Remove**), **Restore Usual Words** and **Close**.
+
+Every change goes through the static `ChatCommandRegistry`: `Check` returns a `WordProblem` (`TooLong` past `MaxWordLength` = 20, `Characters`, `EndsInTime`, `Reserved`), `Normalize` and `Add` (returns a negative number at `MaxWords` = 128), `Remove`, `RestoreUsualWords`, and `Words` for the list. `ProblemText` maps a problem to its `TwitchChat_Problem_*` string. The registry's `RegistryChanged` event re-derives the Twitch Chat row's buttons, refreshes the pickers and saves, so the dialog keeps no state of its own beyond the displayed rows. See [Twitch Chat Internals](twitch-chat-internals.md).
+
+### MapKeyLightsDialog
+
+**Files:** `MapKeyLightsDialog.xaml`, `MapKeyLightsDialog.xaml.cs`
+
+Names a keyboard's lights one at a time (#557), opened from the Devices page's **Map Key Lights** button (`MapKeyLights_Click`) with the device's `OutputPath` and name. `FluentWindow` (820x640, `ResizeMode="NoResize"`) titled `MapKeyLights_Title` over a `MapKeyLightsViewModel` (`DataContext`). The body holds the `MapKeyLights_Intro` line, the **Device:** label, the progress line, **Start**, **Back**, **Skip**, **Forget** and **Stop** buttons, a `KeyLightsView` picture, the `MapKeyLights_NoLightHint` line (Dynamic Lighting or the vendor's own software holding the device), `NoteText`, and a footer with **Export…**, **Import…**, **Forget All** and **Close**. The view model lights one light, and the user presses the key under it.
+
+While `IsListening` the window handles `PreviewKeyDown` and `PreviewKeyUp` itself. A key is found by the scan code its window message carries (`ComponentDispatcher.CurrentKeyboardMessage`, then `KeyLightsView.ScanKey`), so the physical key is the one named on any input layout. `NameFrom` resolves the scan code through `KbmHidKeyMap.UsagesOfScanKey` and the view model's `Choose`, or, with no scan code, through `KbmHidKeyMap.Resolve(vk, UiLayout())`, then calls `Name(usage)`. Ctrl+Tab stops listening. AltGr's synthetic Left Ctrl is ignored (`KeyLightsView.IsAltGrLeftControl`), and Print Screen is read on key up, since Windows sends only its release. Names persist per product in `LearnedKeyMaps`. **Export…** writes JSON (`padforgeKeyLights` version 1, `product`, `device`, `names`) with `LearnedKeyMaps.Format`, and **Import…** reads it with `LearnedKeyMaps.Parse` and `Replace`, naming another model's file in `MapKeyLights_ImportedOtherFormat`. A file with no product reads as `MapKeyLights_ImportNotAFile`.
+
+### KeepDriverDialog
+
+**Files:** `KeepDriverDialog.xaml`, `KeepDriverDialog.xaml.cs`
+
+The Keep prompt after a keyboard, mouse or precision touchpad is switched to PadForge alone (#549), shown by `KeepDriverDialog.Show(owner, deviceName, seconds, mouse, touchpad)` from `MainWindow` with `KeepDriverSeconds` = 15. `FluentWindow` (`ResizeMode="NoResize"`, centered on the owner or the screen) titled `Devices_DriverKeepTitle` ("Keep This Keyboard in PadForge?"), `Devices_DriverKeepTitle_Mouse` or `Devices_TouchpadKeepTitle` by device kind. Windows stops typing with the keyboard, or moving the pointer with the mouse or touchpad, at the switch, so the prompt undoes itself: only **Keep** keeps it, and **Give It Back**, Esc, the close button and the end of the countdown all return the device. **Give It Back** holds the focus.
+
+A 250 ms `DispatcherTimer` recomputes the seconds left from a `Stopwatch` deadline set on `Loaded` (`RemainingAt`, rounded up, never below zero), so a busy UI thread cannot stretch the wait. `CountdownText` reads `Devices_DriverKeepCountdown_Format`. A **Keep** click that lands after the deadline changes nothing (`RemainingAt` is checked again in `KeepButton_Click`). `Show` returns true only when **Keep** was clicked in time. The tests hold `RemainingAt`.
+
+### BlissBoxPlayerDialog
+
+**Files:** `BlissBoxPlayerDialog.xaml`, `BlissBoxPlayerDialog.xaml.cs`
+
+Sets a Bliss-Box port's player number (#469), opened by `MainWindow.BlissBox.cs` from the Devices page's player button. `FluentWindow` (`ResizeMode="NoResize"`) titled `BlissBoxPlayer_Title` ("Player Number"), in the confirm dialog's chrome: **Cancel** holds the default and the focus. The adapter stores the number and reconnects under that player's product ID, which Windows sees as a new device (`BlissBoxPlayer_Message`). `DetailText` carries the port's line, a **Player** ComboBox (`PlayerBox`, 1 to 4, `Tag` carries the number) and **Set Player** (`ActionButton`). `Show` returns the chosen player, or 0 when canceled. The number is clamped to 1 to 4 on entry. See [Bliss-Box Internals](bliss-box-internals.md).
+
+### DreamcastScreenDialog
+
+**Files:** `DreamcastScreenDialog.xaml`, `DreamcastScreenDialog.xaml.cs`
+
+What a Dreamcast pad's VMU shows in a Bliss-Box port (#469), opened from the Devices page's Dreamcast screen button. `FluentWindow` (`ResizeMode="NoResize"`) titled `DreamcastScreen_Title`. It works on a copy: nothing reaches the port or the profile until **Save**, and `Show` returns a `Result(Mode, Picture, ProfilePicture)` or null. A **Show** ComboBox (`ModeBox`) lists `DreamcastScreenMode`: The Adapter's Picture, Profile Name, Profile Number, Profile Picture, Clock, Play Time, Chosen Picture. The preview (`PreviewImage`) is drawn by `DreamcastScreenService.Preview` from the same composition the service writes to the VMU. **Choose Picture…** shows for Chosen Picture, and **Choose Picture for {profile}…** and **Remove Profile Picture** show for Profile Picture. `PickPicture` imports a file through `DreamcastScreenService.ImportPicture` and warns with `DreamcastScreen_ImportFailed` when it cannot.
+
+### KeyboardScreenDialog
+
+**Files:** `KeyboardScreenDialog.xaml`, `KeyboardScreenDialog.xaml.cs`
+
+What one keyboard screen, or one Screen Overlay, shows (#519, #560): the Dreamcast Screen dialog's shape, opened from the screen's row on the Devices page (`KeyboardScreen_Click`) and, for an overlay, from the Dashboard's **Choose What It Shows…** (`MainWindow.ConfigureScreenOverlay`). `FluentWindow` (`ResizeMode="NoResize"`) titled by `KeyboardScreenService.ScreenName(screen)`. It works on a copy until **Save**, and `Show` returns a `Result(Mode, Picture, PanX, PanY, ProfilePicture, Zoom, LightbarSlot)` or null.
+
+The `ModeBox` lists every `KeyboardScreenMode` through `KeyboardScreenService.ModeName`: Off, Profile Name, Profile Number, Profile Picture, Clock, Play Time, Chosen Picture, Stopwatch and Lightbar Color. The hint line is `ModeHint` for a screen and `OverlayHint` for an overlay (the `KeyboardScreen_Hint_*_Overlay` strings). The preview takes the screen's own pixels from `KeyboardScreenFormats.SizeOf`: a monochrome screen doubled on a green-gray frame with nearest-neighbor scaling, a larger screen shrunk to 480 wide. For `KeyboardScreenKind.Overlay` the preview is a `ScreenOverlayContentView` (`OverlayPreview`) sized to the overlay's window shape inside 480x270. Rows by mode: **Choose Picture…** for Chosen Picture, **Zoom** (`ZoomBox`, 100 to `KeyboardScreenData.MaxZoom` = 2000, overlay with a picture only), **Pan X** and **Pan Y** (clamped to `PanLimits` of the picture, shown for a screen with a picture or an overlay zoomed above 100), and a **Slot** ComboBox for Lightbar Color on an overlay (**Lowest Slot with a Color**, then 1 to `InputManager.MaxPads`).
+
+### OnScreenKeyboardWindow
+
+**Files:** `OnScreenKeyboardWindow.xaml`, `OnScreenKeyboardWindow.xaml.cs`
+
+The On-Screen Keyboard (#566), the window a Keyboard-style menu draws. A borderless, transparent, topmost `Window` (`SizeToContent="WidthAndHeight"`, `ShowActivated="False"`, `Focusable="False"`) with `WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW` set on `Loaded` and a `WndProc` hook answering `WM_MOUSEACTIVATE` with `MA_NOACTIVATE`, as `MenuOverlayWindow` does, but without `WS_EX_TRANSPARENT`: a mouse or a touch screen can press its keys while the window being typed into keeps focus. It is owned by `InputService.OnScreenKeyboard.cs` (`_oskWindow`, created lazily), which reads `InputManager.OnScreenKeyboardView` on the UI timer and calls `UpdateFromView(OskView, MenuDefinitionEntry, describe)`. The constructor takes three callbacks: `post(OskCommand)` back to the poll thread (`PostOnScreenKeyboardCommand`), `moved(cx, cy)` and `resized(scale)`, which write the menu's Screen Position and Size through `EditKeyboardMenu`, so the Menus tab shows the change and settings save.
+
+Layout: a `Border` (`Root`, corner radius 14) holding a `ScaleTransform` (the menu's Size), a top bar (`Grip` glyph, `TitleText` with the menu name and the layout name, `CloseButton`), `KeysHost`, a `Hints` wrap panel (`MaxWidth` 720) built by `BuildHints`, and a corner `ResizeGrip`. A key is 42 DIPs with a 5 DIP gap (`KeyUnit`, `Gap`). Keys, and in the Wheel style eight petals with a center, are built in code from the poll thread's `OskView` snapshot: `Build` runs only when the shape (`view.Shape`, the controller family and the theme) changes, and `Restyle` recolors the keys on every other tick. A key click posts `OskCommand(ClickKey, board, row, index, shape)`, the close button posts `Close`, and the top bar and grip drag the window. The grip resizes between `MinScalePercent` (10) and `MaxScalePercent` (400), the Menu Overlay card's Size range, and a menu's opacity is clamped to 5 to 100 percent. `Place` centers the window on the menu's `PosXPercent` and `PosYPercent` of `SystemParameters.WorkArea` (`PercentOf` is the inverse), clamped on screen with a 12 DIP margin (`EdgeMargin`), and shrinks a keyboard larger than the work area so its close button stays reachable. The window sets `UiLanguage.KeepLeftToRight` so keys keep a keyboard's physical order in every language. Engine side: [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
+
+### ScreenOverlay
+
+**Files:** `ScreenOverlay.xaml`, `ScreenOverlay.xaml.cs`, `ScreenOverlayContentView.cs`, `OverlayPlacement.cs`
+
+What a keyboard screen shows, in a borderless window on the PC's own display (#560), with no keyboard screen needed. `Window` (`AllowsTransparency`, `Topmost`, `ShowActivated="False"`, 320x240 default, min 80x60) titled `Dashboard_ScreenOverlayWindowTitle` ("PadForge Screen Overlay"), built from `TouchpadOverlay` with `WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW` applied in `OnSourceInitialized`, so a macro that shows it during a game takes no focus and no click. `InputService.KeyboardScreens.cs` keeps one window per overlay number (`_screenOverlays`) and `SyncScreenOverlays` brings them in line with the Dashboard's `ScreenOverlays` list: it opens, hides, places and closes windows, attaches the content callback through `KeyboardScreens.AttachOverlay`, and sets `item.IsRunning`.
+
+Two states, as g-helper's HardwareOverlay and Forza-Telemetry-Splitter's OverlayForm have. While another program is in front (`SetArranging(false)`) the window carries `WS_EX_TRANSPARENT`, so clicks reach the program beneath and only the content shows. While PadForge is in front (`SetArranging(true)`, from `TendScreenOverlay` and `IsPadForgeForeground`) it takes input and shows its ember outline and corner grip, so it can be found, moved and sized with nothing to show. A gesture in progress holds its state (`InGesture`). The surface (alpha 1, the least Windows routes input to) takes the right mouse button for a window drag, or one finger by touch, and the left button for panning a zoomed picture (`PanDragged`, routed to `KeyboardScreens.DragOverlayPan`). The grip resizes, and both gestures raise `PositionChanged`, which `OnScreenOverlayPositionChanged` writes into the item's `Left`, `Top`, `Width`, `Height` and `Monitor`. `LostMouseCapture` ends a drag whose release never arrives. `KeepOnTop` re-asserts `HWND_TOPMOST` once a second when another program's visible window sits above it (PadForge's own windows are skipped through `IsOurWindow`). `SetContentOpacity` lands on the content view alone, so the outline and grip stay findable. `ShowContent` sets `EmptyHint` from the blank reason (`ScreenOverlay_Empty`, `ScreenOverlay_Blank_NoPicture`, `ScreenOverlay_Blank_NoLightbar`), shown only while arranging and empty.
+
+`ScreenOverlayContentView` is a `FrameworkElement` that draws a `ScreenOverlayContent` in `OnRender`, in the overlay and in the dialog's preview: a color fills the bounds, a picture scales to touch the bounds with its proportions kept, centered (`FitPicture`, `PictureScale`, zoom from 100 percent up, panning held to the picture's edges by `PanLimits`), and text is white on black, as large as fits inside a margin of a twentieth (`FitText` halves the size, where the keyboard screens' `RenderText` counts down). It draws again only when the content changes, since the service hands the same content over four times a second.
+
+`OverlayPlacement` (`OverlayPlacement.cs`) holds the DPI-safe placement the Touchpad Overlay once carried: `NoPlace` (-100000, no saved place), `HasPlace`, `MoveToMonitor`, `EnsureOnScreen` (re-centers when no monitor shows the window), `IsOnScreen` and `GetCurrentMonitor`, converting physical pixels to DIPs at the monitor's effective DPI. The Touchpad Overlay and the Screen Overlay share it.
+
+---
+
+## Custom Controls
+
+All in `PadForge.App/Controls/` (`PadForge.Controls` namespace) unless noted. Most exist to give UI Automation an accurate peer without changing a pixel for mouse users.
+
+| Control | File | What it does |
+|---------|------|--------------|
+| `ClickBorder` | `ClickBorder.cs` | A `Border` that acts as a button (chips, swatches, tiles). Raises `Click` where the old mouse handler ran, and from Enter, Space or a screen reader's Invoke. Tab reaches it and the focus ring shows only after keyboard focus. Its peer reports invoke, selection and toggle |
+| `SegmentButton` | `SegmentButton.cs` | A `Button` that is one choice of a set. `IsSelected` changes nothing on screen, and its peer reports a radio button with that state |
+| `StateToggleButton` | `StateToggleButton.cs` | A `Button` for an on/off control (a slot's power, the engine). `IsOn` drives a toggle peer |
+| `AvailabilityButton` | `AvailabilityButton.cs` | A `Button` that stays clickable and unchanged while its choice is unavailable (an Add Controller entry at capacity). Its handler then does nothing and its peer reports it unavailable |
+| `ContentTabControl` | `ContentTabControl.cs` | A header-less `TabControl` whose peer lists the selected tab's content, so a page that draws its own tab strip stays visible to screen readers |
+| `GlyphText` | `GlyphText.cs` | A `TextBlock` for an icon glyph (Segoe MDL2 Assets or Segoe Fluent Icons), with a peer that leaves the control view |
+| `DecorativeFontIcon` / `DecorativeSymbolIcon` / `DecorativeImage` | `DecorativeIcons.cs`, `DecorativeImage.cs` | The WPF UI icons and `Image` for decoration only, with a peer outside the control view |
+| `QuietNavigationSeparator` | `QuietNavigationSeparator.cs` | The sidebar footer's separator, kept out of UI Automation's control view |
+| `BaseStyle` | `BaseStyle.cs` | Gives a control subclass (such as `SegmentButton`) the implicit style its base class has, since WPF finds an implicit style by the element's own type |
+| `MarqueeLabel` | `MarqueeLabel.cs` | One line that trims with an ellipsis at rest and, while `Active`, scrolls a too-long text: a pause, a slide to the end, a pause, the slide back. The whole text is the tooltip. The slot cards' Preset name uses it, with `Active` bound to the card's hover (#543) |
+| `RangeSlider` | `RangeSlider.cs` | The two-thumb slider |
+| `EqCurveControl` | `EqCurveControl.cs` | The graphic EQ's log-frequency curve with one draggable handle per band (#347), drawn in `OnRender` |
+| `SettingResetButton` | `SettingResetButton.cs` | The per-setting reset button with the icon style and a localized `SettingLabel` |
+| `CurveEditor`, `TriggerTravelArc` | `CurveEditor.xaml`, `TriggerTravelArc.xaml` | The response-curve editor and the trigger travel arc |
+| `LabeledShapeIcon`, `ProfilePill`, `TriggerEffectGraph` | `Views/Controls/` | The labeled shape icon, the status-bar profile pill, and the adaptive-trigger effect graph |
+
+Code-only helpers in `PadForge.App/Views/`: `KeyLightsView` (the Key Colors picture), `ScreenOverlayContentView`, `OverlayPlacement`, `TouchSensorStrip`, `ColorPickerControl`, `ShiftLayerFlyout` and `WorkshopControllerPreview`.
+
 ---
 
 ## Value Converters
 
-All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (lines 1057-1076). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
+All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). All but one are registered as `StaticResource` in `App.xaml` (22 `conv:` entries, from line 1047). `UppercaseConverter` (key `UpperConverter`) is registered in `ControllerIcons.xaml` instead.
 
 | Converter | Key | Input | Output | Description |
 |-----------|-----|-------|--------|-------------|
@@ -2129,11 +2308,13 @@ All converters in `PadForge.App/Converter/` (`PadForge.Converters` namespace). A
 | `StringToVisibilityConverter` | `StringToVisibility` | `string` | `Visibility` | Non-null/non-empty = Visible, else Collapsed. |
 | `EnumIndexConverter` | `EnumIndexConverter` | `enum` | `int` | Bridges an enum property and `ComboBox.SelectedIndex` (enum values assumed sequential 0..N). Supports `ConvertBack`. |
 | `EnumEqualityVisibilityConverter` | `EnumEqualityVisibilityConverter` | `enum` | `Visibility` | Visible when the enum name matches the parameter (case-insensitive, pipe-separated list allowed). Switches per-mode UI sections. |
+| `EnumEqualityConverter` | `EnumEqualityConverter` | `enum` | `bool` | The bool twin of `EnumEqualityVisibilityConverter`, with the same matching. One-way. Drives `IsSelected` on the Devices page's facet chips. |
 | `BoolToTriggerShapeKindConverter` | `BoolToTriggerShapeKindConverter` | `bool` (IconRightSide) | `LabeledShapeKind` | `false` = TriggerLeft, `true` = TriggerRight. |
 | `RgbToBrushConverter` | `RgbToBrushConverter` | `MultiBinding(R, G, B)` bytes | `SolidColorBrush` | Lightbar preview swatch on the Lighting tab. Falls back to black. |
 | `IndexToLetterConverter` | `IndexToLetterConverter` | `int` (0-25) | `string` | 0..25 maps to `a`..`z`. Index >= 26 falls back to `s[N]`. Macro formula chips. |
 | `IndexLessThanVisibilityConverter` | `IndexLessThanVisibilityConverter` | `int` (count), param `int` (index) | `Visibility` | Visible when `param < count`. Reveals a per-letter formula chip when its index is within the variable count. |
 | `OneBasedIndexConverter` | `OneBasedIndexConverter` | `int` (0-based) | `string` | Renders a 0-based index as its 1-based number. Touchpad-tab pad selector. |
+| `LogScaleConverter` | `LogScaleConverter` | `int` or `double` (1 to the parameter) | `double` (0-100) | Puts a whole number on a 0 to 100 slider by its logarithm, so each step changes the number by the same ratio. `ConverterParameter` is the maximum, and `ConvertBack` rounds `max^(position/100)`. The Set Key Colors action's duration slider uses it with 600000 ms. The exact number stays in the text box beside it. |
 | `ExeIconConverter` | `ExeIconConverter` | `string` (exe path) | `ImageSource` | Extracts the exe's shell icon for profile cards (cached per path, frozen). Returns null when the path is empty/missing. |
 | `CultureLanguageConverter` | `CultureLanguageConverter` | `CultureInfo` | `XmlLanguage` | The language a row of the language picker declares: the culture's own for Chinese, Japanese and Korean, `en-US` for every other (`UiLanguage.Declared`). |
 | `UppercaseConverter` | `UpperConverter` | `string` | `string` | Uppercases header strings for the ember eyebrow treatment. Registered in `ControllerIcons.xaml`, not `App.xaml`. |
@@ -2160,7 +2341,8 @@ The #175 ember restyle grew `App.xaml` well past the old two-dictionary shell. M
             <ResourceDictionary Source="/Resources/ControllerIcons.xaml"/>
             <ResourceDictionary>                    <!-- ember identity tokens (#175) -->
                 <!-- Ember*/Cold*/Steel* brushes, WaitBrush, EmberSegGradient,
-                     FlameOuterGeometry, LivenessFlameBase, MiniTypeButton styles -->
+                     FlameOuterGeometry, LivenessFlameBase, SegTrackBrush, MiniTypeButtonActiveStyle,
+                     MiniTypeChipStyle -->
             </ResourceDictionary>
         </ResourceDictionary.MergedDictionaries>
 
@@ -2170,7 +2352,7 @@ The #175 ember restyle grew `App.xaml` well past the old two-dictionary shell. M
         <!-- keyed: EmberIconButton(+Hot), EmberAccentButton, EmberPrimaryButton,
              EmberDestructiveButton, EmberSelectListItem, EmberSlider,
              InstrumentBarRaw / InstrumentBarOut, EmberFocusVisual, EntranceFade -->
-        <!-- 20 global converter registrations (lines 1057-1076) -->
+        <!-- 22 global converter registrations (from line 1047) -->
     </ResourceDictionary>
 </Application.Resources>
 ```
@@ -2463,6 +2645,10 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 - [Services Layer](services-layer.md): `InputService`, `SettingsService`, `DeviceService` wired in `MainWindow.xaml.cs`
 - [2D Overlay System](2d-overlay-system.md): `ControllerModel2DView`, `ControllerSchematicView`, `KBMPreviewView`, `MidiPreviewView`, `VRPreviewView`
 - [3D Model System](3d-model-system.md): `ControllerModelView` (HelixToolkit 3D viewport)
+- [Profile Import Internals](profile-import-internals.md): The translators and report behind `ImportConfigDialog`
+- [On-Screen Keyboard Internals](on-screen-keyboard-internals.md): The engine side of `OnScreenKeyboardWindow` and the Keyboard menu style
+- [Screen Color Internals](screen-color-internals.md): The capture and color math behind the Lighting tab's Screen Color mode
+- [Twitch Chat Internals](twitch-chat-internals.md): The chat reader, the command words and the claim rules behind `ChatCommandsDialog`
 - [Settings and Serialization](settings-and-serialization.md): `PadSetting` descriptors driving mapping grid UI
 - [Peripheral Outputs Internals](peripheral-outputs-internals.md): The links, claims and backend states the Lighting and Force Feedback route lines read
 - [Virtual Controllers](../features/virtual-controllers.md): Output type selection UI for Xbox, PlayStation, Nintendo, Extended, KB+M, MIDI, VR (all HM-backed types are produced by `HMaestroVirtualController`, VR by `HMaestroVRController`). The Add Controller popup builds a Nintendo button (Switch logo, AutomationId `AddNintendoBtn`, capacity via `MaxNintendoSlots`) between PlayStation and Extended, and a VR button (`F119` glyph, AutomationId `AddVrBtn`, capacity via `MaxVrSlots` = 1) at the tail, the `VirtualControllerGroups.InOrder` visual order.
@@ -2470,4 +2656,4 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

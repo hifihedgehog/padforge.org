@@ -26,6 +26,8 @@ Feedback travels the other way too. When the game on the consumer drives the sha
 
 A wheel shared from the den shakes in the den while the race runs on the PC in the office, and a DualSense lights its bar and buzzes its triggers on the couch while the game plays upstairs.
 
+A shared device's **Device Dossier** on the [Devices](../features/devices.md) page shows the owner's firmware and revision text, because the copy has no open device to read them from. The copy of a DualShock 4 also learns whether the owner's pad is on a cable or on Bluetooth. That decides whether a first-model pad on a cable gets speaker audio, which it cannot play. An owner running a build before 5.3.0 sends none of this, and the copy's rows stay as they were.
+
 ---
 
 ## NFC tag taps
@@ -175,4 +177,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -138,7 +138,8 @@ Seven projects (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.
 
 ```
 PadForge.App/
-  App.xaml / App.xaml.cs              # Entry point: update-helper and pending-update checks, single-instance mutex, single-file OpenXInput SetDllDirectory, global exception handling
+  Program.cs                          # Process entry (StartupObject): answers a give-back task's run before WPF loads, then starts App
+  App.xaml / App.xaml.cs              # WPF application: update-helper and pending-update checks, single-instance mutex, single-file OpenXInput SetDllDirectory, global exception handling
   MainWindow.xaml / MainWindow.xaml.cs # Shell: app branding bar, sidebar navigation, page hosting, event wiring
   gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (two entries: the DualShock 3 under DsHidMini SDF / SXS and the PS VR Aim Controller, #506)
   Properties/
@@ -717,6 +718,72 @@ Driving games send their telemetry over UDP, and Assetto Corsa publishes it in s
 
 - `InputService.GameTelemetry.cs`. The Dashboard status line and flame, and the Devices panel line
 
+### Since 5.2.2, shipped in 5.3.0
+
+**App `Program.cs`.** The process's entry (`StartupObject`). A give-back task's run (`GiveBackRun`) answers in `Main` before any WPF assembly loads, since at a boot it runs in a session with no desktop. Every other start creates `App` and runs it.
+
+**App `Common/ConfigImport/`** (#561). Import of another tool's profile file. Detailed on [Profile Import Internals](profile-import-internals.md).
+
+- `ForeignConfigReader.cs`, `ForeignConfigImporter.cs`. The file's kind from its contents, never its extension, and the reason keys of the import preview, each an `Import_Tr_*` string
+- `RewasdTranslator.cs`, `Ds4WindowsTranslator.cs`. A reWASD `.rewasd` file (JSON, schema 3) and a DS4Windows profile (XML, root `DS4Windows`) turned into a profile
+- `ImportBuilder.cs`, `DirectInputKeys.cs`. The rows, layers and macros a translator builds, and the DirectInput scan codes of reWASD's keyboard buttons mapped to Windows virtual keys through the active layout
+
+**App `Common/Input/OnScreenKeyboard/`** (#566). The keyboard menu style. Detailed on [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
+
+- `OskModel.cs`, `OskEngine.cs`, `OskView.cs`. How the keyboard is laid out and driven, what its controls and pointers read each tick, and each key as the window draws it. `InputManager.OnScreenKeyboard.cs` runs it on the poll thread
+- `OskPredictor.cs`. Word suggestions from Windows' own text prediction (`Windows.Data.Text.TextPredictionGenerator`), asked off the poll thread
+- `OskTextFocusWatcher.cs`. UI Automation focus events for **Open When a Text Box Is Selected**, subscribed only while a menu asks
+- `OskWindows.cs`. The keyboard layout of the window being typed into, read once per layout with `ToUnicodeEx`
+- Engine `Menus/KeyboardMenu.cs` holds the layouts and the control defaults (`KeyboardMenuDefaults`), and `Menus/MenuHotbar.cs` runs Steam Input's hotbar mode on four inputs. App `Views/OnScreenKeyboardWindow.xaml(.cs)` is the window, and `Views/OverlayPlacement.cs` places it, the Screen Overlay and the Touchpad Overlay on a monitor in DPI units
+
+**App `Common/Input/ScreenColor/`** (#559). The Screen Color lighting mode. Detailed on [Screen Color Internals](screen-color-internals.md).
+
+- `ScreenColorSource.cs`. The color or picture one device's settings ask of the screen, with one result shared by devices with the same settings. Reading keeps a display's capture running
+- `ScreenCaptureWorker.cs`, `ScreenDxgi.cs`, `WindowsCaptureGrabber.cs`. The capture thread and its two grabbers, Desktop Duplication and Windows.Graphics.Capture
+- `ScreenColorMath.cs`. One downscaled picture of a display and the reductions taken from it. `Peripherals/ScreenPicture.cs` is the small picture a device's lights spread across
+
+**App `Common/Input/Twitch/`** (#555). The Twitch Chat row. Detailed on [Twitch Chat Internals](twitch-chat-internals.md).
+
+- `TwitchChatClient.cs`, `TwitchChatDevice.cs`, `TwitchChatRuntime.cs`. The IRC connection, the synthetic row that presses buttons when viewers type commands, and what the controller picture page reads of the chat
+- `ChatCommandRegistry.cs`, `ChatCommandParser.cs`, `ChatCommandPlayer.cs`. The words offered as buttons (a stable button per word), their steps, and the commands waiting to play
+- `ChatGamepadPlacement.cs`, `ChatTurns.cs`. Where the usual words sit in SDL's gamepad layout, and who approves a viewer's `!claim`. Engine `Common/GamepadPlacement.cs` is the placement rule the Bliss-Box ports share
+- App `Services/DisplayPose.cs` and `WebAssets/display.html` draw the controller for a stream's browser source. `Views/ChatCommandsDialog.xaml(.cs)` edits the word list
+
+**Screen Overlay** (#560). `Views/ScreenOverlay.xaml(.cs)` is a borderless, never-focused window that shows what a keyboard screen shows, `Views/ScreenOverlayContentView.cs` draws its content, and `ViewModels/ScreenOverlayItem.cs` is one overlay's group on the Dashboard card, identified by its number.
+
+**Key colors and lighting backends** (#557). Detailed on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+
+- `Common/Input/MacroKeyColors.cs`, `ViewModels/MacroKeyColorChoices.cs`. The Set Key Colors and Clear Key Colors actions: the lights an action names, and the per-slot store they play in
+- `Peripherals/KeyFrame.cs`, `LightMap.cs`, `KeyLightingSettings.cs`, `LearnedKeyMaps.cs`, `KeyboardProfileBackups.cs`. The light colors one controller asks of one device, what one light is, what a layer's other lights show, the key names learned with Map Key Lights, and a keyboard's stored lighting profile as it was before PadForge wrote over it
+- `ViewModels/KeyColorsCardViewModel.cs`, `KeyTargetPickerViewModel.cs`, `LedStripsCardViewModel.cs`, `MapKeyLightsViewModel.cs`, with `Views/KeyLightsView.cs` and `Views/MapKeyLightsDialog.xaml(.cs)`. The Key Colors and LED Strips cards, the picker the macro actions share, and Map Key Lights
+- `Peripherals/HidLightingBackend.cs`, `HidLightingFamily.cs` and the `HidFamilies/` folder. One worker that lights every device of the OpenRGB controller families through the device's own lighting collection, light by light, and one file per family
+- `Peripherals/OpenRgbBackend.cs`, `OpenRgbClient.cs`, `OpenRgbProtocol.cs`, `OpenRgbDevices.cs`, `OpenRgbKeys.cs`, `OpenRgbServerPort.cs`. The OpenRGB route: while OpenRGB runs with its SDK server on, PadForge lights its devices through that server
+- `Peripherals/SdkCategoryBackend.cs`, `AuraSdkBackend.cs`, `MysticLightBackend.cs`, `IcueBackend.cs`, `WootingRgbSdkBackend.cs`, `VendorPrograms.cs`, `OwnLightingChannels.cs`, `Services/IcueSdkNative.cs`. The vendor SDK routes (ASUS Aura, MSI Mystic Light, Corsair iCUE, Wooting) that light a vendor's devices by kind while the vendor's program runs, and the ACPI and WMI channels laptops are lit through
+- `tools/gen_*.py` write the `*.g.cs` tables these use. See [Build and Publish](build-and-publish.md#diagnostic-tools-tools)
+
+**WinUSB keyboards, mice and touchpads** (#549). Detailed in [Driver Installation Internals](driver-installation-internals.md#keyboards-and-mice-use-only-in-padforge).
+
+- `Common/Input/WinUsbKeyboards/`. `WinUsbKeyboardChannel`, `WinUsbKeyboardDevice`, `WinUsbMouseDevice`, `HidKeyboardReports`, `HidMouseReports` and `KeyboardTakeovers`: a keyboard or mouse read over WinUSB and presented as the row it had
+- `Common/Input/Touchpads/` and Engine `Common/Touchpads/`. A precision touchpad read by PadForge alone: `TouchpadNodes`, `TouchpadMouseDevice`, `TouchpadCapture`, `TouchpadPointer`, `TouchpadMouse`
+- `Services/WinUsbKeyboardBinding.cs`, `GiveBackTask.cs`, `GiveBackRun.cs`, `Views/KeepDriverDialog.xaml(.cs)`. The offer, the Task Scheduler give-back and the Keep prompt
+
+**Other additions.** `Common/Input/BluetoothFirmwareService.cs` (a Bluetooth LE pad's firmware revision from its Device Information service), `Common/Input/Ds4UsbAudio.cs` (where a DualShock 4's USB audio plays, #546), `Services/FreedButtonCleanup.cs` (clears what still names a removed word, phrase, tag or learned button), Engine `Common/Mapping/BoundedReads.cs` (the range, sector, stage, wedge and disc reads Steam imports lower to), Engine `Common/XmlSafeText.cs` (text the settings file can hold), `Controls/MarqueeLabel.cs` and `Converter/LogScaleConverter.cs`.
+
+**Subsystem folders with their own pages.**
+
+| Folder | Page |
+|---|---|
+| Engine `Common/AnalogKeyboard/` and `Routes/`, App `Common/Input/AnalogKeyboard*.cs` | [Analog Keyboards Internals](analog-keyboards-internals.md) |
+| Engine `Common/BlissBox/`, App `MainWindow.BlissBox.cs`, `Services/DreamcastScreenService.cs` | [Bliss-Box Internals](bliss-box-internals.md) |
+| Engine `Common/ForceDimension/`, App `Common/Input/Falcon/`, `MainWindow.Falcon.cs` | [Novint Falcon Internals](novint-falcon-internals.md) |
+| App `Common/Input/KeyboardScreens/`, `MainWindow.KeyboardScreens.cs`, Engine `Common/Logitech/LogitechArxLibrary.cs`, `Common/MadCatz/Strike7Library.cs` | [Keyboard Screens Internals](keyboard-screens-internals.md) |
+| Engine `Common/Logitech/` (the G-key files) | [Logitech G-Keys Internals](logitech-g-keys-internals.md) |
+| Engine `Common/OpenXr/` | [OpenXR Input Internals](openxr-input-internals.md) |
+| App `Services/ExternalControlService.cs` | [External Control Internals](external-control-internals.md) |
+| App `Common/Input/AcpiWmi.cs` | [Handheld PC Buttons Internals](handheld-buttons-internals.md) |
+
+Engine `Common/Tablets/` holds the pen tablet capture (`WindowsTabletDevice`, `TabletCaptureQueue`) that the taken-touchpad capture copies. See [Touchpads](driver-installation-internals.md#touchpads).
+
 ### PadForge.SteamWorkshop
 
 ```
@@ -1040,6 +1107,18 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 The Game Telemetry row (#531) runs a background thread named `PadForge.GameTelemetryUdp` while **Listen for Game Telemetry** is on, the engine runs, and the Game list holds anything but Assetto Corsa, which only shared memory carries. It blocks in `Socket.ReceiveFrom`, copies each packet to the forward port, and decodes it under the row's state lock. The poll thread reads the frame in Step 2 and polls Assetto Corsa's shared memory there itself. Closing the socket ends the thread, and retiring the row waits up to 50 ms for it.
 
+### 15. Screen Color Capture Thread (ScreenCaptureWorker, on demand)
+
+Each display a Screen Color lighting mode reads (#559) gets a background thread named `PadForge Screen Color` (`ThreadPriority.BelowNormal`, MTA) that grabs the desktop image and hands the lighting threads one whole downscaled picture by reference. Reading through `ScreenColorSource` keeps the capture running, and a display nothing has read for a while stops (`IsIdle`). See [Screen Color Internals](screen-color-internals.md).
+
+### 16. Twitch Chat Connection (TwitchChatClient, on demand)
+
+`TwitchChatClient` (#555) is not a dedicated `Thread`. While the Twitch Chat row is on, `RunAsync` loops as a task on the thread pool, reconnecting after a failed session. See [Twitch Chat Internals](twitch-chat-internals.md).
+
+### 17. Text Focus Watcher (OskTextFocusWatcher, on demand)
+
+`OskTextFocusWatcher` (#566) subscribes to UI Automation's focus event on a background thread named `PadForge text focus`, and only while a keyboard menu has **Open When a Text Box Is Selected** on, because a focus watcher costs every program that answers UI Automation a query per focus change.
+
 ### Thread Safety Summary
 
 | Shared State | Writer | Reader | Sync |
@@ -1178,24 +1257,24 @@ Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual contro
 
 | Package | Version | Project | Purpose |
 |---|---|---|---|
-| **CommunityToolkit.Mvvm** | 8.2.2 | App | MVVM: `ObservableObject`, `SetProperty`, `RelayCommand` |
+| **CommunityToolkit.Mvvm** | 8.4.2 | App | MVVM: `ObservableObject`, `SetProperty`, `RelayCommand` |
 | **Concentus** | 2.2.2 | App | Pure-C# Opus encoder for the DualSense Bluetooth speaker |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | App | 3D viewport for controller model visualization |
-| **Microsoft.Windows.CsWinRT** | 2.2.0 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
+| **Microsoft.Windows.CsWinRT** | 2.3.1 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
 | **NAudio.Wasapi** | 2.2.1 | App | WASAPI loopback capture for bass-driven rumble, plus the WASAPI capture and render behind Bass Shakers, macro sounds, controller audio, haptic tones, and voice macros |
 | **Nefarius.Utilities.DeviceManagement** | 6.1.0 | App | Driver-store install, class filters, and USB CyclePort for the BthPS3 DualShock 3 stack (#116) and for releasing a hidden USB controller |
-| **System.Management** | 10.0.11 | App | ACPI-WMI event subscriptions for handheld hidden buttons and their learner (#343) |
-| **System.Speech** | 10.0.0 | App | SAPI recognizer session for voice macros (#317) |
+| **System.Management** | 10.0.13 | App | ACPI-WMI event subscriptions for handheld hidden buttons and their learner (#343) |
+| **System.Speech** | 10.0.13 | App | SAPI recognizer session for voice macros (#317) |
 | **Vosk** | 0.3.38 | App | Offline voice-macro recognizer (Apache-2.0). Phrase-list grammar with an `[unk]` bucket |
 | **WPF-UI** | 4.3.0 | App | Fluent Design theme (Windows 11-style UI) |
-| **BouncyCastle.Cryptography** | 2.6.2 | Engine | Remote Link crypto: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (#138) |
-| **System.Security.Cryptography.ProtectedData** | 10.0.9 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
-| **SteamKit2** | 3.4.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only. protobuf-net and ZstdSharp.Port arrive transitively |
+| **BouncyCastle.Cryptography** | 2.7.0 | Engine | Remote Link crypto: X25519, Ed25519, ChaCha20-Poly1305, HKDF-SHA256 (#138) |
+| **System.Security.Cryptography.ProtectedData** | 10.0.13 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
+| **SteamKit2** | 3.5.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only. protobuf-net and ZstdSharp.Port arrive transitively |
 
 `HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.9.0.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 
-Native libraries folded into `PadForge.exe` and extracted at first launch to the single-file extraction directory (`%TEMP%\.net\PadForge\<hash>\`). Each architecture folder below has an `arm64` twin the ARM64 build takes, except `Interhaptics`, which ships x64 only:
+Native libraries folded into `PadForge.exe` and extracted at first launch to the single-file extraction directory (`%TEMP%\.net\PadForge\<hash>\`). Each architecture folder below has an `arm64` twin the ARM64 build takes, except `Interhaptics`, `Corsair` and `MysticLight`, which ship x64 only:
 
 | Library | Caller | Notes |
 |---|---|---|
@@ -1203,6 +1282,8 @@ Native libraries folded into `PadForge.exe` and extracted at first launch to the
 | `libusb-1.0.dll` | SDL3's HIDAPI backend | WinUSB access for the Switch 2 Pro Controller. `Resources/SDL3/x64/` |
 | `msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll` | `SDL3.dll` | The C++ runtime SDL3.dll imports (its Elite paddle reader is C++), bundled so no redistributable install is needed. `vcruntime140_1.dll` is x64 only. `Resources/VisualCpp/x64/` |
 | `xinput1_4.dll` | SDL3's XInput backend, `BluetoothLinkHelper` | OpenXInput fork. Single-file-embedded. `App.OnStartup` calls `SetDllDirectory` on the extraction directory, so the loader resolves the extracted copy ahead of System32. Filters HM virtuals from PadForge's own XInput view. `Resources/OpenXInput/x64/` |
+| `iCUESDK.x64_2019.dll` | `IcueSdkNative` (#557) | The redist library of Corsair's iCUE SDK 4.0.84, loaded by name while iCUE runs. x64 only. `Resources/Corsair/x64/` |
+| `MysticLight_SDK_x64.dll` | `MysticLightNative` (#557) | The x64 library of MSI's Mystic Light SDK 1.0.0.8, loaded while Mystic Light runs. x64 only. `Resources/MysticLight/x64/` |
 | `HAR.dll` | `SensaHapticsService` (#374), the Razer Sensa row's worker (#494) | Interhaptics engine, P/Invoked lazily, so a missing DLL degrades to a diagnostics line. `Resources/Interhaptics/x64/` |
 | `Interhaptics.RazerProvider.dll` | `HAR.dll` | The Razer Sensa backend `HAR.dll` loads. `Resources/Interhaptics/x64/` |
 | `libvosk.dll` + `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | x64: added by the Vosk 0.3.38 package's own targets file, not by the csproj, and the three MinGW DLLs are what that `libvosk.dll` links against. ARM64: a `<Content>` item, `Resources/Vosk/arm64/libvosk.dll`, built by `tools/build-libvosk-arm64.sh` with its runtime linked in, so it has no companions |
@@ -1412,4 +1493,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

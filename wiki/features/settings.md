@@ -22,115 +22,115 @@ Arabic, Central Kurdish, Persian and Urdu lay the interface out right to left. C
 
 | Language | Own name | Tag | Strings |
 |---|---|---|---|
-| Afrikaans | Afrikaans | `af` | 3660 of 3841 |
-| Albanian | Shqip | `sq` | 3785 of 3841 |
-| Amharic | አማርኛ | `am` | 3802 of 3841 |
-| Arabic | العربية | `ar` | 3840 of 3841, right to left |
-| Armenian | Հայերեն | `hy` | 3799 of 3841 |
-| Basque | Euskara | `eu` | 3831 of 3841 |
+| Afrikaans | Afrikaans | `af` | 4029 of 4794 |
+| Albanian | Shqip | `sq` | 4144 of 4794 |
+| Amharic | አማርኛ | `am` | 4170 of 4794 |
+| Arabic | العربية | `ar` | 4209 of 4794, right to left |
+| Armenian | Հայերեն | `hy` | 4161 of 4794 |
+| Basque | Euskara | `eu` | 4193 of 4794 |
 | Belarusian | Беларуская | `be` | all |
 | Bengali | বাংলা | `bn` | all |
-| Bikol | Bikol | `bik` | 787 of 3841 |
-| Bislama | Bislama | `bi` | 1107 of 3841 |
+| Bikol | Bikol | `bik` | 927 of 4794 |
+| Bislama | Bislama | `bi` | 1314 of 4794 |
 | Bulgarian | Български | `bg` | all |
-| Burmese | မြန်မာ | `my` | 3829 of 3841 |
+| Burmese | မြန်မာ | `my` | 4189 of 4794 |
 | Cantonese (Traditional) | 廣東話（繁體） | `zh-HK` | all |
-| Cape Verdean Creole | Kabuverdianu | `kea` | 2263 of 3841 |
-| Catalan | Català | `ca` | 3839 of 3841 |
-| Cebuano | Cebuano | `ceb` | 2835 of 3841 |
-| Central Kurdish | کوردیی ناوەندی | `ckb` | 3825 of 3841, right to left |
-| Chichewa | Chichewa | `ny` | 887 of 3841 |
-| Chinese (Pinyin) | Hànyǔ Pīnyīn | `zh-Latn` | 3758 of 3841 |
+| Cape Verdean Creole | Kabuverdianu | `kea` | 2534 of 4794 |
+| Catalan | Català | `ca` | 4208 of 4794 |
+| Cebuano | Cebuano | `ceb` | 3184 of 4794 |
+| Central Kurdish | کوردیی ناوەندی | `ckb` | 4193 of 4794, right to left |
+| Chichewa | Chichewa | `ny` | 1054 of 4794 |
+| Chinese (Pinyin) | Hànyǔ Pīnyīn | `zh-Latn` | 4120 of 4794 |
 | Chinese (Simplified) | 中文（简体） | `zh-Hans` | all |
 | Chinese (Traditional) | 中文（繁體） | `zh-Hant` | all |
-| Chuukese | Fosun Chuuk | `chk` | 365 of 3841 |
-| Croatian | Hrvatski | `hr` | 3838 of 3841 |
+| Chuukese | Fosun Chuuk | `chk` | 387 of 4794 |
+| Croatian | Hrvatski | `hr` | 4200 of 4794 |
 | Czech | Čeština | `cs` | all |
 | Danish | Dansk | `da` | all |
 | Dutch | Nederlands | `nl` | all |
 | English (United Kingdom) | English (United Kingdom) | `en-GB` | all |
 | English (United States) | English (United States) | `en-US` | all |
-| Estonian | Eesti | `et` | 3837 of 3841 |
-| Fiji Hindi | Fiji Hindi | `hif` | 583 of 3841 |
-| Fijian | Vosa Vakaviti | `fj` | 424 of 3841 |
+| Estonian | Eesti | `et` | 4199 of 4794 |
+| Fiji Hindi | Fiji Hindi | `hif` | 716 of 4794 |
+| Fijian | Vosa Vakaviti | `fj` | 494 of 4794 |
 | Finnish | Suomi | `fi` | all |
 | French | Français | `fr` | all |
-| Georgian | ქართული | `ka` | 3825 of 3841 |
+| Georgian | ქართული | `ka` | 4182 of 4794 |
 | German | Deutsch | `de` | all |
 | Greek | Ελληνικά | `el` | all |
-| Guarani | Avañeʼẽ | `gn` | 771 of 3841 |
-| Gujarati | ગુજરાતી | `gu` | 3829 of 3841 |
-| Haitian Creole | Kreyòl ayisyen | `ht` | 3217 of 3841 |
-| Hawaiian | ʻŌlelo Hawaiʻi | `haw` | 613 of 3841 |
-| Hiligaynon | Hiligaynon | `hil` | 1009 of 3841 |
+| Guarani | Avañeʼẽ | `gn` | 858 of 4794 |
+| Gujarati | ગુજરાતી | `gu` | 4191 of 4794 |
+| Haitian Creole | Kreyòl ayisyen | `ht` | 3562 of 4794 |
+| Hawaiian | ʻŌlelo Hawaiʻi | `haw` | 713 of 4794 |
+| Hiligaynon | Hiligaynon | `hil` | 1226 of 4794 |
 | Hindi | हिन्दी | `hi` | all |
-| Hmong | Hmoob | `hmn` | 946 of 3841 |
+| Hmong | Hmoob | `hmn` | 1113 of 4794 |
 | Hungarian | Magyar | `hu` | all |
 | Icelandic | Íslenska | `is` | all |
-| Igbo | Igbo | `ig` | 829 of 3841 |
-| Ilocano | Ilokano | `ilo` | 748 of 3841 |
+| Igbo | Igbo | `ig` | 1004 of 4794 |
+| Ilocano | Ilokano | `ilo` | 932 of 4794 |
 | Indonesian | Bahasa Indonesia | `id` | all |
 | Italian | Italiano | `it` | all |
 | Japanese | 日本語 | `ja` | all |
-| Kannada | ಕನ್ನಡ | `kn` | 3808 of 3841 |
-| Kazakh | Қазақша | `kk` | 3834 of 3841 |
-| Khmer | ភាសាខ្មែរ | `km` | 3834 of 3841 |
-| Kinyarwanda | Ikinyarwanda | `rw` | 1223 of 3841 |
+| Kannada | ಕನ್ನಡ | `kn` | 4170 of 4794 |
+| Kazakh | Қазақша | `kk` | 4196 of 4794 |
+| Khmer | ភាសាខ្មែរ | `km` | 4195 of 4794 |
+| Kinyarwanda | Ikinyarwanda | `rw` | 1425 of 4794 |
 | Korean | 한국어 | `ko` | all |
-| Lao | ລາວ | `lo` | 3819 of 3841 |
+| Lao | ລາວ | `lo` | 4181 of 4794 |
 | Latvian | Latviešu | `lv` | all |
-| Lingala | Lingála | `ln` | 1238 of 3841 |
-| Lithuanian | Lietuvių | `lt` | 3834 of 3841 |
-| Luganda | Luganda | `lg` | 431 of 3841 |
-| Luxembourgish | Lëtzebuergesch | `lb` | 3815 of 3841 |
+| Lingala | Lingála | `ln` | 1463 of 4794 |
+| Lithuanian | Lietuvių | `lt` | 4196 of 4794 |
+| Luganda | Luganda | `lg` | 490 of 4794 |
+| Luxembourgish | Lëtzebuergesch | `lb` | 4174 of 4794 |
 | Macedonian | Македонски | `mk` | all |
-| Malagasy | Malagasy | `mg` | 1461 of 3841 |
-| Malay | Bahasa Melayu | `ms` | 3835 of 3841 |
-| Malayalam | മലയാളം | `ml` | 3804 of 3841 |
-| Maltese | Malti | `mt` | 3770 of 3841 |
-| Marathi | मराठी | `mr` | 3819 of 3841 |
-| Mongolian | Монгол | `mn` | 3819 of 3841 |
-| Māori | Te Reo Māori | `mi` | 1284 of 3841 |
+| Malagasy | Malagasy | `mg` | 1723 of 4794 |
+| Malay | Bahasa Melayu | `ms` | 4197 of 4794 |
+| Malayalam | മലയാളം | `ml` | 4166 of 4794 |
+| Maltese | Malti | `mt` | 4130 of 4794 |
+| Marathi | मराठी | `mr` | 4181 of 4794 |
+| Mongolian | Монгол | `mn` | 4180 of 4794 |
+| Māori | Te Reo Māori | `mi` | 1520 of 4794 |
 | Nepali | नेपाली | `ne` | all |
-| Northern Sotho | Sepedi | `nso` | 732 of 3841 |
+| Northern Sotho | Sepedi | `nso` | 888 of 4794 |
 | Norwegian | Norsk | `no` | all |
-| Oromo | Afaan Oromoo | `om` | 1402 of 3841 |
-| Papiamento | Papiamentu | `pap` | 1912 of 3841 |
+| Oromo | Afaan Oromoo | `om` | 1589 of 4794 |
+| Papiamento | Papiamentu | `pap` | 2209 of 4794 |
 | Persian | فارسی | `fa` | all, right to left |
 | Polish | Polski | `pl` | all |
 | Portuguese (Brazil) | Português (Brasil) | `pt-BR` | all |
-| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | 3839 of 3841 |
-| Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 989 of 3841 |
+| Portuguese (Portugal) | Português (Portugal) | `pt-PT` | 4201 of 4794 |
+| Quechua (Bolivia) | Qhichwa (Bolivia) | `quh` | 1184 of 4794 |
 | Romanian | Română | `ro` | all |
 | Russian | Русский | `ru` | all |
-| Samoan | Gagana Sāmoa | `sm` | 782 of 3841 |
+| Samoan | Gagana Sāmoa | `sm` | 899 of 4794 |
 | Serbian | Српски | `sr` | all |
-| Sesotho | Sesotho | `st` | 639 of 3841 |
-| Shona | ChiShona | `sn` | 872 of 3841 |
-| Sinhala | සිංහල | `si` | 3795 of 3841 |
+| Sesotho | Sesotho | `st` | 793 of 4794 |
+| Shona | ChiShona | `sn` | 1081 of 4794 |
+| Sinhala | සිංහල | `si` | 4157 of 4794 |
 | Slovak | Slovenčina | `sk` | all |
 | Slovenian | Slovenščina | `sl` | all |
 | Spanish | Español | `es` | all |
-| Swahili | Kiswahili | `sw` | 3769 of 3841 |
+| Swahili | Kiswahili | `sw` | 4131 of 4794 |
 | Swedish | Svenska | `sv` | all |
-| Tagalog | Tagalog | `fil` | 3652 of 3841 |
+| Tagalog | Tagalog | `fil` | 4010 of 4794 |
 | Tamil | தமிழ் | `ta` | all |
 | Telugu | తెలుగు | `te` | all |
 | Thai | ไทย | `th` | all |
-| Tok Pisin | Tok Pisin | `tpi` | 1246 of 3841 |
-| Tongan | Lea faka-Tonga | `to` | 444 of 3841 |
-| Tswana | Setswana | `tn` | 673 of 3841 |
+| Tok Pisin | Tok Pisin | `tpi` | 1474 of 4794 |
+| Tongan | Lea faka-Tonga | `to` | 516 of 4794 |
+| Tswana | Setswana | `tn` | 783 of 4794 |
 | Turkish | Türkçe | `tr` | all |
-| Twi | Twi | `tw` | 416 of 3841 |
-| Ukrainian | Українська | `uk` | 3835 of 3841 |
+| Twi | Twi | `tw` | 482 of 4794 |
+| Ukrainian | Українська | `uk` | 4197 of 4794 |
 | Urdu | اردو | `ur` | all, right to left |
 | Vietnamese | Tiếng Việt | `vi` | all |
-| Waray | Winaray | `war` | 903 of 3841 |
-| Welsh | Cymraeg | `cy` | 3814 of 3841 |
-| Western Armenian | Արեւմտահայերէն | `hyw` | 3794 of 3841 |
-| Xhosa | IsiXhosa | `xh` | 1174 of 3841 |
-| Yoruba | Èdè Yorùbá | `yo` | 1351 of 3841 |
-| Zulu | IsiZulu | `zu` | 1819 of 3841 |
+| Waray | Winaray | `war` | 1042 of 4794 |
+| Welsh | Cymraeg | `cy` | 4175 of 4794 |
+| Western Armenian | Արեւմտահայերէն | `hyw` | 4154 of 4794 |
+| Xhosa | IsiXhosa | `xh` | 1389 of 4794 |
+| Yoruba | Èdè Yorùbá | `yo` | 1565 of 4794 |
+| Zulu | IsiZulu | `zu` | 2142 of 4794 |
 
 Corrections and new translations land as pull requests. `tools/l10n/check_translation.py` checks a translation against the rules every file in the tree passes: placeholders, line breaks, digits, the names that stay in Latin letters, and decimal numbers written with a period.
 
@@ -245,7 +245,7 @@ Close the Bliss-Box API Tool and DeviceBuddy while this is on, since they talk t
 
 ### Polling Interval
 
-How often the engine reads input, in milliseconds. Default: **1 ms** (~1000 Hz).
+The field is labeled **Polling Interval (Unless a Profile Overrides It)**. How often the engine reads input, in milliseconds. Default: **1 ms** (~1000 Hz).
 
 | Value | Frequency | Fits |
 |---|---|---|
@@ -308,10 +308,14 @@ While the engine runs, the card names the library that loaded, and when no Falco
 
 Get notified when a controller's battery runs low, before it dies mid-game.
 
-- **Notify When Battery Runs Low** turns the alerts on.
-- **Notify at or Below** sets the percentage that triggers one.
-- **Also Vibrate the Controller** adds a buzz on the pad itself, so the warning reaches you without looking at the screen.
+- **Notify When Battery Runs Low** turns the low-battery notice on. It is on by default.
+- **Notify at or Below** sets the percentage that triggers it, 5 to 50. Default: 15.
+- **Also Vibrate the Controller** adds a buzz on the pad itself, so the warning reaches you without looking at the screen. Off by default.
+- **Repeat the Notice Every** shows the low notice again after this many minutes while the pad stays at or below the threshold and is not charging. Range 0 to 60, with the unit text **Minutes (0 = Never)**. Default: 0, which never repeats.
+- **Notify When Fully Charged** shows a **Controller Fully Charged** notice once when a pad's charge rises to 100%. It is off by default and works without the low-battery notice. A pad already at 100% when PadForge first sees it stays quiet, and the notice arms again once the level falls to 90% or below.
 - **Test Notification** sends a sample alert at the threshold level through the same path, so you can check it without draining a battery.
+
+The low notice fires when the level crosses to the threshold or below, or when PadForge first sees a pad already there. It never fires while the pad charges, and it arms again when the pad charges or rises more than 5 points above the threshold. It shows as a tray notification and in the status bar.
 
 The same rumble drives **identify**: buzzing a device is how you tell which of several identical pads is which.
 
@@ -541,9 +545,10 @@ Opens the folder holding `diagnostics.log` and any snapshots.
 - [Devices](devices.md): physical controllers and assignments.
 - [Driver Management](driver-management.md): driver install detail.
 - [Profiles](../guides/profiles.md): per-app config and Profile Shortcuts.
+- [Profile Import](../guides/profile-import.md): bring in reWASD and DS4Windows profiles.
 - [Steam Workshop Config Import](../guides/steam-workshop-import.md): the feature behind the Community Configs card.
 - [Troubleshooting](../troubleshooting.md): more help.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

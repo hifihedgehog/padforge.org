@@ -163,6 +163,7 @@ public static string SDL_GetJoystickName(IntPtr joystick);
 public static ushort SDL_GetJoystickVendor(IntPtr joystick);
 public static ushort SDL_GetJoystickProduct(IntPtr joystick);
 public static ushort SDL_GetJoystickProductVersion(IntPtr joystick);
+public static ushort SDL_GetJoystickFirmwareVersion(IntPtr joystick);
 public static SDL_JoystickType SDL_GetJoystickType(IntPtr joystick);
 public static string SDL_GetJoystickPath(IntPtr joystick);
 public static string SDL_GetJoystickSerial(IntPtr joystick);
@@ -187,6 +188,17 @@ public static void SDL_CloseGamepad(IntPtr gamepad);
 public static IntPtr SDL_GetGamepadJoystick(IntPtr gamepad);
 public static short SDL_GetGamepadAxis(IntPtr gamepad, int axis);
 public static bool SDL_GetGamepadButton(IntPtr gamepad, int button);
+
+// Face button label for the gamepad's face style (A B X Y, Cross Circle Square Triangle)
+public static int SDL_GetGamepadButtonLabel(IntPtr gamepad, int button);
+
+// Capacitive sensors (fork, SDL_GAMEPAD_CAPSENSE_COUNT = 4 channels)
+public static bool SDL_GamepadHasCapSense(IntPtr gamepad, int type);
+public static bool SDL_GetGamepadCapSense(IntPtr gamepad, int type);
+
+// Joystick balls (the Logitech WingMan Warrior spin dial is ball 0)
+public static int SDL_GetNumJoystickBalls(IntPtr joystick);
+public static bool SDL_GetJoystickBall(IntPtr joystick, int ball, out int dx, out int dy);
 
 // Gamepad sensors
 public static bool SDL_GamepadHasSensor(IntPtr gamepad, int type);
@@ -374,13 +386,13 @@ private static void LoadEmbeddedGamepadMappings()
 
 ### SDL Hints (Complete Reference)
 
-`InitializeSdl` sets these before `SDL_Init()`. SDL reads them during subsystem startup. Two fork HIDAPI hints are deliberately absent from this table and toggled at runtime instead, covered in [Runtime-Managed Hints](#runtime-managed-hints-mcu-demand-latch) below.
+`InitializeSdl` sets these before `SDL_Init()`. SDL reads them during subsystem startup. Three fork HIDAPI hints are deliberately absent from this table and toggled at runtime instead, covered in [Runtime-Managed Hints](#runtime-managed-hints-mcu-demand-latch) below.
 
 | Hint | Value | Rationale |
 |------|-------|-----------|
 | `SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS` | `"1"` | Keeps joystick input flowing while PadForge is in the background, which a remapper needs while games have focus. SDL drops that input only when the app has an SDL window and none holds keyboard focus (`SDL_PrivateJoystickShouldIgnoreEvent`, `SDL_joystick.c`). PadForge opens no SDL window, so that condition never holds and the hint changes nothing today. |
 | `SDL_HINT_JOYSTICK_XINPUT` | `"1"` | Has no effect. The constant's string, `SDL_JOYSTICK_XINPUT`, is not a hint SDL 3 reads. SDL 3 kept SDL2's name for the XInput switch, `SDL_HINT_XINPUT_ENABLED` (`SDL_XINPUT_ENABLED`), and that switch defaults to on (`SDL_xinputjoystick.c`), which is why Xbox controllers enumerate. |
-| `SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI` | `"1"` by default | The Settings page's Flydigi Enhanced Protocol checkbox (#395). On, SDL's Flydigi driver takes the pad's vendor interface for M1 to M4, C, Z, LM, RM and motion. Off leaves the pad on its XInput view, for a user whose Flydigi Space Station must keep sight of the pad. `SDL_Quit` clears hints, so `ApplyFlydigiEnhancedProtocol` replays the recorded state before every `SDL_Init()`, and a toggle applies live through the driver's hint callback. |
+| `SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI` | `"1"` by default | The Settings page's Flydigi Enhanced Protocol checkbox (#395). On, SDL's Flydigi driver takes the pad's vendor interface for M1 to M4, C, Z, LM, RM and motion. Off leaves the pad on its XInput view, for a user whose Flydigi Space Station must keep sight of the pad. `SDL_Quit` clears hints, so `ApplyFlydigiEnhancedProtocol` replays the recorded state before every `SDL_Init()`, and a toggle applies live through the driver's hint callback. The serial, iCade and DJI lists are replayed the same way at each start. |
 | `SDL_HINT_HIDAPI_IGNORE_DEVICES` | `"0x146b/0x0603"` | Devices SDL's hidapi layer must never enumerate or probe. Connecting a Nacon PS4 Compact (146B:0603) froze the app until unplug (#235). The leading explanation, refined by the fork SDL#19 audit, is a Sony third-party capabilities feature-report probe that never returns, on the UI thread that runs enumeration. PID-scoped seatbelt: other Nacon PIDs stay untouched. The value is the `InputManager.HidapiIgnoreDevices` constant. |
 | `SDL_HINT_JOYSTICK_BLACKLIST_DEVICES` | `"0x054c/0x03d5,0x054c/0x0c5e,0x054c/0x042f"` | Devices no SDL joystick backend may enumerate. The PS Move family (#277): a docked Move exposes three HID collections and no SDL driver claims the PIDs, so each collection surfaced as its own dead joystick row. PadForge drives these pads itself (`PsMoveDirectService`, and the DS3 service's navigation profile) and feeds SDL virtual joysticks, which are exempt because the virtual backend never calls `SDL_ShouldIgnoreJoystick`. The value is the `InputManager.JoystickBlacklistDevices` constant. |
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH2` | `"1"` | Enables the HIDAPI driver for wired Switch 2 controllers (`SDL_hidapi_switch2.c`: Pro Controller, Joy-Con 2 L/R, NSO GameCube). The fork carries the driver's Windows USB path. An unset hint falls back to `SDL_HINT_JOYSTICK_HIDAPI`, which is on by default on Windows (`SDL_HIDAPI_DEFAULT`), so setting it pins the default. |
@@ -390,18 +402,27 @@ private static void LoadEmbeddedGamepadMappings()
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_SHAPED_RUMBLE` | `"1"` | Enables the fork's frequency-shaped Switch rumble (#271 item 4, `hifihedgehog/SDL#25`). Upstream drives the Switch LRAs at two fixed carriers with amplitude-only tables. With the hint on, each motor's intensity also sweeps its frequency band (low ~41-160 Hz, high 160-320 Hz) with attack and decay transients. Classic LRA packet only, Switch 2 encoding untouched. |
 | `SDL_HINT_JOYSTICK_BLE_SWITCH2_MAGNETOMETER` | `"1"` | Enables the fork's Switch 2 BLE magnetometer channel (#271 item 5, same fork commit). Three raw int16 axes after the mouse counters, availability riding the raw axis count (9 = magnetometer, 11 = mouse plus magnetometer). `SdlDeviceWrapper.ReadSwitch2Magnetometer` reads them every poll for the Gyro tab's compass-anchored yaw (`GyroCompassYaw`), which stays inert until a figure-8 calibration stores `MagBiasX/Y/Z` and `MagFieldNorm`. |
 | `SDL_HINT_JOYSTICK_HIDAPI_PS3_SIXAXIS_DRIVER` | `"1"` | Enables SDL's Sony-sixaxis PS3 driver (#194). Claims a DualShock 3 in DsHidMini SXS mode, the only mode that serves motion, and reads its accelerometer, yaw gyro, and 10 pressure axes. Do **not** also set `SDL_HINT_JOYSTICK_HIDAPI_PS3` (the regular PS3 driver outranks sixaxis and writes at the device). |
+| `SDL_HINT_JOYSTICK_BLE` | `"1"` | Turns on the fork's Bluetooth LE drivers for pads that send input over a vendor GATT service: the Poke Ball Plus, the Daydream, Gear VR and Oculus Go controllers, the iOS Guitar Hero Live guitar, the Zwift Play and Click, and the Myo (`hifihedgehog/SDL#33`). The drivers share the Switch 2 driver's one advertisement watcher and connect to every matching pad in range that advertises, paired with the PC or not. `SDL_JOYSTICK_BLE_PAIRING` stays off: SDL never writes or removes a Bluetooth bond. `SDL_Quit` waits up to 3 s for open links to close. |
+| `SDL_HINT_JOYSTICK_HIDAPI_DREAMCHEEKY` | `"1"` | Turns on the fork's Dream Cheeky roll-up drum kit driver (1941:8021). A weather station and a missile launcher share that ID, so either one reads as a drum kit with six pads. It reaches a game only when the user assigns it to a slot. |
+| `SDL_HINT_JOYSTICK_ICADE_RAWINPUT` | `"0"` | Keeps SDL from registering for the keyboard Raw Input class. Windows gives that class to one window per process, and `RawInputListener`'s window holds it, so it hands each keyboard record to `SDL_ICadeProcessRawKeyboard` instead. |
+| `SDL_HINT_JOYSTICK_ICADE_DEVICES` | the iCade list | The pads in iCade mode that the user marked on the Devices page (`_iCadeHintValue`). |
+| `SDL_HINT_JOYSTICK_SERIAL` and `SDL_HINT_JOYSTICK_KONAMI_ACIO` | the serial list | The serial controllers the user added in the pairing dialog (`_serialHintValue`). The Konami ACIO board hint carries `SerialControllers.AcioHintValue` of that list, so an ACIO board runs only while the list names one. Without that, the fork would open a plugged-in BIO2's port and hold it with no joystick. |
+| `SDL_HINT_JOYSTICK_DJI_REMOTE_TCP_HOSTS` | the DJI host list | The DJI remotes the user added by address in the pairing dialog (`_djiHostsHintValue`). |
+| `SDL_HINT_JOYSTICK_HIDAPI_USIO_LAYOUT` | `_usioLayout`, `UsioTaiko` by default | The Namco USIO board's layout, which the board reads when it opens. `ResetUsioReopenAtInit` also writes `SDL_HINT_JOYSTICK_HIDAPI_USIO` to `"1"` when the last engine left a reopen pending with the driver off. |
 | `SDL_HINT_VIDEO_ALLOW_SCREENSAVER` | `"1"` | Counteracts `SDL_INIT_VIDEO`'s default screensaver suppression. PadForge opens no SDL window, so it has no reason to hold the screensaver off. |
 
 > **Hint timing:** subsystem-init hints such as `SDL_HINT_XINPUT_ENABLED` must precede `SDL_Init()` because SDL reads them during subsystem startup. The background-events hint can be set at any time. HIDAPI driver hints stay live after init. SDL re-evaluates them when a hint change enables or disables a driver (`SDL_HIDAPIDriverHintChanged`), and the fork reads the two MCU hints below on every device update (`SDL_hidapi_switch.c` `UpdateNfc` and `UpdateIR`). The [Wii rescan](#sdl-hint-sdl_hint_joystick_hidapi_wii) depends on the first, and the runtime-managed hints on the second.
 
 ### Runtime-Managed Hints (MCU Demand Latch)
 
-Two fork HIDAPI hints are toggled at runtime by `InputService.RefreshSwitchNfcArming()` (on the auto-idle cadence), never set at init:
+Three fork HIDAPI hints are toggled at runtime by `InputService.RefreshSwitchNfcArming()` (on the auto-idle cadence), never set at init. The first two are covered by the table, and `RefreshRingConArming` handles the third just below it.
 
 | Hint | ON while | OFF effect |
 |------|----------|------------|
 | `SDL_HINT_JOYSTICK_HIDAPI_SWITCH_NFC` | An NFC tag registration capture is running, or a Bluetooth-linked reader-capable pad (right Joy-Con `0x2007`, combined pair `0x2008`, Pro Controller `0x2009`) is online and a configured NFC consumer (local or Remote Link peer) polled an NFC descriptor within the demand window | MCU powers down. `ReadNfcTag` reports "no tag" |
 | `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_IR_SENSOR` | An "IR Brightness" consumer (`hifihedgehog/SDL#7`, #151: a right Joy-Con posts its NIR MCU average-intensity byte on joystick axis 6) polled within the demand window, no NFC registration capture is active, and an IR-capable Joy-Con is online (standalone right `0x2007`, or a combined gen-1 pair `0x2008` whose right half runs the same camera machine, fork SDL#26 / #275) | Camera stops, freeing the MCU for NFC |
+
+| `SDL_HINT_JOYSTICK_HIDAPI_JOYCON_RINGCON` (`hifihedgehog/SDL#33`) | A "Ring-Con Squeeze" or "Ring-Con Pull" read is fresh (`SourceCoercion.LastRingConReadRequestTick` within `McuDemandWindowMs`, locally or from a Remote Link peer's demand) and a right Joy-Con of this machine is online | The fork stops looking for a ring. Every look for a ring holds the MCU, which the camera and NFC get first, so the driver stops the ring while either wants it. `_ringConHintOn` latches only when `SDL_SetHint` accepts the value |
 
 How the latch works:
 
@@ -419,7 +440,7 @@ How the latch works:
 **File:** `PadForge.App/Common/Input/InputManager.Step1.UpdateDevices.cs`
 **Method:** `private void UpdateDevices()`
 
-Runs every ~2s (`EnumerationIntervalMs = 2000`) on the background polling thread, and every 5 s while the engine idles. The first cycle runs immediately (`firstCycle = true`) for instant controller detection, and so does the first cycle after idle or focus suspension ends. Two phases for joysticks, plus keyboard/mouse enumeration. The same pass also enumerates the device families SDL never sees (tablets, Precision Touchpads, MIDI inputs, NFC readers, microphones, head trackers, handheld PC buttons, Logitech G-keys), which [Input Pipeline](input-pipeline.md) covers.
+Runs every ~2s (`EnumerationIntervalMs = 2000`) on the background polling thread, and every 5 s while the engine idles. The first cycle runs immediately (`firstCycle = true`) for instant controller detection, and so does the first cycle after idle or focus suspension ends. Two phases for joysticks, plus keyboard/mouse enumeration. The same pass also enumerates the device families SDL never sees (tablets, Precision Touchpads and the mouse rows of touchpads PadForge reads alone, MIDI inputs, NFC readers, microphones, head trackers, handheld PC buttons, game telemetry, a Twitch channel's chat, Logitech G-keys, keyboard screens, Novint Falcons, peripheral outputs, and TouchSense mice and keyboards bound to WinUSB), which [Input Pipeline](input-pipeline.md) covers.
 
 ### Phase 1: Open Newly Connected Joystick Devices
 
@@ -476,9 +497,11 @@ SDL_GetJoysticks() -> uint[] joystickIds
     |       YES -> PassOver logs and records the ID. Dispose wrapper, continue
     |
     |   3. FindOrCreateUserDevice(wrapper.InstanceGuid, wrapper.ProductGuid,
-    |                             currentInstanceIds, wrapper.SerialNumber)
+    |                             currentInstanceIds, wrapper.SerialNumber,
+    |                             wrapper.PathInstanceGuid)
     |       |   Same unit re-identifying inside the disconnect debounce? -> its own row
     |       |   Exact match by InstanceGuid? -> return existing
+    |       |   Offline row keyed by PathInstanceGuid? -> re-key it to the serial GUID (#562)
     |       |   Fallback match by ProductGuid (offline device)? -> migrate GUID
     |       |   No match? -> create new UserDevice
     |       If the row's InstanceGuid differs (a same-serial twin),
@@ -534,11 +557,12 @@ HIDMaestro virtual controllers are filtered upstream by PadForge's SDL3 fork: th
 
 ### UserDevice Lookup and GUID Migration
 
-**`FindOrCreateUserDevice(Guid instanceGuid, Guid productGuid = default, HashSet<uint> livePresentSdlIds = null, string serialNumber = null)`**. The SDL sweep passes the instance IDs SDL reports present and the wrapper's serial. Every other caller passes neither. Before the tiers, a same-product row with the same serial that is still online, but whose SDL instance has left the present set, is returned as the same unit re-identifying inside the disconnect debounce (for a device with no serial, only when a live device holds the exact-match row). Three-tier matching:
+**`FindOrCreateUserDevice(Guid instanceGuid, Guid productGuid = default, HashSet<uint> livePresentSdlIds = null, string serialNumber = null, Guid pathGuid = default)`**. The SDL sweep passes the instance IDs SDL reports present, the wrapper's serial and its `PathInstanceGuid`. Every other caller passes none of them. Before the tiers, a same-product row with the same serial that is still online, but whose SDL instance has left the present set, is returned as the same unit re-identifying inside the disconnect debounce (for a device with no serial, only when a live device holds the exact-match row). Four-tier matching:
 
 1. **Exact match** by `InstanceGuid`. Returns existing device with preserved settings. When a live, present device already holds that row (two units reporting one serial), the newcomer takes an offline row of the same product and keeps that row's GUID, or gets a session GUID when no such row exists
-2. **Fallback match** by `ProductGuid` against offline devices. Handles Bluetooth reconnections with changed device paths/`InstanceGuid`. Migrates the old GUID, updates `UserSetting` via `MigrateUserSettingGuid()`, and queues the device-pinned references (mapping rows, activators, menus, per-pad slot configs) in `PendingDeviceGuidMigrations` for the UI thread to re-key
-3. **Create new**. Adds a fresh `UserDevice`
+2. **Path-keyed entry** (#562). A device that reports a serial but whose `PathInstanceGuid` names an offline row takes that row: the row's `InstanceGuid` becomes the serial GUID, `MigrateUserSettingGuid` and `PendingDeviceGuidMigrations` carry the settings and references over. A Wii Remote on a Mayflash DolphinBar had no serial until fork commit `b8afb934a2` gave it one from its calibration, so its saved entry is keyed by the bar slot's path. Without this tier the next tier would hand the remote the first offline entry of its model, another slot's or another remote's
+3. **Fallback match** by `ProductGuid` against offline devices. Handles Bluetooth reconnections with changed device paths/`InstanceGuid`. Migrates the old GUID, updates `UserSetting` via `MigrateUserSettingGuid()`, and queues the device-pinned references (mapping rows, activators, menus, per-pad slot configs) in `PendingDeviceGuidMigrations` for the UI thread to re-key
+4. **Create new**. Adds a fresh `UserDevice`
 
 All lookups use manual `for` loops (not LINQ) to avoid closure allocations in the hot path.
 
@@ -612,10 +636,17 @@ Wraps an SDL joystick (and optionally its Gamepad overlay) for unified device ac
 | `DevicePath` | `string` | Device file system path |
 | `JoystickType` | `SDL_JoystickType` | Device classification |
 | `SerialNumber` | `string` | Serial (e.g., BT MAC address) |
+| `FirmwareVersion` | `ushort` | `SDL_GetJoystickFirmwareVersion`, 0 when unknown. Read at open and again every 5 seconds, because a driver can learn it after open (`SDL#42`, `SDL#43`, `SDL#44`) |
+| `FirmwareText` | `string` | The XInput driver's four-part GameInput version, such as "5.17.3202.0", read from the joystick property `SDL.joystick.xinput.firmware` (`XInputFirmwareProperty`, `SDL#46`). `ParseFirmwareText` accepts only four decimal parts of 0 to 65535 and returns empty for anything else |
+| `ProductVersion` | `ushort` | `SDL_GetJoystickProductVersion`: the USB release number (bcdDevice) over USB, the PnP ID product version over Bluetooth LE |
+| `Backend` | `string` | The SDL driver family, from the byte of the SDL GUID that marks it (`BackendFromGuid`): `'h'` HIDAPI, `'g'` GameInput, `'v'` a virtual joystick. DirectInput leaves it zero. SDL no longer ships a RawInput or Windows.Gaming.Input joystick driver, so `'r'` and `'w'` are gone |
 | `InstanceGuid` | `Guid` | Deterministic GUID for settings matching |
+| `PathInstanceGuid` | `Guid` | The identity the device would have without its serial: `BuildPathInstanceGuid` of its path, VID and PID. `Guid.Empty` for a device with no serial, no path, or an SDL XInput slot path. `FindOrCreateUserDevice` uses it to move a saved entry keyed by path onto the serial key (#562) |
 | `ProductGuid` | `Guid` | VID+PID-based GUID |
 | `IsGameController` | `bool` | `GameController != IntPtr.Zero` |
 | `IsAttached` | `bool` | `SDL_JoystickConnected(Joystick)` |
+
+`FaceButtonLabel(int button)` returns SDL's label for a gamepad's South, East, West or North face button (`SDL_GetGamepadButtonLabel`, one of the `SDL_GAMEPAD_BUTTON_LABEL_*` values: A, B, X, Y, Cross, Circle, Square, Triangle). Each is read once on the poll thread and cached, and a device opened as a raw joystick returns `SDL_GAMEPAD_BUTTON_LABEL_UNKNOWN`.
 
 ### Force Raw Mode
 
@@ -646,7 +677,7 @@ public bool Open(uint instanceId)
 
 1. **Try Gamepad first:** `SDL_IsGamepad()` -> `SDL_OpenGamepad()`, get joystick via `SDL_GetGamepadJoystick()`
 2. **Fall back to Joystick:** `SDL_OpenJoystick()` if not a gamepad or open failed
-3. **Populate properties:** name, VID, PID, path, serial, type, `SdlGuid` from joystick handle
+3. **Populate properties:** name, VID, PID, path, serial, type, `SdlGuid` from joystick handle, plus `FirmwareVersion`, `FirmwareText` and `ProductVersion`. A driver can learn its firmware after open, so `GetCurrentState` reads `FirmwareVersion` and `FirmwareText` again every 5 seconds
 4. **Capture raw counts** before the gamepad override: `RawButtonCount = SDL_GetNumJoystickButtons()`, `RawAxisCount = SDL_GetNumJoystickAxes()`
 5. **Gamepad layout override:** NumAxes=6, NumButtons=22, NumHats=1. Parse `_mappedRawButtonIndices` and compute `SupportedButtonIndices`
 6. **HID name fallback:** if Name is raw VID/PID (e.g., `"0x16c0/0x05e1"`), query `HidD_GetProductString`
@@ -940,7 +971,7 @@ public static Guid BuildInstanceGuid(string devicePath, ushort vid, ushort pid,
 
 Deterministic GUID from MD5 hash. Five tiers, in priority order:
 
-1. **VID+PID+Serial** (`serial:{VID}:{PID}:{serial}`). Best for Bluetooth devices, where the serial (BT MAC address) is stable across reboots
+1. **VID+PID+Serial** (`serial:{VID}:{PID}:{serial}`). Best for Bluetooth devices, where the serial (BT MAC address) is stable across reboots. A Wii Remote on a Mayflash DolphinBar gets its serial from the fork (`wiical-` plus its EEPROM calibration in hex, `SDL#47`), so it keeps one identity in any bar slot. `BuildPathInstanceGuid` rebuilds the serial-less path identity of such a device, so `FindOrCreateUserDevice` can re-key an entry saved before the serial existed (#562)
 2. **XInput path resolution.** When `devicePath` starts with `XInput#`, the slot-dependent SDL path and name-derived GUID are both unstable across slot reshuffles. `StableXInputInstance.FindAll(vid, pid)` resolves to the physical PnP instance (BT MAC / USB hub+port), keyed `pnp:{physicalPath}` (with `:slot{n}` appended when two same-model pads are paired). Falls back to `sdlguid:` then the path tier if no physical match is found
 3. **Device path** (`{devicePath}:{VID}:{PID}`). Stable for wired/USB devices. VID/PID is included so different hardware in the same path stays distinct
 4. **SDL GUID** (`sdlguid:{sdlGuid}`). For virtual joysticks with no path or serial (the DS3 BT bridge). SDL's joystick GUID is stable across reconnects, unlike the session instance ID
@@ -1124,10 +1155,12 @@ Runs once per polling cycle (~1000Hz). Uses a pre-allocated `_deviceSnapshotBuff
 For each online device:
 
 1. Save the current state as `OldInputState` (`ud.OldInputState = ud.InputState`) for change detection
-2. Call `ud.Device.GetCurrentState()` (dispatches to `GetGamepadState()` or `GetJoystickState()`)
-3. Atomic reference swap: `ud.InputState = newState` (safe for cross-thread reading)
-4. Tick the touchpad gesture engine via `UpdateGestureContexts(ud, newState)`, once per device per tick, across every touchpad surface the device exposes. `UpdateMouseGestureContexts` (#200) and `UpdateMenuContexts` (#9 B-17) run beside it
-5. Apply force feedback via `ApplyForceFeedback(ud)`
+2. Call `ud.Device.GetCurrentState(ud.ForceRawJoystickMode)` (dispatches to `GetGamepadState()` or `GetJoystickState()`)
+3. While an On-Screen Keyboard is open and drives the device, `OnScreenKeyboardFilter(ud, newState)` replaces the state with one at rest for everything else (#566, see [On-Screen Keyboard Internals](on-screen-keyboard-internals.md)). The unfiltered read stays in `rawState`
+4. Atomic reference swap: `ud.InputState = newState` (safe for cross-thread reading)
+5. `UpdateIdleDisconnect` takes `rawState`. Tick the touchpad gesture engine via `UpdateGestureContexts(ud, newState)`, once per device per tick, across every touchpad surface the device exposes. `UpdateMouseGestureContexts` (#200) and `UpdateMenuContexts(ud, newState, rawState)` (#9 B-17) run beside it, the menus reading the real state so a keyboard menu keeps working
+6. `BoundedReads.StepPulls` steps the two-stage trigger pulls (#561), so a pull sees every release whether or not a row or a macro reads it this tick
+7. Apply force feedback via `ApplyForceFeedback(ud)`
 
 ### Multi-Slot Force Feedback Combining
 
@@ -1212,6 +1245,8 @@ public interface ISdlInputDevice : IDisposable
     bool HasTouchpad { get; }
     int NumTouchpads { get; }              // touchpad surface count
     int[] TouchpadFingerCounts { get; }    // per-pad simultaneous-finger count
+    int CapSenseChannelMask => 0;          // capacitive sensor channels, bits over SDL_GAMEPAD_CAPSENSE_*
+    bool? OwnerHasVoicePhrases => null;    // voice phrases as the owning PC answers (Remote Link)
     bool? TouchpadPressureSupported => null; // null = unknown
     bool? TouchpadClickSupported => null;    // null = unknown
     HapticEffectStrategy HapticStrategy { get; }
@@ -1235,7 +1270,7 @@ public interface ISdlInputDevice : IDisposable
 }
 ```
 
-`RawAxisCount`, `HasExtraGenericAxes`, `SupportedAxisIndices`, `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, `TouchpadFingerCounts`, `TouchpadPressureSupported`, and `TouchpadClickSupported` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides the first seven with live per-device values and leaves both touchpad capability flags unknown. The Remote Link peer (`RemotePeerDevice`) mirrors all nine from the owner's device list, so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252). `WindowsTabletDevice` reads pressure support from its tablet descriptor and reports no click.
+`RawAxisCount`, `HasExtraGenericAxes`, `SupportedAxisIndices`, `HasAccelAux`, `HasGyroAux`, `NumTouchpads`, `TouchpadFingerCounts`, `CapSenseChannelMask`, `OwnerHasVoicePhrases`, `TouchpadPressureSupported`, and `TouchpadClickSupported` have default interface implementations. Keyboard and mouse wrappers inherit those defaults. `SdlDeviceWrapper` overrides the first seven and `CapSenseChannelMask` with live per-device values and leaves both touchpad capability flags unknown. The Remote Link peer (`RemotePeerDevice`) mirrors the first nine from the owner's device list, `OwnerHasVoicePhrases` included, so a shared Nunchuk's "Motion Accel L" source, a shared pair's "Motion Gyro L" source, and a shared touchpad stay pickable on the consumer (#199, #252). `WindowsTabletDevice` reads pressure support from its tablet descriptor and reports no click.
 
 ### Implementations
 
@@ -1245,7 +1280,7 @@ public interface ISdlInputDevice : IDisposable
 | `SdlKeyboardWrapper` | Keyboard | `RawInputListener.GetKeyboardState()` | None |
 | `SdlMouseWrapper` | Mouse | `RawInputListener.ConsumeMouseDelta()` + `GetMouseButtons()` | None |
 
-Fourteen more classes implement the interface without touching SDL. In the engine: `ConsumerControlWrapper`, `WebControllerDevice`, `TouchpadOverlayDevice`, `WindowsTabletDevice`, and `RemotePeerDevice` (see [Engine Library](engine-library.md)). In the app: `MidiInputDevice`, `NfcReaderDevice`, `MicrophoneInputDevice`, `SonyHeadsetMotionDevice`, `SystemMotionDevice`, `HandheldButtonsDevice`, `HeadTrackerDevice`, `OpenXrHandDevice`, and `LogitechGKeysDevice`.
+Twenty-five more classes implement the interface without touching SDL. In the engine: `ConsumerControlWrapper`, `WebControllerDevice`, `TouchpadOverlayDevice`, `WindowsTabletDevice`, and `RemotePeerDevice` (see [Engine Library](engine-library.md)). In the app: `MidiInputDevice`, `NfcReaderDevice`, `MicrophoneInputDevice`, `SonyHeadsetMotionDevice`, `SystemMotionDevice`, `HandheldButtonsDevice`, `HeadTrackerDevice`, `OpenXrHandDevice`, `LogitechGKeysDevice`, `AnalogKeyboardDevice`, `KeyboardScreenDevice`, `FalconDevice`, `GameTelemetryDevice`, `TwitchChatDevice`, `TouchpadMouseDevice`, `TouchSenseMouseDevice`, `PeripheralOutputRow`, `PeripheralUnitRow`, `WinUsbKeyboardDevice` and `WinUsbMouseDevice` (the last two through `IWinUsbInputRow`).
 
 ---
 
@@ -1259,6 +1294,8 @@ Keyboards and mice use Windows Raw Input (not SDL) for per-device tracking. SDL'
 - `RegisterRawInputDevices(RIDEV_INPUTSINK)` registers for background input
 - Per-device state stored in `ConcurrentDictionary<IntPtr, bool[]>` (keyboards) and `ConcurrentDictionary<IntPtr, MouseDeviceState>` (mice)
 - Mouse deltas accumulated via `Interlocked.Add()` and consumed atomically via `Interlocked.Exchange()`
+
+A keyboard or mouse bound to WinUSB (#549) has no Raw Input row. `InputManager.WinUsbKeyboards.cs` (Phase 1o) gives it a `WinUsbKeyboardDevice` or `WinUsbMouseDevice` row under the Raw Input row's recorded ID, so the device keeps its slots, mappings and macros. `SdlKeyboardWrapper.KeyObjects` names its keys the same as a Raw Input keyboard's.
 
 ---
 
@@ -1419,7 +1456,7 @@ The fork rebases on `libsdl-org/SDL` mainline, so every upstream HIDAPI driver i
 
 | Driver | Registered at | Devices | Notes |
 |--------|---------------|---------|-------|
-| `SDL_HIDAPI_DriverFlydigi` (`SDL_hidapi_flydigi.c`) | `SDL_hidapijoystick.c:128`, enabled by `SDL_JOYSTICK_HIDAPI_FLYDIGI` at `SDL_hidapijoystick_c.h:52` | `SDL_IsJoystickFlydigiController` (`SDL_joystick.c:3638`) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2502 / 37D7:2401 (second generation, any interface), from `usb_ids.h:46-47` and `:137-140`. The model comes from the controller's device ID (`HIDAPI_DriverFlydigi_UpdateDeviceIdentity`): Apex 2, 3, 4, 5, 6 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro | The gamepad mapping (`SDL_gamepad.c:1493-1505`) puts the four paddles at `b11-b14`, the Vader C/Z and the Apex 5 and Apex 6 shoulder macros at `misc2:b15,misc3:b16`, and the Vader 5 Pro's three extra buttons at `misc4:b17,misc5:b18,misc6:b19`. `SdlDeviceWrapper` carries MISC2-MISC6 at `CustomInputState` button indices 17-21 (`SdlDeviceWrapper.cs:3227-3231`), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (`PhysicalSlotResolver.cs`). Apex 5, Apex 6, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream changes carried: `b0ccb9ef0f` (2026-10-30, removes the driver's stubs for unsupported functions), `e00dcdc9a5` (2026-09-24, fixes the Apex 6's connection type) and `d2050211eb` (2026-09-21, Apex 6 support). The fork adds the firmware version (`bb08b128e6`, `SDL#42`) |
+| `SDL_HIDAPI_DriverFlydigi` (`SDL_hidapi_flydigi.c`) | `SDL_hidapijoystick.c:128`, enabled by `SDL_JOYSTICK_HIDAPI_FLYDIGI` at `SDL_hidapijoystick_c.h:52` | `SDL_IsJoystickFlydigiController` (`SDL_joystick.c:3638`) claims 04B4:2412 (first-generation protocol, interface 2 only) and 37D7:2501 / 37D7:2502 / 37D7:2401 (second generation, any interface), from `usb_ids.h:46-47` and `:137-140`. The model comes from the controller's device ID (`HIDAPI_DriverFlydigi_UpdateDeviceIdentity`): Apex 2, 3, 4, 5, 6 and Vader 2, 2 Pro, 3, 3 Pro, 4 Pro, 5 Pro | The gamepad mapping (`SDL_gamepad.c:1493-1505`) puts the four paddles at `b11-b14`, the Vader C/Z and the Apex 5 and Apex 6 shoulder macros at `misc2:b15,misc3:b16`, and the Vader 5 Pro's three extra buttons at `misc4:b17,misc5:b18,misc6:b19`. `SdlDeviceWrapper` carries MISC2-MISC6 at `CustomInputState` button indices 17-21 (`SdlDeviceWrapper.cs:3336-3340`), and the Steam Workshop importer maps a Vader 5 Pro profile's macro buttons onto them (`PhysicalSlotResolver.cs`). Apex 5, Apex 6, Vader 3 Pro, 4 Pro and 5 Pro report gyro and accelerometer. Latest upstream changes carried: `b0ccb9ef0f` (2026-10-30, removes the driver's stubs for unsupported functions), `e00dcdc9a5` (2026-09-24, fixes the Apex 6's connection type) and `d2050211eb` (2026-09-21, Apex 6 support). The fork adds the firmware version (`bb08b128e6`, `SDL#42`) |
 | `SDL_HIDAPI_DriverSteamDeck` (`SDL_hidapi_steamdeck.c`) | `SDL_hidapijoystick.c:94` | 28DE:1205 (`controller_list.h:670`) | Trackpads, gyro, haptics. PadForge also drives the Deck as a virtual-controller persona (`steam-deck-composite`), which is HIDMaestro work, not SDL's |
 | `SDL_HIDAPI_DriverSteamTriton` (`SDL_hidapi_steam_triton.c`) | `SDL_hidapijoystick.c:97` | 28DE:1302 wired, 1303 BLE, 1304 Proteus dongle, 1305 Nereid dongle (`controller_list.h:671-674`) | The 2026 Steam Controller. Upstream added the driver in May 2026 (`f7a8801227`, `f6ffa69890`, `634dff3725`). PadForge's PCM haptic stream (reports 0x86 / 0x88) is written by PadForge itself, outside SDL (`TritonPcmSupport.cs`) |
 
@@ -1474,9 +1511,9 @@ PadForge needs no code change for the extension swap. `SdlDeviceWrapper.BuildIns
 
 #### SDL Hint: `SDL_HINT_JOYSTICK_HIDAPI_WII`
 
-Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` (`InputManager.cs:960`) before `SDL_Init()`, next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:54`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
+Gates the `hidapi_wii` driver. `InputManager.InitializeSdl` sets it to `"1"` (`InputManager.cs:1017`) before `SDL_Init()`, next to the Switch 2 hint. The constant resolves to `"SDL_JOYSTICK_HIDAPI_WII"` (`SDL3Minimal.cs:52`). Enabling the driver also lights the player LED, which stops the remote's idle flashing.
 
-`InputManager.RescanWiiControllers()` (`InputManager.cs:1483`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:962-963`), because the rescan drops every connected Wii Remote.
+`InputManager.RescanWiiControllers()` (`InputManager.cs:1540`) re-uses the hint as a per-driver restart after a pair. The `BluetoothSetServiceState` change during pairing invalidates the handle SDL grabbed mid-pairing, leaving a stale device that normally only a full app restart clears. The method toggles the hint `"0"` then `"1"` eight times on a background task (200 ms off, 1200 ms on, about 11 s total) so `SDL_HIDAPIDriverHintChanged` tears down the dead handle and re-enumerates the now-stable device. `MainWindow` calls it through `InputService` after the `PairDeviceDialog` closes, and only when a Wii pairing landed (`dialog.PairedWii`, `MainWindow.xaml.cs:971-972`), because the rescan drops every connected Wii Remote.
 
 ### Build Instructions
 
@@ -1510,4 +1547,4 @@ Whichever architecture you build, check the libusb name inside the DLL before bu
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

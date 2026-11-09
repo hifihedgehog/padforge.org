@@ -482,7 +482,25 @@ Some assigned devices show named buttons instead of numbered descriptors. They a
 - **NFC tags.** An NFC reader shows **Any NFC Tag** plus one entry per registered tag. A tap fires the source as a momentary press. Register and name tags on the [Devices](devices.md) page. See [NFC Tags](nfc-tags.md).
 - **Analog keyboard keys.** An analog keyboard's row lists every key it can report, named for its US legend. A key reads 0 at rest and full at the bottom of its travel, so it drives a trigger or a stick axis by depth, and a button at the row's **Axis-to-Button Deadzone**. See [Analog Keyboards](analog-keyboards.md).
 
-All three also work as **Assigned Devices** triggers in [Macros](../guides/macros.md).
+- **Voice phrases.** A microphone row shows **Any Phrase** plus one entry per registered phrase, which pulses when you say it. See [Voice Macros](voice-macros.md).
+- **Twitch chat words.** The Twitch Chat row shows **Any Command** plus one entry per chat word, which pulses when a viewer's command runs. See [Twitch Chat](twitch-chat.md).
+- **Hidden handheld buttons.** The Hidden Buttons row shows each button you learned, by the name you gave it. See [Handheld PC Buttons](handheld-buttons.md).
+
+These also work as **Assigned Devices** triggers in [Macros](../guides/macros.md). Removing an NFC tag, a voice phrase, a chat word or a learned handheld button clears every row, macro and saved profile that named it, so a source added later under the same number does not inherit them.
+
+---
+
+## Sources an import creates
+
+A profile imported from reWASD or DS4Windows (see [Profile Import](../guides/profile-import.md)) can bind a row to a read the source picker does not offer: a stick zone, a stick sector, a trigger's soft and full stages, or one direction of a Steam-style D-pad. Only an import creates these. The row's Source cell names the input and what it reads, as in these examples:
+
+| Read | Source cell |
+|------|-------------|
+| An input between two thresholds | The input, then the range: *Left Trigger, 20 to 80%* |
+| A stick sector or a wedge of Steam's D-pad | The stick, then the direction nearest the sector's center: *Left Stick Ring: Up* |
+| One stage of a two-stage trigger pull | The trigger, then the mode and the stage: *Left Trigger: Hair Trigger, Full Pull*. Hip Fire and Hip Fire Exclusive add the wait in milliseconds: *Left Trigger: Hip Fire, Soft Pull, 70 ms* |
+
+The numbers behind a label stay as imported. Pick another input from the dropdown to replace the read. The **Sensitivity** floor is 0.001 on an imported row, below the 0.1 of the slider, because a rotated stick's row carries the sine or cosine of its rotation.
 
 ---
 
@@ -688,7 +706,9 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 - [Force Feedback](force-feedback.md): rumble and vibration settings.
 - [Devices](devices.md): assign physical devices to slots before mapping.
 - [Steam Workshop Config Import](../guides/steam-workshop-import.md): imported community configs are built from Gamepad sources.
+- [Profile Import](../guides/profile-import.md): bring in reWASD and DS4Windows profiles.
+- [On-Screen Keyboard](on-screen-keyboard.md): a menu style any mapped input can steer and press.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

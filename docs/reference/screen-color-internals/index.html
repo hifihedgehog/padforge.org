@@ -1,0 +1,5027 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/screen-color-internals/">
+      
+      
+        <link rel="prev" href="../on-screen-keyboard-internals/">
+      
+      
+        <link rel="next" href="../twitch-chat-internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Screen Color Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#screen-color-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Screen Color Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/first-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Five-Minute Remap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/starter-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start from a starter profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/accessibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen readers and the keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/switching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Switching from another tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/peripherals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mice, Keyboards and Vendor Rows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/voice-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/handheld-buttons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/logitech-g-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bliss-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/keyboard-screens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/head-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controller-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VR Controller Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/supported/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/ps-move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PlayStation Move
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/spacemouse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpaceMouse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The worker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The worker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        States
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returning-to-the-picked-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returning to the picked display
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-grabber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing a grabber
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screendxgi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenDxgi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-gpu-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GPU reduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#desktop-duplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desktop Duplication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windowsgraphicscapture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows.Graphics.Capture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Windows.Graphics.Capture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screenmodewatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenModeWatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hdr-and-sdr-white" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HDR and SDR white
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screencolormath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenColorMath
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-spread-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The spread picture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-colors-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the colors go
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-lighting-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Lighting tab
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Peripheral Outputs Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openxr-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenXR Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logitech-g-keys-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bliss-box-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard-screens-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Data flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-worker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The worker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The worker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        States
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#returning-to-the-picked-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returning to the picked display
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-grabber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing a grabber
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screendxgi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenDxgi
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-gpu-reduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The GPU reduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#desktop-duplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desktop Duplication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#windowsgraphicscapture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows.Graphics.Capture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Windows.Graphics.Capture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screenmodewatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenModeWatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hdr-and-sdr-white" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HDR and SDR white
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#screencolormath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ScreenColorMath
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-spread-picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The spread picture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-colors-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the colors go
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-lighting-tab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Lighting tab
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="screen-color-internals">Screen Color Internals<a class="headerlink" href="#screen-color-internals" title="Permanent link">&para;</a></h1>
+<p><em>How the Screen Color lighting mode reads a display, shrinks it on the GPU, turns an area into a color or a small picture, and hands the result to the lighting paths.</em></p>
+<p>For the user-facing side see <a href="../../features/screen-color/">Screen Color</a>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.App/Common/Input/ScreenColor/ScreenColorSource.cs</code></td>
+<td>The entry point the lighting threads call: one worker per display, results shared by settings, smoothing, the spread picture, test seams.</td>
+</tr>
+<tr>
+<td><code>ScreenCaptureWorker.cs</code></td>
+<td><code>ScreenCaptureWorker</code>, the thread that reads one display, its states, waits and retirement. <code>IScreenGrabber</code>, <code>ScreenGrabResult</code>, <code>ScreenCaptureState</code>.</td>
+</tr>
+<tr>
+<td><code>ScreenDxgi.cs</code></td>
+<td><code>ScreenDxgi</code>, the DXGI and Direct3D 11 calls as raw COM slots. <code>ScreenDownscaler</code>, the GPU mip-chain reduction. <code>DesktopDuplicationGrabber</code>. The <code>ScreenGrabberWaiting</code> and <code>ScreenGrabberUnavailable</code> exceptions.</td>
+</tr>
+<tr>
+<td><code>WindowsCaptureGrabber.cs</code></td>
+<td><code>WindowsCaptureGrabber</code>, the Windows.Graphics.Capture path. <code>ScreenModeWatch</code>, its once-a-second check for display and HDR changes.</td>
+</tr>
+<tr>
+<td><code>ScreenColorMath.cs</code></td>
+<td><code>ScreenFrame</code>, <code>ScreenRect</code> and <code>ScreenColorMath</code>: areas, Average, Most Common, saturation, brightness, smoothing, rotation and the scRGB conversion. Stateless.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/Peripherals/ScreenPicture.cs</code></td>
+<td><code>ScreenPicture</code>, the spread picture a key frame carries, and <code>LightPlacement</code>, where each light of a device sits.</td>
+</tr>
+</tbody>
+</table>
+<p>The settings live on <code>DeviceSlotConfig</code> (the <code>ScreenColor*</code> properties) and <code>DeviceSlotConfigData</code>, and the Lighting tab's panel is in <code>PadPage.xaml</code> and <code>PadPage.xaml.cs</code>.</p>
+<hr />
+<h2 id="data-flow">Data flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
+<ol>
+<li>A lighting thread asks <code>ScreenColorSource.ColorFor(cfg)</code> for one color, or <code>PictureFor(cfg)</code> for the spread picture, at up to 30 calls a second.</li>
+<li><code>WorkerFor(display)</code> finds or starts the display's <code>ScreenCaptureWorker</code> and calls <code>Touch()</code> on it. A read is what keeps a capture running.</li>
+<li>The worker's thread builds a grabber, takes frames, and publishes each <code>ScreenFrame</code> with <code>Volatile.Write</code>. A frame is made whole and never changed, so the lighting threads read it by reference.</li>
+<li>The source computes the color or picture for the device's settings from the newest frame, smooths it toward the target, and returns it.</li>
+</ol>
+<p>Results are keyed by <code>ResultKey(Display, Area, Method, Saturation, Brightness, Smoothing)</code>. Devices with the same settings share one result, so a slot's devices cost one calculation between them. A result no device has asked for in <code>ForgetMs</code> (10,000 ms) is dropped the next time a new key is added. The source holds one lock, <code>s_gate</code>, only for arithmetic on a picture of a few thousand cells at the most.</p>
+<p><code>StateOf(display)</code> reports a worker's state for the Lighting tab without starting or touching one.</p>
+<hr />
+<h2 id="the-worker">The worker<a class="headerlink" href="#the-worker" title="Permanent link">&para;</a></h2>
+<p><code>ScreenCaptureWorker.Start</code> runs <code>Run</code> on a background thread named <code>PadForge Screen Color</code>, at <code>ThreadPriority.BelowNormal</code>, in the MTA. Each <code>Step</code> returns the milliseconds to wait before the next, or -1 once the worker has retired.</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IdleStopMs</code></td>
+<td>2000</td>
+<td>A worker nothing has read for this long asks the source to retire it.</td>
+</tr>
+<tr>
+<td><code>FrameMs</code></td>
+<td>33</td>
+<td>About 30 pictures a second at the most, the top of Aurora's range (<code>AmbilightLayerHandler.GetIntervalFromFps</code>).</td>
+</tr>
+<tr>
+<td><code>WorkShare</code></td>
+<td>4</td>
+<td>Reading back gets at most a quarter of the time.</td>
+</tr>
+<tr>
+<td><code>GrabTimeoutMs</code></td>
+<td>100</td>
+<td>How long one <code>Grab</code> waits for a new frame.</td>
+</tr>
+<tr>
+<td><code>RetryMinMs</code></td>
+<td>250</td>
+<td>The first wait after a failed build or an ended capture.</td>
+</tr>
+<tr>
+<td><code>RetryMaxMs</code></td>
+<td>8000</td>
+<td>The longest wait while neither grabber runs on the PC.</td>
+</tr>
+<tr>
+<td><code>WaitRetryMaxMs</code></td>
+<td>1000</td>
+<td>The longest wait while Windows holds the desktop or the capture restarts, Prismatik's <code>ACCESSDENIED_DESKTOP_RETRY_INTERVAL</code> (Lightpack <code>DDuplGrabber.cpp</code>).</td>
+</tr>
+<tr>
+<td><code>ReturnCheckMs</code></td>
+<td>1000</td>
+<td>How often a capture that fell back to the primary display looks for the display it was asked for.</td>
+</tr>
+<tr>
+<td><code>EndsBeforeUnavailable</code></td>
+<td>3</td>
+<td>Ends in a row with no picture before the state turns Unavailable.</td>
+</tr>
+</tbody>
+</table>
+<p>After a frame, the wait is <code>Math.Max(FrameMs - work, work * (WorkShare - 1))</code>, where <code>work</code> is the grabber's <code>LastWorkMs</code>. A frame that took 5 ms waits 28 ms. One that took 20 ms waits 60 ms. <code>NoChange</code> asks again at once, since <code>Grab</code> itself waited.</p>
+<p>Retirement is two-sided. <code>Step</code> sees <code>IsIdle</code> and calls the source's <code>Retire</code>, which checks <code>IsIdle</code> again under <code>s_gate</code> and removes the worker from <code>s_workers</code> only if it is still the registered one. A read that arrived at the last moment keeps the worker alive. A stopped engine, a changed profile and a macro that switched a device off the mode all end a worker this way, with no hook of their own.</p>
+<h3 id="states">States<a class="headerlink" href="#states" title="Permanent link">&para;</a></h3>
+<p><code>ScreenCaptureState</code> has five values:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Set when</th>
+<th>Lighting tab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stopped</code></td>
+<td>No worker for the display, or it retired</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td><code>Capturing</code></td>
+<td>A grabber was built, or a frame arrived</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td><code>Waiting</code></td>
+<td>The build threw <code>ScreenGrabberWaiting</code></td>
+<td><code>Pad_Lighting_ScreenWaiting</code></td>
+</tr>
+<tr>
+<td><code>Restarting</code></td>
+<td>A capture ended (<code>Lost</code> or a throwing <code>Grab</code>) for the first or second time in a row</td>
+<td>Nothing</td>
+</tr>
+<tr>
+<td><code>Unavailable</code></td>
+<td>The build threw anything else, or a capture ended the third time in a row</td>
+<td><code>Pad_Lighting_ScreenUnavailable</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>NextRetry</code> doubles the wait from 250 ms each time, up to 1000 ms for <code>Waiting</code> and <code>Restarting</code> and 8000 ms for <code>Unavailable</code>. A frame puts the wait back to 250 ms and the count of ends to zero. A build alone does neither, so a capture that builds and ends again keeps its growing wait. The worker logs a <code>SCREEN</code> line to the diagnostic log only when the reason changes.</p>
+<p>Neither grabber can tell a held desktop from a mode change when a capture ends: Desktop Duplication answers <code>DXGI_ERROR_ACCESS_LOST</code> to both. Only the rebuild's <code>DuplicateOutput</code> answers <code>E_ACCESSDENIED</code> for the secure desktop. So an end shows nothing, and the rebuild's answer sets the state. Prismatik treats <code>ACCESS_LOST</code> the same way, as a frame not ready and a reallocation (<code>DDuplGrabber.cpp</code>, <code>GrabManager.cpp</code>).</p>
+<h3 id="returning-to-the-picked-display">Returning to the picked display<a class="headerlink" href="#returning-to-the-picked-display" title="Permanent link">&para;</a></h3>
+<p><code>ScreenDxgi.FindOutput</code> gives the primary display when the asked-for one is not attached, and nothing ends that capture when the display comes back. So once every <code>ReturnCheckMs</code>, while the grabber's <code>Output</code> differs from the asked-for name, the worker asks the source's <code>CanReadAgain</code>. It first asks <code>ScreenDxgi.IsAttached</code>, which reads <code>EnumDisplayDevicesW</code> and costs no DXGI factory, then <code>ScreenDxgi.Resolves</code>, which runs DXGI's own walk on a new factory. A display Windows lists but DXGI does not enumerate, such as an indirect or virtual display, would otherwise rebuild the capture onto the primary every second. When both say yes, the worker drops the grabber and builds again. Prismatik compares its screens before every grab the same way (<code>GrabberBase.cpp</code>, <code>isReallocationNeeded</code>).</p>
+<hr />
+<h2 id="choosing-a-grabber">Choosing a grabber<a class="headerlink" href="#choosing-a-grabber" title="Permanent link">&para;</a></h2>
+<p><code>ScreenColorSource.FirstThatRuns</code> tries <code>DesktopDuplicationGrabber</code> first and <code>WindowsCaptureGrabber</code> only when the first throws <code>ScreenGrabberUnavailable</code>. A <code>ScreenGrabberWaiting</code> from the first reaches the worker unchanged: a desktop Windows holds for now is no reason to change ways.</p>
+<p><code>DesktopDuplicationGrabber</code> sorts <code>DuplicateOutput</code> failures the way Prismatik's <code>DDuplGrabber::_reallocate</code> does:</p>
+<table>
+<thead>
+<tr>
+<th>HRESULT</th>
+<th>Value</th>
+<th>Becomes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DXGI_ERROR_UNSUPPORTED</code></td>
+<td><code>0x887A0004</code></td>
+<td>Unavailable: the PC cannot duplicate this output, as on many laptops with two GPUs</td>
+</tr>
+<tr>
+<td><code>DXGI_ERROR_NOT_CURRENTLY_AVAILABLE</code></td>
+<td><code>0x887A0022</code></td>
+<td>Unavailable: the most programs that may duplicate an output already do</td>
+</tr>
+<tr>
+<td><code>E_NOTIMPL</code></td>
+<td><code>0x80004001</code></td>
+<td>Unavailable</td>
+</tr>
+<tr>
+<td>Anything else, <code>E_ACCESSDENIED</code> among them</td>
+<td></td>
+<td>Waiting</td>
+</tr>
+</tbody>
+</table>
+<p>A failed <code>CreateDXGIFactory1</code>, <code>D3D11CreateDevice</code> or an empty desktop also throws <code>ScreenGrabberUnavailable</code>.</p>
+<hr />
+<h2 id="screendxgi">ScreenDxgi<a class="headerlink" href="#screendxgi" title="Permanent link">&para;</a></h2>
+<p>The DXGI and Direct3D 11 calls go through function pointers to raw vtable slots, numbered by each method's place in the C vtable struct of the Windows SDK 10.0.26100 headers (<code>d3d11.h</code>, <code>dxgi.h</code>, <code>dxgi1_2.h</code>, <code>dxgi1_5.h</code>, <code>dxgi1_6.h</code>).</p>
+<ul>
+<li><code>FindOutput(display, ...)</code> walks every adapter (<code>EnumAdapters</code>, slot 12) and every output (<code>EnumOutputs</code>, slot 7), reading <code>DXGI_OUTPUT_DESC</code> (<code>GetDesc</code>, slot 7): the GDI name at byte 0, <code>AttachedToDesktop</code> at 80, <code>Rotation</code> at 84, the <code>HMONITOR</code> at 88. An attached output whose name matches wins. Otherwise the primary, the attached output at the desktop's origin, is used. A device must come from the adapter its output is connected to (Microsoft, <code>IDXGIOutput5::DuplicateOutput1</code>), which is why it walks every adapter, as Prismatik's <code>DDuplGrabber</code> does. An overload hands the factory to the caller.</li>
+<li><code>IsCurrent(factory)</code> is <code>IDXGIFactory1::IsCurrent</code> (slot 13), false once the adapters or outputs the factory saw have changed. Sunshine asks it on every frame because "This will return false if the HDR state changes" (<code>src/platform/windows/display_base.cpp:337-341</code>).</li>
+<li><code>CreateDevice(adapter, ...)</code> is <code>D3D11CreateDevice</code> with <code>D3D_DRIVER_TYPE_UNKNOWN</code>, no flags and the runtime's feature levels.</li>
+<li><code>IsHdr(output)</code> reads <code>DXGI_OUTPUT_DESC1</code> through <code>IDXGIOutput6::GetDesc1</code> (slot 27) and compares the color space at byte 100 with <code>DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020</code> (12).</li>
+<li><code>SdrWhiteNits(display)</code> walks the active paths of <code>QueryDisplayConfig</code>, matches the source's GDI name (<code>DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME</code>, type 1), and reads <code>DISPLAYCONFIG_SDR_WHITE_LEVEL</code> (type 11). The level is in thousandths of 80 nits, so nits are <code>level * 80 / 1000</code>. Any failure returns 200 nits.</li>
+<li><code>IsAttached(display)</code> reads <code>DISPLAY_DEVICEW.StateFlags</code> at byte 324 for <code>DISPLAY_DEVICE_ATTACHED_TO_DESKTOP</code>.</li>
+</ul>
+<hr />
+<h2 id="the-gpu-reduction">The GPU reduction<a class="headerlink" href="#the-gpu-reduction" title="Permanent link">&para;</a></h2>
+<p><code>ScreenDownscaler</code> turns a desktop texture into a few dozen cells on the GPU, the mip chain ScreenCapture.NET builds (<code>DX11ScreenCapture.PerformCaptureZoneUpdate</code>), so no full frame reaches the CPU.</p>
+<p>For a texture of width <code>W</code>, the mip level is the smallest <code>m</code> with <code>W &gt;&gt; m &lt;= MaxCols</code> (64), and the picture is <code>max(1, W &gt;&gt; m)</code> by <code>max(1, H &gt;&gt; m)</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Desktop</th>
+<th>Mip level</th>
+<th>Picture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1920 by 1080</td>
+<td>5</td>
+<td>60 by 33</td>
+</tr>
+<tr>
+<td>2560 by 1440</td>
+<td>6</td>
+<td>40 by 22</td>
+</tr>
+<tr>
+<td>2560 by 1600</td>
+<td>6</td>
+<td>40 by 25</td>
+</tr>
+<tr>
+<td>3840 by 2160</td>
+<td>6</td>
+<td>60 by 33</td>
+</tr>
+</tbody>
+</table>
+<p><code>Build</code> makes two textures in the frame's own format: a scaling texture with <code>mip + 1</code> levels, bound as render target and shader resource with <code>D3D11_RESOURCE_MISC_GENERATE_MIPS</code>, with a shader resource view on it, and a staging texture of the picture's size with CPU read access. <code>Read</code> copies the frame into level 0 (<code>CopySubresourceRegion</code>, context slot 46), calls <code>GenerateMips</code> (slot 54), copies the chosen level into the staging texture, and maps it with <code>Map</code> (slot 14, <code>D3D11_MAP_READ</code>), then <code>Unmap</code> (slot 15). The textures are rebuilt only when the frame's width, height or format changes. A step the device refuses returns null, which the grabber reports as <code>Lost</code>.</p>
+<p>A <code>DXGI_FORMAT_B8G8R8A8_UNORM</code> frame (87) is read byte by byte. A <code>DXGI_FORMAT_R16G16B16A16_FLOAT</code> frame (10) is read as half floats through <code>ScreenColorMath.ScRgbToRgb</code>. The cells then pass through <code>ScreenColorMath.Oriented</code> with the output's rotation.</p>
+<hr />
+<h2 id="desktop-duplication">Desktop Duplication<a class="headerlink" href="#desktop-duplication" title="Permanent link">&para;</a></h2>
+<p><code>DesktopDuplicationGrabber</code> builds a device on the output's adapter. On an HDR output it reads the SDR white level once, at the build, and asks <code>IDXGIOutput5::DuplicateOutput1</code> (slot 26) for <code>R16G16B16A16_FLOAT</code> and then <code>B8G8R8A8_UNORM</code>. On an SDR output it asks for <code>B8G8R8A8_UNORM</code> alone. A process that is not per-monitor DPI aware gets <code>DXGI_ERROR_UNSUPPORTED</code> from <code>DuplicateOutput1</code>, so the older <code>IDXGIOutput1::DuplicateOutput</code> (slot 22) follows it. The rotation comes from <code>DXGI_OUTDUPL_DESC</code> at byte 28 (<code>GetDesc</code>, slot 7).</p>
+<p><code>Grab</code> calls <code>AcquireNextFrame</code> (slot 8) with the 100 ms timeout:</p>
+<ul>
+<li><code>DXGI_ERROR_WAIT_TIMEOUT</code> (<code>0x887A0027</code>) is <code>NoChange</code>.</li>
+<li>Any other failure, <code>ACCESS_LOST</code> from a mode change, an HDR switch or the secure desktop among them, is <code>Lost</code>.</li>
+<li>A frame whose <code>LastPresentTime</code> is 0 only moved the pointer, ScreenCapture.NET's test (<code>DX11ScreenCapture.CaptureScreen</code>), and is <code>NoChange</code>.</li>
+</ul>
+<p><code>ReleaseFrame</code> (slot 14) runs after every acquired frame. A Desktop Duplication frame carries no pointer.</p>
+<hr />
+<h2 id="windowsgraphicscapture">Windows.Graphics.Capture<a class="headerlink" href="#windowsgraphicscapture" title="Permanent link">&para;</a></h2>
+<p><code>WindowsCaptureGrabber</code> is for a PC where Desktop Duplication cannot run. A laptop with two GPUs is the usual case: alienfx-tools documents it (<code>Doc/alienfx-gui.md</code>), and Sunshine keeps this path for it (<code>src/platform/windows/display_wgc.cpp</code>).</p>
+<p>The build needs Windows 10 build 18362 (version 1903) and <code>GraphicsCaptureSession.IsSupported()</code>. It finds the output and keeps the factory, makes a Direct3D 11 device on the output's adapter, wraps it with <code>CreateDirect3D11DeviceFromDXGIDevice</code>, and makes the capture item with <code>IGraphicsCaptureItemInterop::CreateForMonitor</code> (slot 4) on the output's <code>HMONITOR</code>. A refused <code>CreateForMonitor</code> throws <code>ScreenGrabberWaiting</code>. Any other failure throws <code>ScreenGrabberUnavailable</code>.</p>
+<p><code>PoolFormat(hdr, ...)</code> picks the pool's format: <code>R16G16B16A16Float</code> with the display's SDR white level on an HDR display, since 8-bit color there comes out clipped (Microsoft, Screen capture), as Sunshine does for scRGB (<code>src/platform/windows/frame_contract.cpp</code>, <code>select_wgc_capture_format</code>). On SDR it is <code>B8G8R8A8UIntNormalized</code>. The pool is <code>Direct3D11CaptureFramePool.CreateFreeThreaded</code> with 2 buffers at the item's size.</p>
+<p><code>TurnOffBorderAndPointer</code> sets <code>IsCursorCaptureEnabled</code> to false on build 19041 and later. On build 20348 and later it asks <code>GraphicsCaptureAccess.RequestAccessAsync(Borderless)</code> and sets <code>IsBorderRequired</code> to false. A refusal is logged and the capture runs with the border.</p>
+<p><code>Grab</code>:</p>
+<ul>
+<li>The item's <code>Closed</code> event, or <code>ScreenModeWatch.Changed()</code>, returns <code>Lost</code>.</li>
+<li><code>Newest(_pool.TryGetNextFrame)</code> takes every queued frame and keeps the newest, disposing the rest. The pool queues its frames, so one call alone hands over the oldest, a grab period behind. Sunshine keeps only the newest the same way (<code>display_wgc.cpp</code>, <code>on_frame_arrived</code>).</li>
+<li>No frame sleeps <code>Math.Min(timeoutMs, 16)</code> and returns <code>NoChange</code>.</li>
+<li>A frame whose <code>ContentSize</code> differs from the pool's size returns <code>Lost</code>.</li>
+<li>The surface's texture comes from <code>IDirect3DDxgiInterfaceAccess::GetInterface</code> (slot 3) and goes through the same <code>ScreenDownscaler</code> with identity rotation (<code>DXGI_MODE_ROTATION_IDENTITY</code>, 1). This API hands over a rotated display already turned, as Sunshine's <code>display_wgc.cpp</code> notes.</li>
+</ul>
+<h3 id="screenmodewatch">ScreenModeWatch<a class="headerlink" href="#screenmodewatch" title="Permanent link">&para;</a></h3>
+<p>Windows.Graphics.Capture sends no word of a mode change, so an HDR switch would leave an 8-bit pool clipping or a float pool on its old format. <code>ScreenModeWatch.Changed()</code> runs at most once every <code>ReturnCheckMs</code> (1000 ms). It returns true, which rebuilds the capture, when <code>IsCurrent</code> on the kept factory is false or the output's HDR state differs from the one the pool was built for. On an HDR display it rereads the SDR white level and keeps it, since the pool's format still fits. Sunshine asks <code>IsCurrent</code> on every frame (<code>display_base.cpp:337-341</code>) and rereads the white level once a second (<code>display_base.cpp:955-964</code>, <code>display.h:324</code>).</p>
+<hr />
+<h2 id="hdr-and-sdr-white">HDR and SDR white<a class="headerlink" href="#hdr-and-sdr-white" title="Permanent link">&para;</a></h2>
+<p><code>ScreenColorMath.ScRgbToRgb(r, g, b, sdrWhiteNits)</code> scales linear scRGB by <code>80 / max(sdrWhiteNits, 1)</code>, since scRGB's 1.0 is 80 nits, and encodes each channel with the sRGB curve (<code>12.92 * x</code> up to 0.0031308, then <code>1.055 * x^(1/2.4) - 0.055</code>). The display's SDR white maps to full white, which is what the desktop's ordinary colors are drawn against. A value at or above 1.0 after scaling clips to 255. A negative value, which scRGB uses for colors outside sRGB's gamut, and NaN clip to 0.</p>
+<p>Desktop Duplication reads the white level when its grabber is built. An HDR switch ends that capture with <code>ACCESS_LOST</code>, and the rebuild reads it again. Windows.Graphics.Capture rereads it every second through <code>ScreenModeWatch</code>. An 8-bit frame goes unconverted, and its grabbers pass 80 nits, which goes unused.</p>
+<hr />
+<h2 id="screencolormath">ScreenColorMath<a class="headerlink" href="#screencolormath" title="Permanent link">&para;</a></h2>
+<p><code>RectOf(area, left, top, width, height)</code> gives the part of the display each <code>ScreenColorArea</code> covers. Top Left to Bottom Right and Center are a third on each side. Custom clamps left and top to 0 to 99 percent, and the right and bottom edges to at least one percent past them and at most 100, so a custom area never leaves the display and never comes to nothing. <code>CellRange</code> turns a rectangle into the cells it touches, at least one, with a slack of 0.0001 so an edge on a cell boundary does not take the next cell.</p>
+<p><code>Average</code> is the rounded mean of the cells.</p>
+<p><code>MostCommon</code> follows alienfx-tools' Prevailing calculation beside its Medium one (<code>alienfx-gui/CaptureHelper.cpp</code>), which takes the majority of exact colors. A small averaged picture rarely repeats an exact color, so this one votes by hue:</p>
+<ul>
+<li>12 hue buckets of 30 degrees, offset so each primary sits in the middle of one. A red does not split in two across the wrap at 0.</li>
+<li>A cell with saturation under 0.2 or value under 0.1 (<code>NeutralSaturation</code>, <code>NeutralValue</code>) goes in a 13th, neutral bucket with weight 0.05 (<code>NeutralWeight</code>).</li>
+<li>Any other cell weighs <code>saturation * value</code>.</li>
+<li>The result is the weighted mean of the heaviest bucket's cells, or black when every weight is 0.</li>
+</ul>
+<p><code>Saturate(rgb, percent)</code> moves a color from or toward its gray with RazerAmbilight's <code>ApplySaturation</code> weights (<code>Ambilight/Util/ImageManipulation.cs</code>): 0.3086, 0.6094 and 0.0820. <code>Dim(rgb, percent)</code> scales each channel.</p>
+<p><code>SmoothingStep(elapsedMs, percent)</code> is <code>1 - exp(-elapsedMs / (percent * SmoothingMsPerPercent))</code> with <code>SmoothingMsPerPercent</code> = 1. It is a time constant and not a share per frame, so a fade takes as long at any update rate. It does the job of OpenRGB's Smoothness (OpenRGBEffectsPlugin <code>Effects/Ambient/Ambient.cpp</code>). A setting of 0 returns 1, and no elapsed time returns 0.</p>
+<p><code>Oriented(cols, rows, cells, rotation)</code> turns a surface into the display's orientation for <code>DXGI_MODE_ROTATION</code> 2 (90 degrees), 3 (180) and 4 (270), the way ScreenCapture.NET's <code>CopyRotate90</code>, <code>CopyRotate180</code> and <code>CopyRotate270</code> do. A rotated display's duplicated surface stays unrotated (Microsoft, Desktop Duplication API, Rotating the desktop image).</p>
+<p><code>ColorFor</code> applies Most Common or Average, then <code>Saturate</code>, then <code>Dim</code>, then the smoothing. The first frame a result sees sets its color at once, so a light does not fade up from black. Before that frame the color is black. While a capture waits or restarts, the newest frame stays, so the light keeps its last color.</p>
+<hr />
+<h2 id="the-spread-picture">The spread picture<a class="headerlink" href="#the-spread-picture" title="Permanent link">&para;</a></h2>
+<p><code>PictureFor</code> cuts the area into at most <code>PictureMaxCols</code> by <code>PictureMaxRows</code> (32 by 16) cells. <code>Crop</code> splits the area's cell range into that many parts with integer bounds, so every cell of the area lands in exactly one part and no edge goes missing, and each part gets the device's method, saturation and brightness. Each cell then smooths on its own. The source returns the same <code>ScreenPicture</code> instance while no cell changes (<code>SameCells</code>), so a device with nothing new to show gets no write.</p>
+<p><code>ScreenPicture</code> is immutable and compares by content, with its hash computed once. <code>At(across, down)</code> finds the cell under a place from 0 to 1.</p>
+<p><code>LightPlacement.Of(map)</code> gives each light of a device a place, worked out once per <code>LightMap</code>:</p>
+<ol>
+<li>Lights with reported positions (<code>LightInfo.HasPosition</code>, such as a LampArray's) are placed by the center of each light within the bounding box of all of them.</li>
+<li>A keyboard with no positions uses the QMK layout that holds the most of its key usages (<code>BestLayout</code>), the smaller of two that hold as many: full-size ANSI, ISO and extended, TKL, 75%, 65%, 65% with blocker, 60%, HHKB, HHKB JIS and the Keychron Q6. A usage the layout draws twice puts its lights on the first.</li>
+<li>Zones and edge lights still without a place are spread from left to right at mid height.</li>
+</ol>
+<p>A light with no place has NaN coordinates and takes the device's one color.</p>
+<hr />
+<h2 id="where-the-colors-go">Where the colors go<a class="headerlink" href="#where-the-colors-go" title="Permanent link">&para;</a></h2>
+<p>The one color comes from <code>Ds5EffectSynthesizer.ComputeLightbarColor</code>, whose <code>LightbarMode.ScreenColor</code> case calls <code>ScreenColorSource.ColorFor</code>. Every lit device shares that core through <code>Ds4EffectSynthesizer.ResolveLightbarRgb</code>: the DualSense and DualSense Edge, the DualShock 4, the PS Move sphere, the Web Controller's drawn lightbar, and mice, keyboards and lighting rows through <code>PeripheralLightingColor.Resolve</code>.</p>
+<p>The picture goes to peripherals only. In <code>UserEffectsDispatcher</code>, when a device's mode is Screen Color, <code>ScreenColorSpread</code> is on and the base mode shows (no fresh game color, no macro override, no Input Reactive pulse), <code>PictureFor</code> is attached to the device's key frame with <code>KeyFrame.WithPicture</code>. <code>LightRenderer.Render</code> then gives each light its own color first, then its key's or group's, then the picture's cell at its place, then the fill. A background a frame sets covers the picture. A game's lightbar, a game mod's color, a macro color and the Input Reactive pulse cover the spread because it is the base mode's color light by light.</p>
+<p><code>UserEffectsDispatcher.ColorKeepsChanging(mode, baseModeShows)</code> is true for Screen Color while the base mode shows, and <code>PeripheralOutputs.SetLighting</code> carries it in the claim as <code>KeepsChanging</code>. A HID lighting model that stores each picture (<code>HoldMs</code> above 0) is sent nothing while it is true, in <code>HidLightingBackend.Paint</code>, and keeps showing its last picture. <code>SteelSeriesDirectBackend</code> treats its two headsets that store pictures the same way. A keyboard that also has a LampArray interface takes the changing colors through <code>LampArrayBackend</code>, which sends no lamp twice inside the device's minimum update interval (HID Usage Tables 1.6, section 26.3). See <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
+<p><code>UserEffectsDispatcher.IsAnimated</code> counts Screen Color among the modes that keep the effects timer running.</p>
+<hr />
+<h2 id="the-lighting-tab">The Lighting tab<a class="headerlink" href="#the-lighting-tab" title="Permanent link">&para;</a></h2>
+<p>The panel shows under the <strong>Mode</strong> box when it is set to Screen Color. Its rows bind to <code>DeviceSlotConfig</code>. The Display box has no binding: <code>PadPage.ShowScreenDisplays</code> fills it from <code>ScreenDisplayChoice.ListFor(saved)</code>, the primary first, then each <code>System.Windows.Forms.Screen</code> by its number, then the saved display when it is not connected. A list swapped under a two-way binding clears the selection and writes that back into the setting, so the box follows the MIDI port box's pattern instead. <code>ScreenDisplayChoice.ToString</code> returns the line's words, so a screen reader reads them.</p>
+<p><code>SyncScreenColorStatus</code> runs on a one-second <code>DispatcherTimer</code> while the tab shows the mode. It refreshes the Display box and shows the Waiting or Unavailable line from <code>ScreenColorSource.StateOf</code>. The spread checkbox shows only while the Key Colors card does (<code>KeyColors.IsVisible</code>), on a device with more than one light. The tab's preview draws a gradient from <code>#58B6E4</code> to <code>#E48A58</code> and reads nothing, so it never keeps a capture running.</p>
+<hr />
+<h2 id="settings">Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LightbarMode</code></td>
+<td></td>
+<td><code>ScreenColor</code> = 17, appended after <code>PlayerNumber</code></td>
+</tr>
+<tr>
+<td><code>ScreenColorDisplay</code></td>
+<td>empty (the primary)</td>
+<td>A GDI name such as <code>\\.\DISPLAY2</code></td>
+</tr>
+<tr>
+<td><code>ScreenColorArea</code></td>
+<td><code>WholeScreen</code></td>
+<td><code>ScreenColorArea</code>, 0 to 10</td>
+</tr>
+<tr>
+<td><code>ScreenColorLeft</code>, <code>ScreenColorTop</code></td>
+<td>25</td>
+<td>0 to 99</td>
+</tr>
+<tr>
+<td><code>ScreenColorWidth</code>, <code>ScreenColorHeight</code></td>
+<td>50</td>
+<td>1 to 100</td>
+</tr>
+<tr>
+<td><code>ScreenColorMethod</code></td>
+<td><code>MostCommon</code></td>
+<td><code>MostCommon</code> = 0, <code>Average</code> = 1</td>
+</tr>
+<tr>
+<td><code>ScreenColorSaturation</code></td>
+<td>100</td>
+<td>0 to 200</td>
+</tr>
+<tr>
+<td><code>ScreenColorBrightness</code></td>
+<td>100</td>
+<td>0 to 100</td>
+</tr>
+<tr>
+<td><code>ScreenColorSmoothing</code></td>
+<td>30</td>
+<td>0 to 100</td>
+</tr>
+<tr>
+<td><code>ScreenColorSpread</code></td>
+<td>true</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The setters clamp to the ranges, and each has a reset command. <code>DeviceSlotConfigData</code> saves them as XML attributes of the same names with the same defaults, so a file from before the mode reads as the defaults.</p>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p><code>PadForge.Tests/ScreenColorTests.cs</code> holds the behavior:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ScreenColorMathTests</code></td>
+<td>The areas, the custom clamp, <code>CellRange</code>, Average, Most Common on dark, gray and red-wrap scenes, saturation, brightness, the smoothing time constant, rotation, the scRGB conversion, <code>ColorKeepsChanging</code></td>
+</tr>
+<tr>
+<td><code>ScreenCaptureWorkerTests</code></td>
+<td>Start and retire, the pace, <code>NoChange</code>, a lost capture and its rebuild, the state a rebuild answers, Unavailable at the third end, the waits and their limits, the return to the picked display</td>
+</tr>
+<tr>
+<td><code>ScreenGrabberOrderTests</code></td>
+<td>The first grabber when it runs, the second when it cannot, a wait that changes nothing, the newest pool frame, the float pool on HDR, the HDR-switch rebuild, <code>ScreenModeWatch</code></td>
+</tr>
+<tr>
+<td><code>ScreenColorSourceTests</code></td>
+<td>One capture per display, shared results, the return check, the spread method, black before the first picture, smoothing over time, the order of steps, each area, the last color through a rebuild, <code>StateOf</code>, retirement, the picture's size, coverage, identity and smoothing, the test host reading nothing</td>
+</tr>
+<tr>
+<td><code>LightPlacementTests</code></td>
+<td>Reported positions, layouts, zones and edges, the best layout</td>
+</tr>
+<tr>
+<td><code>ScreenPictureRenderTests</code></td>
+<td>The picture under each light, key and group colors over it, a background over it, frame equality</td>
+</tr>
+<tr>
+<td><code>ScreenColorSpreadClaimTests</code></td>
+<td>The claim's picture and <code>KeepsChanging</code>, spread off, other modes, a game or macro color over the picture, unchanged pictures waking nothing</td>
+</tr>
+<tr>
+<td><code>ScreenColorSettingsTests</code></td>
+<td>The mode number, the defaults, the settings round trip, an older file, the resets, the ranges</td>
+</tr>
+<tr>
+<td><code>ScreenColorMacroTests</code></td>
+<td>The mode in a macro cycle</td>
+</tr>
+<tr>
+<td><code>ScreenDisplayListTests</code></td>
+<td>The Display box's list, a gone display, the words a screen reader hears, a language change, selection</td>
+</tr>
+</tbody>
+</table>
+<p>The tests drive the worker through <code>ScriptedGrabber</code> and the source's seams (<code>GrabberSeam</code>, <code>ListedSeam</code>, <code>ResolvesSeam</code>, <code>ClockSeam</code>, <code>StartSeam</code>). <code>TestHostFences</code> sets <code>ScreenColorSource.OffLimitsForTest</code> for the whole test process, so a test without a seam starts no capture of the real screen.</p>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/screen-color/">Screen Color</a></li>
+<li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: the backends that take the colors and pictures.</li>
+<li><a href="../input-pipeline/">Input Pipeline</a></li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 5.3.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../on-screen-keyboard-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: On-Screen Keyboard Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                On-Screen Keyboard Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../twitch-chat-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Twitch Chat Internals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Twitch Chat Internals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <nav class="product-footer-nav md-grid" aria-label="Site sections">
+    <a href="/">Home</a><a href="/press/">Press</a><a href="/specs.html">Specifications</a><a href="/docs/">Documentation</a>
+  </nav>
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -30,7 +30,7 @@ does.</p>
   <a href="guides/">
     <span class="pf-eyebrow">Do a thing</span>
     <h3>Guides</h3>
-    <p>Task-by-task walkthroughs. Import a Steam config, aim with gyro, build macros, use your phone as a controller.</p>
+    <p>Task-by-task walkthroughs. Import a Steam, reWASD or DS4Windows config, aim with gyro, build macros, use your phone as a controller.</p>
   </a>
   <a href="features/">
     <span class="pf-eyebrow">Every control</span>
@@ -65,10 +65,18 @@ does.</p>
   d-pad, gyro to aim, a MIDI key to a button, a Wii Remote to a wheel.
   A Sony headset's head rotation drives motion like any other gyro.
 - **The extras real hardware has.** Adaptive triggers, impulse triggers,
-  lighting, controller speakers and microphones, force feedback for
-  wheels, bass-shaker audio output, NFC tag triggers.
-- **Steam Workshop import.** Bring an existing Steam Input config across
-  and every supported setting lands on a PadForge control you can edit.
+  lighting (including [lights that follow the screen](features/screen-color.md)),
+  controller speakers and microphones, force feedback for wheels,
+  bass-shaker audio output, NFC tag triggers.
+- **Beyond the controller.** An [On-Screen Keyboard](features/on-screen-keyboard.md)
+  you steer from a controller, a [Screen Overlay](features/screen-overlay.md) above
+  other windows, and [Twitch Chat](features/twitch-chat.md) commands that press
+  a slot's buttons.
+- **Config import.** Bring an existing Steam Input, reWASD or DS4Windows
+  config across. Each setting PadForge can carry lands on a control you can
+  edit, and the rest is listed with the reason. [Steam Workshop import](guides/steam-workshop-import.md) browses
+  community layouts, and [Import from reWASD and DS4Windows](guides/profile-import.md)
+  reads a profile file after a preview of what came across.
 - **Thirteen starter profiles.** Ready-made layouts for desktop use,
   WASD shooters, emulation, racing, space sims, and gyro aim. Load one
   and edit from there.
@@ -76,4 +84,4 @@ does.</p>
 PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -146,7 +146,7 @@ A badge hides when its count is zero. The strip gives you a quick read of the pr
 | **Load** | Apply the selected profile. Double-click also loads. |
 | **Edit** | Rename and edit the executable list. |
 | **Export…** | Write the selected profile to a shareable `.pfprofile` file. |
-| **Import…** | Read a `.pfprofile` file back in. |
+| **Import…** | Read a `.pfprofile` file back in, or turn a reWASD `.rewasd` config or a DS4Windows profile `.xml` into a new profile. See [Import from reWASD and DS4Windows](profile-import.md). |
 | **Browse Starter Profiles** | Open the starter gallery and save a ready-made genre archetype as a new profile. See [Start from a starter profile](starter-profiles.md). |
 | **Browse Community Configs** | Open the Steam Workshop browser and import a community-made Steam Input config as a new profile. See [Steam Workshop Config Import](steam-workshop-import.md). |
 | **Delete** | Remove the selected profile. Default cannot be deleted. |
@@ -201,9 +201,11 @@ Import reads a `.pfprofile` back in.
 
 Import does not activate the profile. Load it, or let auto-switch pick it up.
 
+The same button reads reWASD `.rewasd` configs and DS4Windows profile `.xml` files. Those open a preview of what came across first, and **Import** there adds a new profile. See [Import from reWASD and DS4Windows](profile-import.md).
+
 ### Drag and drop
 
-Drag a `.pfprofile` file from Explorer and drop it onto the profile grid to import it. A dashed **Drop to Import Profile** overlay appears while a valid file is over the grid.
+Drag a `.pfprofile`, `.rewasd` or DS4Windows `.xml` file from Explorer and drop it onto the profile grid to import it. A dashed **Drop to Import Profile** overlay appears while a valid file is over the grid. Several files dropped at once import one after another.
 
 ---
 
@@ -425,4 +427,4 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

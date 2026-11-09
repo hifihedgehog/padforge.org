@@ -171,6 +171,8 @@ Layers carry more than button rows:
 - **Any output type.** Layer rows drive every virtual output the slot has: Xbox and PlayStation outputs, Extended buttons, MIDI notes, keyboard keys, mouse moves, and touchpad outputs all follow the active layer.
 - **Flick stick.** A [flick stick](../features/stick-deadzones.md#flick-stick) row hosted on a layer arms when the layer engages and goes quiet when it drops, with no half-finished turn left running.
 - **Macros.** Every [macro](macros.md) has a **Layer** picker. **Any Layer** fires regardless of the engaged layer. A named layer's macros fire only while that layer is engaged. Base macros fire on Base and while an engaged layer inherits from Base, exactly like a Base mapping row. A macro can also change the layer: the [Switch Layer](macros.md#switch-layer) action jumps the slot to any layer or back to Base and holds it there the way a Latch does.
+- **Key colors.** The Lighting tab's **Key Colors** card keeps its own colors for each layer. A shift layer shows its colors over the Base layer's, light by light, and **Other Lights** says what the lights without a color on that layer show: the Base layer's colors, **Same as Lightbar**, **Off** or **One Color**. See [Lighting](../features/lighting.md).
+- **Consumed keys.** With **Consume Mapped Inputs (Hooks)** on for a keyboard or mouse, a key or mouse button that only a layer's rows read is eaten only while the engine evaluates those rows, and a macro on a layer eats its trigger key only while that layer is engaged. On Base, where nothing reads the key, it types normally.
 - **Menus.** An on-screen [menu](menus.md) set to a named **Layer** (menus imported from a Steam action layer arrive that way) engages only while that layer is engaged, and the layer ending commits an On Touch Release menu's hovered cell.
 
 ---
@@ -229,4 +231,4 @@ Engagement state does not survive a restart. Toggle's on/off flag, Sticky's one-
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

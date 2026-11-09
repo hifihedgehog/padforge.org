@@ -12,13 +12,14 @@ device, except Remote Link, which needs PadForge on both PCs.
 | [Motion aiming](gyro.md) | Gyro-to-mouse or gyro-to-stick aiming with calibration and an engage button |
 | [Macros](macros.md) | Multi-step sequences on a button, with timing, loops, and layer scoping |
 | [Shift Layers](shift-layers.md) | A second (or eighth) set of mappings behind a held or toggled button |
-| [Radial and Grid Menus](menus.md) | On-screen menus driven by a stick or touchpad |
+| [Menus](menus.md) | A Radial Ring, Touch Grid, Hotbar or on-screen keyboard driven by a stick, touchpad or buttons |
 | [Per-game Profiles](profiles.md) | Mappings that switch when a game gains focus, on a controller combo, or on a command from your launcher |
 | [Remote Link](remote-link.md) | A controller on one PC driving games on another, on your network or across the internet |
 | [Steering with any stick](steering.md) | Winding-wheel steering on a stick, d-pad, or motion |
 | [Screen readers and the keyboard](accessibility.md) | PadForge spoken by NVDA, and the keys for the custom controls |
+| [Import from reWASD and DS4Windows](profile-import.md) | A reWASD or DS4Windows profile file turned into a PadForge profile in one step |
 | [Switching from another tool](switching.md) | A setup from Steam Input, DS4Windows, reWASD or SimHub rebuilt in PadForge, with a way back |
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

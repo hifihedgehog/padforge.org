@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1065,6 +1095,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1340,6 +1378,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1516,6 +1582,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1852,6 +1946,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2499,6 +2649,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3304,6 +3462,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -4247,7 +4517,7 @@
 <p>After the V1 records, <code>EncodeDeviceList</code> appends a metadata extension marked by a magic byte (<code>0xE2</code>), one section per V1 record in the same order. It carries the serial number, the touchpad shape (<code>NumTouchpads</code> plus a finger count per pad), and the forwarded <code>DeviceObjects</code> (the owner's named inputs: <code>Name</code>, <code>InputIndex</code>, <code>Offset</code>, an <code>ObjectType</code> flags word, and the <code>ObjectTypeGuid</code>). So serial, touchpad shape, and named inputs now cross the link, and a remote device lists on the Devices page and in the mapping picker identically to a local one.</p>
 <p>The extension uses the same appended-tail compatibility as the input codec. An old decoder reads its <code>count</code> V1 records and never looks at the tail. A new decoder facing an old sender finds no magic byte. A malformed extension tail falls back to the V1 result: any parse failure resets every extension-carried field on every record, so a mid-record throw leaves no half-applied garbage, and the consumer synthesizes generic names as before.</p>
 <p>Objects are forwarded only for device types whose names the consumer cannot synthesize locally: Consumer Control (per-session dynamic slots), NFC (tags named from the owner's registry), Microphone (#317, buttons named from the owner's phrase registry), Handheld Buttons (#343, every button a name from the owner's learned set), Head Tracker, Tablet, VR Controller, and Logitech G-Keys (key names from the owner's Logitech software). A gamepad, joystick, keyboard, mouse, or MIDI shape is synthesized identically on the consumer, so shipping its objects would spend budget for nothing. The consumer builds a keyboard's and a mouse's objects with the local wrappers' builders (<code>SdlKeyboardWrapper.KeyObjects</code>, <code>SdlMouseWrapper.MouseObjects</code>). It used to name them as a gamepad's, so a shared keyboard's key 0 read "A". The push travels as one UDP datagram into a 4 KB receive buffer on old peers, so the encoder caps the payload at 3800 bytes and gives no one device more than half of it. Each device ships the named inputs that fit its share, so one large row cannot starve the rows after it. The cap covers the whole payload: the room for a device's names leaves out what the devices after it and every tail still need. It once counted only what was already written, so a list whose names filled it went past it by every later section and tail. Once the budget runs out, the remaining devices get empty object sections and the consumer falls back to synthesized names for them, rather than the whole list becoming undeliverable. The budget targets old peers only: the current receive loop (<code>LinkServer.UdpLoopAsync</code>) takes datagrams into a 64 KB buffer, the UDP maximum, so an oversized frame can no longer vanish into a receive error.</p>
-<p>Eleven more tails follow the <code>0xE2</code> extension, each marked by its own magic byte and appended in order:</p>
+<p>Thirteen more tails follow the <code>0xE2</code> extension, each marked by its own magic byte and appended in order:</p>
 <table>
 <thead>
 <tr>
@@ -4312,9 +4582,19 @@
 <td>Capacitive sensors</td>
 <td>For the pads that have any: <code>[records]</code>, then per record <code>[record index][mask]</code>, the owner's <code>UserDevice.CapSenseChannelMask</code>, bit N for <code>SDL_GAMEPAD_CAPSENSE</code> channel N (the stick tops of the Steam Deck and the 2026 Steam Controller, and the 2026 pad's grips). The sensors' state already crosses in the input codec's CapSense block. A peer's copy lists a sensor under the pad, and its Valve automap binds it, only where this mask has it (<code>RemotePeerDeviceInfo.CapSenseChannelMask</code>). Without it a shared pad offered its sensors under (Any Device) alone.</td>
 </tr>
+<tr>
+<td><code>0xEE</code> (<code>DeviceListExtV13Magic</code>)</td>
+<td>Voice phrases</td>
+<td>For the rows whose pad carries voice phrases on the owner (#528): <code>[records]</code>, then per record <code>[record index]</code>. A Bluetooth DualShock 4 carries them by its path, which a <code>peer://</code> copy never has, so the copy offered none although its voice buttons already crossed in the input codec. Read into <code>RemotePeerDeviceInfo.HasVoicePhrases</code>; a malformed tail clears that field on every row.</td>
+</tr>
+<tr>
+<td><code>0xEF</code> (<code>DeviceListExtV14Magic</code>)</td>
+<td>Dossier text and link</td>
+<td>For the rows that have any: <code>[records]</code>, then per record <code>[record index][link byte][firmware string][revision string]</code>. The link byte is 0 not said, 1 wired, 2 Bluetooth (a DualShock 4's link, which a <code>peer://</code> path does not carry). The strings are the owner's Device Dossier FIRMWARE and REV, at most 64 characters (<code>MaxDossierTextLength</code>), longer text goes as none. Read into <code>RemotePeerDeviceInfo.FirmwareText</code>, <code>ProductRevision</code> and <code>OnBluetooth</code>, and exposed as <code>RemotePeerDevice.OwnerFirmware</code>, <code>OwnerProductRevision</code> and <code>OwnerOnBluetooth</code>. The periodic push carries a version the owner learned after it opened the device, and a pad that moved to the other link. A peer that predates the tail leaves the fields null.</td>
+</tr>
 </tbody>
 </table>
-<p>The last four are written only when some row carries one, so a list without an analog keyboard, a raw port, a known DualShock 3 or a pad with capacitive sensors is byte for byte what it was before them, and only while the list with them fits its budget without a single name: the 3800-byte cap on the connect-time list, the one list an older peer can receive, and the full-list limit on a publication to a peer that reads full lists (<code>EncodeDeviceList</code>'s <code>tailBudget</code>). They are admitted in order, the rest masks first, then the identities, then the capacitive sensor masks, then the key lists. The names get the room the 3800-byte budget leaves them either way, so a tail only a full-list peer takes never costs a device its names. The identity tail is read only while the cursor through the metadata sections stayed trustworthy. A malformed one clears every identity rather than half of them and leaves the capacitive sensor tail after it unread. They never push a list an old peer could read past what it can. Each parses whole before any row takes a value, and refuses an index past the device count, a repeated index, and a code out of range or repeated.</p>
+<p>The last six are written only when some row carries one, so a list without an analog keyboard, a raw port, a known DualShock 3, a pad with capacitive sensors, a pad with voice phrases or a firmware text is byte for byte what it was before them, and only while the list with them fits its budget without a single name: the 3800-byte cap on the connect-time list, the one list an older peer can receive, and the full-list limit on a publication to a peer that reads full lists (<code>EncodeDeviceList</code>'s <code>tailBudget</code>). They are admitted in order, the rest masks first, then the identities, then the capacitive sensor masks, then the voice phrase rows, then the key lists, then the dossier text (<code>FitOptionalTails</code>). The names get the room the 3800-byte budget leaves them either way, so a tail only a full-list peer takes never costs a device its names. The identity tail is read only while the cursor through the metadata sections stayed trustworthy. A malformed one clears every identity rather than half of them and leaves the capacitive sensor tail after it unread. They never push a list an old peer could read past what it can. Each parses whole before any row takes a value, and refuses an index past the device count, a repeated index, and a code out of range or repeated.</p>
 <p>Each update after connect travels as one UDP datagram, so the list a peer receives depends on its version. A peer older than 3.6.0 reads the datagram into 4 KB and parses the v1 records alone. The metadata extension and the 64 KB receive buffer both first shipped in 3.6.0, so a peer whose connect-time list carries <code>0xE2</code> reads full lists (<code>LinkConnectionResult.PeerReadsFullLists</code>, handed to the <code>LinkConnectionLifetime</code>). A peer without it gets the records alone (<code>EncodeBasicDeviceList</code>) within the 3800-byte cap. A full list is bounded by the UDP payload limit less the seal (<code>MaxListPayload</code>). A list past either bound is not sent: <code>PublishLocalInventory</code> returns <code>TooLarge</code>, the peer keeps its list and its input bindings, and a rekey counts the result as ready. The slots the list reserved for new device ids go back (<code>LinkSlotReservations.Release</code>), since the peer never saw them and the 256 slots bound a session. A list past 4 KB used to go to an old peer anyway, which dropped every update after connect. The diagnostic log names the peer once when its list first stops fitting (<code>DEVLIST too large for peer ...</code>) and once when it fits again (<code>LinkServer.ListSizeNote</code>, per connection).</p>
 <p>Each tail decodes only after everything before it parsed cleanly, under its own <code>try</code>/<code>catch</code>. A malformed tail costs only its own fields and marks the cursor unreliable, so later tails are skipped rather than misread. An old peer that stops earlier simply leaves the fields at their defaults (flags false, counts zero).</p>
 <p>The periodic push also refreshes an already-registered device in place. <code>ReconcileRemoteDevices</code> keys by the stable device id and copies the relayed metadata (serial, touchpad shape, <code>DeviceObjects</code>), every capability flag, the standardized and raw axis and button counts, the hat count, <code>HasExtraGenericAxes</code>, and the input-device type onto the existing record, so a capability that appears after connect (a Joy-Con pair joining, a reader arming rule flipping) reaches the consumer without a re-register. The raw counts travel with the standardized ones because the raw axis count is the larger of the two, and refreshing only the standardized one moved half of one answer. The supported index sets are refreshed too, and <code>RemotePeerDevice.RefreshSupportedSets</code> rebuilds the device's own arrays from them, since a Bliss-Box port the owner's switch reopens changes shape (#469). The analog key order, the rest mask, the capacitive sensor mask and the gamepad layout answer are copied on every push, and a key order that changed raises <code>DeviceKeyOrderChanged</code>, on which <code>InputService</code> rebuilds every slot's input picker and the Devices preview's order, as it does when a local keyboard reports a key its list lacked. The SDL GUID is set at first registration and never refreshed. Identity fields, the ids and the peer-labeled name, stay untouched.</p>
@@ -4472,6 +4752,7 @@
 <p>The router maps the <code>peer://</code> path to a target (owner fingerprint, link slot, the advertising connection, and the device id, registered again when the device's slot moves) and sends through <code>PushOutputEffect</code> or <code>PushAudio</code> on that connection. Dedup varies per channel. Sony effects, scalar vibration, wheel frames, player index, and Guide LED dedup exact repeats. A vibration frame with directional or condition data always ships. The haptic tone dedups only the silent steady state, because an active tone must ship every rumble tick to keep refreshing the owner's hangover expiry.</p>
 <p>On the owner, the <code>FrameReceived</code> handler <code>OnRemoteFrameReceived</code> decodes the frame, resolves its device id to the physical source device, and hands an <code>Output</code> frame to <code>ApplyRemoteOutput</code>, which takes the sole-writer lease (except for a <code>PlayerIndex</code> or <code>GuideLed</code> frame, see below), and applies by kind: a Sony effect through <code>SDL_SendGamepadEffect</code>, a vibration through <code>ForceFeedbackState.SetDeviceForces</code>, a wheel frame through <code>ApplyRemoteWheel</code> (which re-encodes with the owner's own vendor writers, see <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>), a haptic tone (<code>HapticToneHz</code>/<code>HapticToneAmp</code>) through <code>HapticToneService.ApplyRemoteTone</code>, re-encoded by the owner's own per-family writer (Joy-Con HD Rumble, Steam 0x8f, Triton 0x83, Deck), a player index through <code>SetPlayerIndex</code> (0-based) for a Nintendo pad (VID <code>0x057E</code>), <code>Ds3DirectService.TrySetPlayerNumber</code> for a Bluetooth DS3 (<code>0x054C</code>/<code>0x0268</code>, falling back to <code>SetPlayerIndex</code> for a wired one), or <code>PsMoveDirectService.TrySetPlayerNumber</code> for a PS Move (<code>0x054C</code>/<code>0x03D5</code>), a Guide/Home LED brightness through <code>XboxGipGuideLedWriter.TrySetBrightness</code> for an Xbox GIP pad, <code>SteamHomeLedSetter.TrySet</code> for a 2015 Steam Controller, or <code>SwitchHomeLedSetter.TrySet</code> for a Switch HOME-LED pad (the same writers and gate order as the local apply path). An <code>Audio</code> frame takes no lease and goes straight to <code>AudioPassthroughService.FeedRemoteAudio</code> (see <a href="../controller-audio-internals/">Controller Audio Internals</a>). The vibration apply has three special cases. A Fanatec pedal re-routes to its raw-HID pedal-rumble writer. A Padix PlayStation converter (#440) records through <code>TryRecordMotorSnapshot</code> and writes the converter's own report via <code>PadixConverterRawHidWriter.Write</code>. An Xbox One+ impulse-trigger pad, gated by <code>XboxControllerIdentity.IsImpulseTriggerDevice</code>, records through <code>TryRecordXboxImpulseSnapshot</code> and writes all four channels (large and small plus LT and RT) via <code>XboxImpulseHidWriter.Write</code>, with SDL rumble suppressed so the impulse triggers fire. The owner synthesizes nothing here: for the wheel and the haptic tone it is a transport transcoder that re-frames the semantic payload with the writer that owns the real hardware.</p>
 <p><strong>Sole-writer guard.</strong> A device can be both shared out and mapped locally, and output cannot merge. An inbound relay frame stamps the local path with a three-second lease, and the owner's local chokepoints skip their own writes while the lease is fresh. A device that is only lent out (not also mapped locally) has no local writer, so there is no contention. A <code>PlayerIndex</code> or <code>GuideLed</code> frame is exempt from the lease. Both are cosmetic LED updates, not effect claims, so neither blanks a locally-mapped device's rumble or lightbar for the lease window.</p>
+<p><strong>Who still holds a device.</strong> <code>RemoteLinkOutputRouter.PeerKeepsDevice(localDevicePath, assertedBy)</code> answers whether a connected peer still holds an owner's device: the peer that asserted what the device plays on, or the peer that wrote it last (<code>_peerWroteLast</code>). <code>ReleasePeer</code> and <code>ReleaseDevice</code> clear that record. <code>UserEffectsDispatcher.NotePeerFrameApplied</code> uses the answer to note a frame again, and let the pad go back, when the peer's session dropped after the frame's claim.</p>
 <hr />
 <h2 id="gamepad-only-enforcement">Gamepad-only enforcement<a class="headerlink" href="#gamepad-only-enforcement" title="Permanent link">&para;</a></h2>
 <p><code>InputManager.SetDeviceRestricted</code> populates the restricted-device set from each peer's gamepad-only flag, set before the device goes online. <code>IsSlotRestricted(slot)</code> is true when any restricted device maps to that slot, and it early-outs when no peer is restricted (<code>RestrictedSnapshot</code> returns null and the caches rebuild only when the set changes). Five chokepoints honor it:</p>
@@ -4501,7 +4782,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: the persisted Remote Link fields.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

@@ -9,7 +9,7 @@
 
 ## Sections
 
-Ten sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, Game Mods, Game Telemetry, and the overlays.
+Twelve sections, stacked top to bottom: the engine and its slots, then a **Services** header, then the input services, the Motion Server, Game Mods, Game Telemetry, Twitch Chat, and the overlays.
 
 | Section | Purpose |
 |---------|---------|
@@ -21,12 +21,14 @@ Ten sections, stacked top to bottom: the engine and its slots, then a **Services
 | **Motion Server** | [DSU/Cemuhook](../reference/dsu-motion-server.md) gyro broadcasting for emulators. |
 | **Game Mods** | Adaptive triggers and lights set by [game mods made for DSX](game-mods.md). |
 | **Game Telemetry** | The speed, RPM, gear and pedals [driving games send](game-telemetry.md), as a device row and macro triggers. |
+| **Twitch Chat** | Viewers [play by typing commands](twitch-chat.md) in your stream's chat. |
 | **Overlays** | On-screen indicators: the [menu](../guides/menus.md) ring or grid, the shift layer flyout, and profile switch announcements. |
 | **Touchpad Overlay** | On-screen touch surface that drives a PlayStation slot's touchpad. |
+| **Screen Overlay** | A picture, timer, clock or lightbar color [above other windows](screen-overlay.md). |
 
 Disconnected controllers and a stopped engine surface here. Driver install status lives on the driver cards of the [Settings](settings.md) page. See [Driver Management](driver-management.md).
 
-The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Game Mods, Game Telemetry, Web Controller, and Touchpad Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, the ports beside them, and Game Telemetry's game, forward port and Full Speed are stored in every profile and follow it on each switch. The custom telemetry formats are one list for every profile. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
+The on/off toggles on this page ride the active [profile](../guides/profiles.md), in two shapes. The Motion Server, Game Mods, Game Telemetry, Web Controller, Touchpad Overlay, and Screen Overlay toggles, the DSX.exe stand-in switch, the three Overlays checkboxes, the ports beside them, and Game Telemetry's game, forward port and Full Speed are stored in every profile and follow it on each switch. The custom telemetry formats are one list for every profile. The head-tracking UDP and FreeTrack toggles are stored as opinions: a profile records one only when you change the toggle while that profile is active, a profile with no opinion leaves the toggle alone on switch, and the global setting stands until some profile opines. Remote Link and Reconnect Automatically stay global: a link between two PCs is not a per-game setting. Enable OpenXR Headset Input stays global too, and so do the Web Controller's plain HTTP settings and access code, so no profile changes them. The Twitch Chat switch, channel and **Who approves !claim** are global as well, so a profile switch never opens or closes the chat connection. The plain address runs only while the Web Controller runs, so a profile that turns the Web Controller off closes both of its ports.
 
 ---
 
@@ -63,14 +65,15 @@ Each [virtual controller slot](controller-slots.md) gets a card under the engine
 ### Card layout
 
 <!-- SCREENSHOT: dashboard-slot-card -->
-![A virtual controller slot card showing the power flame, type track, device roster, status counts, and stage ledger](../images/dashboard-slot-card.png)
+![A virtual controller slot card showing the power flame, type chip, Preset name, device roster, status counts, and stage ledger](../images/dashboard-slot-card.png)
 
 | Element | Location | Description |
 |---------|----------|-------------|
 | **Power flame** | Top-left | Slot status, shown as a flame (see below). Click to enable or disable. |
 | **Slot number** | Next to the flame | Global controller number (1, 2, 3, ...). |
-| **Type track** | Second row | A recessed segmented strip of seven type icons: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. The active type is lit ember (steel on a card with nothing mapped). The others are dim. Click a dim icon to switch type. Two icons carry a dependency gate: when no MIDI API starts, the MIDI icon shows a no-entry cursor and "MIDI (not running, see the Windows MIDI Services card in Settings)", and with SteamVR missing the VR icon shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
-| **Per-type instance number** | After the type track | Position within the type, e.g. `#2` for the second Xbox slot. |
+| **Type chip** | Second row, left | One chip showing the slot's type: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR. Lit ember on a card with devices mapped, steel on a card with none. Click it to open the type bar under the card, the same bar **Add Controller** uses, with the current type lit. Picking the current type changes nothing. Two entries in the bar carry a dependency gate: when no MIDI API starts, MIDI shows a no-entry cursor and "MIDI (not running, see the Windows MIDI Services card in Settings)", and with SteamVR missing, VR shows the same cursor and "VR (requires SteamVR)". The other five have no gate. |
+| **Per-type instance number** | After the chip | Position within the type, e.g. `#2` for the second Xbox slot. |
+| **Preset name** | After the instance number | The slot's Preset. A long name trims at rest, scrolls to its end while the pointer is on the card, and shows whole in its tooltip. |
 | **Device roster** | Third row | Every mapped device, each with a device-class icon, a Bluetooth icon on Bluetooth links, and a battery icon plus percent when the device reports it. Offline devices dim. Hover for the full untruncated list, one device per line. Shows "No device mapped" when the slot is empty. |
 | **Status text + counts** | Fourth row | The slot state in words (see below), then `2 mapped, 1 connected`. |
 | **Stage ledger** | Fifth row | One small icon per pipeline stage the slot's devices have: sticks, triggers, gyro, lighting, touchpad, audio. An icon glows ember when that stage carries a non-default setup and stays steel when it is untouched. Hover a lit icon for a per-device readout. |
@@ -90,7 +93,7 @@ The power flame and the status text both track the slot's state. Hovering the fl
 | **Initializing** | Flashing ember | The controller is coming up. |
 | **Disabled** | Steel outline | Turned off with the power flame. |
 
-Click anywhere on a card (except the power flame, the type track icons, or the delete button) to open the slot's configuration: [Button and Axis Mappings](mappings.md), [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Adaptive Triggers](adaptive-triggers.md), [Lighting](lighting.md), and [Macros](../guides/macros.md).
+Click anywhere on a card (except the power flame, the type chip, or the delete button) to open the slot's configuration: [Button and Axis Mappings](mappings.md), [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Adaptive Triggers](adaptive-triggers.md), [Lighting](lighting.md), and [Macros](../guides/macros.md).
 
 ### Reordering slots
 
@@ -222,6 +225,28 @@ See [Game Telemetry](game-telemetry.md) for each game's setup, the row's axes an
 
 ---
 
+## Twitch Chat
+
+Lets the people watching your stream play by typing commands in its chat. A viewer types `!a`, and PadForge presses what **!a** is mapped to on the **Twitch Chat** row of the [Devices](devices.md) page. PadForge reads chat without signing in and never posts in it.
+
+| Control | Description |
+|---------|-------------|
+| **Read Twitch Chat** | Opens the Twitch Chat row and its connection. Off by default. It reads only while the engine runs. |
+| **Channel** | Your channel's name or its twitch.tv address. |
+| **Who approves !claim** | **Only you**, **You and your moderators**, or **You, your moderators or two other viewers**. Decides who can give a viewer the sole control they ask for with `!claim`. Default **Only you**. |
+| **Pause** / **Resume** | Stops the command playing, clears the line and ignores chat until you resume. |
+| **Skip** | Stops the command playing. The next one in line starts. |
+| **Clear Line** | Drops the commands waiting. The one playing finishes. |
+| **End Claim** | Ends the sole control a viewer took with `!claim`. |
+| **Status indicator** | A flame beside the status text. Ember while PadForge has joined the channel's chat, a steel outline otherwise. The text names the channel, or says why nothing is read. |
+| **Controller picture address** | Shown while the Web Controller's plain HTTP address runs: the address to add to OBS as a browser source, with a copy button. Otherwise the card says to turn on **Also Serve Plain HTTP**. |
+
+The four buttons act only while the row is open. A line under them says viewers take turns with `!claim`, that only the newest 20 commands wait in line, and that a command plays for at most 10 seconds.
+
+See [Twitch Chat](twitch-chat.md) for the command words, the turn rules and the picture for OBS.
+
+---
+
 ## Overlays
 
 The on-screen indicators PadForge shows while you play. Turning one off never changes what the input does, only whether it is announced. Three checkboxes, all on by default.
@@ -249,6 +274,24 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 
 ---
 
+## Screen Overlay
+
+A transparent window above other programs that shows a picture, a timer, the time, or a lightbar's color, with no keyboard screen needed. While another program is in front, clicks pass through it. While PadForge is in front, drag it with the right mouse button and size it from its corner.
+
+| Control | Description |
+|---------|-------------|
+| **Enable Screen Overlay** | Shows the overlay window. |
+| **Opacity** | Slider plus percentage box, 0-100%, with a reset button. |
+| **Choose What It Shows…** | Picks what the overlay draws. |
+| **Reset Position** | Recenters the overlay on its monitor. |
+| **Remove** | Deletes this overlay. Shown only while several exist. |
+| **Add Overlay** | Adds another overlay, up to 8. |
+| **Status indicator** | A flame: ember while the overlay is showing, steel outline when hidden. |
+
+With several overlays, each group is titled **Screen Overlay 1**, **Screen Overlay 2**, and so on. The overlays ride the active [profile](../guides/profiles.md). See [Screen Overlay](screen-overlay.md) for what each overlay can show and the macro actions that control them.
+
+---
+
 ## Related pages
 
 - [Installation](../start/installation.md): first-time setup.
@@ -260,9 +303,11 @@ The overlay tracks up to two finger contacts and feeds them to every slot its **
 - [Game Telemetry](game-telemetry.md): driving games' telemetry as a device row and macro triggers.
 - [Game Mods](game-mods.md): adaptive triggers and lights from mods made for DSX.
 - [Web Controller](../guides/web-controller.md): browser-based virtual controller.
+- [Twitch Chat](twitch-chat.md): chat commands as controller input.
+- [Screen Overlay](screen-overlay.md): the picture, timer, clock and lightbar overlay.
 - [Menus](../guides/menus.md): the radial and touch menus the Menu Overlay draws.
 - [Head Tracking](head-tracking.md): OpenTrack setup for the Head Tracking section.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -47,7 +47,9 @@ A phrase button binds anywhere a real button does:
 - **Shift layers**. A phrase works as a layer activator. A recognition is a 175 ms pulse rather than a held key, so use **Toggle** mode: say the phrase to enter the layer, say it again to leave.
 - **Recording**. All three recorders (mapping rows, macro triggers, expression variables) hear phrases and capture the specific phrase you said, not the Any button.
 
-The binding stores the phrase's stable button, so renaming a phrase never breaks it.
+The binding stores the phrase's stable button, so renaming a phrase never breaks it. Removing a phrase clears every mapping, macro and saved-profile entry that named it, because the next phrase you register takes the lowest free button and would otherwise inherit them.
+
+Words typed in Twitch chat become buttons the same way. See [Twitch Chat](twitch-chat.md).
 
 ---
 
@@ -64,4 +66,4 @@ Every DualSense, Bluetooth DualShock 4 and Microphone row's details pane carries
 - On the full DualSense or DualShock 4 profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.
 - The first time voice macros are on with a phrase registered, PadForge unpacks the model from inside itself, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -4,6 +4,8 @@
 
 Several gaming keyboards carry a second screen with a row of keys for it. With **Drive Keyboard Screens** on, each screen gets its own row on the [Devices](devices.md) page. The row's panel sets what that screen shows, and the keys beside it are the row's buttons, so two keyboards with screens keep their own settings and their own keys. A macro can play pictures on a screen, switch its mode, run a stopwatch and pan a map.
 
+A PC with no such keyboard can show the same things in a window on its own display. See [Screen Overlay](screen-overlay.md), which needs no keyboard screen and no **Drive Keyboard Screens**.
+
 ---
 
 ## The screens
@@ -119,7 +121,7 @@ Under LGS, the screen keys reach PadForge only while its applet is the one on th
 
 ## Macros
 
-A keyboard screen macro reaches the screens whose rows are in the macro's slot, the way a Show Dreamcast Screen macro reaches the Dreamcast pads in its slot. Add a screen's row to a slot to aim that slot's macros at it.
+A keyboard screen macro reaches the screens whose rows are in the macro's slot, the way a Show Dreamcast Screen macro reaches the Dreamcast pads in its slot. Add a screen's row to a slot to aim that slot's macros at it. With **Screen Overlay** as the kind, the same actions reach a [Screen Overlay](screen-overlay.md#macros) from any slot instead.
 
 | Action | Settings |
 |---|---|
@@ -132,4 +134,4 @@ See [Macros](../guides/macros.md) and the technical page, [Keyboard Screens Inte
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

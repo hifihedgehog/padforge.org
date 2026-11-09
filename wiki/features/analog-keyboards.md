@@ -102,6 +102,8 @@ To hold a color for as long as the key is held, set the macro to **While Held** 
 
 Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the Lighting tab the keyboard's own row gets. See [Mice, Keyboards and Vendor Rows](peripherals.md).
 
+**Set Key Colors** and **Clear Key Colors**, in the same group, light single keys on a keyboard that PadForge lights key by key, steady, fading or counting down, for a time, while the trigger is held or until cleared. The **Key Colors** card on the keyboard's Lighting tab sets the same per-key colors without a macro, one set for each shift layer. See [Lighting](lighting.md).
+
 ---
 
 ## Supported keyboards
@@ -238,4 +240,4 @@ Keyboards that send the 0xA0 depth event without being asked, the MCHOSE Jet 75 
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

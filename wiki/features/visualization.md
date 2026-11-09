@@ -278,7 +278,8 @@ The layout rebuilds when MIDI configuration changes (note count, start note, CC 
 - [Controller Slots](controller-slots.md): how the 3D and 2D views render different controller types.
 - [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md): tuning controls that don't appear on the controller model itself.
 - [Macros](../guides/macros.md): trigger and action authoring that uses the same recording flow.
+- [Twitch Chat](twitch-chat.md#the-controller-picture-for-obs): a slot's controller drawn as a browser source for a stream.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

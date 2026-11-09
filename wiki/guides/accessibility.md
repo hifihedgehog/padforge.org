@@ -70,6 +70,16 @@ Tab reaches each curve. The point the keys move is drawn orange while the curve 
 | Insert | Add a point on the curve, halfway to the next point |
 | Delete | Remove the point. The two end points stay |
 
+## The Key Colors picture
+
+The picture of lights on the Lighting tab's **Key Colors** card, and the key picker of the **Set Key Colors** macro action, is one Tab stop. Each light is a toggle a screen reader reads by name.
+
+| Key | What it does |
+| --- | --- |
+| Arrow keys | Move between the lights |
+| Space, Enter | Add the focused light to the selection, or take it out |
+| Ctrl+Tab, Ctrl+Shift+Tab | With **Select by Pressing Keys** on, leave the picture. Until then every key pressed in it selects that key's lights |
+
 ---
 
-*Last updated for PadForge 5.2.2.*
+*Last updated for PadForge 5.3.0.*

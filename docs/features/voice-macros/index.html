@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1067,6 +1097,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1345,6 +1383,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../stick-deadzones/" class="md-nav__link">
         
   
@@ -1521,6 +1587,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1959,6 +2053,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2682,6 +2832,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3171,6 +3329,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -3959,7 +4229,8 @@
 <li><strong>Shift layers</strong>. A phrase works as a layer activator. A recognition is a 175 ms pulse rather than a held key, so use <strong>Toggle</strong> mode: say the phrase to enter the layer, say it again to leave.</li>
 <li><strong>Recording</strong>. All three recorders (mapping rows, macro triggers, expression variables) hear phrases and capture the specific phrase you said, not the Any button.</li>
 </ul>
-<p>The binding stores the phrase's stable button, so renaming a phrase never breaks it.</p>
+<p>The binding stores the phrase's stable button, so renaming a phrase never breaks it. Removing a phrase clears every mapping, macro and saved-profile entry that named it, because the next phrase you register takes the lowest free button and would otherwise inherit them.</p>
+<p>Words typed in Twitch chat become buttons the same way. See <a href="../twitch-chat/">Twitch Chat</a>.</p>
 <hr />
 <h2 id="watching-it-live">Watching it live<a class="headerlink" href="#watching-it-live" title="Permanent link">&para;</a></h2>
 <p>Every DualSense, Bluetooth DualShock 4 and Microphone row's details pane carries a <strong>Voice Macros</strong> section at the end of the raw input state. Each registered phrase lights the moment it is recognized, which is the quickest way to check that listening works before binding anything.</p>
@@ -3971,7 +4242,7 @@
 <li>On the full DualSense or DualShock 4 profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
 <li>The first time voice macros are on with a phrase registered, PadForge unpacks the model from inside itself, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.</li>
 </ul>
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

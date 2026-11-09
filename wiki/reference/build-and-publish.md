@@ -27,7 +27,7 @@ PadForge.sln
 │   ├── Models3D/             3D model classes (Base, DS4, DualSense, DualSenseEdge,
 │   │                         SteamController, SteamController2, SteamDeck,
 │   │                         Switch2Pro, Xbox360, XboxSeries)
-│   ├── Models2D/             2D overlay layouts (11 classes) + colorway table
+│   ├── Models2D/             2D overlay layouts (12 layout classes), the colorway table, the Nintendo preview map, the touch-area type
 │   ├── 2DModels/             PNG overlay images, 13 families
 │   ├── 3DModels/             OBJ meshes (DS4/, DualSense/, DualSenseEdge/,
 │   │                         SteamController/, SteamController2/, SteamDeck/,
@@ -35,7 +35,7 @@ PadForge.sln
 │   │                         Xbox sets split by colorway subfolder
 │   ├── Converter/            WPF value converters
 │   ├── Controls/             Custom controls (RangeSlider, CurveEditor, EqCurveControl,
-│   │                         SettingResetButton, TriggerTravelArc)
+│   │                         SettingResetButton, TriggerTravelArc, MarqueeLabel, ClickBorder, ...)
 │   ├── Resources/            Icons, SDL3 DLL, embedded driver installers, localization
 │   └── Properties/           AssemblyInfo.cs
 │
@@ -51,7 +51,12 @@ PadForge.sln
 ├── PadForge.SteamWorkshop.Tests/  xunit suite for the Workshop client (offline fixtures + golden translation snapshots)
 ├── PadForge.NativeChecks/    Console helper (net10.0-windows) that PadForge.Tests runs in a child
 │                             process against the bundled x64 SDL3.dll
+├── PadForge.DsxStandIn/      The DSX.exe stand-in for DSX game mods (net462 WinExe, assembly name DSX).
+│                             PadForge.App builds it and embeds the exe
 │
+├── docs/                     ui-exposure-ledger.md
+├── screenshots/              Captured UI images the README uses
+├── .github/                  Issue templates, the build workflow, and the issue and discussion automation workflows
 ├── nuget-local/              Local NuGet source (the MIDI Services App SDK runtime's projection)
 ├── nuget.config               Registers nuget.org + nuget-local/ as package sources
 ├── .gitattributes             `* text=auto`: every text file is stored with LF
@@ -121,7 +126,7 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 
 | File | Description |
 |------|-------------|
-| `PadForge.exe` | ~331 MB, single-file self-contained. The only file in the publish directory |
+| `PadForge.exe` | about 296 MB, single-file self-contained. The only file in the publish directory |
 
 For Windows on ARM (preliminary, since 4.5.1), add the runtime identifier:
 
@@ -129,9 +134,9 @@ For Windows on ARM (preliminary, since 4.5.1), add the runtime identifier:
 dotnet publish PadForge.App/PadForge.App.csproj -c Release -r win-arm64
 ```
 
-Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-arm64/publish/`, one ~310 MB `PadForge.exe`. It cross-compiles on an x64 machine. With no `-r` the build is x64, so every existing command produces what it always has. See [Building for ARM64](#building-for-arm64) for what differs.
+Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-arm64/publish/`, one `PadForge.exe`. It cross-compiles on an x64 machine. With no `-r` the build is x64, so every existing command produces what it always has. See [Building for ARM64](#building-for-arm64) for what differs.
 
-`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll` and the three Visual C++ runtime files are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain x64 `dotnet build` drops all twelve beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
+`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `iCUESDK.x64_2019.dll`, `MysticLight_SDK_x64.dll` and the three Visual C++ runtime files are `<Content>` items in the App csproj, and the Vosk package's own targets add `libvosk.dll` plus the MinGW runtime it links against (`libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll`). A plain x64 `dotnet build` drops all fourteen beside the output assembly. On publish they are folded into the bundle by `IncludeNativeLibrariesForSelfExtract`, and the publish directory holds `PadForge.exe` alone.
 
 The custom gamepad mapping database ships embedded in the assembly, not as a loose file. See [gamecontrollerdb_padforge.txt](#gamecontrollerdb_padforgetxt) under Embedded Resources.
 
@@ -186,6 +191,14 @@ The refusals matter most in a mutation run, which builds the code with one check
 | A request to Steam, and the Steam client's connect | `SteamHttp` | `TestHostFenceTests`, `SteamOffLimitsTests` |
 | A pipe served or written to under the name a running PadForge serves | `ExternalControlService` | `TestHostFenceTests` |
 | A DSU server on the port every DSU client polls | `DsuMotionServer` | `TestHostFenceTests` |
+| A game mod server on the port every DSX mod sends to, and the port files the mods read | `GameModServer`, `GameModPortFiles` | `TestHostFenceTests` |
+| A telemetry row bound to a game's port, and Assetto Corsa's shared memory | `GameTelemetryDevice`, `KunosSharedMemory` | `TestHostFenceTests` |
+| The start of a display capture | `ScreenColorSource` | `TestHostFenceTests` |
+| A give-back task registered or deleted in Task Scheduler | `GiveBackTask` | `TestHostFenceTests` |
+| A laptop's lighting set through its ACPI device or WMI method, a serial port opened, the mainboard name read through WMI | `OwnLightingChannels`, `AsusAuraCoreLighting` | `TestHostFenceTests` |
+| A connection to an OpenRGB SDK server, OpenRGB's process opened for its command line, its settings file read | `OpenRgbTcpLink`, `OpenRgbServerPort` | `TestHostFenceTests` |
+| The iCUE SDK's library loaded | `IcueSdkNative` | `TestHostFenceTests` |
+| The PC's keyboard layout read, which a reWASD import reads every key through | `DirectInputKeys` | `TestHostFenceTests` |
 | The GameInput service, which HIDMaestro's context asks `sc.exe` about and starts as it is built | A flag inside the HIDMaestro SDK, set through reflection by `GameInputServiceOffLimits` | `TestHostFenceTests` |
 
 `TestHostFenceTests` also lists every call of a kind that reaches the machine: process starts, clipboard writes, input imports, `CreateFile` imports, pipes, sound outputs, libraries loaded by path, and network clients. `TestHostListenerTests` lists every socket. A new call of one of those kinds fails its list until it is read and either given a refusal or entered as one that needs none.
@@ -230,7 +243,7 @@ Preliminary since 4.5.1. Nothing on this path has run on ARM64 hardware: the ben
 
 Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics` has an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in an `x64` or `arm64` folder under `Resources` and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
 
-A publish for either architecture is refused by the `RequireBundledNatives` target if `SDL3.dll` or `libusb-1.0.dll` is missing from `Resources/SDL3/<arch>`, or `xinput1_4.dll` from `Resources/OpenXInput/<arch>`, and an ARM64 publish if `libvosk.dll` is missing from `Resources/Vosk/arm64`. Those `Content` items are conditioned on `Exists`, so without that target a missing DLL would publish anyway, and the auto build runs no tests that would notice. Without `SDL3.dll` the input engine cannot start. Without `libusb-1.0.dll` wired Switch 2 controllers and the GameCube adapter never open, which is the 4.5.0 regression. Without the fork's `xinput1_4.dll` SDL loads the system one and PadForge reads its own virtual controllers back as input. The same target refuses any runtime other than `win-x64` and `win-arm64`, which would otherwise be handed the x64 libraries. A plain `dotnet build` is let through with a message. `SDL3.dll` and `xinput1_4.dll` come from the forks, the ARM64 pair cross-compiled with `cmake -A ARM64`.
+A publish for either architecture is refused by the `RequireBundledNatives` target if `SDL3.dll` or `libusb-1.0.dll` is missing from `Resources/SDL3/<arch>`, or `xinput1_4.dll` from `Resources/OpenXInput/<arch>`, an x64 publish if `iCUESDK.x64_2019.dll` is missing from `Resources/Corsair/x64` or `MysticLight_SDK_x64.dll` from `Resources/MysticLight/x64`, and an ARM64 publish if `libvosk.dll` is missing from `Resources/Vosk/arm64`. Those `Content` items are conditioned on `Exists`, so without that target a missing DLL would publish anyway, and the auto build runs no tests that would notice. Without `SDL3.dll` the input engine cannot start. Without `libusb-1.0.dll` wired Switch 2 controllers and the GameCube adapter never open, which is the 4.5.0 regression. Without the fork's `xinput1_4.dll` SDL loads the system one and PadForge reads its own virtual controllers back as input. The same target refuses any runtime other than `win-x64` and `win-arm64`, which would otherwise be handed the x64 libraries. A plain `dotnet build` is let through with a message. `SDL3.dll` and `xinput1_4.dll` come from the forks, the ARM64 pair cross-compiled with `cmake -A ARM64`.
 
 The `RefuseInBoxMidiBinaries` target runs after `ComputeResolvedFilesToPublishList` and refuses a publish whose file list carries anything named `Windows.Devices.Midi2` (the DLL, `.pri` or `.pdb` from Microsoft's preview package, which NuGet copies from its `runtimes/win-*/native` folder by itself). PadForge uses the copy of the in-box API that Windows installs in System32 and ships none of its own. The project takes only the metadata, `Resources/WinMD/Windows.Devices.Midi2.winmd` from the 0.99.88-preview.10 package, as a `CsWinRTInputs` item with `CsWinRTIncludes` set to `Windows.Devices.Midi2`, and C#/WinRT 2.2.0 compiles the projection into `PadForge.dll`. C#/WinRT 2.2.0 resolves the Windows metadata it needs from an installed Windows SDK, so the build machine needs the Windows 11 SDK (10.0.26100).
 
@@ -276,6 +289,8 @@ Drivers follow the machine. HIDMaestro 2.1.0 and BthPS3 3.2.1 each carry an x64 
   <Nullable>disable</Nullable>
   <ImplicitUsings>enable</ImplicitUsings>
   <GenerateAssemblyInfo>false</GenerateAssemblyInfo>  <!-- Manual AssemblyInfo.cs -->
+  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  <StartupObject>PadForge.Program</StartupObject>
 </PropertyGroup>
 ```
 
@@ -289,6 +304,8 @@ Key settings:
 | `UseWindowsForms` | `true` | `NotifyIcon` system tray only (not WinForms UI) |
 | `GenerateAssemblyInfo` | `false` | Uses manual `Properties/AssemblyInfo.cs` |
 | `Nullable` | `disable` | Nullable reference types not used |
+| `AllowUnsafeBlocks` | `true` | Unsafe code in the App project |
+| `StartupObject` | `PadForge.Program` | The process's entry is `Program.Main`. A give-back task's run (`GiveBackRun`) answers there before any WPF assembly loads, because at a boot it runs in a session with no desktop. Every other start goes on to `App` |
 
 **WinForms implicit using removal**. Prevents `System.Drawing` / `System.Windows.Forms` ambiguity with WPF types:
 ```xml
@@ -340,19 +357,19 @@ Every build between two releases carries the same version, so the App also stamp
 
 | Package | Version | Source | Purpose |
 |---------|---------|--------|---------|
-| **CommunityToolkit.Mvvm** | 8.2.2 | nuget.org | MVVM: `ObservableObject`, `RelayCommand` |
+| **CommunityToolkit.Mvvm** | 8.4.2 | nuget.org | MVVM: `ObservableObject`, `RelayCommand` |
 | **Concentus** | 2.2.2 | nuget.org | Pure-C# Opus encoder and decoder for the DualSense Bluetooth speaker and microphone streams |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | nuget.org | 3D viewport rendering (OBJ model loading, camera, lighting) |
-| **Microsoft.Windows.CsWinRT** | 2.2.0 | nuget.org | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` at build time |
+| **Microsoft.Windows.CsWinRT** | 2.3.1 | nuget.org | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` at build time |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | **nuget-local/** | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
 | **NAudio.Wasapi** | 2.2.1 | nuget.org | WASAPI capture, playback and endpoint enumeration, Media Foundation decode, and mixing through its NAudio.Core dependency: the controller speaker mirror, macro sounds, voice-macro microphones, bass shakers, and bass-driven rumble detection |
 | **Nefarius.Utilities.DeviceManagement** | 6.1.0 | nuget.org | Driver-store install, class filters, and USB CyclePort for the DualShock 3 Bluetooth stack (same library BthPS3's own installer uses) and for releasing a hidden USB controller |
-| **System.Management** | 10.0.11 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
-| **System.Speech** | 10.0.0 | nuget.org | SAPI recognizer behind the voice-macro trigger (#317) |
+| **System.Management** | 10.0.13 | nuget.org | WMI queries behind the handheld hidden-button learner (ACPI `_WDG` event classes) |
+| **System.Speech** | 10.0.13 | nuget.org | SAPI recognizer behind the voice-macro trigger (#317) |
 | **Vosk** | 0.3.38 | nuget.org | Offline recognizer for voice macros (Apache-2.0, Alpha Cephei). Phrase-list grammar with an `[unk]` bucket, so non-phrase audio decodes as unknown. Its targets file also copies `libvosk.dll` and the MinGW runtime into the output |
 | **WPF-UI** | 4.3.0 | nuget.org | Fluent Design theme for WPF (dark mode, NavigationView, controls) |
 
-`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `1.12.0.0`. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.
+`HIDMaestro.Core` (the virtual controller client) is a project `<Reference>` with a `HintPath` into `Resources/HIDMaestro/`, not a NuGet package. The shipped DLL reports file version `2.1.0.0`. The csproj comment that names the shipped build is hand-maintained, so when the two disagree the DLL's own file version is the authority.
 
 The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.SteamWorkshop`.
 
@@ -360,7 +377,7 @@ The App also holds `<ProjectReference>`s to `PadForge.Engine` and `PadForge.Stea
 
 | Package | Version | Purpose |
 |---|---|---|
-| **SteamKit2** | 3.4.0 | Steam protocol client (LGPL-2.1: its license.txt grants 2.1 or any later version, its package metadata says LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases |
+| **SteamKit2** | 3.5.0 | Steam protocol client (LGPL-2.1: its license.txt grants 2.1 or any later version, its package metadata says LGPL-2.1-only) for the anonymous CM session behind Workshop config lookup. Pinned exactly: Valve adjusts the Steam protocol periodically and SteamKit2 catches up in point releases |
 
 The Workshop client is the #9 community config import feature. Every client constructor checks `ISteamWorkshopGate` and throws when the user has not opted in, so no network work can happen until the "Enable Community Configs" toggle in Settings (backed by `EnableCommunityConfigLookup`) is on.
 
@@ -368,8 +385,8 @@ The Workshop client is the #9 community config import feature. Every client cons
 
 | Package | Version | Purpose |
 |---|---|---|
-| **BouncyCastle.Cryptography** | 2.6.2 | X25519 / Ed25519 / ChaCha20-Poly1305 for Remote Link pairing and transport, on the Win10 1809 floor where the in-box AEAD is gated to Win11 22000+ |
-| **System.Security.Cryptography.ProtectedData** | 10.0.9 | DPAPI at-rest protection for this PC's Remote Link identity key |
+| **BouncyCastle.Cryptography** | 2.7.0 | X25519 / Ed25519 / ChaCha20-Poly1305 for Remote Link pairing and transport, on the Win10 1809 floor where the in-box AEAD is gated to Win11 22000+ |
+| **System.Security.Cryptography.ProtectedData** | 10.0.13 | DPAPI at-rest protection for this PC's Remote Link identity key |
 
 All SDL3 and system interop still uses raw `[DllImport]` P/Invoke.
 
@@ -416,6 +433,8 @@ The full native set in the bundle:
 | `vcruntime140_1.dll` | `<Content>`, `Resources/VisualCpp/x64/` | The x64 `SDL3.dll`. It holds an exception handler that exists for the x64 ABI alone | No |
 | `HAR.dll` | `<Content>`, `Resources/Interhaptics/x64/` | `SensaHapticsService` (#374), the Razer Sensa row's worker (#494), P/Invoked lazily | No |
 | `Interhaptics.RazerProvider.dll` | `<Content>`, `Resources/Interhaptics/x64/` | Loaded by `HAR.dll` as its Razer Sensa backend | No |
+| `iCUESDK.x64_2019.dll` | `<Content>`, `Resources/Corsair/x64/` | `IcueSdkNative` (#557), the redist library of Corsair's iCUE SDK 4.0.84, loaded by name while iCUE runs | No |
+| `MysticLight_SDK_x64.dll` | `<Content>`, `Resources/MysticLight/x64/` | `MysticLightNative` (#557), the x64 library of MSI's Mystic Light SDK 1.0.0.8, loaded while Mystic Light runs | No |
 | `libvosk.dll` | x64: Vosk 0.3.38 package targets. ARM64: `<Content>`, `Resources/Vosk/arm64/` | `Vosk.dll`, behind `VoskVoiceEngine` (#317) | Yes |
 | `libgcc_s_seh-1.dll`, `libstdc++-6.dll`, `libwinpthread-1.dll` | Vosk 0.3.38 package targets | MinGW runtime `libvosk.dll` links against | No |
 
@@ -580,12 +599,17 @@ HTML/CSS/JS for the browser-based virtual controller. Served at runtime by `WebC
 | `WebAssets/index.html` | Landing page |
 | `WebAssets/controller.html` | Virtual gamepad UI |
 | `WebAssets/touchpad.html` | Touchpad surface UI |
+| `WebAssets/menus.html` | Web Menus: a slot's Touch Grid menus as tiles |
+| `WebAssets/display.html` | The controller picture page for a stream's browser source (#555): a read-only drawing of a slot's controller, lit from its live output |
 | `WebAssets/custom.html` | Custom controller builder UI |
 | `WebAssets/gamepad.html` | Browser Gamepad page: forwards a controller paired to the phone or built into the handheld |
 | `WebAssets/css/controller.css` | Gamepad styling |
+| `WebAssets/css/layout_view.css` | Styling of the resting controller drawing the home page's cards and the picture page share |
 | `WebAssets/js/controller_client.js` | WebSocket client logic |
 | `WebAssets/js/custom_client.js` | Custom layout client logic |
 | `WebAssets/js/gamepad_client.js` | Gamepad API reader and WebSocket forwarding for the Browser Gamepad page |
+| `WebAssets/js/layout_view.js` | One controller drawing at rest, shared by the home page's cards and the controller picture page (#555) |
+| `WebAssets/js/display_client.js` | The controller picture page's client: it lights the drawing from the slot's live output and shows who plays through Twitch chat. It sends nothing |
 | `WebAssets/js/fullscreen.js` | Fullscreen toggle for the web controller pages, added where the browser supports element fullscreen |
 | `WebAssets/js/nipplejs.min.js` | Virtual joystick library |
 
@@ -740,7 +764,7 @@ Copy the publish output to any folder:
 cp PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe C:\PadForge\PadForge.exe
 ```
 
-There are no companion files. Every native library (`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, the Visual C++ runtime, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `libvosk.dll`, and the MinGW runtime) is folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
+There are no companion files. Every native library (`SDL3.dll`, `libusb-1.0.dll`, `xinput1_4.dll`, the Visual C++ runtime, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `iCUESDK.x64_2019.dll`, `MysticLight_SDK_x64.dll`, `libvosk.dll`, and the MinGW runtime) is folded into the single-file bundle on publish and extracted to `%TEMP%\.net\PadForge\<hash>\` at first launch. The gamepad mapping database is embedded in the assembly, so no `.txt` file sits alongside the exe either. A deploy is one `PadForge.exe`.
 
 ### Development Deploy Script
 
@@ -794,7 +818,7 @@ cd ../../win-arm64/publish
 zip -r PadForge-vX.Y.Z-win-arm64.zip .
 ```
 
-Each publish directory holds one file, so the 5.2.0 assets are `PadForge-v5.2.0-win-x64.zip` and `PadForge-v5.2.0-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
+Each publish directory holds one file, so the 5.3.0 assets are `PadForge-v5.3.0-win-x64.zip` and `PadForge-v5.3.0-win-arm64.zip`, each containing `PadForge.exe` and nothing else. Only the x64 exe can be run on an x64 bench.
 
 The in-app updater finds a release by these names: a `vX.Y.Z` tag with no suffix, zips ending in `-win-x64.zip` and `-win-arm64.zip`, and `PadForge.exe` at the root of each zip. It offers an asset only when GitHub reports a SHA-256 `digest` for it. See [Updates Internals](updates-internals.md#couplings).
 
@@ -820,9 +844,9 @@ Standalone diagnostic utilities and development scripts. None of the tool projec
 | **combomeasure** | `cd tools/combomeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | Renders the real WPF-UI ComboBox with the app's style and font, then reads back `ActualWidth` per option in every language `Languages.tsv` lists, a string a partial translation leaves out measured in English as the window shows it. Lists every option wider than the picker `PadPage.xaml` gives it, by language and key |
 | **rowmeasure** | `cd tools/rowmeasure && dotnet run` | net10.0-windows (WPF) | WPF-UI 4.3.0 | The same measurement for the fixed-size rows the 2026-09-15 audit flagged: the Profiles shortcut row, the raw hat strip, the equalizer row and its headings, the gesture recorder's hint and the pad page's first tier, in every language `Languages.tsv` lists. Reads each element's desired width, margin included, and lists every equalizer option and heading wider than its column, by language and key |
 | **PersonaVerify** | `dotnet run --project tools/PersonaVerify -- [diagLogPath]` | net10.0-windows10.0.26100.0 | NAudio 2.2.1 | Consumer-side integration check for HIDMaestro composite USB personas. Measures at the persona's own WASAPI endpoints instead of trusting PadForge's internal counters, which read healthy while Windows received full-scale noise. Also renders four channels (speaker on 1/2, authored haptics on 3/4) so the haptics lane is exercised with no game running. Pass a `PADFORGE_DIAG` log path for the log-backed checks. The audio checks run without it |
-| **WdgProbe** | `dotnet run --project tools/WdgProbe -- [seconds]` | net10.0-windows | PadForge.Engine, System.Management 10.0.11 | Runs the handheld hidden-button learner's own path outside the app (#343): dumps the firmware ACPI `_WDG` table, lists the WMI event classes that pass the gate, then subscribes and prints every event for the given seconds. Compiles the app's `AcpiWmi.cs` and `WmiEventRuntime.cs` directly, so it cannot drift from what PadForge does |
+| **WdgProbe** | `dotnet run --project tools/WdgProbe -- [seconds]` | net10.0-windows | PadForge.Engine, System.Management 10.0.13 | Runs the handheld hidden-button learner's own path outside the app (#343): dumps the firmware ACPI `_WDG` table, lists the WMI event classes that pass the gate, then subscribes and prints every event for the given seconds. Compiles the app's `AcpiWmi.cs` and `WmiEventRuntime.cs` directly, so it cannot drift from what PadForge does |
 
-The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 37 with the capture, tracing, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
+The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted during the 4.1.0 cycle (dead-feature cleanup: `tools/` went from ~128 entries to 16, and has grown back to 78 entries with the capture, tracing, audit, lighting-table generator, and asset-generation scripts). Nothing in `tools/` targets the deprecated vJoy stack anymore.
 
 ### Development Scripts
 
@@ -831,14 +855,16 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `deploy.ps1` | Kill running instance, copy the published exe to `C:\PadForge`, relaunch |
 | `kill_padforge.ps1` | Elevated kill of a running PadForge instance |
 | `diag-sweep.ps1` | Runtime self-diagnostics harvest: deploys the fresh build, launches with `PADFORGE_DIAG` armed, walks every page via UI Automation so lazily realized templates evaluate their bindings. Must run elevated or UIA sees zero elements |
-| `capture_all.ps1` | Captures all wiki/README screenshots in one run: backs up `PadForge.xml`, injects test data, drives the UI. `capture_all_wrapper.ps1` runs it elevated with logging |
+| `capture_all.ps1` | The one screenshot script: captures every wiki and README screenshot in a run, backs up `PadForge.xml`, injects test data and drives the UI. It replaced the separate colorway, VR, web and mouse-gesture scripts. `capture_all_wrapper.ps1` runs it elevated with logging |
 | `prep_xml_for_capture.ps1` | Preps `PadForge.xml` with 5 slot types and sample macros for screenshot runs. `prep_xml_for_capture_wrapper.ps1` adds logging |
+| `settings_guard.ps1` | Dot-sourced by every script that writes the settings file. Backs the file up with a marker, puts it back at the end, and restores a backup a killed run left. `CaptureHarnessSetupTests` fails a script that writes the file without it |
+| `a11y_uia_audit.ps1` | Runtime screen-reader audit: walks each sidebar page and tab through UI Automation and reports focusable elements with no name, names with private-use glyphs, and names shaped like .NET type names |
+| `a11y_nvda_tab_pass.ps1` | Starts a portable NVDA with a silent synthesizer and its IO log, presses Tab a set number of times on a page, and quits NVDA. Run it elevated. `a11y_nvda_speech_parse.py` prints each utterance from the log |
+| `render_readme_header.ps1` | Renders `tools/readme_header.html` to `screenshots/header.png`, the README banner, with headless Edge |
+| `check_fork_refs.py` | Lists the docs pages' SDL fork commit hashes that the shipped fork commit does not contain, and prints every source line a page cites in the fork. Run on every take of a fork build |
+| `verify_plugin_rows.mjs` / `verify_plugin_rows.py` | Hold the frames SignalRGB's plugins send against the frames the lighting rows send |
 | `convert_screenshots.ps1` | Converts and renames captured wiki images into `screenshots/` |
 | `add_slots_via_ui.ps1` | Restores a `PadForge.xml` backup, then adds slot types via UI Automation |
-| `capture_colorways.ps1` | Captures the themed-colorway shots by writing `PadForge.xml` state (`SlotModel3DAppearances`, `Use2DControllerView`, slot types) rather than driving the appearance picker, which is one of the two least reliable UI paths for automation |
-| `capture_vr.ps1` | Same state-injection approach, for the VR controller shots |
-| `capture_web.ps1` | Recaptures the two Web Controller shots against a proven-live server. Refuses to capture until an HTTP 200 comes back, after both shots shipped as Edge's "localhost refused to connect" page |
-| `capture_mouse_gestures.ps1` | Recaptures the Mouse tab shot alone, with the same seven-slot topology the rest of the gallery shows. Two minutes instead of the full run's twenty five |
 | `mirror_screenshots.py` | Mirrors captured screenshots into the repo and the website. Any destination without a source is an error, not a note, because every stale picture this project shipped came from a mirror step that skipped one silently |
 | `btaudio-trace.ps1` | Launches the deployed build with the diagnostic mirror armed and tails the `BTAUDIO` heartbeat, one line per second per pad while the DualSense Bluetooth stream thread lives. Its absence is a finding: the thread stopped |
 | `button-trace.ps1` | Tails `BTNSURFACE` and `BTNEDGE` to answer why a mapped button does nothing. `gp=0 raw=1` is SDL's gamepad mapping dropping it, `gp=0 raw=0` is nothing arriving from the pad |
@@ -850,6 +876,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | `dualshock3_mesh.py` | Splits the bought DualShock 3 model into per-part OBJs and its atlas. Each stick is cut at the dome's edge, the bezel collar stays with the body, and the run prints the stick pivots and trigger hinges |
 | `probe_macro_list.ps1` | Dumps control type, class, and name of everything on the Macros tab, so the capture harness's macro-presence gate can match on what UI Automation really exposes |
 | `verify_site_carousel.ps1` | Opens the padforge.org page (the local repository copy by default) in a visible browser and screenshots the finish carousel twice, 11 seconds apart by default, to prove it advances. Headless cannot answer this, because the carousel pauses on `document.hidden` |
+| `gen_*.py` (32 scripts) | Generators for the lighting tables (the `*.g.cs` files under `Common/Input/Peripherals/`, its `HidFamilies/` folder and `Views/`), the keyboard layouts and the 2D art. Each reads pinned commits of its reference projects (OpenRGB, QMK, the vendor SDK headers, SignalRGB's plugins) and writes one C# table. Run one when its reference moves, and commit the regenerated `.g.cs` with it |
 | `overlay_positions.py` | Generates 2D overlay positions from labeled Gamepad-Asset-Pack SVGs. Positions are generated, never placed by eye |
 | `gen_2d_colorways.py` | Emits the 2D colorway art for the five stock families plus the derived DualSense Edge set. Only sprites that differ from the default are written |
 | `gen_dualsense_edge_art.py` | Extends the DualSense 2D set into `2DModels/DUALSENSEEDGE`, adding the four extra controls as floating tiles |
@@ -867,7 +894,7 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 | Missing WPF types | Using `dotnet build` instead of `dotnet publish` for deployment | Always use `dotnet publish -c Release` for deployment |
 | `System.Drawing` ambiguity | WinForms implicit usings conflict with WPF | Ensure `<Using Remove="System.Drawing" />` is in csproj |
 | HelixToolkit errors | Package restore failed | Run `dotnet restore` first |
-| Large exe size (~331 MB x64, ~310 MB ARM64) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
+| Large exe size (about 296 MB for the x64 publish at 5.3.0) | Expected. Self-contained with bundled .NET runtime, WPF native libs, the HIDMaestro SDK, and every embedded mesh, driver, and asset | `EnableCompressionInSingleFile` already enabled |
 | CI build fails | .NET 10 SDK not available in runner | Check that the `actions/setup-dotnet` step still resolves `dotnet-version: 10.x` |
 | `HIDMaestro.Core` reference fails to resolve | `Resources/HIDMaestro/HIDMaestro.Core.dll` missing or wrong build | Drop a Release-build `HIDMaestro.Core.dll` from a tagged HIDMaestro release into `Resources/HIDMaestro/` |
 
@@ -886,4 +913,4 @@ The v2 vJoy SDK utilities and the ad-hoc vJoy diagnostic scripts were deleted du
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

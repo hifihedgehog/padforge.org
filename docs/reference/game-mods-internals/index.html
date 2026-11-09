@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1065,6 +1095,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1340,6 +1378,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1516,6 +1582,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1852,6 +1946,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2577,6 +2727,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3069,6 +3227,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -4311,7 +4581,7 @@
 <li><code>LightbarEverExternal</code> is left as the game left it, so when the hold ends PadForge's own color returns rather than the stand-down a game's write triggers.</li>
 </ul>
 <p>The pad keeps a trigger program, a mute light or a player row until something overwrites it, and the pass leaves an idle subsystem unasserted (<code>GateMirroredSubsystem</code>), so a game's last program persists after the game stops writing. A mod's hold ends on purpose, so <code>ModHoldEnded</code> asserts each of those subsystems once more on the pass after a hold ends, carrying PadForge's own value: Off for a trigger or a mute light the pad page leaves unset.</p>
-<p>A change to a hold calls <code>NotifyModEffectsChanged</code> for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (<code>ModChangeTimerMs</code>, a <code>HasTimerDemand</code> term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through <code>LightPeripheral</code> where no game color is live, and a change requests their refresh through <code>GameLightbarCapture.NotifyChanged</code>.</p>
+<p>A change to a hold calls <code>NotifyModEffectsChanged</code> for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (<code>ModChangeTimerMs</code>, a <code>HasTimerDemand</code> term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through <code>LightPeripheral</code> where no game color is live, and a change requests their refresh through <code>GameLightbarCapture.NotifyChanged</code>. A mod's color also covers Screen Color's per-light spread (#559): the spread's picture rides the claim only while no game, mod, macro or overlay color is showing (<code>baseModeShows</code> in <code>UserEffectsDispatcher</code>).</p>
 <p><code>TryGetInboundTriggerEffects</code> hands <code>AtToImpulseTranslator</code> the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.</p>
 <h2 id="the-threshold">The threshold<a class="headerlink" href="#the-threshold" title="Permanent link">&para;</a></h2>
 <p>Step 5 applies the held thresholds right before submit, after button SOCD, on a copy, so the pad page's preview and the impulse translation still read the real pull. Two paths carry it:</p>
@@ -4335,7 +4605,7 @@
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
 <p><code>GameModTests</code> replays the packets of the mods DSZ's tests capture, checks every encoding against Nielk1's formulas and the chosen tables, the lights, the holds and their owners, the releases, the controller order, the dispatcher's fill and its order in the pass, the threshold, the server over a real loopback socket, sender identification against the test's own socket, the port-file rule on temporary paths, and the stand-in, which the test extracts and runs. The default port and the real port files are fenced in the test host (<code>GameModPortOffLimits</code>, <code>GameModPortFilesOffLimits</code>).</p>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

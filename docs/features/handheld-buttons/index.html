@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1067,6 +1097,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1345,6 +1383,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../stick-deadzones/" class="md-nav__link">
         
   
@@ -1521,6 +1587,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -2003,6 +2097,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2726,6 +2876,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3215,6 +3373,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -4035,7 +4305,7 @@
 </ol>
 <p>Whatever the press changed is shown under <strong>Source:</strong> as the key combination the firmware typed (<em>Keys: Ctrl + Win + F17</em>), the report field that flipped (<em>report 04, byte 20, bit 0x80</em>), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a list appears and you pick one. Give the button a name and click <strong>Register</strong>.</p>
 <p>If nothing changed, the dialog says so and counts what it watched: <em>Watched 3 vendor reports and 10 event classes. During the press: 0 reports, 0 events.</em> Press again, inside the highlighted window.</p>
-<p>Repeat for every paddle and key. The <strong>Learned Buttons</strong> list below shows each one with a <strong>Remove</strong> button. Each learned button keeps the index it was given for good, so a binding made today survives buttons added or removed later.</p>
+<p>Repeat for every paddle and key. The <strong>Learned Buttons</strong> list below shows each one with a <strong>Remove</strong> button. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. <strong>Remove</strong> clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.</p>
 <hr />
 <h2 id="how-the-three-paths-behave">How the three paths behave<a class="headerlink" href="#how-the-three-paths-behave" title="Permanent link">&para;</a></h2>
 <p><strong>Key combinations</strong> go through PadForge's low-level keyboard and mouse hooks. A learned combination is swallowed before the shell sees it, so Win+D no longer minimizes your desktop and F24 no longer reaches the game as a key. A key that is only the start of a combination is held back for 100 ms. If the rest never arrives, it is replayed, so typing F11 by itself still types F11. Modifier keys are never held back, and a prefix is judged in the order the firmware typed it, so the D in WASD is never held for a Win+D chord. A combination containing Win or Alt gets the AutoHotkey treatment (a tap of a reserved key) so releasing Win does not open the Start menu. Keystrokes injected by other software pass through untouched. A button releases when any key of its combination goes up.</p>
@@ -4070,7 +4340,7 @@
 <li><a href="../../reference/handheld-buttons-internals/">Handheld PC Buttons Internals</a>: the three delivery paths and the learner, for whoever has to change the code.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

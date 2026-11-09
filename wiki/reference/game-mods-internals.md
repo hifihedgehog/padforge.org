@@ -106,7 +106,7 @@ Two placements are deliberate:
 
 The pad keeps a trigger program, a mute light or a player row until something overwrites it, and the pass leaves an idle subsystem unasserted (`GateMirroredSubsystem`), so a game's last program persists after the game stops writing. A mod's hold ends on purpose, so `ModHoldEnded` asserts each of those subsystems once more on the pass after a hold ends, carrying PadForge's own value: Off for a trigger or a mute light the pad page leaves unset.
 
-A change to a hold calls `NotifyModEffectsChanged` for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (`ModChangeTimerMs`, a `HasTimerDemand` term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through `LightPeripheral` where no game color is live, and a change requests their refresh through `GameLightbarCapture.NotifyChanged`.
+A change to a hold calls `NotifyModEffectsChanged` for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (`ModChangeTimerMs`, a `HasTimerDemand` term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through `LightPeripheral` where no game color is live, and a change requests their refresh through `GameLightbarCapture.NotifyChanged`. A mod's color also covers Screen Color's per-light spread (#559): the spread's picture rides the claim only while no game, mod, macro or overlay color is showing (`baseModeShows` in `UserEffectsDispatcher`).
 
 `TryGetInboundTriggerEffects` hands `AtToImpulseTranslator` the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.
 
@@ -144,4 +144,4 @@ The Dashboard line comes from `GameModServer.FormatStatus`: why the server is no
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

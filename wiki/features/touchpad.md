@@ -35,6 +35,35 @@ Support covers the standard Windows HID pen/digitizer interface. PadForge does n
 
 ---
 
+## Precision touchpads read by PadForge alone
+
+A laptop or external Windows Precision Touchpad moves the cursor in Windows whether or not PadForge reads it. **Use Only in PadForge** stops that. Select the touchpad's card on the [Devices](devices.md) page, or the card of its mouse, and click **Use Only in PadForge** in the **Input Hiding** section. **Hide from Games (HidHide)** is not shown for these rows.
+
+The switch needs three things, and the status bar names the first one missing before anything is asked:
+
+- HidHide installed. See [Driver Management](driver-management.md).
+- **Hide Devices from Games** on in [Settings](settings.md).
+- The engine running.
+
+A confirmation says that while the engine runs, the touchpad moves no pointer and clicks or scrolls nothing in any program, and that its mappings keep working in PadForge. It also carries the warning about losing your only pointer. After the switch, a **Keep This Touchpad in PadForge?** prompt counts down 15 seconds. Click **Keep** to stay, or click **Give It Back**. If nobody answers, PadForge gives the touchpad back to Windows. A touchpad PadForge cannot read is given back at once, with a message.
+
+PadForge hides the touchpad's collection with HidHide and opens that collection itself, the way it captures a pen tablet. No driver changes. Windows gets the touchpad back when the engine stops or PadForge closes, even with **Keep Devices Cloaked Between Launches** on. The row's button turns into **Give Back to Windows**, which does the same at any time. A line under the button follows the capture: Shared Input, Switching Input, Waiting For Touchpad Input, Captured By PadForge, or Touchpad Input Unavailable.
+
+The touchpad stays in Windows' touchpad mode. The device's mouse row, which Windows' pointer fed before, keeps its ID, so its slots and mappings carry over. While the touchpad is taken, that row reads the touchpad's own frames the way libinput reads a touchpad:
+
+| Input | What the mouse row reports |
+|---|---|
+| Motion | One finger moves the cursor, unaccelerated. Every finger counts while the click-pad is pressed. |
+| Press | Pressing the pad clicks right in the bottom right area or with two fingers, middle with three fingers, and left otherwise. |
+| Tap | A touch under 180 ms that moves under 1.3 mm clicks. One finger clicks left and two fingers click right. Tap-and-drag works. |
+| Scroll | Two fingers scroll by their average motion, one wheel notch for each 10 mm. |
+
+Each follows your Windows touchpad setting: taps, two-finger tap, the right-click zone, tap-and-drag, scrolling and its direction. Windows sends no wheel for touchpad scrolling, so the 10 mm notch is PadForge's choice.
+
+Measured on one Goodix I2C touchpad: the switch took it in about a second, the Keep prompt gave it back at 15 seconds, and Windows listed it again two seconds later. Other touchpads have not been run.
+
+---
+
 ## What lives on this tab
 
 Eight cards, top to bottom:
@@ -233,4 +262,4 @@ Shape matching runs two gesture recognizers on every single-finger shape and kee
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

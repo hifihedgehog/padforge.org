@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1065,6 +1095,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1340,6 +1378,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1516,6 +1582,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1852,6 +1946,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2577,6 +2727,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3069,6 +3227,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -7462,6 +7732,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p><code>BuildKeyboardCanvas()</code> draws the picked keyboard as its board when <code>KeyboardFamilies.For(KbmKeyboardDevice)</code> has a drawing (<code>BuildDeviceKeyboard</code>), and the generic keyboard otherwise (<code>BuildGenericKeyboard</code>): on Windows input, and for a keyboard profile no drawing covers, such as one a user imported.</p>
 <p>The generic keyboard is <code>KeyboardKeyItem.BuildLayout()</code> (full ANSI QWERTY with numpad, 556x136 layout units) plus four media keys over the number pad (Mute, Volume Down, Volume Up, Play/Pause, as Segoe MDL2 Assets glyphs), where 108-key boards have them. The mapping grid carries the rest of the media and browser keys.</p>
 <p>A board drawing is one of eleven key sets in <code>KeyboardFamilies.g.cs</code>, which <code>tools/gen_kbm_layouts.py</code> generates from QMK's layout data (<code>layouts/default</code>, <code>keyboards/hhkb/jp</code>) and Keychron's QMK fork for the Q6: full size ANSI, ISO and with four keys over the number pad, tenkeyless, 75 percent, 65 percent with and without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Each <code>LayoutKey</code> holds its position and size in key units (24 px each) and the HID usage it sends. <code>KeyboardFamilies</code> maps each of HIDMaestro's 51 keyboard profiles to a set, and <code>KbmHidDeviceTests</code> holds that table to the catalog, so a profile a later SDK adds cannot go undrawn. A board no QMK layout matches draws as the nearest set, marked <code>Approximate</code>, and the canvas adds the caption <code>Pad_Kbm_Preview_Approximate</code> under it.</p>
+<p>The Lighting tab's <strong>Key Colors</strong> card draws a lit device's lights with <code>KeyLightsView</code> (<code>KeyLightsView.cs</code>), built in code the way <code>BuildDeviceKeyboard</code> builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the <code>KeyboardFamilies.g.cs</code> set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through <code>KeyTargetPickerViewModel</code>.</p>
 <p>Each board key stands for the row the input layout gives it: <code>KbmHidKeyMap.TargetOf(usage, UiLayout())</code> turns its usage into the virtual-key index of its row, and a layout change redraws the board. A language switch rebuilds both canvases once the switch's other handlers have run (<code>Strings.CultureChanged</code>), so the tooltips and the approximate-board caption take the new language. Its legend comes from, in order, <code>KeyboardFamilies.FixedLegend</code> (Apple's modifier symbols on a Mac board, the JIS keys' own legends, <code>Fn</code> for a key that sends nothing), a media glyph for a consumer usage, the character the layout types (<code>KbmHidKeyMap.CharacterLegend</code>), and <code>ShortLegend</code>. A key the picked keyboard cannot send (<code>KbmDeviceCaps</code>), or that no row reaches (<code>InputManager.IsKbmKeyTarget</code>), is drawn at 35 percent and takes no clicks.</p>
 <p>Every live key has:
 - <code>CornerRadius(3)</code> rounded corners
@@ -8252,7 +8523,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: 2D PNG assets (<code>2DModels/</code>) included as WPF <code>Resource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

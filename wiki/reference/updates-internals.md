@@ -37,7 +37,7 @@ It stamps nothing unless git answers, the repository's top level is the solution
 | Releases | `repos/hifihedgehog/PadForge/releases/latest` | A higher version than this build's. GitHub never answers this endpoint with a pre-release. |
 | Pre-releases | `repos/hifihedgehog/PadForge/releases/tags/latest-v{major}-dev` | A higher commit count, parsed from the title `PadForge r{count}@{hash}`. |
 
-`build.yml` republishes the dev release for each push to the dev branch, unless a newer commit is already published, with exactly that title and the assets `PadForge.zip` and, when the ARM64 build succeeded, `PadForge-arm64.zip`. A comment there says the updater depends on all three.
+`build.yml` republishes the dev release for each push to the dev branch, unless a newer commit is already published, with exactly that title and the assets `PadForge.zip` and, when the ARM64 build succeeded, `PadForge-arm64.zip`. The new release is created as a draft under a staging tag, checked to hold every asset, and only then swapped in for the published one, so a failed upload leaves the old release in place. A comment there says the updater depends on the tag, the title and the asset names.
 
 `IsNewerDevBuild` counts a published build as newer when this build has no count, when its count is higher, or when the count is the same and the commit differs, which is a rewritten history. The check and the launch-time install both ask it, so they never disagree.
 
@@ -200,4 +200,4 @@ Tests: `UpdateServiceTests`, `UpdateControllerTests` and `UpdateStatusCultureTes
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

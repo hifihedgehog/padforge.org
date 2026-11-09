@@ -108,14 +108,18 @@ CATS = [
  ("mapping", "Mapping and control", [
    "multi-source mappings", "multi-source mapping", "shift layers", "starter profiles",
    "socd cleaning", "stick-assisted triggers", "mouse gestures", "media keys as inputs",
-   "macros with action sequences", "per-app profiles", "six deadzone shapes",
+   "macros with action sequences", "on-screen keyboard", "hotbar menus",
+   "per-app profiles", "six deadzone shapes",
    "unknown hardware welcome", "game telemetry as inputs"]),
  ("virtual", "Virtual controllers", [
    "nintendo virtual controller", "nintendo output", "virtual vr controllers",
-   "midi virtual output", "hide physical controllers", "steam workshop config import"]),
+   "midi virtual output", "hide physical controllers",
+   "a keyboard or mouse for padforge alone", "steam workshop config import",
+   "rewasd and ds4windows import"]),
  ("feel", "Feel and feedback", [
    "native wheel force feedback", "force feedback both ways", "impulse triggers",
    "trigger motors that feel the game", "adaptive triggers and lightbar",
+   "screen color lighting",
    "dualsense effects in any game", "guide led brightness", "bass shaker output",
    "bass shakers", "controller speaker audio", "audio through the controller speaker",
    "headphone dsp chain", "rumble and lighting in mice and keyboards",
@@ -130,9 +134,9 @@ CATS = [
  ("connect", "Devices and connectivity", [
    "remote link", "share controllers across your pcs", "phone-as-controller",
    "midi input", "a midi keyboard as a controller", "midi from a gamepad",
-   "nfc tag triggers", "wii controllers", "wii controllers, paired in-app",
+   "nfc tag triggers", "twitch chat plays", "wii controllers", "wii controllers, paired in-app",
    "dualshock 3, paired in-app", "battery and idle disconnect", "1000 hz polling",
-   "keyboard screens"]),
+   "keyboard screens", "screen overlay"]),
 ]
 
 used = set()

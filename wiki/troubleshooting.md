@@ -64,11 +64,11 @@ Related pages: [Installation](start/installation.md), [Settings](features/settin
 **A Nintendo virtual controller is active but the game does not react to it.**
 
 1. The Nintendo output rides **HIDMaestro**, the same driver as Xbox, PlayStation, and Extended. It installs itself the first time a slot creates a virtual controller. If no virtual controller appears, turn the slot off and on, and PadForge runs the setup again.
-2. Games see the slot as the picked Nintendo profile, a **Nintendo Switch Pro Controller** or a **Nintendo Switch 2 Pro Controller**. XInput-only games never read either one. Use an Xbox slot for those.
+2. Games see the slot as the picked Nintendo profile: **Nintendo Switch Pro Controller**, **Nintendo Switch Pro Controller (USB)**, **Nintendo Switch 2 Pro Controller** or **Nintendo Switch 2 Pro Controller: Full**. XInput-only games never read any of them. Use an Xbox slot for those.
 3. Steam Input detects it as a Pro Controller with Nintendo glyphs. For games without native Switch Pro support, let Steam Input translate it, or switch the slot to Xbox output.
-4. Gyro and accelerometer pass through from the assigned pad, so emulators and Steam Input gyro read real motion.
+4. Gyro and accelerometer pass through from the assigned pad on every Nintendo profile except the plain **Nintendo Switch 2 Pro Controller**, whose report has no motion field. Pick **Nintendo Switch 2 Pro Controller: Full** or a Switch Pro profile for motion. The USB profile sends input only once a program such as SDL or Steam starts it with the Switch protocol.
 5. Face buttons follow Nintendo lettering, so A sits on the right and B on the bottom. Prompts that look swapped against an Xbox pad are the Switch layout working as intended.
-6. The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers **Nintendo Switch Pro Controller** (the default) and **Nintendo Switch 2 Pro Controller**.
+6. The Nintendo slot has no Customize surface. It deploys a catalog profile as-is. The profile picker offers the four profiles in step 2, with **Nintendo Switch Pro Controller** the default.
 
 ---
 
@@ -410,6 +410,16 @@ The imported profile replaces what the Steam config did. Disable Steam Input for
 
 See [Steam Workshop Config Import](guides/steam-workshop-import.md) for the full feature guide.
 
+**An imported reWASD or DS4Windows profile does not behave like the original.**
+
+1. Read the preview's **Partial** and **Skipped** rows before importing. Each carries its reason, and [Import from reWASD and DS4Windows](guides/profile-import.md#what-reads-partial-or-skipped) lists what each one asks of you.
+2. Import adds the profile without loading it. Select it on the Profiles page and click **Load**.
+3. Assign your controller to the profile's controller slots on the [Devices](features/devices.md) page. An import assigns no controller. Keyboard and mouse inputs read the merged rows, which the profile assigns itself.
+4. If keys still reach the game twice, turn on **Consume Mapped Inputs (Hooks)** for the keyboard or mouse, or **Hide from Games (HidHide)** for the controller, as the preview's reason says.
+5. Close reWASD or DS4Windows while testing. Both read the same controllers and can fight PadForge for them.
+
+See [Import from reWASD and DS4Windows](guides/profile-import.md) for the full feature guide.
+
 ---
 
 ## Sensitivity Curves Not Responding
@@ -481,6 +491,22 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 2. Mouse axes show relative deltas, not absolute positions. Fast movements produce larger values.
 3. When recording a mouse axis mapping, move the mouse in the desired direction. Detection is instant.
 4. PadForge does not automatically consume mouse or keyboard inputs. Enable **"Consume Mapped Inputs (Hooks)"** or **"Hide from Games (HidHide)"** manually if needed (a warning appears before enabling).
+5. To take a USB keyboard or mouse away from Windows entirely, use **Use Only in PadForge** under **Input Hiding** on the [Devices](features/devices.md) page. See the next entry.
+
+---
+
+## Keyboard, Mouse or Touchpad Dead in Windows After Use Only in PadForge
+
+**A keyboard, mouse or touchpad no longer types or points in Windows after Use Only in PadForge, or its row shows no such button.**
+
+1. A device on **Use Only in PadForge** is PadForge's alone. Windows stops typing with the keyboard or moving the pointer with the mouse in every program, even while PadForge is closed. Select the device on the [Devices](features/devices.md) page and click **Restore the Windows Driver**. A touchpad goes back to Windows when the engine stops or PadForge closes, and its button reads **Give Back to Windows**.
+2. The **Keep This Keyboard in PadForge?**, **Keep This Mouse in PadForge?** and **Keep This Touchpad in PadForge?** prompts give the device back after 15 seconds unless you click **Keep**. If you left it, the status bar says the device is back on its Windows driver because the switch was not kept.
+3. The button shows only for a USB keyboard or mouse and for a precision touchpad. A keyboard or mouse on Bluetooth, PS/2 or I2C has none.
+4. "Unplug the other keyboards of this model first" (or mice) means Windows moves every plugged-in device with the same ID at once. Unplug the others, switch, and plug them back.
+5. A touchpad needs HidHide installed, **Hide Devices from Games** on in [Settings](features/settings.md), and the engine running. The status bar names the one that is missing.
+6. A switched device shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**. That is expected.
+
+[Driver Management](features/driver-management.md#keyboards-mice-and-touchpads-use-only-in-padforge) has the details.
 
 ---
 
@@ -702,7 +728,8 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 2. 4.4.0 finishes the transport switch. When PadForge opens the pad's USB audio (controller audio passthrough, or a persona that plays through the pad), it drops the stale Bluetooth link once for that cable session. The drop lands within a few seconds. With no PadForge audio feature in use on the pad, nothing drops the link: connect the pad by one transport instead.
 3. A pad whose radio was dropped while the cable is in does not re-link on a PS press. To go back to Bluetooth, unplug the cable, then press PS.
 4. Unplugging, using the pad over Bluetooth, and plugging in again earns a fresh drop.
-5. The DualShock 4 is not affected. It has no USB audio interface.
+5. This entry covers the DualSense. A wired DualShock 4 has a USB audio path of its own, which PadForge routes with **Output Path** on the Audio tab ([Controller Audio](features/controller-audio.md)).
+6. When the engine stops, or PadForge crashes, PadForge puts every Sony pad it had moved off the headphone route back on it, so Windows audio to the pad keeps playing.
 
 ---
 
@@ -757,7 +784,7 @@ If PadForge has not crashed there is no `crash.log`, and that is normal.
 - **Save Snapshot** writes the engine's most recent events to a timestamped file and shows it in Explorer. It works even with logging off, because those events are always held in memory, so it is the right button right after something goes wrong.
 - **Keep a Diagnostics Log** records continuously to `diagnostics.log` instead. It stays on across restarts, so use it for something that only appears minutes into a session or on a PadForge that starts with Windows. Turn it back off when you are done.
 
-Both land in the folder PadForge runs from, and the card shows the path.
+Both land in the folder PadForge runs from, and the card shows the path. A snapshot also writes HidHide's flags and list, every present XInput interface and each virtual controller's HID node, which is what to attach for a controller that vanishes while HidHide runs.
 
 `PADFORGE_DIAG` still works for benches: set it to a file path before launching and the same trace goes there for that session only.
 
@@ -771,6 +798,8 @@ Both land in the folder PadForge runs from, and the card shows the path.
 | Detected but no mapping | Assign to slot, check source dropdown |
 | No virtual controller in game | HIDMaestro installs itself. Turn the slot off and on to run a failed setup again. A MIDI slot on the legacy MIDI API needs an Output Port picked |
 | Nintendo slot not in game | XInput-only games need an Xbox slot |
+| Keyboard, mouse or touchpad dead in Windows | **Restore the Windows Driver** or **Give Back to Windows** on its Devices row. A touchpad returns when the engine stops |
+| Imported reWASD or DS4Windows profile off | Read the preview's Partial and Skipped reasons, Load it, assign your controller |
 | Double input | Install HidHide, enable "Hide Devices from Games" |
 | BLE controller not hidden | Enable per-device "Hide from Games" and "Hide Devices from Games" in Settings |
 | Wrong button mapping | Force Raw Joystick Mode, re-record |
@@ -846,8 +875,9 @@ Both land in the folder PadForge runs from, and the card shows the path.
 - [DSU Motion Server](reference/dsu-motion-server.md): Motion data for emulators
 - [Web Controller](guides/web-controller.md): Browser-based virtual controller
 - [Remote Link](guides/remote-link.md): Share a controller between PCs, on your network or across the internet
+- [Import from reWASD and DS4Windows](guides/profile-import.md): What each import row means and what to do about it
 - [Wii Controllers](devices/wii-controllers.md): Holds, emulator setup, and the Motion Plus limitation
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -12,11 +12,11 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `WebControllerAccess` | The plain HTTP address's access code: generation (10 characters of Crockford base 32, 50 bits, from `RandomNumberGenerator`), constant-time comparison, the `PadForgeWebCode` cookie, the loopback test for This PC Only, the admission ruling, and DPAPI storage |
 | `WebCustomLayoutStore` | The browser-built custom pad layouts (#296), machine-scoped. Holds one validated JSON array that rides `AppSettingsData` in PadForge.xml, deliberately not `ProfileData` |
 | `WebControllerBindingPool` | Reference-counted leases on the HTTPS binding `WebControllerTls` makes per port. The first lease creates the binding, and releasing the last one removes it off the calling thread |
-| `WebControllerListener` | `IWebControllerListener` and its `HttpListener` implementation, the seam `WebControllerServer` listens through |
+| `WebControllerListener` (file) | `IWebControllerListener` and its `HttpListener` implementation `HttpWebControllerListener`, the seam `WebControllerServer` listens through |
 | `WebMenusService` | Builds each Web Menus phone's snapshot on the UI timer and serves its icons by token (#471). [Below](#web-menus-471) |
 | `QrCode` | Byte-mode QR generator ported from the Nayuki reference, used only to render the web controller's URL on the Dashboard card |
 | `VoiceMacroService` | Voice macro recognition (#317). One session per microphone, no shared mic and no voice pseudo-device. Started and shut down by the engine's Step 1 device sweep, not by `InputService.Start()` |
-| `VoskVoiceEngine` | The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes, and for the rest of the run when libvosk will not load, which leaves the cache alone. libvosk reports a model it cannot read by returning null. The store reads the native handle, so such a model is deleted and unpacked again and is never published as ready. Windows will not move a folder while any file in it is open, and a virus scanner or sync client often has a just-written file open for a moment, so the unpacked folder's move into the cache is tried up to ten times over about five seconds before the unpack counts as failed and waits five minutes to try again |
+| `VoskModelStore`, `VoskSession` (`VoskVoiceEngine.cs`) | The Vosk recognition engine behind the same session surface SAPI uses (#317). The model is an embedded resource, unpacked once to a re-creatable cache under TEMP because Vosk loads a model from a directory. Nothing is downloaded, so recognition works with no network. SAPI is the fallback until the unpack finishes, and for the rest of the run when libvosk will not load, which leaves the cache alone. libvosk reports a model it cannot read by returning null. The store reads the native handle, so such a model is deleted and unpacked again and is never published as ready. Windows will not move a folder while any file in it is open, and a virus scanner or sync client often has a just-written file open for a moment, so the unpacked folder's move into the cache is tried up to ten times over about five seconds before the unpack counts as failed and waits five minutes to try again |
 | `NfcReaderService` | PC/SC monitor for NFC macro triggers (#150). [Below](#nfcreaderservice) |
 | `WorkshopProfileMaterializer` | Workshop import to `ProfileData` bridge (#9). [Below](#workshopprofilematerializer-v41-9) |
 | `WorkshopTuningApplier` | Folds a Workshop import's parked tuning stamps into the assigned device's own settings (#9). [Below](#workshoptuningapplier-v41-9) |
@@ -26,9 +26,9 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `PsmPatchCoordinator` | Keeps this process from turning on BthPS3's PSM rewriting while a Wii pairing runs (`Ds3DriverInstaller.SuspendPsmEnablingForWii`) |
 | `PsmPatchSnapshot` | One read of the BthPS3 filter state, or the exact point where the read failed, for `PsmPatchCoordinator` |
 | `GyroCalibratorService` | Samples an at-rest controller and writes the per-(device, slot) gyro bias onto its `PadSetting` |
-| `CursorControlService` | Owns the 200 Hz desktop-cursor timeline feeding the "Mouse Position X" / "Mouse Position Y" sources (#107) |
+| `CursorControlService` | Owns the 200 Hz desktop-cursor timeline feeding the "Mouse Position X" / "Mouse Position Y" sources (#107). The clamp region is the screen inset on each edge by `insetX` and `insetY`, then moved by `offsetX` and `offsetY` pixels (`ClampPoint`), so the region need not be centered |
 | `HeadsetTrackerRepair` | Rebinds a Sony headset whose head-tracker HID child is missing or parked at `CM_PROB_FAILED_START` (#188), ported from `sony-head-tracker`'s `bluetooth.cpp` |
-| `StarterProfileCatalog` | Builds the bundled starter profiles (#256) in code as ordinary `ProfileData`, every source on the empty "(Any device)" GUID |
+| `StarterProfileCatalog` | Builds the bundled starter profiles (#256) in code as ordinary `ProfileData`, every source on the empty "(Any device)" GUID. The Desktop profile's Show Keyboard on X is a keyboard menu (`KeyboardMenuDefaults.Create`, opened with X) instead of a Win+Ctrl+O macro (#566) |
 | `LegacyBaseMappingProjection` | Writes a slot's Base-layer rows into the layerless descriptor fields of every assigned device's `PadSetting`. Called from `SettingsService.UpdatePadSettingsFromViewModels` |
 | `SlotAppearancePersistence` | Captures and applies the per-slot 3D preview appearance (`SlotModel3DAppearances`), and rebuilds it from the legacy per-`PadSetting` maps for files saved before the move |
 | `ExternalControlService` | Named-pipe profile control for launchers and scripts (#366). Detail on [External Control Internals](external-control-internals.md) |
@@ -41,6 +41,14 @@ Five service classes bridge **PadForge.Engine** with the **WPF UI layer** and ge
 | `UpdateController` | The Settings > Updates card (#457): the check timer, Check Now, Install and Restart, the background download, and every status line. UI thread only. Detail on [Updates Internals](updates-internals.md) |
 | `DreamcastScreenService` | What each Bliss-Box port's Dreamcast screen shows (#469), with the per-port choices `BlissBoxPortData` keeps in the settings file. Detail on [Bliss-Box Internals](bliss-box-internals.md) |
 | `KeyboardScreenService` | What each keyboard screen shows (#519), with the per-screen mode, picture and pan `KeyboardScreenData` keeps in the settings file by the screen's id, the four keyboard screen macros, and the line on each screen's Devices row. Detail on [Keyboard Screens Internals](keyboard-screens-internals.md) |
+| `GiveBackTask` and `GiveBackRun` | One-shot SYSTEM tasks that give a taken keyboard, mouse or touchpad back to Windows after a crash, kill or power cut (#549). [Below](#give-back-tasks-549) |
+| `HiddenControllerRelease` | Cycles the hub port of a USB controller PadForge just hid, so a program that already opened it loses it (#484). [Below](#hiddencontrollerrelease-484) |
+| `FreedButtonCleanup` | Clears mappings that name a chat word, voice phrase, NFC tag or handheld button after it is removed (#555). [Below](#freedbuttoncleanup-555) |
+| `BthPS3Removal`, `HIDMaestroRemoval` | The Settings removal tools for the BthPS3 stack and for HIDMaestro, each with a Preview and a Run. [Below](#removal-tools-in-settings) |
+| `TouchSenseBinding`, `WinUsbKeyboardBinding` | Read-only views of which TouchSense mice, keyboards and mice sit on PadForge's WinUSB package and what the Devices page offers (#494, #549) |
+| `DisplayPose` | One slot as the controller picture page draws it (#555). [Below](#twitch-chat-and-the-controller-picture-page-555) |
+| `GameModServer`, `GameModPortFiles` | The DSX-compatible UDP server for game mods and the two port files it keeps in step with a running DSX (#529). Detail on [Game Mods Internals](game-mods-internals.md) |
+| `IcueSdkNative` | The iCUE SDK binding for the peripheral host's iCUE worker (#557). [Below](#peripheral-sdk-shims-494-557) |
 | `VendorUsbDriverInstaller` | Binds the inbox WinUSB driver to the controllers the SDL fork reads through libusb (hifihedgehog/SDL#33), one package per device node on the DualShock 3 template. Detail on [Driver Installation Internals](driver-installation-internals.md) |
 
 > **Engine-side subsystems (3.4).** Two more runtime subsystems sit alongside these services. `AudioPassthroughService` drives controller speaker output on its own worker and Bluetooth threads, and the Remote Link server runs the device-sharing transport. Both are wired through `InputService` and documented on their own pages: [Controller Audio Internals](controller-audio-internals.md) and [Remote Link Internals](remote-link-internals.md).
@@ -112,6 +120,10 @@ graph TB
   - [DSU Server Lifecycle](#dsu-server-lifecycle)
   - [Game Mod Server Lifecycle (#529)](#game-mod-server-lifecycle-529)
   - [Game Telemetry Status (#531)](#game-telemetry-status-531)
+  - [Twitch Chat and the Controller Picture Page (#555)](#twitch-chat-and-the-controller-picture-page-555)
+  - [On-Screen Keyboard (#566)](#on-screen-keyboard-566)
+  - [Precision Touchpads and Keyboard Takeovers (#549)](#precision-touchpads-and-keyboard-takeovers-549)
+  - [Keyboard Screens and Screen Overlays (#519, #560)](#keyboard-screens-and-screen-overlays-519-560)
   - [Web Controller Server Lifecycle](#web-controller-server-lifecycle)
   - [Audio Bass Detector Lifecycle](#audio-bass-detector-lifecycle)
   - [Peripheral Outputs Lifecycle (#494)](#peripheral-outputs-lifecycle-494)
@@ -143,6 +155,7 @@ graph TB
   - [Constructor](#recorderservice-constructor)
   - [Recording Flow](#recording-flow)
   - [Detection Algorithm](#detection-algorithm)
+  - [Press recording (#566)](#press-recording-566)
   - [All Public Methods](#recorderservice-all-public-methods)
   - [All Events](#recorderservice-all-events)
 - [ForegroundMonitorService](#foregroundmonitorservice)
@@ -161,6 +174,7 @@ graph TB
   - [BluetoothLinkHelper](#bluetoothlinkhelper)
 - [WorkshopProfileMaterializer (v4.1, #9)](#workshopprofilematerializer-v41-9)
 - [WorkshopTuningApplier (v4.1, #9)](#workshoptuningapplier-v41-9)
+- [Give-back and Cleanup Helpers](#give-back-and-cleanup-helpers)
 
 ---
 
@@ -227,7 +241,7 @@ PadForge uses three primary threads. Knowing which thread owns what prevents rac
 
 ## InputService
 
-**File:** `PadForge.App/Services/InputService.cs`, plus six partials: `InputService.Tablets.cs` (pen tablet capture, #484), `InputService.BlissBox.cs` (#469), `InputService.KeyboardScreens.cs` (#519), `InputService.Falcon.cs` (#521), `InputService.GameMods.cs` (#529) and `InputService.GameTelemetry.cs` (#531)
+**File:** `PadForge.App/Services/InputService.cs`, plus nine partials: `InputService.Tablets.cs` (pen tablet capture, #484), `InputService.BlissBox.cs` (#469), `InputService.KeyboardScreens.cs` (#519, and the Screen Overlay windows, #560), `InputService.Falcon.cs` (#521), `InputService.GameMods.cs` (#529), `InputService.GameTelemetry.cs` (#531), `InputService.TwitchChat.cs` (#555), `InputService.Touchpads.cs` (Use Only in PadForge for precision touchpads, plus the WinUSB keyboard takeovers, #549) and `InputService.OnScreenKeyboard.cs` (#566)
 **Implements:** `IDisposable`
 
 Central service bridging the InputManager engine with WPF ViewModels. Owns the InputManager instance, runs the 30 Hz UI timer, and manages all subsystem lifecycles (DSU, web server, audio bass detector, foreground monitor, device hiding).
@@ -627,6 +641,54 @@ The line the Dashboard card and the Devices row share: why nothing arrives, or w
 
 Called from `UpdateDevicePanelLines`, the selected row's panel, with `UpdateHeadTrackerDevicePanel` beside it. It rebuilds the row's `GameTelemetryStatus` only when the row instance or its `StatusVersion` moved, and clears the line once a stopped engine has retired the row. Both run there, rather than on the live-input path, so the engine-stop refresh clears them too.
 
+### Twitch Chat and the Controller Picture Page (#555)
+
+In `InputService.TwitchChat.cs`. `InputManager` opens the Twitch Chat row in Step 1 (`InputManager.TwitchChat.cs`), and this partial builds what the UI shows of it. The chat client, the claim queue and the registry are on [Twitch Chat Internals](twitch-chat-internals.md).
+
+#### `UpdateTwitchChatStatus()` (private)
+
+Runs on the dashboard cadence. The Dashboard line and flame read "Stopped" while the switch is off, the engine is down or the row has not opened. Otherwise the line is `BuildTwitchChatStatus(channel, state, paused)` and is rebuilt only when the row instance, its `StatusVersion` or the pause moves (the Game Telemetry card's cache key, since a reopen restarts the version at 0). `ResetTwitchChatStatusCache()` drops it on a language change. `UpdateTwitchChatDevicePanel` does the same for the selected Devices row.
+
+#### Chat words
+
+`RefreshChatObjects()` re-derives the row's words and button span after the `ChatCommandRegistry` changes (`OnChatCommandRegistryChanged`), so a word added while the row is open can be mapped without a reopen. A removed word, voice phrase, NFC tag or handheld button raises `OnChatWordFreed`, `OnVoicePhraseFreed`, `OnNfcTagFreed` or `OnHandheldButtonFreed`, which run `FreedButtonCleanup` (see [Give-back and cleanup helpers](#give-back-and-cleanup-helpers)).
+
+#### Controller picture page
+
+`StartWebServerIfEnabled` hands the server `DisplaySlot = DisplayFrameFor`, `DisplayChatSlot = FirstTwitchChatSlot`, and the two slot-number mappers. `DisplayFrameFor(int slot)` runs on the page's socket task and returns null for a slot that is off. Otherwise it builds a `DisplayPose` from the slot's combined output: `DisplayPose.FromGamepad(CombinedOutputStates[slot])`, or `DisplayPose.FromRaw(CombinedRawHidStates[slot], profileId)` for a Nintendo slot and a Valve lettered Extended slot, the pad page's own rule (`PadViewModel.PreviewRidesRawSurface`). It adds the web layout key for the slot's 2D asset folder (`WebLayoutFor`, the folder lower-cased, `DS3` drawn as `ds4`, empty as `xbox360`) and the finish the pad page shows. `FirstTwitchChatSlot()` is the lowest slot the Twitch Chat row is assigned to, or -1.
+
+### On-Screen Keyboard (#566)
+
+In `InputService.OnScreenKeyboard.cs`. The keyboard's state machine runs on the poll thread (`InputManager.OnScreenKeyboard*.cs`), described on [On-Screen Keyboard Internals](on-screen-keyboard-internals.md). This partial is the UI-timer leg, the menu overlay's shape.
+
+#### `UpdateOnScreenKeyboard()` (private)
+
+Each tick, from `InputManager.OnScreenKeyboardView`:
+
+1. A new `InputManager` (each engine start makes one) gets the timing and the layout again.
+2. The view counts as open only when `Open` is set and its `StampMs` is within 500 ms, so a poll thread that stopped refreshing (the engine stopped) hides the window. The menu comes from `FindKeyboardMenu(slot, menuId)`.
+3. A layout or function-row change made on the keyboard's own keys is saved to the keyboard menu through `EditKeyboardMenu`, which edits the open menu editor's item when one is up and the menu directly otherwise. A change counts, not a difference, so a menu edited while the keyboard is open keeps the edit.
+4. Windows' key repeat timing (`OskWindowsKeyboard.RepeatTiming`) is read every 5 s and handed over through `SetOnScreenKeyboardRepeat`.
+5. The layout of the window that has focus (`OskWindowsKeyboard.ForegroundLayout`, which is where the keys land) is read at most every 250 ms while open, wrapped in an `OskWindowsLayout` and handed over whole through `SetOnScreenKeyboardLayout`. Caps Lock state goes in through `SetCaps`.
+6. Hold-to-move arrives from `TakeOnScreenKeyboardMove` in percent of the work area, the unit of the menu's Screen Position. The fraction below a whole percent is carried to the next tick (`_oskMoveCarryX/Y`), and the result is clamped to 0..100 and saved through `SetKeyboardPlace`.
+7. `OnScreenKeyboardWindow` is created on first use with three callbacks: commands go to `PostOnScreenKeyboardCommand`, a dragged place goes to `SetKeyboardPlace`, and a grip scale goes to the menu clamped to `MinScalePercent`..`MaxScalePercent`. `UpdateFromView` draws the poll thread's snapshot, with `DescribeKeyboardInput` naming each control's input.
+
+### Precision Touchpads and Keyboard Takeovers (#549)
+
+In `InputService.Touchpads.cs`, the pen tablet partial's hiding (`InputService.Tablets.cs`, #484) applied to a precision touchpad whose **Use Only in PadForge** switch is on (`UserDevice.TouchpadOnlyInPadForge`).
+
+- **Hide and capture.** `AddTouchpadHides` adds the touchpad's HID collection, and only that collection, to the HidHide list while the engine runs, and `TouchpadCapture` opens it. `IsTouchpadCollectionRow` picks the row the switch sits on (a `HID\` path, not the merged `aggregate://` row), and `IsTouchpadMouseRow` marks a touchpad's mouse collection so its own hiding flag is never applied.
+- **Give-back.** When the engine stops, PadForge closes or the switch is turned off, the hide comes off and the collection is restarted (`TakeHideOff`, `ReleaseTouchpads`). A touchpad is often a laptop's only pointer, so it is never left hidden with nothing reading it. A crash or a Windows restart releases it at once through `ReleaseTouchpadsNow` within `TouchpadReleaseBudgetMs` (1500 ms). A kill cannot run code, so the one-shot task registered before the hide is written (`CoverTouchpadHide`, retried no sooner than `TouchpadCoverRetryMs`, 60 s, after a refusal) releases it. A power cut ends that wait too, and the same task releases it at the next boot. See [Give-back and cleanup helpers](#give-back-and-cleanup-helpers).
+- **Keep prompt.** A switch still waiting on its Keep prompt when the last session ended is taken back by `GiveBackTouchpadsNobodyKept` at the next start (`EndKeepsLeftPending`), with the `Status_TouchpadKeepExpired_Format` status line. `RetryOwedGiveBacks` retries a give-back that failed.
+- **Capture changes.** `OnTouchpadCaptureChanged` and `HandleTouchpadCaptureChanged` handle a capture that failed or rolled back, with `TouchpadNodePresent` and `TouchpadGoneSettleMs` (500 ms) deciding whether the node left.
+- **Keyboard and mouse takeovers.** `InputManager.WinUsbTakeoversFound` raises `OnWinUsbTakeoversFound`, which marshals to `AdoptTakeovers`. A device left on PadForge's WinUSB package with no record gets a `KeyboardTakeoverEntry` in `SettingsViewModel.KeyboardTakeovers`, an offline `UserDevice` row (`AddOfflineRowOf`) so the Devices page has its Restore with the engine off, an immediate save, and the status `Status_DriverAdopted_Format`. The binding itself is `VendorUsbDriverInstaller`'s, read by `WinUsbKeyboardBinding`.
+
+### Keyboard Screens and Screen Overlays (#519, #560)
+
+In `InputService.KeyboardScreens.cs`. `KeyboardScreens` makes the `KeyboardScreenService` on first use, handing it `OverlayNumbers` and `OverlaySize` callbacks into the Dashboard's overlay list. `TickKeyboardScreens()` runs every UI tick while the engine runs, ungated by focus, and the service holds itself to four passes a second. With the **Keyboard Screens** switch off and no Screen Overlay up, a service that ran lets go of what it held (`LetGoOfScreens`, which closes every screen's session). With the switch off and an overlay up, the sessions close and the overlay keeps running.
+
+`SyncScreenOverlays()` brings the `ScreenOverlay` windows into line with `DashboardViewModel.ScreenOverlays`: it closes windows whose item is gone, hides a disabled one (`DetachOverlay`), creates a window per enabled item, places it (`PlaceScreenOverlay`), attaches it to the service (`AttachOverlay` with a content sink and a bounds function), shows it, and moves an off-screen window back onto a monitor (`OverlayPlacement.EnsureOnScreen`). It changes only what differs, so a second call does nothing, and a window mid-gesture keeps its place. `ScheduleScreenOverlaySync()` queues it once on the dispatcher. `ToggleScreenOverlays(int mask)` serves the Toggle Screen Overlay macro: bit 0 is every overlay (any on, they all go off, else all come on), bit N is overlay N, and the windows follow at once so a macro that goes on to show a picture finds its window up. `OnScreenOverlayPositionChanged` writes a dragged window's place, size and monitor back to its item. `KeyboardScreensSwitched(false)` closes the sessions and restores a G19 screen interface bound to WinUSB on a worker. `UpdateKeyboardScreensStatus` and `UpdateKeyboardScreenDeviceRow` build the Settings switch's lines and the selected row's line and button. Detail on [Keyboard Screens Internals](keyboard-screens-internals.md).
+
 ### Web Controller Server Lifecycle
 
 #### `StartWebServerIfEnabled()` (private)
@@ -650,6 +712,12 @@ The accept loop rules on every request before dispatching it, reading only the r
 The plain port's firewall rule, "PadForge Web Controller (HTTP)", names the port rather than the executable, because http.sys receives the traffic in the kernel and a program rule would never match. `ApplyPlainFirewallRule` opens it for a served LAN address and removes it for This PC Only, on a failed or absent plain address, and at `Stop`. Requests run one at a time off the caller's thread, and one superseded before its turn is skipped, so the newest lands last. A removal runs once per process when nothing was opened, which also clears a rule left by a process that ended while serving.
 
 `/api/info` returns `{"secureUrl": ...}`: the main HTTPS address, or null while the main address is plain HTTP or the peer is this PC. A gamepad layout opened over plain HTTP reads it to turn its **Motion needs HTTPS** note into a link to the same page on the secure address.
+
+#### Controller picture page and viewer names (#555)
+
+A socket whose query carries `view` is the controller picture page, a read-only view of one slot for an OBS browser source. `HandleDisplayAsync` makes no device and takes no client slot, and at most `MaxDisplays` (4) pages may watch at once, a fifth getting 503. About 30 times a second (a 33 ms delay) it sends three kinds of message: `slot` (the shown slot number, layout key and finish) when the slot, its drawing or its finish changes, the pose (`DisplayPose.ToMessage`) only when it differs from the last one sent, and `chat` (`ChatMessage` of the live `TwitchChatRuntime` row's snapshot) when the row, its `ShowVersion` changes or a second has passed, so a claim's clock counts down. The watched slot comes from `DisplaySlotFor(view)`: the 1-based number the query names as PadForge shows slots (`DisplayNamedSlot`), else the first slot the Twitch Chat row is assigned to (`DisplayChatSlot`), else the slot shown first. It is asked once a second, because the chat row's slot takes the settings lock. A page that joined through the plain address is closed when the code changes, as the plain controllers are. `DisplayUrl` is the page on the plain address with the code (`display.html?<code query>`), or null when the plain address is not served: OBS's browser engine cancels a page whose certificate it does not trust, so the self-signed main address will not do. The page's assets are `display.html` and `js/display_client.js` under `PadForge.App/WebAssets/`.
+
+A phone controller's query may carry `name`. `CleanViewerName` drops control, format, line and paragraph separator and surrogate characters (a right-to-left override could make one name pose as another) and anything the settings file cannot hold (`XmlSafeText.Clean`), trims, and keeps at most `MaxViewerNameLength` (24) characters. The device row is then named `Browser Gamepad: <name>`, `<custom name>: <name>` or `<layout stem> Web Controller: <name>`. The identity stays the client id, so mappings survive a new name.
 
 #### Web Menus (#471)
 
@@ -703,7 +771,7 @@ A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an
 
 `InputService.cs` line 11025. Raised from the link thread when a row's recorded outputs (`UserDevice.PeripheralOutputs`) change. On the dispatcher it marks the settings dirty, so the record that keeps a sleeping device's tabs up reaches disk, and resyncs the Devices list, whose rumble chip reads it.
 
-`OnDevicesUpdated` tells the host that a device row came or went (`PeripheralOutputHost.DevicesChanged`), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. `RequestPeripheralRescan` passes on Windows' notice of a HID interface arriving, which `MainWindow.OnDeviceChangeMessage` receives, so a lit device with no row of its own is found when it is plugged in. `PanicQuiesceOutputs` (`InputService.cs` line 14112) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (`PeripheralOutputHost.WaitForSilence`). It then hands every device lit on its own back to its own effect (`ReleaseLightingNow`): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. `IsShareableDevice` (`InputService.cs` line 12656) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.
+`OnDevicesUpdated` tells the host that a device row came or went (`PeripheralOutputHost.DevicesChanged`), so the link pass runs at once rather than at the next 500 ms tick, and the present HID collections are walked again. `RequestPeripheralRescan` passes on Windows' notice of a HID interface arriving, which `MainWindow.OnDeviceChangeMessage` receives, so a lit device with no row of its own is found when it is plugged in. `PanicQuiesceOutputs` (`InputService.cs` line 14379) waits up to 250 ms in all for the GameSense worker to tell GG that a tactile Rival is silent, for the Razer Sensa worker to render the zero and for the TouchSense worker to send its stop (`PeripheralOutputHost.WaitForSilence`). It then hands every device lit on its own back to its own effect (`ReleaseLightingNow`): the Logitech units over HID++ first, then the LampArray, SteelSeries and Razer units, all inside one 750 ms deadline. `IsShareableDevice` (`InputService.cs` line 12902) keeps the vendor rows off Remote Link: each stands for this PC's vendor software and has no input.
 
 The Dashboard switches the vendor rows replaced are read once at load. `LoadFromFile` runs `PeripheralSwitchMigration` (`PeripheralSwitchMigration.cs` line 38) at `SettingsService.cs` line 538, and `ProfileTransfer.Import` runs it at `ProfileTransfer.cs` line 150. [Settings and Serialization](settings-and-serialization.md) has the rules.
 
@@ -763,7 +831,7 @@ Restores a profile, in this order:
 7. **Slot orders**. `SlotOrders.RebuildFromCurrentTopology` rebuilds all seven per-group lists from the profile's saved arrays, or ascending defaults when the profile predates them.
 8. **Extended, MIDI and KB+M configs**. Restores per-slot Extended config (`Customize` toggle, axis/trigger/POV/button counts, OEM-name override, product string), MIDI config (channel, CC/note ranges, velocity, and the legacy output port when the profile records a choice for it, **None** included), and the KB+M slot's `Surfaces` (#408) and `SocdMode` / `SocdPairs` (#205).
 9. **Macros**. When `profile.Macros` is non-null, replaces the live macro set via `LoadMacros(profile.Macros)`. A null value leaves the current macros in place (pre-macro-era profile). Applied after the Extended configs so each macro rebuilds against the right per-pad button style and count.
-10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` (`SettingsService.cs` line 4405) applies the head-tracking opinions a profile carries, `EnableHeadTracking` and `EnableHeadTrackingFreeTrack`. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.
+10. **Service toggles**. `SettingsService.ApplyProfileServiceToggles(profile)` (`SettingsService.cs` line 4500) applies the head-tracking opinions a profile carries, `EnableHeadTracking` and `EnableHeadTrackingFreeTrack`. A null leg leaves the global value alone. The Chroma, LIGHTSYNC and Sensa legs are gone (#494): the vendor rows they became ride the profile's device assignments in step 5.
 11. **Server and overlay settings**. DSU and web controller enable and port (ports validated to 1024-65535), plus `EnableTouchpadOverlay`, `EnableMenuOverlay`, `EnableShiftLayerFlyout`, `EnableProfileOverlay` and the touchpad overlay's monitor, position, size and opacity.
 12. **Rebuilds UI**. Applies the profile's slot appearances, then `UpdatePadDeviceInfo()`, reloads PadSettings, refreshes mapping rows per pad through `RefreshMappingsToViewModel` and `PopulateAvailableInputs`, then `SyncDevicesList()`. The whole reconciliation runs under `VmMappingsStale = true` in a `try` / `finally`. That window closes only when the last pad has re-read its rows: clearing it earlier left every pad stale-but-pushable, and an autosave landing inside the window rebuilt the incoming profile's MappingSet from the outgoing profile's MappingItems.
 
@@ -907,6 +975,8 @@ The profile-switch flyout is gated differently: `ShowProfileSwitchOverlay` runs 
 | `IdentifyDevice` | `void IdentifyDevice(Guid instanceGuid)` | Buzzes one device so the user can tell which physical pad a row is (#293). A mapped device rides the `SendTestRumble` lane, an unmapped one gets the direct train, which goes through Remote Link's relay for a peer's row (`RemoteLinkOutputRouter.ShipIdentify`). A haptic mouse, keyboard or the Razer Sensa row takes the train as levels through `PeripheralOutputs.SetMotors`, under its output gate (#494), and holds its shared haptic path for the train (`PeripheralOutputs.BeginIdentify`), so GameSense plays that Rival and the host runs the Sensa worker for a row no controller holds |
 | `TestBatteryNotification` | `void TestBatteryNotification()` | Pushes a synthetic low-battery event through the real delivery pipeline (tray balloon, status line, identify buzz) without draining a pad (#293). Leaves the edge state untouched |
 | `BatteryEdgeDecision` | `static (bool Fire, bool Notified) BatteryEdgeDecision(bool hadState, int lastPct, bool notified, int pct, bool charging, int threshold)` | The pure low-battery edge rule (#293). Fires only on a crossing to at-or-below the threshold, never while charging. Charging or a rise past threshold+5 re-arms |
+| `BatteryFullDecision` | `static (bool Fire, bool Notified) BatteryFullDecision(bool hadState, int lastPct, bool notified, int pct)` | The pure full-charge rule (opt-in, `BatteryNotifyFull`). Fires when the level rises to 100 during the session, so first sight at 100 stays quiet. A level of 90 or below re-arms, a margin wider than one step of a 10% gauge, so a pad that wobbles between 95 and 100 on the charger notifies once. State is kept while the option is off, so turning it on beside a full pad stays quiet |
+| `BatteryRepeatDue` | `static bool BatteryRepeatDue(bool notified, int pct, bool charging, int threshold, long lastShownMs, long nowMs, int repeatMinutes)` | The optional repeat of the low notice: due every `BatteryNotifyRepeatMinutes` while the notice still stands, the level is at or below the threshold and the pad is not charging. 0 never repeats |
 | `AssignOfferDecision` | `static bool AssignOfferDecision(...)` | The pure assign-offer rule, sibling of `BatteryEdgeDecision`. Decides whether a newly seen online device raises the slot's assign offer |
 | `ReEvaluateAssignOffersForNav` | `void ReEvaluateAssignOffersForNav()` | Re-runs the offer evaluation after a navigation change |
 | `RefreshAfterDeviceAssignmentChange` | `void RefreshAfterDeviceAssignmentChange()` | The refresh after an assign or unassign: marks every grid stale, refreshes the device list and slot buttons, reseeds player identities, reconciles the audio and haptic sinks, merges the new devices' mappings, then reloads each slot's rows and its selected device's tuning |
@@ -1093,6 +1163,16 @@ Search order (all relative to `AppDomain.CurrentDomain.BaseDirectory`):
 
 Pushes to SettingsViewModel: `AutoStartEngine`, `MinimizeToTray`, `CloseToTray`, `AlwaysShowTrayIcon`, the three update switches (#457, see [Updates Internals](updates-internals.md)), `StartMinimized`, `StartAtLogin`, `EnablePollingOnFocusLoss`, `PollingRateMs`, theme, language, input hiding, auto-profile switching, slot types, Extended/MIDI configs, DSU/web server settings. It also seeds the machine-scoped web controller custom layouts with `WebCustomLayoutStore.LoadFrom(appSettings.WebCustomLayoutsJson)` (#296), which `BuildAppSettings` writes back from `WebCustomLayoutStore.Json`.
 
+The 5.3.0 additions to the same load, each tolerant of a file that predates it:
+
+- `ChatCommands` goes to `ChatCommandRegistry.LoadRegistry` (#555). A null list registers the usual words. An empty list stays empty. `TwitchChatChannel`, `TwitchChatClaimApproval` (a `TwitchClaimApproval` by number, falling back to the streamer when the number is not a defined value) and `EnableTwitchChat` go to `DashboardViewModel`. See [Twitch Chat Internals](twitch-chat-internals.md).
+- `LearnedKeyMaps` (Map Key Lights names per device model) go to `LearnedKeyMaps.LoadRegistry`, and `KeyboardProfileBackups` (what a keyboard's stored lighting profile held before PadForge wrote its colors, for the hand-back a run owes) to `KeyboardProfileBackups.LoadRegistry` (#557).
+- `ScreenOverlays` go to `DashboardViewModel.LoadScreenOverlays` (#560), and each profile carries its own list (`ProfileData.ScreenOverlays`, read by `LoadScreenOverlays(active.ScreenOverlays)` and written by `SnapshotScreenOverlays()`).
+- `KeyboardTakeovers` (keyboards and mice the user took from Windows for PadForge alone, #549) are filtered through `KeyboardTakeovers.IsValid` into `SettingsViewModel.KeyboardTakeovers`, then `KeyboardTakeovers.Apply` hands them to the device pass and the input hooks. `ResetToDefaults` keeps them, because a taken device stays on PadForge's WinUSB driver whatever the settings say, and keeps `KeyboardProfileBackups` for the same reason: each is the only copy of a lighting profile PadForge wrote over.
+- `BatteryNotifyRepeatMinutes` and `BatteryNotifyFull` (both opt-in) go to `SettingsViewModel`.
+
+The per-device config load and save (`ApplyDeviceSlotConfigData`, `BuildDeviceSlotConfigData`) now carry `KeyLighting`, `LedStripCounts` and the `ScreenColor*` fields (#557, #559). Macro actions carry the Set Key Colors and Clear Key Colors fields (`KeyColorTargets`, `KeyColorStyle`, `KeyColorHold`, `KeyColorMs`, `KeyColorRest`, `KeyRestR/G/B`), the Profile Shortcut fields (`ProfileShortcutMode`, `ProfileShortcutName`, #561), `ScreenOverlayNumber` (#560) and the cursor clamp offsets. A lighting stand-in paste keeps the target device's `LedStripCounts` and carries key and group colors without the colors of single lights (`KeyLightingSettings.WithoutLights`), because a light's number names another light on another model.
+
 **Critical load order**: `SlotCreated[]` and `SlotEnabled[]` must load BEFORE `OutputType`, because OutputType fires PropertyChanged which reads SlotCreated.
 
 #### `LoadPadSettings(UserSetting[], PadSetting[])` (private)
@@ -1124,8 +1204,11 @@ Calls `SaveToFile(_settingsFilePath)`.
 2. For every PadSetting, flushes the raw-surface / MIDI / KBM / VR mapping dictionaries and the `MappingDeadZones` / `MappingBidirectional` dictionaries to their serializable arrays, recomputes the checksum, and copies it onto the UserSetting.
 3. Updates active profile snapshot via `UpdateActiveProfileSnapshot()`.
 4. Collects devices, user settings, deduplicated pad settings (under locks), then pushes the grids into the slot MappingSets once more and collects `SlotMappingSets`, app settings, macros, profiles.
-5. Serializes `SettingsFileData` into memory, then writes the bytes, so a serializer failure never truncates the file (#53).
-6. Clears the dirty flag.
+5. Serializes `SettingsFileData` into memory (`XmlSafeText.Serialize`), then `WriteWhole` writes the bytes to `PadForge.xml.tmp` in the same folder, flushes to disk and swaps it over the settings file with `File.Replace` (`File.Move` when the file does not exist yet). A swap that fails with an I/O or access error is retried up to `SwapTries` (5) times, `SwapRetryMs` (50) apart, because a scanner that just opened the new file holds it briefly. A folder that takes no new file, or a volume that cannot swap, gets the bytes written straight into the settings file. A serializer failure never touches the file (#53), and a process killed mid-write leaves the whole old file.
+6. Hands `KeyboardProfileBackups` back as persisted (`KeyboardProfileBackups.Persisted`), which lets the lighting write those backups guard go out (#557).
+7. Clears the dirty flag.
+
+`Save()` and `SaveToFile()` return `true` when the file was written, and a failure shows in the status line. `SaveNow()` runs `Save()` and then raises `AutoSaved` at once, for state that must not wait for the 2 s quiet time (the only copy of a Bliss-Box adapter's picture, #469). `SaveCount` counts the writes, so a caller can tell a later write from its own.
 
 **Note**: When a named profile is active, `BuildAppSettings()` stores the default profile's slot state (from `PendingDefaultSnapshot`), not the current runtime state. This prevents the named profile's topology from contaminating the default.
 
@@ -1167,8 +1250,9 @@ Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM/VR slots and sets the topolog
 |--------|-----------|-------------|
 | `Initialize` | `void Initialize()` | Finds settings file, loads, initializes collections |
 | `LoadFromFile` | `void LoadFromFile(string filePath)` | Loads settings from XML |
-| `Save` | `void Save()` | Saves to active settings file |
-| `SaveToFile` | `void SaveToFile(string filePath)` | Saves to specified XML file |
+| `Save` | `bool Save()` | Saves to active settings file. True when written |
+| `SaveNow` | `bool SaveNow()` | `Save()` plus an immediate `AutoSaved` |
+| `SaveToFile` | `bool SaveToFile(string filePath)` | Saves to specified XML file. True when written |
 | `MarkDirty` | `void MarkDirty()` | Marks dirty, arms the 250 ms engine push, full save after 2 s quiet |
 | `Reload` | `void Reload()` | Reloads from disk |
 | `ResetToDefaults` | `void ResetToDefaults()` | Resets all settings to defaults |
@@ -1208,6 +1292,7 @@ Counts Xbox/PlayStation/Nintendo/Extended/MIDI/KBM/VR slots and sets the topolog
 | Property | Type | Description |
 |----------|------|-------------|
 | `SettingsFilePath` | `string` (get) | Full path to active settings file |
+| `SaveCount` | `int` (get) | How many times a save has written a settings file |
 | `IsDirty` | `bool` (get) | Whether unsaved changes exist |
 | `RemoteLink` | `RemoteLinkRuntime` (get) | The Remote Link identity and trust list loaded from and saved to `AppSettingsData` |
 | `TouchpadGesturesProvider` / `TouchpadGesturesApplier` | `Func` / `Action` (get/set) | The custom-gesture bridge described above |
@@ -1254,7 +1339,8 @@ Assigns the selected device to a slot:
 2. `SettingsManager.AssignDeviceToSlot()`, populates `ProductGuid`.
 3. Creates default `PadSetting` if none exists.
 4. `AutoEnableHidingDefaults()` for newly assigned devices.
-5. Marks dirty, raises `DeviceAssignmentChanged`, `DeviceHidingStateChanged`, `NavigateToSlotRequested`.
+5. Folds the import stamps into the device: `WorkshopTuningApplier.ApplyToAssignedDevice` and `FoldBatteryColors` ([below](#workshoptuningapplier-v41-9)).
+6. Marks dirty, raises `DeviceAssignmentChanged`, `DeviceHidingStateChanged`, `NavigateToSlotRequested`.
 
 #### `AssignDeviceToSlot(Guid instanceGuid, int slotIndex)` (public)
 
@@ -1411,6 +1497,14 @@ The Motion Pitch, Yaw and Roll rows record like stick axis rows: `IsButtonLikeRe
 
 A centered axis recorded for a press is stored as the half the user pushed, the `H` prefix (`RecordsAHalf`): on a button-like row, and on a trigger, a one-way Extended axis or one of the ten button pressure rows whose source is a Toggle or Rapid Trigger, which reads the pull as pressed past a threshold. A Direct source there keeps the full axis, and so does any axis that rests at zero (`InputManager.AxisRestsAtZero`: a gamepad trigger, a slider, a VR trigger or grip). A mouse's positive direction keeps the full axis and its negative direction takes the half (#200). Without the half, a stick at rest sits on the press threshold's center line and reads pressed with nothing touched.
 
+#### Press recording (#566)
+
+`StartRecordingPress` starts a freeform session (`StartRecordingFreeform` with a no-op callback) and sets `_pressMode`. Detection then routes through `PressLeg` instead of writing a descriptor. The first input is stored with `PressInput` and the baselines are re-taken with it held, so only an input that goes down after it counts. The first input moving further or coming back is not a second. A second input ends the recording through `FinishPress`, giving `RecordedPress` with both. The first alone ends it when it is let go (`PressFirstHeld` reads it as held above 0.35, the keyboard's release level) or when the 10 second timeout passes with a first input recorded.
+
+`PressDescriptor` records an axis as the half pushed toward, with the mapping row's rule (`RecordsAHalf`, the `I` and `H` prefixes). `PressInput` turns a gamepad's input into its device-free position name (`Gamepad ButtonA`, through `SourceCoercion.GamepadAliasTable`) with an empty device, so a control works on any controller on the slot. A device that places the family its own way (a Bliss-Box port), a raw-mode gamepad and any other device keep the input and the device. Touchpad gestures record only when `takesGestures` is set (Opens With), because the keyboard holds the touchpad at rest. See [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
+
+The Twitch Chat row records its Any Command (0) with the word's own button the same way the Microphone row does (#555). See [Twitch Chat Internals](twitch-chat-internals.md).
+
 #### `CancelRecording()` (public)
 
 Stops the timer, clears all recording state, sets `IsRecording = false`.
@@ -1446,6 +1540,7 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 | `AxisHoldCycles` | 3 | Cycles axis must be held |
 | `MotionRecordGyroRadPerSec` | 1.5 | Change in gyro rate from the reading at the start that records a Motion Gyro row (#475) |
 | `MotionRecordAccelMs2` | 0.5 × 9.80665 | Accelerometer change from the baseline that records a Motion Accelerometer row (#475) |
+| `AnalogKeyRecordDepth` | 0.5 | Analog key travel that records (#468) |
 | `MidiCcThreshold` | 10 | Minimum CC delta before a MIDI CC counts |
 | `MidiPitchThreshold` | 6000 | Minimum pitch-bend delta |
 | `MidiRelativeBand` | 16 | Band around center that reads a CC as relative |
@@ -1458,6 +1553,7 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 | `StartRecordingExtraSource` | `void StartRecordingExtraSource(MappingItem parent, MappingSourceItem extraSource, int padIndex, bool neutralizeBaseline = false, bool negRecording = false)` | Cross-device recording for a multi-source ExtraSource row. First device to fire wins |
 | `StartRecordingExtraSourceParam` | `void StartRecordingExtraSourceParam(MappingItem parent, MappingSourceItem extraSource, int padIndex, ParamTarget target)` | Records an on/off input into an ExtraSource's Up / Down / Modifier param field: a button, a hat direction, a touchpad gesture, an analog key, or a MIDI note, encoder detent or CC. A param never records an axis or pitch bend: the param gate sits after the MIDI blocks and before the axis sweep, and the pitch-bend capture runs for a mapping row alone |
 | `StartRecordingFreeform` | `void StartRecordingFreeform(int padIndex, Action<string, string> onComplete)` | Recording that delivers `(deviceGuid, descriptor)` to a callback without writing a MappingItem (shift activator dialog) |
+| `StartRecordingPress` | `void StartRecordingPress(int padIndex, Action<RecordedPress> onComplete, bool takesGestures = false)` | Records one press, or a held pair, for an On-Screen Keyboard control or its Opens With (#566). See [Press recording](#press-recording-566) |
 | `CancelRecording` | `void CancelRecording()` | Cancels without assigning |
 | `Dispose` | `void Dispose()` | Cancels recording, disposes resources |
 
@@ -1467,6 +1563,7 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 |--------|------|-------------|
 | `IsRecording` | `bool` (get) | True while a mapping or freeform recording is active |
 | `ParamTarget` | `public enum { None, Up, Down, Modifier }` | Which param field `StartRecordingExtraSourceParam` writes |
+| `RecordedPress` | `public readonly record struct (string Descriptor, string DeviceGuid, string AndDescriptor, string AndDeviceGuid)` | One press recording's result. `DeviceGuid` is `""` for every controller on the slot |
 
 ### RecorderService All Events
 
@@ -1474,6 +1571,7 @@ KBM is checked before the triggers, so a KBM row never falls through to the trig
 |-------|-----------|-------------|
 | `RecordingCompleted` | `event EventHandler<RecordingResult> RecordingCompleted` | Raised on successful detection |
 | `RecordingTimedOut` | `event EventHandler RecordingTimedOut` | Raised after 10 second timeout |
+| `RecordingCanceled` | `event EventHandler RecordingCanceled` | Raised when a cancel drops a freeform or press recording's callback unanswered: the user's stop, a timeout, or another recording starting. A record button waiting on that callback (a keyboard row, #566) leaves its Recording state here |
 
 **RecordingResult fields:** `Mapping` (`MappingItem`), `ExtraSource` (`MappingSourceItem`, non-null when the recording targeted an extra source), `Descriptor` (`string`), `Type` (`MapType`), `IsParamRecording` (`bool`, true when only an Up / Down / Modifier param field was updated).
 
@@ -1798,11 +1896,15 @@ What it stamps on a claimed slot:
 | Workshop stick deadzone shapes | Xbox slot only. A keyboard slot has no sticks to shape |
 | Gyro engage descriptor, invert, toggle | Every claimed slot |
 | Gyro ratchet descriptors, pipe-joined into one string | Every claimed slot |
+| Gyro space (`gyro_to_2d_conversion_style`, Player or World Space) as `WorkshopGyroSpace` | Every claimed slot |
+| Gyro activation lane (`WorkshopGyroActivation`, `layer=encoded` pairs joined by `;`) and the re-center on each activation (`WorkshopGyroRecenterOnEngage`) | Every claimed slot |
 | `MacroData.LayerMask` | All three macro build legs: the single macro, both hold-pair legs, and both region-clamp legs |
 
 Slots the translation does not claim get a fresh `MappingSet` left non-authoritative, so a user can author on them normally.
 
 It clones each translated menu (`MenuDefinitionEntry`, #9 B-17) onto every created slot's `MappingSet.Menus`. The menu runtime and the fired-set provider are slot-keyed, so a split config's two slots each carry their own copy and the overlay publisher dedupes at display time.
+
+Steam's Show Keyboard (#566) no longer becomes a Run Program macro. `KeyboardMenuFor(TranslatedMacro, int menuId)` turns it into a keyboard menu (`KeyboardMenuDefaults.Create`) whose Opens With is the binding's first input and the second held with it, with the hosting read's axis half and threshold as the press point. The Long_Press, Double_Press and Release activators become the matching `OpenPress` (`Hold`, `DoublePress`, `Release`) with their times clamped to 50 ms through `KeyboardMenuDefaults.MaxOpenPressMs`, and the binding's layer gates the menu through `LayerMask`. The menu goes on one slot, the Xbox slot when there is one, so a split config's single press is not answered twice. A binding with no input to open it with makes no menu. See [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
 
 Macros convert to `MacroData` on pad 0 with `OutputController` triggers. A macro carrying a device-free descriptor trigger converts instead through the exact picker path, `MacroItem.TryBuildTriggerEntry`, and is dropped when any descriptor fails to convert. The conversion returns an **empty** `MacroData[]`, never null, because null is the profile model's "this profile predates macros, leave the live set alone" sentinel and an import must not read as one. Two Steam constructs lower into pairs rather than single macros:
 
@@ -1826,14 +1928,20 @@ Rules:
 - **Called from every assignment funnel.** Both `DeviceService.OnAssignToSlot` (the device list's assign command) and `DeviceService.AssignDeviceToSlot` (drag-and-drop and programmatic). Idempotent and cheap, so over-calling is free and under-calling is a silent regression. A guard test in `WorkshopTuningApplierTests` enumerates the call sites, so a third funnel that forgets the call fails CI.
 - **Also folds per-source response shaping** the import writes onto its rows (`FoldSourceShaping`), which had the same live-in-the-engine, absent-from-the-cards defect one level down.
 
-Four folds run, three of them from `ApplyToAssignedDevice` directly:
+Before the folds run, `TargetsKeepingTheirRows` names the six card targets (both sticks' axes and both triggers) whose rows tune them differently from one another. Those targets keep their rows' tuning, and neither the stamped curves nor `FoldSourceShaping` touch their cards. These folds run from `ApplyToAssignedDevice` directly:
 
 | Fold | Called from |
 |------|-------------|
-| `FoldSourceShaping(MappingSet, PadSetting)` | `ApplyToAssignedDevice` |
+| `FoldImportStamps(MappingSet, PadSetting, string deviceGuid, HashSet<string> kept)` | `ApplyToAssignedDevice`. The reWASD and DS4Windows import's stamps (#561, see [Profile Import Internals](profile-import-internals.md)): `WorkshopCurves` onto a card whose curve is still linear, `WorkshopRumblePercent` onto both motor strengths when both are 100, `WorkshopGyroDeadZone` over the default only, `WorkshopGyroSpace` over the default Local only, and `WorkshopIdleDisconnectSeconds` onto the device record when its idle time is not set |
+| `FoldSourceShaping(MappingSet, PadSetting, HashSet<string> kept)` | `ApplyToAssignedDevice` |
 | `FoldTouchpadAcceleration(MappingSet, PadSetting, string deviceGuid)` | `ApplyToAssignedDevice` |
+| `FoldTouchpadGlide(MappingSet, PadSetting, string deviceGuid)` | `ApplyToAssignedDevice`. Turns touchpad momentum on for pad 0 at the stamped glide (decay clamped to 0.80 to 1.00) where it is still off. Needs a device GUID to key the entry, so the stamp waits for an assignment that names one |
 | `FoldGyroAcceleration(MappingSet, PadSetting)` | `ApplyToAssignedDevice` |
 | `FoldStickGeometry(MappingSource, ShapingCard)` | `FoldSourceShaping`, one level down |
+
+A single-source stick row with a dead zone geometry also hands its scale to the card: the card's curve takes the scale clamped to full ahead of the stamped exponent, and the row's `Sensitivity` goes back to 1. A row of several sources keeps its scales as coefficients.
+
+`ApplyBatteryColors(int slotIndex, DeviceSlotConfig cfg)` is separate because the battery light colors live on the device's Lighting card, which only the slot's view model holds. `DeviceService.FoldBatteryColors` calls it next to `ApplyToAssignedDevice` in both assignment funnels. It writes `WorkshopBatteryColors` (`low;high`, each `r,g,b`) onto the card where it still holds the defaults, red at empty and green at full, and clears the stamp.
 
 The deadzone-shape and gyro-engage folds are inline in the method body, not extracted helpers.
 
@@ -1844,6 +1952,40 @@ The gyro engage mode is derived rather than copied: Toggle wins, else `ReleaseTo
 Two stamps stay runtime overlays because no user-facing card exists to fold them into. `WorkshopGyroRatchetDescriptors` lives on `MappingSet` and has no ratchet field on `PadSetting`. `ParamFlickRotationOffsetDeg` lives on `MappingSource`, is read by `SourceKindRuntime`, and has no rotation-offset control. The second is a known gap, not a deliberate exclusion.
 
 ---
+
+## Give-back and Cleanup Helpers
+
+These live in `PadForge.App/Services/`, run off the poll thread, and exist because PadForge takes devices from Windows or installs drivers and has to put them back, including when it is killed.
+
+### Give-back tasks (#549)
+
+`GiveBackTask` registers one-shot Task Scheduler tasks that give a device back when no PadForge is left to do it: a crash, a kill, a power cut or a Windows restart while a keyboard or mouse waits on its Keep prompt (#549), or while a touchpad is taken (**Use Only in PadForge**). A task is created from an XML definition (`TaskXml`, `ExecutionTimeLimit` PT0S, runs on battery) through `schtasks`, driven by exit code alone because its text is localized. It runs as SYSTEM, as soon as it is registered and at boot, and is named `PadForge Give Back <16 hex digits of a hash of the id>` (`NameOf`).
+
+The app holds a named pipe for each task (`PipeName`, and `RunPipeName` for a registration's own wait) and writes nothing. The task's first step reads that pipe with `find.exe`. Windows closes a pipe's server with its process however that ends, so the read ends at once when the app is killed, and also when the app deletes the task. At a boot no pipe is there to read. If the task still stands after that, a device is owed, and `PadForge.exe` starts in `GiveBackRun`'s mode (`--give-back-touchpad` or `--give-back-package`), as SYSTEM, with no window, on every platform. An exe moved or deleted since, or a run that did not get through, falls back to a command line of tools: `pnputil /delete-driver ... /uninstall /force` for a keyboard or mouse package (`KeyboardCommand`), and `HidHideCLI --dev-unhide` followed by `pnputil /restart-device` for a touchpad (`TouchpadCommand`, the CLI found by `FindCli`). The task goes once the device is back, and one whose give-back failed stays for the next boot. Entry points: `RegisterKeyboard(bindId, log)`, `RegisterTouchpad(instanceId, log)` returning an `Outcome`, `Delete(id, log)`, `Stands`, `AnAppHolds`.
+
+`GiveBackRun.Run(args, seams)` tries the give-back every `TryEveryMs` (5000 ms) up to `Tries` (24) times, two minutes, since at a boot HidHide's control device or the collection can still be coming up. A run that never got through exits 1. A watchdog ends a run that hangs in a driver call past `RunLimitMs` (`2 * Tries * TryEveryMs`). `TakeHideOffNow` returns an `Attempt` (`Done`, `TryAgain`, `NothingAnswers`), and `NothingAnswers` counts as done only at the last try, because a driver that is gone took its hides with it. `GiveBackRun.Seams` holds the run's ways out to the machine, each a test's to replace.
+
+### HiddenControllerRelease (#484)
+
+Takes a controller PadForge just hid away from every program that opened it before the hide. HidHide decides access only when a handle is opened, so such a program kept the controller until it reconnected. For a USB controller that was already connected, `HiddenControllerRelease` cycles its hub port, the way HandheldCompanion releases a hidden pad, and the controller comes back where only whitelisted programs can open it. The device decision is `HidHideController.PickUsbDeviceToCycle`. Work runs on the thread pool, one batch after another, and a batch decides from what is true when it runs: it cycles only ids still on HidHide's blacklist, and a controller shown again in the meantime, or a receiver another pad has joined, stays connected. A batch that cannot decide yet keeps its ids and asks again every `RetryMs` (2 s), up to `ListingWaitMs` (10 s) while the engine has not listed its devices and `ListWaitMs` (60 s) while HidHide's list does not read. A USB device is cycled at most once per `CooldownMs` (30 s), with `PauseBetweenCyclesMs` (500 ms) between cycles in a batch. `TakeCycledIds` hands the cycled HID ids back to the apply, each with the time its port was cycled.
+
+### FreedButtonCleanup (#555)
+
+Clears what still names a button whose chat word, voice phrase, NFC tag or learned handheld button was removed. The registries give the lowest free button to the next one added, so a leftover binding would fire the new one with no warning. `ForChatWord`, `ForVoicePhrase`, `ForNfcTag` and `ForHandheldButton` each call `Clear(NamesButton, pads)`, which walks every place `InputService.RemapDeviceGuidsInSlotMappingSets`, `RemapDeviceGuidsInMacros` and `RemapDeviceGuidsInStoredPadSettings` follow a device: the slots' mapping sets (`ClearSet`), the `PadSetting`s they are rebuilt from (`WithoutButton`), the macros, the engage pins, and the same again in every saved profile. A source with no device names no button of this one, so it stays.
+
+### Removal tools in Settings
+
+- `BthPS3Removal`: removes the BthPS3 Bluetooth profile and PSM filter drivers PadForge installs the first time a PlayStation 3, Move or Navigation controller is paired, with the WinUSB package and signing certificate added for the pairing. `Preview()` plans from `Read()`'s `MachineState`, and `Run(Action stopEngine)` does the steps in BthPS3's own setup's order (`BthPS3Installer/CustomActions.cs UninstallDrivers`), running the setup's own uninstaller first when that setup installed it. It returns a `Report` of `Item`s (`ItemKind`, `ItemOutcome`, reason) and a `RemovalStatus`. BthPS3 stays while DsHidMini is installed and while a PlayStation controller is connected over Bluetooth, since BthPS3 2.12.0 to 3.2.0 crash Windows when a connected controller is torn down by the radio restart the removal does (nefarius/BthPS3#182, the gate `Ds3DriverInstaller.MayReplaceDriversNow` keeps). The engine stops first and stays stopped.
+- `HIDMaestroRemoval` (#516, #518): removes HIDMaestro from the PC through HIDMaestro's `HMUninstall` (every virtual controller and record, the driver packages, the signing certificate, registry keys, files and the shared Windows keys it changed). `Preview(includeUsbip)` shows what would go, `Run(includeUsbip, stopEngine)` does it, and `IsDriverInstalled()` gates the button. A removal refuses while another program that embeds HIDMaestro runs, and names it (`HMUninstallStatus.Blocked`). PadForge itself never blocks it. The engine stays stopped afterward, and starting it installs HIDMaestro again. `MainWindow` drives both from the Settings page.
+
+### Device-state readers for the Devices page
+
+- `TouchSenseBinding` and `WinUsbKeyboardBinding` only read what Windows says about a TouchSense mouse's driver and about a keyboard or mouse read over WinUSB (#549): which bound devices are plugged in, what the Devices page offers a row, and what else leaves Windows when its node is bound (`Takes` flags, by the HID collections whose parent is the node). The binding and its restore are `VendorUsbDriverInstaller`'s, made only after the Devices page's confirm. `VendorUsbDriverInstaller.OptInKind` now carries `Keyboard` and `Mouse` beside `Xbox360Pad`, `Xbox360Receiver`, `IntelBaseStation`, `Prodikeys` and `TouchSenseMouse`, appended only so a kind's place is never reused. Keyboards and mice are offered by the row's HID collection (`WinUsbKeyboardBinding.QueryOffer`), not by IDs, so they have no row in `OptIns`. `IsClaimedByATable` tells whether a node already reached the package through one of the tables.
+- `DisplayPose` is one slot as the controller picture page draws it: the lit controls by the web layouts' target names, trigger pulls 0 to 1 and sticks -1 to 1 with up positive. `FromGamepad` mirrors `PadViewModel.UpdateFromEngineState` and `FromRaw` mirrors `PadViewModel.UpdateNintendoPreviewFromRaw`, so the page lights what the pad page lights.
+
+### Peripheral SDK shims (#494, #557)
+
+`IcueSdkNative` binds Corsair's iCUE SDK (shipped inside PadForge, #557) for the peripheral host's iCUE worker. A single thread, the worker's, makes every call, and the session handler's delegate lives as long as the process. `LogiLedEngineNative` gained `SetLightingForKeyWithKeyName` (`KeyCallsAvailable`) for per-key Logitech boards, resolved per export so older engines still load. `GameSenseClient.SetColors` takes a want per device type: a type claimed with light colors travels on a second event with a handler per light (`GameSenseLights`), a type that changes between one color and light by light has its old event removed before the new one binds, and a light event GG refuses to bind leaves its type on the one-color event until the next connection. The second unanswered bind of a type's light event, across connections, puts it on the one-color event, so a slow bind cannot hold a device dark. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 
 ## MainWindow Service Wiring
 
@@ -1987,7 +2129,12 @@ User clicks Record button
 - [Engine Library](engine-library.md): `Gamepad`, `CustomInputState`, `UserDevice`, `UserSetting`
 - [DSU Protocol Implementation](dsu-protocol.md): `DsuMotionServer` lifecycle managed by `InputService`
 - [Peripheral Outputs Internals](peripheral-outputs-internals.md): the peripheral host, its workers and the vendor rows that `InputService` starts with the engine
+- [Twitch Chat Internals](twitch-chat-internals.md): the chat row, its registry and the claim queue behind `InputService.TwitchChat.cs`
+- [On-Screen Keyboard Internals](on-screen-keyboard-internals.md): the keyboard behind `InputService.OnScreenKeyboard.cs` and `RecorderService.StartRecordingPress`
+- [Screen Color Internals](screen-color-internals.md): the screen-following lights whose `ScreenColor*` fields `SettingsService` persists
+- [Profile Import Internals](profile-import-internals.md): the reWASD and DS4Windows import whose stamps `WorkshopTuningApplier` folds
+- [Keyboard Screens Internals](keyboard-screens-internals.md): `KeyboardScreenService` and the Screen Overlay windows
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -117,9 +117,13 @@ DS4Windows comes in several forks. Note where yours came from and its exact vers
 
 For the trial, close the game and exit DS4Windows, plus any separate VIIPER tray program your fork runs. Keep the drivers installed. PadForge's HIDMaestro carries its own usbip-win2 host controller and moves only one it installed itself, so another program's driver keeps its version.
 
-### Rebuild it
+### Import it
 
-Make a new PadForge profile and start from the controller type the game expects. Xbox, a plain PlayStation preset and a Full Sony preset with audio each carry different things to the game. A Full preset does not give your controller a touchpad, pressure buttons or adaptive triggers it does not have.
+Click **Import…** on the Profiles page and pick the profile's `.xml` in DS4Windows' `Profiles` folder. Keep `Actions.xml` and `Auto Profiles.xml` one folder above it, where DS4Windows writes them: the import reads its special actions from the first and the profile's games from the second. Read every **Clean**, **Partial** and **Skipped** line before you click **Import**. The new profile reads your controller once you assign it to the profile's slots on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
+
+### Fill the gaps by hand
+
+For anything the preview marks **Skipped**, or a profile you build from scratch, start from the controller type the game expects. Xbox, a plain PlayStation preset and a Full Sony preset with audio each carry different things to the game. A Full preset does not give your controller a touchpad, pressure buttons or adaptive triggers it does not have.
 
 Rebuild buttons and sticks first, then the touchpad, then gyro, then shift modifiers, and special actions as macros. A gyro engage only opens the gate. The gyro still needs somewhere to go, such as **Mouse X** and **Y** or the aiming stick. More: [Output routing](gyro.md#output-routing).
 
@@ -146,9 +150,13 @@ To go back, leave the game, exit PadForge from the tray, restore the HidHide per
 
 Back up the `.rewasd` config and its profile folder, from **Open file location** in reWASD's options. In reWASD a profile is a folder and a config holds the mappings, so note both names. Open every activator, layer and sub-config, and write down the device groups and their members, the virtual output type, shortcuts, combos, muted controls and Autodetect rules.
 
-For the trial, use reWASD's [Tray Agent](https://help.rewasd.com/interface/tray-agent.html) to turn **Remap** off for all devices, then exit reWASD so [Autodetect](https://help.rewasd.com/basic-functions/autodetect.html) cannot load a config when the game gains focus. PadForge has no `.rewasd` importer, so this is a rebuild. Keep the old config untouched.
+For the trial, use reWASD's [Tray Agent](https://help.rewasd.com/interface/tray-agent.html) to turn **Remap** off for all devices, then exit reWASD so [Autodetect](https://help.rewasd.com/basic-functions/autodetect.html) cannot load a config when the game gains focus. Keep the old config untouched.
 
-### Rebuild it
+### Import it
+
+Click **Import…** on the Profiles page and pick the `.rewasd` config. The dialog lists reWASD's shared `Profiles` folder among its places. The preview marks every binding **Clean**, **Partial** or **Skipped** with its reason. Shifts become shift layers, press types become macro fire modes, and unmapped keys ask for **Consume Mapped Inputs (Hooks)** on the keyboard or mouse. Keyboard and mouse inputs work as soon as the profile loads. Assign your controller to its slots on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
+
+### Fill the gaps by hand
 
 Assign every physical device in the old group to the PadForge slot and check each one alone. Several devices can feed one virtual controller. More: [Mappings](../features/mappings.md).
 
@@ -232,4 +240,4 @@ Mark a check "not tested" when you lack the hardware or the game. When a require
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

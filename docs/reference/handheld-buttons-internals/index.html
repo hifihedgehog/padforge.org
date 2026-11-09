@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1065,6 +1095,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1340,6 +1378,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1516,6 +1582,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1852,6 +1946,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2577,6 +2727,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3069,6 +3227,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -4306,6 +4576,7 @@
 </tbody>
 </table>
 <p><code>Register</code> assigns the lowest free button index (from 0, there is no "any" button on this row) unless the entry already carries a free one, which is how import keeps indices. <code>Remove</code> never renumbers survivors. <code>LoadRegistry</code> honors stored indices and reassigns collisions. Names are deduplicated with <code>(2)</code>, <code>(3)</code> suffixes.</p>
+<p><code>Remove</code> raises <code>ButtonFreed</code> with the removed entry's index, outside the registry lock and before <code>RegistryChanged</code>, because the next learned entry takes the lowest free index. <code>InputService.OnHandheldButtonFreed</code> queues <code>FreedButtonCleanup.ForHandheldButton</code> on the dispatcher, which clears every mapping that names that <code>Button N</code> on a Hidden Buttons row, so the next entry does not inherit what was mapped to the old one. The voice phrase, NFC tag and Twitch chat word registries raise the same event.</p>
 <p>Persistence is <code>AppSettingsData.HandheldButtons</code>, an array of <code>HandheldButtonData</code> with every field as an XML attribute (<code>Keys</code> is comma-joined), plus <code>HandheldMachineKey</code> and <code>HandheldButtonsEnabled</code>. The registry loads before the toggle. The export file is the same DTO under <code>{"padforgeHandheldButtons": 1, "machine": "...", "buttons": [...]}</code>.</p>
 <p>Two flags on the registry drive the hooks: <code>FeatureEnabled</code> (the Settings toggle) and <code>LearnCaptureActive</code> (the dialog is open). Either flipping raises <code>ActivityChanged</code>, which sends <code>InputService.ApplyDeviceHiding</code> back through <code>ApplyInputHooks</code>, where <code>HandheldChordRuntime.NeedsHooks</code> is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.</p>
 <hr />
@@ -4361,7 +4632,7 @@
 </tr>
 </tbody>
 </table>
-<p>Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. <code>HandheldChordRuntime</code>'s worker handles only timed work, ticking every 10 ms while <code>HasPendingWork</code> (hold expiry, capture idle). Every injected event carries <code>ReplayTag</code> = <code>0x50464843</code> ("PFHC") in <code>dwExtraInfo</code>, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying <code>LLKHF_INJECTED</code> or <code>LLMHF_INJECTED</code> bypass the engine too.</p>
+<p>Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. <code>HandheldChordRuntime</code>'s worker handles only timed work, ticking every 10 ms while <code>HasPendingWork</code> (hold expiry, capture idle). Every injected event carries <code>ReplayTag</code> = <code>0x50464843</code> ("PFHC") in <code>dwExtraInfo</code>, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying <code>LLKHF_INJECTED</code> or <code>LLMHF_INJECTED</code> bypass the engine too. A key's down and up are decided as a pair by the hooks' consume logic (<code>_passedKeyDown</code>, <code>_passedMouseDown</code>): an up goes the way its down went, so a chord prefix that replayed to Windows never has its up swallowed after the suppression set changed. See <a href="../input-pipeline/#layer-gated-hook-inputs">Input Pipeline</a>.</p>
 <p>A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for <code>LLKHF_EXTENDED</code> (<code>InputHookManager.ReplayIdentity</code>, AutoHotkey's form in <code>hook.cpp</code> lines 196-214), every queued replay carries it, and <code>InjectReplay</code> types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.</p>
 <p>The device turns <code>ButtonChanged</code> into <code>_chordDown[button]</code> plus a pulse.</p>
 <hr />
@@ -4582,7 +4853,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a> for <code>AppSettingsData</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

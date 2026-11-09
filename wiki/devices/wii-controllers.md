@@ -12,7 +12,7 @@ The Windows pairing wizard can't pair a Wii controller on its own. The controlle
 
 1. Open the [Devices](../features/devices.md) page.
 2. Click **Pair**, next to **Refresh**. The **Pair a Controller** dialog opens.
-3. Leave **Controller Family** on **Nintendo Wii**. The other entries pair a **Sony DualShock 3** and a **PlayStation Move / Navigation** controller.
+3. Leave **Controller Family** on **Nintendo Wii**. The other entries pair a **Sony DualShock 3**, a **PlayStation Move / Navigation** controller, a **Serial Controller (COM Port)** and a **DJI RC or RC 2 (Network)**.
 4. Click **Pair** in the dialog to start scanning. The **Pair** button dims and the progress ring spins.
 5. Press the red **SYNC** button under the battery cover on the back of the controller.
 6. The controller appears in the found list and pairs on its own. You don't select it.
@@ -59,6 +59,19 @@ None of them reads behind an active Motion Plus, and none has the IR pointer.
 Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.
 
 The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See [Holds](#holds).
+
+---
+
+## Mayflash DolphinBar
+
+A Mayflash DolphinBar in mode 4 lists four remote slots to Windows, and PadForge reads each remote in them as a Wii Remote.
+
+The bar gives no serial number for a remote. PadForge reads the remote's factory calibration from its memory and uses it as the serial, so a remote keeps its slot assignment and mappings in whichever of the bar's four slots it lands in. The serial is read again at every connection, since another remote can sync into the slot.
+
+- An empty bar slot gets no controller card. A slot that fails every write is not a remote, however much input it sends. A remote that syncs into it later appears once it answers a status request.
+- A remote saved under the bar slot it sat in before 5.3.0 takes that entry over the first time it connects with a serial. Its slot assignments carry over. An entry that is online is never taken.
+
+Nobody has run a DolphinBar with this code yet. The driver change was written against mode 4.
 
 ---
 
@@ -258,4 +271,4 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -280,6 +280,8 @@ Every slider has 0.1% precision. Three ways to set a value:
 
 Sliders apply as you drag. A typed value in either field applies once you leave the field, by tabbing away or clicking elsewhere.
 
+A profile imported from reWASD or DS4Windows brings its sticks' response curves to the **Sensitivity Curves** card when the card is still linear, as the nearest curve it can draw. A card you already shaped keeps its curve. See [Profile Import](../guides/profile-import.md).
+
 ---
 
 ## Reset buttons
@@ -431,4 +433,4 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -37,6 +37,10 @@ Nothing here is required reading for using the app.
 | [Remote Link Internals](remote-link-internals.md) | Cross-PC device sharing on the wire |
 | [External Control Internals](external-control-internals.md) | The profile control pipe, its command grammar, and the held-profile state |
 | [Steam Workshop Import Internals](steam-workshop-import-internals.md) | The VDF parser and config translator |
+| [Profile Import Internals](profile-import-internals.md) | The reWASD and DS4Windows file parsers and how each setting maps to a PadForge one |
+| [On-Screen Keyboard Internals](on-screen-keyboard-internals.md) | The keyboard overlay window, its key grid and how a controller drives it |
+| [Screen Color Internals](screen-color-internals.md) | Screen capture sampling and how the colors reach the lighting devices |
+| [Twitch Chat Internals](twitch-chat-internals.md) | The chat connection, command parsing and how chat input becomes controller input |
 | [Controller Audio Internals](controller-audio-internals.md) | Speaker and haptic audio paths |
 | [Steam Controller Haptics Internals](steam-controller-haptics-internals.md) | The 2026 pad's PCM actuator stream and the tone lane it falls back to |
 | [Sensa Haptics Internals](sensa-haptics-internals.md) | Controller rumble as a Razer Sensa HD effect through Interhaptics |
@@ -59,4 +63,4 @@ Nothing here is required reading for using the app.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

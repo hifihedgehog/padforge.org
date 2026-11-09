@@ -43,6 +43,22 @@ Five devices lose something to the switch, so they move only when you ask, from 
 
 ---
 
+## Keyboards, mice and touchpads: Use Only in PadForge
+
+HidHide hides a controller from games. It cannot hide a keyboard or mouse from Windows, because their input reaches Windows through a stack HidHide does not filter. For a keyboard, a mouse or a precision touchpad, the **Input Hiding** section on the [Devices](devices.md) page can show **Use Only in PadForge**. It stands beside **Hide from Games (HidHide)** and **Consume Mapped Inputs (Hooks)**.
+
+**A USB keyboard or mouse.** The button moves the device's USB node to Windows' WinUSB driver. On a receiver or a composite device only that interface moves. Windows then stops typing with the keyboard or moving the pointer with the mouse in every program, even while PadForge is closed, until you click **Restore the Windows Driver**. PadForge reads the device's reports itself and keeps the device's row, so its slots, mappings and macros carry over. The confirmation lists what else leaves Windows with the device: a mouse or keyboard sharing the interface, media keys, power and sleep keys, a game controller, or the link to the maker's software.
+
+- After the switch, a **Keep This Keyboard in PadForge?** or **Keep This Mouse in PadForge?** prompt counts down 15 seconds. Click **Keep** to stay. Any other answer, or none, puts the Windows driver back, so a switch that leaves you without a working keyboard or mouse undoes itself.
+- One device of a model moves at a time, because Windows moves every plugged-in device with the same ID. The status bar asks you to unplug the others first.
+- A keyboard or mouse on Bluetooth, PS/2 or I2C has no USB node and gets no button.
+- A switched device shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**. Its row is PadForge's alone, so there is nothing left to hide or consume.
+- If a program such as a laptop vendor's utility holds the device open, Windows cannot restart it on the new driver and the switch fails. PadForge then removes its driver package so the device does not move at the next Windows restart.
+
+**A precision touchpad.** An I2C touchpad cannot move to WinUSB. **Use Only in PadForge** hides its collection from Windows with HidHide while the engine runs, and PadForge reads the collection itself. The button shows on the touchpad's row and on its mouse row. It needs HidHide installed, **Hide Devices from Games** on under **Settings**, and the engine running, and the status bar says which is missing. While the touchpad is taken, its mouse row reads the touchpad's own frames: motion, clicks, taps and two-finger scrolling, following your Windows touchpad settings. Windows gets the touchpad back when the engine stops or PadForge closes, and the same Keep prompt gives it back after 15 seconds. The button then reads **Give Back to Windows**. **Hide from Games (HidHide)** no longer acts on a touchpad's rows, because a touchpad hidden with nothing reading it is dead in Windows and in PadForge.
+
+---
+
 ## Status indicators
 
 Each driver card on the Settings page shows an ember flame next to its status text.
@@ -185,7 +201,7 @@ Other controller utilities (Steam Input, for example) need their own whitelist e
 1. Open **Settings**. Scroll to **HidHide Driver**.
 2. Click **Install**. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.
 
-Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, which rule the transport sweep used, whether HidHide's whitelist could be read and written, and whether PadForge could still open a device it hid. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
+Turn on **Keep a Diagnostics Log** under **Settings** to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, which rule the transport sweep used, whether HidHide's whitelist could be read and written, and whether PadForge could still open a device it hid. The log also lists HidHide entries that PadForge did not add, and flags any that names one of PadForge's own virtual controllers, which hides it from every program HidHide does not list. **Save Snapshot** writes HidHide's flags and list, every present XInput interface, and each virtual controller's HID node with its problem code into the history. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.
 
 ### Uninstall steps
 
@@ -401,4 +417,4 @@ The slot guards read your saved slots, not what the engine is running, so they h
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

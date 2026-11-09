@@ -77,7 +77,7 @@ graph TB
 | `PadForge.Engine.Haptics` | (v3.6) HD haptic tone path (#147): `HapticToneEncoder` (per-family wire bytes), `HapticToneReducer` (PCM to tone), `WiiSpeakerAdpcm` (Yamaha 4-bit ADPCM, off the live path). (v4.4) `TritonPcmEncoder` (Steam Controller 2026 PCM stream reports, #381) |
 | `PadForge.Engine.Touchpad` | (v3.3) Touchpad gesture pipeline: `GestureRecognizer` (Tier 1/2/3 detector), `ShapeRecognizer` (canonical $Q point-cloud matcher), `ShapeTemplate`, `AngularMarginRecognizer`, `InBoxShapeTemplates`, `TouchpadCustomGesture`, `TouchpadGestureContext`, `TouchpadGestureSettings`, `TouchpadSettingsEntry`, `TouchpadGestureAutoArm`, (v4.1) `SwipeHapticsEvaluator` (swipe-haptic distance detents, #219) |
 | `PadForge.Engine.Mouse` | (v4) Mouse-gesture pipeline (#200): `MouseGestureRecognizer` (per-button flick classifier), `MouseGestureContext`, `MouseGestureSettings`, `MouseGestureSettingsEntry` |
-| `PadForge.Engine.Menus` | (v4.1) Radial / touch menus (#9 B-17): `MenuDefinitionEntry` (+ `MenuItemDefinition` and enums `MenuKind` / `MenuFireType` in the same file), `MenuSelectionMath`, `MenuEvaluator`, `MenuRuntimeState` |
+| `PadForge.Engine.Menus` | (v4.1) Radial / touch menus (#9 B-17): `MenuDefinitionEntry` (+ `MenuItemDefinition` and enums `MenuKind` / `MenuFireType` in the same file), `MenuSelectionMath`, `MenuEvaluator`, `MenuRuntimeState`. (5.3.0) `MenuHotbar` (the Hotbar style) and `KeyboardMenu.cs` (the On-Screen Keyboard's menu types, #566) |
 | `PadForge.Engine.RemoteLink` | (v4) Device sharing between PCs (#138): `LinkDiscovery`, `LinkServer`, `LinkConnection` (+ `ILinkControlChannel`), `LinkSession`, `LinkHandshake`, `PeerCrypto`, `PeerIdentity`, `IdentityProtector`, `PeerTrust` / `PeerTrustStore`, `RemotePeerDevice`, `CustomInputStateCodec`, `OutputEffectCodec`, `AntiReplayWindow`, `TcpControlChannel`, and the (#294 internet) lane: `LinkCode`, `IrohRelayClient`, `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, plus the `Dht/` folder. See [Remote Link Internals](remote-link-internals.md) |
 | `PadForge.Engine.Common.OpenXr` | (v4.5) OpenXR headset and motion controller input (#403): `OpenXrSession`, `OpenXrInterop` (structs, constants and the negotiation entry point), `OpenXrActions` (action set and suggested bindings), `OpenXrHeadPoseSource`, `OpenXrRuntimeCatalog`, `OpenXrHandState` (+ `OpenXrHand`). PadForge talks to the runtime directly rather than through the Khronos loader. See [OpenXR Input Internals](openxr-input-internals.md) |
 | `PadForge.Engine.Common.Logitech` | (v4.5) Logitech G-key input (#454): `LogitechGKeyInterop` (the packed event word), `LogitechGKeyMap` (the fixed 102-button layout), `LogitechGKeyCatalog` (library search), `LogitechGKeySource` (load, callback, teardown). See [Logitech G-Keys Internals](logitech-g-keys-internals.md) |
@@ -142,6 +142,8 @@ graph TB
 - [MenuDefinitionEntry](#menudefinitionentry) (Menus/MenuDefinitionEntry.cs)
 - [MenuSelectionMath](#menuselectionmath) (Menus/MenuSelectionMath.cs)
 - [MenuEvaluator](#menuevaluator) (Menus/MenuEvaluator.cs)
+- [MenuHotbar](#menuhotbar) (Menus/MenuHotbar.cs)
+- [KeyboardMenu types](#keyboardmenu-types) (Menus/KeyboardMenu.cs)
 - [PadSetting](#padsetting) (Data/PadSetting.cs)
 - [RawMappingEntry](#rawmappingentry) (Data/PadSetting.cs)
 - [UserSetting](#usersetting) (Data/UserSetting.cs)
@@ -3273,10 +3275,10 @@ One `(device, settings)` pair inside `PadSetting.MouseGestureSettings`. Twin of 
 
 Two enums share the file:
 
-- `MenuKind`: `Radial` (0) / `Grid` (1). Values mirror Steam Input's two menu group modes (`radial_menu` / `touch_menu`).
+- `MenuKind`: `Radial` (0) / `Grid` (1) / `Keyboard` (2) / `Hotbar` (3). Radial and Grid mirror Steam Input's two menu group modes (`radial_menu` / `touch_menu`). `Keyboard` (5.3.0, #566) is the On-Screen Keyboard, and `Hotbar` (5.3.0) is Steam's hotbar mode. The numbers are saved and append-only.
 - `MenuFireType`: `Click` (0) / `ClickRelease` (1) / `TouchRelease` (2) / `Always` (3). Values are Steam Input's serialized `touchmenu_button_fire_type`. Semantics under [MenuEvaluator](#menuevaluator).
 
-All fields are `[XmlAttribute]` except `Items`:
+All fields are `[XmlAttribute]` except `Items` and `KeyboardControls`:
 
 | Property | Default | Purpose |
 |---|---|---|
@@ -3284,7 +3286,7 @@ All fields are `[XmlAttribute]` except `Items`:
 | `MenuId` | `1` | Stable id unique within the owning slot's menu list. Rides the fired descriptor grammar `Menu {MenuId} Item {k}`. |
 | `Name` | `""` | Display name. |
 | `Kind` | `Radial` | Layout family. |
-| `HostDescriptor` | `"Gamepad RightStick"` | The input surface driving the menu: an abstract stick (`Gamepad LeftStick` / `Gamepad RightStick`), a touchpad (`Touchpad 0`..`Touchpad 2`), or `"Custom"` with the two raw axis descriptors below. Sticks engage on deflection past `EngageDeadzonePercent`. Touchpads engage on touch. |
+| `HostDescriptor` | `"Gamepad RightStick"` | The input surface driving the menu: an abstract stick (`Gamepad LeftStick` / `Gamepad RightStick`), the button-pair hosts `Gamepad DPad` and `Gamepad Diamond` (the face buttons: north Y, south A, west X, east B), a touchpad (`Touchpad 0`..`Touchpad 2`), or `"Custom"` with the two raw axis descriptors below. Sticks engage on deflection past `EngageDeadzonePercent`. Touchpads engage on touch. Button-pair hosts engage on a press. A keyboard menu reads none of it. A hotbar reads it only for its default controls (`MenuHotbar.DefaultControl`). |
 | `HostHalf` | `0` | Horizontal half-window for single-physical-pad hosts (DS4 / DualSense trackpad halves): 0 = whole surface, 1 = left half, 2 = right half. Sticks are always 0. |
 | `CustomXDescriptor` / `CustomYDescriptor` | `""` | Raw axis descriptors (`"Axis 3"`, `"Slider 0"`, ...) that steer the menu when `HostDescriptor` is `"Custom"`. This is what makes joysticks, wheels, and other non-gamepad devices first-class openers, since "Left/Right Stick" means nothing on them. Engage follows the same deadzone rule as sticks. |
 | `ClickDescriptor` | `""` | Assignable Click input for the Click / Click Release fire modes, any button-family descriptor. Empty = the host's default (stick click for stick hosts, pad click for touchpads, none for Custom). |
@@ -3302,8 +3304,26 @@ All fields are `[XmlAttribute]` except `Items`:
 | `LayerHoldsOpen` | `false` | (4.5.0, #413) Stay-open mode. When `LayerMask` names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover. Empty or `"Base"` cannot hold a menu open, so those fall back to ordinary surface engagement. |
 | `ShowOnWebController` | `false` | (#471) Offer this Touch Grid menu to Web Menus phones on the slot, one page per menu. Ignored on a radial menu. Carried by `Clone`. |
 | `Items` | empty list | `[XmlElement("Item")]` list of `MenuItemDefinition`. |
+| `KeyboardLayout` | `Grid` | (5.3.0, #566) Keyboard menus: `Grid`, `Split` or `Wheel`. |
+| `OpenDescriptor` / `OpenDeviceGuid` | `""` | Keyboard menus: Opens With, a source descriptor in the legacy I/H half-axis form, and the device it reads (`""` every device that drives the menu). Empty: no input opens it. |
+| `OpenAndDescriptor` / `OpenAndDeviceGuid` | `""` | Keyboard menus: a second input held with Opens With. |
+| `OpenThreshold` | `0` | Keyboard menus: Opens With's press point in percent. 0 takes `KeyboardInput.DefaultThreshold` (50). |
+| `OpenPress` | `Press` | Keyboard menus: the `KeyboardOpenPress` that acts. |
+| `OpenPressMs` | `0` | Keyboard menus: the hold time or press window in ms. 0 takes the macro trigger's default (500 or 442). |
+| `OpenOnTextFocus` | `false` | Keyboard menus: open when a text box takes focus, close when focus leaves text boxes. |
+| `TypesThrough` | `""` | Keyboard menus: `""` Windows Input, `"slot:N"` the keyboard of the Keyboard + Mouse slot at pad index N, else a HIDMaestro keyboard profile id. |
+| `FunctionRow` | `false` | Keyboard menus: Esc, F1 to F12 and Delete. |
+| `Suggestions` | `true` | Keyboard menus: word suggestions from Windows' text prediction. |
+| `Symbols` | `""` | Keyboard menus: the symbols page's characters. Empty: `OskLayoutFrame.DefaultSymbols`. |
+| `KeyboardControls` | empty list | Keyboard menus: `[XmlElement("KeyboardControl")]` list of `KeyboardControlEntry`, only the controls that differ from their layout's default. |
+| `HotbarShowDescriptor` / `HotbarPreviousDescriptor` / `HotbarNextDescriptor` / `HotbarFireDescriptor` | `""` | (5.3.0) Hotbar menus: the four controls. Empty takes the host's direction. |
+| `HotbarWrap` | `false` | Hotbar menus: stepping past an end goes on from the other (Steam's `scroll_wrap`). |
+| `HotbarDismissOnFire` | `true` | Hotbar menus: Fire hides the bar (Steam's Dismiss After Activation). |
+| `HotbarRecenter` | `true` | Hotbar menus: the selection returns to the middle cell while the bar is hidden (Steam's Re-Center Each Time). |
 
-`Clone()` deep-copies, item list included. Every clone site (profile apply, slot copy, editor round-trips) must use it so item lists never alias.
+Every keyboard and hotbar member has a `ShouldSerialize*` method that writes it only on a menu of its own `Kind`, and the optional ones only when set, so a radial or grid menu saves exactly as before 5.3.0.
+
+`Clone()` deep-copies, the item list and `KeyboardControls` included. Every clone site (profile apply, slot copy, editor round-trips) must use it so item lists never alias.
 
 ### MenuItemDefinition
 
@@ -3344,7 +3364,7 @@ Pure selection math for radial / grid menus. Inputs are in the SDL frame both st
 **File:** `PadForge.Engine/Menus/MenuEvaluator.cs`
 **Namespace:** `PadForge.Engine.Menus`
 
-The per-menu commit state machine. `MenuRuntimeState` (same file) is one menu's runtime state, one instance per `(slot, device, menu id)`, owned by the poll thread: `Engaged` / `Clicked` (last-frame edges), `PhysicalEngaged` (stay-open menus only: the surface was physically engaged last frame while the menu was open), `HoveredIndex` (`-1` = none), `AssertedIndex` (item held by the hold-shaped fire types), `PulsedIndex` + `PulseUntilMs` (item fired by the one-shot fire types), `PulseSeq` (counts every commit pulse and never resets, so a reader can tell a pulse armed this frame from one still running), `StepIndex` (button-pair grid stepped selection, &minus;1 = nothing selected yet, persisting across presses), `PrevStepMask` (previous frame's direction bools for the stepping edge detector, bit 0 up, 1 down, 2 left, 3 right), and `Reset()`.
+The per-menu commit state machine. `MenuRuntimeState` (same file) is one menu's runtime state, one instance per `(slot, device, menu id)`, owned by the poll thread: `Engaged` / `Clicked` (last-frame edges), `PhysicalEngaged` (stay-open menus only: the surface was physically engaged last frame while the menu was open), `HoveredIndex` (`-1` = none), `AssertedIndex` (item held by the hold-shaped fire types), `PulsedIndex` + `PulseUntilMs` (item fired by the one-shot fire types), `PulseSeq` (counts every commit pulse and never resets, so a reader can tell a pulse armed this frame from one still running), `StepIndex` (button-pair grid stepped selection, &minus;1 = nothing selected yet, persisting across presses), `PrevStepMask` (previous frame's direction bools for the stepping edge detector, bit 0 up, 1 down, 2 left, 3 right, or a hotbar's own bits, below), the hotbar's `HotbarShown`, `HotbarHeld` (&minus;1 = none), `HotbarReleaseAtMs` and `HotbarArmed`, and `Reset()`, which clears all of them.
 
 `Update(state, def, surfaceActive, clicked, dx, dy, nx, ny, nowMs)` advances one surface-mode menu per poll frame. `surfaceActive` = physically engaged AND the hosting layer active, so a layer ending lands as a release edge, which is exactly Steam's mode-shift-end commit. `ComputeSurfaceActive(def, physical, layerOk)` decides whether a menu is open: the layer gate alone for a stay-open menu (`LayerHoldsOpen` on a real layer, #413), the layer gate AND physical engagement otherwise. Stay-open menus advance through `UpdateLayerEngaged(state, def, menuActive, physical, clicked, centerAtRest, dx, dy, nx, ny, nowMs)` instead, where Touch Release commits on the physical lift or re-center while the menu stays open, and the layer ending commits only an interaction still in progress. Hover comes from `MenuSelectionMath`: radial menus use the center-relative deflection `(dx, dy)`, grids the absolute normalized position `(nx, ny)`. Fire-type semantics are grounded on Valve's shipped configurator strings ("Touch Menu Activation Style" / "Radial Menu Button Type"):
 
@@ -3357,9 +3377,53 @@ The per-menu commit state machine. `MenuRuntimeState` (same file) is one menu's 
 
 One-shot commits pulse for `CommitPulseMs` = 100 ms, matching the gesture engine's fired-set latch, so downstream readers see a stable fire long enough to pick up the rising edge at any reasonable polling rate. The pulse and the 250 ms stale windows run on `MenuClock` (`PadForge.Engine.Menus`), the system tick count unless a test sets its internal `Source`. `IsItemFired(state, index, nowMs)` is the read side: true while the item is asserted by a hold-shaped fire type or within a one-shot commit's pulse window.
 
-`StepButtonPairGrid(state, def, layerActive, up, down, left, right, nowMs)` is the second entry point, for a button-pair grid (a hotbar). Direction presses step a persistent selection instead of composing a hover vector, because four bools can only ever reach a grid's edge cells. Rising Right or Down moves +1, rising Left or Up moves &minus;1, clamped to the cell range, and entering a cell commits it as a one-shot pulse. Selection persists while the menu stays live so repeated presses walk the bar, and `layerActive` going false freezes it rather than resetting it. A hotbar remembers its position.
+`StepButtonPairGrid(state, def, layerActive, up, down, left, right, nowMs)` is the second entry point, for a Touch Grid whose host is the D-pad or the face buttons. It is not Steam's hotbar, which is the Hotbar style and runs through [MenuHotbar](#menuhotbar). Direction presses step a persistent selection instead of composing a hover vector, because four bools can only ever reach a grid's edge cells. Rising Right or Down moves +1, rising Left or Up moves &minus;1, clamped to the cell range, the first press from no selection going to the first or the last cell, and entering a cell commits it as a one-shot pulse. Selection persists while the menu stays live so repeated presses walk the grid, and `layerActive` going false freezes it rather than resetting it.
 
 The App-side runtime (`InputManager.MenuRuntime.cs`) ticks these contexts from Step 2 beside the gesture contexts and exposes fires through `SourceCoercion.MenuItemFiredProvider`, read by mapping rows, shift activators, and macro descriptor triggers. Items carrying a direct binding deliver through `CollectMenuDirectOutputs` in the Step 4b pass. When a step arms a new pulse (`PulseSeq` moved) while the menu's own named layer gate is closed, the commit came from that layer ending, and the runtime records it with the layer for the length of the pulse, so the departed layer's rows and macros, and the activators it hosts, read it (see [Input Pipeline](input-pipeline.md#shift-layer-activators-and-the-cycle-cursor)).
+
+---
+
+## MenuHotbar
+
+**File:** `PadForge.Engine/Menus/MenuHotbar.cs`
+**Namespace:** `PadForge.Engine.Menus`
+
+(5.3.0) The Hotbar style, Steam Input's hotbar as `steamclient64.dll`'s `CHotbarMode` runs it. Steam builds the hotbar on its D-pad mode: Down shows or hides the bar, Left and Right step the selection, Up fires the selected cell. Here those four are `HotbarControl` inputs (`Show`, `Previous`, `Next`, `Fire`), each any button-family descriptor. The App-side runtime (`InputManager.MenuRuntime.cs`) reads each with `SourceCoercion.EvaluateForButtonTarget` at 50, a device-free stick control only on a device that has the stick (#431), and calls `Step` once per poll.
+
+| Member | Value / behavior |
+|---|---|
+| `HoldMs` | 1000 / 30 ms. A fired cell is held at least this long, and under `Always` two cells are this far apart. |
+| `SteamDeadzonePercent` | 61, Steam's hotbar dead zone of 20000 / 32767. The editor applies it when a menu turns into a hotbar with the radial default 25 still set. |
+| `IsCellBound(def, index)` | True when `Items` holds an entry for the cell. Stepping skips cells without one. |
+| `Step(state, def, layerActive, show, previous, next, fire, nowMs)` | Advances one poll. Below. |
+| `DefaultControl(def, control)` | The control's input when the menu names none. Below. |
+| `ControlDescriptor(def, control)` | The menu's own descriptor for the control, else `DefaultControl`. |
+
+`Step` resets the state and returns when `layerActive` is false or `CellCount` is 0, so the bar starts over hidden with nothing held. Otherwise the selection starts at `StepIndex`, or at `CellCount / 2` when there is none. Edges come from a mask of Steam's direction bits (Fire 1, Show 2, Next 4, Previous 8) against `PrevStepMask`. A rising Show toggles `HotbarShown`, and hiding this way drops the selection, so the bar opens on the middle cell next time whatever `HotbarRecenter` says. While shown, a rising Next and a rising Previous each step from the selection the poll began with (`TryStep`: one cell at a time, at most a lap, to the next bound cell, stopping at an end unless `HotbarWrap`), Previous applied last.
+
+Fire counts only while the bar is shown. Each fire type then runs as Steam's does:
+
+| `FireType` | Behavior |
+|---|---|
+| `Click` | Fire presses a bound selected cell into `HotbarHeld`, released once Fire lets go and `HoldMs` has passed. |
+| `ClickRelease` | The selected cell is pressed on the poll after Fire was held (`HotbarArmed`) and no longer counts: Fire's release, or Fire hiding the bar. A bound cell is released after `HoldMs`. |
+| `TouchRelease` | The selected cell is pressed on the poll after the bar was shown and no longer is, when there is a selection, and a bound cell is released after `HoldMs`. Hiding with Show drops the selection, so only Fire hiding the bar fires, and with `HotbarRecenter` that selection is the middle cell. |
+| `Always` | The selected cell is held while the bar is shown. A step lets it go and holds the next after `HoldMs`. |
+
+After the fire step, a held Fire with `HotbarDismissOnFire` hides the bar, and a hidden bar with `HotbarRecenter` drops the selection. `AssertedIndex` takes `HotbarHeld`, so `MenuEvaluator.IsItemFired` reads the held cell, `HoveredIndex` takes the selection while shown, and `Engaged` takes `HotbarShown`. A hotbar never pulses.
+
+`DefaultControl` gives `Gamepad DPadDown`, `DPadLeft`, `DPadRight` and `DPadUp` for Show, Previous, Next and Fire on a D-pad host, and `Gamepad ButtonA`, `ButtonX`, `ButtonB` and `ButtonY` on a face-button host. On a stick or touchpad host it returns a `BoundedReads.Wedge` read of the host's ring descriptor (`SourceCoercion.LeftStickRingDescriptor`, `RightStickRingDescriptor`, or `Touchpad N Finger 0 Ring` with ` Left` or ` Right` for a `HostHalf`): a 90-degree span centered east for Next, north for Fire, west for Previous and south for Show, a margin of 90 / 50 degrees, engaging at `EngageDeadzonePercent` (clamped 1 to 95) plus 1.25 and holding down to it less 1.25, gated on the pad's click for a touchpad. A `Custom` host has no directions and returns `""`.
+
+`MenuHotbarTests` hold the toggle, stepping, wrap, the Previous-wins rule, each fire type, the re-center rules, the layer reset, the default controls, the settings round trip and the copy. `MenuHotbarEditorTests` hold the Menus tab rows.
+
+---
+
+## KeyboardMenu types
+
+**File:** `PadForge.Engine/Menus/KeyboardMenu.cs`
+**Namespace:** `PadForge.Engine.Menus`
+
+(5.3.0, #566) The On-Screen Keyboard's menu types: `KeyboardLayout` (`Grid` 0, `Split` 1, `Wheel` 2), `KeyboardOpenPress` (the macro trigger's eight press modes), `KeyboardControlAction` (48 controls, append-only), the `KeyboardInput` record struct (one input or two held together, with a press point), `KeyboardControlEntry` (one saved control: `[XmlAttribute]` `Layout`, `Action`, `Descriptor`, `DeviceGuid`, `AndDescriptor`, `AndDeviceGuid`, `Threshold`), and `KeyboardMenuDefaults` (each layout's controls and defaults, `Create`, `Effective`, `Set`, `OpenInput`, `SetOpenInput`). The App side runs them. See [On-Screen Keyboard Internals](on-screen-keyboard-internals.md).
 
 ---
 
@@ -3375,4 +3439,4 @@ The App-side runtime (`InputManager.MenuRuntime.cs`) ticks these contexts from S
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

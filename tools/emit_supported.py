@@ -431,6 +431,15 @@ WINDOWS_IDS.add((int(re.search(r"#define\s+SDL_ICADE_VENDOR\s+(0[xX][0-9a-fA-F]+
 windows = WINDOWS_IDS - union
 union = union | windows
 
+# The keyboards, mice, headsets and other devices PadForge lights directly, by
+# the same USB identity (emit_lit.py, from PadForge's own lighting tables). A
+# lit device that is also a controller above is counted once.
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from emit_lit import LIT
+lit = set(LIT) - union
+union = union | lit
+
 # The profile count comes from the HIDMaestro.Core.dll PadForge ships: every
 # embedded HIDMaestro.Profiles.<vendor>\<name>.json is one profile, and
 # HMContext.LoadDefaultProfiles loads all of them. Counting the manifest
@@ -453,6 +462,8 @@ N = {
     "mapped_community": len(mapped_community),
     "mapped_padforge": len(mapped_padforge),
     "padforge": len(padforge_ids),
+    "lit": len(lit),
+    "lit_all": len(LIT),
     # The categories that also sit in the gamepad list, so the sum of the
     # categories exceeds the total by exactly these.
     "overlap_wheels": len(ids("initial_wheel_devices") & cl_ids),

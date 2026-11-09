@@ -1138,6 +1138,8 @@ The generic keyboard is `KeyboardKeyItem.BuildLayout()` (full ANSI QWERTY with n
 
 A board drawing is one of eleven key sets in `KeyboardFamilies.g.cs`, which `tools/gen_kbm_layouts.py` generates from QMK's layout data (`layouts/default`, `keyboards/hhkb/jp`) and Keychron's QMK fork for the Q6: full size ANSI, ISO and with four keys over the number pad, tenkeyless, 75 percent, 65 percent with and without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Each `LayoutKey` holds its position and size in key units (24 px each) and the HID usage it sends. `KeyboardFamilies` maps each of HIDMaestro's 51 keyboard profiles to a set, and `KbmHidDeviceTests` holds that table to the catalog, so a profile a later SDK adds cannot go undrawn. A board no QMK layout matches draws as the nearest set, marked `Approximate`, and the canvas adds the caption `Pad_Kbm_Preview_Approximate` under it.
 
+The Lighting tab's **Key Colors** card draws a lit device's lights with `KeyLightsView` (`KeyLightsView.cs`), built in code the way `BuildDeviceKeyboard` builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the `KeyboardFamilies.g.cs` set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through `KeyTargetPickerViewModel`.
+
 Each board key stands for the row the input layout gives it: `KbmHidKeyMap.TargetOf(usage, UiLayout())` turns its usage into the virtual-key index of its row, and a layout change redraws the board. A language switch rebuilds both canvases once the switch's other handlers have run (`Strings.CultureChanged`), so the tooltips and the approximate-board caption take the new language. Its legend comes from, in order, `KeyboardFamilies.FixedLegend` (Apple's modifier symbols on a Mac board, the JIS keys' own legends, `Fn` for a key that sends nothing), a media glyph for a consumer usage, the character the layout types (`KbmHidKeyMap.CharacterLegend`), and `ShortLegend`. A key the picked keyboard cannot send (`KbmDeviceCaps`), or that no row reaches (`InputManager.IsKbmKeyTarget`), is drawn at 35 percent and takes no clicks.
 
 Every live key has:
@@ -1666,4 +1668,4 @@ Key differences:
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

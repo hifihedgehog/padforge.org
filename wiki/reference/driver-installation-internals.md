@@ -12,7 +12,7 @@ PadForge v5 deals with six drivers/services and a legacy v2 cleanup path:
 6. **Controllers Windows leaves without a driver** get inbox WinUSB, or Windows' own Xbox 360 driver xusb22, from `VendorUsbDriverInstaller`, each through a package that names one ID and is signed on this machine: automatically for most, and only on request for four devices whose switch costs Windows something.
 7. **Legacy v2 driver cleanup** offers to uninstall ViGEmBus and vJoy on first launch when either is detected. v2 used those two drivers as PadForge's virtual-controller backends. HIDMaestro replaces both.
 
-Driver-side code lives in eight files:
+Driver-side code lives in the files below. The WinUSB keyboard, mouse and touchpad switch has its own sections ([Keyboards and mice](#keyboards-and-mice-use-only-in-padforge), [Touchpads](#touchpads)).
 
 - **`PadForge.App/Common/DriverInstaller.cs`** (`PadForge.Common`) handles HidHide, Steam-free SteamVR and Windows MIDI Services runtime install/uninstall, plus the legacy v2 ViGEmBus and vJoy uninstall paths.
 - **`PadForge.App/Common/Input/MidiApiSelection.cs`** (`PadForge.Common.Input`) picks the Windows MIDI Services API: the in-box one where Windows registers it, else the runtime where it is installed. It also predicts the legacy fallback for the UI and decides when the card offers the runtime.
@@ -614,7 +614,7 @@ internal static bool Bind(BindPlan plan, string instanceId, IReadOnlyList<UsbNod
 
 ### Opt-in bindings
 
-Five kinds of device lose something to WinUSB, so `Plan` never returns them. `OptIns` lists them for the Devices page:
+Seven kinds of device lose something to WinUSB, so `Plan` never returns them. `OptInKind` is append-only and names them: `Xbox360Pad`, `Xbox360Receiver`, `IntelBaseStation`, `Prodikeys`, `TouchSenseMouse`, `Keyboard` and `Mouse`. `OptIns` lists the first five by ID for the Devices page. `Keyboard` and `Mouse` have no row in it, because any USB keyboard or mouse can take the switch and the offer comes from the row's HID collection ([Keyboards and mice](#keyboards-and-mice-use-only-in-padforge)):
 
 | Kind | Node | Bound from | What the switch costs |
 |---|---|---|---|
@@ -636,9 +636,35 @@ A TouchSense mouse (#494), a Logitech iFeel Mouse or iFeel MouseMan, is bound so
 
 `MainWindow.CheckOptedInDrivers` runs 8 s into each start. `MovedBack` lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the status bar names them.
 
+### Keyboards and mice (Use Only in PadForge)
+
+**Files:** `PadForge.App/Services/WinUsbKeyboardBinding.cs`, `PadForge.App/Common/Input/WinUsbKeyboards/` (`WinUsbKeyboardChannel`, `WinUsbKeyboardDevice`, `WinUsbMouseDevice`, `HidKeyboardReports`, `HidMouseReports`, `KeyboardTakeovers`), `PadForge.App/Views/KeepDriverDialog.xaml.cs`, `PadForge.App/Services/GiveBackTask.cs`, `PadForge.App/Services/GiveBackRun.cs` (#549)
+
+A keyboard's or mouse's Devices row offers **Use Only in PadForge**. The switch binds the row's USB node to the same WinUSB package as the other kinds, so Windows stops typing with the keyboard or moving the pointer with the mouse, and PadForge reads the device itself. `WinUsbKeyboardBinding.QueryOffer(devicePath, nodes, ..., kind)` makes the offer:
+
+- A row whose path is a WinUSB interface path that PadForge's interface GUID is active on is offered the restore.
+- Any other row is offered the bind when the parent of its HID collection is a USB node on `HidUsb`, so a keyboard on a receiver moves only its interface. A device on Bluetooth, PS/2, I2C or a virtual bus has no USB node and gets nothing.
+- Binding is one device at a time, as for `TouchSenseMouse`, because the forced update moves every node the ID names.
+
+The confirm names what shares the node and leaves with it (`Devices_DriverTakes_Format`: a mouse, a keyboard, media keys, power and sleep keys, a game controller, the maker's software link). The takeover is recorded in `KeyboardTakeovers` with the row's earlier Raw Input ID and kind (`Kind="Mouse"` for a mouse), so the new row (`WinUsbKeyboardDevice`, `WinUsbMouseDevice`) takes over that row's slots, mappings and macros.
+
+Reports are decoded from the HID report descriptor, since Windows' HID parser is not in the stack. `HidKeyboardReports` builds fields the way Linux's `hid-core.c` does: usages and their pages, fields by report ID, padding, variable bits, array values in the logical range and ErrorRollOver. `HidMouseReports` reuses that parser: button usages 1 to 5 are left, right, middle, side and extra, X and Y are motion when relative, and the wheel is read while AC Pan is not. A pressed keyboard usage becomes a key index through `KbmHidKeyMap.TargetOf` on the foreground layout, once per press. `WinUsbKeyboardChannel` is the one opened WinUSB interface, behind an interface the tests script.
+
+After the switch, `KeepDriverDialog` shows a countdown (`Devices_DriverKeepCountdown_Format`) of 15 seconds. **Keep** keeps the switch. Anything else, or no answer, restores Windows' driver. A row PadForge's driver serves no longer feeds the consume hook or HidHide and offers neither toggle, because a hook cannot tell keyboards apart and would eat the mapped keys on every other keyboard.
+
+`GiveBackTask` covers a PadForge that dies while a device is taken: a crash, a kill, a power cut or a Windows restart during the Keep prompt, or while a touchpad is taken. It registers a one-shot Task Scheduler task from an XML definition that runs as SYSTEM at registration and at boot. The task's first step reads a pipe the app holds, with find.exe, and the read ends when the app's process ends. If the task still stands after that, a device is owed, and `GiveBackRun` starts as `PadForge.exe` with one of two switches, with no window. It talks to HidHide's control device and removes the driver package as the app does. Instances run in parallel. A run that fails leaves the task for the next boot, and the task goes once the device is back.
+
+### Touchpads
+
+**Files:** `PadForge.Engine/Common/Touchpads/` (`TouchpadCapture`, `TouchpadPointer`, `TouchpadMouse`), `PadForge.App/Common/Input/Touchpads/` (`TouchpadNodes`, `TouchpadMouseDevice`)
+
+**Use Only in PadForge** also serves precision touchpads, on the touchpad's row and on its mouse row, but WinUSB cannot take an I2C touchpad. The switch hides the touchpad collection with HidHide while the engine runs, and `TouchpadCapture` opens that collection itself, as `WindowsTabletDevice` does for a pen tablet: an unshared open, a restart of the collection when Windows still holds it (HidHide decides only when a program opens a device), and a restart again on the give-back so Windows reopens it. The touchpad stays in touchpad mode and its mouse collection stays silent.
+
+While the touchpad is taken, `TouchpadMouseDevice` is its mouse row, and `TouchpadPointer` works out the pointer from the touchpad's own frames the way libinput does: unaccelerated motion at 1000 counts per inch, a right press in the bottom right area or with two fingers and a middle press with three, taps under 180 ms and 1.3 mm with tap-and-drag, and two-finger scroll with a wheel notch per 10 mm. `TouchpadMouse` follows the user's Windows touchpad settings from the `PrecisionTouchPad` registry key (a missing value reads as Windows' default). Hide from Games no longer acts on a touchpad's rows, and the Keep prompt and the give-back apply as for a keyboard. Engine stop and exit give every taken touchpad back.
+
 ### Limits
 
-- Nothing here ran on hardware. The bench had none of the targets.
+- Nothing here ran on hardware. The bench had none of the targets. The keyboard and mouse switch has not been tried on a bound device, and the touchpad switch was tried on one I2C touchpad (ACPI\GXTP5100): it took the touchpad in about a second and the Keep prompt gave it back at 15 seconds.
 - ARM64 Windows 11 carries xusb22. The file list of cumulative update KB5124008 for version 24H2 on ARM64 names xusb22.sys 10.0.26100.9278 and an xusb22.inf of 6,304 bytes, the size of the x64 one. No ARM64 PC has run the package.
 - A chatpad or uDraw on a clone receiver stays unread. The clone receivers get xusb22, and the fork's accessory plan names no WinUSB binding for them.
 
@@ -957,6 +983,7 @@ Each USB device cycles once per batch and at most once per 30 s (`HiddenControll
 | `HIDHIDE reach ok after a reconnect` | The self-check ran again for a hidden controller that had left and come back by itself, and opened it. |
 | `HIDHIDE REFUSED` | The self-check was refused: the path, the Win32 error, how many entries PadForge took back, this process's native image path, and `listed=yes`, `no` or `unreadable` for that path on the whitelist at that moment. Listed and refused means the driver knows this process by another path or not at all. Not listed means the entry never landed. |
 | `HIDHIDE reach unknown` | No hidden HID interface answered the self-check, so it runs again on the next apply. |
+| `HIDHIDE others` | The entries on HidHide's list that PadForge did not add (neither wanted in this apply nor managed), as `n=` and the ids. Printed when that set changes and once more when it empties. A second line, `HIDHIDE others hide PadForge virtual controllers from every program HidHide does not list`, names any of them that is a HIDMaestro virtual controller. |
 | `HIDHIDE apply unchanged` | The heartbeat, at most once a minute. |
 | `HIDHIDE released` | A hidden controller's USB port was cycled, with the USB device id. |
 | `HIDHIDE release skipped` | A hidden HID collection whose USB device was left alone, with the reason from the release table. |
@@ -965,6 +992,15 @@ Each USB device cycles once per batch and at most once per 30 s (`HiddenControll
 | `HIDHIDE release goes ahead` | The engine had not listed its devices 10 s into this engine run, so the batch decided from the rows as they stood. |
 | `HIDHIDE release dropped` | The batch ended without a cycle: HidHide's driver does not answer, or the read of PadForge's controller rows threw. With ids in brackets, those ids waited 60 s on a blacklist that did not read, and their hide is left as it is. |
 | `HIDHIDE release failed` | The cycle threw, with the exception type and message. |
+
+`HidHideController.DescribeSnapshotState` adds `STATE` lines after the event history when **Save Snapshot** on the Settings page writes it, and `DiagnosticsLogControl.SnapshotStateLines` writes the same lines to `diagnostics.log` first, never throwing:
+
+| Line | Content |
+|---|---|
+| `STATE hidhide active=... inverse=... listed=N padforge=N others=N` | HidHide's flags and list, with PadForge's entries counted apart from the rest and the others' ids. `read-failed` marks a flag or list that did not read, and `STATE hidhide unavailable` the missing driver. |
+| `STATE hidhide lists PadForge virtual controllers` | A virtual controller's instance id is on the list. |
+| `STATE xinput interfaces n=N` | Every present XUSB interface, the devices XInput opens. |
+| `STATE virtual <id> problem=... hidden=... xinput=...` | Each present PadForge virtual controller's HID node: its devnode problem code (`none`, a code, or `not-present`), whether HidHide lists it, and whether it carries an XInput interface. `STATE virtual none` when there is no node. |
 
 The block prints when the desired set moved, when the self-check was refused in that apply, when the inverse flag differs from the one the last printed block read, when the apply carries a line that happens once (the cloak going off, hiding resumed after a whitelist change, a self-check that passed), or once a minute while the sync, the read-back, the whitelist or the read of the inverse flag reports trouble. A refusal takes the hide back, so the set it leaves can equal the last one printed, and the move test alone would drop the `REFUSED` line. A cloak that comes on while nothing is hidden leaves the empty set as it was, which is why the flag is compared too. `DevicesUpdated` fires on every device-list flip, and an idle bench flipped something every enumeration interval: in one owner trace 215 of 305 diag lines were this block, five seconds apart, all identical.
 
@@ -1102,4 +1138,4 @@ There is no explicit rollback machinery in `DriverInstaller`. On partial failure
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

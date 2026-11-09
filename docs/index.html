@@ -715,6 +715,8 @@
       
         
       
+        
+      
     
     
     
@@ -784,6 +786,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -951,7 +981,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1123,6 +1153,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1398,6 +1436,34 @@
   
   
     <li class="md-nav__item">
+      <a href="features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1574,6 +1640,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1910,6 +2004,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2633,6 +2783,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3122,6 +3280,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -3836,7 +4106,7 @@ does.</p>
   <a href="guides/">
     <span class="pf-eyebrow">Do a thing</span>
     <h3>Guides</h3>
-    <p>Task-by-task walkthroughs. Import a Steam config, aim with gyro, build macros, use your phone as a controller.</p>
+    <p>Task-by-task walkthroughs. Import a Steam, reWASD or DS4Windows config, aim with gyro, build macros, use your phone as a controller.</p>
   </a>
   <a href="features/">
     <span class="pf-eyebrow">Every control</span>
@@ -3871,17 +4141,25 @@ does.</p>
   d-pad, gyro to aim, a MIDI key to a button, a Wii Remote to a wheel.
   A Sony headset's head rotation drives motion like any other gyro.</li>
 <li><strong>The extras real hardware has.</strong> Adaptive triggers, impulse triggers,
-  lighting, controller speakers and microphones, force feedback for
-  wheels, bass-shaker audio output, NFC tag triggers.</li>
-<li><strong>Steam Workshop import.</strong> Bring an existing Steam Input config across
-  and every supported setting lands on a PadForge control you can edit.</li>
+  lighting (including <a href="features/screen-color/">lights that follow the screen</a>),
+  controller speakers and microphones, force feedback for wheels,
+  bass-shaker audio output, NFC tag triggers.</li>
+<li><strong>Beyond the controller.</strong> An <a href="features/on-screen-keyboard/">On-Screen Keyboard</a>
+  you steer from a controller, a <a href="features/screen-overlay/">Screen Overlay</a> above
+  other windows, and <a href="features/twitch-chat/">Twitch Chat</a> commands that press
+  a slot's buttons.</li>
+<li><strong>Config import.</strong> Bring an existing Steam Input, reWASD or DS4Windows
+  config across. Each setting PadForge can carry lands on a control you can
+  edit, and the rest is listed with the reason. <a href="guides/steam-workshop-import/">Steam Workshop import</a> browses
+  community layouts, and <a href="guides/profile-import/">Import from reWASD and DS4Windows</a>
+  reads a profile file after a preview of what came across.</li>
 <li><strong>Thirteen starter profiles.</strong> Ready-made layouts for desktop use,
   WASD shooters, emulation, racing, space sims, and gyro aim. Load one
   and edit from there.</li>
 </ul>
 <p>PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 <a href="https://github.com/hifihedgehog/PadForge">github.com/hifihedgehog/PadForge</a>.</p>
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

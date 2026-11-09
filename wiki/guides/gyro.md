@@ -392,6 +392,16 @@ Since 4.1.0, rows with a continuous source also carry an **Acceleration** contro
 
 ---
 
+## Gyro in an imported profile
+
+A [Steam Workshop import](steam-workshop-import.md) carries Steam's gyro scales and ratios onto the mapping rows. An older gyro mode whose axis is yaw plus roll joins the two the way Steam does: the signed length of the two rates when their signs agree or the yaw rate is larger, otherwise the roll rate's sign with the difference of their squares. The join rides the row's Custom combine, so the row no longer sums yaw and roll, which ran up to 1.41 times Steam's speed on a diagonal turn.
+
+An [import from DS4Windows](profile-import.md) folds the profile's gyro dead zone onto this tab's **Deadzone**, and converts the gyro-as-stick maximum and anti-dead zones at DS4Windows' 16 counts per degree per second against the 500°/s full scale. How far past the dead zone DS4Windows rescales the rate is not measured against PadForge's response, so the result near full deflection can differ.
+
+The Gyro Aim [starter profile](starter-profiles.md#gyro-aim-engages-on-the-left-trigger) inverts the pitch on the right stick's Y row, so nose up looks up.
+
+---
+
 ## Per pad, per slot persistence
 
 Calibration, sensitivity, smoothing, curve, and engage values save per pad per slot. Assigning the same pad to two slots gives you two independent tunings. Removing the pad from a slot drops its values there, and assigning it again starts from the defaults.
@@ -484,4 +494,4 @@ Starting values only. Tune against the live rate readout and in-game feel.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

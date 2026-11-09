@@ -105,11 +105,11 @@ The slot-tier [Bass Shakers](bass-shakers.md) tab can also play game trigger fee
 
 ## Reset controls
 
-Every slider has its own reset button. Each card has a Reset All button.
+Every slider has its own reset button. Each card has a reset button for the whole card.
 
-- **Impulse Triggers Reset All**: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, Translate Adaptive Trigger Vibrations off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.
-- **Constant Trigger Force Reset All**: toggle off, left 0.00, right 0.00. Affects this card only.
-- **Audio Bass Trigger Rumble Reset All**: disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects this card only.
+- **Reset Impulse Triggers**: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, Translate Adaptive Trigger Vibrations off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.
+- **Reset Constant Trigger Force**: toggle off, left 0.00, right 0.00. Affects this card only.
+- **Reset Audio Trigger Rumble**: disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects this card only.
 
 ---
 
@@ -135,4 +135,4 @@ Every slider has its own reset button. Each card has a Reset All button.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

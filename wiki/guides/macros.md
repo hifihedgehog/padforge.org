@@ -234,11 +234,11 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Mouse** | Mouse Move, Mouse Button Press, Mouse Button Release, Toggle Mouse Button, Mouse Scroll, Mouse Wheel Tick, Nudge Cursor, Recenter Mouse, Fix Mouse Position, Limit Mouse Region, Move Mouse to Position |
 | **Timing & Flow** | Delay, Combo Break, Cycle Tap List |
 | **Rumble** | Rumble, Stop Rumble, Rumble Trigger Override, Stop Trigger Vibration, Adaptive Trigger Effect, Stop Adaptive Trigger Effect |
-| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Show Dreamcast Screen, Show Keyboard Screen, Keyboard Screen Mode, Stopwatch, Pan Keyboard Screen Picture |
+| **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Set Key Colors, Clear Key Colors, Show Dreamcast Screen, Show Keyboard Screen, Keyboard Screen Mode, Stopwatch, Pan Keyboard Screen Picture |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
-| **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay |
-| **System & Apps** | Run Program, Voice Listen (While Held), Disconnect Controller |
+| **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay, Toggle Screen Overlay |
+| **System & Apps** | Profile Shortcut, Run Program, Voice Listen (While Held), Disconnect Controller |
 
 ### Button Press / Button Release
 
@@ -317,6 +317,10 @@ A stick example: trigger the macro on the left stick's Y axis with **Half** and 
 ### Cycle Tap List
 
 Each fire performs the next tap in the **Steps** list and advances. With **Wrap** on, the list restarts after the last step. With it off, firing stops at the end. Imported Steam configs use it for their cycle bindings.
+
+### Profile Shortcut
+
+Does what a [profile shortcut](profiles.md) does. The **Profile Shortcut** list picks **Specific Profile**, **Next Profile**, **Previous Profile**, **Toggle Window** or **Toggle Virtual Controllers Disabled**. Specific Profile adds a box for the profile's name, matched without regard to case. A name no profile has does nothing. The action runs once and the macro moves on.
 
 ### Run Program
 
@@ -477,6 +481,7 @@ A toggle that fences the cursor inside an inset rectangle. Fire once to clamp, f
 
 - **Mode.** Which axes the clamp applies to.
 - **Inset X / Inset Y.** How far in from each screen edge the fence sits.
+- **Offset X / Offset Y.** How far the fence sits from the center of the screen, in pixels: right and down when positive, left and up when negative. Zero keeps it centered. Each is limited to half the primary monitor's width or height, and each has a reset button.
 
 These three pair with the **Mouse Position X / Y** mapping sources (see [Button and Axis Mappings](../features/mappings.md)). While a pin or clamp is active, PadForge writes the cursor every frame, so a game that also moves the cursor can fight it. The action editor notes this.
 
@@ -509,6 +514,24 @@ Paints one color for the action's **Duration** on the Razer mice, keyboards and 
 
 To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin. When macros on two virtual controllers paint the same kind of Razer device, the smaller player number wins.
 
+### Set Key Colors
+
+Lights keys in one color on the keyboards and other devices the macro's virtual controller lights. The colors lie over what that controller's **Lighting** tab gives the keys. A keyboard or mouse lights only while its **Control This Device’s Lighting** is on. The action runs once and the macro moves on while the colors play.
+
+| Field | Meaning |
+|---|---|
+| **Keys** | The keys to light. **Every Light** takes all of them. Otherwise pick from the keyboard picture, with the shortcut buttons **All Keys**, **Number Row**, **F Keys**, **Number Pad**, **Arrow Keys** and **WASD**, or turn on **Select by Pressing Keys** and press them. The numbers show the order picked. With no key picked the action lights nothing. |
+| **Style** | **Steady** holds the color whole. **Fade Out** dims it to off. **Countdown** turns the keys off one at a time, the last one picked first, so pick 1 to 0 for a cooldown on the number row. |
+| **Holds** | Steady only: **For a Set Time**, **While the Macro's Trigger Is Held** or **Until Cleared**. Fade Out and Countdown always run for a time. |
+| **Time** | Milliseconds, 1 to 600,000, 3000 by default. Shown when the action runs for a time. |
+| **Other Lights** | What the lights this action leaves out show while it runs: **Keep Their Colors**, **Off** or **One Color**. |
+
+With **Until Cleared** the colors stay until a **Clear Key Colors** action ends them.
+
+### Clear Key Colors
+
+Ends the Set Key Colors actions running on the virtual controller that light one of the keys picked here, or every one when none is picked (the list reads **Clear all key colors**).
+
 ### Show Dreamcast Screen
 
 Plays one to eight pictures on the VMU of each Dreamcast pad in a Bliss-Box port whose controller is assigned to the macro's slot, then returns each port to its own screen setting. The action fires once and the macro moves on while the pictures play.
@@ -527,16 +550,17 @@ Plays one to eight pictures on each keyboard screen of the chosen kind whose row
 
 | Field | Meaning |
 |---|---|
-| **Screen** | **Monochrome Screen**, **Color Screen**, **Arx Control** or **S.T.R.I.K.E. 7**. |
-| **Pictures** | Up to eight, added with **Add Picture…** from a PNG, JPEG, BMP or GIF. Each is fitted to the screen chosen when it is added, so choose the screen first. Click a picture to remove it. |
+| **Screen** | **Monochrome Screen**, **Color Screen**, **Arx Control**, **S.T.R.I.K.E. 7** or **Screen Overlay**. |
+| **Overlay** | Shown for the **Screen Overlay** kind. **Every Overlay** or one of **Screen Overlay 1** to **Screen Overlay 8**. |
+| **Pictures** | Up to eight, added with **Add Picture…** from a PNG, JPEG, BMP or GIF. Each is fitted to the screen chosen when it is added, so choose the screen first. A **Screen Overlay** keeps each picture's own shape, up to 800 pixels on its longer side. Click a picture to remove it. |
 | **Frame Time** | How long each picture shows, in ms. A tenth of a second at least. |
-| **Repeat Count** | How many times the set plays. |
+| **Repeat Count** | How many times the set plays. A count of 0 keeps playing until another Show Keyboard Screen or Keyboard Screen Mode macro. |
 
-It needs **Drive Keyboard Screens** on. See [Keyboard Screens](../features/keyboard-screens.md#macros).
+It needs **Drive Keyboard Screens** on. The screens of a kind are the ones whose row feeds this slot. A Screen Overlay takes the pictures from any slot. See [Keyboard Screens](../features/keyboard-screens.md#macros).
 
 ### Keyboard Screen Mode
 
-Switches each keyboard screen of the chosen kind whose row is in this slot to the mode under **Show**, and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it.
+Switches each keyboard screen of the chosen kind whose row is in this slot to the mode under **Show**, and keeps that mode as the screen's setting, as if it were picked in the screen's dialog. It stays until another macro or the dialog changes it. With the **Screen Overlay** kind, the **Overlay** list picks one overlay or **Every Overlay**.
 
 ### Stopwatch
 
@@ -544,7 +568,11 @@ Switches each keyboard screen of the chosen kind whose row is in this slot to th
 
 ### Pan Keyboard Screen Picture
 
-Moves each keyboard screen whose row is in this slot and that shows a chosen picture larger than itself across that picture, for a map. **Direction** is **Left**, **Right**, **Up** or **Down**, and **Step** is how far in pixels, 16 by default. The window stops at the picture's edges.
+Moves each keyboard screen whose row is in this slot and that shows a chosen picture larger than itself across that picture, for a map. **Direction** is **Left**, **Right**, **Up** or **Down**, and **Step** is how far in pixels, 16 by default. The window stops at the picture's edges. A Screen Overlay moves the same way when its zoom is above 100 percent, whichever slot runs the macro. Pick one with the **Overlay** list, or leave **Every Overlay**.
+
+### Toggle Screen Overlay
+
+Shows or hides a [Screen Overlay](../features/keyboard-screens.md). The **Overlay** list picks **Every Overlay** or one of **Screen Overlay 1** to **Screen Overlay 8**. It runs once and the macro moves on.
 
 ### Clear Lightbar Override
 
@@ -552,7 +580,7 @@ Drop any active macro lightbar override on the slot. The base mode and Input Rea
 
 ### Set Lightbar Mode
 
-Change the slot's base lightbar mode to a specific value (Static, Rainbow, Audio Pulse, etc.). Every Sony pad on the slot, and every mouse, keyboard or vendor row the slot lights, renders the new mode with its own palette and decay settings.
+Change the slot's base lightbar mode to a specific value (**Static Color**, **Rainbow Cycle**, **Screen Color** and so on). Every Sony pad on the slot, and every mouse, keyboard or vendor row the slot lights, renders the new mode with its own palette and decay settings.
 
 ### Cycle Lightbar Modes
 
@@ -699,8 +727,9 @@ Stick-to-mouse aiming (Always mode):
 | **Once** | Runs one time. |
 | **Fixed Count** | Runs N times in a row. |
 | **Until Release** | Loops while the trigger is held and stops on release. Unavailable with **On Short Press**. |
+| **Until Next Press** | Loops until the trigger is pressed again. The press that started the run does not count, and releasing it changes nothing. The press that ends the run does nothing else, and the macro cannot start again until the trigger is released. A closed layer also ends the run. |
 
-Fixed Count and Until Release both have a **Delay** in milliseconds between runs.
+Fixed Count, Until Release and Until Next Press all have a **Delay** in milliseconds between runs.
 
 In the Toggle and Turbo fire modes, the Repeat section hides. Those modes repeat until release on their own, and their pacing is the inline **Interval** field beside the fire mode. On Short Press keeps the section but disables **Until Release**, because the trigger is already released when the macro fires and an until-release loop can never run. **Fixed Count** still works there.
 
@@ -716,6 +745,10 @@ On by default. The trigger's inputs are stripped before the game sees them, so t
 |---|---|
 | On (default) | Macro output only. LB + RB are hidden. |
 | Off | The trigger buttons and the macro output, both. |
+
+A keyboard key or mouse button that alone triggers a macro is also eaten before Windows delivers it, when the device has **Consume Mapped Inputs (Hooks)** on and the macro keeps this option on. A trigger of several inputs is left alone, because the hook cannot tell a chord from its first key. A consumed key is eaten on every keyboard.
+
+On a macro with a **Layer**, the trigger key is eaten only while that layer is engaged.
 
 Consume works for virtual controller buttons, raw device buttons, and touchpad or gyro style inputs. Assigned Devices button entries are stripped at the source, before mapping. Axis-threshold, POV, and gesture entries are not consumed, and an Assigned Devices combo that includes an axis entry consumes nothing. Always and Custom Expression macros ignore the trigger entry list, so they never consume an Assigned Devices entry left over from another mode.
 
@@ -844,4 +877,4 @@ An Extended slot carries up to 128 buttons, set in its **Buttons** field with **
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

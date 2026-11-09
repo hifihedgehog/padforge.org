@@ -36,6 +36,8 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 3. Pick a layout
 
+The landing page has a **Your name** field above the cards. A name typed there stays in that browser. The gamepad layouts, **Browser Gamepad** and your own pads send it, so a streamer with several phones connected can tell them apart on the Devices page. It holds up to 24 characters.
+
 PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, **Touchpad**, **Web Menus**, and **Build Your Own**. Each saved custom layout adds its own card.
 
 - The touchscreen gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
@@ -46,7 +48,7 @@ PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, 
 ### 4. Assign the controller to a slot
 
 1. The browser controller shows up on the [Devices](../features/devices.md) page named for the layout you picked: **Xbox 360 Web Controller 1**, **DualShock 4 Web Controller 1**, **Web Touchpad 1**, or **Web Menus 1** (each layout numbers its own devices starting at 1).
-2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller.
+2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller. A phone that sent a name shows it after a colon, as in **Xbox 360 Web Controller: Sam**.
 3. Done. Start playing.
 
 With [Remote Link](remote-link.md#4-share-and-assign), the web controller also appears on paired PCs. Assign it to a slot on the PC running the game. [Remote assignment](remote-link.md#assign-devices-from-the-other-pc) lets a streaming PC change those assignments after the gaming PC grants permission. A Web Menus phone is not shared, since its taps fire the menus of the PC it connects to.
@@ -100,7 +102,7 @@ Switch layouts at any time by going back to the landing page.
 
 ### Finishes
 
-Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
+Xbox 360, Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. The Xbox 360 row has the default and **WLG**. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
 
 ### Lights, on the page
 
@@ -258,6 +260,12 @@ The code is stored in `PadForge.xml` encrypted for this PC, so a copy of the fil
 
 **This PC Only** admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at `http://localhost:8081`. Share the tunnel's public address with `/?code=` and the access code on the end. The card shows the local address with the code, and no QR code, since a phone cannot open `localhost`.
 
+### The controller picture for OBS
+
+The plain address also serves a read-only page that draws a slot's controller, lit from its live output, on a transparent background. It is meant for an OBS browser source, so viewers of a stream can watch the controller that [Twitch Chat](../features/twitch-chat.md) is pressing. The [Twitch Chat](../features/dashboard.md#twitch-chat) card on the Dashboard shows its address once the plain address runs, as `/display.html?code=` and the access code. Use that address, not the main one. OBS's browser source refuses the main address because its certificate is self-signed. **This PC Only** is enough when OBS runs on this PC.
+
+The page sends nothing and takes no client slot. Up to four open at once. See [The controller picture for OBS](../features/twitch-chat.md#the-controller-picture-for-obs).
+
 ### What plain HTTP gives up
 
 Browsers expose the motion sensors only over HTTPS, so a layout opened on the plain address on a touch device shows **Motion needs HTTPS**, or **Motion: open over HTTPS** when PadForge also serves HTTPS. A tunnel or proxy that serves HTTPS makes the page secure again, so motion works there as long as the browser offers the sensors and the proxy carries the controller's connection as well as the page.
@@ -323,10 +331,11 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 - [Dashboard](../features/dashboard.md): turn on and configure the web controller server.
 - [Devices](../features/devices.md): see the web controller card and assign it to a slot.
+- [Twitch Chat](../features/twitch-chat.md): the controller picture for an OBS browser source.
 - [Controller Slots](../features/controller-slots.md): create a virtual controller for the web controller to feed.
 - [Troubleshooting](../troubleshooting.md): help with connection issues.
 - [3D and 2D Visualization](../features/visualization.md): the same controller art powers both the web controller and the desktop 2D view.
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

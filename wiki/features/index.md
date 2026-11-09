@@ -16,7 +16,7 @@ touch.
 | [Virtual Controllers](virtual-controllers.md) | What games see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR |
 | [Settings](settings.md) | Application-wide options |
 | [Updates](updates.md) | The Updates card on the **Settings** page: automatic checks, one-click installs, and pre-releases |
-| [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, **Install** and **Uninstall** for HidHide, SteamVR and the Windows MIDI Services runtime, and the MIDI API in use |
+| [Driver Management](driver-management.md) | The driver cards on the **Settings** page: HIDMaestro status and version, **Install** and **Uninstall** for HidHide, SteamVR and the Windows MIDI Services runtime, and the MIDI API in use. Also **Use Only in PadForge**, which takes a USB keyboard, a USB mouse or a precision touchpad away from Windows |
 
 ## The Pad page, tab by tab
 
@@ -32,7 +32,8 @@ when that device has the matching hardware.
 | [Preview](visualization.md) | The live 2D and 3D controller view |
 | [Mappings](mappings.md) | The mapping grid: sources, targets, combine modes, per-source options |
 | [Macros](../guides/macros.md) | Action sequences fired by combos, sticks, or every frame |
-| [Menus](../guides/menus.md) | On-screen ring and grid menus driven by a stick or touchpad |
+| [Menus](../guides/menus.md) | On-screen ring, grid and hotbar menus driven by a stick or touchpad |
+| [On-Screen Keyboard](on-screen-keyboard.md) | A menu style that types into any Windows program from a controller: a grid, two split halves or a daisy wheel, opened by any input you pick |
 | [Bass Shakers](bass-shakers.md) | Game rumble and force feedback routed to an audio output as low-frequency tones for bass shakers and subwoofers. Shown on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback |
 | Output | SOCD cleaning and Keep Controller Awake, the two cards that shape the slot's output right before it reaches the game. Hidden on MIDI and VR slots. SOCD is documented on [Mappings](mappings.md) |
 
@@ -46,7 +47,8 @@ when that device has the matching hardware.
 | [Wheel](wheel.md) | Rotation range, auto-center, and shift LEDs on native force feedback wheels |
 | [Impulse Triggers](impulse-triggers.md) | Xbox One and Series trigger motors |
 | [Adaptive Triggers](adaptive-triggers.md) | DualSense trigger effects |
-| [Lighting](lighting.md) | Light bars, LED rings, player lamps |
+| [Lighting](lighting.md) | Light bars, LED rings, player lamps, and per-key colors on keyboards |
+| [Screen Color](screen-color.md) | A lighting mode that follows the colors on your screen: one color for a lightbar, or the screen spread across a keyboard's keys |
 | [Gyro](../guides/gyro.md) | Motion-sensor mapping: calibration, sensitivity, smoothing, engage gates |
 | [Touchpad](touchpad.md) | Gestures, pointer, per-pad mouse feel |
 | [Audio](controller-audio.md) | Controller speakers and headset routing |
@@ -65,6 +67,8 @@ when that device has the matching hardware.
 | [Analog Keyboards](analog-keyboards.md) | How far every key is pressed on analog and Hall effect keyboards, as mapping sources |
 | [Bliss-Box Adapters](bliss-box.md) | Retro controllers in Bliss-Box ports: their button names, DualShock 2 pressure, rumble, the Dreamcast screen and N64 Controller Pak saves |
 | [Keyboard Screens](keyboard-screens.md) | The screens on Logitech GamePanel keyboards, the Mad Catz S.T.R.I.K.E. 7 and Logitech Arx Control, and the keys beside them as buttons |
+| [Screen Overlay](screen-overlay.md) | A picture, a timer, the time or a lightbar's color shown above other windows on any PC, set from a Dashboard card |
+| [Twitch Chat](twitch-chat.md) | The people watching your stream play a slot by typing commands in chat, with the controller shown on stream |
 | [Novint Falcon](novint-falcon.md) | The Falcon's handle as a stick, its grip buttons, and a game's rumble and force feedback as force on the handle |
 | [Game Mods](game-mods.md) | Adaptive triggers, lightbar, player lights and mute light set by game mods made for DSX |
 | [Game Telemetry](game-telemetry.md) | The speed, RPM, gear and pedals driving games send, as a device row, macro triggers and adaptive trigger effects |
@@ -73,6 +77,6 @@ when that device has the matching hardware.
 | [VR Controller Input](vr-controller-input.md) | The headset's pose and both hand controllers read as mapping sources through OpenXR |
 | [Headset Head Tracking](headset-motion.md) | Head rotation from a Sony headset as a motion source |
 | [Head Tracking (OpenTrack)](head-tracking.md) | A head pose from OpenTrack or FreeTrack as six mappable axes |
-| [Mice, Keyboards and Vendor Rows](peripherals.md) | Lighting and rumble for the mice and keyboards assigned to a virtual controller, and the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows |
+| [Mice, Keyboards and Vendor Rows](peripherals.md) | Lighting and rumble for the mice and keyboards assigned to a virtual controller, and the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG, Razer Sensa, ASUS Aura, MSI Mystic Light and Corsair iCUE rows |
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

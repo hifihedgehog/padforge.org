@@ -103,7 +103,8 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 - The steering mode is per stick. Both sticks can run different modes at once, and each keeps its own winding state.
 - Switching profiles clears a stick's winding state. Setting a stick back to Off makes it a normal stick again.
 - The mode and its tunables save with the profile.
+- A DS4Windows profile with a steering wheel emulation axis imports as a Motion Lean row on that axis, with the inner deadzone at 0 and the outer deadzone set from the profile's range. See [Import from reWASD and DS4Windows](profile-import.md).
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

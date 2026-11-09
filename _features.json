@@ -8,6 +8,10 @@
     "d": "Browse the community controller configs on the Steam Workshop and translate the one you pick into a PadForge profile: buttons, sticks, triggers, keyboard and mouse bindings, shift layers, and macros. Anonymous Steam connection, no account. An import report shows what came across clean and what was approximated. Off until you enable it in Settings."
   },
   {
+    "t": "reWASD and DS4Windows import",
+    "d": "Open a reWASD config or a DS4Windows profile and every binding is listed first, Clean, Partial or Skipped with its reason, then imported as an ordinary PadForge profile. Shift layers, multi-press macros, turbo, toggles, radial menus, gyro and touchpad modes, lightbar colors and adaptive trigger effects come across. Programs a profile would run are named before you accept it."
+  },
+  {
     "t": "Native wheel force feedback",
     "d": "Logitech, Fanatec, and Thrustmaster wheels driven in their own native protocols: constant force plus spring, damper, inertia, and friction. A Wheel tab for rotation range, auto-center, and RPM shift LEDs."
   },
@@ -52,6 +56,10 @@
     "d": "Browser-based gamepad over Wi-Fi. Ten controller layouts, a multi-touch touchpad, and a builder for your own. Up to 16 phones on one PC at once. Vibration API rumble back to each phone. No app install."
   },
   {
+    "t": "Twitch chat plays",
+    "d": "Viewers type ! commands in your stream's chat, and each word is a button on a Twitch Chat row, mapped like any controller. Holds, chords and sequences in one message, turns taken with !claim and approved by viewers or moderators, and the controller drawn on stream as an OBS browser source."
+  },
+  {
     "t": "On-screen touchpad overlay",
     "d": "Pin a transparent touchpad window to any monitor and use it as a touchpad input for the assigned DS4 or DualSense slot. Adjustable opacity, size, and position. No phone required."
   },
@@ -81,7 +89,11 @@
   },
   {
     "t": "Adaptive triggers and lightbar",
-    "d": "Seven DualSense trigger modes plus a one-click GameCube preset. Fourteen lightbar modes including audio-pulse, audio-band, Strobe, and Battery."
+    "d": "Seven DualSense trigger modes plus a one-click GameCube preset. Fifteen lightbar modes including audio-pulse, audio-band, Strobe, Battery and Screen Color."
+  },
+  {
+    "t": "Screen Color lighting",
+    "d": "A lighting mode that follows one display: the whole screen or an area of it, as its most common or its average color. A keyboard or mouse whose lights are known one by one spreads the screen across them. HDR displays read against Windows' SDR white level."
   },
   {
     "t": "Impulse triggers",
@@ -90,6 +102,14 @@
   {
     "t": "Macros with action sequences",
     "d": "Combo triggers and Custom Expression formulas. Key presses, mouse, scroll, volume, lightbar, rumble, and axis actions that latch, release, and scale. Twelve fire modes, from On Press through Double, Triple, Long, and Short Press to Toggle and Turbo, plus a per-macro shift-layer scope. Cursor actions to recenter the mouse, pin it at a point, or fence it inside a rectangle. Duplicate a macro in place, copy and paste between virtual controllers, or pull every macro from another in one step."
+  },
+  {
+    "t": "On-screen keyboard",
+    "d": "A menu style that types into any Windows program from a controller, in the focused window's keyboard layout: a grid, two split halves or a daisy wheel, opened by any input or when a text box takes focus. Word suggestions from Windows' text prediction, and keys that can type through a virtual hardware keyboard."
+  },
+  {
+    "t": "Hotbar menus",
+    "d": "Steam Input's hotbar as a menu style: one row of cells run by Show or Hide, Previous, Next and Fire, each on any button, with Steam's fire modes and its Wrap Around, Hide After Firing and Re-Center Each Time switches."
   },
   {
     "t": "Per-app profiles",
@@ -110,6 +130,10 @@
   {
     "t": "Hide physical controllers",
     "d": "HidHide driver-level cloak. Per-device toggles auto-enable for gamepads. Keep Devices Cloaked Between Launches carries the cloak across launches."
+  },
+  {
+    "t": "A keyboard or mouse for PadForge alone",
+    "d": "Use Only in PadForge moves a USB keyboard or mouse to WinUSB, so Windows stops using it and its keys and buttons reach only your mappings and macros. A precision touchpad does the same through HidHide while PadForge runs. A 15-second Keep prompt and a one-click restore give it back."
   },
   {
     "t": "Wii controllers",
@@ -185,7 +209,7 @@
   },
   {
     "t": "Rumble and lighting in mice and keyboards",
-    "d": "A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights Logitech, Razer and SteelSeries devices directly while their software is closed, and through Synapse, G HUB or GG while it runs."
+    "d": "A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights 1,563 RGB devices over USB by itself, key by key where their lights are known one by one, with per-layer Key Colors, Set Key Colors macros and Map Key Lights. While Synapse, G HUB or GG runs, that maker's devices light through it, and the ASUS Aura, MSI Mystic Light and Corsair iCUE rows light through those makers' SDKs."
   },
   {
     "t": "109 languages",
@@ -214,5 +238,9 @@
   {
     "t": "Keyboard screens",
     "d": "The screens on Logitech's GamePanel devices, among them the G15, G19, G510 and G13, on the Mad Catz S.T.R.I.K.E. 7 and on a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color, and the keys beside each screen map as buttons. Macros play pictures, switch modes and run the stopwatch. Not yet run on a screen."
+  },
+  {
+    "t": "Screen Overlay",
+    "d": "A picture, a timer, the time or a lightbar's color in a window above your game, set from a Dashboard card, with no keyboard screen needed. Clicks pass through it while another program is in front, and the keyboard screen macros drive it."
   }
 ]

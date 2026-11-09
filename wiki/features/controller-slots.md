@@ -63,7 +63,7 @@ The Add Controller card disappears when all 16 slots are in use.
 
 ## Pick a type
 
-Pick the type when you create the slot. You can also switch an existing slot's type by clicking the type icons on its [Dashboard](dashboard.md) card.
+Pick the type when you create the slot. You can also switch an existing slot's type from the type chip on its card. See [Slot cards](#slot-cards).
 
 ### Xbox
 
@@ -188,6 +188,25 @@ Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drive
 The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Controllers](vr-controllers.md).
 
 > **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs a MIDI API that starts (Windows MIDI Services or the legacy MIDI API), and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
+
+---
+
+## Slot cards
+
+A slot shows as a card on the [Dashboard](dashboard.md) and as an entry in the sidebar. Each card carries the slot's type chip, its number among slots of that type, and its Preset name.
+
+| Card | Layout |
+|---|---|
+| Sidebar | Power flame, slot number, type chip, `#N`, Preset name, then the delete **X**, which shows while the pointer is on the card |
+| Dashboard | A title row with the power flame and the slot number. Under it, the type chip, `#N` and the Preset name. |
+
+- **Type chip.** The icon of the slot's type. On the Dashboard card it is ember while the slot has devices mapped and steel while it has none. Click it and the type bar that Add Controller uses opens under the card, with the slot's current type lit. Click another type to change the slot. Clicking the current type changes nothing. MIDI and VR carry the same requirements as when you add them.
+- **`#N`.** The slot's number among the slots of its type. The second Xbox slot reads `#2`.
+- **Preset name.** On Xbox, PlayStation, Nintendo and Extended slots, the name of the slot's HIDMaestro profile, such as the DualSense. On a Keyboard+Mouse slot, the name of the input mode the slot's bar picks. On MIDI and VR slots, the type's name, since they have no Preset. A long name is cut at rest, scrolls to its end while the pointer is on the card, and shows whole in its tooltip.
+
+A click on the rest of the card opens the slot's page.
+
+A type change re-runs auto-mapping for the slot's devices, moves the slot to the end of its type group, resets the Preset to the new type's default and returns the stick and trigger dead zone settings to their defaults. A Preset is not remembered per type. A [profile](../guides/profiles.md) keeps one.
 
 ---
 
@@ -388,4 +407,4 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

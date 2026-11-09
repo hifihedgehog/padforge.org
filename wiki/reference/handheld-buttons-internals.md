@@ -75,6 +75,8 @@ The registry stamps `MachineKey` when the first button is learned. Definitions s
 
 `Register` assigns the lowest free button index (from 0, there is no "any" button on this row) unless the entry already carries a free one, which is how import keeps indices. `Remove` never renumbers survivors. `LoadRegistry` honors stored indices and reassigns collisions. Names are deduplicated with ` (2)`, ` (3)` suffixes.
 
+`Remove` raises `ButtonFreed` with the removed entry's index, outside the registry lock and before `RegistryChanged`, because the next learned entry takes the lowest free index. `InputService.OnHandheldButtonFreed` queues `FreedButtonCleanup.ForHandheldButton` on the dispatcher, which clears every mapping that names that `Button N` on a Hidden Buttons row, so the next entry does not inherit what was mapped to the old one. The voice phrase, NFC tag and Twitch chat word registries raise the same event.
+
 Persistence is `AppSettingsData.HandheldButtons`, an array of `HandheldButtonData` with every field as an XML attribute (`Keys` is comma-joined), plus `HandheldMachineKey` and `HandheldButtonsEnabled`. The registry loads before the toggle. The export file is the same DTO under `{"padforgeHandheldButtons": 1, "machine": "...", "buttons": [...]}`.
 
 Two flags on the registry drive the hooks: `FeatureEnabled` (the Settings toggle) and `LearnCaptureActive` (the dialog is open). Either flipping raises `ActivityChanged`, which sends `InputService.ApplyDeviceHiding` back through `ApplyInputHooks`, where `HandheldChordRuntime.NeedsHooks` is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.
@@ -98,7 +100,7 @@ Two flags on the registry drive the hooks: `FeatureEnabled` (the Settings toggle
 | Capture mode swallows everything and reports the set of codes pressed once all are released. An up whose down it never saw passes (the Enter that clicked Start). Idle capture ends empty. | `CaptureIdleTimeoutMs` = 10000 |
 | `SetChords` releases a button whose definition vanished or changed, with the event. `Reset` (hooks detached) releases everything and forgets held prefixes. | |
 
-Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. `HandheldChordRuntime`'s worker handles only timed work, ticking every 10 ms while `HasPendingWork` (hold expiry, capture idle). Every injected event carries `ReplayTag` = `0x50464843` ("PFHC") in `dwExtraInfo`, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying `LLKHF_INJECTED` or `LLMHF_INJECTED` bypass the engine too.
+Injection happens in two places. Event-driven replays and the mask key are injected inside the hook callback, before it returns, so a replayed prefix precedes the foreign key that ended it and the mask lands while Win is still physically down. `HandheldChordRuntime`'s worker handles only timed work, ticking every 10 ms while `HasPendingWork` (hold expiry, capture idle). Every injected event carries `ReplayTag` = `0x50464843` ("PFHC") in `dwExtraInfo`, AutoHotkey's KEY_IGNORE technique, and re-enters the hook without reaching the engine. Events from other software carrying `LLKHF_INJECTED` or `LLMHF_INJECTED` bypass the engine too. A key's down and up are decided as a pair by the hooks' consume logic (`_passedKeyDown`, `_passedMouseDown`): an up goes the way its down went, so a chord prefix that replayed to Windows never has its up swallowed after the suppression set changed. See [Input Pipeline](input-pipeline.md#layer-gated-hook-inputs).
 
 A held key replays as the physical key the hook saw. The engine keeps each held event's identity, its scan code with 0x100 for `LLKHF_EXTENDED` (`InputHookManager.ReplayIdentity`, AutoHotkey's form in `hook.cpp` lines 196-214), every queued replay carries it, and `InjectReplay` types that scan code with that flag. Numpad Enter and Enter share VK_RETURN, and a held Numpad Enter used to replay as Enter. A mouse replay and the Win mask carry none.
 
@@ -240,4 +242,4 @@ The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -657,6 +657,8 @@
       
         
       
+        
+      
     
     
     
@@ -726,6 +728,34 @@
     
   
     Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
   
 
     
@@ -893,7 +923,7 @@
   <span class="md-ellipsis">
     
   
-    Radial and Grid Menus
+    Menus
   
 
     
@@ -1065,6 +1095,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -1340,6 +1378,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/stick-deadzones/" class="md-nav__link">
         
   
@@ -1516,6 +1582,34 @@
     
   
     Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
   
 
     
@@ -1852,6 +1946,62 @@
     
   
     Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
   
 
     
@@ -2499,6 +2649,14 @@
       
         
           
+        
+      
+        
+      
+        
+      
+        
+      
         
       
         
@@ -4372,6 +4530,118 @@
     
   
     Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../on-screen-keyboard-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
   
 
     
@@ -8715,7 +8985,7 @@
 <tr>
 <td><code>&lt;Menu&gt;</code></td>
 <td><code>List&lt;MenuDefinitionEntry&gt;</code></td>
-<td>(v4.1, #9) Radial / touch menus authored for or imported onto this slot (<code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code>). Every scalar field serializes as an <code>[XmlAttribute]</code>: per-entry <code>DeviceGuid</code> (<code>""</code> = any device on the slot, the Workshop-import form), <code>MenuId</code> (default 1), <code>Name</code>, <code>Kind</code> (<code>Radial</code> / <code>Grid</code>), <code>HostDescriptor</code> (an abstract stick, default <code>"Gamepad RightStick"</code>, or <code>"Touchpad N"</code>), <code>HostHalf</code>, the custom host pair <code>CustomXDescriptor</code> / <code>CustomYDescriptor</code>, <code>ClickDescriptor</code>, <code>LayerMask</code>, <code>FireType</code> (default <code>Click</code>), <code>CellCount</code> (default 4), <code>HasCenter</code>, <code>ShowLabels</code> (default true), the overlay geometry (<code>PosXPercent</code> / <code>PosYPercent</code> default 50, <code>ScalePercent</code> default 100, <code>OpacityPercent</code> default 90), <code>EngageDeadzonePercent</code> (default 25), <code>SensitivityPercent</code> (default 100), <code>Enabled</code> (default true), <code>LayerHoldsOpen</code> (#413, default false: when <code>LayerMask</code> names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover), <code>ShowOnWebController</code> (#471, default false: a Touch Grid menu shows as a page on Web Menus phones assigned to the slot). Cells serialize as <code>&lt;Item&gt;</code> child elements (<code>MenuItemDefinition</code>: <code>Index</code>, <code>Label</code>, <code>Icon</code>, <code>MacroName</code>, and the optional direct bindings <code>VirtualKey</code> / <code>XboxButtons</code> / <code>ExtendedButton</code>, all attributes). <code>MacroName</code> (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. <code>Icon</code> is an emoji (#471, one text element, drawn as text), or resolves in order as a <code>pficon://Package/entry</code> icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor <code>"Menu {MenuId} Item {k}"</code>. Empty list = no menus.</td>
+<td>(v4.1, #9) Radial, touch, keyboard and hotbar menus authored for or imported onto this slot (<code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code>). Every scalar field serializes as an <code>[XmlAttribute]</code>: per-entry <code>DeviceGuid</code> (<code>""</code> = any device on the slot, the Workshop-import form), <code>MenuId</code> (default 1), <code>Name</code>, <code>Kind</code> (<code>Radial</code> / <code>Grid</code> / <code>Keyboard</code> / <code>Hotbar</code>, saved by name, the 5.3.0 two appended), <code>HostDescriptor</code> (an abstract stick, default <code>"Gamepad RightStick"</code>, <code>"Gamepad DPad"</code>, <code>"Gamepad Diamond"</code> for the face buttons, <code>"Touchpad N"</code>, or <code>"Custom"</code>), <code>HostHalf</code>, the custom host pair <code>CustomXDescriptor</code> / <code>CustomYDescriptor</code>, <code>ClickDescriptor</code>, <code>LayerMask</code>, <code>FireType</code> (default <code>Click</code>), <code>CellCount</code> (default 4), <code>HasCenter</code>, <code>ShowLabels</code> (default true), the overlay geometry (<code>PosXPercent</code> / <code>PosYPercent</code> default 50, <code>ScalePercent</code> default 100, <code>OpacityPercent</code> default 90), <code>EngageDeadzonePercent</code> (default 25), <code>SensitivityPercent</code> (default 100), <code>Enabled</code> (default true), <code>LayerHoldsOpen</code> (#413, default false: when <code>LayerMask</code> names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover), <code>ShowOnWebController</code> (#471, default false: a Touch Grid menu shows as a page on Web Menus phones assigned to the slot). Cells serialize as <code>&lt;Item&gt;</code> child elements (<code>MenuItemDefinition</code>: <code>Index</code>, <code>Label</code>, <code>Icon</code>, <code>MacroName</code>, and the optional direct bindings <code>VirtualKey</code> / <code>XboxButtons</code> / <code>ExtendedButton</code>, all attributes). <code>MacroName</code> (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. <code>Icon</code> is an emoji (#471, one text element, drawn as text), or resolves in order as a <code>pficon://Package/entry</code> icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor <code>"Menu {MenuId} Item {k}"</code>. (5.3.0, #566) A <code>Keyboard</code> menu, the <a href="../on-screen-keyboard-internals/">On-Screen Keyboard</a>, adds <code>KeyboardLayout</code> (<code>Grid</code> / <code>Split</code> / <code>Wheel</code>, default <code>Grid</code>), <code>OpenDescriptor</code> (Opens With, default <code>""</code>: no input opens it), <code>OpenOnTextFocus</code> (default false), <code>FunctionRow</code> (default false) and <code>Suggestions</code> (default true), written on every keyboard menu, and these only when set: <code>OpenDeviceGuid</code>, <code>OpenAndDescriptor</code> and <code>OpenAndDeviceGuid</code> (a second input held with Opens With), <code>OpenThreshold</code> (the press point in percent, 0 = 50), <code>OpenPress</code> (<code>Hold</code>, <code>DoublePress</code>, <code>Release</code>, <code>WhileHeld</code>, <code>ShortPress</code>, <code>TriplePress</code> or <code>SinglePress</code>, absent = <code>Press</code>), <code>OpenPressMs</code> (0 = the press's default, 500 or 442), <code>TypesThrough</code> (absent = Windows Input, <code>"slot:N"</code> the Keyboard + Mouse slot at pad index N, else a HIDMaestro keyboard profile id) and <code>Symbols</code> (absent = the default set). Controls that differ from their layout's default serialize as <code>&lt;KeyboardControl&gt;</code> child elements (<code>KeyboardControlEntry</code>): <code>Layout</code>, <code>Action</code> (a <code>KeyboardControlAction</code> name) and <code>Descriptor</code> always, an empty <code>Descriptor</code> for a cleared control, and <code>DeviceGuid</code>, <code>AndDescriptor</code>, <code>AndDeviceGuid</code> and <code>Threshold</code> only when set. An untouched keyboard writes no <code>&lt;KeyboardControl&gt;</code>. (5.3.0) A <code>Hotbar</code> menu adds seven attributes: <code>HotbarWrap</code> (default false), <code>HotbarDismissOnFire</code> (default true) and <code>HotbarRecenter</code> (default true), written on every hotbar, and <code>HotbarShowDescriptor</code>, <code>HotbarPreviousDescriptor</code>, <code>HotbarNextDescriptor</code> and <code>HotbarFireDescriptor</code> only when set (absent = the host's direction). None of the keyboard or hotbar members is written on a menu of another <code>Kind</code>, so a radial or grid menu saves as it did before 5.3.0. Empty list = no menus.</td>
 </tr>
 </tbody>
 </table>
@@ -12532,7 +12802,7 @@
 <li><a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>: The vendor rows and the outputs <code>UserDevice.PeripheralOutputs</code> records</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.2.0.</em></p>
+<p><em>Last updated for PadForge 5.3.0.</em></p>
 
 
 

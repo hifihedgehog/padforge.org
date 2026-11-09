@@ -38,7 +38,7 @@ Add an Xbox controller on the [Dashboard](features/dashboard.md), then on the [D
 
 ### Can PadForge import my DS4Windows, reWASD or SimHub setup?
 
-No. PadForge imports its own profile packages and translates supported Steam community layouts, but it reads no DS4Windows, reWASD or SimHub file. Rebuild the setup in PadForge one game at a time, and keep the old tool until the new setup does everything the game needs. More: [Switching from Another Tool](guides/switching.md).
+DS4Windows and reWASD, yes. Click **Import…** on the Profiles page, or drop the file on the profile list, and pick a reWASD `.rewasd` config or a DS4Windows profile `.xml`. A preview marks every binding **Clean**, **Partial** or **Skipped** with its reason, and **Import** adds it as a new profile without loading it. SimHub files are not read. Keep the old tool until the imported profile does everything the game needs. More: [Import from reWASD and DS4Windows](guides/profile-import.md) and [Switching from Another Tool](guides/switching.md).
 
 ### I hid my controller, but the game sees no controller at all. What should I check?
 
@@ -334,4 +334,4 @@ A recognized phrase is a 175 ms press, not a held key. To make a phrase change s
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

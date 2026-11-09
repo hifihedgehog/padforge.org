@@ -18,6 +18,7 @@ _specs_block.html has no hand-authored content and can be taken as written.
 import io, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from emit_supported import fam, mapped, CAT, N, FAM_ORDER, lines, SITE
+from emit_lit import LIT_NAMES, vendor as lit_vendor
 
 # The count of HIDMaestro profiles PadForge's pickers offer: the ones that
 # carry a captured HID descriptor (HMaestroProfileCatalog keeps only
@@ -42,7 +43,12 @@ HN.update(
     offered=OFFERED_PROFILES,
     ow=word(N["overlap_wheels"]),
     og=word(N["overlap_gamecube"]),
+    lit_all_fmt="{:,}".format(N["lit_all"]),
+    lit_over=word(N["lit_all"] - N["lit"]),
+    lit_names_fmt="{:,}".format(len(LIT_NAMES)),
 )
+if N["lit_all"] == N["lit"]:
+    raise SystemExit("no lit device is a controller counted above now: reword HEADLINE")
 # The headline says every arcade stick sits in the gamepad list and nothing
 # else does. A rebase that changes either needs the sentence rewritten.
 if N["overlap_arcade"] != N["arcade"]:
@@ -55,9 +61,12 @@ HEADLINE = (
     "{flydigi} Flydigi pads, {claimed} pads and specialty devices that SDL's dedicated drivers "
     "claim, {wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} "
     "arcade sticks, {gamecube} GameCube adapters, {native} devices PadForge's own code "
-    "claims, and the PS VR Aim Controller, which PadForge's own mapping file names. The arcade "
-    "sticks, {ow} wheels and {og} adapters also sit in the gamepad list, so the total is smaller "
-    "than the sum. Behind those sit **{mapped_all}** named gamepad mappings: {mapped_sdl} from "
+    "claims, the PS VR Aim Controller, which PadForge's own mapping file names, and "
+    "{lit_all_fmt} RGB keyboards, mice, headsets and other devices PadForge lights itself, "
+    "[listed below](#rgb-keyboards-mice-and-other-lit-devices). The arcade sticks, {ow} wheels "
+    "and {og} adapters also sit in the gamepad list, and {lit_over} of the lit devices are "
+    "controllers counted above, so the total is smaller than the sum. Behind those sit "
+    "**{mapped_all}** named gamepad mappings: {mapped_sdl} from "
     "SDL's Windows database, {mapped_community} more from the community database, and "
     "PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For "
     "virtual controllers, HIDMaestro ships {profiles} device profiles. PadForge's controller "
@@ -121,11 +130,27 @@ def vendor_table(names):
     return rows
 
 
+def lit_groups(names):
+    """The lit devices by vendor, emit_lit's rule, largest vendor first."""
+    g = {}
+    for n in names:
+        g.setdefault(lit_vendor(n), []).append(n)
+    return sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
+                  key=lambda kv: (-len(kv[1]), kv[0].lower()))
+
+
+def lit_table(names):
+    rows = ["| Vendor | Devices |", "| --- | --- |"]
+    for v, ns in lit_groups(names):
+        rows.append("| **" + v + "** | " + ", ".join(md_escape(n) for n in ns) + " |")
+    return rows
+
+
 def md():
     L = [
         "# Supported Devices",
         "",
-        "*Every controller, wheel, stick and adapter PadForge knows by name, in one place.*",
+        "*Every controller, wheel, stick, adapter and lit device PadForge knows by name, in one place.*",
         "",
         HEADLINE.format(**HN),
         "",
@@ -151,7 +176,9 @@ def md():
         "### With a shipped mapping ({0})".format(len(mapped)),
         "",
         "Pads carrying a mapping in the database, so their buttons and axes land in the right places",
-        "the moment they are plugged in.",
+        "the moment they are plugged in. SDL's database holds {0} names in its Windows section, the".format(N["mapped_sdl"]),
+        "community SDL_GameControllerDB that PadForge's SDL3 build adds holds {0} more, and PadForge".format(N["mapped_community"]),
+        "adds {0} of its own, for the DualShock 3 under DsHidMini and the PS VR Aim Controller.".format(word(N["mapped_padforge"])),
         "",
     ] + vendor_table(mapped) + [
         "",
@@ -165,6 +192,10 @@ def md():
         "[Force Feedback](../features/force-feedback.md).",
         "",
     ] + vendor_table(CAT["wheels"]) + [
+        "",
+        "**MOZA, both generations.** Each MOZA base has two USB product IDs, one per hardware revision.",
+        "PadForge's SDL fork carries the second-generation IDs (R3 0015, R5 0014, R9 0012, R12 0016, R16/R21 0010,",
+        "under vendor 346E) alongside the originals, so a newer base is typed as a wheel and gets the Wheel tab.",
         "",
         "**Pedals.** Fanatec ClubSport V3, CSL Elite, CSL Loadcell and CSL Loadcell V2, each with its",
         "own rumble output. Pedal sets that enumerate separately are read as their own device, so they",
@@ -196,6 +227,17 @@ def md():
         "## GameCube adapters ({0})".format(len(CAT["gamecube"])),
         "",
     ] + vendor_table(CAT["gamecube"]) + [
+        "",
+        "---",
+        "",
+        "## RGB keyboards, mice and other lit devices ({0}) {{ #rgb-keyboards-mice-and-other-lit-devices }}".format(HN["lit_names_fmt"]),
+        "",
+        "PadForge lights these itself, over USB, with no maker's program needed: a color or an",
+        "effect, Screen Color, and key by key where the device's lights are known one by one. Each",
+        "takes the name its lighting family's own table gives it. {0} USB identities stand behind".format(HN["lit_all_fmt"]),
+        "the names, since a model often has more than one. See [Lighting](../features/lighting.md).",
+        "",
+    ] + lit_table(LIT_NAMES) + [
         "",
         "---",
         "",
@@ -267,7 +309,8 @@ def html():
          'SDL\'s controller list, {community} more pads the community SDL_GameControllerDB maps, '
          '{flydigi} Flydigi pads, {claimed} pads and specialty devices SDL\'s dedicated drivers claim, '
          '{wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} arcade '
-         'sticks, {gamecube} GameCube adapters and {native} devices PadForge\'s own code claims, with '
+         'sticks, {gamecube} GameCube adapters, {native} devices PadForge\'s own code claims and '
+         '{lit_all_fmt} RGB keyboards, mice, headsets and other devices PadForge lights itself, with '
          '<b>{mapped_all}</b> named gamepad mappings and {profiles} device profiles behind them. '
          'Anything not named here still works as a generic input device, so this is where the '
          'names, the correct layout and the extra capabilities come from rather than the limit of '
@@ -287,6 +330,9 @@ def html():
     h.append(row('Throttles' + dim(len(CAT['throttles'])), vendor_html(CAT['throttles'])))
     h.append(row('Arcade sticks' + dim(len(CAT['arcade'])), vendor_html(CAT['arcade'])))
     h.append(row('GameCube adapters' + dim(len(CAT['gamecube'])), vendor_html(CAT['gamecube'])))
+    h.append(row('RGB keyboards, mice and other lit devices' + dim(len(LIT_NAMES)),
+                 '<span class="vgrp">' + '</span><span class="vgrp">'.join(
+                     '<b>' + v + '</b> ' + ', '.join(ns) for v, ns in lit_groups(LIT_NAMES)) + '</span>'))
     h.append(row('Beyond gamepads',
                  'DualSense and Edge, DualShock 4 and 3, PlayStation Move and Navigation, Switch Pro '
                  'and Switch 2 Pro, Joy-Con and Joy-Con 2, Wii Remote with Nunchuk, Classic and Wii U '

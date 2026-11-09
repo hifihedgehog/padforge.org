@@ -1,0 +1,4841 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="PadForge turns any input device into a virtual controller Windows games can use. These docs cover everything from first install to wire protocols.">
+      
+      
+      
+        <link rel="canonical" href="https://padforge.org/docs/reference/on-screen-keyboard-internals/">
+      
+      
+        <link rel="prev" href="../profile-import-internals/">
+      
+      
+        <link rel="next" href="../screen-color-internals/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/icon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>On-Screen Keyboard Internals - PadForge Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#on-screen-keyboard-internals" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="PadForge Documentation" class="md-header__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PadForge Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              On-Screen Keyboard Internals
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../start/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Start
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guides/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../features/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Features
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../devices/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Devices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Troubleshooting
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Technical Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="PadForge Documentation" class="md-nav__button md-logo" aria-label="PadForge Documentation" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    PadForge Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/hifihedgehog/PadForge" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    hifihedgehog/PadForge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../start/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/first-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Your First Controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/five-minute-remap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A Five-Minute Remap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steam-workshop-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import a Steam config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profile-import/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Import from reWASD and DS4Windows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/starter-profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Start from a starter profile
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/web-controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phone as a controller
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/gyro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion aiming (Gyro)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/shift-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shift Layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/menus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Menus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Per-game Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/remote-link/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/steering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steering with any stick
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/accessibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen readers and the keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guides/switching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Switching from another tool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../features/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Features
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Features
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/devices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-slots/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Slots
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/virtual-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/mappings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Button and Axis Mappings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/on-screen-keyboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/stick-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stick Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/trigger-deadzones/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trigger Deadzones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/touchpad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Touchpad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/force-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Force Feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/adaptive-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adaptive Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/impulse-triggers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Impulse Triggers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/lighting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lighting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/peripherals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mice, Keyboards and Vendor Rows
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/controller-audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bass-shakers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bass Shakers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/wheel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/nfc-tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NFC Tags
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/voice-macros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Voice Macros
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/handheld-buttons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/midi-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/logitech-g-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/analog-keyboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/bliss-box/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/keyboard-screens/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/screen-overlay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/twitch-chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/novint-falcon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/game-mods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/game-telemetry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/headset-motion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/head-tracking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/vr-controller-input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VR Controller Input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/visualization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D and 3D Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/input-precision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Precision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/driver-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/updates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../devices/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Devices
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Devices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/supported/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supported Devices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/dualshock-3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DualShock 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/ps-move/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PlayStation Move
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/spacemouse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpaceMouse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../devices/wii-controllers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Services Layer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../viewmodels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ViewModels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xaml-views/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XAML Views
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings-and-serialization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Settings and Serialization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sdl3-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SDL3 Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hidmaestro-deep-dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HIDMaestro Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver-installation-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Driver Installation Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../updates-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Updates Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-motion-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Motion Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dsu-protocol/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DSU Protocol
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remote-link-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Remote Link Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../external-control-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    External Control Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-workshop-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Workshop Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profile-import-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Import Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Screen Keyboard Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-stored-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The stored menu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The stored menu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-poll-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The poll thread
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The poll thread">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opening-and-closing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opening and closing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holding-a-controller-at-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Holding a controller at rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oskengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OskEngine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OskEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggestions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#text-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text focus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The window
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-and-starter-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import and starter profile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../screen-color-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../twitch-chat-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Twitch Chat Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller-audio-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controller Audio Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../steam-controller-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Steam Controller Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peripheral-outputs-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Peripheral Outputs Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensa-haptics-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sensa Haptics Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vr-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Virtual VR Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../headset-motion-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Headset Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../head-tracking-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Head Tracking Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../openxr-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenXR Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-ffb-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../midi-input-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MIDI Input Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logitech-g-keys-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logitech G-Keys Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analog-keyboards-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analog Keyboards Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bliss-box-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard-screens-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyboard Screens Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../novint-falcon-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Novint Falcon Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-mods-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Mods Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../game-telemetry-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Telemetry Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wii-controllers-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wii Controllers Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../handheld-buttons-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Handheld PC Buttons Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2d-overlay-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2D Overlay System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3d-model-system/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Model System
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-and-publish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build and Publish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-stored-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The stored menu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The stored menu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-poll-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The poll thread
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The poll thread">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The tick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opening-and-closing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opening and closing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#holding-a-controller-at-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Holding a controller at rest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading controls
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#oskengine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OskEngine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OskEngine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggestions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#text-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text focus
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The window
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#import-and-starter-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import and starter profile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="on-screen-keyboard-internals">On-Screen Keyboard Internals<a class="headerlink" href="#on-screen-keyboard-internals" title="Permanent link">&para;</a></h1>
+<p><em>How a keyboard menu is stored, how the poll thread opens the keyboard, holds its controllers at rest, reads its controls and routes its keys, and how the window draws it.</em></p>
+<p>For the user-facing side see <a href="../../features/on-screen-keyboard/">On-Screen Keyboard</a>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PadForge.Engine/Menus/KeyboardMenu.cs</code></td>
+<td>The keyboard menu's types: <code>KeyboardLayout</code>, <code>KeyboardOpenPress</code>, <code>KeyboardControlAction</code>, <code>KeyboardInput</code>, <code>KeyboardControlEntry</code>, and <code>KeyboardMenuDefaults</code> with each layout's controls and defaults.</td>
+</tr>
+<tr>
+<td><code>PadForge.Engine/Menus/MenuDefinitionEntry.cs</code></td>
+<td><code>MenuKind.Keyboard</code> (2) and the keyboard attributes of a <code>&lt;Menu&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/InputManager.OnScreenKeyboard.cs</code></td>
+<td>The runtime: Step 2's filter, the menu records, the tick, Opens With and the layer, opening, closing and holding controllers at rest.</td>
+</tr>
+<tr>
+<td><code>InputManager.OnScreenKeyboard.Output.cs</code></td>
+<td>Types Through: Windows Input, a Keyboard + Mouse slot's keyboard, or the menu's own HIDMaestro keyboard.</td>
+</tr>
+<tr>
+<td><code>InputManager.OnScreenKeyboard.TextFocus.cs</code></td>
+<td>Open When a Text Box Is Selected: the watcher's reports, read by the tick.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Common/Input/OnScreenKeyboard/OskModel.cs</code></td>
+<td><code>OskStyle</code>, <code>OskSettings</code>, <code>IOskLayout</code>, <code>IOskOutput</code>, <code>OskKey</code>, and <code>OskLayoutFrame</code>: the physical key frame, the symbols page and the wheel's sets.</td>
+</tr>
+<tr>
+<td><code>OskEngine.cs</code></td>
+<td><code>OskControlState</code>, <code>OskBoard</code> and <code>OskEngine</code>: selection, typing, modifiers, pages, the wheel and suggestions. No Windows state.</td>
+</tr>
+<tr>
+<td><code>OskWindows.cs</code></td>
+<td><code>OskWindowsLayout</code> (the layout read with <code>ToUnicodeEx</code>), <code>OskWindowsKeyboard</code> (foreground layout and repeat timing), <code>OskWindowsOutput</code> (key events for <code>SendInput</code>).</td>
+</tr>
+<tr>
+<td><code>OskPredictor.cs</code></td>
+<td>Word suggestions from <code>Windows.Data.Text.TextPredictionGenerator</code>.</td>
+</tr>
+<tr>
+<td><code>OskTextFocusWatcher.cs</code></td>
+<td>UI Automation focus, and whether the focused element takes text.</td>
+</tr>
+<tr>
+<td><code>OskView.cs</code></td>
+<td>The immutable snapshot the window draws.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/OnScreenKeyboardWindow.xaml(.cs)</code></td>
+<td>The window: keys, hint bar, close button, top-bar drag and corner grip.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Services/InputService.OnScreenKeyboard.cs</code></td>
+<td>The UI-timer leg: hands the poll thread the layout and repeat timing, draws the snapshot, saves what the window and the keyboard's own keys changed.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/ViewModels/MenuEditorItem.Keyboard.cs</code></td>
+<td>The Menus tab's keyboard rows, the Keyboard Controls card and the Keyboard card.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-stored-menu">The stored menu<a class="headerlink" href="#the-stored-menu" title="Permanent link">&para;</a></h2>
+<p>A keyboard menu is a <code>MenuDefinitionEntry</code> with <code>Kind</code> <code>Keyboard</code> on the slot's <code>MappingSet.Menus</code>. It has no cells. Its keyboard attributes carry <code>ShouldSerialize*</code> methods that return false for every other <code>Kind</code>, so a ring, a grid or a hotbar saves as it did before 5.3.0 (<code>KeyboardMenuSchemaTests.AMenuOfAnotherStyle_WritesNoKeyboardSetting</code>). The attributes are listed under <a href="../settings-and-serialization/#mappingset-v32">Settings and Serialization</a>. <code>Clone</code> copies every one and deep-copies <code>KeyboardControls</code>.</p>
+<p><code>KeyboardMenuDefaults.Create(menuId, name)</code> makes a new keyboard: <code>PosYPercent</code> <code>KeyboardMenuDefaults.PosYPercent</code> (100, the bottom of the work area) and <code>EngageDeadzonePercent</code> <code>SteerDeadzonePercent</code> (50). The editor applies the same two values when a menu turns into a keyboard, only where the radial defaults (50, 25) still stand, and reverses them on the way back (<code>MenuEditorItem.ApplyKeyboardDefaults</code>, <code>LeaveKeyboardDefaults</code>).</p>
+<h3 id="controls">Controls<a class="headerlink" href="#controls" title="Permanent link">&para;</a></h3>
+<p><code>KeyboardControlAction</code> has 48 members, saved by name and append-only. <code>KeyboardMenuDefaults</code> holds a table per layout, in the editor's order: steering first, then the keys, then the pointers.</p>
+<table>
+<thead>
+<tr>
+<th>Layout</th>
+<th>Tables</th>
+<th>Controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Grid</code></td>
+<td><code>LeftStickSteer</code>, <code>GridKeys</code>, <code>Pointers</code></td>
+<td>29</td>
+</tr>
+<tr>
+<td><code>Split</code></td>
+<td><code>LeftStickSteer</code>, <code>RightStickSteer2</code>, <code>SplitKeys</code>, <code>Pointers</code></td>
+<td>32</td>
+</tr>
+<tr>
+<td><code>Wheel</code></td>
+<td><code>LeftStickSteer</code>, <code>WheelKeys</code></td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p>Defaults are device-free <code>"Gamepad ..."</code> names, and stick directions use the legacy half-axis prefix: <code>"HGamepad LeftStickX"</code> is the stick pushed right, <code>"IHGamepad LeftStickY"</code> pushed up (SDL frame, +Y down). <code>SourceCoercion.StripLegacyPrefix</code> turns the prefix into <code>MappingSource.Invert</code> and <code>HalfAxis</code>. The pointers default to <code>"Touchpad 0 Finger 0 X"</code>, <code>"... Y"</code>, <code>"... Down"</code> and <code>"Touchpad 0 Click"</code>, and the same on touchpad 1.</p>
+<p>A control's input is a <code>KeyboardInput</code> record struct: <code>Descriptor</code>, <code>DeviceGuid</code> (empty reads every device that drives the menu), an optional <code>AndDescriptor</code> / <code>AndDeviceGuid</code> held with it, and <code>Threshold</code>, the press point in percent. 0 takes <code>KeyboardInput.DefaultThreshold</code>, 50, a mapping row's <code>MappingSource.DeadZone</code> default. <code>ThresholdPercent</code> clamps a set value to 1 to 99.</p>
+<p><code>KeyboardMenuDefaults.Effective(menu, layout, action)</code> returns the saved <code>KeyboardControlEntry</code> for that layout and action, else the default. <code>Set</code> builds a new list and swaps it in, dropping the entry when the input equals the default, so an untouched keyboard saves no <code>&lt;KeyboardControl&gt;</code> and the poll thread never reads a half-edited list. A cleared control keeps an entry with an empty descriptor. <code>SetOpenInput</code> writes Opens With's fields with the descriptor last, since the poll thread reads each field on its own.</p>
+<p><code>KeyboardOpenPress</code> holds the macro trigger's press modes: <code>Press</code> (0), <code>Hold</code> (1), <code>DoublePress</code> (2), <code>Release</code> (3), <code>WhileHeld</code> (4), <code>ShortPress</code> (5), <code>TriplePress</code> (6), <code>SinglePress</code> (7). <code>KeyboardMenuDefaults.OpenPressMs</code> returns the saved time, or <code>DefaultHoldMs</code> (500) for <code>Hold</code> and <code>ShortPress</code> and <code>DefaultDoublePressMs</code> (442) for the three window modes, the macro trigger's <code>TriggerHoldMs</code> and <code>TriggerDoublePressMs</code> defaults. <code>MaxOpenPressMs</code> is 10,000.</p>
+<hr />
+<h2 id="the-poll-thread">The poll thread<a class="headerlink" href="#the-poll-thread" title="Permanent link">&para;</a></h2>
+<h3 id="step-2">Step 2<a class="headerlink" href="#step-2" title="Permanent link">&para;</a></h3>
+<p><code>UpdateInputStates</code> passes each device's new state through <code>OnScreenKeyboardFilter(ud, raw)</code> when any device is masked, and stores the result in <code>ud.InputState</code>. A masked device's state is a pooled copy with everything at rest. Everything downstream reads <code>ud.InputState</code>: mapping rows, macros, other menus, gestures, layer activators, in every slot the device feeds, with no gate of its own.</p>
+<p><code>UpdateMenuContexts</code> (<code>InputManager.MenuRuntime.cs</code>) calls <code>NoteKeyboardMenu(slot, def, ud, raw)</code> for each device on a slot with an enabled keyboard menu, with the real state. The device becomes a driver of the menu's <code>OskMenuRecord</code> for this poll when the menu names it (<code>DeviceGuid</code>) or, for a device-free menu, when <code>InputDeviceType.AnswersAnyDeviceSources(ud.CapType)</code> holds. A device that only a control names drives that control alone. A keyboard menu gets no <code>MenuContexts</code> entry and draws no menu overlay.</p>
+<h3 id="the-tick">The tick<a class="headerlink" href="#the-tick" title="Permanent link">&para;</a></h3>
+<p><code>TickOnScreenKeyboard(step5Runs)</code> runs once per poll after <code>EvaluateMacros</code>, which can switch the layer that holds the keyboard open, and before Step 5, which sends a slot's keyboard the keys typed. The idle path calls it with <code>step5Runs: false</code>, where no slot's keyboard is fed. It returns at once when the keyboard is closed and nothing is pending. Otherwise, in order:</p>
+<ol>
+<li><code>RefreshKeyboardMenus</code> (every 250 ms): the enabled keyboard menus of every created slot, in slot and list order, and whether any asks for text focus.</li>
+<li><code>ReconcileMenuKeyboards</code> (every 250 ms): makes and retires the menus' own HIDMaestro keyboards.</li>
+<li>The window's commands (<code>OskCommand</code>: <code>ClickKey</code>, <code>ClickWheel</code>, <code>Close</code>). A click carries the <code>OskView.ShapeOf</code> shape of the keys it landed on and types nothing when the shape has changed since.</li>
+<li><code>ApplyOwnerSettings</code>: the owner menu's layout, function row, suggestions, symbols and steering deadzone as a new <code>OskSettings</code> when one changed.</li>
+<li><code>ReadControls</code> for the owner menu. A key control that rose this poll and whose input holds every input of Opens With (<code>OskSources.HoldsOpen</code>) takes Opens With's press.</li>
+<li><code>ReadMenuInputs</code>: each menu's Opens With and layer, queued as open or close requests.</li>
+<li><code>ReadTextFocus</code>, then the requests.</li>
+<li><code>DropStaleMasks</code> (a masked device Step 2 has not read for <code>OskStaleMs</code>, 300 ms, went offline), <code>TrackOwned</code>, and the restricted-slot check.</li>
+<li><code>OskEngine.Tick</code>, the hold-to-move delta, and a close the engine asked for.</li>
+<li>Suggestions, the <code>OskView</code> snapshot (on a version change or every 100 ms), <code>ApplyOutput</code>, and <code>ForgetIdleMenus</code> (a non-owner menu no device drove for <code>OskMenuForgetMs</code>, 2,000 ms, is forgotten, and an owner menu that is gone, off or no longer a keyboard closes the keyboard).</li>
+</ol>
+<p>Every time here is on <code>MenuClock</code>.</p>
+<h3 id="opening-and-closing">Opening and closing<a class="headerlink" href="#opening-and-closing" title="Permanent link">&para;</a></h3>
+<p><code>ReadMenuInputs</code> reads Opens With with <code>InputHeld</code> and acts once per press by the mode's rule, cited against the macro trigger's evaluators in <code>InputManager.Step4b.EvaluateMacros.cs</code> (<code>EvaluateHoldForMsTrigger</code>, <code>EvaluateShortPressTrigger</code>, <code>EvaluateDoublePressTrigger</code>, <code>EvaluateTriplePressTrigger</code>, <code>EvaluateSinglePressTrigger</code>). A single press acts up to <code>OskSinglePressGraceMs</code> (250 ms) past its window. An input held when the record is first seen waits for its release. An act on the owner menu closes the keyboard unless a control took the press, and an act on another menu opens it for that menu, when <code>IsMenuLayerOpen</code> passes.</p>
+<p>With <code>LayerHoldsOpen</code> on a named layer, the layer's rise opens and its fall closes. A fall within <code>OskLayerSettleMs</code> (100 ms) of the open sets <code>_oskLayerIgnored</code>: the keyboard held the activator at rest, so the layer ended because of the keyboard and the keyboard stays open.</p>
+<p><code>OpenKeyboard(slot, menuId, reason, now)</code> refuses a slot <code>IsSlotRestricted</code> names, lets go of the last owner's controllers (<code>ReleaseToGuard</code>), takes the menu's drivers with <code>Own</code>, records the reason (<code>Input</code>, <code>Layer</code> or <code>TextFocus</code>), picks the hint family, and opens the engine with the controls read now, so the opening press types nothing until it is let go. <code>CloseKeyboard</code> releases every owned controller.</p>
+<h3 id="holding-a-controller-at-rest">Holding a controller at rest<a class="headerlink" href="#holding-a-controller-at-rest" title="Permanent link">&para;</a></h3>
+<p><code>Own</code> creates an <code>OskMask</code> and <code>TakeRest</code> records what each axis holds at. A device in SDL's gamepad layout (<code>ReadsAsGamepad</code>: an SDL device opened as a gamepad and not forced raw, or a non-SDL device of type Gamepad) holds sticks at 32768 and triggers at 0. A mouse holds its motion lanes at <code>SdlMouseWrapper.AxisCenter</code>. Any other axis, slider, MIDI controller value, Ring-Con strain and Joy-Con IR intensity holds the value it had when the keyboard took the device. <code>HoldAtRest</code> clears buttons, hats, MIDI notes, analog keys, gyro, touch, capacitive sense, NFC, IR and mouse deltas, and keeps the accelerometer as it was.</p>
+<p>At the close, <code>ReleaseToGuard</code> records what is held, and <code>KeepHeldSilent</code> keeps each such input at rest until it is let go: buttons, hats, MIDI notes and pitch bend, analog keys, touch, a gamepad stick pushed past a quarter of its travel, a trigger past a tenth (<code>OskTriggerRest</code>, 6554), and another axis with a named rest more than a quarter from it (<code>OskCenteredRest</code>, 8192). An axis whose rest was taken at the open, such as a throttle, cannot be told held from resting, so it is let go at the close. The mask is removed once nothing is held.</p>
+<p><code>TrackOwned</code> takes a device that starts driving the owner menu while it is open and closes the keyboard when the last owned controller went offline.</p>
+<h3 id="reading-controls">Reading controls<a class="headerlink" href="#reading-controls" title="Permanent link">&para;</a></h3>
+<p><code>OskSources.Build(def, layout)</code> turns each control's <code>Effective</code> input into an <code>OskInputReader</code> of one or two <code>OskLeg</code>s. A leg's <code>Src</code> is <code>SourceOf(descriptor, press)</code> with the press point as <code>MappingSource.DeadZone</code>, and <code>HeldSrc</code> the same source at <code>ReleasePercent(press)</code>, 70% of it (<code>OskEngine.SteerReleaseShare</code>), at least 1. Key controls on the same input share a number in <code>Shared</code>. The record rebuilds when any field it was built from is a different reference.</p>
+<p><code>LegHeld</code> is <code>SourceCoercion.EvaluateForButtonTarget</code>, the read a Mappings row with a button target takes, across the drivers the leg reads, at <code>Src</code> and at <code>HeldSrc</code> while held. <code>LegLevel</code> is <code>EvaluateForTriggerTarget</code> for depth, falling back to 1 where only the button read holds (a zone, a sector, a two-stage pull, IR Offscreen). <code>LegReads</code> applies the #431 rule: a named device reads that device, a device-free leg reads a driver that answers device-free inputs and has the axes the source reads (<code>HasAxesFor</code>), so a mouse's empty stick axes never read as a push.</p>
+<p><code>SteerOf</code> combines four direction levels into -1 to 1 per axis. <code>PointerOf</code> reads a pointer's X and Y across their whole range from the first driver whose touch input holds. <code>ReadControls</code> fills <code>OskControlState</code>: <code>Down</code> and <code>Shared</code> for key controls, <code>SX</code>/<code>SY</code> and <code>S2X</code>/<code>S2Y</code>, and up to two <code>OskTouch</code> values.</p>
+<hr />
+<h2 id="oskengine">OskEngine<a class="headerlink" href="#oskengine" title="Permanent link">&para;</a></h2>
+<p><code>OskEngine</code> owns no Windows state. It takes an <code>IOskLayout</code> and an <code>IOskOutput</code>, so <code>OnScreenKeyboardEngineTests</code> drive it with a fake US layout and a recording output.</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NavDelayMs</code>, <code>NavIntervalMs</code></td>
+<td>380, 90</td>
+<td>Moving the selection repeats after the delay, every interval.</td>
+</tr>
+<tr>
+<td><code>ChordWindowMs</code></td>
+<td>90</td>
+<td>Split's two type controls within it type a space (Wilson and Agrawala, CHI 2006).</td>
+</tr>
+<tr>
+<td><code>SteerReleaseShare</code></td>
+<td>0.7</td>
+<td>Steering counts as let go under this share of the deadzone.</td>
+</tr>
+<tr>
+<td><code>MovePercentPerSecond</code></td>
+<td>60</td>
+<td>Hold-to-move speed at a full push, in percent of the work area.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Tick(pad, now)</code> releases guards (an input held at the open, or at a layout switch, reads nothing until let go), moves the keyboard while <strong>Move the Keyboard (Hold)</strong> is held past the steering release point, then runs <code>TickGrid</code>, <code>TickSplit</code> or <code>TickWheel</code>, and <code>TickTouch</code> outside the wheel. A key control that shares its input with Move the Keyboard fires on release when the keyboard did not move (<code>Fire</code>, <code>SharesMove</code>). Typing controls repeat at <code>RepeatDelayMs</code> and <code>RepeatIntervalMs</code>, which <code>InputService</code> fills from <code>OskWindowsKeyboard.RepeatTiming</code> (Windows' <code>SPI_GETKEYBOARDDELAY</code> and <code>SPI_GETKEYBOARDSPEED</code>, read every 5 seconds).</p>
+<p><code>MoveFocus</code> wraps around a row and between rows and keeps the column (<code>Focus.Col</code>). Shift, Ctrl, Alt, Win and AltGr cycle off, latched for one key, locked (<code>Cycle</code>). <code>TogglePage</code> switches the letters and symbols pages. <code>PetalOf</code> maps the steering vector to one of eight groups, 0 north and clockwise, past the deadzone and held down to its release share. <code>TypeCharacter</code> types a character with the layout's key and level that produces it, base level first, else as Unicode text. A dead level's character goes out as text, so no accent waits for the next key.</p>
+<p><code>SuggestionQuery</code> carries the word being typed, the previous word and a version. <code>SetSuggestions</code> keeps up to three answers to the current version that start with the typed word, are longer than it and contain no space, shaped to its case.</p>
+<h3 id="the-layout">The layout<a class="headerlink" href="#the-layout" title="Permanent link">&para;</a></h3>
+<p><code>OskWindowsLayout(hkl)</code> reads every key's four levels (base, Shift, AltGr, Shift+AltGr) once with <code>ToUnicodeEx</code> and flag 4, which leaves Windows' keyboard state alone, so reading a dead key leaves no pending accent behind. Only Caps Lock changes afterward (<code>SetCaps</code>). <code>InputService</code> asks <code>OskWindowsKeyboard.ForegroundLayout</code> (the keyboard layout of the thread that owns the foreground window) every 250 ms while the keyboard is open and hands a new <code>OskWindowsLayout</code> to the poll thread when the HKL changes.</p>
+<p><code>OskLayoutFrame</code> is the physical frame: the main block by set 1 scan code, 0xE000 added for an extended key, rows aligned in columns so up and down move straight. <code>CharRows</code> holds the character keys of the four main rows (13, 13, 11 and 10). The ISO key (0x56) is drawn only when it types something no other key does. <code>SplitAfter</code> gives each row's last left-hand scan code. <code>DefaultSymbols</code> is the 47-character default symbols page, in the character keys' places. <code>WheelSets(layout)</code> returns four sets of 32: on a US Latin layout, daisywheeljs's <code>abcdefghijklmnopqrstuvwxyz?!;\&amp;-</code>, <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ+.@#$%</code> and <code>0123456789*,_="'()[]{}:~^&lt;&gt;|</code>, and on another layout its own letters sorted by the layout language's <code>CompareInfo</code>, letters past 32 spilling into the numbers set. The fourth set is <code>KeysSet</code>: modifiers, navigation, Esc, Tab, Delete, Caps Lock, F1 to F12, Insert, Print Screen, the layout key and Backspace.</p>
+<hr />
+<h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
+<p>The engine's <code>IOskOutput</code> is <code>OskRouter</code>. <code>TapKey</code> first tries <code>QueueDeviceTap</code>, and otherwise sends through <code>OskWindowsOutput</code>, queued behind any device report still waiting so nothing types out of order. Text always goes through Windows Input.</p>
+<p><code>OskWindowsOutput.TapKey</code> maps the scan code to the virtual key the foreground layout gives it (<code>MapVirtualKeyExW</code>, <code>MAPVK_VSC_TO_VK_EX</code>), builds the modifiers down, the key down and up, and the modifiers up in reverse (AltGr is left Ctrl with right Alt), and queues the batch with <code>InputManager.QueueKeyboardOutputs</code>. The injector thread sends it with <code>SendInput</code>, in order with the macros' and the mapped keys, tagged with <code>InputHookManager.OutputTag</code> so PadForge's own hooks and Raw Input reader pass it by. <code>TypeText</code> sends <code>KEYEVENTF_UNICODE</code> pairs, with Enter and Tab as keys.</p>
+<p><code>OskDestination</code> reads the owner's <code>TypesThrough</code>: <code>""</code> Windows Input, <code>"slot:N"</code> a Keyboard + Mouse slot (<code>TryParseSlotTarget</code>), anything else a HIDMaestro keyboard profile id (<code>MenuKeyboardProfileOf</code>). <code>QueueDeviceTap</code> falls back to Windows Input when the layout gives the key no virtual key, when the slot is not Keyboard + Mouse with its keyboard half on and Step 5 running (<code>SlotKeyboardSends</code>), when the menu's own keyboard is not made yet, or when the model's report cannot carry the key (<code>CapsSend</code> through <code>KbmHidKeyMap.Resolve</code> and <code>KbmDeviceCaps</code>). It queues four reports, one per poll: modifiers, modifiers with the key, modifiers, nothing. <code>ApplyOutput</code> sends one per tick: a slot's into <code>CombinedKbmRawStates[slot]</code>, which lasts that poll, and a menu keyboard's straight to <code>SubmitKbmState</code>.</p>
+<p>A menu's own keyboard (<code>OskMenuKeyboard</code>) exists while its menu is enabled and names a profile <code>KbmDeviceCatalog.HasKeyboard</code> knows. <code>ReconcileMenuKeyboards</code> makes at most one at a time, and only while no slot's create or dispose runs, since Step 5 waits on <code>MenuKeyboardLifecyclePending</code> the same way. <code>CreateMenuKeyboard</code> builds a keyboard-only <code>KeyboardMouseVirtualController</code> on a worker under <code>MenuKeyboardIdentityKey(slot, menuId)</code>, <code>"padforge:pad{slot}:KeyboardMenu{menuId}:keyboard"</code>, so it returns at the same device path after a restart and never meets a slot's own identity. A failed create is not retried until the menu asks for another keyboard or is turned off and on. <code>DestroyMenuKeyboardsLocked</code> removes them at engine stop under the lifecycle lock.</p>
+<hr />
+<h2 id="suggestions">Suggestions<a class="headerlink" href="#suggestions" title="Permanent link">&para;</a></h2>
+<p><code>OskPredictor.Request(language, word, previous, version)</code> runs one question at a time on a task, a newer one replacing any still waiting. It asks <code>TextPredictionGenerator(language).GetCandidatesAsync(word, 10)</code>, or <code>GetNextWordCandidatesAsync(10, [previous])</code> when no word is started, unless <code>LanguageAvailableButNotInstalled</code>. A failure drops the generator and answers nothing. The language is the layout's <code>LanguageTag</code>. <code>TryTake</code> hands the newest answer to the tick, which passes it to <code>SetSuggestions</code> with its version.</p>
+<hr />
+<h2 id="text-focus">Text focus<a class="headerlink" href="#text-focus" title="Permanent link">&para;</a></h2>
+<p><code>OskTextFocusWatcher</code> runs on its own MTA thread for the engine's life (<code>StartTextFocusWatcher</code>) and subscribes to <code>Automation.AddAutomationFocusChangedEventHandler</code> only while <code>_oskWantsTextFocus</code> is set, checked twice a second. Every program that answers UI Automation pays a query per focus change while it listens, and Firefox answers through a slow proxy (Mozilla bug 1777875). Each focus change asks the element's control type, then its Value pattern's read-only flag, else its Text pattern's read-only attribute, so an edit control or a writable document counts. Focus that stays in one element is reported once, by runtime id. Each pass has its own try, so a <code>TimeoutException</code> from a hung window leaves the watcher running.</p>
+<p><code>NoteTextFocus</code> bumps a sequence number. <code>ReadTextFocus</code> opens the keyboard for the first enabled menu in <code>_oskMenuScan</code> with <code>OpenOnTextFocus</code>, an open layer and an unrestricted slot, when the keyboard is closed. A report that focus left text boxes closes a keyboard opened with <code>OskOpenReason.TextFocus</code> and no other.</p>
+<hr />
+<h2 id="the-window">The window<a class="headerlink" href="#the-window" title="Permanent link">&para;</a></h2>
+<p><code>InputService.UpdateOnScreenKeyboard</code> runs on the UI timer. It reads <code>InputManager.OnScreenKeyboardView</code>, hides the window when the view is closed, older than 500 ms, or names a menu no longer on its slot, and saves to the menu what changed: the layout key's style and the Fn key's function row (<code>EditKeyboardMenu</code>, through the menu's editor when one exists), and the hold-to-move delta in whole percents of <code>PosXPercent</code> and <code>PosYPercent</code>.</p>
+<p><code>OskView.Build</code> makes the snapshot on the poll thread: keys with their texts and latch states, the focus per board, the wheel's labels, the owner slot and menu, each control's input for the hint bar, and a <code>Shape</code> that changes only when the keys' places change, so the window rebuilds only then. <code>OnScreenKeyboardWindow</code> sets <code>WS_EX_NOACTIVATE</code> and <code>WS_EX_TOOLWINDOW</code> and <code>ShowActivated="False"</code>, so the window being typed into keeps focus. It places its center at the menu's Screen Position in the work area, as <code>MenuOverlayWindow</code> places a menu, shrinks a keyboard larger than the work area, takes <code>OpacityPercent</code> (5 to 100) and <code>ScalePercent</code> (10 to 400), and writes the top-bar drag and the corner grip back to the menu. The hint bar names a device-free input by the controller family's own label (<code>OskFamily</code>: Xbox, PlayStation, Nintendo, GameCube, from SDL's face labels, else the vendor id), and any other input by the name the slot's input lists give it.</p>
+<hr />
+<h2 id="import-and-starter-profile">Import and starter profile<a class="headerlink" href="#import-and-starter-profile" title="Permanent link">&para;</a></h2>
+<p><code>WorkshopProfileMaterializer.KeyboardMenuFor(TranslatedMacro, menuId)</code> turns a Steam Show Keyboard binding (<code>TranslatedMacroAction.ShowOnScreenKeyboard</code>) into a keyboard menu named after the binding, or "Keyboard". Its first trigger input is Opens With, its second the input held with it, each with the hosting read's half-axis prefix, and a half-axis host's <code>TriggerDescriptorDeadZonePercent</code> as the press point. <code>OnRelease</code>, <code>HoldForMs</code> and <code>DoublePress</code> become <code>Release</code>, <code>Hold</code> and <code>DoublePress</code>, the times clamped to 50 through 10,000 ms. The binding's layer becomes <code>LayerMask</code>. The menu goes on the Xbox slot when the import made one, else the Keyboard + Mouse slot, after that slot's other menus. A binding with no input makes no menu.</p>
+<p><code>StarterProfileCatalog.BuildDesktop</code> adds <code>KeyboardMenuDefaults.Create(1, "Keyboard")</code> with Opens With <code>"Gamepad ButtonX"</code> and no text-box opening (<code>StarterProfileCatalogTests.Desktop_ReachesShowKeyboardAndTheWindowsKey</code>).</p>
+<hr />
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Test class</th>
+<th>Holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KeyboardMenuSchemaTests</code></td>
+<td>Saved enum numbers, the settings-file round trip, no keyboard attribute on another style, defaults per layout, the press point's save rule, <code>Set</code> and <code>SetOpenInput</code>, Opens On's default times.</td>
+</tr>
+<tr>
+<td><code>OnScreenKeyboardEngineTests</code></td>
+<td>The engine on a fake US layout: Grid, Split and Wheel controls, wrap, Shift latch and lock, symbols page, repeat at Windows' timing, hold-to-move and its tap rule, the layout and Fn keys, pointers, suggestions, dead keys and the ISO key.</td>
+</tr>
+<tr>
+<td><code>OnScreenKeyboardMenuTests</code></td>
+<td>The runtime: Opens With and every Opens On mode, controls that take Opens With's press, the controller at rest and silent after the close, devices going offline or joining, takeover by another menu, restricted peers, layers and the settle window, text focus, Types Through to a slot and to the menu's own keyboard, its identity key, non-gamepad devices at rest, the watcher's timeout and once-per-element reports, and Step 2's two states.</td>
+</tr>
+<tr>
+<td><code>OnScreenKeyboardWindowsLayoutTests</code></td>
+<td>Every installed layout read through <code>ToUnicodeEx</code>, the US layout as Windows types it, ABNT2's /? key on a keyboard device, and each family's hint labels.</td>
+</tr>
+<tr>
+<td><code>MenuEditorKeyboardTests</code></td>
+<td>The Menus tab: the style and its defaults, each layout's rows and names, recording (gestures and menu cells only for Opens With), pointer rows, press points, resets, Types Through, Opens On, the symbols box, and the D-pad and face-button openers.</td>
+</tr>
+<tr>
+<td><code>KeyboardMenuSlotDeviceTests</code></td>
+<td>Input lists per device, Copy From Slot and paste moving inputs to the target slot's controller, and the Types Through list after the slots renumber.</td>
+</tr>
+<tr>
+<td><code>WorkshopKeyboardMenuImportTests</code></td>
+<td>The Show Keyboard import: the menu, its slot, its press modes, a stick half with a second input, its layer, and a binding with no input.</td>
+</tr>
+<tr>
+<td><code>StarterProfileCatalogTests</code></td>
+<td>The Desktop starter's keyboard menu.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../features/on-screen-keyboard/">On-Screen Keyboard</a></li>
+<li><a href="../engine-library/#menudefinitionentry">Engine Library</a>: the menu model the keyboard extends.</li>
+<li><a href="../settings-and-serialization/#mappingset-v32">Settings and Serialization</a>: the <code>&lt;Menu&gt;</code> element's keyboard attributes.</li>
+<li><a href="../input-pipeline/">Input Pipeline</a></li>
+</ul>
+<hr />
+<p><em>Last updated for PadForge 5.3.0.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../profile-import-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Profile Import Internals">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Profile Import Internals
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../screen-color-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Screen Color Internals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Screen Color Internals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <nav class="product-footer-nav md-grid" aria-label="Site sections">
+    <a href="/">Home</a><a href="/press/">Press</a><a href="/specs.html">Specifications</a><a href="/docs/">Documentation</a>
+  </nav>
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      PadForge™ is a trademark of hifihedgehog. U.S. trademark application pending.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

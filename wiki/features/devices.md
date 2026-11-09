@@ -44,7 +44,7 @@ Bottom row (one wrapping metadata line):
 
 | Element | Description |
 |---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, Game Telemetry, Haptics, Lighting, or plain Device for anything unclassified. |
+| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, Game Telemetry, Twitch Chat, Haptics, Lighting, or plain Device for anything unclassified. |
 | **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
 | **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
 | **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
@@ -84,8 +84,26 @@ Rows whose fact the device does not report collapse instead of showing a blank p
 | **PATH** | HID path used for HidHide hiding. A bridged device (such as a DualShock 3 over Bluetooth) shows its connection path here instead, and a merged row or a row PadForge builds itself shows its internal address, such as `aggregate://keyboards` or `headtrack://opentrack`. |
 | **VID:PID** | Vendor and Product ID in hex |
 | **LINK** | Reads **BT** for a Bluetooth connection. Absent for wired and other links. |
-| **SERIAL** | The serial number the device reports (a Bluetooth MAC address on most wireless pads). Shown when reported. |
+| **SERIAL** | The serial number the device reports (a Bluetooth MAC address on most wireless pads). Shown when reported. A Wii Remote on a Mayflash DolphinBar reports none, so PadForge builds one from the remote's factory calibration: `wiical-` and the calibration bytes in hex. See [Wii Controllers](../devices/wii-controllers.md#mayflash-dolphinbar). |
+| **FIRMWARE** | The firmware version of the open device. Shown when the device reports one. See [Firmware and revision](#firmware-and-revision). |
+| **REV** | The product revision: the USB release number, such as `0x0100`, or the PnP ID version over Bluetooth LE. Shown when reported. |
 | **BATT** | Battery glyph and percentage. Shown only when the device reports a battery. |
+
+**Copy** includes every row that shows, **FIRMWARE** and **REV** among them.
+
+### Firmware and revision
+
+**FIRMWARE** and **REV** read from the open device, so an offline card shows neither. Each hides when the device reports nothing.
+
+| Device | How **FIRMWARE** reads |
+|---|---|
+| DualSense and DualSense Edge | Hex around a dot, so `0x0224` reads `2.24` |
+| Xbox pads on the GIP and Xbox One drivers, Switch pads over Bluetooth | Decimal major and minor, so `0x0505` reads `5.5` and `0x0348` reads `3.72` |
+| Xbox pads on the XInput driver whose device GameInput lists | All four parts of GameInput's version |
+| An Xbox pad or other Bluetooth LE pad that reports no version to SDL | The Firmware Revision String of its Device Information service, such as `5.23.6.0`, read while the pad is connected |
+| Flydigi pads and other makers' devices | Raw hex, such as `0x0123` |
+
+PadForge reads the version again every five seconds, so one the pad reports after it opens reaches the card. Third-party Xbox and Switch pads show raw hex.
 
 A row of capability icons sits at the bottom of the card, with a rumble, gyro, or touchpad mark for each of those the device has. Click the rumble mark to vibrate the device and identify it.
 
@@ -124,6 +142,8 @@ Five devices can give PadForge more when they run on Windows' WinUSB driver, but
 | Logitech iFeel Mouse and iFeel MouseMan | **Play Rumble on This Mouse** | Windows stops using the mouse as a pointer until its driver is restored. PadForge moves the pointer from it only while PadForge runs and the mouse is assigned to a Keyboard + Mouse virtual controller. One mouse of a model moves at a time, so unplug the others of that model first. See [Logitech iFeel mice](peripherals.md#logitech-ifeel-mice). |
 
 A **Switch to PadForge's Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
+
+A USB keyboard or mouse takes the same switch, named **Use Only in PadForge**, and its button stands in the **Input Hiding** section. See [Use Only in PadForge](#use-only-in-padforge).
 
 ### Pads in iCade mode
 
@@ -290,7 +310,7 @@ MIDI input runs on Windows MIDI Services, the same API the MIDI virtual controll
 
 With **Read Analog Keyboards** on in [Settings](settings.md), each supported analog or Hall effect keyboard gets a card of its own, typed **Analog Keyboard**, beside its normal keyboard card. Select it and a **Key Depth** panel replaces the axes and button grid. Each key you press joins the panel with a bar and a percentage for how far down it is. Every key maps as a button, a trigger or one side of a stick axis. See [Analog Keyboards](analog-keyboards.md).
 
-The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections.
+The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections. A Razer keyboard that waits for Razer Synapse says so in its own detail pane.
 
 ---
 
@@ -310,13 +330,17 @@ With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's d
 
 With **Listen for Game Telemetry** on, on the [Dashboard](dashboard.md), the **Game Telemetry** row carries the speed, RPM, gear and pedals a driving game sends. Its axes are Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, then one per custom variable, and its buttons are Driving, Reverse, Neutral and Gear 1 to Gear 18. The detail pane shows the same status line as the Dashboard, such as *Listening on UDP port 20777. F1 25 from 127.0.0.1.* The row stays listed with no game running, so you can map it first. See [Game Telemetry](game-telemetry.md).
 
+## Twitch Chat
+
+With **Read Twitch Chat** on, on the [Dashboard](dashboard.md), the **Twitch Chat** row carries the words viewers type in your channel's chat. Each word is a button on the row, mapped like any input, so assign the row to a slot like any controller. The row exists while the engine runs and the switch is on. Its detail pane shows a status line, such as *Reading yourchannel's chat.*, and a **Manage Chat Commands** button that opens the **Chat Commands** dialog, where you add words and **Restore Usual Words**. A peer's shared copy of the row is managed on its owner. See [Twitch Chat](twitch-chat.md).
+
+## Map Key Lights
+
+A connected keyboard or other device that PadForge lights one light at a time, at least one of them a key, shows a **Map Key Lights** button in its detail pane. The button opens a window that lights one key light at a time. Press the key under the lit light to name it. The names are kept for every device of that model. The device does not have to be assigned to a slot, and the input engine has to run. A device reached through [Remote Link](../guides/remote-link.md) is mapped on the PC it is plugged into. See [Map Key Lights](lighting.md#map-key-lights).
+
 ## Game mods
 
 While a [game mod made for DSX](game-mods.md) sets something that reaches a controller, the controller's detail pane names the mod's program and what it sets, such as *GTA5.exe is setting this controller's triggers and lights*. A DualSense shows its triggers and lights, a DualShock 4 its lightbar, and an Xbox controller with impulse triggers the trigger vibrations it plays while **Translate Adaptive Trigger Vibrations** is on. **Clear Mod Effects** below the line ends what the mods set on every virtual controller this device feeds, and the controllers' own settings return until a mod sends again.
-
-## Analog keyboards
-
-With **Read Analog Keyboards** on in [Settings](settings.md), a Razer keyboard that waits for Razer Synapse says so in its own detail pane. See [Analog Keyboards](analog-keyboards.md).
 
 ---
 
@@ -449,6 +473,30 @@ An Up, Down or modifier key counts as mapped on the keyboard or mouse it was pic
 
 Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
 
+### Use Only in PadForge
+
+**Use Only in PadForge** takes a keyboard, mouse or touchpad from Windows so that PadForge alone reads it. It is a button in the **Input Hiding** section of the device's detail pane. HidHide cannot hide a mouse from Windows' own pointer driver, which was measured with HidHide running. [Driver Management](driver-management.md#keyboards-mice-and-touchpads-use-only-in-padforge) covers the same switch from the driver side.
+
+| Device | What the switch does | What it needs |
+|---|---|---|
+| USB keyboard | Moves the keyboard to Windows' WinUSB driver. Windows stops typing with it in every program, even while PadForge is closed, until the Windows driver is restored. | The keyboard's HID collection sits on a USB node using Windows' HidUsb driver. A Bluetooth, PS/2 or I2C keyboard is offered nothing. |
+| USB mouse | The same, and Windows stops moving the pointer with it. | The same, for the mouse. |
+| Precision touchpad | HidHide hides the touchpad from Windows while the engine runs, and PadForge reads it. Windows gets it back when the engine stops or PadForge closes. See [Touchpad](touchpad.md#precision-touchpads-read-by-padforge-alone). | HidHide installed, **Hide Devices from Games** on in [Settings](settings.md), and the engine running. |
+
+The row keeps its ID, so its slots, mappings and macros carry over. A switched row shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**, since Windows no longer sees the device as a keyboard or mouse. In their place the section shows **Restore the Windows Driver**, or **Give Back to Windows** for a touchpad. A **Hide from Games (HidHide)** tick left on a touchpad by an earlier build does not take it.
+
+The switch confirms first. The confirmation says what Windows loses. It names what else shares the same USB connection and leaves Windows with the device: a mouse on a shared receiver, media keys, power and sleep keys, a game controller or the maker's own interface. It repeats the warning about losing your only keyboard or mouse.
+
+PadForge refuses the switch while another keyboard or mouse of the same model is plugged in, because Windows moves every device with that ID at once. The status bar says to unplug the others first.
+
+After the switch a **Keep This Keyboard in PadForge?** prompt (or **Keep This Mouse in PadForge?**, or **Keep This Touchpad in PadForge?**) counts down 15 seconds. Click **Keep** to stay. Click **Give It Back**, or let the countdown end, and PadForge restores the Windows driver. The prompt exists because a person whose only keyboard or mouse was just taken cannot answer it. A one-shot Windows boot task also gives the device back after a crash, a power cut or a restart during the prompt.
+
+A program that holds the device open can refuse the switch. Windows then sets PadForge's driver for the next start of Windows and keeps the old driver running. PadForge takes that package back and reports that the switch failed, so nothing changes at the next start. A reported example is Lenovo Legion Toolkit holding a laptop's keyboard controller.
+
+**Restore the Windows Driver** removes PadForge's driver package, and Windows installs the driver the device had before.
+
+Hardware status: the mouse switch has run on one mouse. The keyboard switch has not completed on a keyboard yet. On one laptop's keyboard controller it was refused and taken back.
+
 ### Which to use
 
 | Situation | Method |
@@ -457,7 +505,8 @@ Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, 
 | Racing wheel or flight stick | Hide from Games |
 | Keyboard with a few keys mapped | Consume Mapped Inputs |
 | Mouse with side buttons mapped | Consume Mapped Inputs |
-| Hide a keyboard entirely | Hide from Games (read the warnings) |
+| Keep a USB keyboard or mouse from Windows entirely | Use Only in PadForge |
+| Keep a precision touchpad from Windows while PadForge runs | Use Only in PadForge |
 
 ### Auto-enable defaults
 
@@ -475,13 +524,12 @@ Unassigning a device from every slot clears both hiding options.
 
 PadForge shows a confirmation flyout when you turn on hiding for a keyboard, mouse, or Consumer Control device:
 
-- **HidHide on keyboard.** Every app loses keyboard access.
-- **HidHide on mouse.** Every app outside PadForge loses mouse control.
-- **HidHide on a Consumer Control device (media keys).** The media collection sits on a physical keyboard, so cloaking it hides that whole keyboard from every app. You get the same keyboard warning.
+- **HidHide on a keyboard or mouse.** The flyout warns that if it is your only keyboard or mouse, you lose the ability to use your system.
+- **HidHide on a Consumer Control device (media keys).** The media collection sits on a physical keyboard, so cloaking it hides that whole keyboard. You get the keyboard warning.
 - **Consume on keyboard.** Mapped keys stop working in other apps while PadForge runs. On "All Keyboards (Merged)" that covers every connected keyboard.
 - **Consume on mouse.** Mapped buttons (possibly left / right click) are suppressed. On "All Mice (Merged)" that covers every connected mouse.
 
-Click **Cancel** to back out or **Proceed** to confirm.
+Click **Cancel** to back out or **Proceed** to confirm. The **Use Only in PadForge** confirmation carries the same warning for the device it takes.
 
 ### Master switch
 
@@ -497,7 +545,7 @@ Wireless controllers get a **Power** section in the detail pane. It draws when e
 
 ### Idle Disconnect
 
-Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads **minutes (0 = never)**. Set it to 0 to leave the controller on.
+Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads **Minutes (0 = Never)**. Set it to 0 to leave the controller on.
 
 Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It targets any Bluetooth-linked pad (Sony, gen-1 Switch Pro and Joy-Cons, Wii Remote, and the rest), Xbox controllers on the XInput driver, the Switch 2 family, and the combined gen-1 Joy-Con pair, where PadForge drops both halves' links. A pad reaching this PC through [Remote Link](../guides/remote-link.md) is excluded. This machine holds no radio link to it.
 
@@ -665,6 +713,7 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 - **Grayed out**: HidHide is not installed. Install it from [Driver Management](driver-management.md).
 - **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, Novint Falcon, Game Telemetry, Lighting, and Haptics rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled. An analog keyboard card has no toggle either, since hiding its analog interface would hide it from the vendor's own software, which a Razer keyboard needs before it reports at all.
+- **Also missing**: a USB keyboard or mouse switched with **Use Only in PadForge**, and a precision touchpad row. Their section holds **Restore the Windows Driver** or **Use Only in PadForge** instead. See [Use Only in PadForge](#use-only-in-padforge).
 
 ---
 
@@ -690,4 +739,4 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

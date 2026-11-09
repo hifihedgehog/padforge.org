@@ -9,6 +9,7 @@ import io, os, re, sys, json
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from emit_supported import fam, mapped, CAT, N, FAM_ORDER, SITE
+from emit_lit import LIT_NAMES
 
 # ── category table. Order matters: the first category a name lands in wins. ──
 CATS = [
@@ -30,6 +31,7 @@ CATS = [
     ("bd", "8BitDo", "Full mapping, including the Ultimate and Pro lines."),
     ("mp", "Gamepad", "Ships with a mapping, so buttons and axes land correctly on plug-in."),
     ("sp", "Specialty device", "Has its own lane in PadForge rather than being read as a joystick."),
+    ("rg", "RGB lighting", "PadForge lights it over USB itself: a color, an effect, Screen Color, and key by key where its lights are known."),
 ]
 
 FAM_CODE = {
@@ -155,6 +157,9 @@ def build():
             add(n, FAM_CODE.get(f, "mp"))
     for n in sorted(mapped):
         add(n, "mp")
+    # Last, so a lit device that is also a controller keeps its controller's category.
+    for n in LIT_NAMES:
+        add(n, "rg")
 
     out = []
     for name, code in sorted(seen.values(), key=lambda t: t[0].lower()):

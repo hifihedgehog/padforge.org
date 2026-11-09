@@ -80,6 +80,12 @@ hand.
 
 ## A few worth knowing about
 
+### Desktop opens an on-screen keyboard on X
+
+Desktop carries a **Keyboard** menu, the Keyboard menu style with the Grid layout and its default controls. X opens it, where Valve's desktop scheme puts Show Keyboard. While it is open a press a keyboard control takes stays the keyboard's, so X types Backspace there and B closes it, as Steam's keyboard closes. Earlier versions sent Win+Ctrl+O from a macro on X instead. Edit the menu on the slot's **Menus** tab. See [Menus](menus.md).
+
+The Windows key is Paddle 1, on pads that have paddles. It stays off Start because the quiet layer is a long press of Start.
+
 ### Hotbar puts 32 abilities behind two triggers
 
 Hold the left trigger for eight slots on the D-pad and face buttons, hold
@@ -162,6 +168,8 @@ precision instead of losing the stick. The gyro only steers while the
 left trigger is held. Always-on motion reads as drift during normal play,
 and aiming is exactly when you want it.
 
+Nose up looks up: the gyro's pitch is inverted on the right stick's Y row, the way JoyShockMapper's gyro stick reads it.
+
 It also has a calibrate button. Hold **Back** for 800 ms and the gyro
 recenters. Motion controls drift, and a recenter you can only reach by
 opening the app is not much of a recenter. Back keeps its ordinary press,
@@ -221,4 +229,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

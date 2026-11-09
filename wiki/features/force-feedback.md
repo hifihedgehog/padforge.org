@@ -138,6 +138,8 @@ Some devices (racing wheels, arcade sticks, flight sticks) have no rumble motors
 
 No setup. If a device supports neither rumble nor haptics, vibration is skipped.
 
+A PC with the USB Vibration driver, whose force feedback module is `EZFRD64.DLL`, now runs DirectInput force feedback. PadForge's input library patches that module as it loads, on 64-bit Windows 10 and later. This has not run on hardware with that driver yet.
+
 ### Directional forces
 
 For haptic devices, PadForge preserves force direction instead of collapsing it to one value.
@@ -424,4 +426,4 @@ The default frequencies are starting points, not measured shaker frequencies. Sh
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

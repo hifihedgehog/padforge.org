@@ -38,7 +38,7 @@ Whatever the press changed is shown under **Source:** as the key combination the
 
 If nothing changed, the dialog says so and counts what it watched: *Watched 3 vendor reports and 10 event classes. During the press: 0 reports, 0 events.* Press again, inside the highlighted window.
 
-Repeat for every paddle and key. The **Learned Buttons** list below shows each one with a **Remove** button. Each learned button keeps the index it was given for good, so a binding made today survives buttons added or removed later.
+Repeat for every paddle and key. The **Learned Buttons** list below shows each one with a **Remove** button. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. **Remove** clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.
 
 ---
 
@@ -93,4 +93,4 @@ The **Motion** row feeds the same gyro pipeline every controller uses: gyro aim,
 
 ---
 
-*Last updated for PadForge 5.2.0.*
+*Last updated for PadForge 5.3.0.*

@@ -1,0 +1,1563 @@
+0015	414B	Atlantis PS17 QMK Keyboard	_Random-Brands/atlantis_ps17.js
+0021	001E	MonsGeek M7 QMK Keyboard	Monsgeek/Monsgeek_M7_QMK_ANSI_Keyboard.js
+03EB	FF01	Wooting One (Legacy)	OpenRGB WootingKeyboardController
+03EB	FF02	Wooting Two (Legacy)	OpenRGB WootingKeyboardController
+03F0	028C	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	028E	HyperX Pulsefire Haste Wireless	HyperX/HyperX_PusleFire_Haste_Wireless_Mouse.js
+03F0	0294	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	02B5	HyperX QuadCast 2 S	OpenRGB HyperXMicrophoneV2Controller
+03F0	038F	HyperX Alloy Origins 65 (HP)	OpenRGB HyperXKeyboardController
+03F0	048C	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	048E	HyperX Pulsefire Haste Wireless	HyperX/HyperX_PusleFire_Haste_Wireless_Mouse.js
+03F0	0490	HyperX Pulsefire Surge (HP)	OpenRGB HyperXMouseController
+03F0	058F	HyperX Alloy Elite 2 (HP)	OpenRGB HyperXKeyboardController
+03F0	0591	HyperX Alloy Origins (HP)	OpenRGB HyperXKeyboardController
+03F0	068C	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	068E	HyperX Pulsefire Dart (Wireless)	OpenRGB HyperXMouseController
+03F0	088E	HyperX Pulsefire Dart (Wired)	OpenRGB HyperXMouseController
+03F0	08C2	HyperX Eve 1800 (HP)	OpenRGB HyperXKeyboardController
+03F0	098C	HyperX DuoCast	OpenRGB HyperXMicrophoneController
+03F0	098F	HyperX Alloy Origins Core (HP)	OpenRGB HyperXKeyboardController
+03F0	0B97	HyperX Pulsefire Haste 2	HyperX/HyperX_Pulsefire_Haste_2_Mouse.js
+03F0	0BA0	HyperX Pulsefire Haste 2 Mini	HyperX/HyperX_Pulsefire_Haste_2_Mouse.js
+03F0	0C8E	HyperX Alloy Origins 60 (HP)	OpenRGB HyperXKeyboardController
+03F0	0CC2	HyperX Origins 2 65 (HP)	OpenRGB HyperXKeyboardController
+03F0	0D8B	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	0D8F	HyperX Pulsefire Core (HP)	OpenRGB HyperXMouseController
+03F0	0D97	HyperX Pulsefire Haste 2	HyperX/HyperX_Pulsefire_Haste_2_Mouse.js
+03F0	0DA0	HyperX Pulsefire Haste 2 Mini	HyperX/HyperX_Pulsefire_Haste_2_Mouse.js
+03F0	0F8B	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+03F0	0F8D	HyperX Pulsefire Mat	OpenRGB HyperXMousematController
+03F0	0F8F	HyperX Pulsefire Haste	OpenRGB HyperXMouseController
+03F0	0F98	HyperX Pulsefire Haste 2	HyperX/HyperX_Pulsefire_Haste_2_Mouse.js
+0414	7A3F	Gigabyte Aorus 17X Keyboard	OpenRGB GigabyteAorusLaptopController
+0414	7A42	Gigabyte Aorus 17X Backlight	OpenRGB GigabyteAorusLaptopController
+0414	7A43	Gigabyte Aorus 15BKF Keyboard	OpenRGB GigabyteAorusLaptopController
+0414	7A44	Gigabyte Aorus 15BKF Backlight	OpenRGB GigabyteAorusLaptopController
+0416	5020	ViewSonic Monitor XG270QG	OpenRGB ViewSonicController
+0416	7372	Nuvoton keyboard	Nuvoton/Nuvoton_Keyboard_Controller.js
+0416	A0F8	Nuvoton keyboard	Nuvoton/Nuvoton_Keyboard2_Controller.js
+0416	B23C	Winbond Gaming Keyboard	OpenRGB WinbondGamingKeyboardController
+0416	C345	Witmod Keyboard	OpenRGB WitmodKeyboardController
+041E	3247	Sound BlasterX Katana	Creative Labs/Creative_Sound_BlasterX_Katana_Soundbar.js
+041E	3256	Creative SoundBlasterX G6	OpenRGB CreativeController
+0424	274A	Alienware AW3418DW	Alienware/Alienware_Monitor_Gen1_Controller.js
+0424	274B	Alienware AW3418HW	Alienware/Alienware_Monitor_Gen1_Controller.js
+0424	274C	Alienware AW2518H	Alienware/Alienware_Monitor_Gen1_Controller.js
+043E	9A57	LG UltraGear 38GL950G	LG/LG_UltraGear_38GL950G.js
+043E	9A8A	LG 27GN950-B Monitor	OpenRGB LGMonitorController
+046A	0077	Cherry Keyboard MX BOARD 3.0S FL NBL	OpenRGB CherryKeyboardController
+046A	0079	Cherry Keyboard MX BOARD 3.0S FL RGB	OpenRGB CherryKeyboardController
+046A	0083	Cherry Keyboard MX BOARD 3.0S FL RGB KOREAN	OpenRGB CherryKeyboardController
+046A	00AB	Cherry Keyboard MX 1.0 FL BL	OpenRGB CherryKeyboardController
+046A	00AC	Cherry Keyboard MX BOARD 1.0 TKL RGB	OpenRGB CherryKeyboardController
+046A	00B7	Cherry Keyboard MX BOARD 8.0 TKL RGB	OpenRGB CherryKeyboardController
+046A	00BB	Cherry Keyboard MX BOARD 10.0 FL RGB	OpenRGB CherryKeyboardController
+046A	00C3	Cherry Keyboard G80-3000 TKL NBL	OpenRGB CherryKeyboardController
+046A	00C4	Cherry Keyboard MX BOARD 2.0S FL RGB (US)	OpenRGB CherryKeyboardController
+046A	00C5	Cherry Keyboard G80-3000 TKL RGB	OpenRGB CherryKeyboardController
+046A	00C7	Cherry Keyboard MV BOARD 3.0 FL RGB	OpenRGB CherryKeyboardController
+046A	00C9	Cherry Keyboard CCF MX 8.0 TKL BL	OpenRGB CherryKeyboardController
+046A	00CA	Cherry Keyboard CCF MX 1.0 TKL BL	OpenRGB CherryKeyboardController
+046A	00CB	Cherry Keyboard CCF MX 1.0 TKL NBL	OpenRGB CherryKeyboardController
+046A	00CD	Cherry Keyboard G80-3000 TKL NBL KOREAN	OpenRGB CherryKeyboardController
+046A	00CE	Cherry Keyboard MX BOARD 2.0S FL NBL	OpenRGB CherryKeyboardController
+046A	00D2	Cherry Keyboard MX 1.0 FL NBL	OpenRGB CherryKeyboardController
+046A	00D3	Cherry Keyboard MX 1.0 FL RGB	OpenRGB CherryKeyboardController
+046A	00DD	Cherry Keyboard G80-3000N TKL RGB (EU)	OpenRGB CherryKeyboardController
+046A	00DE	Cherry Keyboard G80-3000N FL RGB (EU)	OpenRGB CherryKeyboardController
+046A	00DF	Cherry Keyboard MX BOARD 10.0N FL RGB (EU)	OpenRGB CherryKeyboardController
+046A	00E0	Cherry Keyboard G80-3000N TKL RGB (US)	OpenRGB CherryKeyboardController
+046A	00E1	Cherry Keyboard G80-3000N FL RGB (US)	OpenRGB CherryKeyboardController
+046A	00E2	Cherry Keyboard MX BOARD 10.0N FL RGB (US)	OpenRGB CherryKeyboardController
+046A	01A6	Cherry Keyboard MX BOARD 2.0S FL RGB (EU)	OpenRGB CherryKeyboardController
+046D	0A5B	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0A5C	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0A78	Logitech G560 Speakers	Logitech/8080 Devices (Legacy)/Logitech_G560_Speakers.js
+046D	0A87	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0A89	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0AB5	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0AD8	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0AFE	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	0B1F	Logitech Headset Controller	Logitech/8080 Devices (Legacy)/Logitech_Headset_Controller.js
+046D	409D	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	40B0	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C048	logitech g9	libratbag logitech-g9.device
+046D	C066	logitech g9x Original	libratbag logitech-g9x-Original.device
+046D	C07E	Logitech G402 Hyperion Mouse	Logitech/8080 Devices (Legacy)/Logitech_G402_Hyperion_Mouse.js
+046D	C081	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C082	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C083	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C084	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C085	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C087	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C088	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C08B	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C08C	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C08D	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C08F	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C090	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C091	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C092	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C094	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C095	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C096	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C099	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C09A	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C09B	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C09D	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C09E	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C21C	Logitech G13 Keyboard	Logitech/Logitech_G13_Keyboard.js
+046D	C229	Logitech G19	Logitech/Logitech_G19_Keyboard.js
+046D	C24A	Logitech G600 Mouse	Logitech/Logitech_G600_Mouse.js
+046D	C32B	Logitech G910 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G910_Keyboard.js
+046D	C330	Logitech G410 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G410_Keyboard.js
+046D	C331	Logitech G810 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G810_Keyboard.js
+046D	C332	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C335	Logitech G910 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G910_Keyboard.js
+046D	C336	Logitech G213 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G213_Keyboard.js
+046D	C337	Logitech G810 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G810_Keyboard.js
+046D	C339	Logitech Pro TKL Keyboard	Logitech/8080 Devices (Legacy)/Logitech_Pro_TKL_Keyboard.js
+046D	C33A	Logitech G413 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G413_Keyboard.js
+046D	C33C	Logitech G513 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G513_Keyboard.js
+046D	C33E	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C33F	Logitech G815 Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G815_Keyboard.js
+046D	C342	Logitech G512 SE Keyboard	Logitech/8080 Devices (Legacy)/Logitech_G512_SE_Keyboard.js
+046D	C343	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C347	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C348	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C351	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C352	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C355	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C356	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C357	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C358	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C359	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C35B	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C539	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C53A	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C541	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C543	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C545	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C547	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C548	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+046D	C54D	Logitech Modern Device	Logitech/Logitech_Modern_Device.js
+0483	5750	LightSalt Peripherals	OpenRGB LightSaltController
+0483	A33E	WhirlwindFX Element V2 ANSI QMK Keyboard	whirlwindfx/WhirlwindFX_Element-V2_QMK_ANSI_Keyboard.js
+048D	6004	ite8291r3 ctl	ite8291r3-ctl
+048D	6005	Ionico Light Bar	OpenRGB IonicoController
+048D	6006	ite8291r3 ctl	ite8291r3-ctl
+048D	600A	ite 8291	tuxedo-drivers ite_8291/ite_8291.c
+048D	600B	Clevo Keyboard (ITE 8291)	OpenRGB ClevoKeyboardController
+048D	6010	TUXEDO Light Bar	src/ite_8291_lb/ite_8291_lb.c
+048D	7000	TUXEDO Light Bar	src/ite_8291_lb/ite_8291_lb.c
+048D	7001	CLEVO Lightbar	OpenRGB ClevoLightbarController
+048D	8297	TUXEDO Keyboard Light	src/ite_8297/ite_8297.c
+048D	8910	Clevo Keyboard (ITE 829x)	OpenRGB ClevoKeyboardController
+048D	C195	Lenovo Legion 5 Gen 10	OpenRGB LenovoControllers
+048D	C197	Lenovo Legion 7 Gen 10	OpenRGB LenovoControllers
+048D	C935	Lenovo Legion Y740	OpenRGB LenovoControllers
+048D	C955	Lenovo 5 2020	OpenRGB LenovoControllers
+048D	C956	Lenovo Legion 7 Gen 5	OpenRGB LenovoControllers
+048D	C957	Lenovo Legion 7S Gen 5	OpenRGB LenovoControllers
+048D	C963	Lenovo Ideapad 3-15ach6	OpenRGB LenovoControllers
+048D	C965	Lenovo 5 2021	OpenRGB LenovoControllers
+048D	C967	Lenovo Legion 7S Gen 6	OpenRGB LenovoControllers
+048D	C968	Lenovo Legion 7 Gen 6	OpenRGB LenovoControllers
+048D	C973	Lenovo 5 2022 Ideapad	OpenRGB LenovoControllers
+048D	C975	Lenovo 5 2022	OpenRGB LenovoControllers
+048D	C977	Lenovo Legion 7S Gen 7	OpenRGB LenovoControllers
+048D	C978	Lenovo Legion 7 Gen 7	OpenRGB LenovoControllers
+048D	C984	Lenovo 5 2023 Ideapad	OpenRGB LenovoControllers
+048D	C985	Lenovo 5 2023	OpenRGB LenovoControllers
+048D	C987	Lenovo Legion 7S Gen 8	OpenRGB LenovoControllers
+048D	C988	Lenovo Legion 7 Gen 8	OpenRGB LenovoControllers
+048D	C997	Lenovo Legion 7 Gen 9	OpenRGB LenovoControllers
+048D	C998	Lenovo Legion 7 Gen 9	OpenRGB LenovoControllers
+048D	CE00	Ionico Keyboard	OpenRGB IonicoController
+04CA	00A5	Alienware AW558	Alienware/Alienware_AW558_Mouse.js
+04D8	EE65	Drop SHIFT v1 QMK Keyboard	Massdrop/Drop_SHIFT_V1_QMK_Keyboard.js
+04D8	EED2	Massdrop CTRL QMK Keyboard	Massdrop/Massdrop_CTRL_QMK_Keyboard.js
+04D8	EED3	massdrop_alt_default	Massdrop/Massdrop_ALT_QMK_Keyboard.js
+04D8	F372	Luxafor Flag	OpenRGB LuxaforController
+04D8	FD0A	Np93 ALPHA - Gaming Mouse	OpenRGB LexipMouseController
+04D9	0348	Ducky Shine 7/Ducky One 2 RGB	OpenRGB DuckyKeyboardController
+04D9	0356	Ducky One 2 RGB TKL	OpenRGB DuckyKeyboardController
+04D9	8008	Anne Pro 2	OpenRGB AnnePro2Controller
+04D9	8009	Anne Pro 2	OpenRGB AnnePro2Controller
+04D9	A070	Holtek USB Gaming Mouse	OpenRGB HoltekController
+04D9	A1FA	Holtek Mousemat	OpenRGB HoltekController
+04D9	A292	Anne Pro 2	OpenRGB AnnePro2Controller
+04D9	A293	Anne Pro 2	OpenRGB AnnePro2Controller
+04D9	FA58	Mars Gaming MM4	src/driver-marsgaming/marsgaming-command.c
+04D9	FA7E	Redragon M810 Taipan	OpenRGB RedragonController
+04D9	FC05	Tecknet M008	OpenRGB TecknetController
+04D9	FC30	Redragon M711 Cobra	OpenRGB RedragonController
+04D9	FC38	Redragon M602 Griffin	OpenRGB RedragonController
+04D9	FC39	Redragon M715 Dagger	OpenRGB RedragonController
+04D9	FC3A	Redragon M716 Inquisitor	OpenRGB RedragonController
+04D9	FC40	Redragon M921 Azzinoth	OpenRGB RedragonController
+04D9	FC4D	Redragon M908 Impact	OpenRGB RedragonController
+04D9	FC58	Redragon M801 Sniper	OpenRGB RedragonController
+04D9	FC5E	Redragon M901-K-2 Perdition	OpenRGB RedragonController
+04D9	FC5F	Redragon M808 Storm	OpenRGB RedragonController
+04D9	FC62	Redragon M711-FPS-1 Cobra FPS	OpenRGB RedragonController
+04D9	FC69	Redragon M987 Reaping	OpenRGB RedragonController
+04F2	1830	Alienware AW510K	OpenRGB AlienwareKeyboardController
+04F2	1968	Alienware AW410K	OpenRGB AlienwareKeyboardController
+0543	A002	ViewSonic Monitor XG270QC	OpenRGB ViewSonicController
+0543	A004	ViewSonic Monitor XG271QG	OpenRGB ViewSonicController
+05AC	024F	Keychron Gaming Keyboard 1	OpenRGB KeychronKeyboardController
+05AC	0250	Ozone tactical QMK Keyboard	_Random-Brands/ozone_tactical.js
+05AC	0256	VSG Mintaka	OpenRGB MintakaKeyboardController
+060B	7010	Cougar 700K EVO Gaming Keyboard	OpenRGB CougarController
+06A3	0DC5	MadCatz Cyborg Gaming Light	OpenRGB MadCatzCyborgController
+0738	2221	Logitech X56 HOTAS Joystick	Logitech/Logitech_X56_HOTAS_Joystick.js
+0738	A221	Logitech X56 HOTAS Throttle	Logitech/Logitech_X56_HOTAS_Throttle.js
+0951	16BE	HyperX Alloy Elite RGB	OpenRGB HyperXKeyboardController
+0951	16D3	HyperX Pulsefire Surge	OpenRGB HyperXMouseController
+0951	16D7	HyperX Pulsefire FPS Pro	OpenRGB HyperXMouseController
+0951	16DC	HyperX Alloy FPS RGB	OpenRGB HyperXKeyboardController
+0951	16DE	HyperX Pulsefire Core	OpenRGB HyperXMouseController
+0951	16E1	HyperX Pulsefire Dart (Wireless)	OpenRGB HyperXMouseController
+0951	16E2	HyperX Pulsefire Dart (Wired)	OpenRGB HyperXMouseController
+0951	16E4	HyperX Pulsefire Raid	OpenRGB HyperXMouseController
+0951	16E5	HyperX Alloy Origins	OpenRGB HyperXKeyboardController
+0951	16E6	HyperX Alloy Origins Core	OpenRGB HyperXKeyboardController
+0951	1705	HyperX Fury Ultra	OpenRGB HyperXMousematController
+0951	1711	HyperX Alloy Elite 2	OpenRGB HyperXKeyboardController
+0951	171D	HyperX Quadcast S	HyperX/HyperX_Quadcast_S.js
+0951	171F	HyperX Quadcast S	OpenRGB HyperXMicrophoneController
+0951	1727	HyperX Pulsefire Haste	OpenRGB HyperXMouseController
+0951	1729	HyperX PulseFire FPS Pro	HyperX/HyperX_Pulsefire_FPS_Pro.js
+0951	1734	HyperX Alloy Origins 60	OpenRGB HyperXKeyboardController
+0951	1741	HyperX Pulsefire Mat RGB Mouse Pad XL	OpenRGB HyperXMousematController
+09DA	11A1	A4Tech Bloody A70x	A4Tech/A4Tech_Controller.js
+09DA	1CCA	A4Tech Bloody A70x	A4Tech/A4Tech_Controller.js
+09DA	3666	Bloody W90 Max	OpenRGB A4TechController
+09DA	37EA	Bloody W60 Pro	OpenRGB A4TechController
+09DA	39B6	Bloody W90 Pro	OpenRGB A4TechController
+09DA	7452	A4Tech Bloody A70x	A4Tech/A4Tech_Controller.js
+09DA	79EF	Bloody W70 Max	OpenRGB A4TechController
+09DA	FA10	Bloody B820R	OpenRGB A4TechController
+09DA	FA60	Bloody MP 50RS	OpenRGB A4TechController
+0B05	17E0	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1807	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	181C	ASUS ROG Spatha Wired	OpenRGB AsusAuraUSBController
+0B05	1822	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1824	ASUS ROG Spatha Wireless	OpenRGB AsusAuraUSBController
+0B05	1835	ASUS Sagaris GK1100	OpenRGB AsusLegacyUSBController
+0B05	1837	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	183D	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1845	ASUS ROG Gladius II	OpenRGB AsusAuraUSBController
+0B05	1846	ASUS ROG Pugio	OpenRGB AsusAuraUSBController
+0B05	1847	ASUS ROG Strix Impact	OpenRGB AsusAuraUSBController
+0B05	184A	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	184D	ASUS ROG Claymore	OpenRGB AsusAuraUSBController
+0B05	1854	ASUS Aura Core	OpenRGB AsusAuraCoreController
+0B05	185B	ASUS ROG Strix Evolve	OpenRGB AsusAuraUSBController
+0B05	1866	ASUS Aura Core	OpenRGB AsusAuraCoreController
+0B05	1867	ASUS Aura Addressable	OpenRGB AsusAuraUSBController
+0B05	1869	ASUS Aura Core	OpenRGB AsusAuraCoreController
+0B05	186E	ASUS PG27UQ	Asus/ASUS_Monitor_Controller.js
+0B05	1872	ASUS Aura Addressable	OpenRGB AsusAuraUSBController
+0B05	1875	ASUS ROG Strix Flare	OpenRGB AsusAuraUSBController
+0B05	1877	ASUS ROG Gladius II Origin	OpenRGB AsusAuraUSBController
+0B05	1881	ASUS ROG Spotlight	Asus/ASUS_ROG_Spotlight.js
+0B05	1887	ASUS ROG Ryuo AIO	OpenRGB AsusAuraUSBController
+0B05	1889	ASUS ROG AURA Terminal	OpenRGB AsusAuraUSBController
+0B05	1890	ASUS ROG Balteus Qi	OpenRGB AsusAuraUSBController
+0B05	1891	ASUS ROG Balteus	OpenRGB AsusAuraUSBController
+0B05	1898	ASUS TUF Gaming M5	OpenRGB AsusAuraUSBController
+0B05	1899	ASUS TUF Gaming K5	OpenRGB AsusAuraUSBController
+0B05	189E	ASUS ROG Gladius II Wireless	OpenRGB AsusAuraUSBController
+0B05	18A0	ASUS ROG Gladius II Wireless	OpenRGB AsusAuraUSBController
+0B05	18A3	ASUS Aura Addressable	OpenRGB AsusAuraUSBController
+0B05	18A5	ASUS Aura Addressable	OpenRGB AsusAuraUSBController
+0B05	18AA	ASUS TUF Gaming K7	OpenRGB AsusAuraUSBController
+0B05	18AE	ASUS ROG Ryujin AIO	OpenRGB AsusAuraUSBController
+0B05	18AF	ASUS ROG Strix Flare CoD Black Ops 4 Edition	OpenRGB AsusAuraUSBController
+0B05	18B1	ASUS ROG Gladius II Origin COD	OpenRGB AsusAuraUSBController
+0B05	18C5	ASUS ROG Throne QI	OpenRGB AsusAuraUSBController
+0B05	18C6	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	18CD	ASUS ROG Gladius II Origin PNK LTD	OpenRGB AsusAuraUSBController
+0B05	18CF	ASUS ROG Strix Flare PNK LTD	OpenRGB AsusAuraUSBController
+0B05	18D4	ASUS PG35VQ	Asus/ASUS_Monitor_Controller.js
+0B05	18D9	ASUS ROG Throne	OpenRGB AsusAuraUSBController
+0B05	18DD	ASUS ROG Gladius II Core	OpenRGB AsusAuraUSBController
+0B05	18E1	ASUS ROG Strix Impact II	OpenRGB AsusAuraUSBController
+0B05	18E3	ASUS ROG Chakram (Wired)	OpenRGB AsusAuraUSBController
+0B05	18E5	ASUS ROG Chakram (Wireless)	OpenRGB AsusAuraUSBController
+0B05	18F3	ASUS Aura Motherboard	OpenRGB AsusAuraUSBController
+0B05	18F6	ASUS ROG Strix Scope	Asus/ASUS_Keyboard.js
+0B05	18F8	ASUS ROG Strix Scope	OpenRGB AsusAuraUSBController
+0B05	1906	ASUS ROG Pugio II (Wired)	OpenRGB AsusAuraUSBController
+0B05	1908	ASUS ROG Pugio II (Wireless)	OpenRGB AsusAuraUSBController
+0B05	190C	ASUS ROG Strix Scope TKL	OpenRGB AsusAuraUSBController
+0B05	1910	ASUS TUF Gaming M3	OpenRGB AsusAuraUSBController
+0B05	1919	ASUS ROG Strix XG279Q	OpenRGB AsusAuraUSBController
+0B05	1931	ASUS PG43UQ	Asus/ASUS_Monitor_Controller.js
+0B05	1933	ASUS ROG Strix XG27W	OpenRGB AsusAuraUSBController
+0B05	1934	ASUS ROG Claymore II	Asus/ASUS_ROG_Claymore_II.js
+0B05	1939	ASUS Aura Motherboard	OpenRGB AsusAuraUSBController
+0B05	193C	ASUS ROG Falchion (Wired)	OpenRGB AsusAuraUSBController
+0B05	193E	ASUS ROG Falchion (Wireless)	OpenRGB AsusAuraUSBController
+0B05	1941	ASUS PG32UQX	Asus/ASUS_Monitor_Controller.js
+0B05	1943	ASUS ROG Delta S	app/Peripherals/Headset/Models/DeltaS.cs
+0B05	1945	ASUS TUF Gaming K1	OpenRGB AsusAuraUSBController
+0B05	1947	ASUS ROG Strix Impact II Wireless USB	OpenRGB AsusAuraUSBController
+0B05	1949	ASUS ROG Strix Impact II Wireless 2.4 Ghz	OpenRGB AsusAuraUSBController
+0B05	194B	ASUS TUF Gaming K3	OpenRGB AsusAuraUSBController
+0B05	1951	ASUS ROG Strix Scope RX	OpenRGB AsusAuraUSBController
+0B05	1954	ASUS ROG Strix Scope TKL PNK LTD	OpenRGB AsusAuraUSBController
+0B05	1956	ASUS ROG Strix Impact II Electro Punk	OpenRGB AsusAuraUSBController
+0B05	1958	ASUS ROG Chakram Core	OpenRGB AsusAuraUSBController
+0B05	195B	ASUS ROG Clavis	app/Peripherals/Headset/Models/Clavis.cs
+0B05	195C	ASUS ROG Keris	OpenRGB AsusAuraUSBController
+0B05	195E	ASUS ROG Keris Wireless USB	OpenRGB AsusAuraUSBController
+0B05	1960	ASUS ROG Keris Wireless 2.4Ghz	OpenRGB AsusAuraUSBController
+0B05	1962	ASUS ROG Keris Wireless Bluetooth	OpenRGB AsusAuraUSBController
+0B05	1965	ASUS ROG Cetra RGB	app/Peripherals/Headset/Models/CetraRgb.cs
+0B05	1968	ASUS ROG Strix XG32VC	OpenRGB AsusAuraUSBController
+0B05	196B	ASUS ROG Claymore II	Asus/ASUS_ROG_Claymore_II.js
+0B05	1977	Asus ROG Spatha X USB	OpenRGB AsusAuraUSBController
+0B05	1979	Asus ROG Spatha X 2.4GHz	OpenRGB AsusAuraUSBController
+0B05	197B	ASUS ROG Gladius III	OpenRGB AsusAuraUSBController
+0B05	197D	ASUS ROG Gladius III Wireless USB	OpenRGB AsusAuraUSBController
+0B05	197F	ASUS ROG Gladius III Wireless 2.4Ghz	OpenRGB AsusAuraUSBController
+0B05	1981	ASUS ROG Gladius III Wireless Bluetooth	OpenRGB AsusAuraUSBController
+0B05	198C	ASUS ROG Strix XG27AQ	OpenRGB AsusAuraUSBController
+0B05	1994	ASUS ROG Throne QI GUNDAM	OpenRGB AsusAuraUSBController
+0B05	19AF	ASUS Aura Motherboard	OpenRGB AsusAuraUSBController
+0B05	19B6	ASUS ROG Strix SCAR 15	OpenRGB AsusAuraCoreController
+0B05	19B9	ASUS ROG PG32UQ	OpenRGB AsusAuraUSBController
+0B05	19BB	ASUS ROG Strix XG27AQM	OpenRGB AsusAuraUSBController
+0B05	19D0	ASUS ROG Strix Scope NX TKL Moonlight White	OpenRGB AsusAuraUSBController
+0B05	19D2	ASUS ROG Strix Impact II Moonlight White	OpenRGB AsusAuraUSBController
+0B05	19F6	ASUS ROG Strix Scope NX Wireless Deluxe USB	OpenRGB AsusAuraUSBController
+0B05	19F8	ASUS ROG Strix Scope NX Wireless Deluxe 2.4GHz	OpenRGB AsusAuraUSBController
+0B05	19FC	ASUS ROG Strix Flare II Animate	OpenRGB AsusAuraUSBController
+0B05	19FE	ASUS ROG Strix Flare II	OpenRGB AsusAuraUSBController
+0B05	1A05	ASUS ROG Strix Scope RX TKL Wireless Deluxe	OpenRGB AsusAuraUSBController
+0B05	1A07	ASUS ROG Strix Scope RX TKL Wireless Deluxe	G-Helper
+0B05	1A18	ASUS ROG Chakram X USB	OpenRGB AsusAuraUSBController
+0B05	1A1A	ASUS ROG Chakram X 2.4GHz	OpenRGB AsusAuraUSBController
+0B05	1A30	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1A55	ASUS ROG Strix Scope RX	Asus/ASUS_Keyboard.js
+0B05	1A57	ASUS ROG Keris Wireless EVA	G-Helper
+0B05	1A59	ASUS ROG Keris	Asus/Asus_Mouse.js
+0B05	1A64	ASUS ROG Falchion Ace	Asus/ASUS_Keyboard.js
+0B05	1A66	ASUS ROG Keris Wireless AimPoint USB	OpenRGB AsusAuraUSBController
+0B05	1A68	ASUS ROG Keris Wireless AimPoint 2.4Ghz	OpenRGB AsusAuraUSBController
+0B05	1A70	ASUS ROG Gladius III Wireless AimPoint USB	OpenRGB AsusAuraUSBController
+0B05	1A72	ASUS ROG Gladius III Wireless AimPoint 2.4Ghz	OpenRGB AsusAuraUSBController
+0B05	1A83	ASUS ROG Azoth USB	OpenRGB AsusAuraUSBController
+0B05	1A85	ASUS ROG Azoth 2.4GHz	OpenRGB AsusAuraUSBController
+0B05	1A88	ASUS ROG Strix Impact III	OpenRGB AsusAuraUSBController
+0B05	1A92	ASUS ROG Harpe Ace AIM LAB Edition	Asus/Asus_Mouse.js
+0B05	1A94	ASUS ROG Harpe Ace AIM LAB Edition	Asus/Asus_Mouse.js
+0B05	1A9B	ASUS TUF Gaming M3 Gen II	OpenRGB AsusAuraUSBController
+0B05	1AA6	ASUS Aura Motherboard	OpenRGB AsusAuraUSBController
+0B05	1AAE	ASUS ROG Strix Scope II 96 Wireless USB	OpenRGB AsusAuraUSBController
+0B05	1AB3	ASUS ROG Strix Scope II	OpenRGB AsusAuraUSBController
+0B05	1AB5	ASUS ROG Strix Scope II RX	OpenRGB AsusAuraUSBController
+0B05	1ABE	ASUS ROG Ally	OpenRGB AsusAuraUSBController
+0B05	1AC5	ASUS PG248QP	Asus/ASUS_Monitor_Controller.js
+0B05	1AC8	Asus ROG Aura Monitor Light Bar	OpenRGB AsusMonitorController
+0B05	1ACE	ASUS Omni keyboard	Asus/Omni Controller/ASUS_Omni_Device.js
+0B05	1AD0	ASUS ROG Harpe II Ace	app/Peripherals/Mouse/Models/HarpeIIAce.cs
+0B05	1AD3	ASUS ROG Cetra SpeedNova	app/Peripherals/Headset/Models/CetraSpeedNova.cs
+0B05	1AFA	ASUS ROG Delta II	app/Peripherals/Headset/Models/DeltaII.cs
+0B05	1B04	ASUS ROG Falchion RX	Asus/ASUS_Keyboard.js
+0B05	1B0A	ASUS ROG Gladius III Aimpoint EVA-02	app/Peripherals/Mouse/Models/GladiusIIIAimpoint.cs
+0B05	1B0C	ASUS ROG Gladius III Aimpoint	Asus/Asus_Mouse.js
+0B05	1B12	ASUS ROG Strix Scope RX EVA-02 Edition	OpenRGB AsusAuraUSBController
+0B05	1B16	ASUS ROG Keris II Ace	app/Peripherals/Mouse/Models/KerisIIAce.cs
+0B05	1B29	ASUS ROG Strix LC III	OpenRGB AsusAuraUSBController
+0B05	1B2B	Asus ROG SWIFT PG32UCDM	OpenRGB AsusMonitorController
+0B05	1B2C	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1B30	ASUS TUF Gaming K3 GEN II	OpenRGB AsusAuraUSBController
+0B05	1B3A	ASUS TX 98	G-Helper
+0B05	1B3F	ASUS ROG Azoth Extreme	G-Helper
+0B05	1B4C	ASUS ROG Ally X	OpenRGB AsusAuraUSBController
+0B05	1B63	ASUS ROG Harpe Ace Mini	app/Peripherals/Mouse/Models/HarpeAceMini.cs
+0B05	1B67	ASUS ROG Harpe Ace Extreme	app/Peripherals/Mouse/Models/HarpeAceAimLab.cs
+0B05	1B6E	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1B78	ASUS ROG Strix Scope II 96 RX Wireless USB	OpenRGB AsusAuraUSBController
+0B05	1B7E	ASUS ROG Falchion Ace HFX	Asus/ASUS_Keyboard.js
+0B05	1B84	ASUS ROG Pelta	app/Peripherals/Headset/Models/Pelta.cs
+0B05	1BA3	Asus ROG STRIX XG27AQDMG	OpenRGB AsusMonitorController
+0B05	1BB4	Asus ROG STRIX XG27UCG	OpenRGB AsusMonitorController
+0B05	1BC9	Asus ROG STRIX XG27ACDNG	OpenRGB AsusMonitorController
+0B05	1BCA	Asus ROG SWIFT PG32UCDP	OpenRGB AsusMonitorController
+0B05	1BED	ASUS Aura Motherboard	OpenRGB AsusAuraUSBController
+0B05	1BF2	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1BF3	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1C0C	ASUS ROG Keris II Origin	Asus/Asus_Mouse.js
+0B05	1C24	ASUS ROG Azoth X	G-Helper
+0B05	1C25	ASUS ROG Azoth X	G-Helper
+0B05	1C56	ASUS TUF Gaming Mini Miku	app/Peripherals/Mouse/Models/TUFM4Wireless.cs
+0B05	1C57	ASUS TUF Gaming Mini Miku	app/Peripherals/Mouse/Models/TUFM4Wireless.cs
+0B05	1C5E	ASUS TUF Gaming K3 GEN II MIKU EDITION	OpenRGB AsusAuraUSBController
+0B05	1C60	ASUS TUF Gaming K3 GEN II Miku	G-Helper
+0B05	1C69	ASUS ROG Harpe II Ace	app/Peripherals/Mouse/Models/HarpeIIAce.cs
+0B05	1C7F	ASUS ROG Bulwark Dock	app/Peripherals/Mouse/Models/BulwarkDock.cs
+0B05	1C8D	ASUS ROG Gladius III Core	OpenRGB AsusAuraUSBController
+0B05	1C8F	ASUS ROG Harpe Mini Core	app/Peripherals/Mouse/Models/HarpeAceMini.cs
+0B05	1C9B	Asus ROG SWIFT PG32UCDMR	OpenRGB AsusMonitorController
+0B05	1CD7	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1CD8	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1CE6	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1CE7	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	1CEF	ASUS ROG Azoth Extreme SE	G-Helper
+0B05	1D41	ASUS ROG Delta II	app/Peripherals/Headset/Models/DeltaII.cs
+0B05	1D4C	ASUS ROG Keris II Origin KJP	app/Peripherals/Mouse/Models/KerisIIOrigin.cs
+0B05	4B42	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	8502	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0B05	879E	ASUS ROG Strix LC	OpenRGB AsusAuraUSBController
+0B05	8854	ASUS laptop keyboard	G-Helper MAIN_AURA_PIDS
+0C45	5004	EVision Keyboard 0C45:5004	OpenRGB EVisionKeyboardController
+0C45	5104	EVision Keyboard 0C45:5104	OpenRGB EVisionKeyboardController
+0C45	5204	EVision Keyboard 0C45:5204	OpenRGB EVisionKeyboardController
+0C45	5F01	Speedlink ORIOS RGB Gaming Mouse	SpeedLink/Speedlink_ORIOS_RGB_Gaming_Mouse.js
+0C45	652F	EVision Keyboard 0C45:652F	OpenRGB EVisionKeyboardController
+0C45	763D	Speedlink ORIOS RGB Gaming Mousepad	SpeedLink/Speedlink_ORIOS_RGB_Gaming_Mousepad.js
+0C45	763E	Speedlink ORIOS RGB Opto-Mech KB	SpeedLink/Speedlink_ORIOS_RGB_Opto-Mech_KB.js
+0C45	7672	EVision Keyboard 0C45:7672	OpenRGB EVisionKeyboardController
+0C45	7698	EVision Keyboard 0C45:7698	OpenRGB EVisionKeyboardController
+0C45	7E18	Patriot Viper V550	OpenRGB PatriotViperMouseController
+0C45	8006	SONIX keyboard	Sonix/SONIX_Keyboard_Controller_2.js
+0C45	8009	SONIX keyboard	Sonix/SONIX_Keyboard_Controller_2.js
+0C45	800A	SONIX keyboard	Sonix/SONIX_Keyboard_Controller_2.js
+0C45	80B1	SONIX keyboard	Sonix/SONIX_Keyboard_Controller_2.js
+0C45	8520	EVision Keyboard 0C45:8520	OpenRGB EVisionKeyboardController
+0C45	8801	SONIX keyboard	Sonix/SONIX_Keyboard_Controller_2.js
+0CF2	5130	AcerNitroHidKeyboardController	OpenRGB AcerNitroHidKeyboardController
+0DB0	0B30	MSI Vigor GK30 controller	OpenRGB MSIVigorController
+0DB0	0D11	MSI Clutch GM11 controller	OpenRGB MSIClutchController
+0E6F	0241	Lego Dimensions Toypad Base	OpenRGB LegoDimensionsToypadBaseController
+0FD9	0080	Elgato Stream Deck MK.2	OpenRGB StreamDeckController
+1038	0616	SteelSeries Apex M750	OpenRGB SteelSeriesControllerDetect.cpp:558
+1038	0617	SteelSeries Apex M750 TKL	Steelseries/Steelseries_Apex_M750_TKL_Keyboard.js
+1038	0619	SteelSeries Apex M750 TKL PUBG Edition	Steelseries/Steelseries_Apex_M750_TKL_Keyboard.js
+1038	1122	MSI Laptop Keyboard	OpenRGB MSILaptopController
+1038	113A	MSI GE68HX Keyboard	OpenRGB MSILaptopController
+1038	113C	MSI GE66 Raider	Steelseries/Steelseries_Keyboard_Laptop_Controller.js
+1038	114B	MSI GE68HX Lightbar	OpenRGB MSILaptopController
+1038	1161	MSI Laptop Lightbar	OpenRGB MSILaptopController
+1038	1202	SteelSeries Apex (OG)/Apex Fnatic	OpenRGB SteelSeriesControllerDetect.cpp:559
+1038	1206	SteelSeries Apex 350	OpenRGB SteelSeriesControllerDetect.cpp:560
+1038	1229	SteelSeries Siberia 350	OpenRGB SteelSeriesControllerDetect.cpp:522
+1038	1250	SteelSeries Arctis 5	OpenRGB SteelSeriesControllerDetect.cpp:524
+1038	1252	SteelSeries Arctis Pro	SignalRGB Steelseries_Arctis_Pro_Headset.js:1
+1038	1280	SteelSeries Arctis Pro GameDAC	SignalRGB Steelseries_Arctis_Pro_GameDAC_Headset.js:1
+1038	12AA	SteelSeries Arctis 5	OpenRGB SteelSeriesControllerDetect.cpp:525
+1038	12EC	SteelSeries Arctis Nova 3	OpenRGB SteelSeriesControllerDetect.cpp:523
+1038	1369	SteelSeries Sensei [RAW]	rivalcfg devices/sensei_raw.py:7
+1038	1384	SteelSeries Rival	rivalcfg devices/rival300.py:7
+1038	1392	SteelSeries Rival 300 Dota 2 Edition	OpenRGB SteelSeriesControllerDetect.cpp:499
+1038	1394	SteelSeries Rival 300 CS:GO Fade Edition	OpenRGB SteelSeriesControllerDetect.cpp:496
+1038	1507	SteelSeries QcK Prism	SignalRGB Steelseries_Qck_Prism_Mousepad.js:1
+1038	150A	SteelSeries QCK Prism Cloth Medium	OpenRGB SteelSeriesControllerDetect.cpp:530
+1038	150D	SteelSeries QCK Prism Cloth XL	OpenRGB SteelSeriesControllerDetect.cpp:531
+1038	1514	SteelSeries QCK Prism Cloth XL CS:GO Neon Rider Ed.	OpenRGB SteelSeriesControllerDetect.cpp:534
+1038	1516	SteelSeries QCK Prism Cloth 3XL	OpenRGB SteelSeriesControllerDetect.cpp:536
+1038	1518	SteelSeries QCK Prism Cloth 4XL	OpenRGB SteelSeriesControllerDetect.cpp:537
+1038	151A	SteelSeries QCK Prism Cloth 5XL	OpenRGB SteelSeriesControllerDetect.cpp:538
+1038	151C	SteelSeries QCK Prism Cloth XL CS:GO Neo Noir Ed.	OpenRGB SteelSeriesControllerDetect.cpp:535
+1038	151E	SteelSeries QCK Prism Cloth XL Destiny Ed.	OpenRGB SteelSeriesControllerDetect.cpp:532
+1038	1520	SteelSeries QCK Prism Cloth XL Destiny 2 Lightfall Ed.	OpenRGB SteelSeriesControllerDetect.cpp:533
+1038	1610	SteelSeries Apex Pro	OpenRGB SteelSeriesControllerDetect.cpp:550
+1038	1612	SteelSeries Apex 7	OpenRGB SteelSeriesControllerDetect.cpp:546
+1038	1614	SteelSeries Apex Pro TKL	OpenRGB SteelSeriesControllerDetect.cpp:551
+1038	1618	SteelSeries Apex 7 TKL	OpenRGB SteelSeriesControllerDetect.cpp:547
+1038	161A	SteelSeries Apex 3	OpenRGB SteelSeriesControllerDetect.cpp:543
+1038	161C	SteelSeries Apex 5	OpenRGB SteelSeriesControllerDetect.cpp:545
+1038	161E	SteelSeries Apex Pro Mini	Steelseries/Steelseries_Apex_Pro_Mini_Keyboard.js
+1038	1620	SteelSeries Apex 9 Mini	OpenRGB SteelSeriesControllerDetect.cpp:549
+1038	1622	SteelSeries Apex 3 TKL	OpenRGB SteelSeriesControllerDetect.cpp:544
+1038	1626	SteelSeries Apex Pro Mini	Steelseries/Steelseries_Apex_Pro_Mini_Keyboard.js
+1038	1628	SteelSeries Apex Pro TKL 2023 Wired	OpenRGB SteelSeriesControllerDetect.cpp:552
+1038	1630	SteelSeries Apex Pro TKL 2023 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:553
+1038	1632	SteelSeries Apex Pro TKL 2023 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:554
+1038	1634	SteelSeries Apex 9 TKL	OpenRGB SteelSeriesControllerDetect.cpp:548
+1038	1640	SteelSeries Apex Pro 3	OpenRGB SteelSeriesControllerDetect.cpp:561
+1038	1642	SteelSeries Apex Pro TKL Gen 3 Wired	OpenRGB SteelSeriesControllerDetect.cpp:555
+1038	1644	SteelSeries Apex Pro TKL Gen 3 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:556
+1038	1646	SteelSeries Apex Pro TKL Gen 3 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:557
+1038	1648	SteelSeries Apex Pro Mini Gen 3	Steelseries/Steelseries_Keyboard_Controller.js
+1038	1700	SteelSeries Rival 700	OpenRGB SteelSeriesControllerDetect.cpp:509
+1038	1702	SteelSeries Rival 100	OpenRGB SteelSeriesControllerDetect.cpp:489
+1038	170A	SteelSeries Rival 100 (Dell China)	rivalcfg devices/rival100.py:13
+1038	170B	SteelSeries Rival 100 Dota 2 Edition (retail)	rivalcfg devices/rival100.py:19
+1038	170C	SteelSeries Rival 100 DotA 2 Edition	OpenRGB SteelSeriesControllerDetect.cpp:490
+1038	170E	SteelSeries Rival 500	rivalcfg devices/rival500.py:20
+1038	1710	SteelSeries Rival 300	OpenRGB SteelSeriesControllerDetect.cpp:494
+1038	1712	SteelSeries Rival 300 Fallout 4 Edition	rivalcfg devices/rival300.py:25
+1038	1714	Acer Predator Gaming Mouse (Rival 300)	OpenRGB SteelSeriesControllerDetect.cpp:495
+1038	1716	SteelSeries Rival 300 CS:GO Fade Edition (stm32)	OpenRGB SteelSeriesControllerDetect.cpp:497
+1038	1718	SteelSeries Rival 300 HP Omen Edition	OpenRGB SteelSeriesControllerDetect.cpp:500
+1038	171A	SteelSeries Rival 300 CS:GO Hyperbeast Edition	OpenRGB SteelSeriesControllerDetect.cpp:498
+1038	171C	SteelSeries Rival 300 Evil Geniuses Edition	rivalcfg devices/rival300.py:31
+1038	171E	SteelSeries Rival 310 CS:GO Howl Edition	OpenRGB SteelSeriesControllerDetect.cpp:503
+1038	1720	SteelSeries Rival 310	OpenRGB SteelSeriesControllerDetect.cpp:502
+1038	1722	SteelSeries Sensei 310	OpenRGB SteelSeriesControllerDetect.cpp:517
+1038	1724	SteelSeries Rival 600	OpenRGB SteelSeriesControllerDetect.cpp:505
+1038	1726	SteelSeries Rival 650 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:508
+1038	1729	SteelSeries Rival 110	OpenRGB SteelSeriesControllerDetect.cpp:493
+1038	172B	SteelSeries Rival 650	OpenRGB SteelSeriesControllerDetect.cpp:507
+1038	172E	SteelSeries Rival 600 Dota 2 Edition	OpenRGB SteelSeriesControllerDetect.cpp:506
+1038	1730	SteelSeries Rival 710	OpenRGB SteelSeriesControllerDetect.cpp:510
+1038	1736	SteelSeries Rival 310 PUBG Edition	OpenRGB SteelSeriesControllerDetect.cpp:504
+1038	1810	SteelSeries Rival 300S	rivalcfg devices/rival300s.py:8
+1038	1814	SteelSeries Rival 105	OpenRGB SteelSeriesControllerDetect.cpp:491
+1038	1816	SteelSeries Rival 106	OpenRGB SteelSeriesControllerDetect.cpp:492
+1038	1824	SteelSeries Rival 3 (Old Firmware)	OpenRGB SteelSeriesControllerDetect.cpp:511
+1038	182A	SteelSeries Prime Rainbow 6 Siege Black Ice Edition	rivalcfg devices/prime.py:13
+1038	182C	SteelSeries Prime+	rivalcfg devices/prime_plus.py:7
+1038	182E	SteelSeries Prime	rivalcfg devices/prime.py:7
+1038	1830	SteelSeries Rival 3 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:513
+1038	1832	SteelSeries Sensei TEN	OpenRGB SteelSeriesControllerDetect.cpp:515
+1038	1834	SteelSeries Sensei TEN CS:GO Neon Rider Edition	OpenRGB SteelSeriesControllerDetect.cpp:516
+1038	1836	SteelSeries Aerox 3 Wired	OpenRGB SteelSeriesControllerDetect.cpp:479
+1038	1838	SteelSeries Aerox 3 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:474
+1038	183A	SteelSeries Aerox 3 Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:475
+1038	183C	SteelSeries Rival 5	OpenRGB SteelSeriesControllerDetect.cpp:514
+1038	183E	SteelSeries Rival 5 Destiny Edition	rivalcfg devices/rival5.py:14
+1038	1840	SteelSeries Prime Wireless (2.4 GHz wireless mode)	rivalcfg devices/prime_wireless_wireless.py:23
+1038	1842	SteelSeries Prime Wireless (wired mode)	rivalcfg devices/prime_wireless_wired.py:11
+1038	1848	SteelSeries Prime Mini Wireless (2.4 GHz wireless mode)	rivalcfg devices/prime_wireless_wireless.py:29
+1038	184A	SteelSeries Prime Mini Wireless (wired mode)	rivalcfg devices/prime_wireless_wired.py:17
+1038	184C	SteelSeries Rival 3	OpenRGB SteelSeriesControllerDetect.cpp:512
+1038	184D	SteelSeries Prime Mini	rivalcfg devices/prime_mini.py:7
+1038	1850	SteelSeries Aerox 5 Wired	OpenRGB SteelSeriesControllerDetect.cpp:486
+1038	1852	SteelSeries Aerox 5 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:480
+1038	1854	SteelSeries Aerox 5 Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:481
+1038	1856	SteelSeries Prime CS:GO Neo Noir Edition	rivalcfg devices/prime.py:19
+1038	1858	SteelSeries Aerox 9 Wireless	OpenRGB SteelSeriesControllerDetect.cpp:487
+1038	185A	SteelSeries Aerox 9 Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:488
+1038	185C	SteelSeries Aerox 5 Destiny 2 Edition Wireless	OpenRGB SteelSeriesControllerDetect.cpp:482
+1038	185E	SteelSeries Aerox 5 Destiny 2 Edition Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:483
+1038	1860	SteelSeries Aerox 5 Diablo IV Edition Wireless	OpenRGB SteelSeriesControllerDetect.cpp:484
+1038	1862	SteelSeries Aerox 5 Diablo IV Edition Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:485
+1038	1870	SteelSeries Rival 3 Gen 2	rivalcfg devices/rival3_gen2.py:8
+1038	1874	SteelSeries Aerox 9 Wireless WOW Edition (2.4 GHz wireless mode)	rivalcfg devices/aerox9_wireless_wireless.py:29
+1038	1876	SteelSeries Aerox 9 Wireless WOW Edition (wired mode)	rivalcfg devices/aerox9_wireless_wired.py:17
+1038	1878	SteelSeries Aerox 3 CS2 Dragon Lore Edition Wireless	OpenRGB SteelSeriesControllerDetect.cpp:476
+1038	187A	SteelSeries Aerox 3 CS2 Dragon Lore Edition Wireless Wired	OpenRGB SteelSeriesControllerDetect.cpp:477
+1038	1890	SteelSeries Aerox 3 Wireless Gen 2	OpenRGB SteelSeriesControllerDetect.cpp:478
+1038	1A00	SteelSeries Arena 7	SignalRGB Steelseries_Arena_7_Speakers.js:1
+1038	1A05	SteelSeries Arena 9	SignalRGB Steelseries_Arena_9_Speakers.js:1
+1038	233A	SteelSeries Aerox 5 Diablo IV Edition	SignalRGB Steelseries_Aerox_Wireless_Mouse.js:1
+1038	3769	SteelSeries QcK Prism XL Destiny Edition	SignalRGB Steelseries_Qck_Mousepad.js:1
+1044	7A40	Gigabyte Aorus M2	OpenRGB GigabyteAorusMouseController
+10F5	5001	Turtle Beach Vulcan II TKL Pro	OpenRGB RoccatController
+10F5	5015	Turtle Beach Kone XP Air - Wired	Turtle Beach/Turtle_Beach_Kone_XP_Air_Wired_Mouse.js
+10F5	5017	Turtle Beach Kone XP Air	Turtle Beach/Turtle_Beach_Kone_XP_Air_Mouse.js
+10F5	5019	Turtle Beach Kone XP Air Dock	Turtle Beach/Turtle_Beach_Kone_XP_Air_Dock.js
+10F5	501B	Turtle Beach Vulcan II	OpenRGB RoccatController
+10F5	501C	Turtle Beach Vulcan II Max Keyboard	Turtle Beach/Turtle_Beach_Vulcan_II_Max_Keyboard.js
+10F5	501E	Turtle Beach Vulcan II Mini Air	Turtle Beach/Turtle_Beach_Vulcan_II_Mini_Air_Keyboard.js
+10F5	5021	Turtle Beach Vulcan II Mini Air	Turtle Beach/Turtle_Beach_Vulcan_II_Mini_Air_Keyboard.js
+10F5	5023	Turtle Beach Vulcan II TKL	OpenRGB RoccatController
+10F5	5026	Turtle Beach AIMO Wide Mousepad	Turtle Beach/Turtle_Beach_AIMO_Wide_Mousepad.js
+10F5	503A	Turtle Beach Command Series KP7	OpenRGB TurtleBeachKP7Controller
+1209	68A0	skeletonkbd Frost68 QMK Keyboard	_Random-Brands/skeletonkbd_frost68.js
+125F	9418	XPG Summoner Gaming Keyboard	OpenRGB XPGSummonerKeyboardController
+12CF	0412	Cougar Revenger ST	OpenRGB CougarController
+145F	0248	Trust GXT 180	OpenRGB TrustController
+145F	026D	Trust GXT 114	OpenRGB TrustController
+1462	1562	MSI Mystic Light MS_1562	OpenRGB MSIKeyboardController
+1462	1563	MSI Mystic Light MS_1563	OpenRGB MSIKeyboardController
+1462	1564	MSI Mystic Light MS_1564	OpenRGB MSIKeyboardController
+1462	1601	MSI Keyboard MS_1565	OpenRGB MSIKeyboardController
+1462	3FA4	MSI Monitor (Gaming Controller)	OpenRGB MSIMonitorController
+1532	0013	Razer Orochi 2011	openrazer
+1532	0015	Razer Naga	openrazer
+1532	0016	Razer DeathAdder 3.5G	openrazer
+1532	001F	Razer Naga Epic	openrazer
+1532	0020	Razer Abyssus 1800	openrazer
+1532	0024	Razer Mamba 2012 (Wired)	openrazer
+1532	0025	Razer Mamba 2012 (Wireless)	openrazer
+1532	002E	Razer Naga 2012	openrazer
+1532	002F	Razer Imperator 2012	openrazer
+1532	0032	Razer Ouroboros	openrazer
+1532	0034	Razer Taipan	openrazer
+1532	0036	Razer Naga Hex (Red)	openrazer
+1532	0037	Razer DeathAdder 2013	openrazer
+1532	0038	Razer DeathAdder 1800	openrazer
+1532	0039	Razer Orochi 2013	openrazer
+1532	003E	Razer Naga Epic Chroma (Wired)	openrazer
+1532	003F	Razer Naga Epic Chroma (Wireless)	openrazer
+1532	0041	Razer Naga Hex	openrazer
+1532	0042	Razer Abyssus	openrazer
+1532	0043	Razer DeathAdder Chroma	openrazer
+1532	0044	Razer Mamba Chroma (Wired)	openrazer
+1532	0045	Razer Mamba Chroma (Wireless)	openrazer
+1532	0046	Razer Mamba Tournament Edition	openrazer
+1532	0048	Razer Orochi (Wired)	openrazer
+1532	004C	Razer Diamondback Chroma	openrazer
+1532	004D	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	004F	Razer DeathAdder 2000	openrazer
+1532	0050	Razer Naga Hex V2	openrazer
+1532	0053	Razer Naga Chroma	openrazer
+1532	0054	Razer DeathAdder 3500	openrazer
+1532	0059	Razer Lancehead (Wired)	openrazer
+1532	005A	Razer Lancehead (Wireless)	openrazer
+1532	005B	Razer Abyssus V2	openrazer
+1532	005C	Razer DeathAdder Elite	openrazer
+1532	005E	Razer Abyssus 2000	openrazer
+1532	0060	Razer Lancehead Tournament Edition	openrazer
+1532	0064	Razer Basilisk	openrazer
+1532	0065	Razer Basilisk Essential	openrazer
+1532	0067	Razer Naga Trinity	openrazer
+1532	0068	Razer Firefly Hyperflux	openrazer
+1532	0069	Razer Mamba Hyperflux (Wired)	openrazer
+1532	006A	Razer Abyssus Elite (D.Va Edition)	openrazer
+1532	006B	Razer Abyssus Essential	openrazer
+1532	006C	Razer Mamba Elite	openrazer
+1532	006E	Razer DeathAdder Essential	openrazer
+1532	006F	Razer Lancehead Wireless (Receiver)	openrazer
+1532	0070	Razer Lancehead Wireless (Wired)	openrazer
+1532	0071	Razer DeathAdder Essential (White Edition)	openrazer
+1532	0072	Razer Mamba Wireless (Receiver)	openrazer
+1532	0073	Razer Mamba Wireless (Wired)	openrazer
+1532	0075	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	0078	Razer Viper	openrazer
+1532	007A	Razer Viper Ultimate (Wired)	openrazer
+1532	007B	Razer Viper Ultimate (Wireless)	openrazer
+1532	007C	Razer DeathAdder V2 Pro (Wired)	openrazer
+1532	007D	Razer DeathAdder V2 Pro (Wireless)	openrazer
+1532	007E	Razer Mouse Dock Chroma	openrazer
+1532	0083	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	0084	Razer DeathAdder V2	openrazer
+1532	0085	Razer Basilisk V2	openrazer
+1532	0086	Razer Basilisk Ultimate	openrazer
+1532	0088	Razer Basilisk Ultimate (Wireless)	openrazer
+1532	008A	Razer Viper Mini	openrazer
+1532	008C	Razer DeathAdder V2 Mini	openrazer
+1532	008D	Razer Naga Left Handed Edition 2020	openrazer
+1532	008F	Razer Naga Pro (Wired)	openrazer
+1532	0090	Razer Naga Pro (Wireless)	openrazer
+1532	0091	Razer Viper 8KHz	openrazer
+1532	0093	Razer Naga Classic	openrazer
+1532	0094	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	0096	Razer Naga X	openrazer
+1532	0098	Razer DeathAdder Essential (2021)	openrazer
+1532	0099	Razer Basilisk V3	openrazer
+1532	00A1	Razer DeathAdder V2 Lite	openrazer
+1532	00A3	Razer Cobra	openrazer
+1532	00A4	Razer Mouse Dock Pro	openrazer
+1532	00A5	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00A6	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00A7	Razer Naga V2 Pro (Wired)	openrazer
+1532	00A8	Razer Naga V2 Pro (Wireless)	openrazer
+1532	00AA	Razer Basilisk V3 Pro (Wired)	openrazer
+1532	00AB	Razer Basilisk V3 Pro (Wireless)	openrazer
+1532	00AF	Razer Cobra Pro (Wired)	openrazer
+1532	00B0	Razer Cobra Pro (Wireless)	openrazer
+1532	00B2	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00B6	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00B7	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00B9	Razer Basilisk V3 X HyperSpeed	openrazer
+1532	00C0	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00C1	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00C5	Razer Modern Mouse	Razer/Razer_Modern_Mouse.js
+1532	00C7	Razer Pro Click V2 Vertical Edition (Wired)	openrazer
+1532	00C8	Razer Pro Click V2 Vertical Edition (Wireless)	openrazer
+1532	00CB	Razer Basilisk V3 35K	openrazer
+1532	00CC	Razer Basilisk V3 Pro 35K (Wired)	openrazer
+1532	00CD	Razer Basilisk V3 Pro 35K (Wireless)	openrazer
+1532	00D0	Razer Pro Click V2 (Wired)	openrazer
+1532	00D1	Razer Pro Click V2 (Wireless)	openrazer
+1532	00D3	Razer Basilisk Mobile (Wired)	openrazer
+1532	00D4	Razer Basilisk Mobile (Receiver)	openrazer
+1532	00D6	Razer Basilisk V3 Pro 35K Phantom Green Edition (Wired)	openrazer
+1532	00D7	Razer Basilisk V3 Pro 35K Phantom Green Edition (Wireless)	openrazer
+1532	00E2	Razer Basilisk V4 Pro (Wired)	openrazer
+1532	00E3	Razer Basilisk V4 Pro (Wireless)	openrazer
+1532	00E7	Razer Naga Pro V3 (Wired)	openrazer
+1532	00E8	Razer Naga Pro V3 (Wireless)	openrazer
+1532	010D	Razer BlackWidow Ultimate 2012	openrazer
+1532	010E	Razer BlackWidow Stealth Edition	openrazer
+1532	010F	Razer Anansi	openrazer
+1532	0113	Razer Orbweaver	openrazer
+1532	0118	Razer DeathStalker/DeathStalker Essential	openrazer
+1532	011A	Razer BlackWidow Ultimate 2013	openrazer
+1532	011B	Razer BlackWidow (Classic)	openrazer
+1532	011C	Razer BlackWidow Tournament Edition 2014	openrazer
+1532	0201	Razer Tartarus	openrazer
+1532	0202	Razer DeathStalker Expert	openrazer
+1532	0203	Razer BlackWidow Chroma	openrazer
+1532	0204	Razer DeathStalker Chroma	openrazer
+1532	0205	Razer Blade Stealth	openrazer
+1532	0207	Razer Orbweaver Chroma	openrazer
+1532	0208	Razer Tartarus Chroma	openrazer
+1532	0209	Razer BlackWidow Tournament Edition Chroma	openrazer
+1532	020F	Razer Blade (QHD)	openrazer
+1532	0210	Razer Blade Pro (Late 2016)	openrazer
+1532	0211	Razer BlackWidow Chroma (Overwatch)	openrazer
+1532	0214	Razer BlackWidow Ultimate 2016	openrazer
+1532	0215	Razer Core	openrazer
+1532	0216	Razer BlackWidow X Chroma	openrazer
+1532	0217	Razer BlackWidow X Ultimate	openrazer
+1532	021A	Razer BlackWidow X Tournament Edition Chroma	openrazer
+1532	021E	Razer Ornata Chroma	openrazer
+1532	021F	Razer Ornata	openrazer
+1532	0220	Razer Blade Stealth (Late 2016)	openrazer
+1532	0221	Razer BlackWidow Chroma V2	openrazer
+1532	0224	Razer Blade (Late 2016)	openrazer
+1532	0225	Razer Blade Pro (2017)	openrazer
+1532	0226	Razer Huntsman Elite	openrazer
+1532	0227	Razer Huntsman	openrazer
+1532	0228	Razer BlackWidow Elite	openrazer
+1532	022A	Razer Cynosa Chroma	openrazer
+1532	022B	Razer Tartarus V2	openrazer
+1532	022C	Razer Cynosa Chroma Pro	openrazer
+1532	022D	Razer Blade Stealth (Mid 2017)	openrazer
+1532	022F	Razer Blade Pro FullHD (2017)	openrazer
+1532	0232	Razer Blade Stealth (Late 2017)	openrazer
+1532	0233	Razer Blade 15 (2018)	openrazer
+1532	0234	Razer Blade Pro 17 (2019)	openrazer
+1532	0235	Razer BlackWidow Lite	openrazer
+1532	0237	Razer BlackWidow Essential	openrazer
+1532	0239	Razer Blade Stealth (2019)	openrazer
+1532	023A	Razer Blade 15 (2019) Advanced	openrazer
+1532	023B	Razer Blade 15 (2018) Base Model	openrazer
+1532	023E	Razer Modern Keyboard	Razer/Razer_Modern_Keyboard.js
+1532	023F	Razer Cynosa Lite	openrazer
+1532	0240	Razer Blade 15 (2018) Mercury	openrazer
+1532	0241	Razer BlackWidow 2019	openrazer
+1532	0243	Razer Huntsman Tournament Edition	openrazer
+1532	0244	Razer Tartarus Pro	openrazer
+1532	0245	Razer Blade 15 (Mid 2019) Mercury	openrazer
+1532	0246	Razer Blade 15 (Mid 2019) Base Model	openrazer
+1532	024A	Razer Blade Stealth (Late 2019)	openrazer
+1532	024B	Razer Blade Advanced (Late 2019)	openrazer
+1532	024C	Razer Blade Pro (Late 2019)	openrazer
+1532	024D	Razer Blade 15 Studio Edition (2019)	openrazer
+1532	024E	Razer BlackWidow V3	openrazer
+1532	0252	Razer Blade Stealth (Early 2020)	openrazer
+1532	0253	Razer Blade 15 Advanced (2020)	openrazer
+1532	0255	Razer Blade Base (Early 2020)	openrazer
+1532	0256	Razer Blade Pro (Early 2020)	openrazer
+1532	0257	Razer Huntsman Mini	openrazer
+1532	0258	Razer BlackWidow V3 Mini HyperSpeed (Wired)	openrazer
+1532	0259	Razer Blade Stealth (Late 2020)	openrazer
+1532	025A	Razer BlackWidow V3 Pro Wired	openrazer
+1532	025C	Razer BlackWidow V3 Pro 2.4 Ghz Wireless	openrazer
+1532	025D	Razer Ornata V2	openrazer
+1532	025E	Razer Cynosa V2	openrazer
+1532	0266	Razer Huntsman V2 Analog	openrazer
+1532	0268	Razer Blade Late 2020 Base	openrazer
+1532	0269	Razer Huntsman Mini JP	openrazer
+1532	026A	Razer Book (2020)	openrazer
+1532	026B	Razer Huntsman V2 Tenkeyless	openrazer
+1532	026C	Razer Huntsman V2	openrazer
+1532	026D	Razer Blade 15 Advanced (Early 2021)	openrazer
+1532	026E	Razer Blade 17 Pro (Early 2021)	openrazer
+1532	026F	Razer Blade Base (Early 2021)	openrazer
+1532	0270	Razer Blade 14 (2021)	openrazer
+1532	0271	Razer BlackWidow V3 Mini HyperSpeed (Wireless)	openrazer
+1532	0276	Razer Blade 15 Advanced (Mid 2021)	openrazer
+1532	0279	Razer Blade 17 Pro (Mid 2021)	openrazer
+1532	027A	Razer Blade Base (Early 2022)	openrazer
+1532	0282	Razer Huntsman Mini Analog	openrazer
+1532	0287	Razer BlackWidow V4	openrazer
+1532	028A	Razer Blade 15 Advanced (Early 2022)	openrazer
+1532	028B	Razer Blade 17 (2022)	openrazer
+1532	028C	Razer Blade 14 (2022)	openrazer
+1532	028D	Razer BlackWidow V4 Pro	openrazer
+1532	028F	Razer Ornata V3 (Alternate)	openrazer
+1532	0290	Razer DeathStalker V2 Pro (Wireless)	openrazer
+1532	0292	Razer DeathStalker V2 Pro (Wired)	openrazer
+1532	0293	Razer BlackWidow V4 X	openrazer
+1532	0294	Razer Ornata V3 X	openrazer
+1532	0295	Razer DeathStalker V2	openrazer
+1532	0296	Razer DeathStalker V2 Pro TKL (Wireless)	openrazer
+1532	0298	Razer DeathStalker V2 Pro TKL (Wired)	openrazer
+1532	029D	Razer Blade 14 (2023)	openrazer
+1532	029E	Razer Blade 15 (2023)	openrazer
+1532	029F	Razer Blade 16 (2023)	openrazer
+1532	02A0	Razer Blade 18 (2023)	openrazer
+1532	02A1	Razer Ornata V3	openrazer
+1532	02A2	Razer Ornata V3 X (Alternate)	openrazer
+1532	02A3	Razer Ornata V3 Tenkeyless	openrazer
+1532	02A5	Razer BlackWidow V4 75%	openrazer
+1532	02A6	Razer Huntsman V3 Pro	openrazer
+1532	02A7	Razer Huntsman V3 Pro TKL	openrazer
+1532	02B0	Razer Huntsman V3 Pro Mini	openrazer
+1532	02B1	Razer Modern Keyboard	Razer/Razer_Modern_Keyboard.js
+1532	02B3	Razer BlackWidow V4 Pro 75% (Wired)	openrazer
+1532	02B4	Razer BlackWidow V4 Pro 75% (Wireless)	openrazer
+1532	02B6	Razer Blade 14 (2024)	openrazer
+1532	02B8	Razer Blade 18 (2024)	openrazer
+1532	02B9	Razer BlackWidow V4 Mini HyperSpeed (Wired)	openrazer
+1532	02BA	Razer BlackWidow V4 Mini HyperSpeed (Wireless)	openrazer
+1532	02C5	Razer Blade 14 (2025)	openrazer
+1532	02C6	Razer Blade 16 (2025)	openrazer
+1532	02C7	Razer Blade 18 (2025)	openrazer
+1532	02C9	Razer Modern Keyboard	Razer/Razer_Modern_Keyboard.js
+1532	02CC	Razer Modern Keyboard	Razer/Razer_Modern_Keyboard.js
+1532	02CF	Razer Huntsman V3 Pro 8KHz	openrazer
+1532	02D0	Razer Modern Keyboard	Razer/Razer_Modern_Keyboard.js
+1532	02D2	Razer BlackWidow V4 Low Profile TKL (Wireless)	openrazer
+1532	02D4	Razer BlackWidow V4 Low Profile TKL (Wired)	openrazer
+1532	02D5	Razer BlackWidow V4 Tenkeyless HyperSpeed (Wireless)	openrazer
+1532	02D7	Razer BlackWidow V4 Tenkeyless HyperSpeed (Wired)	openrazer
+1532	02E4	Razer Huntsman V3 HE Magnetic Mini	openrazer
+1532	0504	Razer Kraken 7.1 V2 Headset	Razer/Razer_Kraken_7.1_V2_Headset.js
+1532	0510	Razer Kraken 7.1 V2 Headset	Razer/Razer_Kraken_7.1_V2_Headset.js
+1532	0517	Razer Nommo Chroma	openrazer
+1532	0518	Razer Nommo Pro	openrazer
+1532	051A	Razer Nari Ultimate Edition	Razer/Razer_Nari_Ultimate_Headset.js
+1532	051C	Razer Nari Headset Controller	Razer/Razer_Nari_Headset_Controller.js
+1532	051E	Razer Nari Essential	Razer/Razer_Nari_Essential_Headset_Wireless.js
+1532	051F	Razer Nari Essential	Razer/Razer_Nari_Essential_Headset_Wired.js
+1532	0527	Razer Kraken Headset Controller	Razer/Razer_Kraken_Headset_Controller.js
+1532	0532	Razer Leviathan V2	openrazer
+1532	0533	Razer Kraken Headset Controller	Razer/Razer_Kraken_Headset_Controller.js
+1532	0537	Razer Kraken Headset Controller	Razer/Razer_Kraken_Headset_Controller.js
+1532	0548	Razer Soundbar	Razer/Razer_Soundbar.js
+1532	0549	Razer Kraken Headset Controller	Razer/Razer_Kraken_Headset_Controller.js
+1532	054A	Razer Leviathan V2 X	openrazer
+1532	055A	Razer Nommo Speakers	Razer/Razer_Nommo_Speakers.js
+1532	055C	Razer Nommo Speakers	Razer/Razer_Nommo_Speakers.js
+1532	0560	Razer Kraken Headset Controller	Razer/Razer_Kraken_Headset_Controller.js
+1532	056F	Razer Seiren V3 Mic	Razer/Razer_Seiren_V3_Mic.js
+1532	0574	Razer Barracuda X Chroma Headset	Razer/Razer_Barracuda_X_Chroma_Headset.js
+1532	0A24	Razer BlackWidow V3 TK	openrazer
+1532	0C00	Razer Firefly	openrazer
+1532	0C01	Razer Goliathus	openrazer
+1532	0C02	Razer Goliathus Extended	openrazer
+1532	0C04	Razer Firefly V2	openrazer
+1532	0C05	Razer Strider Chroma	openrazer
+1532	0C06	Razer Goliathus Chroma 3XL	openrazer
+1532	0C08	Razer Firefly V2 Pro	openrazer
+1532	0F03	Razer Tiamat 7.1 V2	openrazer
+1532	0F07	Razer Chroma Mug Holder	openrazer
+1532	0F08	Razer Base Station Chroma	openrazer
+1532	0F09	Razer Chroma HDK	openrazer
+1532	0F0D	Razer Laptop Stand Chroma	openrazer
+1532	0F0E	Razer Chroma PC Case Lighting Kit	openrazer
+1532	0F12	Razer Raptor 27 Inch	Razer/Razer_Raptor_27_Inch_Monitor.js
+1532	0F13	Lian Li O11 Dynamic - Razer Edition	openrazer
+1532	0F19	Razer Kraken Kitty Edition	openrazer
+1532	0F1A	Razer Core X	openrazer
+1532	0F1B	Razer Seiren Emote	openrazer
+1532	0F1D	Razer Mouse Bungee V3 Chroma	openrazer
+1532	0F1F	Razer Addressable RGB Controller	Razer/Razer_Addressable_RGB_Controller.js
+1532	0F20	Razer Base Station V2 Chroma	openrazer
+1532	0F21	Razer Thunderbolt 4 Dock Chroma	openrazer
+1532	0F26	Razer Charging Pad	Razer/Razer_Charging_Pad.js
+1532	0F28	Razer Raptor 27 Inch Monitor	Razer/Razer_Raptor_27_Inch_Monitor.js
+1532	0F2B	Razer Laptop Stand Chroma V2	openrazer
+1532	0F2C	Razer Chroma Light Strip Set	Razer/Razer_Chroma_Light_Strip_Set.js
+1532	0F35	Razer Hanbo Cooler	Razer/Razer_Hanbo_Cooler.js
+1532	0F43	Razer Laptop Cooling Pad	Razer/Razer_Laptop_Cooling_Pad.js
+1532	0F52	Razer Thunderbolt 5 Dock Chroma	openrazer
+1532	0F59	Razer Monitor Stand Chroma	Razer/Razer_Monitor_Stand_Chroma.js
+16D0	1123	SRGBmods Pico LC	SRGBmods.net/SRGBmods_Pico_LC.js
+16D0	1201	SRGBmods LED Controller v2	SRGBmods.net/SRGBmods_LC_v2.js
+16D0	1205	SRGBmods LED Controller v1	SRGBmods.net/SRGBmods_LC_v1.js
+16D0	12AF	nerdytec CYKEY QMK ANSI Keyboard	nerdytec/nerdytec_CYKEY_QMK_ANSI_Keyboard.js
+16D0	12B0	nerdytec CYKEY QMK ISO Keyboard	nerdytec/nerdytec_CYKEY_QMK_ISO_Keyboard.js
+1770	FF00	MSI 3-Zone Laptop	OpenRGB MSI3ZoneController
+17EF	60D5	Lenovo Legion K500	OpenRGB LenovoControllers
+17EF	60E4	Lenovo Legion M300	OpenRGB LenovoControllers
+17EF	619A	Lenovo Legion K510 Mini Pro	OpenRGB LenovoControllers
+187C	0530	Alienware 15 R3	Alienware/Alienware_15_R3_Laptop.js
+187C	0550	Dell G Series LED Controller	OpenRGB AlienwareController
+187C	0551	Dell G Series LED Controller	OpenRGB AlienwareController
+187C	1008	Alienware AW3821DW	Alienware/Alienware_Monitor_Gen2_Controller.js
+187C	100B	Alienware AW3423DW	Alienware/Alienware_Monitor_Gen2_Controller.js
+187C	100E	Alienware AW3423DWF	OpenRGB AlienwareMonitorController
+187C	1010	Alienware Monitor Gen3 Controller	Alienware/Alienware_Monitor_Gen3_Controller.js
+187C	1013	Alienware AW3225QF	OpenRGB AlienwareMonitorController
+187C	1014	Alienware AW2725DF	Alienware/Alienware_Monitor_Gen2_Controller.js
+195D	1016	ASUS ROG Strix Claw	OpenRGB AsusLegacyUSBController
+195D	2047	ASUS Cerberus Mech	OpenRGB AsusLegacyUSBController
+195D	2061	Dark Project KD3B V2	OpenRGB DarkProject
+19F5	3245	NuPhy Air75 V2 QMK Keyboard	Nuphy/NuPhy_Air75v2_QMK_Keyboard.js
+19F5	3246	NuPhy Air75 V2 QMK Keyboard	Nuphy/NuPhy_Air75v2_QMK_Keyboard.js
+19F5	3265	NuPhy Air96 v2 ANSI QMK Keyboard	Nuphy/NuPhy_Air96v2_QMK_ANSI_Keyboard.js
+19F5	3275	NuPhy Gem80 QMK Keyboard	Nuphy/NuPhy_Gem80_GMK_Keyboard.js
+19F5	32F5	NuPhy Halo75 V2	Nuphy/NuPhy_Halo75v2_QMK_Keyboard.js
+19F5	3302	Halo96 V2 Keyboard	Nuphy/NuPhy_Halo96v2_QMK_Keyboard.js
+1A2C	1511	Red Square Keyrox TKL	OpenRGB RedSquareKeyroxController
+1A2C	2511	Red Square Keyrox TKL V2	OpenRGB RedSquareKeyroxController
+1A86	7523	Skydimo Serial	OpenRGB SkydimoSerialController
+1A86	E316	Skydimo SK0902	OpenRGB SkydimoHIDController
+1A86	FE07	Robobloq Monitor Light Strip	OpenRGB RobobloqLightStripController
+1B1C	0A14	Corsair Void Pro Wireless	OpenRGB CorsairVoidController
+1B1C	0A17	Corsair Void Pro USB	OpenRGB CorsairVoidController
+1B1C	0A19	Corsair Void Pro Headset	Corsair/Void_HeadSets/Corsair_Void_Pro_HeadSet_0x0A19.js
+1B1C	0A1A	Corsair Void Pro Wireless	OpenRGB CorsairVoidController
+1B1C	0A1D	Corsair Void Pro USB	OpenRGB CorsairVoidController
+1B1C	0A34	Corsair ST100 RGB	OpenRGB CorsairPeripheralController
+1B1C	0A3D	Corsair Virtuoso SE	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A3E	Corsair Virtuoso SE Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A40	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A41	Corsair Virtuoso	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A42	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A43	Corsair Virtuoso	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A44	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A4B	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A4C	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A51	Corsair Void Elite Wireless Headset	Corsair/Void_HeadSets/Corsair_Void_Elite_HeadSet_Wireless_0x0A51.js
+1B1C	0A52	Corsair Void Elite Headset	Corsair/Void_HeadSets/Corsair_Void_Elite_HeadSet_0x0A52.js
+1B1C	0A55	Corsair Void Elite Wireless Headset	Corsair/Void_HeadSets/Corsair_Void_Elite_HeadSet_Wireless_0x0A55.js
+1B1C	0A56	Corsair Void Elite Headset	Corsair/Void_HeadSets/Corsair_Void_Elite_HeadSet.js
+1B1C	0A5A	Corsair Virtuoso	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A5C	Corsair Virtuoso Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A62	Corsair Virtuoso XT	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A64	Corsair Virtuoso XT Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A69	Corsair HS80 RGB	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A6B	Corsair HS80 RGB Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A71	Corsair HS80 RGB White	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A73	Corsair HS80 RGB White Wireless	Corsair/Modern_Corsair/Corsair_Headset_Controller.js
+1B1C	0A75	Corsair Void Elite Wireless Headset	Corsair/Void_HeadSets/Corsair_Void_Elite_HeadSet_Wireless_0x0A75.js
+1B1C	0A88	Corsair HS80 RGB Wired Gaming Headset	Corsair/Modern_Corsair/Corsair_HS80_RGB_Wired_Gaming_Headset.js
+1B1C	0A96	Corsair HS80 Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	0A97	Corsair HS80 Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	0D01	Corsair Bragi Device	Corsair/Modern_Corsair/Corsair_Bragi_Device.js
+1B1C	1B11	Corsair K95 RGB	OpenRGB CorsairPeripheralController
+1B1C	1B12	Corsair M65	OpenRGB CorsairPeripheralController
+1B1C	1B13	Corsair K70 RGB	OpenRGB CorsairPeripheralController
+1B1C	1B14	Corsair Legacy Mouse	Corsair/Legacy_Corsair/Corsair_Legacy_Mouse.js
+1B1C	1B15	Corsair Legacy Keyboard	Corsair/Legacy_Corsair/Corsair_Legacy_Keyboard.js
+1B1C	1B17	Corsair K65 RGB	OpenRGB CorsairPeripheralController
+1B1C	1B19	P SABRE L	ckb-next P_SABRE_L
+1B1C	1B1E	Corsair Scimitar RGB	OpenRGB CorsairPeripheralController
+1B1C	1B20	Corsair Strafe	OpenRGB CorsairPeripheralController
+1B1C	1B22	P KATAR	ckb-next P_KATAR
+1B1C	1B23	Corsair Void Pro Headset	Corsair/Void_HeadSets/Corsair_Void_Pro_HeadSet_0x1B23.js
+1B1C	1B2D	Corsair K95 RGB PLATINUM	OpenRGB CorsairPeripheralController
+1B1C	1B2E	Corsair M65 PRO	OpenRGB CorsairPeripheralController
+1B1C	1B2F	Corsair Sabre RGB	OpenRGB CorsairPeripheralController
+1B1C	1B32	Corsair Sabre RGB Optical	OpenRGB CorsairPeripheralController
+1B1C	1B33	Corsair K70 LUX RGB	OpenRGB CorsairPeripheralController
+1B1C	1B34	Corsair Glaive RGB	OpenRGB CorsairPeripheralController
+1B1C	1B35	Corsair Dark Core	Corsair/Legacy_Corsair/Legacy_Corsair_Mouse.js
+1B1C	1B36	Corsair K70 LUX	OpenRGB CorsairPeripheralController
+1B1C	1B37	Corsair K65 LUX RGB	OpenRGB CorsairPeripheralController
+1B1C	1B38	Corsair K70 RGB RAPIDFIRE	OpenRGB CorsairPeripheralController
+1B1C	1B39	Corsair K65 RGB RAPIDFIRE	OpenRGB CorsairPeripheralController
+1B1C	1B3A	Corsair Legacy Keyboard	Corsair/Legacy_Corsair/Corsair_Legacy_Keyboard.js
+1B1C	1B3B	Corsair MM800 RGB Polaris	OpenRGB CorsairPeripheralController
+1B1C	1B3C	Corsair Harpoon RGB	OpenRGB CorsairPeripheralController
+1B1C	1B3D	Corsair K55 RGB	OpenRGB CorsairPeripheralController
+1B1C	1B3E	Corsair Scimitar PRO RGB	OpenRGB CorsairPeripheralController
+1B1C	1B3F	Corsair K68 RED	OpenRGB CorsairPeripheralController
+1B1C	1B40	P K63 NRGB	ckb-next P_K63_NRGB
+1B1C	1B44	Corsair Strafe Red	OpenRGB CorsairPeripheralController
+1B1C	1B48	Corsair Strafe MK.2	OpenRGB CorsairPeripheralController
+1B1C	1B49	Corsair K70 RGB MK.2	OpenRGB CorsairPeripheralController
+1B1C	1B4B	Corsair Dark Core RGB SE (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B4C	Corsair Ironclaw Wireless (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B4F	Corsair K68 RGB	OpenRGB CorsairPeripheralController
+1B1C	1B51	Corsair Dark Core SE	Corsair/Legacy_Corsair/Legacy_Corsair_Mouse.js
+1B1C	1B55	Corsair K70 RGB MK.2 Low Profile	OpenRGB CorsairPeripheralController
+1B1C	1B5A	Corsair M65 RGB Elite	OpenRGB CorsairPeripheralController
+1B1C	1B5C	Corsair Nightsword	OpenRGB CorsairPeripheralController
+1B1C	1B5D	Corsair Ironclaw RGB	OpenRGB CorsairPeripheralController
+1B1C	1B5E	Corsair Harpoon Wireless (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B62	Corsair K57	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B64	Corsair Dark Core	Corsair/Legacy_Corsair/Legacy_Corsair_Mouse.js
+1B1C	1B65	Corsair Slipstream Wireless Receiver SW	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B66	Corsair Slipstream Wireless Receiver HW	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B6B	Corsair K70 RGB MK.2 SE	OpenRGB CorsairPeripheralController
+1B1C	1B6E	Corsair K57 RGB (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B70	Corsair M55 RGB PRO	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B73	Corsair K70 RGB TKL	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B74	Corsair Glaive RGB PRO	OpenRGB CorsairPeripheralController
+1B1C	1B75	Corsair Harpoon RGB PRO	OpenRGB CorsairPeripheralController
+1B1C	1B79	Corsair Sabre Pro	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B7C	Corsair K100 RGB Optical	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B7D	Corsair K100 MX Red	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B7E	Corsair Dark Core RGB Pro SE (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B7F	Corsair Dark Core Pro SE Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B80	Corsair Dark Core Pro Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B81	Corsair Dark Core Pro Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B82	Corsair K95 RGB PLATINUM SE	OpenRGB CorsairPeripheralController
+1B1C	1B83	Corsair K60 PRO	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B89	Corsair K95 RGB PLATINUM XT	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B8B	Corsair Scimitar Elite RGB	OpenRGB CorsairPeripheralController
+1B1C	1B8D	Corsair K60 RGB PRO SE	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B8E	Corsair Nexus	Corsair/Corsair_Nexus_Screen.js
+1B1C	1B93	Corsair Katar Pro	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B98	Corsair Sabre Pro Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1B9B	Corsair MM700	OpenRGB CorsairPeripheralV2Controller
+1B1C	1B9E	Corsair M65 RGB Ultra Wired	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BA0	Corsair K60 RGB PRO	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BA1	Corsair K55 RGB PRO XT	OpenRGB CorsairPeripheralController
+1B1C	1BA4	Corsair K55 RGB PRO	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BA5	Corsair K68 RED SHADOW	OpenRGB CorsairPeripheralController
+1B1C	1BA6	Corsair Slipstream Wireless Receiver HW	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BAB	Corsair K100 Air	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BAC	Corsair Katar Pro XT	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BAD	Corsair K60 RGB PRO Low Profile	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BAF	Corsair K65 Mini	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BB2	Corsair Darkstar Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BB3	Corsair K70 RGB PRO V2	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BB5	Corsair M65 RGB Ultra Wireless (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BB6	Corsair K70 Pro Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BB8	Corsair Nightsabre Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BB9	Corsair K70 RGB TKL Champion Series	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BBA	Corsair Katar Pro V2	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BBD	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BC0	Corsair K70 Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BC3	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BC4	Corsair K70 RGB PRO	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BC5	Corsair K100 RGB Optical	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BC6	Corsair K70 RGB PRO Optomechanical	OpenRGB CorsairPeripheralController
+1B1C	1BC7	Corsair K60 RGB PRO TKL Black	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BC9	Corsair MM700 3XL	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BCF	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD0	Corsair Voyager A1600	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD3	Corsair K70 Pro Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD4	Corsair K70 RGB PRO	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD6	Corsair M65 Ultra Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD7	Corsair K65 Pro Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BDB	Corsair Scimitar Elite Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BDC	Corsair M75 Wireless	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BE3	Corsair Scimitar Elite RGB	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BED	Corsair K60 RGB PRO TKL White	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BF0	Corsair M75 Gaming Mouse	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BF1	Corsair M75 Wireless (Wired)	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BFD	Corsair K70 Core RGB	OpenRGB CorsairPeripheralV2Controller
+1B1C	1BFE	Corsair K55 Core	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BFF	Corsair K70 Core	SignalRGB Corsair_Bragi_Device.js
+1B1C	2A00	Corsair Virtuoso Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	2A02	Corsair Virtuoso Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	2A08	Corsair Void Wireless V2	SignalRGB Corsair_Bragi_Device.js
+1B1C	2A09	Corsair Void Wireless V2	SignalRGB Corsair_Bragi_Device.js
+1B1C	2A0F	Corsair HS80 Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B00	Corsair Ironclaw Wireless SE	OpenRGB CorsairPeripheralV2Controller
+1B1C	2B01	Corsair K70 Core RGB TKL	OpenRGB CorsairPeripheralV2Controller
+1B1C	2B02	Corsair K70 Core TKL Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B05	Corsair K55 Core	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B07	Corsair K65 Plus	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B08	Corsair M75	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B0A	Corsair K70 Core	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B10	Corsair K65 Plus	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B11	Corsair K65 Plus	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B14	Corsair K70 Pro TKL	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B22	Corsair Scimitar Elite Wireless	SignalRGB Corsair_Bragi_Device.js
+1B1C	2B32	Corsair Ironclaw Wireless SE (Wired)	OpenRGB CorsairPeripheralV2Controller
+1C4F	EE88	OKS Optical Axis RGB	OpenRGB OKSController
+1D34	0004	Dream Cheeky Webmail Notifier	OpenRGB DreamCheekyController
+1D50	605E	BlinkyTape	OpenRGB BlinkyTapeController
+1E71	2004	Vertagear RGB LED Upgrade Kits	Nzxt/Vertagear_RGB_LED_Upgrade_Kits.js
+1E71	2100	NZXT Lift	OpenRGB NZXTMouseController
+1E71	2103	NZXT Function	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2104	NZXT Function TKL	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2105	NZXT Function MiniTKL	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2106	NZXT Function	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2107	NZXT Function TKL	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2108	NZXT Function MiniTKL	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2130	NZXT Function 2	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2131	NZXT Function 2	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E71	2136	NZXT Function 2	Nzxt/Peripheral Protocol/NZXT_Function_Keyboard.js
+1E7D	2C88	Roccat Kone Pro	OpenRGB RoccatController
+1E7D	2C8B	Roccat Kone XP	OpenRGB RoccatController
+1E7D	2C8E	Roccat Kone Pro Air	OpenRGB RoccatController
+1E7D	2C92	Roccat Kone Pro Air (Wired)	OpenRGB RoccatController
+1E7D	2CA6	Roccat Burst Pro Air	OpenRGB RoccatController
+1E7D	2CAB	Roccat Burst Pro Air - Wired	Roccat/Roccat_Burst_Pro_Air_Mouse_Wired.js
+1E7D	2CB2	Roccat Kone XP Air - Wired	Roccat/Roccat_Kone_XP_Air_Mouse_Wired.js
+1E7D	2CB6	Roccat Kone XP Air	Roccat/Roccat_Kone_XP_Air.js
+1E7D	2CB8	Roccat Kone XP Air Dock	Roccat/Roccat_Kone_XP_Air_Dock.js
+1E7D	2CEE	Roccat Kova	OpenRGB RoccatController
+1E7D	2CF1	Roccat Kova Aimo	Roccat/Roccat_Kova_Aimo_Mouse.js
+1E7D	2D00	Roccat Kain 100	Roccat/Roccat_Kain_100_Mouse.js
+1E7D	2D5C	Roccat Kain 120	Roccat/Roccat_Kain_120_Mouse.js
+1E7D	2D5F	Roccat Kain 200	Roccat/Roccat_Kain_200_Mouse_Wired.js
+1E7D	2D60	Roccat Kain 200	Roccat/Roccat_Kain_200_Mouse_Wireless.js
+1E7D	2DE1	Roccat Burst Pro	OpenRGB RoccatController
+1E7D	2DE6	Roccat Burst Core	OpenRGB RoccatController
+1E7D	2E24	roccat kone emp	libratbag roccat-kone-emp.device
+1E7D	2E27	Roccat Kone Aimo	OpenRGB RoccatController
+1E7D	2E2C	Roccat Kone Aimo 16K	OpenRGB RoccatController
+1E7D	2EE2	Roccat Vulcan II Max	OpenRGB RoccatController
+1E7D	2F09	Roccat Vulcan II Mini	OpenRGB RoccatController
+1E7D	2F4E	Roccat Vulcan II	OpenRGB RoccatController
+1E7D	2FEE	Roccat Vulcan TKL	OpenRGB RoccatController
+1E7D	303E	Roccat Horde Aimo	OpenRGB RoccatController
+1E7D	307A	Roccat Vulcan 100 Aimo	OpenRGB RoccatController
+1E7D	3098	Roccat Vulcan 120-Series Aimo	OpenRGB RoccatController
+1E7D	30F7	Roccat Vulcan Pro	OpenRGB RoccatController
+1E7D	311A	Roccat Vulcan TKL Pro	OpenRGB RoccatController
+1E7D	3124	Roccat Magma	OpenRGB RoccatController
+1E7D	314C	Roccat Pyro	OpenRGB RoccatController
+1E7D	343A	Roccat Sense Aimo Mid	OpenRGB RoccatController
+1E7D	343B	Roccat Sense Aimo XXL	OpenRGB RoccatController
+1E7D	3A34	Roccat Elo 7.1	OpenRGB RoccatController
+1E7D	3A37	Roccat Elo 7.1 Air	Roccat/Roccat_Elo_7.1_Air_Headset.js
+1E7D	3A3B	Roccat Syn Pro Air	Roccat/Roccat_Syn_Pro_Air_Headset.js
+1E7D	3A56	Roccat Torch	Roccat/Roccat_Torch_Microphone.js
+1E7D	3AA9	Roccat Vulcan II Mini Air	Turtle Beach/Turtle_Beach_Vulcan_II_Mini_Air_Keyboard.js
+1E7D	6978	Roccat Vulcan II Mini Air	Turtle Beach/Turtle_Beach_Vulcan_II_Mini_Air_Keyboard.js
+1E7D	69A0	Roccat Magma Mini	OpenRGB RoccatController
+1EA7	0907	Skyloong GK104 Pro	OpenRGB SkyloongController
+1EA7	6040	JZ-Skyloong DT40 QMK Keyboard	_Random-Brands/jzskyloong_dt40.js
+1EA7	6075	nerdytec CYKEY QMK ANSI Keyboard	nerdytec/nerdytec_CYKEY_QMK_ANSI_Keyboard.js
+1EA7	6076	nerdytec CYKEY QMK ISO Keyboard	nerdytec/nerdytec_CYKEY_QMK_ISO_Keyboard.js
+2004	CB00	Freya splaytoraid QMK Keyboard	_Random-Brands/freya_splaytoraid.js
+20A0	422D	YMDK 84	OpenRGB QMKController
+22D4	1503	Glorious Model I	OpenRGB LaviewTechnologyController
+24F0	2020	Das Keyboard 5Q RGB	OpenRGB DasKeyboardController
+24F0	2037	Das Keyboard 4Q RGB	OpenRGB DasKeyboardController
+24F0	209A	Das Keyboard 5QS RGB	OpenRGB DasKeyboardController
+2516	003B	Cooler Master MasterKeys Pro L	OpenRGB CoolerMasterController
+2516	003C	Cooler Master MasterKeys Pro S	OpenRGB CoolerMasterController
+2516	0047	Cooler Master MasterKeys Pro L White	OpenRGB CoolerMasterController
+2516	004F	Cooler Master RGB	OpenRGB CoolerMasterController
+2516	0065	Cooler Master MM530	OpenRGB CoolerMasterController
+2516	0067	Cooler Master MK750	OpenRGB CoolerMasterController
+2516	0069	Cooler Master MK850	OpenRGB CoolerMasterController
+2516	006D	Cooler Master MP860 Mouse Pad	CoolerMaster/CoolerMaster_MP860_Mat.js
+2516	007F	Cooler Master CK550 V1 / CK552	OpenRGB CoolerMasterController
+2516	0087	CoolerMaster SK622 Keyboard	CoolerMaster/CoolerMaster_SK622_Keyboard.js
+2516	0089	Cooler Master SK630	OpenRGB CoolerMasterController
+2516	008D	Cooler Master SK650	OpenRGB CoolerMasterController
+2516	008F	Cooler Master MK730	OpenRGB CoolerMasterController
+2516	009F	Cooler Master CK530	OpenRGB CoolerMasterController
+2516	0101	Cooler Master MM711	OpenRGB CoolerMasterController
+2516	0105	Cooler Master MP750 Medium	OpenRGB CoolerMasterController
+2516	0107	Cooler Master MP750 Large	OpenRGB CoolerMasterController
+2516	0109	Cooler Master MP750 XL	OpenRGB CoolerMasterController
+2516	0123	CoolerMaster SK650 Keyboard	CoolerMaster/CoolerMaster_SK650_Keyboard.js
+2516	0141	Cooler Master MM720	OpenRGB CoolerMasterController
+2516	0145	Cooler Master CK550 V2	OpenRGB CoolerMasterController
+2516	0147	Cooler Master CK530 V2	OpenRGB CoolerMasterController
+2516	0149	Cooler Master SK622 Black	OpenRGB CoolerMasterController
+2516	014B	Cooler Master SK622 White	OpenRGB CoolerMasterController
+2516	014D	Cooler Master Radeon RX 6000 GPU	OpenRGB CoolerMasterController
+2516	0157	Cooler Master SK620 Black	OpenRGB CoolerMasterController
+2516	0159	Cooler Master SK620 White	OpenRGB CoolerMasterController
+2516	015B	Cooler Master Radeon RX 6900 GPU	OpenRGB CoolerMasterController
+2516	015D	Cooler Master SK652	OpenRGB CoolerMasterController
+2516	0165	Cooler Master MM730	OpenRGB CoolerMasterController
+2516	0169	Cooler Master MM712	OpenRGB CoolerMasterController
+2516	016B	Cooler Master CK720	CoolerMaster/CoolerMaster_CK720_Keyboard.js
+2516	016D	Cooler Master CK721	CoolerMaster/CoolerMaster_CK721_Keyboard.js
+2516	0173	Cooler Master ARGB Gen 2 A1	OpenRGB CoolerMasterController
+2516	01A9	Cooler Master GD160 ARGB Gaming Desk	OpenRGB CoolerMasterController
+2516	01AB	Cooler Master SK653	OpenRGB CoolerMasterController
+2516	01BB	Cooler Master GM27-FQS ARGB Monitor	OpenRGB CoolerMasterController
+2516	01BF	Cooler Master GM34-CWQ ARGB Monitor	OpenRGB CoolerMasterController
+2516	01C9	Cooler Master ARGB Gen 2 A1 V2	OpenRGB CoolerMasterController
+2516	01CB	Cooler Master ARGB Gen 2 A1 Mini	OpenRGB CoolerMasterController
+2516	1000	Cooler Master Small ARGB	OpenRGB CoolerMasterController
+2516	1011	Cooler Master ARGB	OpenRGB CoolerMasterController
+258A	0012	Nubwo X7 Spectrum	src/driver-sinowealth-nubwo.c
+258A	0027	sinowealth 0027	libratbag sinowealth-0027.device
+258A	0029	Everest GT-100 RGB	OpenRGB SinowealthController
+258A	0033	Glorious Model D / D-	OpenRGB SinowealthController
+258A	0036	Glorious Model O / O-	OpenRGB SinowealthController
+258A	0049	Sinowealth keyboard	Sinowealth/Sinowealth_Keyboard_Controller2.js
+258A	004A	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	0051	sinowealth 0051	libratbag sinowealth-0051.device
+258A	0055	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	0059	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	005D	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	0060	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	0065	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	007A	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	0090	Genesis Thor 300	OpenRGB SinowealthController
+258A	00C7	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	00C8	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	00E1	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	00EC	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	00F3	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	00F4	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	00F8	Royal Kludge RK61	Royal Kludge/RK_61_Keyboard.js
+258A	010C	Sinowealth Keyboard	OpenRGB SinowealthController
+258A	010D	Royal Kludge RK84	Royal Kludge/RK_84_Keyboard.js
+258A	1007	ZET Fury Pro	OpenRGB SinowealthController
+258A	2011	Glorious Model O / O- Wireless	OpenRGB SinowealthController
+258A	2012	Glorious Model D / D- Wireless	OpenRGB SinowealthController
+258A	2013	Glorious Model O Wireless - Wired	Glorious/Glorious_Model_O_Wireless_-_Wired.js
+258A	2014	Glorious Model D Wireless - Wired	Glorious/Glorious_Model_D_Wireless_-_Wired.js
+258A	2022	Glorious Model O / O- Wireless	OpenRGB SinowealthController
+258A	2023	Glorious Model D / D- Wireless	OpenRGB SinowealthController
+258A	2024	Glorious Model O Wireless	Glorious/Glorious_Model_O_Wireless.js
+258A	2025	Glorious Model D Wireless	Glorious/Glorious_Model_D_Wireless.js
+258A	2026	Glorious Model O Wireless	Glorious/Glorious_Model_O_Wireless.js
+25A7	FA07	Redragon M901P-KS (Wireless)	OpenRGB AresonController
+25A7	FA08	Redragon M901P-KS	OpenRGB AresonController
+25A7	FA3F	ZET GAMING Edge Air Pro (Wireless)	OpenRGB AresonController
+25A7	FA40	ZET GAMING Edge Air Pro	OpenRGB AresonController
+25A7	FA48	ZET GAMING Edge Air Elit (Wireless)	OpenRGB AresonController
+25A7	FA49	ZET GAMING Edge Air Elit	OpenRGB AresonController
+25A7	FA7B	Redragon M914 NIX	OpenRGB AresonController
+25A7	FA7C	Redragon M914 NIX (Wireless)	OpenRGB AresonController
+260D	2002	Patriot Viper V380 Headset	Patriot/V380_Headset.js
+264A	07D1	Thermaltake Level 20 Desk	Thermal Take/ThermalTake_Level20_Desk.js
+264A	3006	Thermaltake Poseidon Z RGB	OpenRGB ThermaltakePoseidonZRGBController
+264A	8002	ThermalTake Argent E1 Headphone Stand	Thermal Take/ThermalTake_E1_Headphone_Stand.js
+264A	8020	ThermalTake Argent Mouse Bungee	Thermal Take/ThermalTake_Argent_Mouse_Bungee.js
+264A	8022	ThermalTake Argent HS1 Headphone Stand	Thermal Take/Thermaltake_HS1_Headphone_Stand.js
+264A	9008	Thermaltake Dasher	Thermal Take/Thermaltake_Dasher_RGB_Mousepad.js
+264A	9011	ThermalTake Argent MP1 Mousepad	Thermal Take/Thermaltake_Argent_MP1_Mousepad.js
+27B8	01ED	ThingM blink(1) mk2	OpenRGB ThingMController
+28E9	30AD	B87 Keyboard	Yunzii/Yunzii_B87_QMK_ANSI_Keyboard.js
+28E9	30AF	Yunzii AL80 QMK Keyboard	Yunzii/Yunzii_AL80_QMK_ANSI_Keyboard.js
+28E9	3101	IF99 Keyboard	Yunzii/Yunzii_IF99_QMK_ANSI_Keyboard.js
+28E9	31C8	MK25047	Yunzii/Yunzii_MK25047_QMK_ANSI_Keyboard.js
+2D99	A106	Edifier Halo Pixelbar	OpenRGB EdifierHaloController
+2E88	B30A	Xiaohua keyboard	Xiaohua/Xiaohua_Keyboard_Controller.js
+2E8A	0011	Raspberry Pi 500+	OpenRGB QMKController
+2EA8	2125	ZET Blade Optical	OpenRGB ZETKeyboardController
+2F0E	0101	Fnatic Streak	OpenRGB FnaticStreakController
+2F0E	0102	Fnatic miniStreak	OpenRGB FnaticStreakController
+2F0E	0103	Fnatic MiniSTREAK Speed	Fnatic/Fnatic_MiniSTREAK_Speed_Keyboard.js
+2F0E	0105	Fnatic Streak65	OpenRGB FnaticStreakController
+3061	4700	GaiZhongGai 68+4 PRO	OpenRGB GaiZongGaiKeyboardController
+3061	4701	GaiZhongGai 42 PRO	OpenRGB GaiZongGaiKeyboardController
+3061	4710	GaiZhongGai LightBoard	OpenRGB GaiZongGaiKeyboardController
+3061	4711	GaiZhongGai RGB HUB Green	OpenRGB GaiZongGaiKeyboardController
+3061	4712	GaiZhongGai RGB HUB Blue	OpenRGB GaiZongGaiKeyboardController
+3061	4720	GaiZhongGai Dial	OpenRGB GaiZongGaiKeyboardController
+3061	4770	GaiZhongGai 17+4+Touch PRO	OpenRGB GaiZongGaiKeyboardController
+3061	4771	GaiZhongGai 17 PRO	OpenRGB GaiZongGaiKeyboardController
+3061	4772	GaiZhongGai 20 PRO	OpenRGB GaiZongGaiKeyboardController
+306F	1234	JSAUX RGB Docking Station	OpenRGB WushiController
+308F	0038	Alpaca Keyboards WhiteFox Eclipse QMK Keyboard	Alpaca/Alpaca_WhiteFox_Eclipse_QMK_Keyboard.js
+30FA	1030	Advanced GTA 250 USB Gaming Mouse	OpenRGB InstantMouseController
+30FA	1040	AntEsports GM600 USB Gaming Mouse	OpenRGB InstantMouseController
+30FA	1440	Anko KM43243952 USB Gaming Mouse	OpenRGB InstantMouseController
+30FA	1540	Anko KM43277483 USB Gaming Mouse	OpenRGB InstantMouseController
+3141	4466	MATTMCCA heliotrope QMK Keyboard	mattmcca/mattmcca_heliotrope.js
+3141	4467	MATTMCCA black_hellebore QMK Keyboard	mattmcca/mattmcca_blackhellebore.js
+3151	4002	Royuan keyboard	Royuan/Royuan_Keyboard_Controller.js
+3151	4003	Akko 3068B Plus / PC75B Plus	OpenRGB RoyuanKeyboardController
+3151	4010	Epomaker TH80 Pro (USB Cable)	OpenRGB RoyuanKeyboardController
+3151	4011	Epomaker TH80 Pro (USB Dongle)	OpenRGB RoyuanKeyboardController
+3151	4015	Attack Shark K86 (USB Cable)	OpenRGB RoyuanKeyboardController
+3151	5029	Skyloong GK68HE Pro	OpenRGB RoyuanKeyboardController
+31E3	1100	Wooting One	OpenRGB WootingKeyboardController
+31E3	1101	Wooting One	OpenRGB WootingKeyboardController
+31E3	1102	Wooting One	OpenRGB WootingKeyboardController
+31E3	1200	Wooting Two	OpenRGB WootingKeyboardController
+31E3	1201	Wooting Two	OpenRGB WootingKeyboardController
+31E3	1202	Wooting Two	OpenRGB WootingKeyboardController
+31E3	1210	Wooting Two Lekker Edition	OpenRGB WootingKeyboardController
+31E3	1211	Wooting Two Lekker Edition	OpenRGB WootingKeyboardController
+31E3	1212	Wooting Two Lekker Edition	OpenRGB WootingKeyboardController
+31E3	1220	Wooting Two HE	OpenRGB WootingKeyboardController
+31E3	1221	Wooting Two HE	OpenRGB WootingKeyboardController
+31E3	1222	Wooting Two HE	OpenRGB WootingKeyboardController
+31E3	1230	Wooting Two HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1231	Wooting Two HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1232	Wooting Two HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1300	Wooting 60HE	OpenRGB WootingKeyboardController
+31E3	1301	Wooting 60HE	OpenRGB WootingKeyboardController
+31E3	1302	Wooting 60HE	OpenRGB WootingKeyboardController
+31E3	1310	Wooting 60HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1311	Wooting 60HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1312	Wooting 60HE (ARM)	OpenRGB WootingKeyboardController
+31E3	1320	Wooting 60HE+	OpenRGB WootingKeyboardController
+31E3	1321	Wooting 60HE+	OpenRGB WootingKeyboardController
+31E3	1322	Wooting 60HE+	OpenRGB WootingKeyboardController
+31E3	1340	Wooting 60HEv2	OpenRGB WootingKeyboardController
+31E3	1341	Wooting 60HEv2	OpenRGB WootingKeyboardController
+31E3	1342	Wooting 60HEv2	OpenRGB WootingKeyboardController
+31E3	1400	Wooting 80HE	OpenRGB WootingKeyboardController
+31E3	1401	Wooting 80HE	OpenRGB WootingKeyboardController
+31E3	1402	Wooting 80HE	OpenRGB WootingKeyboardController
+31E3	1510	Wooting UwU RGB	OpenRGB WootingKeyboardController
+31E3	1511	Wooting UwU RGB	OpenRGB WootingKeyboardController
+31E3	1512	Wooting UwU RGB	OpenRGB WootingKeyboardController
+320F	5000	EVision Keyboard 320F:5000	OpenRGB EVisionKeyboardController
+320F	502A	EVision Keyboard 320F:502A	OpenRGB EVisionKeyboardController
+320F	5041	EVision Keyboard 320F:5041	OpenRGB EVisionKeyboardController
+320F	5042	Designed by GG Berserker QMK+VIA Keyboard	DesignedByGG/GG_QMK_ISO_Keyboard_TKL_AZERTY_French.js
+320F	5044	Glorious GMMK Pro QMK Keyboard	GMMK/GMMK_Pro_QMK_Keyboard.js
+320F	5045	GMMK 2 65% ANSI QMK Keyboard	GMMK/GMMK_2_65_ANSI_QMK_Keyboard.js
+320F	504A	GMMK 2 65% ISO QMK Keyboard	GMMK/GMMK_2_65_ISO_QMK_Keyboard.js
+320F	504B	GMMK 2 96% ANSI QMK Keyboard	GMMK/GMMK_2_96_ANSI_QMK_Keyboard.js
+320F	5055	EVision keyboard	EVision/EVision_Keyboard_Controller.js
+320F	505A	GMMK 2 96% ISO QMK Keyboard	GMMK/GMMK_2_96_ISO_QMK_Keyboard.js
+320F	505B	EVision Keyboard 320F:505B	OpenRGB EVisionKeyboardController
+320F	5064	EVision Keyboard 320F:5064	OpenRGB EVisionKeyboardController
+320F	5078	EVision Keyboard 320F:5078	OpenRGB EVisionKeyboardController
+320F	5084	EVision Keyboard 320F:5084	OpenRGB EVisionKeyboardController
+320F	5088	GMMK Numpad	GMMK/GMMK_Numpad_QMK.js
+320F	511E	DesignedbyGG Ironclad V3 ISO QMK+VIA	DesignedbyGG/QMK_ISO_DbGG_IroncladV3_1.0_QMKVIA_Full.js
+3233	5319	ProjectD ProjectD 65% ANSI QMK Keyboard	_Random-Brands/projectd_projectd_65_ansi.js
+3282	0001	Mountain Everest	OpenRGB MountainKeyboardController
+3282	0003	Mountain Makalu 67	Mountain/Mountain_Makalu_67_Mouse.js
+3282	0005	Mountain Everest 60	OpenRGB MountainKeyboardController
+3282	0006	Mountain Everest 60	OpenRGB MountainKeyboardController
+3282	0008	Mountain Macropad	Mountain/Mountain_Macropad.js
+3297	4976	Ergodox EZ Glow	Ergodox_EZ/Ergodox_EZ_Glow_QMK.js
+3299	0012	Endorfy Omnis	OpenRGB EVisionKeyboardController
+32AC	0012	Framework Laptop 16 RGB Keyboard	Framework/Framework_16_Keyboard.js
+32AC	0013	Laptop 16 RGB Macropad	Framework/Framework_Macropad.js
+3311	A297	Anne Pro 2	OpenRGB AnnePro2Controller
+3384	0001	Launch Configurable Keyboard (launch_1)	System76/System76_Launch-1_QMK_Keyboard.js
+3402	0300	HYTE Keeb TKL	OpenRGB HYTEKeyboardController
+3402	0B00	HYTE CNVS	OpenRGB HYTEMousematController
+3402	0B01	HYTE CNVS	OpenRGB HYTEMousematController
+342D	E4C2	Monsgeek M1_V5 ISO	Monsgeek/Monsgeek_M1_V5_ISO_Keyboard.js
+342D	E4C5	Monsgeek M1_V5 ANSI	Monsgeek/Monsgeek_M1_V5_ANSI_Keyboard.js
+3434	0100	Keychron Q1v1 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v1_QMK_ANSI_Keyboard.js
+3434	0101	Keychron Q1v1 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v1_QMK_ANSI_Keyboard.js
+3434	0102	Keychron Q1v1 ISO QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v1_QMK_ISO_Keyboard.js
+3434	0103	Keychron Q1v1 ISO QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v1_QMK_ISO_Keyboard.js
+3434	0106	Keychron Q1v2 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v2_QMK_ANSI_Encoder_Keyboard.js
+3434	0107	Keychron Q1v2 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v2_QMK_ANSI_Encoder_Keyboard.js
+3434	0108	Keychron Q1v2 ISO QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v2_QMK_ISO_Encoder_Keyboard.js
+3434	0109	Keychron Q1v2 ISO QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q1v2_QMK_ISO_Encoder_Keyboard.js
+3434	0110	Keychron Q2 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q2_QMK_ANSI_Keyboard.js
+3434	0111	Keychron Q2 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q2_QMK_ANSI_Encoder_Keyboard.js
+3434	0120	Keychron Q3 ANSI Keyboard	Keychron/Q Series/Standard/Keychron_Q3_QMK_ANSI_Keyboard.js
+3434	0121	Keychron Q3 ANSI Encoder Keyboard	Keychron/Q Series/Standard/Keychron_Q3_QMK_ANSI_Encoder_Keyboard.js
+3434	0122	Keychron Q3 ISO Keyboard	Keychron/Q Series/Standard/Keychron_Q3_QMK_ISO_Keyboard.js
+3434	0123	Keychron Q3 ISO Keyboard	Keychron/Q Series/Standard/Keychron_Q3_QMK_ISO_Keyboard.js
+3434	0130	Keychron Q0 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q0_QMK_ANSI_Keyboard.js
+3434	0131	Keychron Q0 Plus QMK Keyboard	Keychron/Q Series/Plus/Keychron_Q0_Plus_QMK_ANSI_Keyboard.js
+3434	0140	Keychron Q4 ANSI	Keychron/Q Series/Standard/Keychron_Q4_QMK_ANSI_Keyboard.js
+3434	0150	Keychron Q5 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q5_QMK_ANSI_Keyboard.js
+3434	0151	Keychron Q5 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q5_QMK_ANSI_Encoder_Keyboard.js
+3434	0153	Keychron Q5 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q5_QMK_ISO_Encoder_Keyboard.js
+3434	0160	Keychron Q6 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q6_QMK_ANSI_ISO_Keyboard.js
+3434	0161	Keychron Q6 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q6_QMK_ANSI_ISO_Keyboard.js
+3434	0162	Keychron Q6 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q6_QMK_ANSI_ISO_Keyboard.js
+3434	0163	Keychron Q6 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q6_QMK_ANSI_ISO_Keyboard.js
+3434	01A1	Keychron Q10	Keychron/Q Series/Standard/Keychron_Q10_QMK_ANSI_Keyboard.js
+3434	01B1	Keychron Q65 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q65_QMK_ANSI_Encoder_Keyboard.js
+3434	01D1	Keychron Q12 QMK Keyboard	Keychron/Q Series/Standard/Keychron_Q12_QMK_ANSI_Keyboard.js
+3434	01E0	Keychron Q11 QMK Keyboard	keychron/Keychron_Q11_QMK_ANSI_Keyboard.js
+3434	0210	Keychron K1 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K1_Pro_QMK_Keyboard.js
+3434	0211	Keychron K1 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K1_Pro_QMK_Keyboard.js
+3434	0220	Keychron K2 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K2_Pro_QMK_ANSI_Keyboard.js
+3434	0221	Keychron K2 Pro ISO DE QMK Keyboard	Keychron/K Series/Pro/Keychron_K2_Pro_QMK_ISO_DE_Keyboard.js
+3434	0230	Keychron K3 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K3_Pro_QMK_ANSI_Keyboard.js
+3434	0231	Keychron K3 Pro QMK ISO Keyboard	Keychron/K Series/Pro/Keychron_K3_Pro_QMK_ISO_Keyboard.js
+3434	0240	Keychron K4 Pro	Keychron/K Series/Pro/Keychron_K4_Pro_ANSI_Keyboard.js
+3434	0241	Keychron K4 Pro	Keychron/K Series/Pro/Keychron_K4_Pro_ISO_DE_Keyboard.js
+3434	0250	Keychron K5 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K5_Pro_QMK_ANSI_Keyboard.js
+3434	0260	Keychron K6 Pro	Keychron/K Series/Pro/Keychron_K6_Pro_ANSI_Keyboard.js
+3434	0280	Keychron K8 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K8Pro_QMK_ANSI_Keyboard.js
+3434	0281	Keychron K8 Pro ISO DE QMK Keyboard	Keychron/K Series/Pro/Keychron_K8Pro_QMK_ISO_DE_Keyboard.js
+3434	02A0	Keychron K10 Pro QMK Keyboard	Keychron/K Series/Pro/Keychron_K10Pro_QMK_ANSI_Keyboard.js
+3434	02A1	Keychron K10 Pro ISO QMK Keyboard	Keychron/K Series/Pro/Keychron_K10Pro_QMK_ISO_Keyboard.js
+3434	02C0	Keychron K12 QMK Keyboard	Keychron/K Series/Pro/Keychron_K12_Pro_QMK_ANSI_Keyboard.js
+3434	0310	Keychron V1 QMK Keyboard	Keychron/V Series/Standard/Keychron_V1_QMK_ANSI_Keyboard.js
+3434	0311	Keychron V1 QMK Keyboard	Keychron/V Series/Standard/Keychron_V1_QMK_ANSI_Encoder_Keyboard.js
+3434	0312	Keychron V1 ISO QMK Keyboard	Keychron/V Series/Standard/Keychron_V1_QMK_ISO_Keyboard.js
+3434	0313	Keychron V1 ISO QMK Keyboard	Keychron/V Series/Standard/Keychron_V1_QMK_ISO_Keyboard.js
+3434	0320	Keychron V2 QMK Keyboard	Keychron/V Series/Standard/Keychron_V2_QMK_ANSI_Keyboard.js
+3434	0321	Keychron V2 QMK Keyboard	Keychron/V Series/Standard/Keychron_V2_QMK_ANSI_Keyboard.js
+3434	0330	Keychron V3 QMK ANSI Keyboard	Keychron/V Series/Standard/Keychron_V3_QMK_ANSI_Keyboard.js
+3434	0331	Keychron V3 QMK ANSI Keyboard	Keychron/V Series/Standard/Keychron_V3_QMK_ANSI_Keyboard.js
+3434	0332	Keychron V3 QMK ISO Keyboard	Keychron/V Series/Standard/Keychron_V3_QMK_ISO_Keyboard.js
+3434	0333	Keychron V3 QMK ISO Keyboard	Keychron/V Series/Standard/Keychron_V3_QMK_ISO_Keyboard.js
+3434	0340	Keychron V4 QMK ANSI Keyboard	Keychron/V Series/Standard/Keychron_V4_QMK_ANSI_Keyboard.js
+3434	0342	Keychron V4 QMK ISO Keyboard	Keychron/V Series/Standard/Keychron_V4_QMK_ISO_Keyboard.js
+3434	0350	Keychron V5 QMK Keyboard	Keychron/V Series/Standard/Keychron_V5_QMK_ANSI_Keyboard.js
+3434	0351	Keychron V5 QMK ANSI Encoder Keyboard	Keychron/V Series/Standard/Keychron_V5_QMK_ANSI_Encoder_Keyboard.js
+3434	0353	Keychron V5 QMK ISO Encoder Keyboard	Keychron/V Series/Standard/Keychron_V5_QMK_ISO_Encoder_Keyboard.js
+3434	0360	Keychron V6 ANSI QMK Keyboard	Keychron/V Series/Standard/Keychron_V6_QMK_ANSI_Keyboard.js
+3434	0361	Keychron V6 ANSI QMK Keyboard	Keychron/V Series/Standard/Keychron_V6_QMK_ANSI_Keyboard.js
+3434	0363	Keychron V6 ISO QMK Keyboard	Keychron/V Series/Standard/Keychron_V6_QMK_ISO_Keyboard.js
+3434	0433	Keychron C3 Pro QMK Keyboard	Keychron/C Series/Pro/Keychron_C3_Pro_QMK_ANSI_Keyboard.js
+3434	0510	Keychron C1 Pro QMK Keyboard	Keychron/C Series/Pro/Keychron_C1_Pro_QMK_ANSI_Keyboard.js
+3434	0520	Keychron C2 Pro QMK Keyboard	Keychron/C Series/Pro/Keychron_C2_Pro_QMK_ANSI_Keyboard.js
+3434	0526	Keychron C2 Pro QMK Keyboard	Keychron/C Series/Pro/Keychron_C2_Pro_QMK_ANSI_Keyboard.js
+3434	0530	Keychron C3 Pro 8K ANSI QMK Keyboard	Keychron/C Series/Pro 8K/Keychron_C3_Pro_8K_QMK_ANSI_Keyboard.js
+3434	0610	Keychron Q1 Pro / OnePlus 81 Pro QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q1_Pro_QMK_ANSI_Encoder_Keyboard.js
+3434	0611	Keychron Q1 Pro ISO QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q1_Pro_QMK_ISO_Encoder_Keyboard.js
+3434	0620	Keychron Q2 Pro ANSI Encoder	Keychron/Q Series/Pro/Keychron_Q2_Pro_QMK_ANSI_Keyboard.js
+3434	0630	Keychron Q3 Pro SE ANSI	Keychron/Q Series/Pro/Keychron_Q3_Pro_SE_QMK_ANSI_Keyboard.js
+3434	0631	Keychron Q3 Pro SE ISO QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q3_Pro_SE_QMK_ISO_Keyboard.js
+3434	0650	Keychron Q5 Pro	Keychron/Q Series/Pro/Keychron_Q5_Pro_QMK_ANSI_Keyboard.js
+3434	0651	Keychron Q5 Pro ISO	Keychron/Q Series/Pro/Keychron_Q5_Pro_QMK_ISO_Keyboard.js
+3434	0660	Keychron Q6 Pro ANSI QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q6_Pro_QMK_ANSI_Keyboard.js
+3434	0661	Keychron Q6 Pro ISO QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q6_Pro_QMK_ISO_Keyboard.js
+3434	0680	Keychron Q8 Pro ANSI QMK Keyboard	Keychron/Q Series/Pro/Keychron_Q8_Pro_QMK_ANSI_Keyboard.js
+3434	0800	Keychron Q0 Max QMK Keyboard	Keychron/Q Series/Max/Keychron_Q0_Max_QMK_Keyboard.js
+3434	0810	Keychron Q1 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q1_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0811	Keychron Q1 Max ISO QMK Keyboard	Keychron/Q Series/Max/Keychron_Q1_Max_QMK_ISO_Encoder_Keyboard.js
+3434	0820	Keychron Q2 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q2_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0830	Keychron Q3 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q3_Max_QMK_ANSI_Keyboard.js
+3434	0831	Keychron Q3 Max ISO QMK Keyboard	Keychron/Q Series/Max/Keychron_Q3_Max_QMK_ISO_Keyboard.js
+3434	0850	Keychron Q5 Max ANSI Encoder QMK Keyboard	Keychron/Q Series/Max/Keychron_Q5_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0860	Keychron Q6 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q6_Max_QMK_ANSI_Keyboard.js
+3434	0861	Keychron Q6 Max ISO QMK Keyboard	Keychron/Q Series/Max/Keychron_Q6_Max_QMK_ISO_Keyboard.js
+3434	0880	Keychron Q8 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q8_Max_QMK_ANSI_Keyboard.js
+3434	08B0	Keychron Q65 Max QMK Keyboard	Keychron/Q Series/Max/Keychron_Q65_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	08C3	Keychron Q12 Max ANSI QMK Keyboard	Keychron/Q Series/Max/Keychron_Q12_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0913	Keychron V1 MAX ANSI + Encoder QMK Keyboard	Keychron/V Series/Max/Keychron_V1_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0914	Keychron V1 MAX ISO + Encoder QMK Keyboard	Keychron/V Series/Max/Keychron_V1_Max_QMK_ISO_Encoder_Keyboard.js
+3434	0933	Keychron V3 Max QMK Keyboard	Keychron/V Series/Max/Keychron_V3_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0934	Keychron V3 Max QMK ISO Keyboard	Keychron/V Series/Max/Keychron_V3_Max_QMK_ISO_Keyboard.js
+3434	0950	Keychron V5 MAX ANSI + Encoder QMK Keyboard	Keychron/V Series/Max/Keychron_V5_Max_QMK_ANSI_Encoder_Keyboard.js
+3434	0951	Keychron V5 MAX ISO + Encoder QMK Keyboard	Keychron/V Series/Max/Keychron_V5_Max_QMK_ISO_Encoder_Keyboard.js
+3434	0960	Keychron V6 Max ANSI QMK Keyboard	Keychron/V Series/Max/Keychron_V6_Max_QMK_ANSI_Keyboard.js
+3434	0961	Keychron V6 Max ISO QMK Keyboard	Keychron/V Series/Max/Keychron_V6_Max_QMK_ISO_Keyboard.js
+3434	0A00	Keychron K17 Max QMK ANSI Keyboard	Keychron/K Series/Max/Keychron_K17_Max_QMK_ANSI_Keyboard.js
+3434	0A10	Keychron K1 Max QMK Keyboard	Keychron/K Series/Max/Keychron_K1_Max_QMK_Keyboard.js
+3434	0A11	Keychron K1 Max QMK Keyboard	Keychron/K Series/Max/Keychron_K1_Max_QMK_Keyboard.js
+3434	0A20	Keychon K2 Max ANSI	Keychron/K Series/Max/Keychron_K2_Max_QMK_ANSI_Keyboard.js
+3434	0A21	Keychon K2 Max ISO	Keychron/K Series/Max/Keychron_K2_Max_QMK_ISO_Keyboard.js
+3434	0A50	Keychron K5 Max ANSI QMK Keyboard	Keychron/K Series/Max/Keychron_K5_Max_QMK_ANSI_Keyboard.js
+3434	0A51	Keychron K5 Max ISO QMK Keyboard	Keychron/K Series/Max/Keychron_K5_Max_QMK_ISO_Keyboard.js
+3434	0A80	Keychron K8 Max QMK Keyboard	Keychron/K Series/Max/Keychron_K8Max_QMK_ANSI_Keyboard.js
+3434	0A81	Keychron K8 Max ISO QMK Keyboard	Keychron/K Series/Max/Keychron_K8Max_QMK_ISO_Keyboard.js
+3434	0AA0	Keychron K10 Max QMK Keyboard	Keychron/K Series/Max/Keychron_K10_Max_QMK_ANSI_Keyboard.js
+3434	0AA1	Keychron K10 Max ISO QMK Keyboard	Keychron/K Series/Max/Keychron_K10_Max_QMK_ISO_Keyboard.js
+3434	0B10	Keychron Q1 HE QMK ANSI Keyboard	Keychron/Q Series/HE/Keychron_Q1_HE_QMK_ANSI_Keyboard.js
+3434	0B11	Keychron Q1 HE QMK ISO Keyboard	Keychron/Q Series/HE/Keychron_Q1_HE_QMK_ISO_Keyboard.js
+3434	0B30	Keychron Q3 HE ANSI Encoder Keyboard	Keychron/Q Series/HE/Keychron_Q3_HE_QMK_ANSI_Encoder_Keyboard.js
+3434	0B50	Keychron Q5 HE QMK Keyboard	Keychron/Q Series/HE/Keychron_Q5_HE_QMK_ANSI_Encoder_Keyboard.js
+3434	0B60	Keychron Q6 HE QMK Keyboard	Keychron/Q Series/HE/Keychron_Q6_HE_QMK_ANSI_ISO_Keyboard.js
+3434	0B61	Keychron Q6 HE QMK Keyboard	Keychron/Q Series/HE/Keychron_Q6_HE_QMK_ANSI_ISO_Keyboard.js
+3434	0D20	Keychon K2v2+v3 ANSI	Keychron/K Series/Standard/Keychron_K2v2+v3_QMK_ANSI_Keyboard.js
+3434	0D21	Keychon K2v3 ISO	Keychron/K Series/Standard/Keychron_K2v3_QMK_ISO_Keyboard.js
+3434	0D31	Keychon K3v3 ISO	Keychron/K Series/Standard/Keychron_K3v3_QMK_ISO_Keyboard.js
+3434	0D51	Keychron K5 v2 ISO QMK Keyboard	Keychron/K Series/Standard/Keychron_K5_v2_QMK_ISO_Keyboard.js
+3434	0D80	Keychron K8 v2 ANSI QMK Keyboard	Keychron/K Series/Standard/Keychron_K8_TKL_Version_2_QMK_ANSI_Keyboard.js
+3434	0D81	Keychron K8 v2 TKL ISO QMK Keyboard	Keychron/K Series/Standard/Keychron_K8_TKL_Version_2_QMK_ISO_Keyboard.js
+3434	0DA0	Keychron K10v2 Max QMK Keyboard	Keychron/K Series/Max/Keychron_K10_v2_QMK_ANSI_Keyboard.js
+3434	0DA1	Keychron K10 V2 ISO QMK Keyboard	Keychron/K Series/Standard/Keychron_K10V2_QMK_ISO_Keyboard.js
+3434	0E20	Keychron K2 HE ANSI QMK Keyboard	Keychron/K Series/HE/Keychron_K2_HE_QMK_ANSI_Keyboard.js
+3434	0E21	Keychron K2 HE ISO QMK Keyboard	Keychron/K Series/HE/Keychron_K2_HE_QMK_ISO_Keyboard.js
+3434	0E40	Keychron K4 HE ANSI QMK Keyboard	Keychron/K Series/HE/Keychron_K4_HE_QMK_ANSI_Keyboard.js
+3434	0E80	Keychron K8 HE QMK Keyboard	Keychron/K Series/HE/Keychron_K8_HE_QMK_ANSI_Keyboard.js
+3434	0E81	Keychron K8 HE ISO QMK Keyboard	Keychron/K Series/HE/Keychron_K8_HE_QMK_ISO_Keyboard.js
+3434	0EA0	Keychron K10 HE ANSI QMK Keyboard	Keychron/K Series/HE/Keychron_K10_HE_QMK_ANSI_Keyboard.js
+3434	0EA1	Keychron K10 HE ISO QMK Keyboard	Keychron/K Series/HE/Keychron_K10_HE_QMK_ISO_Keyboard.js
+3434	0F60	Keychron V6 8K ANSI Encoder QMK Keyboard	Keychron/V Series/8K/Keychron_V6_8K_QMK_ANSI_Encoder_Keyboard.js
+3434	0F61	Keychron V6 8K ISO Encoder QMK Keyboard	Keychron/V Series/8K/Keychron_V6_8K_QMK_ISO_Encoder_Keyboard.js
+3434	FE02	Keychon K2v2+v3 ANSI	Keychron/K Series/Standard/Keychron_K2v2+v3_QMK_ANSI_Keyboard.js
+3434	FE06	Keychron K4v2 QMK Keyboard	Keychron/K Series/Standard/Keychron_K4v2_QMK_ANSI_Keyboard.js
+3434	FE0F	Keychron K8 TKL ISO QMK Keyboard	Keychron/K Series/Standard/Keychron_K8_TKL_QMK_ISO_Keyboard.js
+3537	100F	GameSir Nova 2 Lite	OpenRGB GameSirController
+3537	1098	GameSir Nova 2 Lite (Wireless)	OpenRGB GameSirController
+3554	FA09	OEM Wireless Keyboard	OEM/OEM_Keyboard_Wireless_Controller.js
+359B	0001	Massdrop SENSE75 QMK Keyboard	Massdrop/Massdrop_SENSE75_QMK_Keyboard.js
+359B	0004	Drop CSTM80 QMK Keyboard	Massdrop/Drop_CSTM80_QMK_Keyboard.js
+359B	0006	Drop ALT V2 QMK Keyboard	Massdrop/Drop_ALT_V2_QMK_Keyboard.js
+359B	0009	Massdrop CTRL V2 QMK Keyboard	Massdrop/Massdrop_CTRL_V2_QMK_Keyboard.js
+359B	000C	Drop SHIFT v2 QMK Keyboard	Massdrop/Drop_SHIFT_V2_QMK_Keyboard.js
+362D	0110	Lemokey L1	Lemokey/Lemokey_L1_ANSI_Keyboard.js
+362D	0130	Lemokey L3	Lemokey/Lemokey_L3_ANSI_Keyboard.js
+362D	0303	Lemokey P1 Pro ANSI Keyboard	Lemokey/Lemokey_P1_Pro_ANSI_Keyboard.js
+362D	0304	Lemokey P1 Pro ISO Keyboard	Lemokey/Lemokey_P1_Pro_ISO_Keyboard.js
+362D	0510	Lemokey L1 HE	Lemokey/Lemokey_L1_HE_ANSI_Keyboard.js
+362D	0610	Lemokey P1 HE ANSI Keyboard	Lemokey/Lemokey_P1_HE_ANSI_Keyboard.js
+362D	0611	Lemokey P1 HE ISO Keyboard	Lemokey/Lemokey_P1_HE_ISO_Keyboard.js
+362D	1509	Keychron / Donkey J2 ANSI QMK Keyboard	Keychron/J Series/Keychron_J2_QMK_ANSI_Keyboard.js
+369B	0021	redragon k667 QMK Keyboard	Redragon/Redragon_k667_Keyboard_QMK.js
+36B0	305B	Epomaker TH85 QMK Keyboard	Epomaker/Epomaker_TH85_QMK.js
+36B0	3118	Cerakey Zen75 QMK ANSI Keyboard	Cerakey/Cerakey_Zen75_QMK_ANSI_Keyboard.js
+36B5	27D6	Meletrix Zoom98 QMK Keyboard	_Random-Brands/Meletrix_Zoom98_QMK_Keyboard.js
+3710	2400	Pulsar XBOARD QS	Pulsar/pulsar_XBOARD QS_sRGB_240206.js
+372E	103E	BY Tech keyboard	BYTech/BYTech_Keyboard_Controller.js
+3794	A000	glorious model o eternal	libratbag glorious-model-o-eternal.device
+3842	2402	EVGA X20 USB Receiver	OpenRGB EVGAUSBController
+3842	240D	EVGA X17 Mouse	EVGA/X-17_Mouse.js
+3842	2415	EVGA X15 Mouse	EVGA/X-15_Mouse.js
+3842	2420	EVGA X20 Gaming Mouse	OpenRGB EVGAUSBController
+3842	2422	EVGA X12 Gaming Mouse	OpenRGB EVGAUSBController
+3842	2608	EVGA Z15 Keyboard	OpenRGB EVGAUSBController
+3842	260A	EVGA Z20 Keyboard	OpenRGB EVGAUSBController
+3842	260E	EVGA Z15 Keyboard	OpenRGB EVGAUSBController
+3842	2610	EVGA Z20 Keyboard	OpenRGB EVGAUSBController
+3938	1162	AOC AGON AMM700	OpenRGB AOCMousematController
+3938	1178	AOC GK500	OpenRGB AOCKeyboardController
+3938	1179	AOC GM500	OpenRGB AOCMouseController
+3938	1229	AOC GK500	OpenRGB AOCKeyboardController
+3A54	4F5D	Magic Force / Kinst MF17 QMK Numpad	Kinst/Kinst_MF17_QMK_Numpad.js
+4161	3435	an_achronism tetromino QMK Keyboard	_Random-Brands/anachronism_tetromino.js
+4249	426E	Binepad BN006 QMK Keyboard	_Random-Brands/binepad_bn006.js
+4273	0001	Boardsource The Mark65 QMK Keyboard	boardsource/boardsource_the_mark65.js
+4273	0066	Boardsource Beiwagon QMK Keyboard	boardsource/boardsource_beiwagon.js
+4273	0079	Boardsource Technik-O QMK Keyboard	boardsource/boardsource_techniko.js
+4273	0083	Boardsource Technik-S QMK Keyboard	boardsource/boardsource_techniks.js
+4273	7685	Boardsource lulu QMK Keyboard	boardsource/boardsource_lulu.js
+4347	4B42	CZC.Gaming Dwarf QMK Keyboard	_Random-Brands/czcgaming_dwarf.js
+4357	0003	Controller Works mini42 QMK Keyboard	controller_works/controller_works_mini42.js
+4357	0004	Controller Works mini36 QMK Keyboard	controller_works/controller_works_mini36.js
+4357	0005	Controller Works city42 QMK Keyboard	controller_works/controller_works_city42.js
+444E	4450	dekuNukem duckyPad QMK Keyboard	_Random-Brands/dekunukem_duckypad.js
+4450	6470	depermana12 dp3000 QMK Keyboard	_Random-Brands/depermana12_dp3000.js
+445A	1220	DZTech ANSI DZ60RGB	DZTech/DZTech-60RGB_Keyboard.js
+445A	1221	DZTech ANSI DZ60RGB	DZTech/DZTech-60RGB_Keyboard.js
+445A	1424	DZTech DZ65RGB V3	DZTech/DZTech-65RGB-V3_Keyboard.js
+4557	3665	eggsworks egg58 QMK Keyboard	_Random-Brands/eggsworks_egg58.js
+474B	4202	gkeyboard GPAD8-2R QMK Keyboard	_Random-Brands/gkeyboard_gpad82r.js
+4A16	4A16	SW Eave65	Swagkeys/SW_EAVE65.js
+4A4C	E987	KBM! TG700 Preto	KBM Gaming/KBM_Keyboard_Controller.js
+4A4C	E989	KBM! TG600 Branco	KBM Gaming/KBM_Keyboard_Controller.js
+4B42	0012	kbdfans Kbdpadmk3 QMK Keyboard	_Random-Brands/kbdfans_kbdpadmk3.js
+4B42	0105	KBDfans KBD67MKIIRGB ISO QMK Keyboard	KBDFans/KBDFans_KBD67_V2_QMK_ISO_Keyboard.js
+4B42	0223	FLASHQUARK Horizon_Z QMK Keyboard	_Random-Brands/flashquark_horizonz.js
+4B42	1224	KBDFans KBD67 RGB MKII	KBDFans/KBDFans_KBD67_RGBMKII_QMK_Keyboard.js
+4B42	1225	KBDFans KBD67 RGB MKII	KBDFans/KBDFans_KBD67_RGBMKII_QMK_Keyboard.js
+4B42	1226	KBDFans KBD67 RGB MKII	KBDFans/KBDFans_KBD67_RGBMKII_QMK_Keyboard.js
+4B42	1227	KBDFans KBD67 RGB MKII	KBDFans/KBDFans_KBD67_RGBMKII_QMK_Keyboard.js
+4B50	1122	KPRepublic BM60 Poker Rev 2	KPRepublic/KPRepublic_BM60_Poker_Rev_2.js
+4C58	0004	Lx3 FAve 84H QMK Keyboard	lx3/lx3_fave_84h.js
+4C58	000B	Lx3 favepada QMK Keyboard	lx3/lx3_favepada.js
+4C58	000C	Lx3 fave60a QMK Keyboard	lx3/lx3_fave60a.js
+4D4B	304E	AL68_Keyboard	Yunzii/Yunzii_AL68_QMK_ANSI_Keyboard.js
+4D4B	6067	Unknown Tan67 QMK Keyboard	_Random-Brands/unknown_tan67.js
+4D54	2002	NCR-80 Hotswap	NCR/NCR-80_Hotswap_Keyboard.js
+4E53	5406	N5312A USB Optical Mouse	OpenRGB N5312AController
+504B	320F	GMMK3 QMK Keyboard	GMMK/GMMK_3_QMK_Keyboard.js
+5241	065B	Rama Works M65-B	Rama/Rama_M65B.js
+534E	3630	Synth Labs 060 QMK Keyboard	_Random-Brands/synth_labs_060.js
+544D	C000	Kuro Kuro65 QMK Keyboard	_Random-Brands/kuro_kuro65.js
+5453	0059	Rama Works M60-B QMK Keyboard	rama/rama_works_m60b.js
+5453	0060	Rama M6-C QMK Keyboard	rama/rama_m6c.js
+5453	0067	Freja 65 Keyboard	Helheim Designs/Freja_65_QMK_Keyboard.js
+574C	99EB	Work Louder numpad QMK Keyboard	_Random-Brands/work_louder_numpad.js
+5754	C401	CXT cxt_studio QMK Keyboard	_Random-Brands/cxt_cxtstudio.js
+5842	4B50	XBows KnightPlus Keyboard	XBows/XBows_KnightPlus_QMK_ANSI_Keyboard.js
+5842	4E61	XBows KnightPlus Keyboard	XBows/XBows_Nature_QMK_ANSI_Keyboard.js
+5842	4E75	XBows KnightPlus Numpad	XBows/XBows_KnightPlus_QMK_ANSI_Numpad.js
+586A	B001	KBDCRAFT Adam64 QMK Keyboard	_Random-Brands/kbdcraft_adam64.js
+586A	B002	KBDCraft Adam0110 QMK Keyboard	KBDCraft/KBDCraft_Adam0110_QMK_Keyboard-Test.js
+594D	0075	YMDK Idobao x YMDK ID75 QMK Keyboard	ymdk/ymdk_idobao_x_ymdk_id75.js
+594D	4409	YMDK YMD09 QMK Keyboard	YMDK/YMDK_YMD09_QMK_Keyboard.js
+594D	6060	YMDK Melody96 RGB QMK Keyboard	YMDK/YMDK_Melody96rgb_QMK_Keyboard.js
+6964	0267	IDOBAO ID67	IDOBAO/IDOBAO_ID67_QMK_Keyboard.js
+6C6E	7070	Laser Ninja Pumpkin Pad QMK Keyboard	_Random-Brands/laser_ninja_pumpkin_pad.js
+6F75	5518	1upkeyboards sweet16v2 QMK Keyboard	1upkeyboards/1upkeyboards_sweet16v2.js
+6F75	5600	1upkeyboards pi40 QMK Keyboard	1upkeyboards/1upkeyboards_pi40.js
+6F75	5602	1upkeyboards pi60_rgb QMK Keyboard	1upkeyboards/1upkeyboards_pi60rgb.js
+6F75	5603	1upkeyboards pi60_hse QMK Keyboard	1upkeyboards/1upkeyboards_pi60hse.js
+6F75	5604	1upkeyboards pi60 QMK Keyboard	1upkeyboards/1upkeyboards_pi60.js
+6F75	5607	1upkeyboards 1upocarina QMK Keyboard	1upkeyboards/1upkeyboards_1upocarina.js
+6F75	5610	1upkeyboards 1upsuper16v3 QMK Keyboard	1upkeyboards/1upkeyboards_1upsuper16v3.js
+706C	7905	plywrks ply8x QMK Keyboard	_Random-Brands/plywrks_ply8x.js
+7431	D645	tominabox1 Le Chiffre QMK Keyboard	_Random-Brands/tominabox1_le_chiffre.js
+7654	4321	abko ak84bt QMK Keyboard	_Random-Brands/abko_ak84bt.js
+8089	0007	SayoDevice E1	OpenRGB SayoDeviceController
+8968	4E4C	Novelkeys NK87 QMK Keyboard	_Random-Brands/Novelkeys_NK87_QMK_Keyboard.js
+8968	4E51	Yiancar-Designs NK+ QMK Keyboard	_Random-Brands/yiancardesigns_nk.js
+CB10	1356	Keebio Nyquistpad QMK Keyboard	_Random-Brands/keebio_nyquistpad.js
+D60D	4AD4	Hoksi Technology DURGOD Hades (QMK) QMK Keyboard	_Random-Brands/hoksi_technology_durgod_hades_qmk.js
+ECED	3663	Fancytech FancyAlice66 QMK Keyboard	_Random-Brands/fancytech_fancyalice66.js
+F2E7	1226	Feker IK75 (QMK/VIA)	Feker/Feker-IK75.js
+FEED	0000	Doio doio/kb38 QMK Keyboard	_Random-Brands/doio_doiokb38.js
+FEED	0844	zzeneg stront QMK Keyboard	_Random-Brands/zzeneg_stront.js
+FEFE	3488	SKMT SKMT 15k QMK Keyboard	_Random-Brands/skmt_skmt_15k.js
+FFFE	0002	Inland MK47 QMK Keyboard	_Random-Brands/inland_mk47.js
+FFFE	0005	Monsgeek M1_V3	Monsgeek/Monsgeek_M1_V3_Keyboard.js
+FFFE	0007	Inland KB83 QMK Keyboard	Inland/Inland_KB83_QMK_Keyboard.js
+FFFE	0009	Monsgeek M3 QMK Keyboard	Monsgeek/Monsgeek_M3_Keyboard_TKL.js
+FFFE	000A	MonsGeek M5 QMK Keyboard	monsgeek/monsgeek_m5.js
+FFFE	000B	Akko 5075 QMK Keyboard	Akko/Akko_5075_QMK_Keyboard.js
+FFFE	000D	Akko 5108 QMK Keyboard	akko/akko_5108.js
+FFFE	000E	Akko TOP40 QMK Keyboard	akko/akko_top40.js
+FFFE	0010	Akko ACR87 QMK Keyboard	akko/akko_acr87.js
+FFFE	0011	MonsGeek M6 QMK Keyboard	monsgeek/monsgeek_m6.js
+FFFE	0012	CHOSFOX CHOSFOX CF81 QMK Keyboard	_Random-Brands/chosfox_chosfox_cf81.js
+FFFE	006F	MCHOSE GX87 ANSI QMK Keyboard	MCHOSE/MCHOSE_GX87_QMK_ANSI_Keyboard.js
+FFFE	00A8	YUNZII X98 QMK Keyboard	Yunzii/Yunzii_X98_QMK_ANSI_Keyboard.js
