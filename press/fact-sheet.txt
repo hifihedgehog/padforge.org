@@ -1,11 +1,11 @@
 PadForge
-Product information | October 27, 2026
+Product information | November 9, 2026
 
-PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 1,110 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 2,667 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts, reWASD configs and DS4Windows profiles, and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
-Version: 5.2.0
+Version: 5.3.0
 Downloads and release notes: https://github.com/hifihedgehog/PadForge/releases/latest
 Platforms: Windows 10 and 11 on x64. Preliminary build for Windows 11 on ARM64.
 Price: Free. No subscriptions or paid feature packs.
@@ -14,14 +14,15 @@ Source license: CC BY-NC-SA 4.0.
 Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICENSE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
-New in 5.2.0
-Game Telemetry: Driving games send PadForge their speed, RPM, gear, pedals and steering, from Forza, F1, EA SPORTS WRC and the Codemasters rally games to Assetto Corsa, Project CARS 2 and the truck simulators. They appear as a controller row of their own, to map, to start macros with, or to play adaptive trigger effects on a DualSense. Custom Formats reads a game PadForge does not know.
-Game mods without DSX: Fan mods that give the Grand Theft Auto games, Red Dead Redemption 2, Skyrim and others adaptive triggers send to a program named DSX. PadForge takes its place: their trigger effects, lightbar, player lights and mute light play on the PlayStation controllers on PadForge's virtual controllers, with no DSX installed.
-Novint Falcon: The Falcon's handle becomes a stick and its grip's buttons become buttons, and a game's rumble and force feedback push back on the handle, through Force Dimension's SDK. No Falcon has run against PadForge yet.
-Keyboard screens: The screens on Logitech's GamePanel keyboards, the Mad Catz S.T.R.I.K.E. 7 and a phone running Logitech Arx Control show the profile, a clock, play time, a stopwatch, a picture or a PlayStation controller's lightbar color, and the keys beside them map as buttons. None of these screens has run against PadForge yet.
-Haptics as rumble: A game that plays a DualSense's haptics as audio now rumbles every rumble pad on that virtual controller, and bass shakers follow it.
-HIDMaestro 2.1.0: Virtual Xbox 360 controllers keep working through sleep, and every frame arrives once and in order. In HIDMaestro's own test with every processor busy, a virtual DualShock 4's slowest frame took 1.4 ms instead of 360.
-DualShock 4 headset: Over Bluetooth, a DualShock 4 plays through its headphone jack and its headset microphone works. A second-model DualShock 4 on a cable now plays PadForge's sound through its headphone jack too.
+New in 5.3.0
+reWASD and DS4Windows import: A reWASD config or a DS4Windows profile becomes an ordinary PadForge profile. Before anything changes, a preview marks every binding Clean, Partial or Skipped, says why for each one that is not Clean, and names every program the profile would run. reWASD's shifts become shift layers, and its single, double, triple and long presses become macros that keep the file's wait times. A DS4Windows profile brings its shift modifiers, special actions, gyro and touchpad modes, lightbar, adaptive trigger effects and two-stage triggers.
+Key-by-key lighting: PadForge lights 1,563 RGB keyboards, mice, headsets and other devices by itself, using the protocols that OpenRGB, OpenRazer, SignalRGB's plugins and QMK document. Where it knows a device's lights one by one, the Key Colors card colors them key by key on each shift layer, and Map Key Lights names a light by the key you press under it. Most of these devices have not run against PadForge yet.
+Screen Color: A lighting mode that follows the colors on one display, the whole screen or one area of it. A lightbar takes one color, and a keyboard whose lights PadForge knows one by one spreads the screen across its keys. PadForge reads the finished picture from Windows and stores none of it. It changes nothing in any game.
+Screen Overlay: Up to eight windows above your game show a picture, the profile, a clock, play time, a stopwatch or a lightbar's color, with no keyboard screen needed. While the game is in front, clicks pass through them, and they never take its focus.
+Keyboard and Hotbar menus: The Keyboard menu style types into any Windows program from the controller, on a grid, a split keyboard or a daisy wheel, with word suggestions from Windows. It opens on any input you pick, and it can also open when a text box in a Windows app or browser takes focus. The Hotbar style is Steam Input's hotbar. A Steam config's Show Keyboard binding and its hotbars import as these two styles.
+Twitch Chat: Viewers play a controller slot by typing commands such as !a, !a+b or !a500ms in the stream's chat, and take turns with !claim. PadForge reads the chat without signing in and never posts in it. OBS shows the controller on the stream as a browser source. Twitch Chat has not run against a live channel yet.
+Use Only in PadForge: A button on the Devices page takes a USB keyboard or mouse away from Windows, so its keys and buttons reach only your mappings and macros. It takes a precision touchpad the same way while PadForge runs. The switch has run on one mouse and one touchpad. On a keyboard it has not completed yet.
+DualShock 4 speaker over USB: A second-model DualShock 4 on a cable, or any DualShock 4 on Sony's USB wireless adapter, plays PadForge's sound through its built-in speaker as well as its headphone jack. This route has not run on a wired pad or on the adapter yet.
 
 Setup
 PadForge runs as administrator. Its runtime is included in the executable.
@@ -34,6 +35,15 @@ Product references
 Specifications: https://padforge.org/specs.html
 Supported devices: https://padforge.org/docs/devices/supported/
 Languages: https://padforge.org/docs/features/settings/#language
+reWASD and DS4Windows import: https://padforge.org/docs/guides/profile-import/
+Lighting, Key Colors and Map Key Lights: https://padforge.org/docs/features/lighting/
+Screen Color: https://padforge.org/docs/features/screen-color/
+Screen Overlay: https://padforge.org/docs/features/screen-overlay/
+On-Screen Keyboard: https://padforge.org/docs/features/on-screen-keyboard/
+Hotbar menus: https://padforge.org/docs/guides/menus/#hotbar
+Twitch Chat: https://padforge.org/docs/features/twitch-chat/
+Use Only in PadForge: https://padforge.org/docs/features/devices/#use-only-in-padforge
+DualShock 4 audio on USB: https://padforge.org/docs/features/controller-audio/#dualshock-4-on-usb
 Game telemetry: https://padforge.org/docs/features/game-telemetry/
 Game mods: https://padforge.org/docs/features/game-mods/
 Novint Falcon: https://padforge.org/docs/features/novint-falcon/
@@ -50,16 +60,26 @@ Reviewer brief (4 pages): https://padforge.org/press/PadForge-5.2-reviewer-brief
 Reviewer field guide (29 pages): https://padforge.org/press/PadForge-5.2-reviewer-field-guide.pdf
 
 Notes
-The direct lighting and rumble paths for mice and keyboards follow the
-public implementations that drive each device, and tests check every frame
+Most of the 1,563 RGB devices PadForge lights have not run against
+PadForge yet. Their frames follow the references' own code, checked by
+running those references against PadForge's tables.
+The direct rumble paths for mice and keyboards follow the public
+implementations that drive each device, and tests check every frame
 against them. They have not run on the devices themselves.
+Twitch Chat has not run against a live channel.
+No wired second-model DualShock 4 or Sony USB wireless adapter has run
+the 5.2.0 audio routing or the 5.3.0 speaker route.
+No Mayflash DolphinBar has run the 5.3.0 fix that keeps its empty slots
+from becoming Wii Remotes.
+Use Only in PadForge has run on one mouse and one precision touchpad. The
+keyboard switch has not completed on a keyboard yet.
+A reWASD or DS4Windows import marks a binding Clean when the translation
+keeps its behavior. Clean is not a play test.
 No native speaker has reviewed the translations. A partial translation
 shows English wherever it has no string.
 No NYXI Hyperion 3 has run against PadForge.
 No Novint Falcon and none of the supported keyboard screens has run
 against PadForge. No Fanatec base has run the report 0x01 fix.
-No wired second-model DualShock 4 or Sony USB wireless adapter has run
-the 5.2.0 audio routing.
 DualSense audio over Bluetooth uses a virtual USB DualSense for compatible
 games. The game supplies its native speaker audio and haptic effects.
 Steam imports include a translation report. Some bindings are approximated
@@ -68,12 +88,14 @@ The ARM64 build has not run on ARM64 hardware.
 
 Images
 dualsense-cobalt.jpg: DualSense controller preview in the Deep Earth Cobalt finish. 2560 x 1528 JPG.
-game-telemetry.jpg: The Dashboard's Game Telemetry card, waiting for a game on UDP port 20777. 2560 x 1528 JPG. New in 5.2.0.
-telemetry-formats.jpg: The Custom Telemetry Formats window with a rally game's speed, RPM, gear and throttle fields. 2560 x 1528 JPG. New in 5.2.0.
-game-mods.jpg: The Dashboard's Game Mods card, listening for DSX game mods on port 6969. 2560 x 1528 JPG. New in 5.2.0.
-novint-falcon.jpg: The Novint Falcon settings on an Xbox virtual controller's Force Feedback tab. 2560 x 1528 JPG. New in 5.2.0.
+profile-import.jpg: The Import Profile preview for a reWASD config: ten bindings Clean and one Skipped, with its reason. 2560 x 1528 JPG. New in 5.3.0.
+map-key-lights.jpg: The Map Key Lights window over the Devices page, with 100 of a keyboard's 105 key lights named. 2560 x 1528 JPG. New in 5.3.0.
+screen-color.jpg: A DualSense's Lighting tab in Screen Color mode, reading the whole primary display for its most common color. 2560 x 1528 JPG. New in 5.3.0.
+keyboard-menu.jpg: The Menus tab with a menu named Text Chat in the Keyboard style and the Grid layout. 2560 x 1528 JPG. New in 5.3.0.
+twitch-chat.jpg: The Dashboard's Twitch Chat card, waiting for a channel name, with the address OBS takes for the controller picture. 2560 x 1528 JPG. New in 5.3.0.
+screen-overlay.jpg: The Dashboard's Screen Overlay card with one overlay, off, at 80 percent opacity. 2560 x 1528 JPG. New in 5.3.0.
 mice-and-keyboards.jpg: The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller. 2560 x 1528 JPG.
-languages.jpg: The Language list in Settings, each language under its own name with its English name beside it. 2560 x 1528 JPG.
+languages.jpg: The Language list in Settings, each language under its own name, with its English name beside it where the two differ. 2560 x 1528 JPG.
 button-mappings.jpg: The mapping table with combined physical inputs and layer controls. 2560 x 1528 JPG.
 macros.jpg: A macro with its trigger conditions and a sequence of actions. 2560 x 1528 JPG.
 controller-audio.jpg: Sound output for a DualSense speaker, with crossfeed and a parametric EQ curve. 2560 x 1528 JPG.

@@ -285,7 +285,7 @@ A device that drives addressable strips of a length only its user knows gets an 
 Some keyboards describe their lights without saying which key sits over each one, and some references name a key wrong. **Map Key Lights** names them. Select the keyboard on the [Devices](devices.md) page and click **Map Key Lights** in its details. The button shows for a connected device whose lights PadForge knows one by one, at least one of them a key, for a model it can tell apart from others. The device does not have to be assigned to a virtual controller, but PadForge's input engine has to run.
 
 <!-- SCREENSHOT: map-key-lights -->
-![The Map Key Lights window for a laptop keyboard, with one key light lit white on the keyboard picture, the count of keys named, and the Start, Back, Skip, Forget and Stop buttons](../images/map-key-lights.png)
+![The Map Key Lights window for a laptop keyboard, with the keyboard picture, the count of keys named, and the Start, Back, Skip, Forget and Stop buttons](../images/map-key-lights.png)
 
 The window names the device and counts the key lights named so far, *Keys named: 52 of 104* for example.
 
