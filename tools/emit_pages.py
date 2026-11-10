@@ -122,8 +122,8 @@ def vendor_table(names):
     # Every vendor gets its own row. An "others" bucket looked tidier in the
     # source and rendered as a single 2,600-character cell, which is the wall
     # this grouping exists to remove.
-    items = sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
-                   key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    items = sorted(((v, sorted(set(ns), key=lambda s: (s.lower(), s))) for v, ns in g.items()),
+                   key=lambda kv: (-len(kv[1]), kv[0].lower(), kv[0]))
     rows = ["| Vendor | Devices |", "| --- | --- |"]
     for v, ns in items:
         rows.append("| **" + v + "** | " + ", ".join(md_escape(n) for n in ns) + " |")
@@ -135,8 +135,8 @@ def lit_groups(names):
     g = {}
     for n in names:
         g.setdefault(lit_vendor(n), []).append(n)
-    return sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
-                  key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    return sorted(((v, sorted(set(ns), key=lambda s: (s.lower(), s))) for v, ns in g.items()),
+                  key=lambda kv: (-len(kv[1]), kv[0].lower(), kv[0]))
 
 
 def lit_table(names):
@@ -284,8 +284,8 @@ def vendor_html(names):
     g = {}
     for n in names:
         g.setdefault(vendor_of(n), []).append(n)
-    items = sorted(((v, sorted(set(ns), key=str.lower)) for v, ns in g.items()),
-                   key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    items = sorted(((v, sorted(set(ns), key=lambda s: (s.lower(), s))) for v, ns in g.items()),
+                   key=lambda kv: (-len(kv[1]), kv[0].lower(), kv[0]))
     parts = ["<b>" + v + "</b> " + ", ".join(ns) for v, ns in items]
     return '<span class="vgrp">' + '</span><span class="vgrp">'.join(parts) + '</span>'
 

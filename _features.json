@@ -209,7 +209,7 @@
   },
   {
     "t": "Rumble and lighting in mice and keyboards",
-    "d": "A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights 1,563 RGB devices over USB by itself, key by key where their lights are known one by one, with per-layer Key Colors, Set Key Colors macros and Map Key Lights. While Synapse, G HUB or GG runs, that maker's devices light through it, and the ASUS Aura, MSI Mystic Light and Corsair iCUE rows light through those makers' SDKs."
+    "d": "A mouse or keyboard assigned to a virtual controller takes that controller's lighting on its own Lighting tab, with the same modes a DualSense lightbar has, and a haptic mouse takes its rumble: the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710, and the Logitech iFeel mice once they run on PadForge's driver. PadForge lights 1,565 RGB devices over USB by itself, key by key where their lights are known one by one, with per-layer Key Colors, Set Key Colors macros and Map Key Lights. While Synapse, G HUB or GG runs, that maker's devices light through it, and the ASUS Aura, MSI Mystic Light and Corsair iCUE rows light through those makers' SDKs."
   },
   {
     "t": "109 languages",

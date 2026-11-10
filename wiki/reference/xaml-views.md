@@ -1421,6 +1421,7 @@ Custom `ListBoxItem` `ControlTemplate`:
 | `FacetChip_Click` | ClickBorder.Click | Sets `SelectedFacet` from the chip's `Tag`, filtering the device list |
 | `HidingToggle_Click` | CheckBox.Click | Shows the warning flyout when enabling on a keyboard, mouse, or consumer-control device, clears `LastRawStateDeviceGuid` for rebuild, calls `NotifyDeviceHidingChanged` |
 | `ShowHidingWarningFlyout` | (internal) | WPF UI `Flyout` with warning icon, message, Proceed/Cancel buttons. Reverts checkbox immediately, re-checks only on Proceed. |
+| `HidingWarning(isHidHide, isMouse, isMerged)` | (internal, static) | The flyout's message. Hide from Games says Windows keeps the keyboard or mouse (`Devices_WarnHideHid_Keyboard`, `Devices_WarnHideHid_Mouse`) and names **Use Only in PadForge**, since HidHide filters only the HID class stack and typing and the pointer run through kbdclass and mouclass. Consume Mapped Inputs keeps its warning. The merged row, which offers Consume alone, adds `Devices_WarnScope_Format`. `HidingWarningTests` covers all three (5.3.1) |
 | `SubmitMapping_Click` | Button.Click | Opens browser to GitHub issue template with device info pre-filled |
 | `CopyDossier_Click` | Button.Click | Copies the device dossier's token rows to the clipboard |
 | `RegisterNfcTag_Click` | Button.Click | Opens `RegisterNfcTagDialog` for the selected NFC reader (#150) |
@@ -2656,4 +2657,4 @@ private void ExtendedCustomize_Toggled(object sender, RoutedEventArgs e)
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

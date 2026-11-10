@@ -920,6 +920,8 @@
 1B1C	0A88	Corsair HS80 RGB Wired Gaming Headset	Corsair/Modern_Corsair/Corsair_HS80_RGB_Wired_Gaming_Headset.js
 1B1C	0A96	Corsair HS80 Max	SignalRGB Corsair_Bragi_Device.js
 1B1C	0A97	Corsair HS80 Max	SignalRGB Corsair_Bragi_Device.js
+1B1C	0C1E	Corsair LS100 Lighting Kit	OpenRGB CorsairLightingNodeController
+1B1C	0C23	Corsair LT100	OpenRGB CorsairLightingNodeController
 1B1C	0D01	Corsair Bragi Device	Corsair/Modern_Corsair/Corsair_Bragi_Device.js
 1B1C	1B11	Corsair K95 RGB	OpenRGB CorsairPeripheralController
 1B1C	1B12	Corsair M65	OpenRGB CorsairPeripheralController

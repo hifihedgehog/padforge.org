@@ -3969,6 +3969,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#corsairlightingnodelighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CorsairLightingNodeLighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#stored-lighting-and-the-hand-back-record" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5461,6 +5472,17 @@
     <span class="md-ellipsis">
       
         CorsairVoidLighting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corsairlightingnodelighting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CorsairLightingNodeLighting
       
     </span>
   </a>
@@ -7144,7 +7166,7 @@
 </tr>
 <tr>
 <td>OpenRGB peripherals</td>
-<td>The 44 families of <code>PERIPHERAL_FAMILIES</code>, mice, mousepads, microphones, a sound card, speakers, a keypad, a gamepad, monitors, a laptop light bar, desk lights, strips and a toy pad, all but the Thrustmaster Sol, whose lights sit on a vendor interface OpenRGB reaches through libusb</td>
+<td>The 45 families of <code>PERIPHERAL_FAMILIES</code>, mice, mousepads, microphones, a sound card, speakers, a keypad, a gamepad, monitors, a laptop light bar, desk lights, strips and a toy pad, all but the Thrustmaster Sol, whose lights sit on a vendor interface OpenRGB reaches through libusb</td>
 <td>The same</td>
 </tr>
 <tr>
@@ -7207,6 +7229,40 @@
 </tr>
 </tbody>
 </table>
+<h3 id="corsairlightingnodelighting">CorsairLightingNodeLighting<a class="headerlink" href="#corsairlightingnodelighting" title="Permanent link">&para;</a></h3>
+<p><code>CorsairLightingNodeLighting</code> (<code>CorsairLightingNodeLighting.cs</code>, 5.3.1) lights the Corsair LT100 towers (1B1C:0C23) and LS100 strips (1B1C:0C1E), two of OpenRGB's CorsairLightingNodeController registrations. The family's other five, the Lighting Node Core and Pro, the Commander Pro and the 1000D and SPEC OMEGA cases, are parts inside a PC, and <code>SOME_PRODUCTS</code> in <code>tools/gen_openrgb_registrations.py</code> keeps them out of the generated table. Every report is a 65-byte output report, report ID 0, followed by a read of the 17-byte answer for at most 15 ms (<code>ReadMs</code>). A read that times out is no failure, as in OpenRGB.</p>
+<p>The LT100 has one strip of up to 108 LEDs, four towers of 27, and the LS100 two strips of up to 138 (<code>ChannelLeds</code>), as SignalRGB's plugins and CorsairLightingProtocol's examples give them. The LED Strips card sizes them. A strip with no count is one zone, and its color goes to every LED the strip takes.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Frame</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Begin</td>
+<td><code>00 02</code>, the firmware request. A device that does not answer within <code>BeginReadMs</code> (1000) gets no session</td>
+</tr>
+<tr>
+<td>Picture</td>
+<td>For each channel: <code>00 38</code>, the channel and <code>02</code> (software control), then each run of up to 50 LEDs as three reports, <code>00 32</code>, the channel, the first LED, the count and the color (0 red, 1 green, 2 blue), with that many values from byte 6, then <code>00 33 FF</code></td>
+</tr>
+<tr>
+<td>Values</td>
+<td>Each halved to 0 to 127, the range iCUE sends these two products and SignalRGB's plugins copy</td>
+</tr>
+<tr>
+<td>Keep-alive</td>
+<td><code>00 33 FF</code> alone, once 5 s pass without one (<code>KeepAliveMs</code>). The device goes back to its own lighting after 20 s without a report</td>
+</tr>
+<tr>
+<td>Hand back</td>
+<td><code>00 38</code>, the channel and <code>01</code> (hardware control) for each channel, then <code>00 33 FF</code>. The same frames are the crash path once a picture went out</td>
+</tr>
+</tbody>
+</table>
+<p>OpenRGB's brightness write, <code>00 39</code> at 100 when it takes Direct mode, is not sent. The device stores the level and applies it only to its own effects, so the write would change the brightness set in iCUE and no picture.</p>
 <p>No reference bounds how often a picture may go out, so the bound is SignalRGB's 30 ms after each report (<code>PluginDeviceLighting.VoidWaitMs</code>). SignalRGB's plugins send the same reports and light the Void IDs OpenRGB lacks through <code>PluginDeviceLighting</code>. Corsair iCUE lights these headsets while it runs (<code>VendorPrograms.CorsairIcue</code>).</p>
 <h3 id="stored-lighting-and-the-hand-back-record">Stored lighting and the hand-back record<a class="headerlink" href="#stored-lighting-and-the-hand-back-record" title="Permanent link">&para;</a></h3>
 <p>A session that writes over lighting the device stores, a Lenovo Legion keyboard's profile or a Corsair keyboard's hardware mode, records what it must send to put it back before its first write. <code>KeyboardProfileBackups</code> (<code>KeyboardProfileBackups.cs</code>) keeps each record under the model's product key and the collection's path (<code>KeyboardProfileBackups.DeviceKey</code>), and the settings file holds them (<code>KeyboardProfileBackups</code> in PadForge.xml), so a run that ends without a hand-back, as a forced kill does, leaves the record and the next run puts the lighting back (<code>HidLightingModel.Owed</code>, <code>Repair</code>). A record holds at most <code>KeyboardProfileBackups.MaxContents</code> (958) bytes, an answer's 960 bytes less the report ID and the opcode. A record that does not fit is never taken, and the session waits for it, so the device gets no picture.</p>
@@ -7357,7 +7413,7 @@
 </table>
 <p>5.3.0 moved every pin to its branch head: OpenRGB c6fc8016 to b9d903b5, qmk-plugins to d476c65e, Keychron's 2025q3 firmware to 57e682ca, qmk_firmware to d194c077, G-Helper to 991145fc, libratbag to 8235b5bb and tuxedo-drivers to 77de99bc.</p>
 <h3 id="the-family-guard">The family guard<a class="headerlink" href="#the-family-guard" title="Permanent link">&para;</a></h3>
-<p><code>gen_openrgb_registrations.py</code> lists OpenRGB's <code>Controllers</code> folders from git at the clone's commit, so an empty folder left on disk counts for nothing, and every folder needs a decision: a ported family (<code>FAMILIES</code>, <code>PERIPHERAL_FAMILIES</code>), one PadForge lights another way (<code>LIT_ANOTHER_WAY</code>: the LampArray, Logitech, Razer and SteelSeries families, and the Klipsch ProMedia Lumina, a LampArray on interface 5), one no Windows build compiles (<code>NOT_ON_WINDOWS</code>: RetroidAYNController, Linux only), or one #557's coverage table left out at c6fc8016 (<code>DECIDED_IN_557</code>: parts inside a PC, lights on the network, code for Linux or testing). A folder with none stops the run with its name, so a family OpenRGB adds is named at release prep until it is ported or given its reason. A listed family OpenRGB no longer has stops the run too. The script reads only what OpenRGB's Windows build compiles, expands each macro from its own <code>#define</code>, decodes it against the detector class's constructor in <code>DetectionManager.h</code>, and checks the macro forms none of the families uses against a family that does (<code>FORM_CHECKS</code>).</p>
+<p><code>gen_openrgb_registrations.py</code> lists OpenRGB's <code>Controllers</code> folders from git at the clone's commit, so an empty folder left on disk counts for nothing, and every folder needs a decision: a ported family (<code>FAMILIES</code>, <code>PERIPHERAL_FAMILIES</code>), one PadForge lights another way (<code>LIT_ANOTHER_WAY</code>: the LampArray, Logitech, Razer and SteelSeries families, and the Klipsch ProMedia Lumina, a LampArray on interface 5), one no Windows build compiles (<code>NOT_ON_WINDOWS</code>: RetroidAYNController, Linux only), or one #557's coverage table left out at c6fc8016 (<code>DECIDED_IN_557</code>: parts inside a PC, lights on the network, code for Linux or testing). A ported family of which only some products are lit names the products it keeps in <code>SOME_PRODUCTS</code>, the LT100 and LS100 of CorsairLightingNodeController, and the run stops when OpenRGB no longer registers one of them. A folder with no decision stops the run with its name, so a family OpenRGB adds is named at release prep until it is ported or given its reason. A listed family OpenRGB no longer has stops the run too. The script reads only what OpenRGB's Windows build compiles, expands each macro from its own <code>#define</code>, decodes it against the detector class's constructor in <code>DetectionManager.h</code>, and checks the macro forms none of the families uses against a family that does (<code>FORM_CHECKS</code>).</p>
 <hr />
 <h2 id="the-led-sdk-backend">The LED SDK backend<a class="headerlink" href="#the-led-sdk-backend" title="Permanent link">&para;</a></h2>
 <h3 id="the-loader">The loader<a class="headerlink" href="#the-loader" title="Permanent link">&para;</a></h3>
@@ -8509,6 +8565,11 @@
 <td>The frames ported anew at b9d903b5: the V2 packet sizes, registers and handles and the 65-byte record, the Void's take, picture, refresh and hand-back, Cherry's begin and end reports, MSI's interface 0, G-Helper's opening byte</td>
 </tr>
 <tr>
+<td><code>HidFamilies/CorsairLightingNodeLightingTests.cs</code></td>
+<td><code>CorsairLightingNodeLightingTests</code></td>
+<td>The LT100 and LS100: the two registrations alone, the firmware request a session waits for, a picture with no count and with counts, the halved values, no brightness frame, the commit keep-alive and the hand-back</td>
+</tr>
+<tr>
 <td><code>MapKeyLightsTests.cs</code>, <code>LedStripsCardTests.cs</code></td>
 <td>The classes of the same names</td>
 <td>Map Key Lights' steps and learned names, and the LED Strips card</td>
@@ -8532,7 +8593,7 @@
 <li><a href="../../features/lighting/">Lighting</a> and <a href="../../features/force-feedback/">Force Feedback</a>: the tabs a lit or haptic peripheral shares with a gamepad.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 5.3.1.</em></p>
 
 
 

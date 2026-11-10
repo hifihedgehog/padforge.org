@@ -6608,12 +6608,12 @@
 <h3 id="safety-warnings">Safety warnings<a class="headerlink" href="#safety-warnings" title="Permanent link">&para;</a></h3>
 <p>PadForge shows a confirmation flyout when you turn on hiding for a keyboard, mouse, or Consumer Control device:</p>
 <ul>
-<li><strong>HidHide on a keyboard or mouse.</strong> The flyout warns that if it is your only keyboard or mouse, you lose the ability to use your system.</li>
-<li><strong>HidHide on a Consumer Control device (media keys).</strong> The media collection sits on a physical keyboard, so cloaking it hides that whole keyboard. You get the keyboard warning.</li>
+<li><strong>HidHide on a keyboard or mouse.</strong> HidHide cannot take a keyboard or mouse from Windows, and the flyout says so: typing still works, or the pointer still moves, in every program, games included. It names <strong>Use Only in PadForge</strong>, which takes a USB keyboard or mouse from Windows.</li>
+<li><strong>HidHide on a Consumer Control device (media keys).</strong> The media collection sits on a physical keyboard, and PadForge hides every HID collection of that keyboard with it, as HidHide's own client does. You get the keyboard message.</li>
 <li><strong>Consume on keyboard.</strong> Mapped keys stop working in other apps while PadForge runs. On "All Keyboards (Merged)" that covers every connected keyboard.</li>
 <li><strong>Consume on mouse.</strong> Mapped buttons (possibly left / right click) are suppressed. On "All Mice (Merged)" that covers every connected mouse.</li>
 </ul>
-<p>Click <strong>Cancel</strong> to back out or <strong>Proceed</strong> to confirm. The <strong>Use Only in PadForge</strong> confirmation carries the same warning for the device it takes.</p>
+<p>Click <strong>Cancel</strong> to back out or <strong>Proceed</strong> to confirm. The <strong>Use Only in PadForge</strong> confirmation warns that if this is your only keyboard or mouse, you lose the ability to use your system, since that switch does take the device from Windows.</p>
 <h3 id="master-switch">Master switch<a class="headerlink" href="#master-switch" title="Permanent link">&para;</a></h3>
 <p>The global <strong>Hide Devices from Games</strong> toggle in <a href="../settings/">Settings</a> (under HidHide Driver) is the master on / off. With it off, no hiding or suppression runs, no matter what each device is set to. Flipping it back on restores every per-device setting.</p>
 <hr />
@@ -6846,7 +6846,7 @@
 <li><a href="../../troubleshooting/">Troubleshooting</a>: general troubleshooting guide.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 5.3.1.</em></p>
 
 
 

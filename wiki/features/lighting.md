@@ -278,7 +278,9 @@ A light with its own color shows it over whatever the mode, a game or the Input 
 
 ### LED Strips
 
-A device that drives addressable strips of a length only its user knows gets an **LED Strips** card above the Key Colors card: the ASUS Aura USB controllers' headers, Cooler Master's ARGB controllers, the Razer Chroma ARGB controller and GaiZhongGai's hubs. Each header has a row with the number of LEDs on what is plugged into it, from 0 up to the most the header takes, and a reset button. With a count, each LED takes its own color and shows on the Key Colors card. At 0, the header lights without one. **Reset All** sets every header back to 0.
+A device that drives addressable strips of a length only its user knows gets an **LED Strips** card above the Key Colors card: the ASUS Aura USB controllers' headers, Cooler Master's ARGB controllers, the Razer Chroma ARGB controller, GaiZhongGai's hubs, and Corsair's LT100 towers and LS100 strips. Each header has a row with the number of LEDs on what is plugged into it, from 0 up to the most the header takes, and a reset button. With a count, each LED takes its own color and shows on the Key Colors card. At 0, the header lights without one. **Reset All** sets every header back to 0.
+
+The LT100 has one row for its chain of towers, 27 LEDs to a tower, so two towers are 54 and four are 108. The LS100 has a row for each of its two strips. PadForge sends these two each color at half strength at most, as Corsair iCUE does, and leaves them to iCUE while iCUE runs.
 
 ### Map Key Lights
 
@@ -377,4 +379,4 @@ Some devices of the first table's makers are left to the program the same way wh
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

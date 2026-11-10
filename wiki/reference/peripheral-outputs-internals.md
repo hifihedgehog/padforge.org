@@ -675,7 +675,7 @@ One thread serves every unit, so a session that waits inside a call holds up the
 | Group | Families | Built from |
 |---|---|---|
 | OpenRGB keyboards | The 54 families of `FAMILIES` in `tools/gen_openrgb_registrations.py`: Corsair (older and V2), ASUS Aura USB, Aura Core, legacy USB and TUF, Cooler Master, HyperX, Roccat, Wooting, MSI (keyboards, laptops, 3-zone, Vigor), Dell and Alienware, Lenovo, HP Omen, Gigabyte Aorus, EVGA, A4Tech, Acer, Ionico, Clevo, Cherry, EVision, Das Keyboard, QMK, Keychron, Sinowealth, Ducky, Cougar and the smaller keyboard families | OpenRGB's controllers at b9d903b5 |
-| OpenRGB peripherals | The 44 families of `PERIPHERAL_FAMILIES`, mice, mousepads, microphones, a sound card, speakers, a keypad, a gamepad, monitors, a laptop light bar, desk lights, strips and a toy pad, all but the Thrustmaster Sol, whose lights sit on a vendor interface OpenRGB reaches through libusb | The same |
+| OpenRGB peripherals | The 45 families of `PERIPHERAL_FAMILIES`, mice, mousepads, microphones, a sound card, speakers, a keypad, a gamepad, monitors, a laptop light bar, desk lights, strips and a toy pad, all but the Thrustmaster Sol, whose lights sit on a vendor interface OpenRGB reaches through libusb | The same |
 | Razer outside the 90-byte path | `RazerKrakenLighting`, `RazerKrakenV3Lighting`, `RazerKrakenV4Lighting`, `RazerHanboLighting`, `RazerArgbLighting`, `RazerChargingPadLighting` | OpenRGB's RazerController detectors of their own (`RazerHidTable.g.cs`) |
 | Lenovo | `LenovoLegionLighting`, `LenovoLegionUsbLighting`, `Lenovo4ZoneLighting`, `LenovoK500Lighting`, `LenovoK510Lighting`, `LenovoM300Lighting` | OpenRGB, Lenovo Legion Toolkit |
 | Plugins | `PluginDeviceLighting`, every product of SignalRGB's live plugin branch and qmk-plugins that no family above lights, with the frames each plugin sends (`PluginDevices.cs`, `PluginDevicesBeta.cs`, `PluginDevicesOther.cs`), and `QmkRawHidLighting`, a QMK keyboard asked for its lights by its firmware with no list of IDs | SignalRGB's plugins at their pins |
@@ -703,6 +703,22 @@ The move of the OpenRGB pin from c6fc8016 to b9d903b5 changed the frames of thre
 | Picture | Report `CB` (`ColorReport`), 20 bytes: `06`, then register and value pairs, `1C` red, `16` green and `17` blue for the left earcup, `1D` red, `18` green and `19` blue for the right |
 | Take again | `C8 01` before the first picture, and again before a picture once `RefreshMs` (1000) has passed since the last time, so a wireless headset switched off and on gets its colors back |
 | Hand back | `C8 00` (`Firmware`), which brings back the headset's own effects and its mute light. It is also the crash frame once the lights were taken |
+
+### CorsairLightingNodeLighting
+
+`CorsairLightingNodeLighting` (`CorsairLightingNodeLighting.cs`, 5.3.1) lights the Corsair LT100 towers (1B1C:0C23) and LS100 strips (1B1C:0C1E), two of OpenRGB's CorsairLightingNodeController registrations. The family's other five, the Lighting Node Core and Pro, the Commander Pro and the 1000D and SPEC OMEGA cases, are parts inside a PC, and `SOME_PRODUCTS` in `tools/gen_openrgb_registrations.py` keeps them out of the generated table. Every report is a 65-byte output report, report ID 0, followed by a read of the 17-byte answer for at most 15 ms (`ReadMs`). A read that times out is no failure, as in OpenRGB.
+
+The LT100 has one strip of up to 108 LEDs, four towers of 27, and the LS100 two strips of up to 138 (`ChannelLeds`), as SignalRGB's plugins and CorsairLightingProtocol's examples give them. The LED Strips card sizes them. A strip with no count is one zone, and its color goes to every LED the strip takes.
+
+| Step | Frame |
+|---|---|
+| Begin | `00 02`, the firmware request. A device that does not answer within `BeginReadMs` (1000) gets no session |
+| Picture | For each channel: `00 38`, the channel and `02` (software control), then each run of up to 50 LEDs as three reports, `00 32`, the channel, the first LED, the count and the color (0 red, 1 green, 2 blue), with that many values from byte 6, then `00 33 FF` |
+| Values | Each halved to 0 to 127, the range iCUE sends these two products and SignalRGB's plugins copy |
+| Keep-alive | `00 33 FF` alone, once 5 s pass without one (`KeepAliveMs`). The device goes back to its own lighting after 20 s without a report |
+| Hand back | `00 38`, the channel and `01` (hardware control) for each channel, then `00 33 FF`. The same frames are the crash path once a picture went out |
+
+OpenRGB's brightness write, `00 39` at 100 when it takes Direct mode, is not sent. The device stores the level and applies it only to its own effects, so the write would change the brightness set in iCUE and no picture.
 
 No reference bounds how often a picture may go out, so the bound is SignalRGB's 30 ms after each report (`PluginDeviceLighting.VoidWaitMs`). SignalRGB's plugins send the same reports and light the Void IDs OpenRGB lacks through `PluginDeviceLighting`. Corsair iCUE lights these headsets while it runs (`VendorPrograms.CorsairIcue`).
 
@@ -783,7 +799,7 @@ Every table a family reads from a reference is generated, and every generator ha
 
 ### The family guard
 
-`gen_openrgb_registrations.py` lists OpenRGB's `Controllers` folders from git at the clone's commit, so an empty folder left on disk counts for nothing, and every folder needs a decision: a ported family (`FAMILIES`, `PERIPHERAL_FAMILIES`), one PadForge lights another way (`LIT_ANOTHER_WAY`: the LampArray, Logitech, Razer and SteelSeries families, and the Klipsch ProMedia Lumina, a LampArray on interface 5), one no Windows build compiles (`NOT_ON_WINDOWS`: RetroidAYNController, Linux only), or one #557's coverage table left out at c6fc8016 (`DECIDED_IN_557`: parts inside a PC, lights on the network, code for Linux or testing). A folder with none stops the run with its name, so a family OpenRGB adds is named at release prep until it is ported or given its reason. A listed family OpenRGB no longer has stops the run too. The script reads only what OpenRGB's Windows build compiles, expands each macro from its own `#define`, decodes it against the detector class's constructor in `DetectionManager.h`, and checks the macro forms none of the families uses against a family that does (`FORM_CHECKS`).
+`gen_openrgb_registrations.py` lists OpenRGB's `Controllers` folders from git at the clone's commit, so an empty folder left on disk counts for nothing, and every folder needs a decision: a ported family (`FAMILIES`, `PERIPHERAL_FAMILIES`), one PadForge lights another way (`LIT_ANOTHER_WAY`: the LampArray, Logitech, Razer and SteelSeries families, and the Klipsch ProMedia Lumina, a LampArray on interface 5), one no Windows build compiles (`NOT_ON_WINDOWS`: RetroidAYNController, Linux only), or one #557's coverage table left out at c6fc8016 (`DECIDED_IN_557`: parts inside a PC, lights on the network, code for Linux or testing). A ported family of which only some products are lit names the products it keeps in `SOME_PRODUCTS`, the LT100 and LS100 of CorsairLightingNodeController, and the run stops when OpenRGB no longer registers one of them. A folder with no decision stops the run with its name, so a family OpenRGB adds is named at release prep until it is ported or given its reason. A listed family OpenRGB no longer has stops the run too. The script reads only what OpenRGB's Windows build compiles, expands each macro from its own `#define`, decodes it against the detector class's constructor in `DetectionManager.h`, and checks the macro forms none of the families uses against a family that does (`FORM_CHECKS`).
 
 ---
 
@@ -1238,6 +1254,7 @@ The facade's levels, claims and links are process-wide, so the classes that touc
 | `OpenRgbCoverageTests.cs` | `OpenRgbCoverageTests` | Every registration of the generated table answers with a model through the family list, or names the family that reaches it another way. A registration on a collection Windows holds takes feature reports or is named. Every keyboard table keeps its keys in keyboard order, the keys OpenRGB's tables name wrong are put right, and the keyboards with a key no source names are a fixed list |
 | `HidFamilies/KeyTableOrderTests.cs` | `KeyTableOrderTests` | A plugin key table's three lists, names, places and LEDs, stay in step: Q left of W on one row, the rows in order. A firmware table gives every light its own place |
 | `HidFamilies/CorsairPeripheralV2LightingTests.cs`, `CorsairVoidLightingTests.cs`, `CherryKeyboardLightingTests.cs`, `MsiLaptopLightingTests.cs`, `AsusLaptopAuraTests.cs` | The classes of the same names | The frames ported anew at b9d903b5: the V2 packet sizes, registers and handles and the 65-byte record, the Void's take, picture, refresh and hand-back, Cherry's begin and end reports, MSI's interface 0, G-Helper's opening byte |
+| `HidFamilies/CorsairLightingNodeLightingTests.cs` | `CorsairLightingNodeLightingTests` | The LT100 and LS100: the two registrations alone, the firmware request a session waits for, a picture with no count and with counts, the halved values, no brightness frame, the commit keep-alive and the hand-back |
 | `MapKeyLightsTests.cs`, `LedStripsCardTests.cs` | The classes of the same names | Map Key Lights' steps and learned names, and the LED Strips card |
 | `SensaHapticsTests.cs` | `SensaHapticsTests` | The real Interhaptics engine, on [Sensa Haptics Internals](sensa-haptics-internals.md) |
 
@@ -1255,4 +1272,4 @@ The facade's levels, claims and links are process-wide, so the classes that touc
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

@@ -1,6 +1,6 @@
 # Mice, Keyboards and Vendor Rows
 
-*A mouse, keyboard or other lit device assigned to a virtual controller takes that controller's lighting and rumble on its own Lighting and Force Feedback tabs, the way a DualSense does. PadForge lights 1,563 USB identities itself, across Logitech, Razer, SteelSeries and more than a hundred other families, and any HID LampArray device, while the maker's program is closed. While it runs, PadForge lights the device through that program or leaves it to it. Vendor rows reach the headsets, mousepads, speakers, PC parts and Razer Sensa HD gear that PadForge does not read.*
+*A mouse, keyboard or other lit device assigned to a virtual controller takes that controller's lighting and rumble on its own Lighting and Force Feedback tabs, the way a DualSense does. PadForge lights 1,565 USB identities itself, across Logitech, Razer, SteelSeries and more than a hundred other families, and any HID LampArray device, while the maker's program is closed. While it runs, PadForge lights the device through that program or leaves it to it. Vendor rows reach the headsets, mousepads, speakers, PC parts and Razer Sensa HD gear that PadForge does not read.*
 
 ---
 
@@ -20,14 +20,14 @@ A lit device that no mouse or keyboard row stands for, such as a headset, a mous
 
 ## What PadForge lights
 
-PadForge lights these devices itself, with no maker's program running. The [supported devices](../devices/supported.md) page lists every one by name, 1,563 USB identities in all.
+PadForge lights these devices itself, with no maker's program running. The [supported devices](../devices/supported.md) page lists every one by name, 1,565 USB identities in all.
 
 | Family | How PadForge lights it |
 |---|---|
 | Logitech | Over HID++, for any mouse, keyboard or other device that reports lighting feature 0x8070, 0x8071, 0x8080 or 0x8081, with no model list. The G600 mouse and the X56 HOTAS through their own reports |
 | Razer | Through the device's own 90-byte feature reports for 221 product IDs, read out of OpenRazer and OpenRGB. The Kraken headsets, the Hanbo Chroma cooler, the Chroma ARGB controller, the Charging Pad Chroma and the other accessories OpenRGB and SignalRGB's plugins light, through their own reports |
 | SteelSeries | Through the device's own control collection, for 102 product IDs, read out of rivalcfg, OpenRGB and SignalRGB's plugins |
-| The OpenRGB families | 54 keyboard families and 43 families of mice, mousepads, microphones, speakers, keypads, gamepads, monitors, laptop light bars, desk lights and strips, ported from OpenRGB's controllers with the frames OpenRGB sends: Corsair, ASUS Aura, Cooler Master, HyperX, Roccat, Wooting, MSI, Dell and Alienware, Lenovo, HP Omen, Gigabyte Aorus, EVGA, Cherry, Das Keyboard, QMK and many more |
+| The OpenRGB families | 54 keyboard families and 44 families of mice, mousepads, microphones, speakers, keypads, gamepads, monitors, laptop light bars, desk lights and strips, ported from OpenRGB's controllers with the frames OpenRGB sends: Corsair, ASUS Aura, Cooler Master, HyperX, Roccat, Wooting, MSI, Dell and Alienware, Lenovo, HP Omen, Gigabyte Aorus, EVGA, Cherry, Das Keyboard, QMK and many more |
 | SignalRGB's plugins | Every product SignalRGB's plugins light that OpenRGB does not, with the frames each plugin sends, Keychron and other QMK keyboards among them |
 | Other projects | What only G-Helper, ckb-next, libratbag, alienfx-tools, asusctl, tuxedo-drivers and their kin drive: more ASUS laptops, Corsair, Logitech and Alienware devices, and TUXEDO light bars |
 | Any brand | Over HID LampArray, for a device Windows Dynamic Lighting can drive, while Dynamic Lighting is turned off for it |
@@ -379,4 +379,4 @@ The ARM64 build has no Razer Sensa row, because Razer ships no ARM64 engine. Log
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

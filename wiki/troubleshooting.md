@@ -490,7 +490,7 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 1. Mouse buttons map like any other input. On the Mappings tab, click **Record** on a row and press the mouse button.
 2. Mouse axes show relative deltas, not absolute positions. Fast movements produce larger values.
 3. When recording a mouse axis mapping, move the mouse in the desired direction. Detection is instant.
-4. PadForge does not automatically consume mouse or keyboard inputs. Enable **"Consume Mapped Inputs (Hooks)"** or **"Hide from Games (HidHide)"** manually if needed (a warning appears before enabling).
+4. PadForge does not consume mouse or keyboard inputs on its own. Turn on **Consume Mapped Inputs (Hooks)** if mapped keys or buttons should not also reach other programs (a warning appears first). **Hide from Games (HidHide)** does not stop Windows from reading a keyboard or mouse.
 5. To take a USB keyboard or mouse away from Windows entirely, use **Use Only in PadForge** under **Input Hiding** on the [Devices](features/devices.md) page. See the next entry.
 
 ---
@@ -880,4 +880,4 @@ Both land in the folder PadForge runs from, and the card shows the path. A snaps
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

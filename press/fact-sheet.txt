@@ -1,11 +1,11 @@
 PadForge
 Product information | November 9, 2026
 
-PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 2,667 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts, reWASD configs and DS4Windows profiles, and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 2,669 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts, reWASD configs and DS4Windows profiles, and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
-Version: 5.3.0
+Version: 5.3.1
 Downloads and release notes: https://github.com/hifihedgehog/PadForge/releases/latest
 Platforms: Windows 10 and 11 on x64. Preliminary build for Windows 11 on ARM64.
 Price: Free. No subscriptions or paid feature packs.
@@ -14,14 +14,17 @@ Source license: CC BY-NC-SA 4.0.
 Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICENSE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
+New in 5.3.1
+Corsair LT100 and LS100: PadForge lights Corsair's LT100 towers and LS100 strips, the chain of towers or each strip LED by LED once its length is set on the Lighting tab.
+
 New in 5.3.0
 reWASD and DS4Windows import: A reWASD config or a DS4Windows profile becomes an ordinary PadForge profile. Before anything changes, a preview marks every binding Clean, Partial or Skipped, says why for each one that is not Clean, and names every program the profile would run. reWASD's shifts become shift layers, and its single, double, triple and long presses become macros that keep the file's wait times. A DS4Windows profile brings its shift modifiers, special actions, gyro and touchpad modes, lightbar, adaptive trigger effects and two-stage triggers.
-Key-by-key lighting: PadForge lights 1,563 RGB keyboards, mice, headsets and other devices by itself, using the protocols that OpenRGB, OpenRazer, SignalRGB's plugins and QMK document. Where it knows a device's lights one by one, the Key Colors card colors them key by key on each shift layer, and Map Key Lights names a light by the key you press under it. Most of these devices have not run against PadForge yet.
+Key-by-key lighting: PadForge lights 1,565 RGB keyboards, mice, headsets and other devices by itself, using the protocols that OpenRGB, OpenRazer, SignalRGB's plugins and QMK document. Where it knows a device's lights one by one, the Key Colors card colors them key by key on each shift layer, and Map Key Lights names a light by the key you press under it. Most of these devices have not run against PadForge yet.
 Screen Color: A lighting mode that follows the colors on one display, the whole screen or one area of it. A lightbar takes one color, and a keyboard whose lights PadForge knows one by one spreads the screen across its keys. PadForge reads the finished picture from Windows and stores none of it. It changes nothing in any game.
 Screen Overlay: Up to eight windows above your game show a picture, the profile, a clock, play time, a stopwatch or a lightbar's color, with no keyboard screen needed. While the game is in front, clicks pass through them, and they never take its focus.
 Keyboard and Hotbar menus: The Keyboard menu style types into any Windows program from the controller, on a grid, a split keyboard or a daisy wheel, with word suggestions from Windows. It opens on any input you pick, and it can also open when a text box in a Windows app or browser takes focus. The Hotbar style is Steam Input's hotbar. A Steam config's Show Keyboard binding and its hotbars import as these two styles.
 Twitch Chat: Viewers play a controller slot by typing commands such as !a, !a+b or !a500ms in the stream's chat, and take turns with !claim. PadForge reads the chat without signing in and never posts in it. OBS shows the controller on the stream as a browser source. Twitch Chat has not run against a live channel yet.
-Use Only in PadForge: A button on the Devices page takes a USB keyboard or mouse away from Windows, so its keys and buttons reach only your mappings and macros. It takes a precision touchpad the same way while PadForge runs. The switch has run on one mouse and one touchpad. On a keyboard it has not completed yet.
+Use Only in PadForge: A button on the Devices page takes a USB keyboard or mouse away from Windows, so its keys and buttons reach only your mappings and macros. It takes a precision touchpad the same way while PadForge runs. It has switched one keyboard and one mouse and given them back, and a touchpad taken this way clicked and scrolled. No key or button read through it has been confirmed yet.
 DualShock 4 speaker over USB: A second-model DualShock 4 on a cable, or any DualShock 4 on Sony's USB wireless adapter, plays PadForge's sound through its built-in speaker as well as its headphone jack. This route has not run on a wired pad or on the adapter yet.
 
 Setup
@@ -60,13 +63,14 @@ Reviewer brief (4 pages): https://padforge.org/press/PadForge-5.3-reviewer-brief
 Reviewer field guide (34 pages): https://padforge.org/press/PadForge-5.3-reviewer-field-guide.pdf
 
 Notes
-Most of the 1,563 RGB devices PadForge lights have not run against
+Most of the 1,565 RGB devices PadForge lights have not run against
 PadForge yet. Their frames follow the references' own code, checked by
 running those references against PadForge's tables.
 The direct rumble paths for mice and keyboards follow the public
 implementations that drive each device, and tests check every frame
 against them. They have not run on the devices themselves.
 Twitch Chat has not run against a live channel.
+No Corsair LT100 or LS100 has run against PadForge.
 No wired second-model DualShock 4 or Sony USB wireless adapter has run
 the 5.2.0 audio routing or the 5.3.0 speaker route.
 No Mayflash DolphinBar has run the 5.3.0 fix that keeps its empty slots

@@ -134,7 +134,9 @@ def _read():
 
 
 LIT = _read()
-LIT_NAMES = sorted(set(LIT.values()), key=str.lower)
+# Case first, then the name itself, so two names that differ only in case keep one order
+# from run to run (a set's order changes with Python's hash seed).
+LIT_NAMES = sorted(set(LIT.values()), key=lambda s: (s.lower(), s))
 
 if __name__ == "__main__":
     import sys

@@ -220,7 +220,7 @@ def clean(n):
     n = re.sub(r"^DragonRise .*Wired Wheel.*$", "DragonRise Wired Wheel", n)
     return n
 
-CAT = {k: sorted({clean(v) for v in table(t)}, key=str.lower) for k, t in [
+CAT = {k: sorted({clean(v) for v in table(t)}, key=lambda s: (s.lower(), s)) for k, t in [
     ("wheels", "initial_wheel_devices"),
     ("sticks", "initial_flightstick_devices"),
     ("throttles", "initial_throttle_devices"),
@@ -482,7 +482,7 @@ FAM_ORDER = ["Xbox 360", "Xbox One and Series", "PlayStation 3", "PlayStation 4"
              "8BitDo", "Other"]
 
 def lines(names):
-    return ", ".join(sorted(names, key=str.lower))
+    return ", ".join(sorted(names, key=lambda s: (s.lower(), s)))
 
 if __name__ == "__main__":
     import json

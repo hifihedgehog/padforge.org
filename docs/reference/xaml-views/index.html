@@ -10333,6 +10333,11 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <td>WPF UI <code>Flyout</code> with warning icon, message, Proceed/Cancel buttons. Reverts checkbox immediately, re-checks only on Proceed.</td>
 </tr>
 <tr>
+<td><code>HidingWarning(isHidHide, isMouse, isMerged)</code></td>
+<td>(internal, static)</td>
+<td>The flyout's message. Hide from Games says Windows keeps the keyboard or mouse (<code>Devices_WarnHideHid_Keyboard</code>, <code>Devices_WarnHideHid_Mouse</code>) and names <strong>Use Only in PadForge</strong>, since HidHide filters only the HID class stack and typing and the pointer run through kbdclass and mouclass. Consume Mapped Inputs keeps its warning. The merged row, which offers Consume alone, adds <code>Devices_WarnScope_Format</code>. <code>HidingWarningTests</code> covers all three (5.3.1)</td>
+</tr>
+<tr>
 <td><code>SubmitMapping_Click</code></td>
 <td>Button.Click</td>
 <td>Opens browser to GitHub issue template with device info pre-filled</td>
@@ -12223,7 +12228,7 @@ Slider and TextBox both bind to the same property (e.g., <code>DeadZoneX</code>)
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a>: HidHide install/uninstall and the Windows MIDI Services runtime's install and uninstall, triggered from <code>SettingsPage</code> (HIDMaestro is embedded. OpenXInput's <code>xinput1_4.dll</code> unpacks into the single-file extraction directory under <code>%TEMP%\.net\PadForge</code>, which <code>App.OnStartup</code> adds to the DLL search path)</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 5.3.1.</em></p>
 
 
 

@@ -524,12 +524,12 @@ Unassigning a device from every slot clears both hiding options.
 
 PadForge shows a confirmation flyout when you turn on hiding for a keyboard, mouse, or Consumer Control device:
 
-- **HidHide on a keyboard or mouse.** The flyout warns that if it is your only keyboard or mouse, you lose the ability to use your system.
-- **HidHide on a Consumer Control device (media keys).** The media collection sits on a physical keyboard, so cloaking it hides that whole keyboard. You get the keyboard warning.
+- **HidHide on a keyboard or mouse.** HidHide cannot take a keyboard or mouse from Windows, and the flyout says so: typing still works, or the pointer still moves, in every program, games included. It names **Use Only in PadForge**, which takes a USB keyboard or mouse from Windows.
+- **HidHide on a Consumer Control device (media keys).** The media collection sits on a physical keyboard, and PadForge hides every HID collection of that keyboard with it, as HidHide's own client does. You get the keyboard message.
 - **Consume on keyboard.** Mapped keys stop working in other apps while PadForge runs. On "All Keyboards (Merged)" that covers every connected keyboard.
 - **Consume on mouse.** Mapped buttons (possibly left / right click) are suppressed. On "All Mice (Merged)" that covers every connected mouse.
 
-Click **Cancel** to back out or **Proceed** to confirm. The **Use Only in PadForge** confirmation carries the same warning for the device it takes.
+Click **Cancel** to back out or **Proceed** to confirm. The **Use Only in PadForge** confirmation warns that if this is your only keyboard or mouse, you lose the ability to use your system, since that switch does take the device from Windows.
 
 ### Master switch
 
@@ -739,4 +739,4 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 5.3.1.*

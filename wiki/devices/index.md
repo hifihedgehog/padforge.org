@@ -7,7 +7,7 @@ a slot, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
 Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
-lists every one PadForge knows by name, all 2,667 of them, grouped by family, the RGB keyboards, mice and other devices PadForge lights included.
+lists every one PadForge knows by name, all 2,669 of them, grouped by family, the RGB keyboards, mice and other devices PadForge lights included.
 
 | Family | Why it has a page |
 | --- | --- |
