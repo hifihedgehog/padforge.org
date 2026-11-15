@@ -459,6 +459,8 @@ PadForge hides every interface of the device that HidHide can filter, including 
 
 Hiding is not permanent and does not reach into Windows itself. HidHide blocks only programs that open the device after the entry lands, and only programs that are not on the whitelist. Windows' own drivers keep using a hidden touchpad or keyboard, so the cursor still moves. A game that opened the controller before you hid it keeps it until the controller reconnects, which PadForge does in Windows for a USB controller, the built-in controller of a handheld included. It leaves alone Bluetooth controllers, since dropping the link turns most pads off, and a USB device that carries more than one controller, such as the Xbox 360 wireless receiver or a Steam Controller dongle with two pads. PadForge removes its entries when it exits and puts them back when its engine starts. Turn on **Keep Devices Cloaked Between Launches** in [Settings](settings.md) to keep them in place while PadForge is closed, so a controller is hidden before any game or launcher can open it.
 
+The Xbox Accessories app and Steam still see a hidden Xbox One or Series controller on USB or the Xbox Wireless Adapter. Windows' Xbox driver hands these controllers to programs through a channel of its own, and Steam reads them through that channel or through its own Xbox Extended Feature Support Driver. HidHide filters neither, so no program that hides controllers through HidHide can take one away from them. Games that read the controller through XInput, DirectInput or raw input do not see it.
+
 You can whitelist more apps in [Settings](settings.md) so they can still see hidden devices (streaming overlays, secondary remappers, etc.).
 
 ### Consume Mapped Inputs (Hooks)

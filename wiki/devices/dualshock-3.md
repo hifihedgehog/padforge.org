@@ -102,6 +102,14 @@ Remove the controller from the [Devices](../features/devices.md) list and the Bl
 
 ---
 
+## Coming from DsHidMini
+
+PadForge reads the DualShock 3 itself, so DsHidMini is not needed. In DsHidMini's XInput mode, a DualShock 3 and a Navigation controller both report the ID of an Xbox One controller. PadForge then lists both as **Xbox One Controller** and treats them as two controllers of one model, so their cards follow the order they connect. On PadForge's own connection, each has its own name and its own card.
+
+PadForge never takes a controller from another vendor's driver, so remove DsHidMini first: uninstall **Nefarius DsHidMini Driver** from Windows' installed apps. Leave BthPS3 installed, since PadForge uses it too. Then plug the DualShock 3 in by USB, or pair it for Bluetooth as above. A Navigation controller pairs the same way, with **Controller Family** set to **PlayStation Move / Navigation** ([PlayStation Move](ps-move.md)).
+
+---
+
 ## Coexisting with other Bluetooth devices
 
 The PlayStation Bluetooth driver only steps in on a PC that has a DualShock 3 or a PlayStation Move family controller. PadForge arms it when one of them is paired, and also when Windows still has a record of one that was plugged into this PC over USB. That second case matters because a pad paired outside PadForge writes no pairing record of its own, and arming on the pairing alone would silently stop it connecting. On a PC that has never seen one of these controllers it stays dormant and leaves your other Bluetooth devices alone. Removing every controller stands it back down once neither of those two conditions holds.
