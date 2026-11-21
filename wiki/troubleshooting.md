@@ -373,7 +373,7 @@ iOS Safari kills WebSocket connections when the page loses focus. The web contro
 **A shared device drives the game, but rumble, LEDs, or keyboard output do not reach the owner PC.**
 
 1. Feedback returns only for what the physical device supports: rumble, Xbox trigger rumble, wheel force feedback, adaptive triggers, lightbar, player LEDs, Guide button LED brightness, speaker audio, and HD haptic tones. A device without a given feature shows nothing for it.
-2. Keyboard, mouse, and macros from a shared device are blocked when **Gamepad Only** was ticked for that paired PC (its row under Paired PCs shows "gamepad only"). To allow them, revoke the PC and pair again with the box unticked.
+2. Keyboard, mouse, and macros from a shared device are blocked when **Gamepad Only** was checked for that paired PC (its row under Paired PCs shows "gamepad only"). To allow them, revoke the PC and pair again with the box cleared.
 3. See [Force Feedback](features/force-feedback.md), [Impulse Triggers](features/impulse-triggers.md), [Lighting](features/lighting.md), and [Controller Audio](features/controller-audio.md) for the per-feature setup, which also applies over the link.
 
 ---

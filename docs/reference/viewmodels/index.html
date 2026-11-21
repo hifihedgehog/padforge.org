@@ -17359,7 +17359,7 @@
 <td><code>ShowQuickCharge</code></td>
 <td><code>bool</code></td>
 <td><code>false</code></td>
-<td>Whether the Quick Charge checkbox applies. Deliberately wider than <code>ShowIdleDisconnect</code>: the USB cable rebinds a Sony record to the USB path (identity keys on the shared MAC serial, so no twin record exists), a path the disconnect predicate rejects, which made the checkbox vanish exactly while the pad was plugged in. Seeded by <code>ComputeShowQuickCharge</code>. Notifies <code>ShowPowerSection</code>.</td>
+<td>Whether the Quick Charge switch applies. Deliberately wider than <code>ShowIdleDisconnect</code>: the USB cable rebinds a Sony record to the USB path (identity keys on the shared MAC serial, so no twin record exists), a path the disconnect predicate rejects, which made the switch vanish exactly while the pad was plugged in. Seeded by <code>ComputeShowQuickCharge</code>. Notifies <code>ShowPowerSection</code>.</td>
 </tr>
 <tr>
 <td><code>ShowPowerSection</code></td>
@@ -17701,7 +17701,7 @@
 <td><code>ShowHidHideToggle</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: <code>!IsInternalVirtual &amp;&amp; !IsAggregate &amp;&amp; !IsPadForgeDriverRow &amp;&amp; !IsTouchpadRow &amp;&amp; !IsTouchpadMouse</code>. Gates the "Hide from games" checkbox.</td>
+<td>Computed: <code>!IsInternalVirtual &amp;&amp; !IsAggregate &amp;&amp; !IsPadForgeDriverRow &amp;&amp; !IsTouchpadRow &amp;&amp; !IsTouchpadMouse</code>. Gates the <strong>Hide from Games (HidHide)</strong> switch.</td>
 </tr>
 <tr>
 <td><code>ShowsHidingDriverSwitch</code></td>
@@ -17725,7 +17725,7 @@
 <td><code>ShowInputModeSection</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: <code>_forceRawJoystickMode \|\| (IsGamepad &amp;&amp; !IsInternalVirtual)</code>. Drives the Input Mode (Force Raw Joystick) section visibility. A row whose flag is on shows the section whatever its type or path, so the checkbox can turn it off.</td>
+<td>Computed: <code>_forceRawJoystickMode \|\| (IsGamepad &amp;&amp; !IsInternalVirtual)</code>. Drives the Input Mode (Force Raw Joystick) section visibility. A row whose flag is on shows the section whatever its type or path, so the switch can turn it off.</td>
 </tr>
 </tbody>
 </table>
@@ -20441,7 +20441,7 @@
 </table>
 <p><strong>Action-type picker.</strong> The editor's type dropdown binds <code>MacroTypeCatalog.View</code>, a grouped <code>ICollectionView</code> over <code>MacroTypeCatalog.Choices</code> keyed on <code>MacroTypeChoice.Category</code>. Each <code>MacroTypeChoice</code> carries the <code>MacroActionType</code>, a localized <code>Label</code>, the localized <code>Category</code> header, and an optional <code>Tooltip</code>, and equals another by <code>Type</code>, so a box finds its pick in a list made again. The picker was fifty-six flat entries in enum-history order. The catalog orders them by what they act on, under eleven headers: Virtual Buttons, Virtual Axes &amp; Wheel, Keyboard &amp; Text, Mouse, Timing &amp; Flow, Rumble, Lightbar &amp; LEDs, Sound &amp; Volume, Motion &amp; Pointer, Layers &amp; Overlays, and System &amp; Apps. A census test pins that every enum member appears exactly once, so a new action type cannot ship without choosing its shelf. The catalog holds one list instance for its lifetime and refills it in place on <code>Strings.CultureChanged</code>, then refreshes the view: a fresh list per culture would strand the <code>x:Static</code>-bound view on the old one.</p>
 <h3 id="bass-shakers-236">Bass Shakers (#236)<a class="headerlink" href="#bass-shakers-236" title="Permanent link">&para;</a></h3>
-<p>The per-slot Bass Shakers group's surface, MappingSet-backed like Menus and persisted through the same dirty callback. <code>RumbleAudioTabVisible</code> gates the group on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback. With Customize on, the ForceFeedbackEnabled checkbox decides. With Customize off, the catalog profile descriptor must carry a PID FFB block, except the <code>steam-deck-composite</code> persona, whose vendor feedback PadForge decodes without one. The card binds <code>RumbleAudioEnabled</code>, <code>RumbleAudioEndpointId</code> (output device picker), <code>RumbleAudioChannelMode</code> (Mono / Controller Stereo), <code>RumbleAudioMasterGain</code>, and <code>RumbleAudioVoices</code>, an <code>ObservableCollection</code> of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into <code>MappingSet.RumbleAudio</code> (<code>RumbleAudioConfig</code>), so the routing travels with profiles and Copy / Paste.</p>
+<p>The per-slot Bass Shakers group's surface, MappingSet-backed like Menus and persisted through the same dirty callback. <code>RumbleAudioTabVisible</code> gates the group on slot type: Xbox, PlayStation, and Nintendo always, plus Extended slots whose surface carries force feedback. With Customize on, the <strong>Force Feedback</strong> switch (<code>ForceFeedbackEnabled</code>) decides. With Customize off, the catalog profile descriptor must carry a PID FFB block, except the <code>steam-deck-composite</code> persona, whose vendor feedback PadForge decodes without one. The card binds <code>RumbleAudioEnabled</code>, <code>RumbleAudioEndpointId</code> (output device picker), <code>RumbleAudioChannelMode</code> (Mono / Controller Stereo), <code>RumbleAudioMasterGain</code>, and <code>RumbleAudioVoices</code>, an <code>ObservableCollection</code> of the four per-channel voice rows (Low Motor, High Motor, Left Trigger, Right Trigger: enable, 20–120 Hz frequency, gain, per-voice Test). The frequency sweep and Stop live beside the voices. Everything writes into <code>MappingSet.RumbleAudio</code> (<code>RumbleAudioConfig</code>), so the routing travels with profiles and Copy / Paste.</p>
 <h3 id="output-cards-slot-socd-245-and-keep-controller-awake">Output Cards: Slot SOCD (#245) and Keep Controller Awake<a class="headerlink" href="#output-cards-slot-socd-245-and-keep-controller-awake" title="Permanent link">&para;</a></h3>
 <p>Both cards stand under the picture in the first section (<code>FirstSectionName</code>: Mappings on a gamepad slot) (<code>OutputTabIndex</code> 17, <code>ShowOutputGroup</code>). <code>OutputTabVisible</code> is a slot-type gate: every type except MIDI and VR, the two with no output-behavior surface at all.</p>
 <p>Controller-button SOCD is distinct from <code>KbmSlotConfig</code>'s key SOCD (#205). <code>SocdCardVisible</code> and <code>KbmSocdCardVisible</code> are mutually exclusive by slot type. On a Keyboard + Mouse slot, <code>KbmSocdEditorVisible</code> also hides the key-pair editor while the slot's keyboard half is off (#408). The card binds <code>SocdMode</code> over <code>MappingSet.SocdMode</code> (<code>AvailableSlotSocdModes</code>, in dropdown order: Off / Last Wins / Neutral / First Wins), and <code>SocdPairItems</code> (<code>SlotSocdPairItem</code>) edits the opposing button pairs from <code>SocdButtonOptions</code>. <code>SocdUsesRawIndices</code> says which pair grammar the slot stores: Extended and Nintendo slots write flat raw indices (<code>"12:13"</code>), Xbox and PlayStation slots write the <code>WriteBoolTarget</code> names, mirroring the engine's own raw-surface gate. The engine applies the cleaning to the combined output right before submit, on both the Gamepad bitmap and the raw-HID button words.</p>
@@ -22069,7 +22069,7 @@
 <td><code>IsActiveLayerInheriting</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>True when the currently-active layer is a shift layer AND its activator has <code>InheritUnmapped=true</code>. Drives the per-row "Do not inherit" CheckBox visibility: that flag only has meaning on inheritance-enabled layers (in replace mode the Base row is already blocked wholesale). Recomputed by <code>RebuildLayerTabs</code> and on <code>ActiveLayerMask</code> change.</td>
+<td>True when the currently-active layer is a shift layer AND its activator has <code>InheritUnmapped=true</code>. Drives the visibility of each row's <strong>Do Not Inherit</strong> switch: that flag only has meaning on inheritance-enabled layers (in replace mode the Base row is already blocked wholesale). Recomputed by <code>RebuildLayerTabs</code> and on <code>ActiveLayerMask</code> change.</td>
 </tr>
 <tr>
 <td><code>KbmSurfaceOf</code></td>
@@ -24629,7 +24629,7 @@
 <td><code>IsInvertOutputApplicable</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed by the engine's own <code>InvertConsumedByHalfAxisRead</code> predicate against the prefix-stripped primary. Gates the Flip Output checkbox.</td>
+<td>Computed by the engine's own <code>InvertConsumedByHalfAxisRead</code> predicate against the prefix-stripped primary. Gates the <strong>Flip Output</strong> switch.</td>
 </tr>
 <tr>
 <td><code>ParamAccel</code></td>
@@ -25097,7 +25097,7 @@
 <td><code>ApplyScrollUpAuthoringDefault</code></td>
 <td>method</td>
 <td>-</td>
-<td>E7 authoring default (2026-07-14 audit, closed 2026-07-18), the ONE seam shared by the dropdown pick and the recorder: the wire contract makes an un-inverted press on the vertical scroll target read DOWN (Step 3's documented negation, which the Workshop translator compensates for with SCROLL_UP =&gt; Invert). A user attaching a plain press expects scroll UP, so direction-free press-class sources (buttons, POV directions, touchpad clicks / finger downs) get Invert stamped as the authoring default. Hydration and existing rows are untouched (no migration), the user can uncheck for scroll down, and KbmScrollNeg (the explicit down leg) plus horizontal scroll are never stamped.</td>
+<td>E7 authoring default (2026-07-14 audit, closed 2026-07-18), the ONE seam shared by the dropdown pick and the recorder: the wire contract makes an un-inverted press on the vertical scroll target read DOWN (Step 3's documented negation, which the Workshop translator compensates for with SCROLL_UP =&gt; Invert). A user attaching a plain press expects scroll UP, so direction-free press-class sources (buttons, POV directions, touchpad clicks / finger downs) get Invert stamped as the authoring default. Hydration and existing rows are untouched (no migration), the user can turn Invert off for scroll down, and KbmScrollNeg (the explicit down leg) plus horizontal scroll are never stamped.</td>
 </tr>
 <tr>
 <td><code>PromoteNegDescriptorToExtraSource</code></td>
@@ -25115,7 +25115,7 @@
 <td><code>IsHalfAxisApplicable</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>True when the Half checkbox (and the dependent Either) is meaningful for this row's source. Half-axis only applies to continuous-range sources: Axis, Slider, Touchpad X/Y/Pressure, and Gyro Pitch/Yaw/Roll. Discrete sources (Button, POV direction, Touchpad Click / Finger Down) have no upper or lower half to pick.</td>
+<td>True when the <strong>Half</strong> switch (and the dependent <strong>Bidirectional</strong>) is meaningful for this row's source. Half-axis only applies to continuous-range sources: Axis, Slider, Touchpad X/Y/Pressure, and Gyro Pitch/Yaw/Roll. Discrete sources (Button, POV direction, Touchpad Click / Finger Down) have no upper or lower half to pick.</td>
 </tr>
 <tr>
 <td><code>Cleared</code></td>
@@ -25732,7 +25732,7 @@
 <td><code>IsKeyInvertShown</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Computed: <code>UsesUpDownKeys &amp;&amp; Invert</code>. An Incremental or Ramp source saved with <code>Invert</code> on shows a checkbox for it, the control that turns it off. Unchecked, the checkbox goes with it. A row's primary shows the same checkbox in its own strip, bound to the primary kind holder's <code>Invert</code>.</td>
+<td>Computed: <code>UsesUpDownKeys &amp;&amp; Invert</code>. An Incremental or Ramp source saved with <code>Invert</code> on shows a switch for it, the control that turns it off. Turned off, the switch goes with it. A row's primary shows the same switch in its own strip, bound to the primary kind holder's <code>Invert</code>.</td>
 </tr>
 <tr>
 <td><code>HasAnyBoundFeed</code></td>
@@ -26191,7 +26191,7 @@
 <td><code>IsInvertApplicable</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>Whether the Invert checkbox actually does anything in the current combination: with Half + Either both on, the engine reads absolute deflection and Invert is documented inert. Mirrors MappingItem.IsInvertApplicable on the grid-row twin.</td>
+<td>Whether the <strong>Invert</strong> switch actually does anything in the current combination: with <strong>Half</strong> and <strong>Bidirectional</strong> both on, the engine reads absolute deflection and Invert is documented inert. Mirrors MappingItem.IsInvertApplicable on the grid-row twin.</td>
 </tr>
 <tr>
 <td><code>ParamRecordEventArgs</code></td>
@@ -28688,7 +28688,7 @@
 <td><code>IsAxisYieldCapableType</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>True for the axis holds that honor <code>AxisYieldToPhysical</code> (discussion #237): AxisHold, ToggleVcAxis, and RepeatVcAxisWhileHeld. Gates the yield checkbox row.</td>
+<td>True for the axis holds that honor <code>AxisYieldToPhysical</code> (discussion #237): AxisHold, ToggleVcAxis, and RepeatVcAxisWhileHeld. Gates the <strong>Yield to Physical Input</strong> switch's row.</td>
 </tr>
 <tr>
 <td><code>IsAnyMouseButtonType</code></td>
@@ -28706,7 +28706,7 @@
 <td><code>IsPulseCapableType</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>True for the latch actions whose held contribution can pulse on the turbo square wave (<code>PulseWhileLatched</code>): ToggleVcButton / ToggleKey plus the v18 ToggleMouseButton and ToggleVcAxis. Gates the pulse checkbox row (v19, M1).</td>
+<td>True for the latch actions whose held contribution can pulse on the turbo square wave (<code>PulseWhileLatched</code>): ToggleVcButton / ToggleKey plus the v18 ToggleMouseButton and ToggleVcAxis. Gates the <strong>Pulse While Latched</strong> switch's row (v19, M1).</td>
 </tr>
 <tr>
 <td><code>IsRunProgramType</code></td>
@@ -29903,7 +29903,7 @@
 <td><code>IsAxis</code></td>
 <td><code>bool</code></td>
 <td>-</td>
-<td>True when this row carries an axis input and should show the Invert / Half / Either / Deadzone controls.</td>
+<td>True when this row carries an axis input and should show the Invert / Half / Bidirectional / Deadzone controls.</td>
 </tr>
 <tr>
 <td><code>ThresholdEntry</code></td>
@@ -30127,7 +30127,7 @@
 <tr>
 <td><code>IsRadial</code></td>
 <td><code>bool</code></td>
-<td>Computed: <code>Kind == MenuKind.Radial</code>. Gates the Center Cell checkbox.</td>
+<td>Computed: <code>Kind == MenuKind.Radial</code>. Gates the <strong>Center Cell</strong> switch.</td>
 </tr>
 <tr>
 <td><code>IsKeyboard</code> / <code>IsHotbar</code></td>
@@ -30214,7 +30214,7 @@
 <tr>
 <td><code>ShowsLayerRow</code> / <code>ShowLayerHold</code></td>
 <td><code>bool</code></td>
-<td>Computed visibility of the Layer row and the stay-open checkbox. Each also shows while <code>LayerHoldsOpen</code> is set, so a malformed loaded file stays visible and clearable.</td>
+<td>Computed visibility of the Layer row and the <strong>Layer Holds the Menu Open</strong> switch. Each also shows while <code>LayerHoldsOpen</code> is set, so a malformed loaded file stays visible and clearable.</td>
 </tr>
 <tr>
 <td><code>LayerHoldsOpen</code></td>

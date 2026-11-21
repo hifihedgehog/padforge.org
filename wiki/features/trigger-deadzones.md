@@ -232,7 +232,7 @@ Three settings appear once Stick Trim is picked:
 |---|---|
 | Trim Deadzone | Stick deflection below this percentage leaves the level alone, so steering with the same stick never nudges the trigger. Default 25%. |
 | Trim Speed | How fast a fully pushed stick slides the level, in percent of trigger range per second. 100 sweeps empty to full in one second. Default 100. |
-| Reset on Release | Checked (default): releasing the button snaps the level back to 100%, so the next press starts full. Unchecked: the level stays where you left it between presses, until you move the stick again. |
+| Reset on Release | On (default): releasing the button snaps the level back to 100%, so the next press starts full. Off: the level stays where you left it between presses, until you move the stick again. |
 
 Stick Trim shows only on trigger outputs.
 

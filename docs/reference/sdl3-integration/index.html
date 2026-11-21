@@ -6909,7 +6909,7 @@
 <tr>
 <td><code>SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI</code></td>
 <td><code>"1"</code> by default</td>
-<td>The Settings page's Flydigi Enhanced Protocol checkbox (#395). On, SDL's Flydigi driver takes the pad's vendor interface for M1 to M4, C, Z, LM, RM and motion. Off leaves the pad on its XInput view, for a user whose Flydigi Space Station must keep sight of the pad. <code>SDL_Quit</code> clears hints, so <code>ApplyFlydigiEnhancedProtocol</code> replays the recorded state before every <code>SDL_Init()</code>, and a toggle applies live through the driver's hint callback. The serial, iCade and DJI lists are replayed the same way at each start.</td>
+<td>The Settings page's Flydigi Enhanced Protocol switch (#395). On, SDL's Flydigi driver takes the pad's vendor interface for M1 to M4, C, Z, LM, RM and motion. Off leaves the pad on its XInput view, for a user whose Flydigi Space Station must keep sight of the pad. <code>SDL_Quit</code> clears hints, so <code>ApplyFlydigiEnhancedProtocol</code> replays the recorded state before every <code>SDL_Init()</code>, and a toggle applies live through the driver's hint callback. The serial, iCade and DJI lists are replayed the same way at each start.</td>
 </tr>
 <tr>
 <td><code>SDL_HINT_HIDAPI_IGNORE_DEVICES</code></td>
