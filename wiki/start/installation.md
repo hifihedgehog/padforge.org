@@ -49,7 +49,7 @@ The ARM64 build never adds the Razer Sensa row to the Devices page.
 
 On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.
 
-HIDMaestro 2.3.0 runs every one of its profiles on Windows 11 on ARM64, and PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus: a DualSense over Bluetooth drove an Xbox virtual controller, and HidHide hid the DualSense from games. The DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles have not run on an ARM64 PC.
+Until 6.0 the ARM64 build's virtual controllers did not work with HIDMaestro. HIDMaestro 2.3.0 runs every one of its profiles on Windows 11 on ARM64, and PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus: a DualSense over Bluetooth drove an Xbox virtual controller, and HidHide hid the DualSense from games. The DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles have not run on an ARM64 PC. If anything does not work on your ARM64 PC, tell us right away ([how](../troubleshooting.md)).
 
 ---
 

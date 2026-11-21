@@ -5632,7 +5632,7 @@
 </tr>
 </tbody>
 </table>
-<p>(1) HIDMaestro and HidHide were tested on a Surface Pro with a Snapdragon X2 Plus. The rest of the column has not run on an ARM64 PC.
+<p>(1) HIDMaestro and HidHide were tested on a Surface Pro with a Snapdragon X2 Plus. HIDMaestro's virtual controllers work on ARM64 from 6.0. The rest of the column has not run on an ARM64 PC.
 (2) Built into 25H2 from the late-November 2026 update. Elsewhere, through the runtime PadForge installs from <strong>Settings</strong>.</p>
 <ul>
 <li><strong>HIDMaestro</strong> installs with no reboot. On x64 it is a user-mode driver. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.</li>

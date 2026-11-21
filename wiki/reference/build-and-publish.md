@@ -245,7 +245,7 @@ The App csproj defines these publish properties:
 
 ### Building for ARM64
 
-Built since 4.5.1. PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus under Windows 11: a DualSense over Bluetooth on an Xbox virtual controller, hidden with HidHide. The checks for the other ARM64 paths on this page are static.
+Built since 4.5.1, though its virtual controllers did not work with HIDMaestro until 6.0. PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus under Windows 11: a DualSense over Bluetooth on an Xbox virtual controller, hidden with HidHide. The checks for the other ARM64 paths on this page are static.
 
 Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics`, `Corsair` and `MysticLight` have an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in an `x64` or `arm64` folder under `Resources` and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
 

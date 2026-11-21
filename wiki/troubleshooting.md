@@ -1,6 +1,6 @@
 # Troubleshooting
 
-*Common problems and how to fix them. If your issue is not on this page, check [GitHub Issues](https://github.com/hifihedgehog/PadForge/issues).*
+*Common problems and how to fix them. Something not working, on Windows on ARM or anywhere else? Tell us right away: start a [Q&A discussion](https://github.com/hifihedgehog/PadForge/discussions/new?category=q-a) with the file from **Save Snapshot** ([Logs and diagnostics](#logs-and-diagnostics)), or ask on [Discord](https://discord.gg/qawTZHVhNH).*
 
 ![Settings page where most troubleshooting starts (drivers, polling rate, language)](images/settings.png)
 

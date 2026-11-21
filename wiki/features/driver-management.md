@@ -341,7 +341,7 @@ The dialog appears once. After you pick either button, it does not come back on 
 | **SteamVR** | Yes | Yes | Yes | No | No |
 | **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | Yes (1) | No |
 
-(1) HIDMaestro and HidHide were tested on a Surface Pro with a Snapdragon X2 Plus. The rest of the column has not run on an ARM64 PC.
+(1) HIDMaestro and HidHide were tested on a Surface Pro with a Snapdragon X2 Plus. HIDMaestro's virtual controllers work on ARM64 from 6.0. The rest of the column has not run on an ARM64 PC.
 (2) Built into 25H2 from the late-November 2026 update. Elsewhere, through the runtime PadForge installs from **Settings**.
 
 - **HIDMaestro** installs with no reboot. On x64 it is a user-mode driver. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.
