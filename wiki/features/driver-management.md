@@ -341,7 +341,7 @@ The dialog appears once. After you pick either button, it does not come back on 
 | **SteamVR** | Yes | Yes | Yes | No | No |
 | **Keyboard+Mouse** (no driver) | Yes | Yes | Yes | Yes (1) | No |
 
-(1) Preliminary. HIDMaestro and HidHide have run with this build on one ARM64 PC. The rest of the column has not run on ARM64 hardware.
+(1) HIDMaestro and HidHide were tested on a Surface Pro with a Snapdragon X2 Plus. The rest of the column has not run on an ARM64 PC.
 (2) Built into 25H2 from the late-November 2026 update. Elsewhere, through the runtime PadForge installs from **Settings**.
 
 - **HIDMaestro** installs with no reboot. On x64 it is a user-mode driver. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.
@@ -350,7 +350,7 @@ The dialog appears once. After you pick either button, it does not come back on 
 - **The legacy MIDI API** (WinMM) is part of every Windows. PadForge falls back to it wherever no Windows MIDI Services API runs.
 - **SteamVR** is x64. Valve ships no ARM64 build.
 - **Keyboard+Mouse** needs no driver, so it works wherever PadForge itself runs.
-- **PadForge itself** ships as two 64-bit builds: x64 for Windows 10 and 11, and ARM64 for Windows 11 on ARM64. [Installation](../start/installation.md#windows-on-arm-preliminary) lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.
+- **PadForge itself** ships as two 64-bit builds: x64 for Windows 10 and 11, and ARM64 for Windows 11 on ARM64. [Installation](../start/installation.md#windows-on-arm) lists what the ARM64 build lacks. Neither build runs on 32-bit Windows.
 
 ---
 

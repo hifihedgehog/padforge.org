@@ -187,7 +187,7 @@ Renaming any of these breaks updating for every installed copy:
 - A helper from a dev build before the handshake still installs when the copy that started it crashes before stopping it.
 - A release rebuilt from the same commit under the same version is not offered.
 - The replaced-release lookup reads 100 commits. A build further behind than that is not offered the replacement.
-- Nothing has run on ARM64 hardware.
+- The ARM64 update path has not been tested on ARM64 hardware.
 
 Tests: `UpdateServiceTests`, `UpdateControllerTests` and `UpdateStatusCultureTests` in `PadForge.Tests`.
 

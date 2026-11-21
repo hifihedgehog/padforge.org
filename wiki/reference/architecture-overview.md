@@ -399,7 +399,7 @@ PadForge.App/
       Strings.<tag>.resx              # One translation per file, en-GB among them (see Localization)
       Languages.tsv                   # The one list of languages the catalog reads
     SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
-    SDL3/arm64/, OpenXInput/arm64/, VisualCpp/arm64/   # ARM64 copies for the win-arm64 build (4.5.1, preliminary)
+    SDL3/arm64/, OpenXInput/arm64/, VisualCpp/arm64/   # ARM64 copies for the win-arm64 build (since 4.5.1)
     SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
     VisualCpp/x64/                    # msvcp140.dll, vcruntime140.dll, vcruntime140_1.dll: SDL3.dll's C++ runtime, bundled so no redistributable install is needed
     Vosk/arm64/libvosk.dll            # ARM64 Vosk recognizer, built by tools/build-libvosk-arm64.sh (the x64 build takes the Vosk package's own)

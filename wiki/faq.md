@@ -12,7 +12,7 @@ No. PadForge is free, with no subscription, no paid tier and no nag screens. Con
 
 ### Which versions of Windows does PadForge run on?
 
-Windows 10 and 11 on x64. Every release also carries a preliminary native build for Windows 11 on ARM64, which has not run on ARM64 hardware yet. Razer Sensa HD haptics, Logitech G-keys and the VR headset and controllers through SteamVR are missing from it until their vendors ship ARM64 libraries. More: [Windows on ARM](start/installation.md#windows-on-arm-preliminary).
+Windows 10 and 11 on x64, and Windows 11 on ARM64, each with its own native build. On ARM64 every Xbox, PlayStation, Nintendo and Extended virtual controller works, and HidHide hides devices. Razer Sensa HD haptics, Logitech G-keys and the VR headset and controllers through SteamVR are missing from the ARM64 build until their vendors ship ARM64 libraries. More: [Windows on ARM](start/installation.md#windows-on-arm).
 
 ### Can I stream, record or use PadForge at work?
 

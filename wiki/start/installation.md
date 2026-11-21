@@ -10,7 +10,7 @@ PadForge 5.2.0.
 
 ## Quick start (2 minutes)
 
-1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v6.0.0-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([preliminary](#windows-on-arm-preliminary)).
+1. Download the `win-x64` zip from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest), for example `PadForge-v6.0.0-win-x64.zip`. It holds `PadForge.exe` and nothing else. On Windows on ARM, take the `win-arm64` zip ([Windows on ARM](#windows-on-arm)).
 2. Extract the zip to any folder (e.g. `C:\PadForge\`).
 3. Run `PadForge.exe`.
 4. Approve the one UAC prompt at startup. PadForge needs administrator rights to run.
@@ -26,13 +26,13 @@ PadForge 5.2.0.
 
 | Requirement | Details |
 |-------------|---------|
-| **OS** | Windows 10 or 11 (x64), or Windows 11 on ARM64 ([preliminary](#windows-on-arm-preliminary)) |
+| **OS** | Windows 10 or 11 (x64), or Windows 11 on ARM64 ([Windows on ARM](#windows-on-arm)) |
 | **Runtime** | .NET 10 Desktop Runtime, bundled. No separate install. |
 | **Format** | Portable single-file executable. No installer. Extract and run. |
 
 Settings live in `PadForge.xml` next to the executable. To move PadForge, move the whole folder.
 
-### Windows on ARM (preliminary)
+### Windows on ARM
 
 Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and Windows MIDI Services comes with Windows on ARM64 as it does on x64, with an ARM64 build of the runtime where Windows does not carry it yet. HidHide, Vosk and Elite paddles joined in 4.5.2.
 
@@ -49,7 +49,7 @@ The ARM64 build never adds the Razer Sensa row to the Devices page.
 
 On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.
 
-This build has run on one ARM64 PC: a DualSense over Bluetooth drove an Xbox virtual controller, and HidHide hid the DualSense from games. The rest of the list above has not run on ARM64 hardware.
+HIDMaestro 2.3.0 runs every one of its profiles on Windows 11 on ARM64, and PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus: a DualSense over Bluetooth drove an Xbox virtual controller, and HidHide hid the DualSense from games. The DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles have not run on an ARM64 PC.
 
 ---
 

@@ -132,7 +132,7 @@ Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/`
 |------|-------------|
 | `PadForge.exe` | about 297 MB, single-file self-contained. The only file in the publish directory |
 
-For Windows on ARM (preliminary, since 4.5.1), add the runtime identifier:
+For Windows on ARM (since 4.5.1), add the runtime identifier:
 
 ```bash
 dotnet publish PadForge.App/PadForge.App.csproj -c Release -r win-arm64
@@ -245,7 +245,7 @@ The App csproj defines these publish properties:
 
 ### Building for ARM64
 
-Preliminary since 4.5.1. The 6.0.0 ARM64 build has run on one ARM64 PC under Windows 11: a DualSense over Bluetooth on an Xbox virtual controller, hidden with HidHide. The checks for the other ARM64 paths on this page are static.
+Built since 4.5.1. PadForge 6.0 was tested on a Surface Pro with a Snapdragon X2 Plus under Windows 11: a DualSense over Bluetooth on an Xbox virtual controller, hidden with HidHide. The checks for the other ARM64 paths on this page are static.
 
 Every bundled native binary sits in a folder named for its architecture: `Resources/SDL3/x64` and `Resources/SDL3/arm64`, and the same pair for `OpenXInput` and `VisualCpp`. `Interhaptics`, `Corsair` and `MysticLight` have an `x64` folder only. `NativeBinaryArchitectureTests` reads the PE header of every `.dll` and `.sys` in an `x64` or `arm64` folder under `Resources` and fails when a file's machine type differs from its folder name. It exists because Microsoft's own ARM64 redist folder ships a `vcruntime140_1.dll` that is an x64 image.
 
