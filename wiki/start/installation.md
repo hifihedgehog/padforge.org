@@ -34,7 +34,7 @@ Settings live in `PadForge.xml` next to the executable. To move PadForge, move t
 
 ### Windows on ARM
 
-Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers, HidHide, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles all run there, each driver installs its ARM64 version, and Windows MIDI Services comes with Windows on ARM64 as it does on x64, with an ARM64 build of the runtime where Windows does not carry it yet. HidHide, Vosk and Elite paddles joined in 4.5.2.
+Every release carries a second zip, `win-arm64`, a native build for Windows 11 on ARM64. It works as the x64 build does: virtual controllers and HidHide run there, the DualShock 3 Bluetooth driver, Vosk voice recognition and Xbox Elite paddles are built for it, each driver installs its ARM64 version, and Windows MIDI Services comes with Windows on ARM64 as it does on x64, with an ARM64 build of the runtime where Windows does not carry it yet. HidHide, Vosk and Elite paddles joined in 4.5.2.
 
 A few features wait on their vendors, because an ARM64 program can load ARM64 libraries only:
 
