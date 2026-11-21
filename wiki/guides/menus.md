@@ -188,7 +188,7 @@ The overlay itself is optional. The **Overlays** page under **Extras** carries a
 
 A Touch Grid menu can also appear on a phone. Turn on **Show on Web Controller** (tooltip: **Shows this menu as a page of the web controller’s Web Menus layout, where a tap on a tile fires its cell.**) and the menu becomes a page of tiles on every phone that runs the web controller's [Web Menus](web-controller.md#web-menus) layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.
 
-The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's **Layer** and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.
+The switch appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be turned off there or by its reset. The menu's **Layer** and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.
 
 ---
 

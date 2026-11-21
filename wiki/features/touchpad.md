@@ -202,7 +202,7 @@ Master controls for the per-tick gesture recognizer.
 
 ## In-Box Gestures
 
-Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: **Enable Gestures on This Touchpad** (Gesture Detection, above), a **Recognize** setting that includes the in-box catalog (`In-Box Only` or `Both`), and the gesture's own category toggle. A family is never gated on another family's checkbox.
+Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: **Enable Gestures on This Touchpad** (Gesture Detection, above), a **Recognize** setting that includes the in-box catalog (`In-Box Only` or `Both`), and the gesture's own category toggle. A family is never gated on another family's switch.
 
 **Touch spots.** Held buttons for where the pad is being touched: **Left Touch**, **Right Touch**, **Top Touch**, and **Multitouch**. One finger lands in Left, Right, or Top (the top quarter). Two or more fingers hold Multitouch. The left/right split sits at two fifths of the width, the same boundary DS4Windows uses, and exactly one spot is held at a time. The mapped button holds while the finger stays in the zone, releases the moment it lifts, and hands over live when the finger slides across a boundary. Bind them like any button: touchpad left to A, right to B, top to C.
 

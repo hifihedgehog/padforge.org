@@ -18,7 +18,7 @@ You can change the rate in **[Settings](settings.md) > Input Engine > Polling Ra
 
 The box's tooltip names how often Windows wakes the engine on this PC. Windows wakes a sleeping thread on its clock's tick, so a rate above that runs several passes back to back at each wake: the rate holds, and the passes come in groups. Above 1000 Hz the engine asks Windows for its finest clock, which ticks every half millisecond (2000 wakes a second), and gives it back at 1000 Hz and below, while the engine idles, and while it pauses behind a game.
 
-By default PadForge keeps reading even when its window sits behind the game. The **Continue Polling When Window Loses Focus** checkbox, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
+By default PadForge keeps reading even when its window sits behind the game. The **Continue Polling When Window Loses Focus** switch, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
 
 <!-- SCREENSHOT: dashboard-polling-readout -->
 ![The Home page showing the live polling rate in Hz](../images/dashboard-polling-readout.png)

@@ -174,7 +174,7 @@ The **Reference Frame** line's one row, **Space**, picks how raw gyro motion is 
 
 Local stays as the default so existing configs feel identical.
 
-In 4.5.3 and earlier, Player and World space turned the camera the opposite way to Local. They now turn it the same way. If you checked **Invert Yaw (X)** to correct that, uncheck it.
+In 4.5.3 and earlier, Player and World space turned the camera the opposite way to Local. They now turn it the same way. If you turned on **Invert Yaw (X)** to correct that, turn it off.
 
 ---
 

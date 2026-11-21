@@ -201,7 +201,7 @@ Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Le
    - **On Short Press** fires on release before the Hold Time elapses. Holding past it fires nothing.
    - **On Single Press**, **On Double Press**, and **On Triple Press** wait out the **Press Window** and fire only on the matching press count.
    - **Turbo** repeats only while the trigger is held.
-5. Confirm the macro's enable checkbox is checked.
+5. Confirm the macro's **Enabled** switch is on.
 6. Confirm the engine is running and the slot is enabled.
 7. If the **Source** dropdown is set to **Assigned Devices** but no device is assigned, there is nothing to read. Switch to **Virtual Controller** or assign a device.
 8. Check for conflicting macros with overlapping triggers on the same slot.
@@ -225,7 +225,7 @@ Where Windows MIDI Services does not run (Windows 10, Windows 11 before 24H2, Le
 
 1. A macro set to **Always** fires every frame while the slot is active. No trigger required. That is its design.
 2. A macro set to **Toggle** latches: the first press turns the actions on, and holds and repeats stay active until the second press. Tap the trigger again to release it.
-3. Uncheck the macro's enable checkbox to stop it.
+3. Turn off the macro's **Enabled** switch to stop it.
 4. Delete the macro if it is no longer needed.
 5. Turn the controller off (the state pill on its Home card) to stop all its macros.
 
@@ -730,9 +730,9 @@ SDL3's gamepad mapping does not match the device's HID report layout (common wit
 **On a handheld PC such as the Legion Go, Hide from Games (HidHide) on the built-in controller hides its touchpad but games still see the XInput pad, or the pad is hidden and the touchpad went with it.**
 
 1. Update to 4.4.0. The built-in controller is a USB composite device whose XInput node is an interface under the composite parent, and earlier builds never blacklisted the nodes between the HID child and the parent. 4.4.0 hides every interface of the device that HidHide can filter, the XInput node included. The Xbox 360 wireless receiver has the same shape.
-2. An interface that shows on the [Devices](features/devices.md) page as its own row, such as the touchpad, follows its own **Hide from Games (HidHide)** checkbox. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.
+2. An interface that shows on the [Devices](features/devices.md) page as its own row, such as the touchpad, follows its own **Hide from Games (HidHide)** switch. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.
 3. A program that opened the pad before the entry landed keeps it until the pad reconnects. A built-in pad never reconnects by itself, so PadForge reconnects it in Windows when it hides it, and a game or launcher started first loses it. A USB device that carries a second controller is left alone. To have the pad hidden from the moment Windows starts, turn on **Keep Devices Cloaked Between Launches** in [Settings](features/settings.md).
-4. **Hide Devices from Games** in [Settings](features/settings.md) is the master switch. With it off, no per-device checkbox does anything.
+4. **Hide Devices from Games** in [Settings](features/settings.md) is the master switch. With it off, no per-device switch does anything.
 5. Add any emulator or tool that must still see the physical pad under **Whitelisted Applications** in [Settings](features/settings.md). PadForge whitelists itself.
 
 ---
@@ -837,7 +837,7 @@ Both land in the folder PadForge runs from, and the card shows the path. A snaps
 | Remote Link PC not appearing | Same network, enable on both, allow firewall, or connect by address |
 | Remote Link pairing fails | Codes must match on both screens, then retry the handshake |
 | Remote Link device missing after pairing | Check the pairing is active, assign the shared device to a controller |
-| Remote Link feedback or keys missing | Device must support the feature, untick gamepad-only for keys |
+| Remote Link feedback or keys missing | Device must support the feature, clear **Gamepad Only** for keys |
 | No NFC reader detected | Start the Smart Card service, use a PC/SC (CCID) reader |
 | Media keys not mapping | Keyboard needs a media-key device, input only, no suppress |
 | Wii IR pointer centered | Aim at a sensor bar or IR source, map IR Pointer X/Y |

@@ -7035,15 +7035,15 @@
 <li><strong>Interval.</strong> Milliseconds between presses, 10 to 1000, default 100. The first press fires the moment the trigger engages, the next each time the interval elapses.</li>
 </ul>
 <p>Pair it with the <strong>While Held</strong> fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.</p>
-<p><strong>Pressure-Scaled Rate</strong> ties the repeat rate to how hard the input is pressed. Tick it and pick the analog source the rate follows: a trigger, a DualShock 3 pressure axis, or the stick the macro triggers on. A light press repeats slowly, a full press repeats at the Interval. See <a href="#pressure-scaled-rate">Pressure-Scaled Rate</a> for the settings and the direction rule.</p>
+<p><strong>Pressure-Scaled Rate</strong> ties the repeat rate to how hard the input is pressed. Turn it on and pick the analog source the rate follows: a trigger, a DualShock 3 pressure axis, or the stick the macro triggers on. A light press repeats slowly, a full press repeats at the Interval. See <a href="#pressure-scaled-rate">Pressure-Scaled Rate</a> for the settings and the direction rule.</p>
 <p><img alt="The Repeat Key While Held editor with Pressure-Scaled Rate" src="../../images/macro-turbo.png" /></p>
 <h3 id="repeat-button-while-held">Repeat Button While Held<a class="headerlink" href="#repeat-button-while-held" title="Permanent link">&para;</a></h3>
 <p>Controller-button autofire, the virtual-pad twin of Repeat Key While Held. While the macro's trigger is held, the picked button pulses on and off at the interval. Imported Steam configs use it for turbo on pad buttons.</p>
 <h3 id="toggle-button-toggle-key">Toggle Button / Toggle Key<a class="headerlink" href="#toggle-button-toggle-key" title="Permanent link">&para;</a></h3>
 <p>Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.</p>
-<p>All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a <strong>Pulse While Latched</strong> checkbox: while latched, the output pulses on and off at the repeat interval instead of holding solid.</p>
+<p>All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a <strong>Pulse While Latched</strong> switch: while latched, the output pulses on and off at the repeat interval instead of holding solid.</p>
 <h3 id="pressure-scaled-rate">Pressure-Scaled Rate<a class="headerlink" href="#pressure-scaled-rate" title="Permanent link">&para;</a></h3>
-<p>Every action that shows the Interval field also carries a <strong>Pressure-Scaled Rate</strong> checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the <strong>Slow Interval</strong>, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.</p>
+<p>Every action that shows the Interval field also carries a <strong>Pressure-Scaled Rate</strong> switch. On, the repeat rate follows how hard an analog source is pressed: a light press repeats at the <strong>Slow Interval</strong>, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.</p>
 <ul>
 <li><strong>Slow Interval.</strong> The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.</li>
 <li><strong>Rate Curve.</strong> Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.</li>
@@ -7144,7 +7144,7 @@
 <h3 id="repeat-axis-while-held">Repeat Axis While Held<a class="headerlink" href="#repeat-axis-while-held" title="Permanent link">&para;</a></h3>
 <p>Axis turbo. While the trigger is held, asserts the axis value on an on/off square wave at the set interval.</p>
 <h3 id="yield-to-physical-input">Yield to Physical Input<a class="headerlink" href="#yield-to-physical-input" title="Permanent link">&para;</a></h3>
-<p>Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a <strong>Yield to Physical Input</strong> checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.</p>
+<p>Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a <strong>Yield to Physical Input</strong> switch. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.</p>
 <h3 id="button-pressure">Button pressure<a class="headerlink" href="#button-pressure" title="Permanent link">&para;</a></h3>
 <p>On a PlayStation slot set to the <strong>DualShock 3 (SIXAXIS): Full</strong> preset, the axis actions offer ten more targets: <strong>✕ Pressure</strong>, <strong>○ Pressure</strong>, <strong>◻ Pressure</strong>, <strong>△ Pressure</strong>, <strong>L1 Pressure</strong>, <strong>R1 Pressure</strong>, and one for each D-pad direction. They set how hard the virtual DualShock 3 presses that button, so a controller or keyboard with plain digital buttons can press one partway. L2 and R2 need none of their own: the Left Trigger and Right Trigger targets are their pressure.</p>
 <p>A pressure target sets the press along with the pressure. Any value above 0 presses the button at that pressure, and 0 releases it, the way PCSX2 reads the pad, which counts any pressure as a press. The <strong>Value</strong> box runs from 0 (released) to 100 percent (a full press), like a trigger's pull.</p>
@@ -7198,7 +7198,7 @@
 <li>Stick Y scrolls in both directions. Triggers scroll one way.</li>
 </ul>
 <h3 id="mouse-wheel-tick">Mouse Wheel Tick<a class="headerlink" href="#mouse-wheel-tick" title="Permanent link">&para;</a></h3>
-<p>Sends a fixed number of wheel detents per fire. The <strong>Value</strong> is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with <strong>Scroll Horizontal</strong> checked.</p>
+<p>Sends a fixed number of wheel detents per fire. The <strong>Value</strong> is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with <strong>Scroll Horizontal</strong> on.</p>
 <h3 id="toggle-wheel-scroll">Toggle Wheel Scroll<a class="headerlink" href="#toggle-wheel-scroll" title="Permanent link">&para;</a></h3>
 <p>Each fire latches or unlatches a continuous scroll. While latched, it sends the tick count once per interval until the next fire or until the macro is disabled.</p>
 <h3 id="nudge-cursor">Nudge Cursor<a class="headerlink" href="#nudge-cursor" title="Permanent link">&para;</a></h3>

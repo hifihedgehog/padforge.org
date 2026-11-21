@@ -151,7 +151,7 @@ Each palette is a wrapping list of swatches. Each entry has an in-place color pi
 
 A palette can hold any number of entries. No upper cap. The remove button refuses to drop the last swatch, so a palette never goes empty.
 
-Color Cycle exposes a **Blend Smoothly Between Palette Colors** checkbox. On, the bar lerps between consecutive palette entries. Off, it hops to the next entry every Period divided by the palette size (750 ms per color with the default four-color palette at 3000 ms), so one full Period walks the whole palette.
+Color Cycle exposes a **Blend Smoothly Between Palette Colors** switch. On, the bar lerps between consecutive palette entries. Off, it hops to the next entry every Period divided by the palette size (750 ms per color with the default four-color palette at 3000 ms), so one full Period walks the whole palette.
 
 ---
 

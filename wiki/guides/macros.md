@@ -274,7 +274,7 @@ Keyboard autofire. While the macro's trigger is held, the key presses and releas
 
 Pair it with the **While Held** fire mode. Where the Until Release repeat mode loops a whole action sequence, Repeat Key While Held taps one key on its own clock and mixes with other actions in the same macro.
 
-**Pressure-Scaled Rate** ties the repeat rate to how hard the input is pressed. Tick it and pick the analog source the rate follows: a trigger, a DualShock 3 pressure axis, or the stick the macro triggers on. A light press repeats slowly, a full press repeats at the Interval. See [Pressure-Scaled Rate](#pressure-scaled-rate) for the settings and the direction rule.
+**Pressure-Scaled Rate** ties the repeat rate to how hard the input is pressed. Turn it on and pick the analog source the rate follows: a trigger, a DualShock 3 pressure axis, or the stick the macro triggers on. A light press repeats slowly, a full press repeats at the Interval. See [Pressure-Scaled Rate](#pressure-scaled-rate) for the settings and the direction rule.
 
 ![The Repeat Key While Held editor with Pressure-Scaled Rate](../images/macro-turbo.png)
 
@@ -286,11 +286,11 @@ Controller-button autofire, the virtual-pad twin of Repeat Key While Held. While
 
 Each fire latches or unlatches a controller button or a key. A latched output stays held until the next fire or until the macro is disabled. Imported Steam configs use these for their toggle presses.
 
-All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a **Pulse While Latched** checkbox: while latched, the output pulses on and off at the repeat interval instead of holding solid.
+All four toggle latches (Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis) carry a **Pulse While Latched** switch: while latched, the output pulses on and off at the repeat interval instead of holding solid.
 
 ### Pressure-Scaled Rate
 
-Every action that shows the Interval field also carries a **Pressure-Scaled Rate** checkbox. Checked, the repeat rate follows how hard an analog source is pressed: a light press repeats at the **Slow Interval**, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.
+Every action that shows the Interval field also carries a **Pressure-Scaled Rate** switch. On, the repeat rate follows how hard an analog source is pressed: a light press repeats at the **Slow Interval**, a full press at the Interval, and everything between blends smoothly in taps per second. It restores the PlayStation 2 era's pressure-sensitive fire on current pads and works with any analog input.
 
 - **Slow Interval.** The light-press period, 10 to 2000 ms, default 500. It never runs faster than the Interval.
 - **Rate Curve.** Shapes the pressure before it sets the rate, with the same choices as the gyro output curve. Aggressive keeps light presses slow and saves the speed for the deep end.
@@ -382,7 +382,7 @@ Axis turbo. While the trigger is held, asserts the axis value on an on/off squar
 
 ### Yield to Physical Input
 
-Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** checkbox. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
+Hold Axis, Set Axis (Latched), Toggle Axis, and Repeat Axis While Held carry a **Yield to Physical Input** switch. When physical movement pushes the target axis past about 12.5 percent, the macro stops writing it for the rest of the activation, so you can grab the stick back mid-macro.
 
 ### Button pressure
 
@@ -454,7 +454,7 @@ Map an axis to scroll wheel movement. Updates every frame.
 
 ### Mouse Wheel Tick
 
-Sends a fixed number of wheel detents per fire. The **Value** is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with **Scroll Horizontal** checked.
+Sends a fixed number of wheel detents per fire. The **Value** is the signed tick count, and 0 sends one tick. Positive scrolls up, or right with **Scroll Horizontal** on.
 
 ### Toggle Wheel Scroll
 

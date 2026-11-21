@@ -502,7 +502,7 @@ Keys and clicks PadForge itself sends, from a Keyboard + Mouse controller or a m
 | USB mouse | The same, and Windows stops moving the pointer with it. | The same, for the mouse. |
 | Precision touchpad | HidHide hides the touchpad from Windows while the engine runs, and PadForge reads it. Windows gets it back when the engine stops or PadForge closes. See [Touchpad](touchpad.md#precision-touchpads-read-by-padforge-alone). | HidHide installed, **Hide Devices from Games** on in [Settings](settings.md), and the engine running. |
 
-The row keeps its ID, so its controllers, mappings and macros carry over. A switched row shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**, since Windows no longer sees the device as a keyboard or mouse. In their place the card shows **Restore the Windows Driver**, or **Give Back to Windows** for a touchpad. A **Hide from Games (HidHide)** tick left on a touchpad by an earlier build does not take it.
+The row keeps its ID, so its controllers, mappings and macros carry over. A switched row shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**, since Windows no longer sees the device as a keyboard or mouse. In their place the card shows **Restore the Windows Driver**, or **Give Back to Windows** for a touchpad. A **Hide from Games (HidHide)** switch left on for a touchpad by an earlier build does not take it.
 
 The switch confirms first. The confirmation says what Windows loses. It names what else shares the same USB connection and leaves Windows with the device: a mouse on a shared receiver, media keys, power and sleep keys, a game controller or the maker's own interface. It repeats the warning about losing your only keyboard or mouse.
 

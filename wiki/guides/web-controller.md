@@ -200,7 +200,7 @@ Pick **Web Menus** on the home page and the phone shows a slot's [Touch Grid men
 
 1. Open **Web Menus** on the phone. It shows up on the [Devices](../features/devices.md) page as **Web Menus 1**.
 2. Assign it to the slot whose menus you want, the same way as any controller. Until then the page says **Not on a slot**. The phone has no buttons or sticks of its own, so assigning it beside the slot's controller adds nothing but its tiles.
-3. In that controller's **Macros & Menus** section, select each Touch Grid menu the phone should show and turn on **Show on Web Controller**, under the menu's **More** fold. The checkbox appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says **No menus to show**.
+3. In that controller's **Macros & Menus** section, select each Touch Grid menu the phone should show and turn on **Show on Web Controller**, under the menu's **More** fold. The switch appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says **No menus to show**.
 
 Each marked menu is one page, and a tab strip across the top switches between them. A phone assigned to several slots shows the pages of every slot, and each tab then names its slot.
 

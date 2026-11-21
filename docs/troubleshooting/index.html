@@ -5803,7 +5803,7 @@
 <li><strong>On Short Press</strong> fires on release before the Hold Time elapses. Holding past it fires nothing.</li>
 <li><strong>On Single Press</strong>, <strong>On Double Press</strong>, and <strong>On Triple Press</strong> wait out the <strong>Press Window</strong> and fire only on the matching press count.</li>
 <li><strong>Turbo</strong> repeats only while the trigger is held.</li>
-<li>Confirm the macro's enable checkbox is checked.</li>
+<li>Confirm the macro's <strong>Enabled</strong> switch is on.</li>
 <li>Confirm the engine is running and the slot is enabled.</li>
 <li>If the <strong>Source</strong> dropdown is set to <strong>Assigned Devices</strong> but no device is assigned, there is nothing to read. Switch to <strong>Virtual Controller</strong> or assign a device.</li>
 <li>Check for conflicting macros with overlapping triggers on the same slot.</li>
@@ -5823,7 +5823,7 @@
 <ol>
 <li>A macro set to <strong>Always</strong> fires every frame while the slot is active. No trigger required. That is its design.</li>
 <li>A macro set to <strong>Toggle</strong> latches: the first press turns the actions on, and holds and repeats stay active until the second press. Tap the trigger again to release it.</li>
-<li>Uncheck the macro's enable checkbox to stop it.</li>
+<li>Turn off the macro's <strong>Enabled</strong> switch to stop it.</li>
 <li>Delete the macro if it is no longer needed.</li>
 <li>Turn the controller off (the state pill on its Home card) to stop all its macros.</li>
 </ol>
@@ -6243,9 +6243,9 @@
 <p><strong>On a handheld PC such as the Legion Go, Hide from Games (HidHide) on the built-in controller hides its touchpad but games still see the XInput pad, or the pad is hidden and the touchpad went with it.</strong></p>
 <ol>
 <li>Update to 4.4.0. The built-in controller is a USB composite device whose XInput node is an interface under the composite parent, and earlier builds never blacklisted the nodes between the HID child and the parent. 4.4.0 hides every interface of the device that HidHide can filter, the XInput node included. The Xbox 360 wireless receiver has the same shape.</li>
-<li>An interface that shows on the <a href="../features/devices/">Devices</a> page as its own row, such as the touchpad, follows its own <strong>Hide from Games (HidHide)</strong> checkbox. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.</li>
+<li>An interface that shows on the <a href="../features/devices/">Devices</a> page as its own row, such as the touchpad, follows its own <strong>Hide from Games (HidHide)</strong> switch. Leave it off and the touchpad stays visible while the pad is hidden. Turn it on to hide the touchpad too.</li>
 <li>A program that opened the pad before the entry landed keeps it until the pad reconnects. A built-in pad never reconnects by itself, so PadForge reconnects it in Windows when it hides it, and a game or launcher started first loses it. A USB device that carries a second controller is left alone. To have the pad hidden from the moment Windows starts, turn on <strong>Keep Devices Cloaked Between Launches</strong> in <a href="../features/settings/">Settings</a>.</li>
-<li><strong>Hide Devices from Games</strong> in <a href="../features/settings/">Settings</a> is the master switch. With it off, no per-device checkbox does anything.</li>
+<li><strong>Hide Devices from Games</strong> in <a href="../features/settings/">Settings</a> is the master switch. With it off, no per-device switch does anything.</li>
 <li>Add any emulator or tool that must still see the physical pad under <strong>Whitelisted Applications</strong> in <a href="../features/settings/">Settings</a>. PadForge whitelists itself.</li>
 </ol>
 <hr />
@@ -6420,7 +6420,7 @@
 </tr>
 <tr>
 <td>Remote Link feedback or keys missing</td>
-<td>Device must support the feature, untick gamepad-only for keys</td>
+<td>Device must support the feature, clear <strong>Gamepad Only</strong> for keys</td>
 </tr>
 <tr>
 <td>No NFC reader detected</td>
