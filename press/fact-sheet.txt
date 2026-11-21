@@ -1,42 +1,50 @@
 PadForge
-Product information | November 9, 2026
+Product information | November 21, 2026
 
-PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, and it knows 2,669 devices by their USB identity. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts, reWASD configs and DS4Windows profiles, and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
+PadForge is a free controller remapper for Windows. It maps gamepads, wheels, flight sticks, keyboards and mice onto as many as 16 virtual controllers, knows 2,687 devices by their USB identity and lights 1,572 RGB devices by itself. Players can tune stick response and gyro aiming, build macros and save profiles for individual games. PadForge also imports supported Steam community layouts, reWASD configs and DS4Windows profiles, and connects browser-based controllers. Its source code is available under CC BY-NC-SA 4.0.
 
 Website: https://padforge.org/
 Press resources: https://padforge.org/press/
-Version: 5.3.1
+Version: 6.0.0
 Downloads and release notes: https://github.com/hifihedgehog/PadForge/releases/latest
 Platforms: Windows 10 and 11 on x64. Preliminary build for Windows 11 on ARM64.
 Price: Free. No subscriptions or paid feature packs.
+Virtual controllers: Up to 16 at once.
+Device profiles: HIDMaestro 2.3.0 has 344. PadForge offers 246 of them: 143 controllers, 51 keyboards and 52 mice.
+Polling rate: 60 to 10,000 Hz. 1,000 Hz by default.
 Languages: 109, 42 of them complete. Arabic, Persian, Urdu and Central Kurdish are laid out right to left.
 Source license: CC BY-NC-SA 4.0.
 Source and attributions: https://github.com/hifihedgehog/PadForge/blob/main/LICENSE
 Recognition: Softpedia Editor's Pick, rated 5 out of 5. https://www.softpedia.com/get/Gaming-Related/PadForge.shtml
 
-New in 5.3.1
-Corsair LT100 and LS100: PadForge lights Corsair's LT100 towers and LS100 strips, the chain of towers or each strip LED by LED once its length is set on the Lighting tab.
-
-New in 5.3.0
-reWASD and DS4Windows import: A reWASD config or a DS4Windows profile becomes an ordinary PadForge profile. Before anything changes, a preview marks every binding Clean, Partial or Skipped, says why for each one that is not Clean, and names every program the profile would run. reWASD's shifts become shift layers, and its single, double, triple and long presses become macros that keep the file's wait times. A DS4Windows profile brings its shift modifiers, special actions, gyro and touchpad modes, lightbar, adaptive trigger effects and two-stage triggers.
-Key-by-key lighting: PadForge lights 1,565 RGB keyboards, mice, headsets and other devices by itself, using the protocols that OpenRGB, OpenRazer, SignalRGB's plugins and QMK document. Where it knows a device's lights one by one, the Key Colors card colors them key by key on each shift layer, and Map Key Lights names a light by the key you press under it. Most of these devices have not run against PadForge yet.
-Screen Color: A lighting mode that follows the colors on one display, the whole screen or one area of it. A lightbar takes one color, and a keyboard whose lights PadForge knows one by one spreads the screen across its keys. PadForge reads the finished picture from Windows and stores none of it. It changes nothing in any game.
-Screen Overlay: Up to eight windows above your game show a picture, the profile, a clock, play time, a stopwatch or a lightbar's color, with no keyboard screen needed. While the game is in front, clicks pass through them, and they never take its focus.
-Keyboard and Hotbar menus: The Keyboard menu style types into any Windows program from the controller, on a grid, a split keyboard or a daisy wheel, with word suggestions from Windows. It opens on any input you pick, and it can also open when a text box in a Windows app or browser takes focus. The Hotbar style is Steam Input's hotbar. A Steam config's Show Keyboard binding and its hotbars import as these two styles.
-Twitch Chat: Viewers play a controller slot by typing commands such as !a, !a+b or !a500ms in the stream's chat, and take turns with !claim. PadForge reads the chat without signing in and never posts in it. OBS shows the controller on the stream as a browser source. Twitch Chat has not run against a live channel yet.
-Use Only in PadForge: A button on the Devices page takes a USB keyboard or mouse away from Windows, so its keys and buttons reach only your mappings and macros. It takes a precision touchpad the same way while PadForge runs. It has switched one keyboard and one mouse and given them back, and a touchpad taken this way clicked and scrolled. No key or button read through it has been confirmed yet.
-DualShock 4 speaker over USB: A second-model DualShock 4 on a cable, or any DualShock 4 on Sony's USB wireless adapter, plays PadForge's sound through its built-in speaker as well as its headphone jack. This route has not run on a wired pad or on the adapter yet.
+New in 6.0.0
+PadForge 6: The interface is rebuilt around what most people do first, and no setting is removed. Home replaces the Dashboard: one switch starts the engine, and each virtual controller has a card with a picture of its controller that lights as you press. On a first run, one click makes the first controller for the connected device, mapped 1:1. The services that stood on the Dashboard are tiles on a new Extras page, and each opens a page of its own. A controller's tabs become six sections: Mappings, Sticks & Triggers, Rumble & Haptics, Motion & Touch, Lights & Sound, and Macros & Menus. Ctrl+K finds pages, controllers, devices, profiles, settings and actions.
+Wheel centering from a car's steering: A force feedback wheel can center the way a car's steering does. The new Centering card keeps the plain spring as Spring mode and adds Vehicle mode, which puts on the rim the torque a car's steering gives at its speed and grip. It offers a Sedan, a Compact, a Van, a Race Car and the Stanford X1, and reads the speed from your game's telemetry. Release Test measures the wheel with your hands off it and sets the damping that brings it back without swinging past center.
+Crosshair and Magnifier: Two new extras. Crosshair shows up to ten crosshairs over your game, each a cross, a circle, a dot or a picture of your own. Magnifier is a lens like a sniper scope, the whole display zoomed in, or a spotlight that darkens the rest, at 1.25 to 16 times. Macros show and hide either one, and one shows the magnifier only while a button is held.
+Flydigi Apex 4, Apex 5 and Apex 6 Pro: These pads get what a DualSense or an Xbox pad gets on a virtual controller: adaptive trigger effects, impulse triggers and their own lights on the Lighting card. Controller Screen, on the Devices page, sends a picture or a GIF to the pad's screen by cable. The Apex 4, in DInput mode, and the Apex 5 have triggers that resist. The Apex 6 Pro's trigger coils vibrate, and its grip coils play the DualSense haptic track.
+SInput pads: SInput is Hand Held Legend's HID gamepad protocol. A pad that speaks it arrives with its buttons, sticks, triggers, motion, touchpads, battery and rumble, and plays PadForge's sounds on its haptics. An Extended virtual controller can be an SInput Gamepad too.
+Polling up to 10,000 Hz: The polling rate is set in hertz, from 60 to 10,000, in Settings and in each profile. The default stays 1,000 Hz. It was a whole number of milliseconds, and a saved interval becomes its rate as it loads. On a PC whose timer wakes the engine 2,000 times a second, a higher rate runs several passes at each wake.
+HIDMaestro 2.3.0: 344 device profiles, of which PadForge offers 246. Six are new: the Xbox One S Controller (Model 1708): Full, the USB forms of the Nintendo Switch Online Genesis, N64 and SNES pads, and the Joy-Con Charging Grip with the left or the right Joy-Con. On Windows on ARM every virtual controller now runs as a USB device that Windows' own drivers bind.
+More RGB devices: PadForge lights 1,572 RGB devices by itself, among them the ROG Falchion Ace 75 HE key by key, Cooler Master's MK721 and CK721 LINE, the Roccat Kone XTD and the light bars of the Corsair K70 PRO MINI WIRELESS.
 
 Setup
 PadForge runs as administrator. Its runtime is included in the executable.
 HIDMaestro provides virtual controller output and is installed when needed.
-Composite USB profiles install the USB/IP driver on first use.
+Virtual controllers that are USB devices install usbip-win2's host controller the first time one is created: every virtual controller on Windows on ARM, and on x64 the composite controllers, the Steam Controller (2026), the Xbox One S: Full profile and the Joy-Con Charging Grip forms.
 PadForge 4.5.3 and later update themselves from the Updates card in Settings.
 Installation and removal: https://padforge.org/docs/start/installation/
 
 Product references
 Specifications: https://padforge.org/specs.html
 Supported devices: https://padforge.org/docs/devices/supported/
+Home and Extras: https://padforge.org/docs/features/dashboard/
+Search and the keyboard: https://padforge.org/docs/guides/accessibility/
+Wheel centering: https://padforge.org/docs/features/wheel-centering/
+Crosshair: https://padforge.org/docs/features/crosshair/
+Magnifier: https://padforge.org/docs/features/magnifier/
+Flydigi Apex controllers: https://padforge.org/docs/features/flydigi-apex/
+SInput Gamepad and the other virtual controllers: https://padforge.org/docs/features/virtual-controllers/
+Polling rate: https://padforge.org/docs/features/settings/#polling-rate
 Languages: https://padforge.org/docs/features/settings/#language
 reWASD and DS4Windows import: https://padforge.org/docs/guides/profile-import/
 Lighting, Key Colors and Map Key Lights: https://padforge.org/docs/features/lighting/
@@ -51,7 +59,6 @@ Game telemetry: https://padforge.org/docs/features/game-telemetry/
 Game mods: https://padforge.org/docs/features/game-mods/
 Novint Falcon: https://padforge.org/docs/features/novint-falcon/
 Keyboard screens: https://padforge.org/docs/features/keyboard-screens/
-Screen readers and the keyboard: https://padforge.org/docs/guides/accessibility/
 Mice, keyboards and vendor rows: https://padforge.org/docs/features/peripherals/
 Haptic mice: https://padforge.org/docs/features/force-feedback/#haptic-mice-and-the-razer-sensa-row
 Virtual keyboards and mice: https://padforge.org/docs/features/controller-slots/#keyboardmouse
@@ -59,13 +66,40 @@ Driver management: https://padforge.org/docs/features/driver-management/
 Gyro controls: https://padforge.org/docs/guides/gyro/
 Steam community imports: https://padforge.org/docs/guides/steam-workshop-import/
 Phone and browser controllers: https://padforge.org/docs/guides/web-controller/
-Reviewer brief (4 pages): https://padforge.org/press/PadForge-5.3-reviewer-brief.pdf
-Reviewer field guide (34 pages): https://padforge.org/press/PadForge-5.3-reviewer-field-guide.pdf
+Reviewer brief for 5.3 (4 pages): https://padforge.org/press/PadForge-5.3-reviewer-brief.pdf
+Reviewer field guide for 5.3 (34 pages): https://padforge.org/press/PadForge-5.3-reviewer-field-guide.pdf
 
-Notes
-Most of the 1,565 RGB devices PadForge lights have not run against
-PadForge yet. Their frames follow the references' own code, checked by
-running those references against PadForge's tables.
+Untested hardware and other limits
+No wheel has run wheel centering. Every stability and Release Test result
+comes from a simulated wheel. A wheel whose maker publishes no torque
+figure, Thrustmaster's among them, starts from a high figure, so its forces
+are weak until its own Wheel Torque is entered. Over Remote Link, centering
+reaches a Logitech, Fanatec or Thrustmaster wheel only. A game with no
+telemetry uses the Fixed speed.
+No Logitech wheel has run the switch to native mode, and no Logitech RS50
+has run as a wheel.
+No Flydigi pad has run against PadForge. The screen takes a picture by
+cable only. An Apex 4 send needs every other Xbox 360 pad unplugged. The
+plain Apex 6 is refused.
+No SInput pad has run against PadForge, and no game has run on the SInput
+Gamepad.
+No PadForge build has driven any of the six new HIDMaestro profiles.
+An ARM64 build of this release has run on one Windows 11 ARM64 PC, with a
+virtual Xbox controller and a hidden DualSense, before the last HIDMaestro
+update. The other virtual controller types have not run on ARM64 hardware.
+A game in exclusive full screen hides the crosshairs, the lens and the
+spotlight. Windows' full-screen magnifier serves one program at a time.
+Above 1,000 Hz, what a game reads from a virtual controller whose frames
+carry a clock has not been measured.
+The interface was checked in page renders, UI Automation and the NVDA
+screen reader. No controller was put through every page by hand.
+None of this release's lighting changes has run on a device. Most of the
+1,572 RGB devices PadForge lights have not run against PadForge. Their
+frames follow the references' own code, checked by running those
+references against PadForge's tables.
+A Joy-Con 2 clone such as the Mobapad M12-S is expected to pause for a
+moment about every 30 seconds. Before, it was lost for good. No clone has
+run this build.
 The direct rumble paths for mice and keyboards follow the public
 implementations that drive each device, and tests check every frame
 against them. They have not run on the devices themselves.
@@ -89,22 +123,23 @@ DualSense audio over Bluetooth uses a virtual USB DualSense for compatible
 games. The game supplies its native speaker audio and haptic effects.
 Steam imports include a translation report. Some bindings are approximated
 or skipped. Game-specific Steam Input API actions do not translate.
-The ARM64 build has not run on ARM64 hardware.
 
 Images
-dualsense-cobalt.jpg: DualSense controller preview in the Deep Earth Cobalt finish. 2560 x 1528 JPG.
-profile-import.jpg: The Import Profile preview for a reWASD config: ten bindings Clean and one Skipped, with its reason. 2560 x 1528 JPG. New in 5.3.0.
-map-key-lights.jpg: The Map Key Lights window over the Devices page, with 100 of a keyboard's 105 key lights named. 2560 x 1528 JPG. New in 5.3.0.
-screen-color.jpg: A DualSense's Lighting tab in Screen Color mode, reading the whole primary display for its most common color. 2560 x 1528 JPG. New in 5.3.0.
-keyboard-menu.jpg: The Menus tab with a menu named Text Chat in the Keyboard style and the Grid layout. 2560 x 1528 JPG. New in 5.3.0.
-twitch-chat.jpg: The Dashboard's Twitch Chat card, waiting for a channel name, with the address OBS takes for the controller picture. 2560 x 1528 JPG. New in 5.3.0.
-screen-overlay.jpg: The Dashboard's Screen Overlay card with one overlay, off, at 80 percent opacity. 2560 x 1528 JPG. New in 5.3.0.
-mice-and-keyboards.jpg: The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller. 2560 x 1528 JPG.
-languages.jpg: The Language list in Settings, each language under its own name, with its English name beside it where the two differ. 2560 x 1528 JPG.
-button-mappings.jpg: The mapping table with combined physical inputs and layer controls. 2560 x 1528 JPG.
-macros.jpg: A macro with its trigger conditions and a sequence of actions. 2560 x 1528 JPG.
-controller-audio.jpg: Sound output for a DualSense speaker, with crossfeed and a parametric EQ curve. 2560 x 1528 JPG.
-steam-community-layouts.jpg: A community configuration and its binding translation report. 2560 x 1528 JPG.
+dualsense-cobalt.jpg: PadForge 6 showing a DualSense on its controller page in the Deep Earth Cobalt Blue finish. 2560 x 1528 JPG.
+home.jpg: Home in PadForge 6: the engine card forging at 1000 Hz, a card with a picture of its controller for each of seven virtual controllers, and the extras in use as tiles under them. 2560 x 1528 JPG. New in 6.0.0.
+controller-page.jpg: An Xbox virtual controller's page: the header with its Preset and state, the devices that drive it, the row of six sections, and Mappings on Picture with every control of the 3D controller tagged. 2560 x 1528 JPG. New in 6.0.0.
+extras.jpg: The Extras page: twelve extras as tiles in three groups, More Ways to Play, Send It Elsewhere and On Screen, each with its switch and its state. 2560 x 1528 JPG. New in 6.0.0.
+search.jpg: Search open on "trigger": matching settings with the controller and section each is in, a page, two actions, a documentation search, and the keys that move through the results, open one and bring Search up from anywhere. 2560 x 1528 JPG. New in 6.0.0.
+wheel-centering.jpg: The Centering card in Vehicle mode on a racing wheel: a Sedan, speed from the game at 60 mph, Steering Weight, the steering torque chart at 60 and 25 mph with its four measures, and the More rows open. 2560 x 1528 JPG. New in 6.0.0.
+crosshair.jpg: The Crosshair page: Crosshair 1 with a live preview of a green cross, its style, display and offset, arm length, thickness, gap, color, opacity, outline, rotation and Smooth Edges. 2560 x 1528 JPG. New in 6.0.0.
+magnifier.jpg: The Magnifier page: Lens mode centered on the display at 200 percent zoom, and a round lens 400 pixels across with a white border. 2560 x 1528 JPG. New in 6.0.0.
+devices.jpg: The Devices page: connected devices listed by kind with their links, and a DualSense's panel with its picture, its Bluetooth link, the virtual controllers that use it and Test Inputs. 2560 x 1528 JPG. New in 6.0.0.
+profile-import.jpg: The Import Profile preview of a reWASD file over the Profiles page: ten bindings Clean, none Partial and one Skipped, with its reason. 2560 x 1528 JPG.
+mappings-list.jpg: Mappings in the List view on an Xbox virtual controller: a column for each of its three devices and a row for each output games see, with the Base and Aim layers above. 2560 x 1528 JPG.
+macros.jpg: Macros & Menus on an Xbox virtual controller: the Quick Combo macro with its When inputs and four numbered steps, beside the lists of macros and menus. 2560 x 1528 JPG.
+lights-and-sound.jpg: Lights & Sound on a DualSense: the Lighting card with the pad's picture and its indicator LEDs, and the Audio card with crossfeed and a parametric EQ curve. 2560 x 1528 JPG.
+map-key-lights.jpg: The Map Key Lights window over the Devices page, with 100 of a keyboard's 105 key lights named. 2560 x 1528 JPG.
+languages.jpg: The Language list open in Settings, each language under its own name, with its English name beside it where the two differ. 2560 x 1528 JPG.
 padforge-logo.png: Logo with wordmark. 800 x 800 transparent PNG.
 padforge-icon.png: App icon. 571 x 533 transparent PNG.
 
