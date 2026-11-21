@@ -13,7 +13,7 @@ Start from what the game should receive: a button, an axis, a key, a motion stre
 <source src="/assets/video/padforge-tutorial-switching-from-another-tool.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-switching-from-another-tool.vtt" default>
 </video>
-<figcaption>Export for a backup, Browse Community Configs for a Steam layout, HidHide's Hide Devices from Games, and the controller to rebuild on, recorded live in PadForge 5.2.1 in 59 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-switching-from-another-tool-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Export for a backup, Browse Community Configs for a Steam layout, HidHide's Hide Devices from Games, and the controller to rebuild on, recorded live in PadForge 5.2.1 in 59 seconds. PadForge 6 moved Browse Community Configs into Get Profiles on the Profiles page. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-switching-from-another-tool-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
@@ -33,7 +33,7 @@ Also note the game's executable, its in-game bindings and the old tool's exact v
 
 ### Back up both sides
 
-Back up the old tool the way its documentation describes. For PadForge, export the profile you are working on (**Export…** on the Profiles page), then exit PadForge from its tray icon before copying its folder and `PadForge.xml`. With **Close to System Tray** on, closing the window leaves PadForge running. An exported profile and a copy of the folder protect different things, so keep both.
+Back up the old tool the way its documentation describes. For PadForge, export the profile you are working on (**Export…** in its card's **More** menu on the Profiles page), then exit PadForge from its tray icon before copying its folder and `PadForge.xml`. With **Close to System Tray** on, closing the window leaves PadForge running. An exported profile and a copy of the folder protect different things, so keep both.
 
 Keep these backups private. An exported layout can hold program paths, sound packages and references to other files. Note HidHide's allowed programs and hidden devices separately, since importing a profile does not restore them. More: [Share and back up profiles](profiles.md#share-and-back-up-profiles).
 
@@ -48,7 +48,7 @@ Keep these backups private. An exported layout can hold program paths, sound pac
 | MIDI | Windows MIDI Services, or the legacy MIDI API with an existing port | Which one the Settings card names |
 | VR hands | SteamVR | The game accepts the virtual hands |
 
-The composite Sony, Nintendo and Valve presets also use usbip-win2's virtual USB host controller, which HIDMaestro installs with the first such controller, with no prompt and no USB restart. That is separate from the old tool's ViGEm, vJoy or VIIPER driver. More: [Requirements](../start/installation.md#requirements) and [Driver Management](../features/driver-management.md).
+The composite Sony, Nintendo and Valve presets, **Steam Controller (2026)**, **Xbox One S Controller (Model 1708): Full** and the two Joy-Con Charging Grip presets also use usbip-win2's virtual USB host controller, which HIDMaestro installs with the first such controller, with no prompt and no USB restart. That is separate from the old tool's ViGEm, vJoy or VIIPER driver. More: [Requirements](../start/installation.md#requirements) and [Driver Management](../features/driver-management.md).
 
 ---
 
@@ -67,7 +67,7 @@ To remap a few keys without hiding a whole keyboard, use **Consume Mapped Inputs
 
 Build from the bottom up, and save after each stage that works:
 
-1. Add the controller type the game needs on the Dashboard, assign your physical controller, and check its live values on Devices.
+1. Add the controller type the game needs with **Add Controller** in the sidebar, assign your physical controller, and check its live values on Devices.
 2. Map the plain controls first: buttons, sticks at rest and full travel, each trigger on its own.
 3. Add [shift layers](shift-layers.md). Test entering and leaving each one before you hang actions on it.
 4. Add [macros](macros.md) last. Decide whether each macro's trigger is the virtual controller's output or the physical device's own input. An extra button on your pad can be a trigger even when the virtual controller has no button for it.
@@ -88,7 +88,7 @@ Separate ordinary outputs from Steam's native game actions. A binding that ends 
 
 ### Import it or rebuild it
 
-PadForge can translate a Steam community layout. Turn on **Community Configs** in Settings, after reading what it sends to Steam, and browse from the Profiles page. A private layout you do not want to publish is a manual rebuild. More: [Steam Workshop Config Import](steam-workshop-import.md).
+PadForge can translate a Steam community layout. Turn on **Community Configs** in Settings, after reading what it sends to Steam, and browse from **Get Profiles** on the Profiles page, on its **Community** tab. A private layout you do not want to publish is a manual rebuild. More: [Steam Workshop Config Import](steam-workshop-import.md).
 
 Read every **Clean**, **Partial** and **Skipped** line before you save. Extra action sets become shift layers, and translated outputs can create Xbox and Keyboard + Mouse slots, so assign your controller to the slots the import made. The report is a translation account, not a play test: native game actions and some Steam client commands are skipped, and mouse smoothing, movement threshold and trackball friction can drop without a note. More: [The translation manifest](steam-workshop-import.md#the-translation-manifest).
 
@@ -119,7 +119,7 @@ For the trial, close the game and exit DS4Windows, plus any separate VIIPER tray
 
 ### Import it
 
-Click **Import…** on the Profiles page and pick the profile's `.xml` in DS4Windows' `Profiles` folder. Keep `Actions.xml` and `Auto Profiles.xml` one folder above it, where DS4Windows writes them: the import reads its special actions from the first and the profile's games from the second. Read every **Clean**, **Partial** and **Skipped** line before you click **Import**. The new profile reads your controller once you assign it to the profile's slots on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
+On the Profiles page, click **Get Profiles**, open **Import a File**, click **Import…**, and pick the profile's `.xml` in DS4Windows' `Profiles` folder. The dialog lists that folder among its places. Keep `Actions.xml` and `Auto Profiles.xml` one folder above it, where DS4Windows writes them: the import reads its special actions from the first and the profile's games from the second. Read every **Clean**, **Partial** and **Skipped** line before you click **Import**. The new profile reads your controller once you assign it to the profile's slots under **Used By** on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
 
 ### Fill the gaps by hand
 
@@ -154,7 +154,7 @@ For the trial, use reWASD's [Tray Agent](https://help.rewasd.com/interface/tray-
 
 ### Import it
 
-Click **Import…** on the Profiles page and pick the `.rewasd` config. The dialog lists reWASD's shared `Profiles` folder among its places. The preview marks every binding **Clean**, **Partial** or **Skipped** with its reason. Shifts become shift layers, press types become macro fire modes, and unmapped keys ask for **Consume Mapped Inputs (Hooks)** on the keyboard or mouse. Keyboard and mouse inputs work as soon as the profile loads. Assign your controller to its slots on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
+On the Profiles page, click **Get Profiles**, open **Import a File**, click **Import…**, and pick the `.rewasd` config. The dialog lists reWASD's shared `Profiles` folder among its places. The preview marks every binding **Clean**, **Partial** or **Skipped** with its reason. Shifts become shift layers, press types become macro fire modes, and unmapped keys ask for **Consume Mapped Inputs (Hooks)** on the keyboard or mouse. Keyboard and mouse inputs work as soon as the profile loads. Assign your controller to its slots under **Used By** on the Devices page. More: [Import from reWASD and DS4Windows](profile-import.md).
 
 ### Fill the gaps by hand
 
@@ -194,10 +194,10 @@ Back up SimHub's folder and effect profiles, and export its sound card mappings 
 Use one dedicated shaker output for the comparison, and turn off SimHub's output for it while you test.
 
 1. Build the virtual controller the game will use. Xbox is the starting point for gamepad rumble. A wheel needs an Extended layout the game binds, and the game has to send force effects to it.
-2. On the slot's Bass Shakers tab, turn on **Route Rumble to an Audio Output**, pick the **Output Device** and **Channel Mode**, and start with low software and amplifier gain.
+2. On the controller's page, in the **Rumble & Haptics** section's **Bass Shakers** card, turn on **Route Rumble to an Audio Output**, pick the **Output Device** and **Channel Mode**, and start with low software and amplifier gain.
 3. Use a voice's **Test** or the **Frequency Sweep** to check the route before starting the game.
 
-PadForge offers Mono and Controller Stereo routing. A multichannel SimHub setup needs its own channel plan.
+PadForge offers **Mono (All Channels)** and **Controller Stereo** routing. A multichannel SimHub setup needs its own channel plan.
 
 ### Test it, then keep it or go back
 
@@ -240,4 +240,4 @@ Mark a check "not tested" when you lack the hardware or the game. When a require
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -12,10 +12,10 @@ For the user-facing side see [Twitch Chat](../features/twitch-chat.md).
 | `PadForge.App/Common/Input/Twitch/ChatCommandRegistry.cs` | The word list: stable buttons, validation, the preset words. |
 | `PadForge.App/Common/Input/Twitch/ChatTurns.cs` | `!claim`, `!accept`, `!release`, `!skip`, `!skipall` and the notice the picture page shows. |
 | `PadForge.App/Common/Input/Twitch/TwitchChatDevice.cs` | The row: an `ISdlInputDevice` that joins the pieces and reads each message. |
-| `PadForge.App/Common/Input/Twitch/TwitchChatRuntime.cs` | The Dashboard mirror the engine reads: switch, channel, pause, approval, the open row. `TwitchChatSnapshot` lives here. |
+| `PadForge.App/Common/Input/Twitch/TwitchChatRuntime.cs` | The mirror of the Twitch Chat page that the engine reads: switch, channel, pause, approval, the open row. `TwitchChatSnapshot` lives here. |
 | `PadForge.App/Common/Input/Twitch/ChatGamepadPlacement.cs` | Where the preset words sit in SDL's gamepad layout, for the default mapping. |
 | `PadForge.App/Common/Input/InputManager.TwitchChat.cs` | Step 1 phase 1i3: open, retire, recreate and reopen the row. |
-| `PadForge.App/Services/InputService.TwitchChat.cs` | The Dashboard status line and flame, the Devices panel line, the picture page's frame, slot lookups and the word list's change handler. |
+| `PadForge.App/Services/InputService.TwitchChat.cs` | The Twitch Chat page's status line and flame, the Devices panel line, the picture page's frame, slot lookups and the word list's change handler. |
 | `PadForge.App/Services/WebControllerServer.cs` | `DisplayUrl`, the picture page's socket (`HandleDisplayAsync`) and `ChatMessage`. |
 | `PadForge.App/WebAssets/display.html`, `js/display_client.js`, `js/layout_view.js` | The picture page. |
 | `PadForge.App/Views/ChatCommandsDialog.xaml(.cs)` | The Chat Commands window. |
@@ -26,10 +26,10 @@ The chat rules come from references credited on the About page: tmi.js and Comfy
 
 ## The shape
 
-The Twitch Chat row is the Game Telemetry row's shape. One synthetic `ISdlInputDevice` exists while the Dashboard switch is on. The poll thread opens and retires it, and a pooled state copy goes out on every read. The chat connection runs on its own task, so opening the row does no blocking I/O.
+The Twitch Chat row is the Game Telemetry row's shape. One synthetic `ISdlInputDevice` exists while the Twitch Chat switch is on. The poll thread opens and retires it, and a pooled state copy goes out on every read. The chat connection runs on its own task, so opening the row does no blocking I/O.
 
 ```
-Dashboard switch + channel -> TwitchChatRuntime -> InputManager.UpdateTwitchChatDevice
+Twitch Chat switch + channel -> TwitchChatRuntime -> InputManager.UpdateTwitchChatDevice
     -> TwitchChatDevice ->  TwitchChatClient (anonymous IRC over a WebSocket)
                             -> HandleMessage -> ChatTurns | ChatCommandParser -> ChatCommandPlayer
                             -> GetCurrentState: the player's buttons
@@ -163,19 +163,19 @@ PadForge posts nothing in chat, so every result is a `Notice` string the picture
 
 ## TwitchChatRuntime
 
-Static, written by the Dashboard view model on the UI thread and read by the poll thread, the row and the picture page. `Enabled` and `Channel` bump `Version` (the channel only while enabled), and the sweep reopens the row when `Version` moves. `Paused` and `ClaimApproval` act on the open row at once, with their own version counters. `Paused` is not saved and turning the switch off clears it. `Live` is the open row. `Skip()`, `ClearLine()` and `EndClaim()` reach it for the card's buttons.
+Static, written by `DashboardViewModel` on the UI thread and read by the poll thread, the row and the picture page. `Enabled` and `Channel` bump `Version` (the channel only while enabled), and the sweep reopens the row when `Version` moves. `Paused` and `ClaimApproval` act on the open row at once, with their own version counters. `Paused` is not saved and turning the switch off clears it. `Live` is the open row. `Skip()`, `ClearLine()` and `EndClaim()` reach it for the buttons of the page's While You Are Live card.
 
 `SettingsService` stores `EnableTwitchChat`, `TwitchChatChannel` and `TwitchChatClaimApproval` in `AppSettings` alone, and `ChatCommands` beside them. None is in `ProfileData`, so a profile switch never opens or closes the connection. `MainWindow` saves on a change of any of the three.
 
 ## InputService.TwitchChat
 
-`BuildTwitchChatStatus(channel, state, paused)` builds the one line the Dashboard card and the Devices row share, from `TwitchChat_Status_*` strings, with the paused suffix. The Dashboard line is cached on the row instance, its `StatusVersion` and the pause, since a reopen restarts the version at 0. `IsTwitchChatOpen` enables the card's buttons and `IsTwitchChatRunning` lights its flame, true while the state is `Reading`.
+`BuildTwitchChatStatus(channel, state, paused)` builds the one line the Twitch Chat page, its Extras tile and the Devices row share, from `TwitchChat_Status_*` strings, with the paused suffix. The page's line is cached on the row instance, its `StatusVersion` and the pause, since a reopen restarts the version at 0. `IsTwitchChatOpen` enables the While You Are Live buttons and `IsTwitchChatRunning` lights the status card's flame, true while the state is `Reading`.
 
-`DisplayFrameFor(slot)` is the picture page's view of a slot: its combined output (raw HID state for a Nintendo slot or a Valve lettered one, the gamepad otherwise, the pad page's rule), the layout key from the slot's 2D asset folder (`WebLayoutFor`) and the pad's saved finish. It returns null while the slot is off. `FirstTwitchChatSlot` is the lowest `MapTo` among the row's assignments. `ShownSlotNumber` is the number PadForge shows for a slot, which `?slot=` uses.
+`DisplayFrameFor(slot)` is the picture page's view of a slot: its combined output (raw HID state for a Nintendo slot or a Valve or SInput lettered one, the gamepad otherwise, the controller page's rule), the layout key from the slot's 2D asset folder (`WebLayoutFor`) and the pad's saved finish. It returns null while the slot is off. `FirstTwitchChatSlot` is the lowest `MapTo` among the row's assignments. `ShownSlotNumber` is the number PadForge shows for a slot, which `?slot=` uses.
 
 ## The picture page
 
-`WebControllerServer.DisplayUrl` is `<plain base>/display.html?code=<access code>`, or null while the plain address is not served. The Dashboard sets `TwitchChatDisplayUrl` from it. The main address will not do. Its certificate is self-signed, and obs-browser passes no ignore-certificate-errors switch and leaves CEF's `OnCertificateError` at its default, which cancels the page.
+`WebControllerServer.DisplayUrl` is `<plain base>/display.html?code=<access code>`, or null while the plain address is not served. `DashboardViewModel` sets `TwitchChatDisplayUrl` from it, which the page's Picture for Your Broadcast card shows. The main address will not do. Its certificate is self-signed, and obs-browser passes no ignore-certificate-errors switch and leaves CEF's `OnCertificateError` at its default, which cancels the page.
 
 The page opens `/ws?view=<slot>&code=<code>`. A socket with `view` goes to `HandleDisplayAsync`, which makes no device and takes no client slot. At most `MaxDisplays` (4) run at once and a fifth gets a 503. Every 33 ms the loop does the following:
 
@@ -191,9 +191,9 @@ The web controller's landing page and controller pages send the viewer's name (`
 ## Tests
 
 - `TwitchChatCommandTests`: the registry (preset words at buttons 1 to 16, gaps, the word rules, restore, the settings round trip, change events), the parser (presses, holds, chords, groups, repeats, rejects, the 10 second and 50 step limits, the release gap, the parse budget) and `ChatTurns` on a fake clock (each approval choice, the 60 second request and five-request limits, skips by two viewers or one moderator, login against shown name, notices that never repeat a viewer's text).
-- `TwitchChatRowTests`: `IrcLine` parsing and unescaping, `PING` and `RECONNECT`, the scripted socket (joining, duplicate ids, the ping schedule, the silence and connect limits, `NoChat` and its re-ask, the retry delay doubling to 30 seconds), channel names, the player (the newest 20, `Any Command`, skips, the gap), the row's identity and buttons, replies and pause, control and the line, invisible suffixes, default placement, `FreedButtonCleanup` against every place a button can be mapped, the Dashboard switch and approval reaching the runtime, the status line, the picture page's slot choice, `DisplayUrl` and the chat message.
+- `TwitchChatRowTests`: `IrcLine` parsing and unescaping, `PING` and `RECONNECT`, the scripted socket (joining, duplicate ids, the ping schedule, the silence and connect limits, `NoChat` and its re-ask, the retry delay doubling to 30 seconds), channel names, the player (the newest 20, `Any Command`, skips, the gap), the row's identity and buttons, replies and pause, control and the line, invisible suffixes, default placement, `FreedButtonCleanup` against every place a button can be mapped, the Twitch Chat switch and approval reaching the runtime, the status line, the picture page's slot choice, `DisplayUrl` and the chat message.
 - The test host never reaches Twitch: `InTheTestHostTheClientNeverReachesTwitch` builds a client whose socket factory is never called, and `TestHostFenceTests` pins the gate check in `SessionAsync`.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

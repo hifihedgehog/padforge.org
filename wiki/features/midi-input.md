@@ -33,7 +33,7 @@ The whole MIDI namespace is always available: all 128 notes, all 128 CC numbers,
 
 ## Live preview
 
-Select a MIDI device on the [Devices](devices.md) page and PadForge shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.
+Select a MIDI device on the [Devices](devices.md) page and its **Test Inputs** card shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.
 
 Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash, or a green flash in one direction only, means the encoder is in a relative mode PadForge does not decode (see [What you can map](#what-you-can-map)).
 
@@ -44,7 +44,7 @@ Turn an endless encoder and its CC bar flashes: green for a clockwise detent, or
 1. Connect the MIDI device. USB class-compliant controllers need no driver.
 2. Open the [Devices](devices.md) page. The device appears as an input device with its own name.
 3. Watch the preview while you press a key or turn a knob to confirm which source it is.
-4. Assign the device to a [slot](controller-slots.md) and map its notes and controls on the [Mappings](mappings.md) tab.
+4. Assign the device to a [slot](controller-slots.md) and map its notes and controls on that controller's page (see [Button and Axis Mappings](mappings.md)).
 
 Under the legacy MIDI API, assign the device to a slot before step 3. That API opens a MIDI port only while a slot has it, so the preview stays still until then.
 
@@ -70,4 +70,4 @@ Under Windows MIDI Services, PadForge's own MIDI virtual controllers show up in 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

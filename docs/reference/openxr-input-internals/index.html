@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3757,6 +3907,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3849,6 +4027,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4315,7 +4521,7 @@
 <li>The <code>AvailableRuntimes</code> subkey lists every registered manifest.</li>
 </ul>
 <p>Each manifest is a JSON file naming the runtime's library. The catalog parses them and marks the one matching <code>ActiveRuntime</code> as the default. <em>System Default</em> uses that runtime, or the first other registered runtime whose library is on disk when the default's library is missing. Nothing here writes: the machine's active runtime belongs to whatever set it.</p>
-<p>A runtime registered only as <code>ActiveRuntime</code> drops out of the catalog once another runtime takes the default, because the catalog has no other way to find its manifest. The Dashboard picker still lists it while it is the saved choice, under its manifest's file name (<code>DashboardViewModel.Repopulate</code>), and the session reads a saved choice from its manifest path directly (<code>OpenXrSession.Choose</code>). The user page covers that case for SteamVR. The picker reads the catalog again each time the input is turned on, the same step that restarts the session.</p>
+<p>A runtime registered only as <code>ActiveRuntime</code> drops out of the catalog once another runtime takes the default, because the catalog has no other way to find its manifest. The <strong>OpenXR Runtime</strong> picker on the Extras <strong>Head Tracking</strong> page still lists it while it is the saved choice, under its manifest's file name (<code>DashboardViewModel.Repopulate</code>), and the session reads a saved choice from its manifest path directly (<code>OpenXrSession.Choose</code>). The user page covers that case for SteamVR. The picker reads the catalog again each time the input is turned on, the same step that restarts the session.</p>
 <hr />
 <h2 id="the-session">The session<a class="headerlink" href="#the-session" title="Permanent link">&para;</a></h2>
 <p><code>OpenXrSession.TryCreate</code> takes a manifest path, negotiates with the runtime and creates the instance. <code>TryCreateSession</code> asks for the headset and creates the session on it, and <code>DestroySession</code> takes a lost session down while the instance stays. <code>TryCreate</code> also takes an <code>again</code> flag, set for the ask the source makes on its own after a retired instance, and hands back what it read when no instance came of it. With the flag set it reads the given manifest alone, never the registered runtimes, and creates no instance on an OpenVR client library (<code>IsOpenVrClientLibrary</code>). An overload takes the library loader and the list of registered runtimes, which the tests replace. Two extensions matter.</p>
@@ -4339,15 +4545,15 @@
 <p><strong>Separate identities.</strong> Left and right have different <code>InstanceGuid</code> <em>and</em> different <code>ProductGuid</code>. The instance seeds are <code>pfopenxrhand:left</code> and <code>pfopenxrhand:right</code>, the product seeds <code>pfopenxrhand-product:left</code> and <code>-product:right</code>. Sharing a product GUID would let offline-product adoption hand the left row the right row's mappings after a row is deleted and re-created.</p>
 <p><strong>Vendor and product IDs.</strong> VID <code>0x1209</code>, the pid.codes open-source vendor ID, with PIDs <code>0x2874</code> (left) and <code>0x2875</code> (right).</p>
 <p><strong>Silence returns to rest.</strong> A sample older than <code>SilenceMs</code> (1000) returns every axis to rest and releases every button. This is the Head Tracker row's failsafe, for the same reason: a controller that goes to sleep or drops out of tracking mid-game must not leave a stick held. One that is set down and still tracked keeps reporting, and its axes follow it.</p>
-<p><strong>Own-vocabulary rows answer no Any Device source.</strong> <code>AnswersAnyDeviceSources</code> is false, the rule <a href="../../features/devices/">discussion #431</a> established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".</p>
-<p><strong>Trigger and Grip are unipolar.</strong> <code>IsUnipolarActivatorSource</code> in <code>InputManager.Step3.MappingSetEval.cs</code> returns true for axes 8 and 9 on a <code>VrController</code>, so an Axis Past Threshold activator reads them as resting at zero rather than at center. Without that branch the activator engages the moment it is saved, which is <a href="../../features/mappings/">discussion #443</a> on a new device type.</p>
+<p><strong>Own-vocabulary rows answer no Any Device source.</strong> <code>InputDeviceType.AnswersAnyDeviceSources</code> is false for <code>VrController</code>, the rule <a href="../../features/devices/">discussion #431</a> established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".</p>
+<p><strong>Trigger and Grip are unipolar.</strong> <code>IsUnipolarActivatorSource</code> in <code>InputManager.Step3.MappingSetEval.cs</code> returns true for axes 8 and 9 on a <code>VrController</code> (<code>CanonicalAxisRestsAtZero</code>, through <code>OpenXrHandDevice.AxisTrigger</code> and <code>AxisSqueeze</code>), so an Axis Past Threshold activator reads them as resting at zero rather than at center. Without that branch the activator engages the moment it is saved, which is <a href="../../features/mappings/">discussion #443</a> on a new device type.</p>
 <hr />
 <h2 id="per-axis-ranges">Per-axis ranges<a class="headerlink" href="#per-axis-ranges" title="Permanent link">&para;</a></h2>
 <p>The six pose axes take a shared rotation range and a shared translation range, and each axis can pin its own. The stored value is the pin, and zero means "follow the shared range". The getter returns the pin, never the resolved range, so a box the user typed 45 into reads 45 and a box they never touched reads 0 whatever the shared range is set to. Reading back the resolved value would make a zero impossible to display and would rewrite the user's field behind them.</p>
 <p>The ranges are applied in the shared state fill, so every source that feeds these axes gets them.</p>
 <hr />
 <h2 id="threading">Threading<a class="headerlink" href="#threading" title="Permanent link">&para;</a></h2>
-<p><code>OpenXrHeadPoseSource</code> owns a thread that creates the session, pumps events, and publishes poses. On a runtime other than SteamVR the same thread waits for a headset, replaces a session the runtime lost, and asks for a new instance after the runtime retired one. <a href="../head-tracking-internals/#the-status-line">Head Tracking Internals</a> has the rules. <code>Stop</code> joins it for up to 2 s. It cancels under the gate every state write of the loop takes (<code>Show</code>), so a thread that outlives the join changes nothing the source shows. The publish side is a lock around the latest sample. The read side is each row's <code>GetCurrentState</code>, called from the poll thread's input-state step (<code>InputManager.Step2.UpdateInputStates.cs</code>).</p>
+<p><code>OpenXrHeadPoseSource</code> owns a thread that creates the session, pumps events, and publishes poses. On a runtime other than SteamVR the same thread waits for a headset, replaces a session the runtime lost, and asks for a new instance after the runtime retired one. <a href="../head-tracking-internals/#the-status-line">Head Tracking Internals</a> has the rules. <code>Stop</code> joins it for up to 2 s (<code>StopJoinMs</code>). It cancels under the gate every state write of the loop takes (<code>Show</code>), so a thread that outlives the join changes nothing the source shows. The publish side is a lock around the latest sample. The read side is each row's <code>GetCurrentState</code>, called from the poll thread's input-state step (<code>InputManager.Step2.UpdateInputStates.cs</code>).</p>
 <hr />
 <h2 id="residual">Residual<a class="headerlink" href="#residual" title="Permanent link">&para;</a></h2>
 <p>Coexistence with VDXR while another OpenXR client is running has not been exercised on real hardware.</p>
@@ -4362,7 +4568,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1751,10 +1755,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#rumble-to-audio-card" class="md-nav__link">
+  <a href="#the-card" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rumble to Audio card
+        The card
       
     </span>
   </a>
@@ -1829,6 +1833,34 @@
     
   
     Wheels
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
   
 
     
@@ -2045,6 +2077,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2081,6 +2141,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2840,6 +2956,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3433,6 +3555,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3713,6 +3863,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3805,6 +3983,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4104,10 +4310,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#rumble-to-audio-card" class="md-nav__link">
+  <a href="#the-card" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rumble to Audio card
+        The card
       
     </span>
   </a>
@@ -4176,21 +4382,25 @@
 
 
 <h1 id="bass-shakers">Bass Shakers<a class="headerlink" href="#bass-shakers" title="Permanent link">&para;</a></h1>
-<p><em>The Bass Shakers tab routes the game rumble and force feedback a virtual
+<p><em>The Bass Shakers card routes the game rumble and force feedback a virtual
 controller receives to an audio output as low-frequency tones, for bass
 shakers and subwoofers.</em></p>
 <!-- SCREENSHOT: pad-bass-shakers -->
-<p><img alt="The Bass Shakers tab with the Rumble to Audio card and its four voices" src="../../images/pad-bass-shakers.png" /></p>
-<p>The tab is per slot. It works with Xbox, DualShock 3, DualShock 4, DualSense,
+<p><img alt="The Bass Shakers card with its More open on the four voices" src="../../images/pad-bass-shakers.png" /></p>
+<p>The <strong>Bass Shakers</strong> card is the last card in the <strong>Rumble &amp; Haptics</strong> section
+of a controller's page. Its settings belong to the whole controller, not to a
+device, so its chip reads <strong>Whole controller</strong>. It works with Xbox, DualShock 3, DualShock 4, DualSense,
 and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
-with force feedback, such as racing wheels, and the Steam Deck Controller (Composite) profile. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.</p>
+with force feedback, such as racing wheels. It also works with the Steam Deck Controller (Composite), the SInput Gamepad and the Joypad-OS Steam Input Gamepad. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.</p>
 <p>A game that supports the DualSense's haptics over USB plays them through the
 controller's audio rather than as rumble. On a <strong>DualSense (PS5): Full</strong> or
 <strong>DualSense Edge (PS5): Full</strong> virtual controller, <strong>Low Motor</strong> follows the
 loudness of the left haptic channel and <strong>High Motor</strong> the right, so those
 games reach the shaker too.</p>
 <hr />
-<h2 id="rumble-to-audio-card">Rumble to Audio card<a class="headerlink" href="#rumble-to-audio-card" title="Permanent link">&para;</a></h2>
+<h2 id="the-card">The card<a class="headerlink" href="#the-card" title="Permanent link">&para;</a></h2>
+<p><strong>Route Rumble to an Audio Output</strong> is on the card. The rest are under its
+<strong>More</strong> row, with the four voices and the shaker check after them.</p>
 <table>
 <thead>
 <tr>
@@ -4213,14 +4423,14 @@ games reach the shaker too.</p>
 </tr>
 <tr>
 <td><strong>Master Gain</strong></td>
-<td>Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together.</td>
+<td>Overall loudness applied after each voice’s own gain. Keep headroom so the four voices do not clip when they play together.</td>
 </tr>
 </tbody>
 </table>
 <p>A status line under the Output Device picker reads "Audio output is not running." while
 the routing is off, "Playing to {device}." while it runs, and warns when
 the selected output device is unavailable. Bluetooth audio devices add
-noticeable latency, and the card says so.</p>
+noticeable latency, and the card says so under the picker.</p>
 <hr />
 <h2 id="voices">Voices<a class="headerlink" href="#voices" title="Permanent link">&para;</a></h2>
 <p>Four feedback channels each get their own row: <strong>Low Motor</strong>,
@@ -4251,7 +4461,7 @@ noticeable latency, and the card says so.</p>
 </tr>
 <tr>
 <td><strong>Test</strong></td>
-<td>Plays this channel's tone for 1.5 seconds at its set gain.</td>
+<td>Plays this channel’s tone for 1.5 seconds at its set gain.</td>
 </tr>
 </tbody>
 </table>
@@ -4260,15 +4470,15 @@ triggers. Every voice starts enabled at 100% gain. Master Gain starts at
 50%.</p>
 <hr />
 <h2 id="frequency-sweep">Frequency Sweep<a class="headerlink" href="#frequency-sweep" title="Permanent link">&para;</a></h2>
-<p><strong>Frequency Sweep</strong> sweeps a tone from 20 to 120 Hz over eight seconds on
+<p>Under <strong>Check the Shakers</strong>, <strong>Frequency Sweep</strong> sweeps a tone from 20 to 120 Hz over eight seconds on
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. <strong>Stop</strong> ends a running test or sweep.</p>
 <hr />
 <h2 id="reset-controls">Reset controls<a class="headerlink" href="#reset-controls" title="Permanent link">&para;</a></h2>
 <p>The enable, output device, channel mode, and master gain rows each carry a
 reset button, and each voice row carries one that restores that voice to
-enabled, 100% gain, and its default frequency. The Rumble to Audio card
-header carries a <strong>Reset All</strong> that returns the output device, channel mode,
+enabled, 100% gain, and its default frequency. The card's
+header carries a <strong>Reset All</strong> (<strong>Reset Rumble to Audio</strong>) that returns the output device, channel mode,
 master gain, and all four voices to their defaults. It leaves the routing
 toggle as you set it, since the enable row has its own reset.</p>
 <hr />
@@ -4281,7 +4491,7 @@ toggle as you set it, since the enable row has its own reset.</p>
   speaker and haptic-tone audio.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

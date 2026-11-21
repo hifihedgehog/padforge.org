@@ -10,27 +10,29 @@ A VR headset is the third source. PadForge talks to an OpenXR runtime directly a
 
 ## Turning it on
 
-Open the [Dashboard](dashboard.md), find the **Head Tracking** section, and turn on **Enable UDP Tracking Input**, **Enable FreeTrack 2.0 Shared Memory Input**, **Enable OpenXR Headset Input**, or any combination. The three run together.
+Open **Extras** in the sidebar and click the **Head Tracking** tile. Under **Sources**, turn on **Enable UDP Tracking Input**, **Enable FreeTrack 2.0 Shared Memory Input**, **Enable OpenXR Headset Input**, or any combination. The three run together.
 
-<!-- SCREENSHOT: dashboard-head-tracking -->
-![Dashboard, Head Tracking section with its toggles, port, ranges, and status line](../images/dashboard-head-tracking.png)
+The page's own switch, **Head Tracking**, is on while any of the three is on. Turned off, it remembers which were on, and turned on again it brings those back. The first time, it turns on UDP and FreeTrack, and the headset input waits to be chosen, since it opens an OpenXR session. The reset beside it turns all three off. The tile's switch in the Extras catalog is the same switch.
 
-| Control | Default | Range | Notes |
-| --- | --- | --- | --- |
-| **Enable UDP Tracking Input** | Off | | Opens the UDP listener. An authored profile opinion applies to this input only. |
-| **Enable FreeTrack 2.0 Shared Memory Input** | Off | | Reads `FT_SharedMem` independently of UDP. It has its own authored profile opinion. |
-| **Enable OpenXR Headset Input** | Off | | Reads a VR headset's pose through an OpenXR runtime, with or without SteamVR. |
-| **OpenXR Runtime** | System Default | installed runtimes | Which runtime to read the headset from. The choice affects PadForge only and never the system default. |
-| **UDP Port** | 4242 | 1 to 65535 | The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off. |
-| **Rotation Range (Degrees)** | 90 | 1 to 180 | Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live. |
-| **Translation Range (cm)** | 30 | 1 to 500 | Head travel that moves X, Y, and Z to full deflection. Global, applied live. |
-| **Set Neutral** | | | Makes your current position the neutral. Applies to the OpenXR input only, and re-zeros the headset and both VR controllers together. |
+<!-- SCREENSHOT: extras-head-tracking -->
+![The Head Tracking page in Extras: its switch, the status line with Set Neutral, Sources and Range](../images/dashboard-head-tracking.png)
 
-Each numeric field has a reset button. Changing an input toggle reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line under the controls reads **Stopped** while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.
+| Control | Where | Default | Range | Notes |
+| --- | --- | --- | --- | --- |
+| **Enable UDP Tracking Input** | Sources | Off | | Opens the UDP listener. An authored profile opinion applies to this input only. |
+| **Enable FreeTrack 2.0 Shared Memory Input** | Sources | Off | | Reads `FT_SharedMem` independently of UDP. It has its own authored profile opinion. |
+| **Enable OpenXR Headset Input** | Sources | Off | | Reads a VR headset's pose through an OpenXR runtime, with or without SteamVR. |
+| **Rotation Range (degrees)** | Range | 90 | 1 to 180 | Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live. |
+| **Translation Range (cm)** | Range | 30 | 1 to 500 | Head travel that moves X, Y, and Z to full deflection. Global, applied live. |
+| **UDP Port** | More | 4242 | 1 to 65535 | The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off. |
+| **OpenXR Runtime** | More | System Default | installed runtimes | Which runtime to read the headset from. The choice affects PadForge only and never the system default. |
+| **Set Neutral** | Beside the status line | | | Makes your current position the neutral. Applies to the OpenXR input only, and re-zeros the headset and both VR controllers together. |
+
+Each setting has a reset button, and Sources and Range each carry a **Reset All**. Changing an input switch reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line reads **Stopped** while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.
 
 ### Per-Axis Range
 
-Under the shared ranges sits a **Per-Axis Range** group with one field for each of the six axes: **Yaw**, **Pitch**, **Roll**, **Lean Left and Right**, **Rise and Crouch**, and **Lean Forward and Back**. A field set to anything other than zero governs that axis on its own. Zero follows the shared range above. Rotation fields are degrees and travel fields are centimeters, matching the shared pair.
+Under **More** sits a **Per-Axis Range** group with one field for each of the six axes: **Yaw**, **Pitch**, **Roll**, **Lean Left and Right**, **Rise and Crouch**, and **Lean Forward and Back**. A field set to anything other than zero governs that axis on its own. Zero follows the shared range above. Rotation fields are degrees, 0 to 180, and travel fields are centimeters, 0 to 500, matching the shared pair.
 
 The box always shows what you pinned, not what is in effect. A field reading zero means that axis follows the shared range, and it keeps reading zero however the shared range changes. Each of the six fields has its own reset button.
 
@@ -54,7 +56,7 @@ Every axis rests at center. Yaw right and X right read high, like a stick pushed
 <!-- SCREENSHOT: devices-head-tracking -->
 ![Devices page, Head Tracker row selected, with the status line and six axes](../images/devices-head-tracking.png)
 
-The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map does not cover head trackers, so each axis is bound by hand.
+The row has no buttons, no **Hide from Games (HidHide)** switch, and no **Force Raw Joystick Mode (Bypass Gamepad Remapping)** switch. It starts unmapped: auto-map does not cover head trackers, so each axis is bound by hand.
 
 With every input off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.
 
@@ -66,7 +68,7 @@ Older settings keep their effective enabled state on upgrade. A profile with no 
 
 Two outputs work, and both can be on at once.
 
-**UDP over network.** In OpenTrack's Output list choose *UDP over network*, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under **UDP Port** in PadForge (default 4242). Click Start. The status line changes from *Waiting for a tracker on UDP port 4242.* to *Receiving over UDP from 127.0.0.1:port.*, where the port is the one OpenTrack sent from.
+**UDP over network.** In OpenTrack's Output list choose *UDP over network*, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under **UDP Port** in PadForge (default 4242, under the Head Tracking page's **More**). Click Start. The status line changes from *Waiting for a tracker on UDP port 4242.* to *Receiving over UDP from 127.0.0.1:port.*, where the port is the one OpenTrack sent from.
 
 **freetrack 2.0 Enhanced.** If a game already reads FreeTrack from OpenTrack, keep that output and turn on **Enable FreeTrack 2.0 Shared Memory Input** in PadForge. You can leave UDP input off. PadForge reads the same `FT_SharedMem` block the game does, so both see the pose. The status line says *Receiving from FreeTrack shared memory.* PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.
 
@@ -82,7 +84,7 @@ Turn on **Enable OpenXR Headset Input** and leave **OpenXR Runtime** on *System 
 
 PadForge asks the runtime for a session that runs without drawing anything, so no game has to be open. It submits no frames, though a given runtime may still show its own status window. A runtime that cannot supply one reports *This runtime cannot supply a background session*, and the headset input stays off while the other two inputs carry on.
 
-Meta's runtime, the one a Quest uses over Link, leaves out the extension PadForge needs for that session in every version Khronos has published an extension list for, the latest being 1.205.0. No list exists for later versions. SteamVR's runtime has it and reads a Quest over Link or Air Link, so choose **SteamVR** under **OpenXR Runtime**. The list holds only runtimes Windows has registered. If SteamVR is missing from it, open SteamVR's settings, go to OpenXR, click *Set SteamVR as OpenXR Runtime*, and leave PadForge on *System Default*. Then turn **Enable OpenXR Headset Input** off and back on, because PadForge reads the system runtime only when that input starts. The SteamVR button makes SteamVR the runtime for every OpenXR program on the PC, and *Set Meta Horizon Link as active*, under Settings and then General in the Meta Horizon Link app, switches back. Both buttons need an administrator account. Reading a Quest through SteamVR has not been tried with a headset.
+Meta's runtime, the one a Quest uses over Link, leaves out the extension PadForge needs for that session in every version Khronos has published an extension list for, the latest being 1.205.0. No list exists for later versions. SteamVR's runtime has it and reads a Quest over Link or Air Link, so choose **SteamVR** under **OpenXR Runtime**. The list holds only runtimes Windows has registered. If SteamVR is missing from it, open SteamVR's settings, go to OpenXR, click *Set SteamVR as OpenXR Runtime*, and leave PadForge on *System Default*. Then turn **Enable OpenXR Headset Input** off and back on, because PadForge reads the system runtime only when that input starts. The SteamVR button makes SteamVR the runtime for every OpenXR program on the PC, and it needs an administrator account. Reading a Quest through SteamVR has not been tried with a headset.
 
 The status line reports each stage:
 
@@ -103,7 +105,7 @@ The status line reports each stage:
 
 ## Mapping it
 
-On the Pad page, pick **Head Yaw** as the source of the right stick's X axis, then set the right stick's **Deadzone** on the **Sticks** tab for the angle you want ignored. A mapping row's own deadzone slider applies only to button targets. The stick's **Deadzone** and **Sensitivity Curves** and the row's **Invert** box are the same controls a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.
+On the controller page, pick **Head Yaw** as the source of the right stick's X axis in the Mappings section, then set the right stick's **Deadzone** in the **Sticks & Triggers** section for the angle you want ignored. A mapping row's own deadzone slider applies only to button targets. The stick's **Deadzone** and **Sensitivity Curves** and the row's **Invert** box are the same controls a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.
 
 The six axes bind anywhere an axis does. An Any Device source never reads them, so pick the tracker by name. Assigning the tracker preserves existing Any Device rows. It does not append named gamepad defaults to those rows. If an earlier version already added an unwanted extra source, remove that extra once while retaining the Any Device source.
 
@@ -121,7 +123,7 @@ Nothing here has run against a live OpenTrack yet. The wire formats come from Op
 
 ## Related pages
 
-- [Dashboard](dashboard.md): the Head Tracking section.
+- [Extras](dashboard.md#head-tracking): the Head Tracking page.
 - [Devices](devices.md): the Head Tracker row.
 - [VR Controller Input](vr-controller-input.md): the two hand controllers, read from the same OpenXR runtime.
 - [Head Tracking Internals](../reference/head-tracking-internals.md): the UDP and FreeTrack wire facts, for whoever has to change the code.
@@ -130,4 +132,4 @@ Nothing here has run against a live OpenTrack yet. The wire formats come from Op
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

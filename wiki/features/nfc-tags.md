@@ -10,7 +10,7 @@ PadForge reads NFC tags from two kinds of hardware: a contactless smart-card rea
 
 ## The reader as a device
 
-Plug in a PC/SC reader and it shows up on the [Devices](devices.md) page as a device typed **NFC Reader**. Select its card to manage tags and to watch taps live.
+Plug in a PC/SC reader and it shows up on the [Devices](devices.md) page as a device typed **NFC Reader**. Select it to manage tags and to watch taps live.
 
 The reader exposes buttons you can map:
 
@@ -47,14 +47,14 @@ Limitations, stated plainly:
 ## Registering a tag
 
 1. On the [Devices](devices.md) page, select the NFC reader or the Switch controller.
-2. Click **Register / Manage NFC Tags**.
+2. Click **Register / Manage NFC Tags** at the foot of its **Settings** card.
 3. Tap a tag on the reader or on the controller. Its UID is captured.
 4. Type a name for the tag.
 5. Click **Register**.
 
-The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "(waiting)".
+The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "Tap a tag on the reader."
 
-The dialog lists your registered tags. Each row shows its name and UID with a **Remove** button. Tap another tag to add more.
+The dialog lists your registered tags under **Registered**. Each row shows its name and UID with a **Remove** button. Tap another tag to add more.
 
 Tags are keyed by UID, not by reader. They carry over when you swap readers, from a reader to a controller, and across restarts.
 
@@ -62,7 +62,7 @@ Tags are keyed by UID, not by reader. They carry over when you swap readers, fro
 
 ## Live tag preview
 
-With the NFC reader selected, the Devices page lists your named tags, plus an **Any NFC Tag** row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.
+With the NFC reader selected, the Devices page's **Test Inputs** card lists your named tags under **NFC Tags**, plus an **Any NFC Tag** row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.
 
 ![NFC reader named-tag list with a tapped tag row highlighted](../images/nfc-live-preview.png)
 
@@ -87,4 +87,4 @@ Bindings follow the tag itself, not its name. Rename a tag and its bindings stay
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

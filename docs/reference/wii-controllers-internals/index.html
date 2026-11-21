@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4877,11 +5083,11 @@
 <p>The wrapper stores the screen-aligned aim. All tuning is applied later at the slot-scoped read in <code>SourceCoercion.ReadTunedIrPointer</code> (<code>SourceCoercion.cs</code>), because one remote can feed several virtual controllers, each with its own settings. That read applies four stages in order:</p>
 <ol>
 <li><strong>Lineage margin stretch</strong> (base aim map, #203 pointer modes): <code>IrMarginStretchX = 1.8</code>, <code>IrMarginStretchY = 2.0</code>, applied first. A tracked pair midpoint physically cannot reach +/-1, because both LEDs must stay in the camera view. Without this stretch the cursor walls off inside the screen in every pointer mode. This is the base map, not an optional extra.</li>
-<li><strong>Sensor-bar offset</strong> (Y only): the Pointer-tab vertical bar offset, in post-stretch screen space, matching Touchmote's <code>offsetY</code>. A <code>Calibrated</code> aim skips it. A calibrated remote's window measured where the bar sits, and a GunCon 2's beam window has no bar at all: <code>ApplyGunCon2</code> marks an on-screen aim <code>Calibrated</code>, so a bar offset a Copy From carries onto the gun no longer moves it.</li>
+<li><strong>Sensor-bar offset</strong> (Y only): the IR Pointer card's <strong>Vertical Offset</strong>, in post-stretch screen space, matching Touchmote's <code>offsetY</code>. A <code>Calibrated</code> aim skips it. A calibrated remote's window measured where the bar sits, and a GunCon 2's beam window has no bar at all: <code>ApplyGunCon2</code> marks an on-screen aim <code>Calibrated</code>, so a bar offset a Copy From carries onto the gun no longer moves it.</li>
 <li><strong>EMA smoothing</strong>: a per-(device, slot, axis) exponential moving average, clamped to <code>[0..0.95]</code>, dropped on sight loss so a re-acquire snaps instead of sliding in from stale.</li>
 <li><strong>Per-source sensitivity</strong>: <code>MappingSource.IrPointerSensitivity</code> (default <code>1.0</code>), a mapping-row Slider with a reset button on the "IR Pointer X/Y" rows, then a final clamp to <code>[-1..+1]</code>.</li>
 </ol>
-<p>While no pair is seen, the read serves the last value it returned for that device, slot and axis, after smoothing and before the row's sensitivity, so two rows with different sensitivities each hold their own reading (<code>_irHeld</code>). It used to return 0, which put a light gun's crosshair in the middle of the screen whenever an LED left the camera's view. Touchmote returns its last position marked out of reach (<code>ScreenPositionCalculator.cs</code> lines 153-159), and the light-gun fork skips its IR stick update (<code>ViGEmHandler.cs</code> line 340). A device reads 0 until it is seen after it connects, after a profile switch, and after its slot's rows are replaced, the touch-momentum tiers. <code>ForgetIrPointerForDevice</code> (<code>SourceCoercion.cs</code>) drops a device's held values and smoothing state from the removal path that resets the trackball (<code>InputManager.NeutralizeMappedOutputsFor</code>) and from <code>UserDevice.LoadFromDevice</code> when a new connection binds, the rule that gives it a fresh <code>ForceFeedbackState</code>. A removal the teardown never sees, or a disconnect that arrives after a stale read took the row offline, left the old aim to the next connection. <code>ForgetIrPointer</code> runs from <code>ClearSourceKindRuntime</code> on a profile switch, and <code>ForgetIrPointerForSlot</code> from <code>ResetSourceKindRuntimeForSlot</code> when a slot's rows are replaced. A forget asked for on a thread other than the poll thread, a paste on the UI thread or a Remote Link registration on the link thread, takes effect at the poll thread's next frame boundary (<code>BeginPollFrame</code>). The poll thread can be between a remote's X and Y reads when it is asked for, and a clear there and then let the read finishing after it write its axis of the old aim back, so the new rows or the new connection served X from center and Y from before. The poll thread's own forgets, such as Step 1 binding a new connection, take effect at once. <code>InputManager.Start</code> registers each poll run before it starts the loop's thread (<code>BeginPollRun</code>), and <code>BeginPollFrame</code> checks the run under the lock the registration takes, so a loop Stop retired after a stalled join changes none of this bookkeeping once its replacement has started. A forget makes its poll-thread check and its clear under the same lock, so one that old loop asks for either finishes before the registration or waits for the new run's next active frame boundary, like one from any other thread. The Triggers tab's live preview reads IR sources on the UI thread and writes neither cache (<code>IrReadOnlyScope</code>). The GunCon 2's Gun Aim sources read through the same path and hold the same way.</p>
+<p>While no pair is seen, the read serves the last value it returned for that device, slot and axis, after smoothing and before the row's sensitivity, so two rows with different sensitivities each hold their own reading (<code>_irHeld</code>). It used to return 0, which put a light gun's crosshair in the middle of the screen whenever an LED left the camera's view. Touchmote returns its last position marked out of reach (<code>ScreenPositionCalculator.cs</code> lines 153-159), and the light-gun fork skips its IR stick update (<code>ViGEmHandler.cs</code> line 340). A device reads 0 until it is seen after it connects, after a profile switch, and after its slot's rows are replaced, the touch-momentum tiers. <code>ForgetIrPointerForDevice</code> (<code>SourceCoercion.cs</code>) drops a device's held values and smoothing state from the removal path that resets the trackball (<code>InputManager.NeutralizeMappedOutputsFor</code>) and from <code>UserDevice.LoadFromDevice</code> when a new connection binds, the rule that gives it a fresh <code>ForceFeedbackState</code>. A removal the teardown never sees, or a disconnect that arrives after a stale read took the row offline, left the old aim to the next connection. <code>ForgetIrPointer</code> runs from <code>ClearSourceKindRuntime</code> on a profile switch, and <code>ForgetIrPointerForSlot</code> from <code>ResetSourceKindRuntimeForSlot</code> when a slot's rows are replaced. A forget asked for on a thread other than the poll thread, a paste on the UI thread or a Remote Link registration on the link thread, takes effect at the poll thread's next frame boundary (<code>BeginPollFrame</code>). The poll thread can be between a remote's X and Y reads when it is asked for, and a clear there and then let the read finishing after it write its axis of the old aim back, so the new rows or the new connection served X from center and Y from before. The poll thread's own forgets, such as Step 1 binding a new connection, take effect at once. <code>InputManager.Start</code> registers each poll run before it starts the loop's thread (<code>BeginPollRun</code>), and <code>BeginPollFrame</code> checks the run under the lock the registration takes, so a loop Stop retired after a stalled join changes none of this bookkeeping once its replacement has started. A forget makes its poll-thread check and its clear under the same lock, so one that old loop asks for either finishes before the registration or waits for the new run's next active frame boundary, like one from any other thread. The trigger preview of the Sticks &amp; Triggers section (<code>InputManager.EvaluatePerDeviceTriggerPreview</code>) reads IR sources on the UI thread and writes neither cache (<code>IrReadOnlyScope</code>). The GunCon 2's Gun Aim sources read through the same path and hold the same way.</p>
 <p>On a Keyboard + Mouse slot, <code>FindIrPointerSource</code> routes an IR row to the absolute cursor (<code>KbmRawState.MouseAbs*</code>). It reads the slot's active row, as the touchpad pointer and flick stick do, so a shift layer's IR row drives the cursor while its layer is engaged, and an aiming remote counts as the layer's output for Auto-Cancel. It used to walk Base rows only, and a layer's IR row fell to the velocity lane, where the held aim kept the cursor moving after the bar left view. A layer that forces the mouse off, or a row whose other sources own the target, keeps the legacy per-key IR descriptor from routing around it, the row evaluators' rule. An Invert on Hold modifier is no source here, whatever its descriptor names, and the same holds for the touchpad pointer and the gyro, touchpad and flick stick lanes.</p>
 <hr />
 <h2 id="wii-balance-board-146">Wii Balance Board (#146)<a class="headerlink" href="#wii-balance-board-146" title="Permanent link">&para;</a></h2>
@@ -4957,7 +5163,7 @@
 </tbody>
 </table>
 <p>The Motion Plus report carries its three rates in the order yaw, roll, pitch. <code>HandleMotionPlusData</code> posts them as <code>(-pitch, +yaw, +roll)</code>, the same rotation applied to the gyro. The signs are consistent with the accelerometer. Dolphin's emulated calibration block sets the yaw and pitch scales below zero, so a game reading through the block sees negative gain on those two axes, while raw counts under a fixed positive scale, which is what SDL uses, follow the right-hand rule in the hardware frame on all three axes. SDL's permutation is the proper rotation of that into its frame. There is no sign bug in the decode.</p>
-<p>That frame is the aiming hold. The <strong>Held As</strong> row on the Gyro tab (<code>PadSetting.MotionGrip</code>, default <code>"Pointing"</code>) supplies a body-to-game rotation for the other three holds, all proper rotations (determinant +1), so one table serves the gyro, the accelerometer, and the gravity estimate:</p>
+<p>That frame is the aiming hold. The <strong>Held As</strong> row in the Gyro card's <strong>Grip</strong> fold (<code>PadSetting.MotionGrip</code>, default <code>"Pointing"</code>) supplies a body-to-game rotation for the other three holds, all proper rotations (determinant +1), so one table serves the gyro, the accelerometer, and the gravity estimate:</p>
 <table>
 <thead>
 <tr>
@@ -4998,12 +5204,12 @@
 <p>Where the rotation lands:</p>
 <ul>
 <li><code>ApplyMotionGrip</code> on the accelerometer copy of the motion snapshot (<code>InputManager.cs</code>), which feeds the virtual controller's motion report and the DSU server, in both states of the passthrough tuning toggle. The gyro copy gets it inside <code>GetPassthroughGyro</code>'s calibrated read.</li>
-<li>The Gyro tab's live rate and accelerometer readouts (<code>InputService.cs</code>), so they show the held frame.</li>
+<li>The Gyro card's live rate and accelerometer readouts (<code>InputService.cs</code>), so they show the held frame.</li>
 <li><code>GripPov(guid, slot, centidegrees)</code>: for <code>Sideways</code> and <code>WiiWheel</code>, <code>(cd - 9000) mod 36000</code>, so a physical 9000 (Right) reads 0 (Up). Dolphin's <code>dpad_sideways_bitmasks</code> table, with the diagonals carried by the angle arithmetic. <code>Upright</code> and <code>Pointing</code> are the identity, and a centered hat (negative) passes through. Applied at the evaluator's <code>PovDirection</code> reads (<code>SourceEvaluator</code>, <code>SourceKindRuntime</code>, <code>SourceCoercion</code>), the legacy <code>PadSetting</code> mapper in <code>InputManager.Step3</code>, the macro trigger reads in <code>Step4b</code>, and <code>RecorderService</code>, so a press recorded in the hold fires on that same press. Output-side hats (the HIDMaestro raw POVs, the Valve packers, the Step 4 combine) are untouched, and the Devices page stays physical.</li>
 <li>The Compass yaw correction is gated on <code>GripAxis(grip, 1).source == 1</code>: it is measured on the body's yaw axis and only belongs on a hold that keeps yaw on the yaw lane.</li>
 </ul>
 <p>A user edit of Held As runs <code>InputService.RecenterMotionForSelectedDevice</code> from the <code>MainWindow</code> property hook, guarded by <code>ShouldRecenterOnGripChange</code> so a <code>PadSetting</code> load (device selection, profile switch) does not drop every device's estimate on the slot. It re-seeds that one device's gravity estimate from the next accelerometer sample and drops its lean, tilt, and shake neutrals.</p>
-<p>The tab itself was gated on <code>HasGyro</code> before 4.4.0, so an accelerometer-only remote never saw it and the Gyro Tilt card was unreachable. <code>PadPage.xaml.cs</code> now shows the tab for <code>HasGyro || HasAccel</code> and hides the five rate cards (<code>GyroPassthroughCard</code>, <code>GyroCalibrationCard</code>, <code>GyroSensitivityCard</code>, <code>GyroResponseCard</code>, <code>GyroEngageCard</code>) unless <code>HasGyro</code>.</p>
+<p>The Gyro card (<code>TabGyro</code>) was gated on <code>HasGyro</code> before 4.4.0, so an accelerometer-only remote never saw it and Gyro Tilt was unreachable. <code>PadPage.SyncTabVisibility</code> shows it for <code>HasGyro || HasAccel</code> and, unless <code>HasGyro</code>, hides the parts that act on rates: the rows <code>GyroPassthroughCard</code>, <code>GyroCalibrationCard</code>, <code>GyroSensitivityCard</code>, <code>GyroSensitivityMore</code> and <code>GyroRatesLive</code>, and the folds <code>GyroResponseCard</code>, <code>GyroEngageCard</code> and <code>GyroSpaceCard</code>. The card stays, since its live horizon reads the accelerometer alone.</p>
 <hr />
 <h2 id="motion-plus-calibration-known-limitation">Motion Plus calibration (known limitation)<a class="headerlink" href="#motion-plus-calibration-known-limitation" title="Permanent link">&para;</a></h2>
 <p><em>The fork's Motion Plus decode applies fixed constants and reads no calibration block.</em></p>
@@ -5020,13 +5226,13 @@
 <li><a href="../../devices/wii-controllers/">Wii Controllers</a>: the user guide for this feature.</li>
 <li><a href="../input-pipeline/">Input Pipeline</a>: the six-step pipeline that maps the controller once SDL surfaces it.</li>
 <li><a href="../sdl3-integration/">SDL3 Integration</a>: the <code>hidapi_wii</code> driver, the fork fixes, and the axis capability gate.</li>
-<li><a href="../../features/devices/">Devices</a>: the Pair button and the paired controller's device card.</li>
-<li><a href="../../guides/gyro/">Gyro</a>: the Wii Remote's accelerometer and Motion Plus path, and the Grip card.</li>
+<li><a href="../../features/devices/">Devices</a>: the Pair a Controller button and the paired controller's row.</li>
+<li><a href="../../guides/gyro/">Gyro</a>: the Wii Remote's accelerometer and Motion Plus path, and the Grip fold.</li>
 <li><a href="../controller-audio-internals/">Controller Audio Internals</a>: the shared sink model the Wii Remote speaker follows, and the HD-haptic tone path.</li>
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

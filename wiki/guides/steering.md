@@ -2,9 +2,9 @@
 
 *Two per-stick steering modes make a thumbstick act like a steering wheel, plus a Motion Lean input that steers from controller tilt.*
 
-Winding and Angle to Axis live on the **Sticks** tab, one mode per stick, and write to the stick's virtual axis. Motion Lean is a separate input you map like a gyro source, tuned on the **Gyro** tab. The math follows JoyShockMapper's steering stick modes. The at-lock haptic feedback is PadForge's addition.
+Winding and Angle to Axis live in the **Sticks & Triggers** section of a controller's page, one mode per stick: each stick's card has a **Steering** part under its **More** row. They write to the stick's virtual axis. Motion Lean is a separate input you map like a gyro source, tuned on the **Motion Steering** card inside the **Gyro** card, in the **Motion & Touch** section. The math follows JoyShockMapper's steering stick modes. The at-lock haptic feedback is PadForge's addition.
 
-Every mode is off by default. With the mode set to **Off**, the stick is a normal stick. Pick a mode to make it act like a steering wheel.
+Every mode is off by default. With **Steering Mode** set to **Off**, the stick is a normal stick. Pick a mode to make it act like a steering wheel.
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -13,7 +13,7 @@ Every mode is off by default. With the mode set to **Off**, the stick is a norma
 <source src="/assets/video/padforge-tutorial-steering-from-a-stick.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steering-from-a-stick.vtt" default>
 </video>
-<figcaption>The left stick's Steering Mode set to Winding, with Wind Range and Unwind Rate, then Angle to Axis in the same list, recorded live in PadForge 5.2.1 in 58 seconds. The controller sat on the desk, so nothing in the video steers. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steering-from-a-stick-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The left stick's Steering Mode set to Winding, with Wind Range and Unwind Rate, then Angle to Axis in the same list, recorded live in PadForge 5.2.1 in 58 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. The controller sat on the desk, so nothing in the video steers. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steering-from-a-stick-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ## Modes
@@ -43,9 +43,17 @@ It projects onto a half-plane, so up-and-right and down-and-right read the same 
 
 The outer deadzone is measured from 90°, so the default reaches full lock at 80° instead of forcing an exact 90°.
 
+### Stick Deadzone
+
+Both stick modes show a **Stick Deadzone** row. Below this deflection the stick reads as centered, so no steering builds up. It applies to Winding and to Angle to Axis alike.
+
+| Setting | Default | Range |
+| --- | --- | --- |
+| Stick Deadzone | 15% | 0–90% |
+
 ### Motion Lean
 
-Motion Lean is not a stick mode. It's an input you pick from the input dropdown, like any gyro source, and map to a steering axis. Its tuning lives on the **Gyro** tab's Motion Steering card, not the Sticks tab. Gravity, read through the same source the Gyro tab uses, drives the axis. **Controller Orientation** tells PadForge which way the controller is held (Forward, Left, Right, Backward) so the lean axis is correct.
+Motion Lean is not a stick mode. It's an input you pick from a mapping's input picker, like any gyro source, and map to a steering axis. Its tuning lives on the **Motion Steering** card inside the **Gyro** card, not with the sticks. Gravity, read through the same source the Gyro tab uses, drives the axis. **Controller Orientation** tells PadForge which way the controller is held (Forward, Left, Right, Backward) so the lean axis is correct.
 
 With the default deadzones, lock lands at 45° of tilt from neutral. The inner 15° is dead, so small neutral wobble does nothing, and the 30° above it carries the full sweep.
 
@@ -55,19 +63,19 @@ With the default deadzones, lock lands at 45° of tilt from neutral. The inner 1
 | Lean Outer Deadzone | 135° | 0–179 |
 | Controller Orientation | Forward | Forward / Left / Right / Backward |
 
-A Wii Nunchuk or a left Joy-Con exposes its own lean source in the input dropdown, **Nunchuk Lean** or **Left Joy-Con Lean**. It steers from that second sensor's tilt, using the same math and the same Motion Steering card tuning.
+A Wii Nunchuk or a left Joy-Con exposes its own lean source in the input picker, **Nunchuk Lean** or **Left Joy-Con Lean**. It steers from that second sensor's tilt, using the same math and the same Motion Steering card tuning.
 
 Motion Lean needs a controller with a motion sensor. Without one it produces no output.
 
 ## Continuous steering rumble
 
-For a cue throughout the turn, open **Force Feedback > Steering Angle Rumble**. It follows the selected virtual stick axis, so an ordinary wheel-axis mapping works too. Center adds no rumble, and the rumble rises to the configured strength at full travel. Each direction plays on its own motor unless **Motor** puts both on the left or the right motor. The option is off by default and saves per assigned device.
+For a cue throughout the turn, turn on **Enable Steering Angle Rumble** under **More** on the **Force Feedback** card, in the **Rumble & Haptics** section. It follows the selected virtual stick axis, so an ordinary wheel-axis mapping works too. Center adds no rumble, and the rumble rises to the configured strength at full travel. Each direction plays on its own motor unless **Motor** puts both on the left or the right motor. The option is off by default and saves per assigned device.
 
 See [Steering Angle Rumble](../features/force-feedback.md#steering-angle-rumble) for the axis selector, the motor choice, strength, center deadzone, output support, and interaction with game rumble.
 
 ## At-lock feedback
 
-When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. The **Steering Lock Feedback** card sits near the bottom of the **Sticks** tab, below the per-stick cards (on a keyboard and mouse slot the **Flick Stick** card follows it). Every channel is set per assigned device and off by default, and rows the selected device can't play are hidden.
+When a steering source saturates at full lock, PadForge can make the wheel feel like it hit a wall. **Steering Lock Feedback** folds open inside the **Both Sticks** card, after the per-stick cards in the **Sticks & Triggers** section, with **Flick Stick** after it. Every channel is set per assigned device and off by default, and rows the selected device can't play are hidden.
 
 | Toggle | What it does | Hardware |
 | --- | --- | --- |
@@ -76,7 +84,7 @@ When a steering source saturates at full lock, PadForge can make the wheel feel 
 | **Lightbar Pulse on Lock** | Lightbar flashes a color on lock entry | DualSense / DualShock 4 / PS Move |
 | **Trigger Resistance Near Lock** | DualSense trigger resistance ramps up as the wheel approaches lock, so you feel it coming | DualSense |
 
-**Trigger Resistance Near Lock** only engages on triggers you haven't already configured on the Adaptive Triggers tab, so it never overrides your own trigger effects.
+**Trigger Resistance Near Lock** only engages on triggers you haven't already configured on the Adaptive Triggers card, so it never overrides your own trigger effects.
 
 **Pulse Length** sets how long the rumble and trigger pulses last. The lightbar pulse has its own timing: it jumps to the chosen color on lock entry, holds at full strength for **Hold Time**, then fades back out over **Decay**.
 
@@ -86,9 +94,9 @@ When a steering source saturates at full lock, PadForge can make the wheel feel 
 | Hold Time | 80 ms | 0–2000 |
 | Decay | 250 ms | 0–5000 |
 
-The **Color** dropdown picks where the lightbar color comes from:
+The **Color** list picks where the lightbar color comes from:
 
-- **Fixed**: one color, chosen in a full picker under **Lightbar Color** with an HSV field, swatch, **HEX** box, and RGB sliders. The default is red.
+- **Fixed**: one color, chosen in a full picker under **Lightbar Color** with an HSV field, swatch, **Hex** box, and RGB sliders. The default is red.
 - **Random Hue**: a random full-brightness hue on every lock entry.
 - **Palette Step**: a dedicated palette editor. Add colors to step through, one per lock. The palette belongs to this card alone. Leave it empty and the pulse goes dark instead of borrowing colors from another feature, and the step position restarts at the first color when PadForge restarts.
 
@@ -107,4 +115,4 @@ Physical feedback honors the per-slot test target: when you're testing one assig
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

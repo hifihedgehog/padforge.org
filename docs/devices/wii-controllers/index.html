@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -3057,6 +3173,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3650,6 +3772,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3930,6 +4080,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -4022,6 +4200,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4617,19 +4823,19 @@
 <h2 id="pairing-a-wii-controller">Pairing a Wii controller<a class="headerlink" href="#pairing-a-wii-controller" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Open the <a href="../../features/devices/">Devices</a> page.</li>
-<li>Click <strong>Pair</strong>, next to <strong>Refresh</strong>. The <strong>Pair a Controller</strong> dialog opens.</li>
+<li>Click <strong>Pair a Controller</strong>, at the top of the page. The <strong>Pair a Wii Remote</strong> dialog opens.</li>
 <li>Leave <strong>Controller Family</strong> on <strong>Nintendo Wii</strong>. The other entries pair a <strong>Sony DualShock 3</strong>, a <strong>PlayStation Move / Navigation</strong> controller, a <strong>Serial Controller (COM Port)</strong> and a <strong>DJI RC or RC 2 (Network)</strong>.</li>
-<li>Click <strong>Pair</strong> in the dialog to start scanning. The <strong>Pair</strong> button dims and the progress ring spins.</li>
+<li>Click <strong>Pair</strong> in the dialog to start scanning. The <strong>Pair</strong> button gives way to <strong>Cancel</strong> while the scan runs.</li>
 <li>Press the red <strong>SYNC</strong> button under the battery cover on the back of the controller.</li>
 <li>The controller appears in the found list and pairs on its own. You don't select it.</li>
-<li>On success, the <strong>Pair</strong> button disappears and <strong>Cancel</strong> becomes <strong>Done</strong>. Click <strong>Done</strong> to close.</li>
+<li>On success, <strong>Cancel</strong> becomes <strong>Done</strong>. Click <strong>Done</strong> to close.</li>
 </ol>
 <p>Pressing SYNC bonds the controller. You pair once, and it reconnects on any button press afterward.</p>
 <h3 id="temporary-pairing">Temporary pairing<a class="headerlink" href="#temporary-pairing" title="Permanent link">&para;</a></h3>
 <p>Check <strong>Temporary Pairing (Hold 1 and 2)</strong> before you scan, then hold the <strong>1</strong> and <strong>2</strong> buttons instead of pressing SYNC. This pairs for the current session only. It does not bond the controller, so you re-pair the next time.</p>
 <hr />
 <h2 id="supported-controllers">Supported controllers<a class="headerlink" href="#supported-controllers" title="Permanent link">&para;</a></h2>
-<p>PadForge reads all four forms. Each maps as a normal pad on the <a href="../../features/mappings/">Mappings</a> tab.</p>
+<p>PadForge reads all four forms. Each maps as a normal pad in the <strong>Mappings</strong> section of the controller page (<a href="../../features/mappings/">Mappings</a>).</p>
 <table>
 <thead>
 <tr>
@@ -4696,13 +4902,13 @@
 <p>None of them reads behind an active Motion Plus, and none has the IR pointer.</p>
 <h3 id="d-pad-mapping">D-pad mapping<a class="headerlink" href="#d-pad-mapping" title="Permanent link">&para;</a></h3>
 <p>Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.</p>
-<p>The hat turns with the remote's hold. Set <strong>Held As</strong> on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See <a href="#holds">Holds</a>.</p>
+<p>The hat turns with the remote's hold. Set <strong>Held As</strong> in the Gyro card's <strong>Grip</strong> fold to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See <a href="#holds">Holds</a>.</p>
 <hr />
 <h2 id="mayflash-dolphinbar">Mayflash DolphinBar<a class="headerlink" href="#mayflash-dolphinbar" title="Permanent link">&para;</a></h2>
 <p>A Mayflash DolphinBar in mode 4 lists four remote slots to Windows, and PadForge reads each remote in them as a Wii Remote.</p>
 <p>The bar gives no serial number for a remote. PadForge reads the remote's factory calibration from its memory and uses it as the serial, so a remote keeps its slot assignment and mappings in whichever of the bar's four slots it lands in. The serial is read again at every connection, since another remote can sync into the slot.</p>
 <ul>
-<li>An empty bar slot gets no controller card. A slot that fails every write is not a remote, however much input it sends. A remote that syncs into it later appears once it answers a status request.</li>
+<li>An empty bar slot gets no device row. A slot that fails every write is not a remote, however much input it sends. A remote that syncs into it later appears once it answers a status request.</li>
 <li>A remote saved under the bar slot it sat in before 5.3.0 takes that entry over the first time it connects with a serial. Its slot assignments carry over. An entry that is online is never taken.</li>
 </ul>
 <p>Nobody has run a DolphinBar with this code yet. The driver change was written against mode 4.</p>
@@ -4712,7 +4918,7 @@
 <p>A Nunchuk carries its own accelerometer. When one is attached, three more sources appear in the picker: <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong>. They read the Nunchuk's own motion, separate from the remote's, so you can map each hand independently. <strong>Nunchuk Accelerometer</strong> is offered only on the <strong>Motion Accelerometer</strong> row, the one row that reads it.</p>
 <p>The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared from another PC exposes them just like a local one.</p>
 <h3 id="holds">Holds<a class="headerlink" href="#holds" title="Permanent link">&para;</a></h3>
-<p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Grip</strong> card on the <a href="../../guides/gyro/#grip">Gyro</a> tab, row <strong>Held As</strong>, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
+<p>The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The <strong>Held As</strong> row, in the <strong>Grip</strong> fold of the Gyro card (<a href="../../guides/gyro/#grip">Gyro</a>) in the controller page's <strong>Motion &amp; Touch</strong> section, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the <a href="../../reference/dsu-motion-server/">DSU Motion Server</a> feed.</p>
 <table>
 <thead>
 <tr>
@@ -4740,9 +4946,9 @@
 </tbody>
 </table>
 <p>The two sideways holds differ only in which way the buttons face, and they need different rotations, so pick the one that matches. The D-pad turns with the grip in both sideways holds. Changing the hold recenters the motion neutrals, so hold the remote still for a moment afterward. The Nunchuk is its own body in the other hand and keeps its own frame.</p>
-<p>Since 4.4.0 the Gyro tab shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the Grip, Motion Steering, and Gyro Tilt cards and hides the gyro-rate cards.</p>
+<p>The Gyro card shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the <strong>Grip</strong>, <strong>Motion Steering</strong> and <strong>Gyro Tilt</strong> folds and hides what acts on gyro rates: Motion Passthrough, the calibration, the sensitivity, the live rates, and the <strong>Engage</strong>, <strong>Response Shaping</strong> and <strong>Reference Frame</strong> folds.</p>
 <h3 id="emulators">Emulators<a class="headerlink" href="#emulators" title="Permanent link">&para;</a></h3>
-<p>Keep <strong>Apply Gyro Tuning to Motion Passthrough</strong> on the Gyro tab off. It is off by default. An emulator integrates the rate it receives, and with the box checked the tab's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on <a href="../../guides/gyro/#motion-passthrough">Gyro</a>.</p>
+<p>Keep <strong>Motion Passthrough</strong> on the Gyro card at <strong>Raw</strong>, the default. An emulator integrates the rate it receives, and on <strong>Tuned</strong> the card's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on <a href="../../guides/gyro/#motion-passthrough">Gyro</a>.</p>
 <p>The Motion Plus zero is calibrated when the remote connects. The scale is fixed in the driver, which reads no calibration block from the remote, so a fast turn can read a little short. See <a href="../../reference/wii-controllers-internals/#motion-plus-calibration-known-limitation">Wii Controllers Internals</a>.</p>
 <hr />
 <h2 id="ir-pointer">IR pointer<a class="headerlink" href="#ir-pointer" title="Permanent link">&para;</a></h2>
@@ -4751,9 +4957,9 @@
 <p>When the camera loses sight of the sensor bar, near an edge of the screen or when you point away, the IR Pointer sources hold their last aim until the bar comes back, the way the cursor freezes. They used to jump to the center of the screen. A remote reads center until it first sees the bar after it connects, after a profile switch, or after its slot's mappings are replaced.</p>
 <p>The aim corrects for twist. Roll the remote in your hand and the pointer stays on what you point at, because PadForge turns the aim back by the angle between the bar's two lights. The remote's accelerometer tells the left light from the right when the bar comes into view. It keeps reading while the bar is out of view, so a remote turned over out of sight is read the right way up when it finds the bar again.</p>
 <p><strong>IR Offscreen</strong> reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button, an Up or Down key of an Incremental or Ramp source, and a macro trigger.</p>
-<p>A <strong>Pointer</strong> tab appears when the assigned device has an IR camera. It holds two cards.</p>
+<p>An <strong>IR Pointer</strong> card appears in the controller page's <strong>Motion &amp; Touch</strong> section when the assigned device has an IR camera. It holds the pointer mode up front and the tuning under <strong>More</strong>.</p>
 <h3 id="pointer-mode">Pointer Mode<a class="headerlink" href="#pointer-mode" title="Permanent link">&para;</a></h3>
-<p>The <strong>Pointer Mode</strong> card sets how the aim drives the OS cursor. Pick one of four modes:</p>
+<p>The card's <strong>Mode</strong> row sets how the aim drives the OS cursor. Pick one of four modes:</p>
 <ul>
 <li><strong>Mouse</strong>: the cursor follows where you point, one-to-one.</li>
 <li><strong>FPS Mouse</strong>: the offset from screen center becomes cursor velocity, for first-person games. This mode adds an <strong>FPS Speed</strong> slider (5 to 100, default 35) that sets cursor speed at full aim.</li>
@@ -4762,25 +4968,25 @@
 </ul>
 <p>The mode shapes the cursor only. <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> mapped to a stick or button keep reading the raw aim.</p>
 <!-- SCREENSHOT: wii-pointer-mode -->
-<p><img alt="The Pointer Mode card with the mode dropdown and the FPS Speed slider" src="../../images/wii-pointer-mode.png" /></p>
+<p><img alt="The IR Pointer card with the Mode dropdown and the FPS Speed slider" src="../../images/wii-pointer-mode.png" /></p>
 <h3 id="pointer-tuning">Pointer tuning<a class="headerlink" href="#pointer-tuning" title="Permanent link">&para;</a></h3>
-<p>The tuning card lines the pointer up with your screen:</p>
+<p>The rows under the card's <strong>More</strong> line the pointer up with your screen:</p>
 <ul>
 <li><strong>Sensor Bar Position</strong>: <strong>Centered</strong>, <strong>Above the Screen</strong>, or <strong>Below the Screen</strong>. Set this to where your sensor bar actually sits so the pointer lines up.</li>
-<li><strong>Vertical Offset</strong>: shifts the pointer up or down to compensate for the bar's height.</li>
-<li><strong>Smoothing</strong>: steadies the pointer against camera jitter.</li>
+<li><strong>Vertical Offset</strong>: shifts the pointer up or down to compensate for the bar's height, 0 to 50 percent.</li>
+<li><strong>Smoothing</strong>: steadies the pointer against camera jitter, 0 to 100 percent.</li>
 </ul>
 <p>Each IR Pointer source row also has a <strong>Sensitivity</strong> dial, from 0.1 to 5.0.</p>
 <p>A remote calibrated as a light gun ignores <strong>Sensor Bar Position</strong> and <strong>Vertical Offset</strong>, because the calibration measured where the bar sits.</p>
-<p><img alt="The Pointer tab with sensor-bar position, vertical offset, smoothing, and per-source sensitivity" src="../../images/pad-pointer.png" /></p>
+<p><img alt="The IR Pointer card with sensor-bar position, vertical offset and smoothing under More" src="../../images/pad-pointer.png" /></p>
 <h3 id="light-gun">Light gun<a class="headerlink" href="#light-gun" title="Permanent link">&para;</a></h3>
-<p>Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the <a href="../../features/devices/#light-gun">Devices</a> page, and in its <strong>Light Gun</strong> section click <strong>Calibrate</strong>. Four targets appear in turn. From where you play, point the remote at each one and press <strong>B</strong>. Esc or <strong>Home</strong> cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.</p>
+<p>Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the <a href="../../features/devices/#light-gun">Devices</a> page, and on its <strong>Gun Calibration</strong> row click <strong>Calibrate</strong>. Four targets appear in turn. From where you play, point the remote at each one and press <strong>B</strong>. Esc or <strong>Home</strong> cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The row's reset button returns the remote to its default range.</p>
 <!-- SCREENSHOT: devices-light-gun -->
-<p><img alt="The Light Gun section of a Wii Remote's row on the Devices page" src="../../images/devices-light-gun.png" /></p>
+<p><img alt="The Gun Calibration row of a Wii Remote on the Devices page" src="../../images/devices-light-gun.png" /></p>
 <p>For a light-gun game that aims with a stick:</p>
 <ul>
 <li>Map <strong>IR Pointer X</strong> and <strong>IR Pointer Y</strong> onto one stick of whichever virtual controller the game or emulator reads.</li>
-<li>Leave that stick's <strong>Deadzone X</strong> and <strong>Deadzone Y</strong> at 0 on the <a href="../../features/stick-deadzones/">Sticks</a> tab. Above 0, the default <strong>Scaled Radial</strong> shape keeps the stick inside a circle, which cuts off the screen's corners.</li>
+<li>Leave that stick's <strong>Deadzone</strong> at 0 in the controller page's <strong>Sticks &amp; Triggers</strong> section (<a href="../../features/stick-deadzones/">Stick Deadzones</a>). Above 0, the default <strong>Scaled Radial</strong> shape keeps the stick inside a circle, which cuts off the screen's corners.</li>
 <li>Set the emulator's own deadzone for that stick to 0 and its saturation to full. MAME, for one, starts at a 0.15 deadzone and 0.85 saturation.</li>
 <li>Map <strong>IR Offscreen</strong> to the game's reload button.</li>
 </ul>
@@ -4796,7 +5002,7 @@
 <p><img alt="Balance Board sources in the mapping picker" src="../../images/wii-balance-sources.png" /></p>
 <hr />
 <h2 id="speaker">Speaker<a class="headerlink" href="#speaker" title="Permanent link">&para;</a></h2>
-<p>A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. It appears on the <a href="../../features/controller-audio/">Audio</a> tab like other speaker-capable controllers.</p>
+<p>A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. Its settings are on the Audio card in the controller page's <strong>Lights &amp; Sound</strong> section (<a href="../../features/controller-audio/">Controller Audio</a>), as for other controllers with a speaker.</p>
 <hr />
 <h2 id="left-joy-con-motion">Left Joy-Con motion<a class="headerlink" href="#left-joy-con-motion" title="Permanent link">&para;</a></h2>
 <p>A combined Joy-Con pair carries a full motion sensor in each half. On a pair the plain <strong>Gyro Pitch / Yaw / Roll / Horizontal</strong> rows read both halves fused: each half is debiased against its own measured bias, then the two rates are averaged. The <strong>Motion Gyro</strong> passthrough row is never fused and reads the right half raw, because the passthrough has to stay a single real sensor stream. Each half also gets its own explicit rows, offered only on a pair:</p>
@@ -4838,9 +5044,9 @@
 <p><strong>Left Joy-Con Accelerometer</strong>, <strong>Left Joy-Con Lean</strong> and <strong>Left Joy-Con Shake</strong> are the same three sources that show as <strong>Nunchuk Accelerometer</strong>, <strong>Nunchuk Lean</strong> and <strong>Nunchuk Shake</strong> on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.</p>
 <ul>
 <li>Joy-Con 2 pairs expose the same left-side sources.</li>
-<li>The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the <a href="../../guides/gyro/">Gyro</a> tab all apply, and those device-level sliders tune both halves at once. The per-row <strong>Sensitivity</strong> dial is the independent knob.</li>
+<li>The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the <a href="../../guides/gyro/">Gyro</a> card all apply, and those device-level sliders tune both halves at once. The per-row <strong>Sensitivity</strong> dial is the independent knob.</li>
 <li>Gyro calibration samples both halves in one run and stores a separate bias for each, so hold both halves still.</li>
-<li>The <a href="../../features/devices/">Devices</a> page shows the left half's readings as <strong>Aux Gyroscope</strong> and <strong>Aux Accelerometer</strong> telemetry blocks.</li>
+<li>The <a href="../../features/devices/">Devices</a> page shows the left half's readings as <strong>Aux Gyroscope</strong> and <strong>Aux Accelerometer</strong>.</li>
 <li>The left-side sources work over <a href="../../guides/remote-link/">Remote Link</a>, like the Nunchuk pair.</li>
 </ul>
 <h3 id="one-slot-for-every-joy-con-grip">One slot for every Joy-Con grip<a class="headerlink" href="#one-slot-for-every-joy-con-grip" title="Permanent link">&para;</a></h3>
@@ -4881,13 +5087,13 @@
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../features/devices/">Devices</a>: the Pair button and the paired controller's device card.</li>
+<li><a href="../../features/devices/">Devices</a>: the Pair a Controller button and the paired controller's row.</li>
 <li><a href="../../guides/gyro/">Gyro</a>: tune the Wii Remote's motion sensors and set the hold.</li>
 <li><a href="../../reference/wii-controllers-internals/">Wii Controllers Internals</a>: the pairing ceremony, the sensor frame, and the Motion Plus calibration limitation.</li>
 <li><a href="../../features/driver-management/">Driver Management</a>: HIDMaestro and HidHide driver setup.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

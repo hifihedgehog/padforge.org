@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -2032,6 +2036,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2228,6 +2260,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2264,6 +2324,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -3023,6 +3139,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3616,6 +3738,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3896,6 +4046,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3988,6 +4166,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4543,15 +4749,15 @@
 
 <h1 id="on-screen-keyboard">On-Screen Keyboard<a class="headerlink" href="#on-screen-keyboard" title="Permanent link">&para;</a></h1>
 <p><em>Type into any Windows program from a controller: a keyboard of the Windows layout in use, laid out as a grid, two split halves or a daisy wheel, opened by any input you pick.</em></p>
-<p>The On-Screen Keyboard is a menu style. A slot's <strong>Menus</strong> tab lists it beside the Radial Ring, Touch Grid and Hotbar menus, and it takes the same <strong>Layer</strong> and <strong>Menu Overlay</strong> settings they do. Instead of cells it has keys: the keys of the keyboard layout of the window you are typing into, so a French AZERTY window gets AZERTY keys and a German window gets QWERTZ.</p>
+<p>The On-Screen Keyboard is a menu style. The <strong>Menus</strong> list in a controller's <strong>Macros &amp; Menus</strong> section holds it beside the Radial Ring, Touch Grid and Hotbar menus, and it takes the same <strong>Layer</strong> and <strong>Menu Overlay</strong> settings they do. Instead of cells it has keys: the keys of the keyboard layout of the window you are typing into, so a French AZERTY window gets AZERTY keys and a German window gets QWERTZ.</p>
 <!-- SCREENSHOT: pad-menus-keyboard -->
-<p><img alt="The Menus tab with the Text Chat menu selected, its Style set to Keyboard" src="../../images/pad-menus-keyboard.png" /></p>
+<p><img alt="The Macros &amp; Menus section with a keyboard menu selected in the Menus list, its Style set to Keyboard" src="../../images/pad-menus-keyboard.png" /></p>
 <p>The keyboard window never takes focus, so the program you type into keeps it. It does take mouse clicks: click a key to type it, drag the top bar to move the keyboard, drag the corner grip to resize it, or click the close button.</p>
 <hr />
 <h2 id="adding-a-keyboard">Adding a keyboard<a class="headerlink" href="#adding-a-keyboard" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Open a slot and switch to its <strong>Menus</strong> tab.</li>
-<li>Click <strong>Add</strong>, then set <strong>Style</strong> to <strong>Keyboard</strong>.</li>
+<li>Open a controller from the sidebar and click <strong>Macros &amp; Menus</strong>.</li>
+<li>Click the plus button beside <strong>Menus</strong> (<strong>New Menu</strong>), then in the <strong>Opens</strong> block set <strong>Style</strong> to <strong>Keyboard</strong>.</li>
 <li>Pick a <strong>Layout</strong>.</li>
 <li>Set <strong>Opens With</strong> to the input that opens it, or turn on <strong>Open When a Text Box Is Selected</strong>.</li>
 </ol>
@@ -4654,9 +4860,9 @@
 <p>This is why touchpad gestures and menu cells can open the keyboard but cannot be keyboard controls: once the keyboard holds the controller, neither fires.</p>
 <hr />
 <h2 id="keyboard-controls">Keyboard Controls<a class="headerlink" href="#keyboard-controls" title="Permanent link">&para;</a></h2>
-<p>The <strong>Keyboard Controls</strong> card lists every control of the chosen layout, with the layout's name and the control count beside its title ("Grid layout, 29 controls"). Each control reads any input on any device assigned to the slot: a button, an axis direction, a hat, a touchpad, or two held together. Pick an input from the control's list, or click its record button and press the input. <strong>Map All</strong> records every control of the layout in order, and its status line names the control to press an input for. The reset beside the title returns every control of the layout to its default, and each row has its own reset.</p>
+<p><strong>Keyboard Controls</strong>, under the <strong>Keyboard</strong> block's rows, lists every control of the chosen layout, with the layout's name and the control count beside its head ("Grid layout, 29 controls"). Each control reads any input on any device assigned to the slot: a button, an axis direction, a hat, a touchpad, or two held together. Pick an input from the control's list, or click its record button and press the input. <strong>Map All</strong> records every control of the layout in order, and its status line names the control to press an input for. The reset beside the head returns every control of the layout to its default, and each row has its own reset.</p>
 <p>Each layout keeps its own controls, so switching layouts never loses what you recorded for another.</p>
-<p><strong>Engage Deadzone</strong> at the top of the card sets how far a steering control is pushed before the highlight moves, 1 to 95, default 50. Steering counts as let go under 70% of it. A button moves the highlight at once.</p>
+<p><strong>Engage Deadzone</strong>, under the head, sets how far a steering control is pushed before the highlight moves, 1 to 95, default 50. Steering counts as let go under 70% of it. A button moves the highlight at once.</p>
 <p>A key control on an analog input presses at that row's <strong>Axis-to-Button Deadzone</strong>, 50% unless set, and lets go below 70% of it, so a trigger resting near the point does not type twice. Steering controls read an axis's depth instead, against the <strong>Engage Deadzone</strong>.</p>
 <p>Defaults are recorded by position, in Xbox labels, and read the same position on any gamepad on the slot: A is Cross on a DualSense. They come from the keyboards people already use: Windows' gamepad keyboard (X Backspace, Y Space, Menu Enter), Steam's B to close, the CHI 2006 dual-stick keyboard for Split, and daisywheeljs for Wheel. The keyboard's hint bar shows each control with the label your controller gives it.</p>
 <h3 id="grid">Grid<a class="headerlink" href="#grid" title="Permanent link">&para;</a></h3>
@@ -4848,7 +5054,7 @@
 <p>The Move, Steer, Arrow, Type Key, Backspace, Space and cursor controls repeat while held. Moving repeats after 380 ms, every 90 ms. Typing repeats at Windows' own keyboard repeat delay and rate.</p>
 <hr />
 <h2 id="keyboard">Keyboard<a class="headerlink" href="#keyboard" title="Permanent link">&para;</a></h2>
-<p>The <strong>Keyboard</strong> card sets where the keys go and what the keyboard shows.</p>
+<p>The <strong>Keyboard</strong> block sets where the keys go and what the keyboard shows.</p>
 <h3 id="types-through">Types Through<a class="headerlink" href="#types-through" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4882,7 +5088,7 @@
 <p><strong>Symbols Page</strong> holds the characters of the keyboard's symbols page, typed as Unicode characters. The default set holds currency and other signs, accented letters, typographic punctuation, fractions and math signs, in the places of the letter keys. The <strong>Symbols Page</strong> control, or the keyboard's <strong>&amp;123</strong> key, switches to it, and <strong>abc</strong> switches back. Its reset restores the default set.</p>
 <hr />
 <h2 id="place-size-and-opacity">Place, size and opacity<a class="headerlink" href="#place-size-and-opacity" title="Permanent link">&para;</a></h2>
-<p>The <strong>Menu Overlay</strong> card carries the rows every menu has: <strong>Screen Position</strong> (X and Y, in percent of the main display's work area), <strong>Size</strong> (10% to 400%) and <strong>Opacity</strong> (5% to 100%). Dragging the keyboard's top bar or corner grip, or holding <strong>Move the Keyboard (Hold)</strong>, sets them too. A keyboard larger than the work area shrinks to fit, so its close button stays on screen.</p>
+<p>The <strong>Menu Overlay</strong> rows under the menu's <strong>More</strong> fold are the ones every menu has: <strong>Screen Position X</strong> and <strong>Screen Position Y</strong> (in percent of the main display's work area), <strong>Size</strong> (10% to 400%) and <strong>Opacity</strong> (5% to 100%). The <strong>Layer</strong> rows sit in the same fold. Dragging the keyboard's top bar or corner grip, or holding <strong>Move the Keyboard (Hold)</strong>, sets them too. A keyboard larger than the work area shrinks to fit, so its close button stays on screen.</p>
 <hr />
 <h2 id="the-desktop-starter-and-steam-imports">The Desktop starter and Steam imports<a class="headerlink" href="#the-desktop-starter-and-steam-imports" title="Permanent link">&para;</a></h2>
 <p>The <strong>Desktop</strong> <a href="../../guides/starter-profiles/">starter profile</a> carries a keyboard menu named Keyboard, in the Grid layout with its default controls, opened by X on press. That is where Valve's desktop scheme puts Show Keyboard. <strong>Open When a Text Box Is Selected</strong> is off.</p>
@@ -4898,7 +5104,7 @@
 <li><a href="../../guides/starter-profiles/">Starter Profiles</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

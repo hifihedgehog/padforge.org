@@ -2,10 +2,10 @@
 
 *Type into any Windows program from a controller: a keyboard of the Windows layout in use, laid out as a grid, two split halves or a daisy wheel, opened by any input you pick.*
 
-The On-Screen Keyboard is a menu style. A slot's **Menus** tab lists it beside the Radial Ring, Touch Grid and Hotbar menus, and it takes the same **Layer** and **Menu Overlay** settings they do. Instead of cells it has keys: the keys of the keyboard layout of the window you are typing into, so a French AZERTY window gets AZERTY keys and a German window gets QWERTZ.
+The On-Screen Keyboard is a menu style. The **Menus** list in a controller's **Macros & Menus** section holds it beside the Radial Ring, Touch Grid and Hotbar menus, and it takes the same **Layer** and **Menu Overlay** settings they do. Instead of cells it has keys: the keys of the keyboard layout of the window you are typing into, so a French AZERTY window gets AZERTY keys and a German window gets QWERTZ.
 
 <!-- SCREENSHOT: pad-menus-keyboard -->
-![The Menus tab with the Text Chat menu selected, its Style set to Keyboard](../images/pad-menus-keyboard.png)
+![The Macros & Menus section with a keyboard menu selected in the Menus list, its Style set to Keyboard](../images/pad-menus-keyboard.png)
 
 The keyboard window never takes focus, so the program you type into keeps it. It does take mouse clicks: click a key to type it, drag the top bar to move the keyboard, drag the corner grip to resize it, or click the close button.
 
@@ -13,8 +13,8 @@ The keyboard window never takes focus, so the program you type into keeps it. It
 
 ## Adding a keyboard
 
-1. Open a slot and switch to its **Menus** tab.
-2. Click **Add**, then set **Style** to **Keyboard**.
+1. Open a controller from the sidebar and click **Macros & Menus**.
+2. Click the plus button beside **Menus** (**New Menu**), then in the **Opens** block set **Style** to **Keyboard**.
 3. Pick a **Layout**.
 4. Set **Opens With** to the input that opens it, or turn on **Open When a Text Box Is Selected**.
 
@@ -97,11 +97,11 @@ This is why touchpad gestures and menu cells can open the keyboard but cannot be
 
 ## Keyboard Controls
 
-The **Keyboard Controls** card lists every control of the chosen layout, with the layout's name and the control count beside its title ("Grid layout, 29 controls"). Each control reads any input on any device assigned to the slot: a button, an axis direction, a hat, a touchpad, or two held together. Pick an input from the control's list, or click its record button and press the input. **Map All** records every control of the layout in order, and its status line names the control to press an input for. The reset beside the title returns every control of the layout to its default, and each row has its own reset.
+**Keyboard Controls**, under the **Keyboard** block's rows, lists every control of the chosen layout, with the layout's name and the control count beside its head ("Grid layout, 29 controls"). Each control reads any input on any device assigned to the slot: a button, an axis direction, a hat, a touchpad, or two held together. Pick an input from the control's list, or click its record button and press the input. **Map All** records every control of the layout in order, and its status line names the control to press an input for. The reset beside the head returns every control of the layout to its default, and each row has its own reset.
 
 Each layout keeps its own controls, so switching layouts never loses what you recorded for another.
 
-**Engage Deadzone** at the top of the card sets how far a steering control is pushed before the highlight moves, 1 to 95, default 50. Steering counts as let go under 70% of it. A button moves the highlight at once.
+**Engage Deadzone**, under the head, sets how far a steering control is pushed before the highlight moves, 1 to 95, default 50. Steering counts as let go under 70% of it. A button moves the highlight at once.
 
 A key control on an analog input presses at that row's **Axis-to-Button Deadzone**, 50% unless set, and lets go below 70% of it, so a trigger resting near the point does not type twice. Steering controls read an axis's depth instead, against the **Engage Deadzone**.
 
@@ -175,7 +175,7 @@ The Move, Steer, Arrow, Type Key, Backspace, Space and cursor controls repeat wh
 
 ## Keyboard
 
-The **Keyboard** card sets where the keys go and what the keyboard shows.
+The **Keyboard** block sets where the keys go and what the keyboard shows.
 
 ### Types Through
 
@@ -205,7 +205,7 @@ Keys type in the layout of the window that has focus. While the keyboard is open
 
 ## Place, size and opacity
 
-The **Menu Overlay** card carries the rows every menu has: **Screen Position** (X and Y, in percent of the main display's work area), **Size** (10% to 400%) and **Opacity** (5% to 100%). Dragging the keyboard's top bar or corner grip, or holding **Move the Keyboard (Hold)**, sets them too. A keyboard larger than the work area shrinks to fit, so its close button stays on screen.
+The **Menu Overlay** rows under the menu's **More** fold are the ones every menu has: **Screen Position X** and **Screen Position Y** (in percent of the main display's work area), **Size** (10% to 400%) and **Opacity** (5% to 100%). The **Layer** rows sit in the same fold. Dragging the keyboard's top bar or corner grip, or holding **Move the Keyboard (Hold)**, sets them too. A keyboard larger than the work area shrinks to fit, so its close button stays on screen.
 
 ---
 
@@ -228,4 +228,4 @@ A [Steam Workshop](../guides/steam-workshop-import.md) config's Show Keyboard bi
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

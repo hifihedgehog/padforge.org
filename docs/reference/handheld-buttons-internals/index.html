@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4578,7 +4784,7 @@
 <p><code>Register</code> assigns the lowest free button index (from 0, there is no "any" button on this row) unless the entry already carries a free one, which is how import keeps indices. <code>Remove</code> never renumbers survivors. <code>LoadRegistry</code> honors stored indices and reassigns collisions. Names are deduplicated with <code>(2)</code>, <code>(3)</code> suffixes.</p>
 <p><code>Remove</code> raises <code>ButtonFreed</code> with the removed entry's index, outside the registry lock and before <code>RegistryChanged</code>, because the next learned entry takes the lowest free index. <code>InputService.OnHandheldButtonFreed</code> queues <code>FreedButtonCleanup.ForHandheldButton</code> on the dispatcher, which clears every mapping that names that <code>Button N</code> on a Hidden Buttons row, so the next entry does not inherit what was mapped to the old one. The voice phrase, NFC tag and Twitch chat word registries raise the same event.</p>
 <p>Persistence is <code>AppSettingsData.HandheldButtons</code>, an array of <code>HandheldButtonData</code> with every field as an XML attribute (<code>Keys</code> is comma-joined), plus <code>HandheldMachineKey</code> and <code>HandheldButtonsEnabled</code>. The registry loads before the toggle. The export file is the same DTO under <code>{"padforgeHandheldButtons": 1, "machine": "...", "buttons": [...]}</code>.</p>
-<p>Two flags on the registry drive the hooks: <code>FeatureEnabled</code> (the Settings toggle) and <code>LearnCaptureActive</code> (the dialog is open). Either flipping raises <code>ActivityChanged</code>, which sends <code>InputService.ApplyDeviceHiding</code> back through <code>ApplyInputHooks</code>, where <code>HandheldChordRuntime.NeedsHooks</code> is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.</p>
+<p>Two flags on the registry drive the hooks: <code>FeatureEnabled</code> (the Settings switch, Enable Handheld PC Buttons) and <code>LearnCaptureActive</code> (the dialog is open). Either flipping raises <code>ActivityChanged</code>, which sends <code>InputService.ApplyDeviceHiding</code> back through <code>ApplyInputHooks</code>, where <code>HandheldChordRuntime.NeedsHooks</code> is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.</p>
 <hr />
 <h2 id="path-one-key-combinations">Path one: key combinations<a class="headerlink" href="#path-one-key-combinations" title="Permanent link">&para;</a></h2>
 <p><code>HandheldChordEngine</code> is pure. Both low-level hooks feed every key and mouse-button event through <code>InputHookManager.ChordSwallows</code>, which calls <code>engine.OnEvent(code, down, now)</code> and swallows or passes on its answer. The rules, each locked by a test in <code>HandheldChordEngineTests</code>:</p>
@@ -4853,7 +5059,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a> for <code>AppSettingsData</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2045,6 +2077,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2081,6 +2141,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2840,6 +2956,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3433,6 +3555,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3713,6 +3863,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3805,6 +3983,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4220,7 +4426,7 @@
 <p><strong>Not mapped:</strong> channel pressure, polyphonic aftertouch, and program change. Endless-encoder support covers the binary-offset style (sometimes labeled "Relative 2"). Two's-complement encoders read as absolute jumps. A signed-bit encoder is misread: one direction fires the up button and the other reads as absolute jumps. Fast encoder spins are capped at about 28 steps per second.</p>
 <hr />
 <h2 id="live-preview">Live preview<a class="headerlink" href="#live-preview" title="Permanent link">&para;</a></h2>
-<p>Select a MIDI device on the <a href="../devices/">Devices</a> page and PadForge shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.</p>
+<p>Select a MIDI device on the <a href="../devices/">Devices</a> page and its <strong>Test Inputs</strong> card shows a live preview: a piano that lights the notes you play and vertical sliders that follow the CC knobs and faders. Use it to find which CC number a knob sends before you map it.</p>
 <p>Turn an endless encoder and its CC bar flashes: green for a clockwise detent, orange for counter-clockwise. No flash, or a green flash in one direction only, means the encoder is in a relative mode PadForge does not decode (see <a href="#what-you-can-map">What you can map</a>).</p>
 <hr />
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
@@ -4228,7 +4434,7 @@
 <li>Connect the MIDI device. USB class-compliant controllers need no driver.</li>
 <li>Open the <a href="../devices/">Devices</a> page. The device appears as an input device with its own name.</li>
 <li>Watch the preview while you press a key or turn a knob to confirm which source it is.</li>
-<li>Assign the device to a <a href="../controller-slots/">slot</a> and map its notes and controls on the <a href="../mappings/">Mappings</a> tab.</li>
+<li>Assign the device to a <a href="../controller-slots/">slot</a> and map its notes and controls on that controller's page (see <a href="../mappings/">Button and Axis Mappings</a>).</li>
 </ol>
 <p>Under the legacy MIDI API, assign the device to a slot before step 3. That API opens a MIDI port only while a slot has it, so the preview stays still until then.</p>
 <hr />
@@ -4246,7 +4452,7 @@
 <li><a href="../../guides/shift-layers/">Shift Layers</a>: a MIDI button can hold a whole second mapping table.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

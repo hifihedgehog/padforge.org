@@ -8,8 +8,8 @@ Nothing here is required reading for using the app.
 
 | Page | Covers |
 | --- | --- |
-| [Architecture Overview](architecture-overview.md) | The three projects and how data flows between them |
-| [Input Pipeline](input-pipeline.md) | The six-step, 1000 Hz loop from raw input to virtual output |
+| [Architecture Overview](architecture-overview.md) | The seven projects of the solution and how data flows between them |
+| [Input Pipeline](input-pipeline.md) | The six-step loop from raw input to virtual output, 60 to 10000 passes a second and 1000 by default |
 | [Engine Library](engine-library.md) | PadForge.Engine: the UI-free core |
 | [Services Layer](services-layer.md) | The App-side services |
 | [ViewModels](viewmodels.md) | The WPF view-model layer |
@@ -40,6 +40,7 @@ Nothing here is required reading for using the app.
 | [Profile Import Internals](profile-import-internals.md) | The reWASD and DS4Windows file parsers and how each setting maps to a PadForge one |
 | [On-Screen Keyboard Internals](on-screen-keyboard-internals.md) | The keyboard overlay window, its key grid and how a controller drives it |
 | [Screen Color Internals](screen-color-internals.md) | Screen capture sampling and how the colors reach the lighting devices |
+| [Crosshair and Magnifier Internals](crosshair-magnifier-internals.md) | The crosshair and magnifier windows over a game, how they are drawn, and the macro actions that drive them |
 | [Twitch Chat Internals](twitch-chat-internals.md) | The chat connection, command parsing and how chat input becomes controller input |
 | [Controller Audio Internals](controller-audio-internals.md) | Speaker and haptic audio paths |
 | [Steam Controller Haptics Internals](steam-controller-haptics-internals.md) | The 2026 pad's PCM actuator stream and the tone lane it falls back to |
@@ -50,6 +51,7 @@ Nothing here is required reading for using the app.
 | [Headset Head Tracking Internals](headset-motion-internals.md) | The descriptor probe and rotation-to-rate synthesis |
 | [Head Tracking Internals](head-tracking-internals.md) | The OpenTrack datagram, the FreeTrack heap, and the scaling into six axes |
 | [Wheel Force Feedback Internals](wheel-ffb-internals.md) | DirectInput FFB effects |
+| [Wheel Centering Internals](wheel-centering-internals.md) | Centering a wheel from a car's steering: the vehicle model, the force each wheel family takes, and the Release Test |
 | [MIDI Input Internals](midi-input-internals.md) | MIDI parsing and routing |
 | [Logitech G-Keys Internals](logitech-g-keys-internals.md) | Loading the vendor library, the callback, and the 32-bit key word |
 | [Analog Keyboards Internals](analog-keyboards-internals.md) | Routes, sessions and the HID channel behind analog keyboard rows, and every supported family's protocol |
@@ -57,10 +59,11 @@ Nothing here is required reading for using the app.
 | [Keyboard Screens Internals](keyboard-screens-internals.md) | Finding each screen, its row, the drawing engines, and the keys beside it |
 | [Novint Falcon Internals](novint-falcon-internals.md) | Force Dimension's library, the haptic thread per Falcon, and the driver install |
 | [Handheld PC Buttons Internals](handheld-buttons-internals.md) | The three delivery paths a hidden button can arrive on, and the learners |
+| [Flydigi Apex Internals](flydigi-apex-internals.md) | The three Apex protocol dialects, the session, the lighting models and the two ways a picture reaches the screen |
 | [Wii Controllers Internals](wii-controllers-internals.md) | Extensions, Motion Plus, IR camera |
 | [2D Overlay System](2d-overlay-system.md) | The overlay renderer |
 | [3D Model System](3d-model-system.md) | The 3D controller models |
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

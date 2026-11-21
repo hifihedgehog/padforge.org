@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2151,6 +2183,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2187,6 +2247,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2946,6 +3062,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3539,6 +3661,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3819,6 +3969,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3911,6 +4089,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4393,10 +4599,10 @@
 <p>Your typing is untouched. The normal keyboard row and Windows keep receiving the keys as usual. PadForge reads the depth alongside them.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Settings</strong>, find the <strong>Input Engine</strong> card, and tick <strong>Read Analog Keyboards</strong>. It is off by default.</p>
-<!-- SCREENSHOT: settings-input-engine -->
-<p><img alt="The Input Engine card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters" src="../../images/settings-input-engine.png" /></p>
-<p>With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. A Razer keyboard waiting for Razer Synapse says so in its row's detail pane. The line under the checkbox says when no supported keyboard was found.</p>
+<p>Open <strong>Settings</strong> and turn on <strong>Read Analog Keyboards</strong> on the <strong>Hardware Support</strong> card. It is off by default.</p>
+<!-- SCREENSHOT: settings-handheld-buttons -->
+<p><img alt="The Hardware Support card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters" src="../../images/settings-handheld-buttons.png" /></p>
+<p>With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. A Razer keyboard waiting for Razer Synapse says so in its row's detail pane. The line under the switch says <em>No supported analog keyboard found.</em> when there is none.</p>
 <p>Most keyboards are read by asking them over the channel their own configurator uses. Close that configurator, whether an app or a browser tab, while the switch is on. Both asking the same questions confuses the keyboard and the configurator alike, and on some keyboards PadForge holds the channel alone, so the configurator cannot open it while PadForge reads.</p>
 <h3 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h3>
 <table>
@@ -4504,7 +4710,7 @@
 <tbody>
 <tr>
 <td><strong>Button</strong></td>
-<td>Presses once the key passes the row's <strong>Axis-to-Button Deadzone</strong>. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With <strong>Primary Mode</strong> set to <a href="#rapid-trigger">Rapid Trigger</a>, a short lift releases and a short push presses again.</td>
+<td>Presses once the key passes the <strong>Axis-to-Button Deadzone</strong> on its source's line. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With the source's <strong>Mode</strong> set to <a href="#rapid-trigger">Rapid Trigger</a>, a short lift releases and a short push presses again.</td>
 </tr>
 <tr>
 <td><strong>Trigger</strong></td>
@@ -4518,21 +4724,21 @@
 </table>
 <p>An analog key is never read through the <strong>(Any Device)</strong> group. Pick it under the keyboard's own row.</p>
 <h3 id="soft-press-and-full-press">Soft press and full press<a class="headerlink" href="#soft-press-and-full-press" title="Permanent link">&para;</a></h3>
-<p>Two rows can read the same key at two deadzones. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.</p>
+<p>Two rows can read the same key at two deadzones, each set on its source's line. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.</p>
 <p>For an action that fires on the soft press and lets go at the full press, put both depths on one row as two sources, 30% and 90%, and set the row's <strong>Combine</strong> to <strong>Only One</strong>. The row fires while exactly one of them is past its deadzone, which is the band between the two depths.</p>
 <h3 id="rapid-trigger">Rapid Trigger<a class="headerlink" href="#rapid-trigger" title="Permanent link">&para;</a></h3>
-<p>Set a button row's <strong>Primary Mode</strong> to <strong>Rapid Trigger</strong> and the key releases as soon as it lifts by more than the row's <strong>Distance</strong>, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the row's deadzone stays the actuation point, and <strong>Distance</strong> defaults to 10 percent of the key's travel. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See <a href="../mappings/#rapid-trigger">Rapid Trigger</a>.</p>
+<p>Set the key's source <strong>Mode</strong> on a button row to <strong>Rapid Trigger</strong> and the key releases as soon as it lifts by more than the <strong>Distance</strong> on that source's line, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the source's deadzone stays the actuation point, and <strong>Distance</strong> runs from 1 to 50 percent of the key's travel, 10 by default. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See <a href="../mappings/#rapid-trigger">Rapid Trigger</a>.</p>
 <h3 id="two-characters-from-one-keyboard">Two characters from one keyboard<a class="headerlink" href="#two-characters-from-one-keyboard" title="Permanent link">&para;</a></h3>
-<p>A keyboard assigns to any number of slots, like any device, so one keyboard can drive two controllers for split-screen games. To switch which character the keys move, give each slot a <a href="../../guides/shift-layers/">shift layer</a> with a <strong>Toggle</strong> activator on the same key. On one slot the keys live on the base layer and the shift layer is empty, with <strong>Inherit Unmapped Targets from Base</strong> left off so the empty layer silences them. On the other slot it is the reverse. One press moves the keyboard from one character to the other.</p>
+<p>A keyboard assigns to any number of slots, like any device, so one keyboard can drive two controllers for split-screen games. To switch which character the keys move, give each slot a <a href="../../guides/shift-layers/">shift layer</a> with a <strong>Toggle</strong> activator on the same key. On one slot the keys live on the base layer and the shift layer is empty, with the layer's <strong>Unmapped Controls</strong> set to <strong>Do Nothing</strong> so the empty layer silences them. On the other slot it is the reverse. One press moves the keyboard from one character to the other.</p>
 <hr />
 <h2 id="macros">Macros<a class="headerlink" href="#macros" title="Permanent link">&para;</a></h2>
 <h3 id="keys-as-macro-triggers">Keys as macro triggers<a class="headerlink" href="#keys-as-macro-triggers" title="Permanent link">&para;</a></h3>
 <p>Analog keys appear in a macro's <strong>Add from List</strong> dropdown under the keyboard, and <strong>Record Trigger</strong> picks up a key pressed past half travel. Each key entry on the trigger has its own <strong>Deadzone</strong>, the depth it fires at, so two macros on one key can be a soft press and a full press. See <a href="../../guides/macros/#trigger-input-types">Macros</a>.</p>
 <h3 id="set-chroma-color">Set Chroma Color<a class="headerlink" href="#set-chroma-color" title="Permanent link">&para;</a></h3>
-<p><strong>Set Chroma Color</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every <a href="../lighting/">Lighting</a> tab, and when the action ends the lighting goes back to the color a Lighting tab or a vendor row sets, or to Razer Synapse. <a href="../peripherals/#set-chroma-color">Set Chroma Color</a> says what it paints while Synapse is closed.</p>
+<p><strong>Set Chroma Color</strong>, in the <strong>Lightbar &amp; LEDs</strong> group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every <a href="../lighting/">Lighting</a> card, and when the action ends the lighting goes back to the color a Lighting card or a vendor row sets, or to Razer Synapse. <a href="../peripherals/#set-chroma-color">Set Chroma Color</a> says what it paints while Synapse is closed.</p>
 <p>To hold a color for as long as the key is held, set the macro to <strong>While Held</strong> with <strong>Until Release</strong> and give the action a long <strong>Duration</strong>. When two macros paint at once, the one lower in the list wins. Put a full-press macro below its soft-press twin and the keys turn the full-press color at the bottom of the press and back to the soft-press color on the way up.</p>
-<p>Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the Lighting tab the keyboard's own row gets. See <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>.</p>
-<p><strong>Set Key Colors</strong> and <strong>Clear Key Colors</strong>, in the same group, light single keys on a keyboard that PadForge lights key by key, steady, fading or counting down, for a time, while the trigger is held or until cleared. The <strong>Key Colors</strong> card on the keyboard's Lighting tab sets the same per-key colors without a macro, one set for each shift layer. See <a href="../lighting/">Lighting</a>.</p>
+<p>Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the <strong>Lighting</strong> card in the slot's <strong>Lights &amp; Sound</strong> section that the keyboard's own row gets. See <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>.</p>
+<p><strong>Set Key Colors</strong> and <strong>Clear Key Colors</strong>, in the same group, light single keys on a keyboard that PadForge lights key by key, steady, fading or counting down, for a time, while the trigger is held or until cleared. The <strong>Key Colors</strong> card in the slot's <strong>Lights &amp; Sound</strong> section sets the same per-key colors without a macro, one set for each shift layer. See <a href="../lighting/">Lighting</a>.</p>
 <hr />
 <h2 id="supported-keyboards">Supported keyboards<a class="headerlink" href="#supported-keyboards" title="Permanent link">&para;</a></h2>
 <p>PadForge reads every keyboard below. The families and how each one is read are in <a href="../../reference/analog-keyboards-internals/">Analog Keyboards Internals</a>.</p>
@@ -4968,14 +5174,14 @@
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../settings/">Settings</a>: the Input Engine card and its Read Analog Keyboards switch.</li>
+<li><a href="../settings/">Settings</a>: the Hardware Support card and its Read Analog Keyboards switch.</li>
 <li><a href="../devices/">Devices</a>: the analog keyboard row and its Key Depth panel.</li>
 <li><a href="../mappings/">Button and Axis Mappings</a>: deadzones, Invert, and the Combine modes.</li>
 <li><a href="../../guides/macros/">Macros</a>: trigger entries and the Set Chroma Color action.</li>
 <li><a href="../../reference/analog-keyboards-internals/">Analog Keyboards Internals</a>: every protocol, for whoever has to change the code.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

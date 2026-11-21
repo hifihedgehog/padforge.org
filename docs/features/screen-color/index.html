@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1877,6 +1881,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2073,6 +2105,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2109,6 +2169,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2868,6 +2984,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3461,6 +3583,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3741,6 +3891,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3833,6 +4011,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4233,14 +4439,15 @@
 
 <h1 id="screen-color">Screen Color<a class="headerlink" href="#screen-color" title="Permanent link">&para;</a></h1>
 <p><em>A lighting mode that follows the colors on your screen: one color for a lightbar, or the screen spread across a keyboard's keys.</em></p>
-<p>Screen Color is a base mode on a device's <a href="../lighting/">Lighting</a> tab. Pick <strong>Screen Color</strong> in the <strong>Mode</strong> box and the device takes its color from one area of one display. PadForge reads the finished desktop picture from Windows while a device uses the mode. It stores none of it, and it reads nothing from a game and writes nothing into one.</p>
+<p>Screen Color is a base mode on the <strong>Lighting</strong> card of a controller's <strong>Lights &amp; Sound</strong> section (<a href="../lighting/">Lighting</a>). Pick <strong>Screen Color</strong> in the <strong>Mode</strong> box and the device takes its color from one area of one display. PadForge reads the finished desktop picture from Windows while a device uses the mode. It stores none of it, and it reads nothing from a game and writes nothing into one.</p>
 <!-- SCREENSHOT: pad-lighting-screen-color -->
-<p><img alt="The Lighting tab of a DualSense in the PlayStation slot with Mode set to Screen Color, showing the Display, Screen Area, Color, Saturation, Brightness and Smoothing rows" src="../../images/pad-lighting-screen-color.png" /></p>
+<p><img alt="The Lighting card of a DualSense in the PlayStation slot's Lights &amp; Sound section with Mode set to Screen Color, showing the Display, Screen Area, Color, Saturation, Brightness and Smoothing rows" src="../../images/pad-lighting-screen-color.png" /></p>
 <hr />
 <h2 id="where-it-works">Where it works<a class="headerlink" href="#where-it-works" title="Permanent link">&para;</a></h2>
-<p>Every device whose Lighting tab has the <strong>Mode</strong> box can use it: a DualSense, DualSense Edge or DualShock 4 lightbar, a PS Move sphere, the lightbar a <a href="../../guides/web-controller/">Web Controller</a> draws, and a mouse, keyboard or lighting row from <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>. The <strong>Set Lightbar Mode</strong> and <strong>Cycle Lightbar Modes</strong> macros offer it too.</p>
+<p>Every device whose Lighting card has the <strong>Mode</strong> box can use it: a DualSense, DualSense Edge or DualShock 4 lightbar, a PS Move sphere, the lightbar a <a href="../../guides/web-controller/">Web Controller</a> draws, and a mouse, keyboard or lighting row from <a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>. The <strong>Set Lightbar Mode</strong> and <strong>Cycle Lightbar Modes</strong> macros offer it too.</p>
 <p>A game's lightbar, a <a href="../game-mods/">game mod's</a> color, a macro's color and the Input Reactive pulse cover Screen Color the way they cover any base mode, and it comes back when they end (see <a href="../lighting/#priority-chain">Priority chain</a>).</p>
-<p>The tab's preview shows a blue-to-orange wash for this mode. The preview reads nothing from the screen.</p>
+<p>Under the <strong>Mode</strong> box the card says <em>Follows the colors on your screen. While a device uses this mode, PadForge reads the finished picture from Windows. It stores none of it and changes nothing in any game.</em></p>
+<p>The card's preview shows a blue-to-orange wash for this mode. The preview reads nothing from the screen.</p>
 <hr />
 <h2 id="the-settings">The settings<a class="headerlink" href="#the-settings" title="Permanent link">&para;</a></h2>
 <table>
@@ -4314,7 +4521,7 @@
 <td>How slowly the light follows a change. 0% jumps at once. Each percent adds 1 ms to the fade's time constant, so 100% is 100 ms and the default settles within about 100 ms.</td>
 </tr>
 <tr>
-<td><strong>Spread the Screen Across This Device's Lights</strong></td>
+<td><strong>Spread the Screen Across This Device’s Lights</strong></td>
 <td>On</td>
 <td>On, off</td>
 <td>Shown only for a device with more than one light. On, each light shows the part of the area under its own place on the device. Off, the whole device shows one color.</td>
@@ -4330,7 +4537,7 @@
 <li>A keyboard that reports no positions uses the standard keyboard layout that holds the most of its keys.</li>
 <li>Zones and edge lights are placed in order from left to right.</li>
 </ul>
-<p>A light with none of these shows the device's one color. A color set for a key, a group or a single light on the tab's <a href="../lighting/#key-colors"><strong>Key Colors</strong> or <strong>Zone Colors</strong></a> card stays over the picture. A game, mod or macro color covers the picture the way it covers the one color.</p>
+<p>A light with none of these shows the device's one color. A color set for a key, a group or a single light on the section's <a href="../lighting/#key-colors"><strong>Key Colors</strong> or <strong>Zone Colors</strong></a> card stays over the picture. A game, mod or macro color covers the picture the way it covers the one color.</p>
 <hr />
 <h2 id="what-it-needs">What it needs<a class="headerlink" href="#what-it-needs" title="Permanent link">&para;</a></h2>
 <p>PadForge reads the screen through Windows' Desktop Duplication. Where that cannot run on a PC, such as a laptop with two GPUs or a PC where too many programs already duplicate the display, it reads through Windows.Graphics.Capture instead. That second way needs Windows 10 version 1903 or later.</p>
@@ -4339,9 +4546,10 @@
 <li>On Windows 10 versions before 2004, the pointer shows in the picture Windows.Graphics.Capture hands over. Desktop Duplication never includes it.</li>
 <li>A rotated display is read the way it shows on screen.</li>
 </ul>
-<p>While Windows holds the desktop, for a UAC prompt or the lock screen, the light keeps its last color and the tab says <em>Windows is holding the screen for now, so the light keeps its last color.</em> PadForge tries again at least once a second.</p>
-<p>When neither way runs, the tab says <em>PadForge can't read the screen on this PC right now and keeps trying. Save Snapshot in Settings records the reason.</em> The waits between tries grow to 8 seconds. <strong>Save Snapshot</strong> on the <a href="../settings/">Settings</a> page writes the reason Windows gave. A capture that ends three times in a row with no picture also brings that line up.</p>
-<p>A display change, such as a new resolution, an HDR switch or a display unplugged, rebuilds the capture. The light keeps its last color meanwhile, and the tab shows no line unless the rebuild fails.</p>
+<p>While Windows holds the desktop, for a UAC prompt or the lock screen, the light keeps its last color and the card says <em>Windows is holding the screen for now, so the light keeps its last color.</em> PadForge tries again at least once a second.</p>
+<p>When neither way runs, the card says <em>PadForge can’t read the screen on this PC right now and keeps trying. Save Snapshot in Settings records the reason.</em> The waits between tries grow to 8 seconds. <strong>Save Snapshot</strong> on the <a href="../settings/">Settings</a> page writes the reason Windows gave. A capture that ends three times in a row with no picture also brings that line up.</p>
+<p>A display change, such as a new resolution, an HDR switch or a display unplugged, rebuilds the capture. The light keeps its last color meanwhile, and the card shows no line unless the rebuild fails.</p>
+<p>The card checks these states and the list of displays once a second, and only while the <strong>Lights &amp; Sound</strong> section shows with the mode on Screen Color. The light itself follows the screen whatever page is open.</p>
 <hr />
 <h2 id="hdr">HDR<a class="headerlink" href="#hdr" title="Permanent link">&para;</a></h2>
 <p>On a display with HDR on, PadForge reads the desktop in 16-bit color and converts it against the white level Windows draws SDR content at, the <strong>SDR content brightness</strong> slider in Windows' HDR settings. A white window on the desktop shows as full white on the light. Anything brighter than that white clips to full, and a color outside sRGB clips at its edge. When Windows does not report the white level, PadForge uses 200 nits.</p>
@@ -4364,7 +4572,7 @@
 </ul>
 <p>See the technical page, <a href="../../reference/screen-color-internals/">Screen Color Internals</a>. The capture follows Prismatik, AlkaidLab's foundation-sunshine fork of Sunshine, ScreenCapture.NET, RazerAmbilight, OpenRGBEffectsPlugin, Aurora and alienfx-tools, credited on PadForge's About page.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

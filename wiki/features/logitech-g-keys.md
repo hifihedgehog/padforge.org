@@ -10,7 +10,7 @@ PadForge reads the G-keys directly through Logitech's G-key SDK instead. They ar
 
 ## Turning it on
 
-Open **Settings**, find the **Input Engine** card, and tick **Read Logitech G-Keys**. It is off by default, because turning it on loads a third-party library and opens a session with the Logitech software.
+Open **Settings** and turn on **Read Logitech G-Keys** on the **Hardware Support** card. It is off by default, because turning it on loads a third-party library and opens a session with the Logitech software.
 
 A **Logitech G-Keys** row then appears on the [Devices](devices.md) page.
 
@@ -26,7 +26,7 @@ Then make that profile the **persistent profile**. Logitech Gaming Software lets
 
 While the PadForge profile is persistent, Logitech Gaming Software ignores every other profile, including the profiles linked to your games, so a game's own G-key assignments stop applying. To clear it, right-click the PadForge profile in the Profiles area and select **Set As Persistent** again to remove the check mark.
 
-A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.
+A G600 or G300 mouse also has to be out of on-board memory mode. The SDK reads neither mouse while it is in that mode.
 
 Logitech's profiles are unrelated to PadForge's own [profiles](../guides/profiles.md), which are a different thing that lives on the Profiles page.
 
@@ -34,7 +34,7 @@ Logitech's profiles are unrelated to PadForge's own [profiles](../guides/profile
 
 ## Reading the status line
 
-Under the checkbox is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.
+Under the switch is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.
 
 | Status | What to do |
 | --- | --- |
@@ -43,8 +43,8 @@ Under the checkbox is a line saying exactly which of seven situations the machin
 | *Found the G-key SDK and could not load it.* | Usually an architecture mismatch or a damaged install. |
 | *That library is not the G-key SDK this expects.* | Something else is registered under the SDK's key. |
 | *The G-key SDK refused to start. Logitech Gaming Software is usually not running.* | Start Logitech Gaming Software. |
-| *Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent. A G600 or G300 mouse also has to be out of on-board mode.* | Do both, take a G600 or G300 out of on-board mode, then press a G-key. |
-| *Running, {0} key events* | Working, with the count in place of `{0}`. It rises as you press keys. |
+| *Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent. A G600 or G300 mouse also has to be out of on-board memory mode.* | Do both, take a G600 or G300 out of on-board memory mode, then press a G-key. |
+| *Running, {0} key events* (*Running, 1 key event* after the first) | Working, with the count in place of `{0}`. It rises as you press keys. |
 
 The line is empty while the feature is off.
 
@@ -83,12 +83,12 @@ G-keys need Logitech Gaming Software, and G HUB alone cannot supply them. Logite
 
 ## Related pages
 
-- [Settings](settings.md): the Input Engine card.
+- [Settings](settings.md): the Hardware Support card.
 - [Devices](devices.md): the Logitech G-Keys row.
 - [Mice, Keyboards and Vendor Rows](peripherals.md): Logitech keyboard and mouse lighting from a virtual controller, through the LED SDK (the other Logitech SDK PadForge loads) while Logitech Gaming Software or G HUB runs.
-- [Lighting](lighting.md): coloring a Logitech keyboard's keys from the Lighting tab.
+- [Lighting](lighting.md): coloring a Logitech keyboard's keys from the **Lighting** card in a slot's **Lights & Sound** section.
 - [Logitech G-Keys Internals](../reference/logitech-g-keys-internals.md): the event word, the library search, and the lifecycle, for whoever has to change the code.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

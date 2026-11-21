@@ -10,12 +10,12 @@ Your typing is untouched. The normal keyboard row and Windows keep receiving the
 
 ## Turning it on
 
-Open **Settings**, find the **Input Engine** card, and tick **Read Analog Keyboards**. It is off by default.
+Open **Settings** and turn on **Read Analog Keyboards** on the **Hardware Support** card. It is off by default.
 
-<!-- SCREENSHOT: settings-input-engine -->
-![The Input Engine card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters](../images/settings-input-engine.png)
+<!-- SCREENSHOT: settings-handheld-buttons -->
+![The Hardware Support card in Settings, with Read Analog Keyboards and Read Bliss-Box Adapters](../images/settings-handheld-buttons.png)
 
-With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. A Razer keyboard waiting for Razer Synapse says so in its row's detail pane. The line under the checkbox says when no supported keyboard was found.
+With it on, every supported keyboard that is plugged in gets a row on the Devices page, named for the model. A Razer keyboard waiting for Razer Synapse says so in its row's detail pane. The line under the switch says *No supported analog keyboard found.* when there is none.
 
 Most keyboards are read by asking them over the channel their own configurator uses. Close that configurator, whether an app or a browser tab, while the switch is on. Both asking the same questions confuses the keyboard and the configurator alike, and on some keyboards PadForge holds the channel alone, so the configurator cannot open it while PadForge reads.
 
@@ -66,7 +66,7 @@ A key reads 0 at rest and full at the bottom of its travel. What that means depe
 
 | Target | What the key does |
 |---|---|
-| **Button** | Presses once the key passes the row's **Axis-to-Button Deadzone**. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With **Primary Mode** set to [Rapid Trigger](#rapid-trigger), a short lift releases and a short push presses again. |
+| **Button** | Presses once the key passes the **Axis-to-Button Deadzone** on its source's line. The deadzone is the actuation point: 20% fires on a light touch, 100% only at the bottom. With the source's **Mode** set to [Rapid Trigger](#rapid-trigger), a short lift releases and a short push presses again. |
 | **Trigger** | The depth is the pull, so a half-pressed key is a half-pulled trigger. |
 | **Stick axis** | The depth pushes the stick toward one side. **Invert** pushes it the other way, so two keys drive one axis the way two buttons do. |
 
@@ -74,17 +74,17 @@ An analog key is never read through the **(Any Device)** group. Pick it under th
 
 ### Soft press and full press
 
-Two rows can read the same key at two deadzones. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.
+Two rows can read the same key at two deadzones, each set on its source's line. A row at 30% fires on a soft press, and a row at 90% fires only on a full press, so one key carries two actions.
 
 For an action that fires on the soft press and lets go at the full press, put both depths on one row as two sources, 30% and 90%, and set the row's **Combine** to **Only One**. The row fires while exactly one of them is past its deadzone, which is the band between the two depths.
 
 ### Rapid Trigger
 
-Set a button row's **Primary Mode** to **Rapid Trigger** and the key releases as soon as it lifts by more than the row's **Distance**, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the row's deadzone stays the actuation point, and **Distance** defaults to 10 percent of the key's travel. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See [Rapid Trigger](mappings.md#rapid-trigger).
+Set the key's source **Mode** on a button row to **Rapid Trigger** and the key releases as soon as it lifts by more than the **Distance** on that source's line, then presses again as soon as it goes back down by more than that, without rising past the actuation point in between. Analog keyboards such as Wooting's do this in their firmware. In PadForge the source's deadzone stays the actuation point, and **Distance** runs from 1 to 50 percent of the key's travel, 10 by default. A trigger row takes the mode too, so a key or a gamepad trigger can fire a controller game's trigger the same way. See [Rapid Trigger](mappings.md#rapid-trigger).
 
 ### Two characters from one keyboard
 
-A keyboard assigns to any number of slots, like any device, so one keyboard can drive two controllers for split-screen games. To switch which character the keys move, give each slot a [shift layer](../guides/shift-layers.md) with a **Toggle** activator on the same key. On one slot the keys live on the base layer and the shift layer is empty, with **Inherit Unmapped Targets from Base** left off so the empty layer silences them. On the other slot it is the reverse. One press moves the keyboard from one character to the other.
+A keyboard assigns to any number of slots, like any device, so one keyboard can drive two controllers for split-screen games. To switch which character the keys move, give each slot a [shift layer](../guides/shift-layers.md) with a **Toggle** activator on the same key. On one slot the keys live on the base layer and the shift layer is empty, with the layer's **Unmapped Controls** set to **Do Nothing** so the empty layer silences them. On the other slot it is the reverse. One press moves the keyboard from one character to the other.
 
 ---
 
@@ -96,13 +96,13 @@ Analog keys appear in a macro's **Add from List** dropdown under the keyboard, a
 
 ### Set Chroma Color
 
-**Set Chroma Color**, in the **Lightbar & LEDs** group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every [Lighting](lighting.md) tab, and when the action ends the lighting goes back to the color a Lighting tab or a vendor row sets, or to Razer Synapse. [Set Chroma Color](peripherals.md#set-chroma-color) says what it paints while Synapse is closed.
+**Set Chroma Color**, in the **Lightbar & LEDs** group, paints the Razer devices assigned to the macro's virtual controller one color while the action runs, along with every other Razer device of the same kind. The analog row of a Razer keyboard or keypad lights as that device, so assigning the analog row to the virtual controller is enough. The color wins over every [Lighting](lighting.md) card, and when the action ends the lighting goes back to the color a Lighting card or a vendor row sets, or to Razer Synapse. [Set Chroma Color](peripherals.md#set-chroma-color) says what it paints while Synapse is closed.
 
 To hold a color for as long as the key is held, set the macro to **While Held** with **Until Release** and give the action a long **Duration**. When two macros paint at once, the one lower in the list wins. Put a full-press macro below its soft-press twin and the keys turn the full-press color at the bottom of the press and back to the soft-press color on the way up.
 
-Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the Lighting tab the keyboard's own row gets. See [Mice, Keyboards and Vendor Rows](peripherals.md).
+Assigned to a virtual controller, the analog row of a Razer, SteelSeries or Logitech keyboard that PadForge can light also gets the **Lighting** card in the slot's **Lights & Sound** section that the keyboard's own row gets. See [Mice, Keyboards and Vendor Rows](peripherals.md).
 
-**Set Key Colors** and **Clear Key Colors**, in the same group, light single keys on a keyboard that PadForge lights key by key, steady, fading or counting down, for a time, while the trigger is held or until cleared. The **Key Colors** card on the keyboard's Lighting tab sets the same per-key colors without a macro, one set for each shift layer. See [Lighting](lighting.md).
+**Set Key Colors** and **Clear Key Colors**, in the same group, light single keys on a keyboard that PadForge lights key by key, steady, fading or counting down, for a time, while the trigger is held or until cleared. The **Key Colors** card in the slot's **Lights & Sound** section sets the same per-key colors without a macro, one set for each shift layer. See [Lighting](lighting.md).
 
 ---
 
@@ -232,7 +232,7 @@ Keyboards that send the 0xA0 depth event without being asked, the MCHOSE Jet 75 
 
 ## Related pages
 
-- [Settings](settings.md): the Input Engine card and its Read Analog Keyboards switch.
+- [Settings](settings.md): the Hardware Support card and its Read Analog Keyboards switch.
 - [Devices](devices.md): the analog keyboard row and its Key Depth panel.
 - [Button and Axis Mappings](mappings.md): deadzones, Invert, and the Combine modes.
 - [Macros](../guides/macros.md): trigger entries and the Set Chroma Color action.
@@ -240,4 +240,4 @@ Keyboards that send the 0xA0 depth event without being asked, the MCHOSE Jet 75 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

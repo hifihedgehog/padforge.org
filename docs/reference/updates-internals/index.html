@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3544,6 +3666,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3824,6 +3974,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3916,6 +4094,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4414,7 +4620,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Services/UpdateController.cs</code></td>
-<td>The Updates card: the timer, Check Now, Install and Restart, the background download, and every status line. UI thread only.</td>
+<td>The Updates card and the About page's update line: the timer, Check Now, Install and Restart, Release Notes, the background download, and every status line. UI thread only.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/App.xaml.cs</code></td>
@@ -4512,7 +4718,7 @@
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        recovery-&lt;attempt&gt;\        the previous exe, kept by the last install
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            PadForge.exe
 </code></pre></div>
-<p>The install key is the first 16 hex characters of the SHA-256 of the installed exe's full path, taken in upper case, so two portable copies never install, delete or reuse each other's files.</p>
+<p>The install key is the first 16 hex characters, in lower case, of the SHA-256 of the installed exe's full path written in upper case, so two portable copies never install, delete or reuse each other's files.</p>
 <hr />
 <h2 id="installing">Installing<a class="headerlink" href="#installing" title="Permanent link">&para;</a></h2>
 <p>Windows will not overwrite an exe while it runs. PadForge follows two references here: DS4Windows hands the swap to a helper that waits for the app to close, and OpenTabletDriver's elevated path runs its own binary with an update verb. The downloaded exe runs from the staging folder as the helper. OpenTabletDriver's other approach, moving the running files aside, only works on the same volume and would leave a file beside <code>PadForge.exe</code>, so PadForge does not use it.</p>
@@ -4530,7 +4736,7 @@
 <li><strong>Handshake.</strong> It sets Ready and waits for Commit for as long as the old copy runs. The old copy exiting without a commit means install nothing.</li>
 <li><strong>Wait for the old copy.</strong> Every two minutes (<code>OldCopyNoticeInterval</code>) it asks whether to keep waiting, in a small window that answers itself once the old copy exits. Cancel skips the update, and PadForge still starts again once the old copy has closed.</li>
 <li><strong>Swap.</strong> <code>Swap</code> copies the installed exe into <code>recovery-&lt;attempt&gt;</code> and checks it against its hash, then copies itself over the installed exe and checks that against the payload hash. If the second step fails, the old exe goes back and is checked again. Each step makes up to 60 attempts, 500 ms apart, while antivirus or the loader holds a file, and no retry writes over the only good copy.</li>
-<li><strong>Restart.</strong> On success it starts the installed exe with <code>--updated</code> in front of the original arguments, and the new copy's status bar says it was updated. A failure to start names the recovery folder. A failed swap that restored the old exe restarts it and reports the error. A swap that could not restore it names the folder that holds the copy, and starts nothing.</li>
+<li><strong>Restart.</strong> On success it starts the installed exe with <code>--updated</code> in front of the original arguments, and the new copy's message line says it was updated. A failure to start names the recovery folder. A failed swap that restored the old exe restarts it and reports the error. A swap that could not restore it names the folder that holds the copy, and starts nothing.</li>
 </ol>
 <p>The helper runs before settings load and before any window exists, so its two dialogs follow the Windows display language rather than PadForge's own.</p>
 <p>A dev build from before the handshake (<code>c935af76</code>, the feature's first commit) starts the helper without <code>--handshake</code> and exits at once, so for it the helper treats its own start as the commit.</p>
@@ -4605,6 +4811,7 @@
 </tbody>
 </table>
 <p>A check that comes back up to date, or finds no build for this PC, deletes the pending record too, so a pulled release never installs behind the card.</p>
+<p>The About page reads the same state. <code>SettingsViewModel.AboutSubLine</code> shows <em>Up to date.</em> after a check that found this build the newest (<code>Status</code> with <code>upToDate</code>, which sets <code>IsUpToDate</code>), the card's own line while a check runs, has failed or has found an update, and the subtitle alone before any check. Its <strong>Check for Updates</strong> and <strong>Release Notes</strong> buttons raise the card's commands. <code>ReleaseNotesUrl</code> opens the offer's release page, or the repository's releases list while nothing is offered, and refuses any address outside <code>https://github.com/hifihedgehog/PadForge/</code>.</p>
 <p>Every line is worded when it is shown, so the card follows a language change. The reasons for a stalled download and for an installer that failed are translated. Any other reason, an HTTP status, a note from the check such as <code>unexpected release data</code>, or an error from Windows or the network, is shown as it came.</p>
 <hr />
 <h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
@@ -4636,7 +4843,7 @@
 <li><a href="../services-layer/">Services Layer</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

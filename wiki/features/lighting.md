@@ -1,9 +1,9 @@
 # Lighting
 
-*Lightbar control for DualSense and DualShock 4 with fifteen base modes and three per-press Input Reactive overlays, the player and mute LEDs on DualSense, the Guide button LED on Xbox, 2015 Steam Controller, and Switch pads, and the same modes on the keyboards, mice, headsets, light strips and vendor rows assigned to a virtual controller, with a color for each key where the device allows it.*
+*Lightbar control for DualSense and DualShock 4 with fifteen base modes and three per-press Input Reactive overlays, the player and mute LEDs on DualSense, the Guide button LED on Xbox, 2015 Steam Controller, and Switch pads, and the same modes on Flydigi Apex pads and on the keyboards, mice, headsets, light strips and vendor rows assigned to a virtual controller, with a color for each key where the device allows it.*
 
 <!-- SCREENSHOT: pad-lighting -->
-![Lighting tab with mode picker and audio-band cards](../images/pad-lighting.png)
+![The Lighting card in the Lights & Sound section, with the mode picker and the audio-band colors](../images/pad-lighting.png)
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -12,21 +12,24 @@
 <source src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dualsense-triggers-light-sound.vtt" default>
 </video>
-<figcaption>The left trigger set to Weapon, the lightbar to Rainbow Cycle, and the PC's sound mirrored to the DualSense speaker, recorded live in PadForge 5.2.1 in 57 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The left trigger set to Weapon, the lightbar to Rainbow Cycle, and the PC's sound mirrored to the DualSense speaker, recorded live in PadForge 5.2.1 in 57 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-triggers-light-sound-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
 
-## When the tab shows
+## When the Lighting card shows
 
-The Lighting tab appears for these devices:
+The controller page's **Lights & Sound** section holds the **Lighting** card for these devices:
 
 - DualShock 4, DualSense, and DualSense Edge, for full lightbar control
 - A PlayStation Move controller, whose sphere is driven as its lightbar
 - Microsoft Xbox One, Elite, and Series pads, for the Guide button LED only
 - A 2015 Steam Controller, for the Home button LED only
 - A Switch Pro Controller or right Joy-Con (alone, in a pair, or in the charging grip), for the HOME button LED only
+- A Flydigi Apex 4, Apex 5 or Apex 6 Pro, once it has answered as one. See [Flydigi Apex pads](#flydigi-apex-pads) below
 - A mouse or keyboard that PadForge can light, of any brand and analog keyboard rows included, a lit device with a row of its own on the Devices page (a headset, a mousepad, a monitor, a light strip, a laptop light bar), and the Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG, ASUS Aura, MSI Mystic Light and Corsair iCUE rows
+
+The card's settings belong to the device picked under **Driven by** in the page's header, which its **This device** chip says.
 
 On a Sony pad it controls:
 
@@ -37,19 +40,21 @@ On a Sony pad it controls:
 - The player-indicator LEDs below the DualSense touchpad
 - The mute LED above the DualSense microphone
 
-On a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME LED, the tab shows only the Guide button LED card. The lightbar controls stay hidden.
+On a Sony pad the mode rows sit beside a picture of the lit lightbar, and the **Indicator LEDs** line sits in the card's tray below them on a DualSense or DualSense Edge.
 
-On a mouse, keyboard or vendor row, the tab shows the lightbar mode card and a line naming where the colors go. A mouse or keyboard also gets the **Lighting Control** card, whose checkbox lets this virtual controller light it. A device whose lights PadForge knows one by one gets the **Key Colors** card, or **Zone Colors** where its lights are zones, and a device with addressable headers gets the **LED Strips** card. See [Mice, keyboards and vendor rows](#mice-keyboards-and-vendor-rows) below.
+On a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME LED, the card holds only its title and the **Guide Button LED** line. The lightbar controls stay hidden.
 
-The tab is per pad per slot. Pick a different physical device in the assigned-devices dropdown and the tab re-binds to that device's config. Two Sony pads on the same slot can carry different modes, palettes, and overlay variants. Macro lightbar actions stay slot-level. They fan out across every Sony pad on the slot and every mouse, keyboard or vendor row the slot lights, each rendering with its own per-device settings.
+On a mouse, keyboard, Flydigi Apex pad or vendor row, the card holds the mode rows with no picture, and a line above the card names where the colors go. A mouse, keyboard or Flydigi pad also gets the **Lighting Control** line in the card's tray, whose switch lets this virtual controller light it. A device whose lights PadForge knows one by one gets the **Key Colors** card, or **Zone Colors** where its lights are zones, and a device with addressable headers gets the **LED Strips** card. See [Mice, keyboards and vendor rows](#mice-keyboards-and-vendor-rows) below.
+
+The card is per pad per slot. Pick a different device under **Driven by** and the card re-binds to that device's config. Two Sony pads on the same slot can carry different modes, palettes, and overlay variants. **Reset All** on the card's title returns the lightbar settings to their defaults. Macro lightbar actions stay slot-level. They fan out across every Sony pad on the slot and every mouse, keyboard or vendor row the slot lights, each rendering with its own per-device settings.
 
 ### Priority chain
 
-A [web controller](../guides/web-controller.md) showing the DualShock 4 or DualSense layout gets this tab too, and it behaves the same: the phone draws the pad's own lightbar in whatever color and mode you pick, animations included. The DualSense layout also carries its player indicator row.
+A [web controller](../guides/web-controller.md) showing the DualShock 4 or DualSense layout gets this card too, and it behaves the same: the phone draws the pad's own lightbar in whatever color and mode you pick, animations included. The DualSense layout also carries its player indicator row.
 
-On a virtual DualSense, game writes always win at packet level. A virtual DualShock 4 does not forward the game's lightbar writes to the physical pad, so the settings on this tab stay in charge there. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar.
+On a virtual DualSense, game writes always win at packet level. A virtual DualShock 4 does not forward the game's lightbar writes to the physical pad, so the settings on this card stay in charge there. Macro lightbar overrides beat user settings. The Input Reactive overlay layers on top of the base mode. User settings apply when nothing else is driving the lightbar. While the mode is Player Number and the overlay is off, a line at the foot of the mode rows reads *Games take over whenever they write lighting.*
 
-A [game mod made for DSX](game-mods.md) sets the lightbar on a DualSense or DualShock 4, and the player lights and mute light on a DualSense, below a game's own writes and above macro overrides and this tab's settings. An orange line under the tab's hint names the program while it does. When the mod's effects end, this tab's settings return.
+A [game mod made for DSX](game-mods.md) sets the lightbar on a DualSense or DualShock 4, and the player lights and mute light on a DualSense, below a game's own writes and above macro overrides and this card's settings. An orange line above the card names the program while it does. When the mod's effects end, this card's settings return.
 
 ---
 
@@ -168,7 +173,7 @@ Above the cards are the **Low-to-Mid Boundary** and **Mid-to-High Boundary** thr
 
 ## Indicator LEDs (DualSense)
 
-A separate card below the lightbar mode picker. Five small white LEDs below the DualSense touchpad show a player-slot pattern. One mute LED sits above the microphone.
+A line in the Lighting card's tray, below the mode rows, that opens to its settings. Five small white LEDs below the DualSense touchpad show a player-slot pattern. One mute LED sits above the microphone.
 
 | Control | Values |
 |---|---|
@@ -182,7 +187,7 @@ Battery Level shows the pad's charge as a bar that fills from the left, one pip 
 
 Follow Audio Device mirrors a chosen audio endpoint's mute state. Picking it reveals an **Audio Device** dropdown that lists the active input and output devices. The mute LED lights when that device is muted and turns off when it is unmuted.
 
-Each dropdown on this card has a one-click reset button. Player Pattern resets to Player Number, Mute LED Mode to Off, and LED Brightness to High.
+Each dropdown on this line has a one-click reset button, and **Reset All** on the line resets all three. Player Pattern resets to Player Number, Mute LED Mode to Off, and LED Brightness to High.
 
 ---
 
@@ -192,16 +197,16 @@ The DS4 lightbar sits above the touchpad as a single LED strip. The same RGB Pad
 
 DS4 supports all fifteen base modes (Player Number, Off, Static, Breathing, Rainbow, Color Cycle, the three Audio Pulse variants, the three Audio Bands variants, Battery, Screen Color, Strobe) and the Input Reactive overlay. In Player Number mode the DS4 lightbar idles on the player color. PadForge computes the DS4 lightbar colors with the same mode code it uses for the DualSense. The DS4 packet always carries the lightbar, so a game's color shows on a DS4 only within 1.5 seconds of each game write, and then the configured mode or the player color returns.
 
-The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) are dropped when the assigned device is a DS4. Those controls stay hidden on the tab.
+The DualSense-only fields (player-indicator row, mute LED, adaptive triggers) are dropped when the assigned device is a DS4. Those controls stay hidden on the card.
 
 ---
 
 ## Guide Button LED
 
-The Lighting tab shows this card instead of the lightbar controls when the assigned device is a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.
+The Lighting card shows this line in its tray, with no lightbar controls, when the assigned device is a Microsoft Xbox One, Elite, or Series pad, a 2015 Steam Controller, or a Switch pad with a HOME button LED: a Pro Controller, a right Joy-Con, a combined Joy-Con pair, or the charging grip. It sets the brightness of the glowing Guide or Home button.
 
 <!-- SCREENSHOT: pad-lighting-guide-led -->
-![Guide button LED card with mode dropdown and brightness slider](../images/pad-lighting-guide-led.png)
+![The Guide Button LED line with its mode dropdown and brightness slider](../images/pad-lighting-guide-led.png)
 
 | Control | Values |
 |---|---|
@@ -222,25 +227,39 @@ Guide and Home LED brightness also reaches a pad shared from another PC over Rem
 
 ---
 
+## Flydigi Apex pads
+
+A Flydigi Apex 4, Apex 5 or Apex 6 Pro takes its virtual controller's lighting on its own Lighting card, as a lit keyboard does, once **Control This Device’s Lighting** is on. PadForge lights a pad only after the pad has answered PadForge's identity request, in this run or an earlier one, since other Flydigi pads share these product IDs. The lights go through the same session that sends the pad's trigger effects and rumble. See [Flydigi Apex](flydigi-apex.md) for the rest of what PadForge does with these pads.
+
+| Pad | Lights | How a picture goes out |
+|---|---|---|
+| Apex 4 | Four zones | The whole lighting block, acknowledged part by part, no more than once a second. It shows at once and is gone when the pad is switched off |
+| Apex 5 | Twelve zones | The pad's lighting block with every frame the same color, no closer than 80 ms to the last. It changes the pad's working copy, which the pad drops at its next sleep |
+| Apex 6 Pro | One color | The pad stores every write, so a color goes out only once it has held for 1.5 seconds, a color within 12 of the stored one on every channel is not sent, and no more than 300 go out in one run of PadForge. The line above the card says changing colors do not show |
+
+The Apex 4 and Apex 5 show their zones on the **Zone Colors** card. When PadForge lets go, it sends the Apex 5 the lighting it read at the start and sends the Apex 6 Pro its saved lighting back, which PadForge.xml holds until the pad has it. Flydigi Space Station lights these pads while its service runs, and PadForge leaves them to it then. No Flydigi pad was run with this build.
+
+---
+
 ## Mice, keyboards and vendor rows
 
-A mouse or keyboard assigned to a virtual controller takes that controller's lighting through its own Lighting tab, the way a DualSense does, once **Control This Device’s Lighting** is on. While its maker's program is closed, PadForge lights the device on its own, each device in its own virtual controller's color: Logitech devices over HID++, Razer and SteelSeries devices through their own reports, more than a hundred other families of keyboards, mice, headsets, mousepads, monitors, laptop keyboards and light strips through the reports OpenRGB, SignalRGB's plugins and other open projects send them, and any device Windows Dynamic Lighting can drive over HID LampArray. While the maker's program runs, PadForge either lights the device through that program, or leaves it to the program and says so. [Programs PadForge stands aside for](#programs-padforge-stands-aside-for) lists them. See [Mice, Keyboards and Vendor Rows](peripherals.md) for each path, the device families and what each needs.
+A mouse or keyboard assigned to a virtual controller takes that controller's lighting through its own Lighting card, the way a DualSense does, once **Control This Device’s Lighting** is on. While its maker's program is closed, PadForge lights the device on its own, each device in its own virtual controller's color: Logitech devices over HID++, Razer and SteelSeries devices through their own reports, more than a hundred other families of keyboards, mice, headsets, mousepads, monitors, laptop keyboards and light strips through the reports OpenRGB, SignalRGB's plugins and other open projects send them, and any device Windows Dynamic Lighting can drive over HID LampArray. While the maker's program runs, PadForge either lights the device through that program, or leaves it to the program and says so. [Programs PadForge stands aside for](#programs-padforge-stands-aside-for) lists them. See [Mice, Keyboards and Vendor Rows](peripherals.md) for each path, the device families and what each needs.
 
-The tab carries the same mode card, with every base mode and the Input Reactive overlay, set for this virtual controller alone. The macro lightbar actions reach the device too. The tab has no controller art, indicator LEDs card or Guide button LED card.
+The card carries the same mode rows, with every base mode and the Input Reactive overlay, set for this virtual controller alone. The macro lightbar actions reach the device too. The card has no lightbar picture, Indicator LEDs line or Guide Button LED line.
 
-**Control This Device’s Lighting** sits on the **Lighting Control** card above the mode card and is off by default, so assigning a keyboard for its keys never repaints it. Off, this virtual controller leaves the device alone. A vendor row, or another device of its kind lit through the same software, can still set its color, and a [Set Chroma Color](../guides/macros.md#set-chroma-color) macro on this virtual controller still paints a Razer device. The vendor rows and the rows of lit devices with no inputs have no such card, since lighting is all they carry.
+**Control This Device’s Lighting** is the switch on the **Lighting Control** line, in the card's tray below the mode rows, and is off by default, so assigning a keyboard for its keys never repaints it. Off, this virtual controller leaves the device alone. A vendor row, or another device of its kind lit through the same software, can still set its color, and a [Set Chroma Color](../guides/macros.md#set-chroma-color) macro on this virtual controller still paints a Razer device. The vendor rows and the rows of lit devices with no inputs have no such line, since lighting is all they carry.
 
 On a DualShock 4 or DualSense virtual controller, the game's lightbar wins for 1.5 seconds after each write. A device left at Player Number with the overlay off keeps the game's last color until 15 seconds pass with no output from the game, and then the player color returns. When two virtual controllers light one device, the one with the smaller player number sets its color.
 
 Battery mode reads a Logitech device's charge over HID++, whichever path lights it. Every other device and the vendor rows report no charge to PadForge, so Battery holds them at the Full Battery color.
 
-A line above the mode card says where the colors go, such as *Colors go through Razer Synapse.* When the colors do not show, or show only in part, it says why: the maker's program is not running or lights the device itself, a device has not answered yet, another virtual controller or another row of the same device sets the color, another device or a vendor row sets it for every device of its kind, Windows Dynamic Lighting lights the device, another program has the device open, or the device stores each picture and shows only colors that stay the same. The line is empty while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, it does not say where the colors go. [The route line](peripherals.md#the-route-line) lists every wording.
+A line above the Lighting card says where the colors go, such as *Colors go through Razer Synapse.* When the colors do not show, or show only in part, it says why: the maker's program is not running or lights the device itself, a device has not answered yet, another virtual controller or another row of the same device sets the color, another device or a vendor row sets it for every device of its kind, Windows Dynamic Lighting lights the device, another program has the device open, or the device stores each picture and shows only colors that stay the same. The line is empty while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, it does not say where the colors go. [The route line](peripherals.md#the-route-line) lists every wording.
 
 Earlier versions mirrored a game's lightbar to Razer Chroma and Logitech LIGHTSYNC from two Dashboard toggles. A toggle that was on now assigns its row to the first DualSense or DualShock 4 virtual controller, if there is one.
 
 ### Key Colors
 
-A device whose lights PadForge knows one by one gets a **Key Colors** card below the mode card. A device whose lights are zones, such as a mouse or a four-zone laptop keyboard, gets the same card titled **Zone Colors**. The card is per virtual controller and per device, like the rest of the tab. It shows once the device has answered, and while the device sleeps or is unplugged the card waits and the colors stay saved.
+A device whose lights PadForge knows one by one gets a **Key Colors** card below the Lighting card. A device whose lights are zones, such as a mouse or a four-zone laptop keyboard, gets the same card titled **Zone Colors**. The card is per virtual controller and per device, like the Lighting card. It shows once the device has answered, and while the device sleeps or is unplugged the card waits and the colors stay saved.
 
 These keyboards are lit key by key where their device or their references give each key a light:
 
@@ -252,9 +271,11 @@ These keyboards are lit key by key where their device or their references give e
 - QMK keyboards, by asking the firmware for its lights, with no list of models, and Keychron and VialRGB keyboards by the keys they report
 - Devices lit through Corsair iCUE, the ASUS Aura SDK, MSI's Mystic Light SDK or OpenRGB's SDK Server, LED by LED
 
+A Corsair K70 PRO MINI WIRELESS also shows the 28 light bars around its keys, as edge lights that **Edge** selects. No keyboard of that model was run with this build.
+
 Select lights on the picture by clicking or dragging, or with the buttons below it: **All Keys**, **Number Row**, **F Keys**, **Number Pad**, **Arrow Keys** and **WASD** on a keyboard, **Edge** and **Logo** where the device has those lights, **All Lights** and **Clear Selection**. With **Select by Pressing Keys** on, a key pressed while the picture has focus selects its lights, and pressing it again clears them. **Ctrl+Tab** leaves the picture.
 
-The color block under the buttons is the Lightbar card's: a picker, eight swatches, a hex box and R, G and B sliders. A change of color reaches the selected lights at once.
+The color block under the buttons is the Lighting card's single-color block: a picker, eight swatches, a hex box and R, G and B sliders. A change of color reaches the selected lights at once.
 
 | Button | What it does |
 |---|---|
@@ -270,9 +291,9 @@ The **Other Lights** picker says what the lights without a color of their own sh
 | **Same as Lightbar** | The mode card's color, a game's lightbar or a macro color included. The Base layer starts here |
 | **Off** | Nothing |
 | **One Color** | One color, from a picker that appears below the choice |
-| **Base Layer Colors** | On a shift layer only: what the Base layer shows, light by light. A shift layer starts here. The choice takes the Base layer's name from the Mappings tab |
+| **Base Layer Colors** | On a shift layer only: what the Base layer shows, light by light. A shift layer starts here. The choice takes the Base layer's name from the Mappings section |
 
-When the virtual controller has [shift layers](../guides/shift-layers.md), the card shows a chip for each, the Mappings tab's chips with a choice of their own, so picking the layer to color never changes the layer being mapped. Each layer keeps its own colors, and they show while that layer is engaged.
+When the virtual controller has [shift layers](../guides/shift-layers.md), the card shows a chip for each, the Mappings section's chips with a choice of their own, so picking the layer to color never changes the layer being mapped. Each layer keeps its own colors, and they show while that layer is engaged.
 
 A light with its own color shows it over whatever the mode, a game or the Input Reactive overlay sets. The [Set Key Colors](../guides/macros.md) macro action paints keys over the card's colors for as long as it runs, and **Clear Key Colors** ends it. A keyboard or mouse takes either only while its **Control This Device’s Lighting** is on. Keys are saved by what they are, so a color on W reaches the W key of any keyboard. A light chosen by its number on the picture, such as a single zone or an edge light, belongs to that device alone.
 
@@ -284,7 +305,7 @@ The LT100 has one row for its chain of towers, 27 LEDs to a tower, so two towers
 
 ### Map Key Lights
 
-Some keyboards describe their lights without saying which key sits over each one, and some references name a key wrong. **Map Key Lights** names them. Select the keyboard on the [Devices](devices.md) page and click **Map Key Lights** in its details. The button shows for a connected device whose lights PadForge knows one by one, at least one of them a key, for a model it can tell apart from others. The device does not have to be assigned to a virtual controller, but PadForge's input engine has to run.
+Some keyboards describe their lights without saying which key sits over each one, and some references name a key wrong. **Map Key Lights** names them. Select the keyboard on the [Devices](devices.md) page and click **Map Key Lights** at the foot of its **Settings** card. The button shows for a connected device whose lights PadForge knows one by one, at least one of them a key, for a model it can tell apart from others. The device does not have to be assigned to a virtual controller, but PadForge's input engine has to run.
 
 <!-- SCREENSHOT: map-key-lights -->
 ![The Map Key Lights window for a laptop keyboard, with the keyboard picture, the count of keys named, and the Start, Back, Skip, Forget and Stop buttons](../images/map-key-lights.png)
@@ -326,7 +347,7 @@ While these programs run, PadForge lights their devices through them:
 | Wootility | Wooting keyboards | Through the Wooting RGB SDK's reports, beside Wootility |
 | OpenRGB | Every device OpenRGB holds | Through OpenRGB's SDK Server, once it is turned on in OpenRGB. A device OpenRGB holds that has no Direct mode stays with OpenRGB |
 
-While these run, PadForge leaves their devices to them, and the Lighting tab's line names the program:
+While these run, PadForge leaves their devices to them, and the line above the Lighting card names the program:
 
 | Program | Devices it lights |
 |---|---|
@@ -353,6 +374,7 @@ While these run, PadForge leaves their devices to them, and the Lighting tab's l
 | ORIOS | Speedlink's ORIOS devices |
 | TT iTAKE | The Thermaltake Level 20 desk |
 | Teclado Mecanico Gamer | KBM! keyboards |
+| Flydigi Space Station | Flydigi Apex 4, Apex 5 and Apex 6 Pro pads |
 
 Some devices of the first table's makers are left to the program the same way when PadForge has no route through it, such as a Razer Kraken headset while Synapse runs or an MSI laptop's SteelSeries keyboard while GG runs.
 
@@ -373,10 +395,11 @@ Some devices of the first table's makers are left to the program the same way wh
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger effects on the same physical pads that drive the lightbar.
 - [Macros](../guides/macros.md): the Set Lightbar Color, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Set Key Colors and Clear Key Colors macro action types.
 - [Mice, Keyboards and Vendor Rows](peripherals.md): each lighting path for a mouse, keyboard or vendor row, the device families, and what each needs.
+- [Flydigi Apex](flydigi-apex.md): the Apex pads' triggers, rumble and screen.
 - [Screen Color](screen-color.md): the base mode that follows the colors on a display.
 - [Shift Layers](../guides/shift-layers.md): the layers Key Colors gives their own colors.
 - [Devices](devices.md): where Map Key Lights opens.
 
 ---
 
-*Last updated for PadForge 5.3.1.*
+*Last updated for PadForge 6.0.0.*

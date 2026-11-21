@@ -103,7 +103,7 @@ The DSU motion server does its own flip separately, in `DsuMotionServer`, and th
 
 ## What the user sees
 
-The headset appears on the **Devices** page as its own device, and carries a headphone glyph in the device roster on its slot's page (`PadPage`, through `DeviceTypeGlyph.For`, one call site in `InputService`).
+The headset appears on the **Devices** page as its own device, and carries a headphone glyph in the device list on its slot's controller page (`PadPage`). Both glyphs come from `DeviceTypeGlyph.For`, which `InputService` calls for the slot's device list and for the Devices row.
 
 Because it is motion-only, it reports no buttons, no sticks, and no triggers. Its contribution is motion: a rotation rate, plus acceleration when the descriptor exposes an accelerometer. That is why it is worth setting an **Aim Engage Button**, since head tracking that is always live is disorienting in most games.
 
@@ -128,4 +128,4 @@ The picker label is **Gyro Horizontal (Yaw + Roll)**, verbatim from `Strings.res
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3311,6 +3433,34 @@
     
   
     Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
   
 
     
@@ -3930,6 +4080,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -4022,6 +4200,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4676,7 +4882,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/HapticToneService.cs</code></td>
-<td>The HD-haptic tone sink for Switch and Steam controllers (#147). Reduces the macro mix to a tone and encodes per family. <code>internal static class</code>.</td>
+<td>The haptic sink for Switch and Steam controllers (#147), SInput pads (#584) and the Flydigi Apex 6 Pro's grips (#586). Reduces the macro mix to a tone and encodes per family, or streams it as samples on the PCM families. <code>internal static class</code>.</td>
 </tr>
 <tr>
 <td><code>PadForge.Engine/Haptics/HapticToneReducer.cs</code></td>
@@ -4684,7 +4890,7 @@
 </tr>
 <tr>
 <td><code>PadForge.Engine/Haptics/HapticToneEncoder.cs</code></td>
-<td>Per-family wire-byte encoders for the tone requests.</td>
+<td>Per-family wire-byte encoders for the tone requests, <code>EncodeSInputHaptics</code> among them.</td>
 </tr>
 <tr>
 <td><code>PadForge.Engine/Haptics/TritonPcmEncoder.cs</code></td>
@@ -4740,7 +4946,7 @@
 <h2 id="macro-sounds">Macro sounds<a class="headerlink" href="#macro-sounds" title="Permanent link">&para;</a></h2>
 <p><code>SoundMacroService</code> decodes WAV, MP3, M4A, AAC, WMA, and FLAC through <code>MediaFoundationReader</code> (or a streaming reader for <code>pfsound://</code> package refs), resamples to 48 kHz stereo, and caches the PCM under a 128 MB LRU cap.</p>
 <p><code>StartPlacements</code> is the routing core. It calls <code>AudioPassthroughService.GetSlotSinkMixers(slot, out pendingActivation, deviceFilter)</code>, which returns the <code>MacroMixer</code> of every live sink on the slot that takes macro sounds (<code>TakesMacroSounds</code>: every sink but a DualShock 4 on USB whose resolved Output Path is Headphones (Stereo) or (Mono) while its jack has not reported headphones, #546), each with an <code>OwnsMaster</code> flag (optionally filtered to one device GUID, which plays whatever the jack reports on a headphone-only route). When the slot has eligible speaker pads whose sinks are not live yet, <code>pendingActivation</code> is true, the worker is signaled, and the caller drops the sound rather than leak it to the PC speakers. Macro demand itself is never latched in the audio service: the worker re-reads it every pass through <code>SlotWantsMacroAudioProvider</code>, which <code>InputService</code> wires to <code>SoundMacroService.SnapshotWantsControllerAudio</code> over the slot's macro snapshot. When the slot has no controller sink and no device filter, it falls back to a per-slot system-default <code>WasapiOut</code>, where the master volume scales the samples, as it does on every placement whose sink does not own it (see Master volume below).</p>
-<p><code>PlayTestBeep(slot, deviceGuid)</code> routes an 880 Hz, 200 ms tone through <code>StartPlacements</code> with a device filter, so the Audio-tab test hits only the selected device and never fans out to the slot's other pads.</p>
+<p><code>PlayTestBeep(slot, deviceGuid)</code> routes an 880 Hz, 200 ms tone through <code>StartPlacements</code> with a device filter, so the Audio card's Test hits only the selected device and never fans out to the slot's other pads.</p>
 <hr />
 <h2 id="usb-transport">USB transport<a class="headerlink" href="#usb-transport" title="Permanent link">&para;</a></h2>
 <p>The USB branch of <code>BuildTransportOnWorker</code> first drops a stale Bluetooth link (#387, below), then reads the HID interface's PnP container ID through cfgmgr32 and matches a render <code>MMDevice</code> whose container ID is the same. If that endpoint is disabled in Windows it re-enables it through <code>IPolicyConfig</code>, then restores the prior default if Windows promoted the pad to default. <code>UsbFrameProvider.Read</code> reads the device's Audio Output Path once per call and shapes each frame through <code>MapMirrorChannels</code>. Default (enum <code>AudioOutputPath.Automatic</code>) and Speaker Only silence channel 0 and put the mono program mix <code>(L+R) * 0.5</code> on channel 1 (the firmware speaker tap). Headphones (Stereo) puts L on channel 0 and R on channel 1. The mono headset paths put the downmix on channel 0, with channel 1 either silent or a copy for the split path. Follow Headphone Jack resolves to one of the others in <code>ResolveOutputPath</code> before the shaper sees it. A DualShock 4 on USB shapes through the same <code>MapMirrorChannels</code>, since its routes are the DualSense's output path values (#546, see <a href="#dualshock-4-usb-route-546">DualShock 4 USB route</a>). Its USB audio endpoint is a stereo headset (<code>wChannelConfig</code> 0x0003 in the CUH-ZCT2E dump and the adapter's probe), and the pad's firmware, not the shaper, decides which channel reaches the speaker. Channels 2 and 3 are the pad's voice-coil actuators: zero unless a composite persona is feeding them. Playback is <code>WasapiOut</code> in shared mode with event sync at 30 ms latency. Its shared-mode stream asks for <code>AutoConvertPcm</code> (NAudio 2.2.1, <code>WasapiOut.Init</code>), so Windows resamples the 48 kHz feed to a DualShock 4's 32 kHz headset.</p>
@@ -4821,7 +5027,7 @@
 <li><code>SweepOrphanedRoutes</code> does the same for a recorded pad no slot maps any more: unassigned, dropped by a profile, or left by a deleted slot. It runs on every dispatch and from <code>Dispose</code>, decides under the capture lock so a slot that takes the pad later wins, waits for an offline pad, and does not retry a failed release on every frame (<code>s_orphanReleaseTried</code>).</li>
 <li>Automatic puts a DualSense back on its headphone path once after an explicit path, as the DualShock 4 does.</li>
 </ul>
-<p><code>Ds4UsbSpeakerTests</code> holds the route table, the route decisions, the report bytes, the channel map, macro routing and the Audio tab. <code>AudioRouteReleaseTests</code> drives each release path through a file-backed DualSense and the Remote Link relay. No run on a wired pad or the adapter backs either set.</p>
+<p><code>Ds4UsbSpeakerTests</code> holds the route table, the route decisions, the report bytes, the channel map, macro routing and the Audio card. <code>AudioRouteReleaseTests</code> drives each release path through a file-backed DualSense and the Remote Link relay. No run on a wired pad or the adapter backs either set.</p>
 <hr />
 <h2 id="composite-usb-persona-lanes">Composite USB persona lanes<a class="headerlink" href="#composite-usb-persona-lanes" title="Permanent link">&para;</a></h2>
 <p>A slot whose virtual controller is a composite USB persona has a real Windows endpoint the game renders into. HIDMaestro delivers that PCM on its pacing thread, in four-channel 48 kHz windows (speaker L/R, haptic L/R) for the DualSense personas and two-channel 32 kHz headset windows for the DualShock 4 persona. <code>RegisterPersonaFeed</code> subscribes, and <code>RoutePersonaFrames</code> routes each window to the slot's physical Sony pads, resampling the 32 kHz persona to 48 kHz. The feed's presence is itself sink demand, so a composite slot builds its pads' transports with passthrough off and no macros.</p>
@@ -4848,9 +5054,9 @@
 <hr />
 <h2 id="hd-haptic-tones-147">HD-haptic tones (#147)<a class="headerlink" href="#hd-haptic-tones-147" title="Permanent link">&para;</a></h2>
 <p><em>Playing macro sounds as tones through a controller's haptic actuators: the reduce step, the per-family encoders, and where the fidelity ceiling sits.</em></p>
-<p>Some controllers have no speaker but do have haptic actuators: LRAs (linear resonant actuators) on the Nintendo pads, haptic transducers on the Steam pads. <code>HapticToneService</code> treats them as a tone generator. A Switch Joy-Con L/R, a combined Joy-Con pair, Switch Pro, Steam Controller 2015, Steam Deck, or Steam Controller 2026 (Triton) assigned to a slot becomes an output sink whose <code>MacroMixer</code> is returned to <code>SoundMacroService</code> alongside the Sony and Wii sinks, so a macro Play Sound fans out to it with no macro-layer change. <code>FamilyOf</code> sorts the device by VID and PID against the SDL <code>controller_list.h</code> table, so every transport and revision of a family (wired, BLE, dongle) is caught rather than a hand-picked PID subset. Switch 2 is excluded: no reference plays an audible tone on its actuator, so it gets no Audio tab.</p>
+<p>Some controllers have no speaker but do have haptic actuators: LRAs (linear resonant actuators) on the Nintendo pads, haptic transducers on the Steam pads. <code>HapticToneService</code> treats them as a tone generator. A Switch Joy-Con L/R, a combined Joy-Con pair, Switch Pro, Steam Controller 2015, Steam Deck, Steam Controller 2026 (Triton), SInput pad, or Flydigi Apex 6 Pro assigned to a slot becomes an output sink whose <code>MacroMixer</code> is returned to <code>SoundMacroService</code> alongside the Sony and Wii sinks, so a macro Play Sound fans out to it with no macro-layer change. <code>FamilyOf</code> sorts the Nintendo and Valve devices by VID and PID against the SDL <code>controller_list.h</code> table, so every transport and revision of a family (wired, BLE, dongle) is caught rather than a hand-picked PID subset. An SInput pad is any ID <code>Engine.SInputControllerIdentity.IsSInput</code> holds, the list SDL's SInput driver opens. The Apex 6 Pro is found by the pad's own answer (<code>FlydigiApexService.HasVoiceCoils</code>), because the plain Apex 6 shares its IDs and has no voice coils. Switch 2 is excluded: no reference plays an audible tone on its actuator, so it gets no Audio card.</p>
 <p><code>FamilyOf</code> maps the paired-set PID <code>0x2008</code> to <code>Family.JoyConPair</code>, the id SDL reports when it combines two Joy-Cons by default (issue #184). That set has no HID path of its own to open: SDL's <code>nintendo_joycons_combined</code> is a synthetic placeholder, not a real <code>\\?\HID#...</code> path, so <code>CreateFileW</code> on it fails. <code>BuildSink</code> calls <code>SelectPairChildPaths</code> to resolve both real child paths (Left <code>0x2006</code> as primary, Right <code>0x2007</code> as second) and drives <strong>both coils</strong> (#223). <code>OpenPairSecondChild</code> opens the second child on its own handle, timer, probed write path, and <code>OutputReportByteLength</code>, and runs the init subcommands (<code>0x03</code> arg <code>0x30</code> input-report mode, <code>0x48</code> arg <code>0x01</code> enable vibration) on it, skipping the <code>0x03</code> mode write while Switch NFC or the Joy-Con IR hint is armed. A pair that resolves only one child degrades to single-coil and <code>RetryPairSecondHandles</code> picks the missing coil up on the 3-second reconcile.</p>
-<p>Side routing follows the slot's merged vibration snapshot: left motor active plays the left coil, right the right, both or neither play both. A side stays hot for <code>PairSideHoldMs = 300</code> ms after its motor drops so packet-rate motor flap does not strobe the tone, and a side going cold gets one neutral half before silence. The Audio-tab Test button and remote-driven sinks bypass the routing and always play both coils. Two simultaneous pairs no longer stack on one set of children: <code>ResolveUnclaimedPairChildren</code> walks <code>FirstUnclaimed</code> over the paths no other live pair sink already holds, so each physical Joy-Con gets exactly one writer. Residual on record: nothing at this layer proves the left it picks is the physical partner of the right it picks, because SDL owns the pairing and exposes only the combined device with an empty serial.</p>
+<p>Side routing follows the slot's merged vibration snapshot: left motor active plays the left coil, right the right, both or neither play both. A side stays hot for <code>PairSideHoldMs = 300</code> ms after its motor drops so packet-rate motor flap does not strobe the tone, and a side going cold gets one neutral half before silence. The Audio card's Test button and remote-driven sinks bypass the routing and always play both coils. Two simultaneous pairs no longer stack on one set of children: <code>ResolveUnclaimedPairChildren</code> walks <code>FirstUnclaimed</code> over the paths no other live pair sink already holds, so each physical Joy-Con gets exactly one writer. Residual on record: nothing at this layer proves the left it picks is the physical partner of the right it picks, because SDL owns the pairing and exposes only the combined device with an empty serial.</p>
 <p>An LRA reproduces one frequency at a time: a tone with an amplitude envelope, not PCM. A pad with more than one actuator (a Pro or Joy-Con pair has two coils, the 2015 Steam Controller has two haptics, the Steam Controller 2026 has four LRAs, two trackpads and two grips) still plays that single mono tone. The extra actuators do not buy stereo or fidelity. Beeps, alerts, and melodic cues land. Speech and music do not. Each tick the service collapses the macro mix to one tone:</p>
 <ul>
 <li><code>HapticToneReducer</code> (<code>PadForge.Engine/Haptics/HapticToneReducer.cs</code>) reads the dominant frequency from the first normalized-autocorrelation peak above the voiced threshold (not the global maximum) over the playable lag range, and the amplitude from windowed RMS. Below a silence RMS the amplitude is 0. An unvoiced burst holds the last pitch so the coil does not jump around.</li>
@@ -4886,18 +5092,28 @@
 <td><code>0x86</code> configure plus <code>0x88</code> stereo PCM, 64 bytes</td>
 <td>(#381) Not a tone at all. The sink reads the stereo mix through a Butterworth low-pass and a sinc downsample to 8 kHz and streams it, s16 wired and G.711 mu-law over the dongle. Cut and Fold are not applied. Falls back to <code>0x83</code> when the write ring cannot build. Full detail on <a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>.</td>
 </tr>
+<tr>
+<td>SInput</td>
+<td>Output report <code>0x03</code>, command <code>0x01</code>, haptics type 1, 48 bytes</td>
+<td>(#584) <code>EncodeSInputHaptics</code>: the tone's frequency on band 1 of both sides and each side's amplitude as a <code>u16</code> over 65535, band 2 silent (SINPUT-LIB-HID <code>sinput_lib_protocol.c</code>). The frequency is octave-folded into 41 to 1252 Hz (<code>FoldSInputFrequency</code>) and written on both sides, because HOJA reads its oscillators from the left side alone. HOJA firmware plays the pitch, OpenPuck the amplitude only. The pad holds the last frame, so <code>StreamSInputTick</code> writes when the tone changes, again every <code>SInputRefreshMs</code> (50 ms) while a tone sounds, because SDL's own type 2 rumble write replaces the held frame whenever a game changes its rumble, and one all-zero stop when the cue ends.</td>
+</tr>
+<tr>
+<td>Flydigi Apex 6 Pro</td>
+<td>Grip samples, one signed byte a millisecond per grip, eight to a report</td>
+<td>(#586) Not a tone. The sink reads the stereo mix through the same low-pass and 8 kHz downsample as the Triton lane, fixed at <code>FlydigiLowPassHz</code> (400, under the samples' 500 Hz limit), averages each millisecond's eight frames into one sample at 127 for full scale (<code>FlydigiSample</code>, after ApexSenseBridge), and hands blocks of <code>Apex6SamplesPerReport</code> to the pad's session (<code>FlydigiApexSession.SubmitGripPcm</code>). <code>SetGripPcmWanted</code> asks for the grips while the cue lasts and gives them back to the pad's own rumble <code>PcmHangoverMs</code> after it. Cut and Fold are not applied, and the Test tone is held at 400 Hz.</td>
+</tr>
 </tbody>
 </table>
-<p>Why raw HID and not SDL rumble: the bundled SDL fork's Switch and Steam drivers hard-code the rumble carrier and vary only amplitude, so tone playback needs the same raw-HID writer pattern the Wii and Sony speaker paths use. The one exception is the 2015 Steam Controller, whose <code>0x8F</code> feature blob is forwarded through <code>SDL_SendGamepadEffect</code> (with a raw <code>HidD_SetFeature</code> fallback when SDL did not open it as a gamepad). The Joy-Con, Deck, and Triton tone lanes each write their own raw HID handle.</p>
+<p>Why raw HID and not SDL rumble: the bundled SDL fork's Switch and Steam drivers hard-code the rumble carrier and vary only amplitude, so tone playback needs the same raw-HID writer pattern the Wii and Sony speaker paths use. The one exception is the 2015 Steam Controller, whose <code>0x8F</code> feature blob is forwarded through <code>SDL_SendGamepadEffect</code> (with a raw <code>HidD_SetFeature</code> fallback when SDL did not open it as a gamepad). The Joy-Con, Deck, Triton and SInput tone lanes each write their own raw HID handle. SInput's frames go out with <code>WriteFile</code> on the interrupt endpoint, the way SDL writes them, and fall back to <code>SET_REPORT</code> for the rest of a cue if that is refused. SDL's SInput driver sends type 2 only, so the type 1 tone needs this lane. The Apex 6 Pro writes nothing through its handle: the session PadForge has with the pad owns every write to it, and the handle only stands for the pad being there.</p>
 <h3 id="high-tone-cut-and-fold-202">High-tone cut and fold (#202)<a class="headerlink" href="#high-tone-cut-and-fold-202" title="Permanent link">&para;</a></h3>
 <p>An LRA loses fidelity above its resonance, and a loud high pitch on a wrist-worn coil is unpleasant. <code>HapticToneService</code> filters the reduced pitch upstream of the family switch, so every encoder sees the same clamped pair. Three settings, held in <code>ToneFilterOff</code> / <code>ToneFilterCut</code> / <code>ToneFilterFold</code> (0, 1, 2): off passes everything, cut and fold act above a limit. The <code>(mode, limitHz)</code> pair is resolved per (slot, device) through <code>ToneFilterProvider</code> and re-read by each sink every 250 ms on its own stream thread.</p>
 <ul>
 <li><strong>Cut</strong> zeroes the amplitude above the limit. It re-emits the last passing pitch rather than the cut pitch. The pitch-only <code>0x8F</code> square (Steam 2015 and Deck) never reads amplitude, so a cut tick carrying the beep pitch would re-arm the square at the exact frequency the user cut.</li>
 <li><strong>Fold</strong> octave-halves the pitch into the pass band, keeping the pitch class.</li>
 </ul>
-<p>The filter runs only on the tone branch. A PCM-capable Triton sink never calls it, since the stream's low-pass cutoff replaces its purpose. <code>ApplyToneFilter</code> clamps the user limit to <code>100..1300</code> Hz and carries a boundary-hysteresis latch (a Schmitt trigger). The reducer measures pitch on the integer-lag grid <code>ReduceRate / lag</code>, so a tone near the limit lands on one of two adjacent grid pitches, and per-tick noise flips which one wins. A bare <code>&gt;</code> turns that flip into an octave flap at the tick rate. Once engaged, the tie's lower grid member stays engaged, so the pair folds together instead of alternating folded and unfolded. Disengage needs the measurement a full grid step below the limit. The filter runs on the Test button too, so the test never lies about the setting. Owner-side Remote Link frames are exempt, because the consumer applied its own filter before shipping.</p>
+<p>The filter runs only on the tone branch. A PCM sink, a wired or dongle Triton or an Apex 6 Pro, never calls it, since the stream's low-pass cutoff replaces its purpose. The Audio card hides High Tones on an Apex 6 Pro (<code>PadViewModel.SelectedDeviceHasToneFilter</code>). Play DualSense Haptics on This Controller and Haptics Gain sit in a panel of their own, shown for every pad that plays haptic tones (<code>SelectedDeviceHasHapticTones</code>), so an Apex 6 Pro shows them. <code>ApplyToneFilter</code> clamps the user limit to <code>100..1300</code> Hz and carries a boundary-hysteresis latch (a Schmitt trigger). The reducer measures pitch on the integer-lag grid <code>ReduceRate / lag</code>, so a tone near the limit lands on one of two adjacent grid pitches, and per-tick noise flips which one wins. A bare <code>&gt;</code> turns that flip into an octave flap at the tick rate. Once engaged, the tie's lower grid member stays engaged, so the pair folds together instead of alternating folded and unfolded. Disengage needs the measurement a full grid step below the limit. The filter runs on the Test button too, so the test never lies about the setting. Owner-side Remote Link frames are exempt, because the consumer applied its own filter before shipping.</p>
 <h3 id="system-audio-mirror-and-engage-gate-185">System-audio mirror and engage gate (#185)<a class="headerlink" href="#system-audio-mirror-and-engage-gate-185" title="Permanent link">&para;</a></h3>
-<p>Like the Sony sink, the Wii and haptic-tone sinks carry their own system-audio mirror. <code>WiiSpeakerService.ReconcileMirrors</code> and <code>HapticToneService.ReconcileMirrors</code> read the same <code>PassthroughConfigProvider</code> and add a <code>WasapiLoopbackCapture</code> onto the sink's <code>MacroMixer</code>, so a mirrored Windows output plays through the Wii speaker, or through a haptic pad reduced to a pitch-following tone (a wired or dongle Steam Controller 2026 streams it as low-passed PCM instead).</p>
+<p>Like the Sony sink, the Wii and haptic-tone sinks carry their own system-audio mirror. <code>WiiSpeakerService.ReconcileMirrors</code> and <code>HapticToneService.ReconcileMirrors</code> read the same <code>PassthroughConfigProvider</code> and add a <code>WasapiLoopbackCapture</code> onto the sink's <code>MacroMixer</code>, so a mirrored Windows output plays through the Wii speaker, or through a haptic pad reduced to a pitch-following tone (a wired or dongle Steam Controller 2026 and an Apex 6 Pro stream it as low-passed PCM instead).</p>
 <p>The mirror's <code>BufferedWaveProvider</code> is 500 ms deep with <code>DiscardOnBufferOverflow</code>, and the persona haptic feed's is 250 ms. Both are filled in wall-clock time by other threads and read by the sink thread, so at idle the sink's coarse 15 ms sleep let them fill to cap and every onset queued behind stale audio (#371 follow-up). The idle catch-up drain in <code>StreamLoop</code> holds both at one tick of depth. The mechanism is described with the PCM lane on <a href="../steam-controller-haptics-internals/">Steam Controller Haptics Internals</a>, and it runs on every haptic sink that has a persona feed or a mirror, tone sinks included.</p>
 <p>On the haptic path that mirror can gate. When <code>ReconcileMirrors</code> starts a mirror, <code>StartMirror</code> wraps only the mirror's sample provider in a <code>GatedMirrorSampleProvider</code> bound to a per-(slot, device) <code>EngageCell</code>. The gate has three modes: Always (default, the cell stays engaged), Input (engaged while a chosen descriptor is held, an empty descriptor reads as always-on), and Rumble (engaged while any of the slot's four vibration motors is nonzero). <code>InputManager.UpdateHapticMirrorEngageStates</code> settles every cell once per poll and applies a release-delay hold through <code>HoldEngaged</code>, clamped to <code>0..10000</code> ms, so the tone does not clip off the instant the source drops. The gate wraps the mirror input alone. Macro sounds and the Test button bypass it and always play.</p>
 <hr />
@@ -4923,7 +5139,7 @@
 <li><a href="../../guides/macros/">Macros</a>: the Play Sound action that feeds the sink mixers.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

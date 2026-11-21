@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3311,6 +3433,34 @@
     
   
     Screen Color Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
   
 
     
@@ -3912,6 +4062,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -4004,6 +4182,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4744,7 +4950,7 @@
 <p>Only one chain is ever read at runtime, so the pull model's single-reader rule holds.</p>
 <h3 id="mix-not-arbitrate">Mix, not arbitrate<a class="headerlink" href="#mix-not-arbitrate" title="Permanent link">&para;</a></h3>
 <p>The <code>MacroMixer</code> is the sum every source already feeds. On a PCM sink that means the persona's haptic channels (<code>PersonaBuf</code>, fed by <code>SubmitPersonaHaptics</code> from HIDMaestro's pacing thread, scaled by Haptics Gain 25 to 300%), macro sounds, and the system-audio mirror behind its engage gate. The stream consumes the mix and nothing is silenced by it. The requester's original limitation, exclusive ownership of the actuators by one source, dissolves into mixing.</p>
-<p>Two things are synthesized into the stream instead of being sent as their own reports. The Audio-tab test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. While the stream is armed, a touchpad swipe tick becomes a 160 Hz sine (<code>PcmPulseHz</code>) on its own side's channel with a decaying envelope, that side's pulse amplitude times 0.6, max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. With the stream disarmed the tick goes out as the ordinary 0x82 tick command. The pulse amplitudes (<code>PulseAmp</code>, <code>PulseAmpLeft</code>, <code>PulseAmpRight</code>) are read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).</p>
+<p>Two things are synthesized into the stream instead of being sent as their own reports. The Audio card's test tone and a Remote Link relayed tone render as a sine at the requested frequency and amplitude. While the stream is armed, a touchpad swipe tick becomes a 160 Hz sine (<code>PcmPulseHz</code>) on its own side's channel with a decaying envelope, that side's pulse amplitude times 0.6, max-wins with whatever envelope is still ringing, because racing a 0x82 click against an active stream is an interaction no reference documents. With the stream disarmed the tick goes out as the ordinary 0x82 tick command. The pulse amplitudes (<code>PulseAmp</code>, <code>PulseAmpLeft</code>, <code>PulseAmpRight</code>) are read then zeroed on consumption, so a lowered slider takes effect on the next swipe (the 09-02 audit's F13).</p>
 <h3 id="arm-and-disarm">Arm and disarm<a class="headerlink" href="#arm-and-disarm" title="Permanent link">&para;</a></h3>
 <p><code>StreamTritonPcmTick</code> marks <code>PcmLastContentMs</code> whenever a tick's peak is audible. The stream is wanted while a test tone is active or within <code>PcmHangoverMs</code> (2000 ms) of the last content. Wanted and not armed arms. Not wanted and armed disarms, so an idle pad costs nothing on the wire.</p>
 <p><code>ArmTritonPcm</code> (<code>HapticToneService.cs</code>) sends, in order:</p>
@@ -4767,11 +4973,12 @@
 <p><code>TrySubmit</code> returns false when every slot is busy, and the caller keeps the frames pending for the next tick. A hard write failure consumes the report and counts it (<code>HardFailures</code>), so a dead handle degrades to counted drops instead of a stalled stream.</p>
 <p>A zero event handle from <code>CreateEventW</code> would leave a slot unreclaimable forever, and the ring would go silent once every slot had been used. The constructor throws in that case after releasing what it built. The sink catches it, logs <code>TRITONPCM ring FAILED ... falling back to 0x83</code>, disarms, and clears <code>PcmCapable</code>, so the pad plays tones instead of nothing until its sink is rebuilt. <code>TritonPcmTests.WriteRing_RefusesAZeroEvent</code> drives that path through the injectable event factory.</p>
 <h3 id="the-low-pass">The low-pass<a class="headerlink" href="#the-low-pass" title="Permanent link">&para;</a></h3>
-<p><code>TritonPcmLowPassProvider</code> is two cascaded RBJ biquads per channel with the standard fourth-order Q split (0.5411961, 1.3065630), applied at the 48 kHz mix rate before the sinc downsample, so content above the cutoff reaches the wire attenuated, about 24 dB down one octave above it. The default 250 Hz is the requester's hardware-measured threshold on their unit for where the actuators start to be audible as sound rather than felt as vibration. It is a setting because that is one unit's measurement, not a device specification. <code>SetCutoff</code> clamps to 60..1000 and rebuilds the four filters. It is called only from the reading thread, between reads, on the same 250 ms configuration cadence that refreshes the tone filter. The tests pin -3 dB at the cutoff, a steep slope above it, and a flat band well below it.</p>
+<p><code>TritonPcmLowPassProvider</code> is two cascaded RBJ biquads per channel with the standard fourth-order Q split (0.5411961, 1.3065630), applied at the 48 kHz mix rate before the sinc downsample, so content above the cutoff reaches the wire attenuated, about 24 dB down one octave above it. The default 250 Hz is the requester's hardware-measured threshold on their unit for where the actuators start to be audible as sound rather than felt as vibration. It is a setting because that is one unit's measurement, not a device specification. <code>SetCutoff</code> clamps to 60..1000 and rebuilds the four filters. It is called only from the reading thread, between reads, on the same 250 ms configuration cadence that refreshes the tone filter, and only on a <code>Family.Steam2026</code> sink. The tests pin -3 dB at the cutoff, a steep slope above it, and a flat band well below it.</p>
+<p>The Flydigi Apex 6 Pro's grip lane (#586) reads its mix through the same provider and downsample, built at <code>FlydigiLowPassHz</code> (400) and never retuned, and averages each millisecond into one grip sample instead of packing 0x88 reports. It is described in <a href="../controller-audio-internals/#hd-haptic-tones-147">Controller Audio Internals</a>.</p>
 <p>The #202 high-tone Cut and Fold settings are not applied on the PCM transports. <code>ApplyToneFilter</code> runs only on the <code>!PcmCapable</code> branch. The low-pass replaces their purpose there.</p>
 <h3 id="the-idle-catch-up-drain">The idle catch-up drain<a class="headerlink" href="#the-idle-catch-up-drain" title="Permanent link">&para;</a></h3>
 <p>The 09-01 follow-up. At idle the sink thread reads one 10 ms mixer block, then sleeps on the 15 ms coarse timer, which rounds to about 16 ms of wall time (idle deliberately avoids <code>timeBeginPeriod</code>). A producer that writes in wall-clock time, the persona feed at 10 ms of audio every 10 ms, outran that reader by roughly a third. <code>PersonaBuf</code> is a 250 ms <code>BufferedWaveProvider</code> with <code>DiscardOnBufferOverflow</code>, which drops new data and keeps the oldest, the worst polarity for latency. It pinned at cap in under a second, and every haptic onset then queued behind stale audio upstream of where the 40 ms <code>PcmPending</code> cap could reach. <code>MirrorBuf</code> has the identical shape at 500 ms.</p>
-<p><code>IdleCatchUpDrainOwned</code>, the policy the test-facing <code>IdleCatchUpDrain</code> wraps, runs on each idle wake while <code>PersonaOn || MirrorOn</code>: while the deepest wall-clock-fed buffer holds more than <code>IdleDrainKeepMs</code> (15 ms), consume another block, up to <code>IdleDrainMaxBlocks</code> (5) per wake, and stop the moment a drained block carries content. Nothing is discarded blind. On a PCM sink the drain block is the full <code>StreamTritonPcmTick</code>, so an onset buried in backlog arms and submits in the wake it is found. On a tone sink the drain peak-checks and marks <code>LastContentMs</code> so the next iteration streams. <code>IdleDrainBlocks</code> counts the extra blocks for the diagnostic.</p>
+<p><code>IdleCatchUpDrainOwned</code>, the policy the test-facing <code>IdleCatchUpDrain</code> wraps, runs on each idle wake while <code>PersonaOn || MirrorOn</code>: while the deepest wall-clock-fed buffer holds more than <code>IdleDrainKeepMs</code> (15 ms), consume another block, up to <code>IdleDrainMaxBlocks</code> (5) per wake, and stop the moment a drained block carries content. Nothing is discarded blind. On a PCM sink the drain block is the full <code>StreamTritonPcmTick</code>, or <code>StreamFlydigiPcmTick</code> on an Apex 6 Pro, so an onset buried in backlog arms and submits in the wake it is found. On a tone sink the drain peak-checks and marks <code>LastContentMs</code> so the next iteration streams. <code>IdleDrainBlocks</code> counts the extra blocks for the diagnostic.</p>
 <p>The transferable rule: every wall-clock producer feeding a pull-based mixer needs its drain rate matched at every consumer cadence, idle included. A drop-oldest cap on an output queue bounds nothing that accumulates in an input-stage buffer.</p>
 <h3 id="teardown">Teardown<a class="headerlink" href="#teardown" title="Permanent link">&para;</a></h3>
 <p><code>TeardownSink</code> for <code>Family.Steam2026</code> raises the <code>TornDown</code> fence first, then disarms the stream if armed, disposes the ring, and sends the 0x83 stop on the lane's actuator set. <code>ArmTritonPcm</code> reads the fence before its first config write, so a stream thread that outlived the 3 s join can never re-enable the stream after the disable pair. The audit flipped the old order (disarm, then fence) and the contract test with it.</p>
@@ -4890,7 +5097,7 @@
 <li><a href="../remote-link-internals/">Remote Link Internals</a>: how a relayed tone reaches this sink.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

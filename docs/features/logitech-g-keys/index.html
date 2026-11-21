@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2073,6 +2105,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2109,6 +2169,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2868,6 +2984,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3461,6 +3583,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3741,6 +3891,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3833,6 +4011,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4237,7 +4443,7 @@
 <p>PadForge reads the G-keys directly through Logitech's G-key SDK instead. They arrive as their own device row, bind through the same grid every other device uses, and never reach any other program.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Settings</strong>, find the <strong>Input Engine</strong> card, and tick <strong>Read Logitech G-Keys</strong>. It is off by default, because turning it on loads a third-party library and opens a session with the Logitech software.</p>
+<p>Open <strong>Settings</strong> and turn on <strong>Read Logitech G-Keys</strong> on the <strong>Hardware Support</strong> card. It is off by default, because turning it on loads a third-party library and opens a session with the Logitech software.</p>
 <p>A <strong>Logitech G-Keys</strong> row then appears on the <a href="../devices/">Devices</a> page.</p>
 <h3 id="what-you-need">What you need<a class="headerlink" href="#what-you-need" title="Permanent link">&para;</a></h3>
 <p>Logitech Gaming Software 8.55 or later, running. The SDK ships with it, and G HUB does not include it.</p>
@@ -4245,11 +4451,11 @@
 <p>Give each key the <strong>G-key</strong> command. Once PadForge has run with this setting on, Logitech Gaming Software has a profile for PadForge with a G-key command in its command list. Drag that command onto every G-key and extra mouse button you want PadForge to read. A key without it keeps running whatever Logitech's software has on it and never reaches PadForge.</p>
 <p>Then make that profile the <strong>persistent profile</strong>. Logitech Gaming Software lets you nominate one, which keeps receiving G-keys no matter which program is in front. Without it the SDK only feeds whichever program has focus, so your G-keys work in PadForge's own window and nowhere else.</p>
 <p>While the PadForge profile is persistent, Logitech Gaming Software ignores every other profile, including the profiles linked to your games, so a game's own G-key assignments stop applying. To clear it, right-click the PadForge profile in the Profiles area and select <strong>Set As Persistent</strong> again to remove the check mark.</p>
-<p>A G600 or G300 mouse also has to be out of on-board mode. The SDK reads neither mouse while it is in that mode.</p>
+<p>A G600 or G300 mouse also has to be out of on-board memory mode. The SDK reads neither mouse while it is in that mode.</p>
 <p>Logitech's profiles are unrelated to PadForge's own <a href="../../guides/profiles/">profiles</a>, which are a different thing that lives on the Profiles page.</p>
 <hr />
 <h2 id="reading-the-status-line">Reading the status line<a class="headerlink" href="#reading-the-status-line" title="Permanent link">&para;</a></h2>
-<p>Under the checkbox is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.</p>
+<p>Under the switch is a line saying exactly which of seven situations the machine is in, so a quiet G-key is never a mystery.</p>
 <table>
 <thead>
 <tr>
@@ -4279,11 +4485,11 @@
 <td>Start Logitech Gaming Software.</td>
 </tr>
 <tr>
-<td><em>Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent. A G600 or G300 mouse also has to be out of on-board mode.</em></td>
-<td>Do both, take a G600 or G300 out of on-board mode, then press a G-key.</td>
+<td><em>Connected, no key seen yet. In Logitech Gaming Software, drag the G-key command onto each key in the PadForge profile, and make that profile persistent. A G600 or G300 mouse also has to be out of on-board memory mode.</em></td>
+<td>Do both, take a G600 or G300 out of on-board memory mode, then press a G-key.</td>
 </tr>
 <tr>
-<td><em>Running, {0} key events</em></td>
+<td><em>Running, {0} key events</em> (<em>Running, 1 key event</em> after the first)</td>
 <td>Working, with the count in place of <code>{0}</code>. It rises as you press keys.</td>
 </tr>
 </tbody>
@@ -4310,14 +4516,14 @@
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../settings/">Settings</a>: the Input Engine card.</li>
+<li><a href="../settings/">Settings</a>: the Hardware Support card.</li>
 <li><a href="../devices/">Devices</a>: the Logitech G-Keys row.</li>
 <li><a href="../peripherals/">Mice, Keyboards and Vendor Rows</a>: Logitech keyboard and mouse lighting from a virtual controller, through the LED SDK (the other Logitech SDK PadForge loads) while Logitech Gaming Software or G HUB runs.</li>
-<li><a href="../lighting/">Lighting</a>: coloring a Logitech keyboard's keys from the Lighting tab.</li>
+<li><a href="../lighting/">Lighting</a>: coloring a Logitech keyboard's keys from the <strong>Lighting</strong> card in a slot's <strong>Lights &amp; Sound</strong> section.</li>
 <li><a href="../../reference/logitech-g-keys-internals/">Logitech G-Keys Internals</a>: the event word, the library search, and the lifecycle, for whoever has to change the code.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

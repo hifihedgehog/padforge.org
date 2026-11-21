@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3566,6 +3688,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3846,6 +3996,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3938,6 +4116,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4465,7 +4671,7 @@
 </tr>
 <tr>
 <td>Internet lane (#294)</td>
-<td><code>LinkCode.cs</code>, <code>StunClient.cs</code>, <code>NatProfile.cs</code>, <code>PortPredictor.cs</code>, <code>HolePuncher.cs</code>, <code>PunchedConnection.cs</code>, <code>RendezvousProtocol.cs</code>, <code>IrohRelayClient.cs</code>, <code>Dht/</code></td>
+<td><code>LinkCode.cs</code>, <code>StunClient.cs</code>, <code>NatProfile.cs</code>, <code>PortPredictor.cs</code>, <code>HolePuncher.cs</code>, <code>PunchedConnection.cs</code>, <code>IrohRelayClient.cs</code>, <code>Dht/</code></td>
 </tr>
 <tr>
 <td>Crypto</td>
@@ -4497,7 +4703,7 @@
 <hr />
 <h2 id="discovery">Discovery<a class="headerlink" href="#discovery" title="Permanent link">&para;</a></h2>
 <p><code>LinkDiscovery</code> is a UDP broadcast beacon, not mDNS. It binds <code>IPAddress.Any:27501</code>, announces every two seconds to <code>IPAddress.Broadcast:27501</code>, and prunes a peer after ten seconds of silence. Because it broadcasts, it is same-subnet only. The beacon carries a four-byte magic, a version, the link port, the sender's identity fingerprint (hex), and the self-asserted machine name. A forged beacon can only put a name in the <strong>Nearby PCs (Not Paired)</strong> list. The crypto gate still controls admission. The receive loop filters out the PC's own fingerprint and raises <code>PeersChanged</code>. The discovered-peer table caps at 256 entries so a beacon flood with rotating fingerprints cannot grow it without bound. A known peer keeps refreshing and is never evicted by the cap.</p>
-<p>Discovery is a convenience, not the only way in. The Dashboard also carries a manual "Or Connect by Address (Advanced)" field with a "Pair / Connect" button, which raises <code>DashboardViewModel.ConnectToPeerRequested</code> into <code>InputService.OnConnectToPeerRequested</code>. That handler enables and starts the link server if it is off, splits an optional <code>:port</code> suffix off the typed host (falling back to the configured link port), builds the exposed-device list, and calls <code>LinkServer.ConnectAsync</code>. The auto-reconnect dial below runs through the same handler, so a hand-typed address and a discovered peer take an identical path across a subnet boundary.</p>
+<p>Discovery is a convenience, not the only way in. The Remote Link page under Extras also carries a manual "Connect by Address" field, in its More fold, with a "Pair / Connect" button, which raises <code>DashboardViewModel.ConnectToPeerRequested</code> into <code>InputService.OnConnectToPeerRequested</code>. That handler enables and starts the link server if it is off, splits an optional <code>:port</code> suffix off the typed host (falling back to the configured link port), builds the exposed-device list, and calls <code>LinkServer.ConnectAsync</code>. The auto-reconnect dial below runs through the same handler, so a hand-typed address and a discovered peer take an identical path across a subnet boundary.</p>
 <p>The same field also accepts a connection code, which is the internet lane (#294). <code>LinkCode.LooksLikeCode</code> and <code>LinkCode.TryParseSelfContained</code> sort the two apart before anything else: an entry with a dot or a colon is never a code, and a bare name that does not parse as a self-contained code goes to the address path.</p>
 <hr />
 <h2 id="server-connection-and-the-sealed-transport">Server, connection, and the sealed transport<a class="headerlink" href="#server-connection-and-the-sealed-transport" title="Permanent link">&para;</a></h2>
@@ -4585,7 +4791,7 @@
 <tr>
 <td><code>0xEE</code> (<code>DeviceListExtV13Magic</code>)</td>
 <td>Voice phrases</td>
-<td>For the rows whose pad carries voice phrases on the owner (#528): <code>[records]</code>, then per record <code>[record index]</code>. A Bluetooth DualShock 4 carries them by its path, which a <code>peer://</code> copy never has, so the copy offered none although its voice buttons already crossed in the input codec. Read into <code>RemotePeerDeviceInfo.HasVoicePhrases</code>; a malformed tail clears that field on every row.</td>
+<td>For the rows whose pad carries voice phrases on the owner (#528): <code>[records]</code>, then per record <code>[record index]</code>. A Bluetooth DualShock 4 carries them by its path, which a <code>peer://</code> copy never has, so the copy offered none although its voice buttons already crossed in the input codec. Read into <code>RemotePeerDeviceInfo.HasVoicePhrases</code>. A malformed tail clears that field on every row.</td>
 </tr>
 <tr>
 <td><code>0xEF</code> (<code>DeviceListExtV14Magic</code>)</td>
@@ -4734,7 +4940,7 @@
 <p>The first extension block is <code>BlockExt.GyroAux</code> (#252): the gyro triple of a combined pair's left Joy-Con, capability-gated like <code>Gyro</code>, <code>Accel</code>, and <code>AccelAux</code> because a zeroed reading is a still controller, not an absent sensor. Decode fails closed on a non-finite float, resetting the frame to neutral so a hostile NaN never reaches the tuning chain. On the consumer the block feeds the aux gyro sources and <code>SourceCoercion.GravityProviderAux</code> on the tuning path, and the <code>HasGyroAux</code> capability (the <code>0xE4</code> device-list tail) gates discoverability, mirroring a local left Joy-Con.</p>
 <p>The second is <code>BlockExt.RingCon</code> (hifihedgehog/SDL#33): <code>RingConStrain</code> as one float, written after <code>GyroAux</code> so a decoder that knows only <code>GyroAux</code> reads its block and leaves this one in the tail. Presence comes from the state, as the <code>JoyConIr</code> block's does: a strain of exactly 0 is rest or no Ring-Con, the neutral an omitted block decodes to, so only a nonzero strain rides the wire. Decode fails closed on a non-finite float like <code>GyroAux</code>, and the consumer's read clamps each direction to 0..1 again.</p>
 <p>The third is <code>BlockExt.AnalogKeys</code> (#468): how far each key an analog keyboard reports as down is pressed. It is a count byte, then a little-endian u16 key code and a u16 depth per key, the depth 0 at rest and 65535 at the bottom of the press, written after <code>RingCon</code> under the same tail rule. Presence comes from the state: no key down omits the block, and an omitted block decodes to no key down. The encoder writes at most <code>AnalogKeyInputState.MaxKeys</code> (64) keys, and a count past that fails the frame closed to neutral as a hostile or corrupt one. The decoder hands each key to <code>AnalogKeyInputState.Set</code>, which ignores a code outside 1 to 0x6FF and keeps the last depth of a repeated code. The keys a keyboard has travel separately, in the device list's <code>0xEA</code> tail above.</p>
-<p><code>BlockExt.IrCalibrated</code> (#485), the bit after <code>AnalogKeys</code>, carries no payload. It marks the frame's Wii IR aim as already mapped through the owner's light-gun calibration window, so the consumer's IR read adds no Pointer-tab sensor-bar offset, as a local calibrated remote's read does not. A GunCon 2's on-screen aim carries it too, since its beam window already places the aim. The encoder sets it only with the <code>Ir</code> block, and the decoder honors it only when that block arrived. A peer that predates the bit leaves it unread, and a tail the bit opens alone is the three-byte header that <code>MaxEncodedSize</code> already budgets with the Ring-Con block.</p>
+<p><code>BlockExt.IrCalibrated</code> (#485), the bit after <code>AnalogKeys</code>, carries no payload. It marks the frame's Wii IR aim as already mapped through the owner's light-gun calibration window, so the consumer's IR read adds no sensor-bar offset of its own, as a local calibrated remote's read does not. A GunCon 2's on-screen aim carries it too, since its beam window already places the aim. The encoder sets it only with the <code>Ir</code> block, and the decoder honors it only when that block arrived. A peer that predates the bit leaves it unread, and a tail the bit opens alone is the three-byte header that <code>MaxEncodedSize</code> already budgets with the Ring-Con block.</p>
 <hr />
 <h2 id="reverse-output-relay-consumer-game-to-owner-hardware">Reverse output relay (consumer game to owner hardware)<a class="headerlink" href="#reverse-output-relay-consumer-game-to-owner-hardware" title="Permanent link">&para;</a></h2>
 <p>The consumer runs the full config-applied output pipeline for a <code>peer://</code> device. The final hardware write fails (the handle is zero), so each write chokepoint hands its config-baked payload to <code>RemoteLinkOutputRouter</code> instead:</p>
@@ -4742,7 +4948,7 @@
 <li><code>ShipSonyEffect</code> (in <code>PlayStationEffectWriter</code>) strips the report id and encodes the DualSense or DualShock 4 effect body.</li>
 <li><code>ShipVibration</code> (Step 2) encodes the full <code>Vibration</code> (motors, impulse triggers, directional and condition force). For a device without trigger motors, the consumer's <strong>Fold Trigger Rumble into Main Motors</strong> goes into the motors first, since the owner replays the frame with a neutral setting.</li>
 <li><code>ShipIdentify</code> (in <code>InputService.IdentifyDevice</code>) sends Identify's pulses for a peer row in no slot as vibration frames, past the record <code>ShipVibration</code> dedups against. Step 2 sends such a row a stop whenever that record shows a level.</li>
-<li><code>ShipWheel</code> (Step 2) encodes a semantic wheel frame (force, condition, periodic, range, auto-center, RPM-LED mask). Its flag byte carries the condition (1), directional (2) and LED-valid (4) bits, and bit 3 (8) marks a range the consumer leaves to the wheel (#512), which the owner then never sends. The range still rides the frame, so an owner from before that bit sets it as before.</li>
+<li><code>ShipWheel</code> (Step 2) encodes a semantic wheel frame (force, condition, periodic, range, auto-center, RPM-LED mask). Its flag byte carries the condition (1), directional (2) and LED-valid (4) bits, and bit 3 (8) marks a range the consumer leaves to the wheel (#512), which the owner then never sends. The range still rides the frame, so an owner from before that bit sets it as before. Vehicle mode's centering (#588) rides last as <code>OutputEffectCodec.CenteringTail</code>, 13 bytes behind the tag <code>0xCE</code>: the level as a signed force, then the spring's coefficient and saturation, the damper's coefficient and saturation and the friction's saturation, each held to 10000. The consumer composes it, since the settings, the game's speed and the wheel's relayed position are all there. The tail rides only when it holds something, and a frame without it lets go of any centering the wheel holds. A wheel frame is 44 bytes, 57 with the tail (<code>WheelFrameMax</code>). The poll writes it into a stack buffer and makes an array only for a frame that differs from the last one sent. An owner from before the tail stops reading at the LED mask and never sees it.</li>
 <li><code>ShipHapticTone</code> (in <code>HapticToneService</code>) encodes the HD haptic tone (#147): one (dominant frequency Hz, amplitude 0..1) pair per rumble tick, slot volume already applied.</li>
 <li><code>ShipPlayerIndex</code> encodes the consumer's winning 1-based player number (the smallest displayed number across the slots the pad feeds) for a shared Nintendo pad (<code>0x057E</code>), DS3 (<code>0x054C</code>/<code>0x0268</code>), or PS Move (<code>0x054C</code>/<code>0x03D5</code>, whose owner-side lane routes the number into the sphere's default color, #277). #191. A DualSense or DualShock 4 peer carries its player LED in the Sony effect body, so it never ships this kind.</li>
 <li><code>ShipGuideLed</code> encodes the consumer's configured Guide/Home LED brightness (0-100 percent) for a shared Xbox GIP pad, 2015 Steam Controller (#209), or Switch HOME-LED pad (Pro Controller, right Joy-Con, pair, charging grip, #226). It has <code>ShipPlayerIndex</code>'s shape, dedups per path, and addresses one peer device by its path.</li>
@@ -4750,7 +4956,7 @@
 </ul>
 <p><code>OutputEffectCodec.Kind</code> has six values: <code>SonyEffect = 1</code>, <code>Vibration = 2</code>, <code>Wheel = 3</code>, <code>HapticTone = 4</code>, <code>PlayerIndex = 5</code>, <code>GuideLed = 6</code>.</p>
 <p>The router maps the <code>peer://</code> path to a target (owner fingerprint, link slot, the advertising connection, and the device id, registered again when the device's slot moves) and sends through <code>PushOutputEffect</code> or <code>PushAudio</code> on that connection. Dedup varies per channel. Sony effects, scalar vibration, wheel frames, player index, and Guide LED dedup exact repeats. A vibration frame with directional or condition data always ships. The haptic tone dedups only the silent steady state, because an active tone must ship every rumble tick to keep refreshing the owner's hangover expiry.</p>
-<p>On the owner, the <code>FrameReceived</code> handler <code>OnRemoteFrameReceived</code> decodes the frame, resolves its device id to the physical source device, and hands an <code>Output</code> frame to <code>ApplyRemoteOutput</code>, which takes the sole-writer lease (except for a <code>PlayerIndex</code> or <code>GuideLed</code> frame, see below), and applies by kind: a Sony effect through <code>SDL_SendGamepadEffect</code>, a vibration through <code>ForceFeedbackState.SetDeviceForces</code>, a wheel frame through <code>ApplyRemoteWheel</code> (which re-encodes with the owner's own vendor writers, see <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>), a haptic tone (<code>HapticToneHz</code>/<code>HapticToneAmp</code>) through <code>HapticToneService.ApplyRemoteTone</code>, re-encoded by the owner's own per-family writer (Joy-Con HD Rumble, Steam 0x8f, Triton 0x83, Deck), a player index through <code>SetPlayerIndex</code> (0-based) for a Nintendo pad (VID <code>0x057E</code>), <code>Ds3DirectService.TrySetPlayerNumber</code> for a Bluetooth DS3 (<code>0x054C</code>/<code>0x0268</code>, falling back to <code>SetPlayerIndex</code> for a wired one), or <code>PsMoveDirectService.TrySetPlayerNumber</code> for a PS Move (<code>0x054C</code>/<code>0x03D5</code>), a Guide/Home LED brightness through <code>XboxGipGuideLedWriter.TrySetBrightness</code> for an Xbox GIP pad, <code>SteamHomeLedSetter.TrySet</code> for a 2015 Steam Controller, or <code>SwitchHomeLedSetter.TrySet</code> for a Switch HOME-LED pad (the same writers and gate order as the local apply path). An <code>Audio</code> frame takes no lease and goes straight to <code>AudioPassthroughService.FeedRemoteAudio</code> (see <a href="../controller-audio-internals/">Controller Audio Internals</a>). The vibration apply has three special cases. A Fanatec pedal re-routes to its raw-HID pedal-rumble writer. A Padix PlayStation converter (#440) records through <code>TryRecordMotorSnapshot</code> and writes the converter's own report via <code>PadixConverterRawHidWriter.Write</code>. An Xbox One+ impulse-trigger pad, gated by <code>XboxControllerIdentity.IsImpulseTriggerDevice</code>, records through <code>TryRecordXboxImpulseSnapshot</code> and writes all four channels (large and small plus LT and RT) via <code>XboxImpulseHidWriter.Write</code>, with SDL rumble suppressed so the impulse triggers fire. The owner synthesizes nothing here: for the wheel and the haptic tone it is a transport transcoder that re-frames the semantic payload with the writer that owns the real hardware.</p>
+<p>On the owner, the <code>FrameReceived</code> handler <code>OnRemoteFrameReceived</code> decodes the frame, resolves its device id to the physical source device, and hands an <code>Output</code> frame to <code>ApplyRemoteOutput</code>, which takes the sole-writer lease (except for a <code>PlayerIndex</code> or <code>GuideLed</code> frame, see below), and applies by kind: a Sony effect through <code>SDL_SendGamepadEffect</code>, a vibration through <code>ForceFeedbackState.SetDeviceForces</code>, a wheel frame through <code>ApplyRemoteWheel</code> (which re-encodes with the owner's own vendor writers, see <a href="../wheel-ffb-internals/">Wheel Force Feedback Internals</a>, and joins the centering tail's level to the game's constant force with <code>WheelCenteringWriter.MergedForce</code>), a haptic tone (<code>HapticToneHz</code>/<code>HapticToneAmp</code>) through <code>HapticToneService.ApplyRemoteTone</code>, re-encoded by the owner's own per-family writer (Joy-Con HD Rumble, Steam 0x8f, Triton 0x83, Deck), a player index through <code>SetPlayerIndex</code> (0-based) for a Nintendo pad (VID <code>0x057E</code>) or an SInput pad (<code>SInputControllerIdentity.IsSInput</code>), <code>Ds3DirectService.TrySetPlayerNumber</code> for a Bluetooth DS3 (<code>0x054C</code>/<code>0x0268</code>, falling back to <code>SetPlayerIndex</code> for a wired one), or <code>PsMoveDirectService.TrySetPlayerNumber</code> for a PS Move (<code>0x054C</code>/<code>0x03D5</code>), a Guide/Home LED brightness through <code>XboxGipGuideLedWriter.TrySetBrightness</code> for an Xbox GIP pad, <code>SteamHomeLedSetter.TrySet</code> for a 2015 Steam Controller, or <code>SwitchHomeLedSetter.TrySet</code> for a Switch HOME-LED pad (the same writers and gate order as the local apply path). An <code>Audio</code> frame takes no lease and goes straight to <code>AudioPassthroughService.FeedRemoteAudio</code> (see <a href="../controller-audio-internals/">Controller Audio Internals</a>). The vibration apply has three special cases. A Fanatec pedal re-routes to its raw-HID pedal-rumble writer. A Padix PlayStation converter (#440) records through <code>TryRecordMotorSnapshot</code> and writes the converter's own report via <code>PadixConverterRawHidWriter.Write</code>. An Xbox One+ impulse-trigger pad, gated by <code>XboxControllerIdentity.IsImpulseTriggerDevice</code>, records through <code>TryRecordXboxImpulseSnapshot</code> and writes all four channels (large and small plus LT and RT) via <code>XboxImpulseHidWriter.Write</code>, with SDL rumble suppressed so the impulse triggers fire. The owner synthesizes nothing here: for the wheel and the haptic tone it is a transport transcoder that re-frames the semantic payload with the writer that owns the real hardware.</p>
 <p><strong>Sole-writer guard.</strong> A device can be both shared out and mapped locally, and output cannot merge. An inbound relay frame stamps the local path with a three-second lease, and the owner's local chokepoints skip their own writes while the lease is fresh. A device that is only lent out (not also mapped locally) has no local writer, so there is no contention. A <code>PlayerIndex</code> or <code>GuideLed</code> frame is exempt from the lease. Both are cosmetic LED updates, not effect claims, so neither blanks a locally-mapped device's rumble or lightbar for the lease window.</p>
 <p><strong>Who still holds a device.</strong> <code>RemoteLinkOutputRouter.PeerKeepsDevice(localDevicePath, assertedBy)</code> answers whether a connected peer still holds an owner's device: the peer that asserted what the device plays on, or the peer that wrote it last (<code>_peerWroteLast</code>). <code>ReleasePeer</code> and <code>ReleaseDevice</code> clear that record. <code>UserEffectsDispatcher.NotePeerFrameApplied</code> uses the answer to note a frame again, and let the pad go back, when the peer's session dropped after the frame's claim.</p>
 <hr />
@@ -4782,7 +4988,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: the persisted Remote Link fields.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

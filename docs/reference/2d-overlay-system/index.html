@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4345,6 +4551,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#home-cards-and-the-devices-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Home cards and the Devices page
+      
+    </span>
+  </a>
   
 </li>
       
@@ -5536,6 +5753,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#home-cards-and-the-devices-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Home cards and the Devices page
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#controllerschematicview" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6244,7 +6472,7 @@
 
 
 <h1 id="2d-overlay-system">2D Overlay System<a class="headerlink" href="#2d-overlay-system" title="Permanent link">&para;</a></h1>
-<p>PNG overlays on a WPF Canvas show live controller state for Xbox, PlayStation, and Nintendo layouts. Custom Extended controllers use a procedurally generated schematic view. Keyboard+Mouse, MIDI, and VR types have dedicated preview views.</p>
+<p>PNG overlays on a WPF Canvas show live controller state for Xbox, PlayStation, and Nintendo layouts. Custom Extended controllers use a procedurally generated schematic view. Keyboard+Mouse, MIDI, and VR types have dedicated preview views. Every one of them is drawn in the picture at the top of the controller page's first section, labeled Mappings on a controller and Keys &amp; Mouse, Notes &amp; Controls or Hands on the Keyboard + Mouse, MIDI and VR types. The same 2D art, layer by layer, is the picture on a Home card and on the Devices page (see <a href="#home-cards-and-the-devices-page">Home cards and the Devices page</a>).</p>
 <hr />
 <h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>overlay_positions.py          (SVG parsing + alpha-match refinement)
@@ -6274,9 +6502,17 @@
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        |
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        v
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>VRPreviewView.xaml.cs           (SteamVR left+right hand pair)
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>ControllerOverlayLayout.cs + StagePictures.LayoutOf()
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        |
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        v
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>LiveArt.cs                      (the 2D art as layers)
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        |
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        v
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>LiveArtStage.cs                 (a Home card&#39;s moving 2D picture)
 </code></pre></div>
 <h3 id="when-each-view-is-used">When Each View Is Used<a class="headerlink" href="#when-each-view-is-used" title="Permanent link">&para;</a></h3>
-<p><code>PadPage.ApplyViewMode()</code> selects the view. Priority: KeyboardMouse &gt; Midi &gt; Extended without dedicated art &gt; Vr &gt; standard gamepad (2D/3D toggle). Nintendo slots take the last branch, so they get the same 2D/3D toggle as Xbox and PlayStation. <code>ControllerModel2DView</code> draws them from the SWITCHPRO or SWITCH2PRO layout, and <code>ControllerModelView</code> draws the Switch 2 Pro mesh for both profile generations. An Extended slot on one of the five Valve profiles takes the last branch too, because <code>HMaestroProfileCatalog.HasDedicatedArt</code> reports that PadForge ships that controller's body.</p>
+<p>The six views share one host, <code>PictureHost</code> in <code>PadPage.xaml</code>, with the <code>TouchSensorStrip</code>, the picked-control ring and the 2D/3D toggle (<code>ViewModeToggle</code>, top left) over them. <code>PadPage.ApplyViewMode()</code> selects the view. Priority: KeyboardMouse &gt; Midi &gt; Extended without dedicated art &gt; Vr &gt; standard gamepad (2D/3D toggle). Nintendo slots take the last branch, so they get the same 2D/3D toggle as Xbox and PlayStation. <code>ControllerModel2DView</code> draws them from the SWITCHPRO or SWITCH2PRO layout, and <code>ControllerModelView</code> draws the Switch 2 Pro mesh for both profile generations. An Extended slot on one of the five Valve profiles takes the last branch too, because <code>HMaestroProfileCatalog.HasDedicatedArt</code> reports that PadForge ships that controller's body.</p>
 <table>
 <thead>
 <tr>
@@ -6319,7 +6555,8 @@
 </tbody>
 </table>
 <p><code>VirtualControllerType</code> is <code>Xbox = 0</code>, <code>PlayStation = 1</code>, <code>Extended = 2</code>, <code>Midi = 3</code>, <code>KeyboardMouse = 4</code>, <code>Nintendo = 5</code>, <code>Vr = 6</code>. Numeric values are persisted, so the list is append-only.</p>
-<p>The mapping grid of a Nintendo slot, or of an Extended slot on a Valve profile, speaks the raw HID grammar (<code>RawBtn7</code>, <code>RawAxis0Neg</code>) while the preview art speaks the element grammar (<code>ButtonA</code>, <code>LeftThumbAxisXNeg</code>). <code>PadPage.OnModelRecordRequested</code> translates clicks with <code>NintendoPreviewMap.ToRaw</code>, and <code>ControllerModel2DView.UpdateFlashTarget</code> translates the recording target back with <code>NintendoPreviewMap.ToPreview</code>.</p>
+<p>The mapping grid of a Nintendo slot, or of an Extended slot on a Valve profile, speaks the raw HID grammar (<code>RawBtn7</code>, <code>RawAxis0Neg</code>) while the preview art speaks the element grammar (<code>ButtonA</code>, <code>LeftThumbAxisXNeg</code>). <code>PadPage.OnModelRecordRequested</code> translates clicks with <code>NintendoPreviewMap.ToRaw</code> (through <code>MappingTargetOf</code>), and <code>ControllerModel2DView.UpdateFlashTarget</code> translates the recording target back with <code>NintendoPreviewMap.ToPreview</code> and then <code>NintendoPreviewMap.ArtRole</code>, which names the art a role is drawn as.</p>
+<p>A click on a control also picks it: <code>OnModelRecordRequested</code> sets <code>PadViewModel.PickedTarget</code>, and the bar under the picture shows that control's rows, whether or not a recording starts. The page rings the picked control (<code>PickRing</code>, an ember line with a soft band outside it) where the picture says the control is drawn. All six views and the touch sensor strip implement <code>IPictureWithPick</code> (<code>Views/PicturePick.cs</code>): <code>TryGetPickBounds(target, out bounds, out round)</code> answers the place, and <code>PickBoundsChanged</code> asks the page to place the ring again after a rebuild.</p>
 <hr />
 <h2 id="controlleroverlaylayoutcs">ControllerOverlayLayout.cs<a class="headerlink" href="#controlleroverlaylayoutcs" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Models2D/ControllerOverlayLayout.cs</code></p>
@@ -6671,7 +6908,7 @@
 <hr />
 <h2 id="png-asset-structure">PNG Asset Structure<a class="headerlink" href="#png-asset-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>PadForge.App/2DModels/
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  XBOX360/  (28 images)
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>  XBOX360/  (50 images)
 <a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    XB360_base.png                        (1545x955, base controller image)
 <a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    Xbox 360 Controller Overlay.png       (composite overlay for refinement tool)
 <a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    XB360_A_Button.png, XB360_B_Button.png, ...
@@ -6685,144 +6922,147 @@
 <a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    XB360_base_Black.png                  (colorway base)
 <a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    XB360_LeftStick_Black.png, XB360_RightStick_Black.png,
 <a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>      XB360_LeftTrigger_Black.png, XB360_RightTrigger_Black.png  (colorway rest art)
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>  XBOXONE/  (34 images)
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    XB1_S_base.png                        (1543x956, base controller image)
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    Xbox One S Controller Overlay.png     (composite overlay for refinement tool)
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    XB1_A_Button.png, XB1_B_Button.png, XB1_X_Button.png, XB1_Y_Button.png
-<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    XB1_LeftBumper_Active.png, XB1_RightBumper_Active.png
-<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    XB1_LeftTrigger.png, XB1_RightTrigger.png             (trigger base)
-<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    XB1_LeftTrigger_Active.png, XB1_RightTrigger_Active.png  (trigger fill)
-<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    XB1_LeftStick.png, XB1_RightStick.png
-<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    XB1_LeftStick_Click.png, XB1_RightStick_Click.png
-<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    XB1_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    XB1_ViewButton.png, XB1_MenuButton.png, XB1_HomeButton.png
-<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    XB1_S_base_Carbon/PulseRed/ShockBlue.png              (colorway bases)
-<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    XB1_Left/RightStick_PulseRed/ShockBlue.png,
-<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>      XB1_Left/RightTrigger_PulseRed/ShockBlue.png        (colorway rest art)
-<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>  XBOXSERIES/  (40 images)
-<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>    XBSeries_base.png                     (1534x954, base controller image)
-<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    Xbox Series X Controller Overlay.png  (composite overlay for refinement tool)
-<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    XBSeries_A_Button.png, XBSeries_B_Button.png, XBSeries_X_Button.png, XBSeries_Y_Button.png
-<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    XBSeries_LeftBumper_Active.png, XBSeries_RightBumper_Active.png
-<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    XBSeries_LeftTrigger.png, XBSeries_RightTrigger.png   (trigger base)
-<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    XBSeries_LeftTrigger_Active.png, XBSeries_RightTrigger_Active.png  (trigger fill)
-<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    XBSeries_LeftStick.png, XBSeries_RightStick.png
-<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    XBSeries_LeftStick_Click.png, XBSeries_RightStick_Click.png
-<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    XBSeries_D-PAD_Up/Down/Left/Right.png, XBSeries_D-PAD_Center.png
-<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    XBSeries_ViewButton.png, XBSeries_MenuButton.png, XBSeries_HomeButton.png
-<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    XBSeries_ShareButton.png
-<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    XBSeries_base_Carbon/DeepPink/ElectricVolt/PulseRed/ShockBlue.png  (colorway bases)
-<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    XBSeries_Left/RightStick_DeepPink/ElectricVolt/PulseRed/ShockBlue.png,
-<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>      XBSeries_Left/RightTrigger_Carbon.png               (colorway rest art)
-<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>  DualSense/  (33 images)
-<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    DualSense_base.png                    (1467x816, base controller image)
-<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>    DualSense Controller Overlay.png      (composite overlay for refinement tool)
-<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>    DualSense_Cross.png, DualSense_Circle.png,
-<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>      DualSense_Square.png, DualSense_Triangle.png        (face glyphs)
-<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>    DualSense_L1-Active.png, DualSense_R1-Active.png
-<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>    DualSense_L2.png, DualSense_R2.png                    (trigger base)
-<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    DualSense_L2-Active.png, DualSense_R2-Active.png      (trigger fill)
-<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>    DualSense_LeftAnalogStick.png, DualSense_RightAnalogStick.png
-<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>    DualSense_AnalogStick_Click.png                       (shared for both stick clicks)
-<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>    DualSense_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    DualSense_Create_Button.png, DualSense_Option_Button.png, DualSense_Home_Button.png
-<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>    DualSense_Mute_Button.png, DualSense_Lightbar.png, DualSense_Gyro-Accel.png
-<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>    DualSense_Touchpad_Touch.png, DualSense_Touchpad-Click.png
-<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>    DualSense_Touchpad_Click.png          (touchpad-click highlight, used by the 2D view)
-<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>    DualSense_base_CosmicRed/GalacticPurple/Midnight/NovaPink/StarlightBlue.png
-<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>                                          (colorway bases, no rest-art overrides)
-<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>  DUALSENSEEDGE/  (34 images)
-<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>    Same file names as DualSense/ (the bases are the wider 1817x816 renders),
-<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>    plus DualSense_EdgeTile.png           (the four floating back-button tiles)
-<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>  DS4/  (29 images)
-<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>    DS4_V2_base.png                       (1466x783, base controller image)
-<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>    DualShock 4 Controller V2 Model Overlay.png  (composite overlay for refinement tool)
-<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>    DS4_Face_Button.png                   (single image for all 4 face buttons)
-<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>    DS4_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>    DS4_L1-Active.png, DS4_R1-Active.png
-<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>    DS4_L2.png, DS4_R2.png                (trigger base)
-<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>    DS4_L2-Active.png, DS4_R2-Active.png  (trigger fill)
-<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>    DS4_OptionsShare_Button.png           (shared for Back and Start)
-<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>    DS4_Home_Button.png
-<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>    DS4_V2_LeftAnalogStick.png, DS4_V2_RightAnalogStick.png
-<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>    DS4_AnalogStick_Click.png             (shared for both stick clicks)
-<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>    DS4_Touchpad_Click.png                (touchpad-click highlight)
-<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>    DS4_Lightbar_Front.png, DS4_Lightbar_Rear.png  (lightbar preview, #175)
-<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>    DS4_V2_base_GlacierWhite/Gold/MagmaRed/MidnightBlue.png  (colorway bases)
-<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>    DS4_V2_Left/RightAnalogStick_GlacierWhite/Gold.png       (colorway rest art)
-<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>  DS3/  (17 images, drawn by tools/dualshock3_art.py)
-<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>    DS3_base.png                          (1466x925, base controller image)
-<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>    DS3_Face_Button.png                   (single image for all 4 face buttons)
-<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>    DS3_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>    DS3_L1-Active.png, DS3_R1-Active.png
-<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>    DS3_L2.png, DS3_R2.png                (trigger base)
-<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>    DS3_L2-Active.png, DS3_R2-Active.png  (trigger fill)
-<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>    DS3_Select_Button.png, DS3_Start_Button.png, DS3_Home_Button.png
-<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>    DS3_AnalogStick.png                   (shared for both stick caps)
-<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>    DS3_AnalogStick_Click.png             (shared for both stick clicks)
-<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>  SWITCHPRO/  (18 images)
-<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>    NSwitchPro_base.png                   (1485x1079, base controller image)
-<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>    NSwitchPro_FaceButton.png             (single image for all 4 face buttons)
-<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>    NSwitchPro_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>    NSwitchPro_L_Bumper.png, NSwitchPro_R_Bumper.png
-<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>    NSwitchPro_ZL_Rest.png, NSwitchPro_ZR_Rest.png    (trigger base)
-<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>    NSwitchPro_ZL.png, NSwitchPro_ZR.png              (trigger fill)
-<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>    NSwitchPro_Plus-MinusButton.png       (shared for Minus and Plus)
-<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>    NSwitchPro_HomeButton.png, NSwitchPro_CaptureButton.png
-<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>    NSwitchPro_LeftStick.png, NSwitchPro_RightStick.png
-<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>    NSwitchPro_AnalogStickClick.png       (shared for both stick clicks)
-<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>  SWITCH2PRO/  (19 images)
-<a id="__codelineno-12-103" name="__codelineno-12-103" href="#__codelineno-12-103"></a>    Same file names as SWITCHPRO/ (the base is the wider 1805x1079 render),
-<a id="__codelineno-12-104" name="__codelineno-12-104" href="#__codelineno-12-104"></a>    plus NSwitchPro_GripTile.png          (the two floating GL / GR tiles)
-<a id="__codelineno-12-105" name="__codelineno-12-105" href="#__codelineno-12-105"></a>  STEAMDECK/  (19 images)
-<a id="__codelineno-12-106" name="__codelineno-12-106" href="#__codelineno-12-106"></a>    SD_base.png                           (2241x933, base controller image)
-<a id="__codelineno-12-107" name="__codelineno-12-107" href="#__codelineno-12-107"></a>    SD_Face_Button.png, SD_D-PAD_Up/Down/Left/Right.png
-<a id="__codelineno-12-108" name="__codelineno-12-108" href="#__codelineno-12-108"></a>    SD_L1.png, SD_R1.png, SD_L2.png, SD_R2.png
-<a id="__codelineno-12-109" name="__codelineno-12-109" href="#__codelineno-12-109"></a>    SD_L2-Active.png, SD_R2-Active.png    (trigger press art)
-<a id="__codelineno-12-110" name="__codelineno-12-110" href="#__codelineno-12-110"></a>    SD_View-Menu_Button.png, SD_Guide-QuickMenu_Button.png
-<a id="__codelineno-12-111" name="__codelineno-12-111" href="#__codelineno-12-111"></a>    SD_LeftAnalogStick.png, SD_RightAnalogStick.png, SD_Joystick_Click.png
-<a id="__codelineno-12-112" name="__codelineno-12-112" href="#__codelineno-12-112"></a>    SD_Touchpad_Click.png                 (shared by both pads)
-<a id="__codelineno-12-113" name="__codelineno-12-113" href="#__codelineno-12-113"></a>    SD_CompactTile.png                    (shared by the four rear paddles)
-<a id="__codelineno-12-114" name="__codelineno-12-114" href="#__codelineno-12-114"></a>  STEAMCONTROLLER/  (23 images)
-<a id="__codelineno-12-115" name="__codelineno-12-115" href="#__codelineno-12-115"></a>    SC_base.png                           (1466x1049, base controller image)
-<a id="__codelineno-12-116" name="__codelineno-12-116" href="#__codelineno-12-116"></a>    SC_Face_Button.png
-<a id="__codelineno-12-117" name="__codelineno-12-117" href="#__codelineno-12-117"></a>    SC_LeftBumper-Active.png, SC_RightBumper-Active.png
-<a id="__codelineno-12-118" name="__codelineno-12-118" href="#__codelineno-12-118"></a>    SC_LeftTrigger-FullPull-Active.png, SC_RightTrigger-FullPull-Active.png
-<a id="__codelineno-12-119" name="__codelineno-12-119" href="#__codelineno-12-119"></a>    SC_Start-Select_Button.png, SC_Guide_Button.png
-<a id="__codelineno-12-120" name="__codelineno-12-120" href="#__codelineno-12-120"></a>    SC_LeftGrip_Button.png, SC_RightGrip_Button.png
-<a id="__codelineno-12-121" name="__codelineno-12-121" href="#__codelineno-12-121"></a>    SC_LeftGrip_Zone.png, SC_RightGrip_Zone.png    (printed grip marks, Decal rows)
-<a id="__codelineno-12-122" name="__codelineno-12-122" href="#__codelineno-12-122"></a>    SC_AnalogStick.png, SC_AnalogStick_Click.png   (the one real stick)
-<a id="__codelineno-12-123" name="__codelineno-12-123" href="#__codelineno-12-123"></a>    SC_RightStick.png, SC_RightStick_Click.png     (the stick drawn on the right pad)
-<a id="__codelineno-12-124" name="__codelineno-12-124" href="#__codelineno-12-124"></a>    SC_LeftTrackpad_Click.png, SC_RightTrackpad_Click.png
-<a id="__codelineno-12-125" name="__codelineno-12-125" href="#__codelineno-12-125"></a>    SC_LeftPad_Up/Down/Left/Right.png              (left pad quarters, its D-pad)
-<a id="__codelineno-12-126" name="__codelineno-12-126" href="#__codelineno-12-126"></a>    SC_LeftPad_Zones.png                           (quarter boundaries, a Decal row)
-<a id="__codelineno-12-127" name="__codelineno-12-127" href="#__codelineno-12-127"></a>  STEAMCONTROLLER2/  (27 images)
-<a id="__codelineno-12-128" name="__codelineno-12-128" href="#__codelineno-12-128"></a>    SC2_base.png                          (1862x1040, rendered from Valve&#39;s reference drawing)
-<a id="__codelineno-12-129" name="__codelineno-12-129" href="#__codelineno-12-129"></a>    SC2_ButtonA/B/X/Y.png, SC2_DPadUp/Down/Left/Right.png
-<a id="__codelineno-12-130" name="__codelineno-12-130" href="#__codelineno-12-130"></a>    SC2_ButtonBack.png, SC2_ButtonStart.png, SC2_ButtonGuide.png, SC2_ButtonQuickAccess.png
-<a id="__codelineno-12-131" name="__codelineno-12-131" href="#__codelineno-12-131"></a>    SC2_LeftThumbRing.png, SC2_RightThumbRing.png
-<a id="__codelineno-12-132" name="__codelineno-12-132" href="#__codelineno-12-132"></a>    SC2_LeftThumbButton.png, SC2_RightThumbButton.png
-<a id="__codelineno-12-133" name="__codelineno-12-133" href="#__codelineno-12-133"></a>    SC2_LeftTouchpadClick.png, SC2_RightTouchpadClick.png
-<a id="__codelineno-12-134" name="__codelineno-12-134" href="#__codelineno-12-134"></a>    SC2_LeftShoulder.png, SC2_RightShoulder.png,
-<a id="__codelineno-12-135" name="__codelineno-12-135" href="#__codelineno-12-135"></a>      SC2_LeftTrigger.png, SC2_RightTrigger.png,
-<a id="__codelineno-12-136" name="__codelineno-12-136" href="#__codelineno-12-136"></a>      SC2_Paddle1/2/3/4.png               (margin tiles for what a front view cannot show)
-<a id="__codelineno-12-137" name="__codelineno-12-137" href="#__codelineno-12-137"></a>  MOUSE/  (8 images + LICENSE)
-<a id="__codelineno-12-138" name="__codelineno-12-138" href="#__codelineno-12-138"></a>    mouse_body.png, mouse_lmb.png, mouse_rmb.png, mouse_wheel.png
-<a id="__codelineno-12-139" name="__codelineno-12-139" href="#__codelineno-12-139"></a>    mouse_sideupper.png, mouse_sidelower.png, mouse_line.png, mouse.svg
-<a id="__codelineno-12-140" name="__codelineno-12-140" href="#__codelineno-12-140"></a>  VRCONTROLLER/  (15 images)
-<a id="__codelineno-12-141" name="__codelineno-12-141" href="#__codelineno-12-141"></a>    VRController_base.png                 (975x726, the hand pair side by side)
-<a id="__codelineno-12-142" name="__codelineno-12-142" href="#__codelineno-12-142"></a>    VRController_L_/R_ A, B, Grip, Stick, StickCap, System, Trigger.png
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>    XB360_*_WLG.png                       (22 files, the web controller&#39;s WLG finish)
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>  XBOXONE/  (34 images)
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>    XB1_S_base.png                        (1543x956, base controller image)
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>    Xbox One S Controller Overlay.png     (composite overlay for refinement tool)
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>    XB1_A_Button.png, XB1_B_Button.png, XB1_X_Button.png, XB1_Y_Button.png
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>    XB1_LeftBumper_Active.png, XB1_RightBumper_Active.png
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>    XB1_LeftTrigger.png, XB1_RightTrigger.png             (trigger base)
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>    XB1_LeftTrigger_Active.png, XB1_RightTrigger_Active.png  (trigger fill)
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>    XB1_LeftStick.png, XB1_RightStick.png
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    XB1_LeftStick_Click.png, XB1_RightStick_Click.png
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>    XB1_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    XB1_ViewButton.png, XB1_MenuButton.png, XB1_HomeButton.png
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>    XB1_S_base_Carbon/PulseRed/ShockBlue.png              (colorway bases)
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>    XB1_Left/RightStick_PulseRed/ShockBlue.png,
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>      XB1_Left/RightTrigger_PulseRed/ShockBlue.png        (colorway rest art)
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>  XBOXSERIES/  (64 images)
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>    XBSeries_base.png                     (1534x954, base controller image)
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>    Xbox Series X Controller Overlay.png  (composite overlay for refinement tool)
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>    XBSeries_A_Button.png, XBSeries_B_Button.png, XBSeries_X_Button.png, XBSeries_Y_Button.png
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>    XBSeries_LeftBumper_Active.png, XBSeries_RightBumper_Active.png
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>    XBSeries_LeftTrigger.png, XBSeries_RightTrigger.png   (trigger base)
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    XBSeries_LeftTrigger_Active.png, XBSeries_RightTrigger_Active.png  (trigger fill)
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>    XBSeries_LeftStick.png, XBSeries_RightStick.png
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    XBSeries_LeftStick_Click.png, XBSeries_RightStick_Click.png
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    XBSeries_D-PAD_Up/Down/Left/Right.png, XBSeries_D-PAD_Center.png
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>    XBSeries_ViewButton.png, XBSeries_MenuButton.png, XBSeries_HomeButton.png
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>    XBSeries_ShareButton.png
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>    XBSeries_base_Carbon/DeepPink/ElectricVolt/PulseRed/ShockBlue.png  (colorway bases)
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    XBSeries_Left/RightStick_DeepPink/ElectricVolt/PulseRed/ShockBlue.png,
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>      XBSeries_Left/RightTrigger_Carbon.png               (colorway rest art)
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    XBSeries_*_WLG.png                    (24 files, the web controller&#39;s WLG finish)
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>  DualSense/  (60 images)
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>    DualSense_base.png                    (1467x816, base controller image)
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>    DualSense Controller Overlay.png      (composite overlay for refinement tool)
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>    DualSense_Cross.png, DualSense_Circle.png,
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>      DualSense_Square.png, DualSense_Triangle.png        (face glyphs)
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    DualSense_L1-Active.png, DualSense_R1-Active.png
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>    DualSense_L2.png, DualSense_R2.png                    (trigger base)
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>    DualSense_L2-Active.png, DualSense_R2-Active.png      (trigger fill)
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>    DualSense_LeftAnalogStick.png, DualSense_RightAnalogStick.png
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    DualSense_AnalogStick_Click.png                       (shared for both stick clicks)
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>    DualSense_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>    DualSense_Create_Button.png, DualSense_Option_Button.png, DualSense_Home_Button.png
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>    DualSense_Mute_Button.png, DualSense_Lightbar.png, DualSense_Gyro-Accel.png
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a>    DualSense_Touchpad_Touch.png, DualSense_Touchpad-Click.png
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>    DualSense_Touchpad_Click.png          (touchpad-click highlight, used by the 2D view)
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>    DualSense_base_CosmicRed/GalacticPurple/Midnight/NovaPink/StarlightBlue.png
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>                                          (colorway bases, no rest-art overrides)
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>    DualSense_*_WLG.png                   (27 files, the web controller&#39;s WLG finish)
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>  DUALSENSEEDGE/  (34 images)
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>    Same file names as DualSense/ without the WLG set (the bases are the wider 1817x816 renders),
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>    plus DualSense_EdgeTile.png           (the four floating back-button tiles)
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>  DS4/  (29 images)
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>    DS4_V2_base.png                       (1466x783, base controller image)
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>    DualShock 4 Controller V2 Model Overlay.png  (composite overlay for refinement tool)
+<a id="__codelineno-12-71" name="__codelineno-12-71" href="#__codelineno-12-71"></a>    DS4_Face_Button.png                   (single image for all 4 face buttons)
+<a id="__codelineno-12-72" name="__codelineno-12-72" href="#__codelineno-12-72"></a>    DS4_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-73" name="__codelineno-12-73" href="#__codelineno-12-73"></a>    DS4_L1-Active.png, DS4_R1-Active.png
+<a id="__codelineno-12-74" name="__codelineno-12-74" href="#__codelineno-12-74"></a>    DS4_L2.png, DS4_R2.png                (trigger base)
+<a id="__codelineno-12-75" name="__codelineno-12-75" href="#__codelineno-12-75"></a>    DS4_L2-Active.png, DS4_R2-Active.png  (trigger fill)
+<a id="__codelineno-12-76" name="__codelineno-12-76" href="#__codelineno-12-76"></a>    DS4_OptionsShare_Button.png           (shared for Back and Start)
+<a id="__codelineno-12-77" name="__codelineno-12-77" href="#__codelineno-12-77"></a>    DS4_Home_Button.png
+<a id="__codelineno-12-78" name="__codelineno-12-78" href="#__codelineno-12-78"></a>    DS4_V2_LeftAnalogStick.png, DS4_V2_RightAnalogStick.png
+<a id="__codelineno-12-79" name="__codelineno-12-79" href="#__codelineno-12-79"></a>    DS4_AnalogStick_Click.png             (shared for both stick clicks)
+<a id="__codelineno-12-80" name="__codelineno-12-80" href="#__codelineno-12-80"></a>    DS4_Touchpad_Click.png                (touchpad-click highlight)
+<a id="__codelineno-12-81" name="__codelineno-12-81" href="#__codelineno-12-81"></a>    DS4_Lightbar_Front.png, DS4_Lightbar_Rear.png  (lightbar preview, #175)
+<a id="__codelineno-12-82" name="__codelineno-12-82" href="#__codelineno-12-82"></a>    DS4_V2_base_GlacierWhite/Gold/MagmaRed/MidnightBlue.png  (colorway bases)
+<a id="__codelineno-12-83" name="__codelineno-12-83" href="#__codelineno-12-83"></a>    DS4_V2_Left/RightAnalogStick_GlacierWhite/Gold.png       (colorway rest art)
+<a id="__codelineno-12-84" name="__codelineno-12-84" href="#__codelineno-12-84"></a>  DS3/  (17 images, drawn by tools/dualshock3_art.py)
+<a id="__codelineno-12-85" name="__codelineno-12-85" href="#__codelineno-12-85"></a>    DS3_base.png                          (1466x925, base controller image)
+<a id="__codelineno-12-86" name="__codelineno-12-86" href="#__codelineno-12-86"></a>    DS3_Face_Button.png                   (single image for all 4 face buttons)
+<a id="__codelineno-12-87" name="__codelineno-12-87" href="#__codelineno-12-87"></a>    DS3_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-88" name="__codelineno-12-88" href="#__codelineno-12-88"></a>    DS3_L1-Active.png, DS3_R1-Active.png
+<a id="__codelineno-12-89" name="__codelineno-12-89" href="#__codelineno-12-89"></a>    DS3_L2.png, DS3_R2.png                (trigger base)
+<a id="__codelineno-12-90" name="__codelineno-12-90" href="#__codelineno-12-90"></a>    DS3_L2-Active.png, DS3_R2-Active.png  (trigger fill)
+<a id="__codelineno-12-91" name="__codelineno-12-91" href="#__codelineno-12-91"></a>    DS3_Select_Button.png, DS3_Start_Button.png, DS3_Home_Button.png
+<a id="__codelineno-12-92" name="__codelineno-12-92" href="#__codelineno-12-92"></a>    DS3_AnalogStick.png                   (shared for both stick caps)
+<a id="__codelineno-12-93" name="__codelineno-12-93" href="#__codelineno-12-93"></a>    DS3_AnalogStick_Click.png             (shared for both stick clicks)
+<a id="__codelineno-12-94" name="__codelineno-12-94" href="#__codelineno-12-94"></a>  SWITCHPRO/  (18 images)
+<a id="__codelineno-12-95" name="__codelineno-12-95" href="#__codelineno-12-95"></a>    NSwitchPro_base.png                   (1485x1079, base controller image)
+<a id="__codelineno-12-96" name="__codelineno-12-96" href="#__codelineno-12-96"></a>    NSwitchPro_FaceButton.png             (single image for all 4 face buttons)
+<a id="__codelineno-12-97" name="__codelineno-12-97" href="#__codelineno-12-97"></a>    NSwitchPro_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-98" name="__codelineno-12-98" href="#__codelineno-12-98"></a>    NSwitchPro_L_Bumper.png, NSwitchPro_R_Bumper.png
+<a id="__codelineno-12-99" name="__codelineno-12-99" href="#__codelineno-12-99"></a>    NSwitchPro_ZL_Rest.png, NSwitchPro_ZR_Rest.png    (trigger base)
+<a id="__codelineno-12-100" name="__codelineno-12-100" href="#__codelineno-12-100"></a>    NSwitchPro_ZL.png, NSwitchPro_ZR.png              (trigger fill)
+<a id="__codelineno-12-101" name="__codelineno-12-101" href="#__codelineno-12-101"></a>    NSwitchPro_Plus-MinusButton.png       (shared for Minus and Plus)
+<a id="__codelineno-12-102" name="__codelineno-12-102" href="#__codelineno-12-102"></a>    NSwitchPro_HomeButton.png, NSwitchPro_CaptureButton.png
+<a id="__codelineno-12-103" name="__codelineno-12-103" href="#__codelineno-12-103"></a>    NSwitchPro_LeftStick.png, NSwitchPro_RightStick.png
+<a id="__codelineno-12-104" name="__codelineno-12-104" href="#__codelineno-12-104"></a>    NSwitchPro_AnalogStickClick.png       (shared for both stick clicks)
+<a id="__codelineno-12-105" name="__codelineno-12-105" href="#__codelineno-12-105"></a>  SWITCH2PRO/  (19 images)
+<a id="__codelineno-12-106" name="__codelineno-12-106" href="#__codelineno-12-106"></a>    Same file names as SWITCHPRO/ (the base is the wider 1805x1079 render),
+<a id="__codelineno-12-107" name="__codelineno-12-107" href="#__codelineno-12-107"></a>    plus NSwitchPro_GripTile.png          (the two floating GL / GR tiles)
+<a id="__codelineno-12-108" name="__codelineno-12-108" href="#__codelineno-12-108"></a>  STEAMDECK/  (19 images)
+<a id="__codelineno-12-109" name="__codelineno-12-109" href="#__codelineno-12-109"></a>    SD_base.png                           (2241x933, base controller image)
+<a id="__codelineno-12-110" name="__codelineno-12-110" href="#__codelineno-12-110"></a>    SD_Face_Button.png, SD_D-PAD_Up/Down/Left/Right.png
+<a id="__codelineno-12-111" name="__codelineno-12-111" href="#__codelineno-12-111"></a>    SD_L1.png, SD_R1.png, SD_L2.png, SD_R2.png
+<a id="__codelineno-12-112" name="__codelineno-12-112" href="#__codelineno-12-112"></a>    SD_L2-Active.png, SD_R2-Active.png    (trigger press art)
+<a id="__codelineno-12-113" name="__codelineno-12-113" href="#__codelineno-12-113"></a>    SD_View-Menu_Button.png, SD_Guide-QuickMenu_Button.png
+<a id="__codelineno-12-114" name="__codelineno-12-114" href="#__codelineno-12-114"></a>    SD_LeftAnalogStick.png, SD_RightAnalogStick.png, SD_Joystick_Click.png
+<a id="__codelineno-12-115" name="__codelineno-12-115" href="#__codelineno-12-115"></a>    SD_Touchpad_Click.png                 (shared by both pads)
+<a id="__codelineno-12-116" name="__codelineno-12-116" href="#__codelineno-12-116"></a>    SD_CompactTile.png                    (shared by the four rear paddles)
+<a id="__codelineno-12-117" name="__codelineno-12-117" href="#__codelineno-12-117"></a>  STEAMCONTROLLER/  (23 images)
+<a id="__codelineno-12-118" name="__codelineno-12-118" href="#__codelineno-12-118"></a>    SC_base.png                           (1466x1049, base controller image)
+<a id="__codelineno-12-119" name="__codelineno-12-119" href="#__codelineno-12-119"></a>    SC_Face_Button.png
+<a id="__codelineno-12-120" name="__codelineno-12-120" href="#__codelineno-12-120"></a>    SC_LeftBumper-Active.png, SC_RightBumper-Active.png
+<a id="__codelineno-12-121" name="__codelineno-12-121" href="#__codelineno-12-121"></a>    SC_LeftTrigger-FullPull-Active.png, SC_RightTrigger-FullPull-Active.png
+<a id="__codelineno-12-122" name="__codelineno-12-122" href="#__codelineno-12-122"></a>    SC_Start-Select_Button.png, SC_Guide_Button.png
+<a id="__codelineno-12-123" name="__codelineno-12-123" href="#__codelineno-12-123"></a>    SC_LeftGrip_Button.png, SC_RightGrip_Button.png
+<a id="__codelineno-12-124" name="__codelineno-12-124" href="#__codelineno-12-124"></a>    SC_LeftGrip_Zone.png, SC_RightGrip_Zone.png    (printed grip marks, Decal rows)
+<a id="__codelineno-12-125" name="__codelineno-12-125" href="#__codelineno-12-125"></a>    SC_AnalogStick.png, SC_AnalogStick_Click.png   (the one real stick)
+<a id="__codelineno-12-126" name="__codelineno-12-126" href="#__codelineno-12-126"></a>    SC_RightStick.png, SC_RightStick_Click.png     (the stick drawn on the right pad)
+<a id="__codelineno-12-127" name="__codelineno-12-127" href="#__codelineno-12-127"></a>    SC_LeftTrackpad_Click.png, SC_RightTrackpad_Click.png
+<a id="__codelineno-12-128" name="__codelineno-12-128" href="#__codelineno-12-128"></a>    SC_LeftPad_Up/Down/Left/Right.png              (left pad quarters, its D-pad)
+<a id="__codelineno-12-129" name="__codelineno-12-129" href="#__codelineno-12-129"></a>    SC_LeftPad_Zones.png                           (quarter boundaries, a Decal row)
+<a id="__codelineno-12-130" name="__codelineno-12-130" href="#__codelineno-12-130"></a>  STEAMCONTROLLER2/  (27 images)
+<a id="__codelineno-12-131" name="__codelineno-12-131" href="#__codelineno-12-131"></a>    SC2_base.png                          (1862x1040, rendered from Valve&#39;s reference drawing)
+<a id="__codelineno-12-132" name="__codelineno-12-132" href="#__codelineno-12-132"></a>    SC2_ButtonA/B/X/Y.png, SC2_DPadUp/Down/Left/Right.png
+<a id="__codelineno-12-133" name="__codelineno-12-133" href="#__codelineno-12-133"></a>    SC2_ButtonBack.png, SC2_ButtonStart.png, SC2_ButtonGuide.png, SC2_ButtonQuickAccess.png
+<a id="__codelineno-12-134" name="__codelineno-12-134" href="#__codelineno-12-134"></a>    SC2_LeftThumbRing.png, SC2_RightThumbRing.png
+<a id="__codelineno-12-135" name="__codelineno-12-135" href="#__codelineno-12-135"></a>    SC2_LeftThumbButton.png, SC2_RightThumbButton.png
+<a id="__codelineno-12-136" name="__codelineno-12-136" href="#__codelineno-12-136"></a>    SC2_LeftTouchpadClick.png, SC2_RightTouchpadClick.png
+<a id="__codelineno-12-137" name="__codelineno-12-137" href="#__codelineno-12-137"></a>    SC2_LeftShoulder.png, SC2_RightShoulder.png,
+<a id="__codelineno-12-138" name="__codelineno-12-138" href="#__codelineno-12-138"></a>      SC2_LeftTrigger.png, SC2_RightTrigger.png,
+<a id="__codelineno-12-139" name="__codelineno-12-139" href="#__codelineno-12-139"></a>      SC2_Paddle1/2/3/4.png               (margin tiles for what a front view cannot show)
+<a id="__codelineno-12-140" name="__codelineno-12-140" href="#__codelineno-12-140"></a>  MOUSE/  (7 PNG images, mouse.svg and its LICENSE)
+<a id="__codelineno-12-141" name="__codelineno-12-141" href="#__codelineno-12-141"></a>    mouse_body.png, mouse_lmb.png, mouse_rmb.png, mouse_wheel.png
+<a id="__codelineno-12-142" name="__codelineno-12-142" href="#__codelineno-12-142"></a>    mouse_sideupper.png, mouse_sidelower.png, mouse_line.png, mouse.svg
+<a id="__codelineno-12-143" name="__codelineno-12-143" href="#__codelineno-12-143"></a>  VRCONTROLLER/  (15 images)
+<a id="__codelineno-12-144" name="__codelineno-12-144" href="#__codelineno-12-144"></a>    VRController_base.png                 (975x726, the hand pair side by side)
+<a id="__codelineno-12-145" name="__codelineno-12-145" href="#__codelineno-12-145"></a>    VRController_L_/R_ A, B, Grip, Stick, StickCap, System, Trigger.png
 </code></pre></div>
 <p>The three Valve layouts pair no rest art with their triggers (the Steam Deck and 2015 base renders already draw the triggers at rest, and the 2026 trigger is a margin tile), so each trigger is a single-image element rather than the active+base pair the Xbox and Switch layouts use. The three Valve folders also serve the Workshop preview and the web controller's layouts.</p>
 <p>All PNGs are declared as WPF <code>Resource</code> (not <code>EmbeddedResource</code>):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">&lt;Resource</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;2DModels\**\*.png&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 </code></pre></div>
-<p>They are loaded through <code>EmbeddedBitmaps.Load</code>, which reads the assembly's <code>&lt;assemblyname&gt;.g.resources</code> stream directly. <code>pack://</code> URIs are not used. They throw "Part URI cannot end with a forward slash" on the .NET 10 single-file publish. <code>EmbeddedBitmaps</code> lowercases the resource path, looks it up via <code>ResourceManager</code>, and returns a frozen <code>BitmapImage</code> (or null, so callers degrade to an empty placeholder instead of crashing). Results are cached per path in a <code>ConcurrentDictionary</code>, negative results included, so a repeated theme rebuild does not re-decode the art. Shared with the PadPage lightbar preview, the mouse glyph, the VR preview, and the Workshop preview.</p>
+<p>They are loaded through <code>EmbeddedBitmaps.Load</code>, which reads the assembly's <code>&lt;assemblyname&gt;.g.resources</code> stream directly. <code>pack://</code> URIs are not used. They throw "Part URI cannot end with a forward slash" on the .NET 10 single-file publish. <code>EmbeddedBitmaps</code> lowercases the resource path, looks it up via <code>ResourceManager</code>, and returns a frozen <code>BitmapImage</code> (or null, so callers degrade to an empty placeholder instead of crashing). Results are cached per path in a <code>ConcurrentDictionary</code>, negative results included, so a repeated theme rebuild does not re-decode the art. Shared with the PadPage lightbar preview, the mouse glyph, the VR preview, the Workshop preview, and <code>LiveArt</code>, which builds the Home card and Devices page pictures.</p>
 <p>Source artwork: <a href="https://github.com/AL2009man/Gamepad-Asset-Pack">Gamepad-Asset-Pack</a> by AL2009man (MIT license).</p>
 <hr />
 <h2 id="controllermodel2dview">ControllerModel2DView<a class="headerlink" href="#controllermodel2dview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/ControllerModel2DView.xaml</code>, <code>ControllerModel2DView.xaml.cs</code></p>
-<p>WPF <code>UserControl</code> with a <code>Canvas</code> inside a <code>Viewbox</code> for resolution-independent scaling. About 1,183 lines of code-behind, plus a 964-line <code>ControllerModel2DView.Annotations.cs</code> partial that carries the annotation overlay (#175).</p>
+<p>WPF <code>UserControl</code> with a <code>Canvas</code> inside a <code>Viewbox</code> for resolution-independent scaling. About 1,250 lines of code-behind, plus a 908-line <code>ControllerModel2DView.Annotations.cs</code> partial that carries the annotation overlay (#175).</p>
 <h3 id="xaml-structure">XAML Structure<a class="headerlink" href="#xaml-structure" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">&lt;Grid&gt;</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">&lt;Viewbox</span><span class="w"> </span><span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span><span class="nt">&gt;</span>
@@ -6830,11 +7070,11 @@
 <a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="nt">&lt;/Viewbox&gt;</span>
 <a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
 <a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="cm">&lt;!-- Annotation overlay: chips + leader lines, outside the Viewbox</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="cm">         so chip text stays 10 DIP and leaders stay 1 px at any scale --&gt;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="cm">         so chip text stays 12 px and leaders stay 1 px at any scale --&gt;</span>
 <a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">    </span><span class="nt">&lt;Canvas</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationCanvas&quot;</span><span class="w"> </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span><span class="w"> </span><span class="na">ClipToBounds=</span><span class="s">&quot;True&quot;</span><span class="nt">/&gt;</span>
 <a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
 <a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">    </span><span class="cm">&lt;!-- Top-right chrome: colorway picker, its reset button, annotation toggle --&gt;</span>
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="nt">&lt;StackPanel</span><span class="w"> </span><span class="na">Orientation=</span><span class="s">&quot;Horizontal&quot;</span><span class="w"> </span><span class="na">HorizontalAlignment=</span><span class="s">&quot;Right&quot;</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">    </span><span class="nt">&lt;StackPanel</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;CornerTools&quot;</span><span class="w"> </span><span class="na">Orientation=</span><span class="s">&quot;Horizontal&quot;</span><span class="w"> </span><span class="na">HorizontalAlignment=</span><span class="s">&quot;Right&quot;</span>
 <a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">                </span><span class="na">VerticalAlignment=</span><span class="s">&quot;Top&quot;</span><span class="w"> </span><span class="na">Margin=</span><span class="s">&quot;0,8,8,0&quot;</span><span class="nt">&gt;</span>
 <a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">        </span><span class="nt">&lt;ComboBox</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AppearancePicker&quot;</span><span class="w"> </span><span class="na">MinWidth=</span><span class="s">&quot;130&quot;</span><span class="w"> </span><span class="na">Visibility=</span><span class="s">&quot;Collapsed&quot;</span>
 <a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">                  </span><span class="na">SelectionChanged=</span><span class="s">&quot;AppearancePicker_SelectionChanged&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
@@ -6842,16 +7082,21 @@
 <a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">                  </span><span class="na">Visibility=</span><span class="s">&quot;{Binding Visibility, ElementName=AppearancePicker}&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">        </span><span class="nt">&lt;ui:Button</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleButton&quot;</span><span class="w"> </span><span class="na">Style=</span><span class="s">&quot;{StaticResource EmberIconButton}&quot;</span>
 <a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="w">                   </span><span class="na">Click=</span><span class="s">&quot;AnnotationToggle_Click&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">            </span><span class="nt">&lt;TextBlock</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleGlyph&quot;</span><span class="w"> </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span>
-<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">                       </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE8EC;&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">            </span><span class="nt">&lt;reset:GlyphText</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;AnnotationToggleGlyph&quot;</span><span class="w"> </span><span class="na">FontFamily=</span><span class="s">&quot;Segoe MDL2 Assets&quot;</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">                       </span><span class="na">FontSize=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="na">Text=</span><span class="s">&quot;&amp;#xE8EC;&quot;</span><span class="nt">/&gt;</span>
 <a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">        </span><span class="nt">&lt;/ui:Button&gt;</span>
 <a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="w">    </span><span class="nt">&lt;/StackPanel&gt;</span>
 <a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="nt">&lt;/Grid&gt;</span>
 </code></pre></div>
+<p>Both canvases set <code>FlowDirection="LeftToRight"</code>, so a right-to-left language does not mirror the controller. The picker's tooltip is "Colorway" (<code>Pad_Colorway</code>) and the toggle's is "Mapping Annotations" (<code>Pad_ToggleAnnotations</code>).</p>
 <p>The <code>Viewbox</code> scales the canvas uniformly to fit available space. Canvas dimensions match the layout's <code>BaseWidth</code>/<code>BaseHeight</code> (e.g., 1545x955 for Xbox 360). <code>AnnotationCanvas</code> and the top-right chrome sit outside the <code>Viewbox</code> so they keep a fixed pixel size regardless of the model scale.</p>
 <h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ControllerElementRecordRequested</span><span class="p">;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="w"> </span><span class="n">PickBoundsChanged</span><span class="p">;</span><span class="w">          </span><span class="c1">// IPictureWithPick</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationsToggled</span><span class="p">;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="k">public</span><span class="w"> </span><span class="k">event</span><span class="w"> </span><span class="n">EventHandler</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AnnotationChipNavigateRequested</span><span class="p">;</span>
 </code></pre></div>
+<p><code>BuildCanvas</code> raises <code>PickBoundsChanged</code> after every rebuild. <code>TryGetPickBounds</code> reads <code>_pickRects</code>: each control's traced hit outline, or its box when it has no <code>HitPath</code>. A raw row name goes through <code>ToPreview</code> and <code>ArtRole</code>, a <code>Neg</code> direction drops the suffix, and a stick's axes and button fall back to its ring. A stick ring counts as round, and so does a button whose box is between 0.8 and 1.25 as wide as it is tall.</p>
 <h3 id="private-state">Private State<a class="headerlink" href="#private-state" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -6870,7 +7115,7 @@
 <tr>
 <td><code>_loadedModel</code></td>
 <td><code>string</code></td>
-<td>One of <code>"XBOX360"</code>, <code>"XBOXONE"</code>, <code>"XBOXSERIES"</code>, <code>"DS4"</code>, <code>"DualSense"</code>, <code>"DUALSENSEEDGE"</code>, <code>"SWITCHPRO"</code>, <code>"SWITCH2PRO"</code>, <code>"STEAMDECK"</code>, <code>"STEAMCONTROLLER"</code>, <code>"STEAMCONTROLLER2"</code></td>
+<td>One of <code>"XBOX360"</code>, <code>"DS3"</code>, <code>"XBOXONE"</code>, <code>"XBOXSERIES"</code>, <code>"DS4"</code>, <code>"DualSense"</code>, <code>"DUALSENSEEDGE"</code>, <code>"SWITCHPRO"</code>, <code>"SWITCH2PRO"</code>, <code>"STEAMDECK"</code>, <code>"STEAMCONTROLLER"</code>, <code>"STEAMCONTROLLER2"</code></td>
 </tr>
 <tr>
 <td><code>_loadedColorway</code></td>
@@ -6996,6 +7241,11 @@
 <td><code>_padAreas</code></td>
 <td><code>Dictionary&lt;string, PadTouchArea&gt;</code></td>
 <td>Each pad's touch area, measured from its click art</td>
+</tr>
+<tr>
+<td><code>_pickRects</code></td>
+<td><code>Dictionary&lt;string, Rect&gt;</code></td>
+<td>Target name to where the art draws it, in canvas pixels, for the picked-control ring</td>
 </tr>
 </tbody>
 </table>
@@ -7245,16 +7495,17 @@ Created from StickClick overlay images at 40% opacity. Initially collapsed. Used
 <h3 id="image-loading">Image Loading<a class="headerlink" href="#image-loading" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Image</span><span class="w"> </span><span class="nf">CreateImage</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">resourcePath</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">h</span><span class="p">)</span>
 </code></pre></div>
-<p>Loads a PNG through <code>EmbeddedBitmaps.Load(resourcePath)</code> (the <code>.g.resources</code> stream, not a <code>pack://</code> URI) into a <code>BitmapImage</code>, positioned with <code>Canvas.SetLeft/SetTop</code>. A missing resource returns an empty placeholder <code>Image</code> instead of crashing.</p>
+<p>Loads a PNG through <code>EmbeddedBitmaps.Load(resourcePath)</code> (the <code>.g.resources</code> stream, not a <code>pack://</code> URI) and shows it in a <code>DecorativeImage</code>, an <code>Image</code> a screen reader passes over, positioned with <code>Canvas.SetLeft/SetTop</code>. A missing resource returns an empty placeholder instead of crashing.</p>
 <h3 id="per-frame-updates">Per-Frame Updates<a class="headerlink" href="#per-frame-updates" title="Permanent link">&para;</a></h3>
-<p><code>CompositionTarget.Rendering</code> handler, gated by <code>_dirty</code>. The handler returns early when <code>!IsVisible</code> or when <code>AmbientMotionProbe.Instance.IsWindowMinimized</code>, because <code>IsVisible</code> stays true on a minimized window and the repaint would otherwise run per display frame against nothing.</p>
+<p><code>CompositionTarget.Rendering</code> handler, gated by <code>_dirty</code>. The handler returns early when <code>!IsVisible</code> or when <code>AmbientMotionProbe.Instance.IsWindowMinimized</code>, because <code>IsVisible</code> stays true on a minimized window and the repaint would otherwise run per display frame against nothing. It runs <code>UpdateButtons</code>, <code>UpdateTriggers</code>, <code>UpdateSticks</code>, <code>UpdateTouchpadPreview</code> and <code>UpdateAnnotationChipLights</code>, in that order, so the legend tags light in the frame that lights the picture.</p>
 <h4 id="updatebuttons">UpdateButtons()<a class="headerlink" href="#updatebuttons" title="Permanent link">&para;</a></h4>
 <p>Sets overlay visibility for 31 button targets:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">SetOverlayVisible</span><span class="p">(</span><span class="s">&quot;ButtonA&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">_vm</span><span class="p">.</span><span class="n">ButtonA</span><span class="p">);</span>
 <a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">SetOverlayVisible</span><span class="p">(</span><span class="s">&quot;ButtonB&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">_vm</span><span class="p">.</span><span class="n">ButtonB</span><span class="p">);</span>
 <a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1">// ... 29 more</span>
 </code></pre></div>
-<p>Beyond the thirteen shared gamepad targets (four face buttons, four dpad directions, two shoulders, Back, Start, Guide), the list covers <code>ButtonShare</code> (Xbox Series, Switch Capture), <code>ButtonMute</code> (DualSense), <code>ButtonC</code> (Switch 2 Pro), <code>LeftPaddle</code> / <code>RightPaddle</code> (Edge, Switch 2 Pro grips), <code>LeftFunction</code> / <code>RightFunction</code> (Edge), both thumb-click targets, and the Valve roles: <code>ButtonQuickAccess</code>, <code>Paddle1</code> to <code>Paddle4</code>, <code>LeftGrip</code> / <code>RightGrip</code>, and <code>LeftTouchpadClick</code> / <code>RightTouchpadClick</code>. A layout without an element for a target simply has no entry in <code>_overlayImages</code>, so the call is a no-op. <code>SetOverlayVisible()</code> skips elements currently being flash-animated or hovered.</p>
+<p>Beyond the thirteen shared gamepad targets (four face buttons, four dpad directions, two shoulders, Back, Start, Guide), the list covers <code>ButtonShare</code> (Xbox Series, Switch Capture), <code>ButtonMute</code> (DualSense), <code>ButtonC</code> (Switch 2 Pro), <code>LeftPaddle</code> / <code>RightPaddle</code> (Edge, Switch 2 Pro grips), <code>LeftFunction</code> / <code>RightFunction</code> (Edge), both thumb-click targets, and the Valve roles: <code>ButtonQuickAccess</code>, <code>Paddle1</code> to <code>Paddle4</code>, <code>LeftGrip</code> / <code>RightGrip</code>, and <code>LeftTouchpadClick</code> / <code>RightTouchpadClick</code>. A layout without an element for a target has no entry in <code>_overlayImages</code>, so the call is a no-op. <code>SetOverlayVisible()</code> skips elements currently being flash-animated or hovered.</p>
+<p>The two thumb clicks go through <code>SetStickCapVisible</code> instead, which also reads <code>LeftStickTouch</code> / <code>RightStickTouch</code>. A clicked stick shows its click art whole, and a finger resting on a capacitive stick top (Steam Deck, 2026 Steam Controller) shows it at <code>StickTouchOpacity</code> (0.4), since the art has no touch state of its own.</p>
 <h4 id="updatetriggers">UpdateTriggers()<a class="headerlink" href="#updatetriggers" title="Permanent link">&para;</a></h4>
 <p>Adjusts <code>RectangleGeometry</code> clip for a fill-from-bottom effect:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">double</span><span class="w"> </span><span class="n">clipY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v</span><span class="p">);</span><span class="w">  </span><span class="c1">// v = 0: empty (clip at bottom), v = 1: full (clip at top)</span>
@@ -7269,7 +7520,7 @@ Created from StickClick overlay images at 40% opacity. Initially collapsed. Used
 <h3 id="click-to-record">Click-to-Record<a class="headerlink" href="#click-to-record" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">HitArea_Click</span><span class="p">(</span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span><span class="w"> </span><span class="n">MouseButtonEventArgs</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
 </code></pre></div>
-<p>For non-stick elements, fires <code>ControllerElementRecordRequested</code> with the <code>Tag</code> value. For stick rings, calls <code>DetermineAxisFromQuadrant()</code>:</p>
+<p>Fires <code>ControllerElementRecordRequested</code> with what <code>ClickTargetAt()</code> names: the <code>Tag</code> value for most elements, the pad's own click for a <code>Touchpad</code> element (<code>TouchpadClick</code>, or <code>LeftTouchpadClick</code> / <code>RightTouchpadClick</code> through <code>_padClickTarget</code>), and for a stick ring the result of <code>DetermineAxisFromQuadrant()</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">DetermineAxisFromQuadrant</span><span class="p">(</span>
 <a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">stickTarget</span><span class="p">)</span>
 </code></pre></div>
@@ -7359,47 +7610,96 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <!-- SCREENSHOT: 2d-touchpad-finger-dots -->
 <p><img alt="DualSense 2D preview with the touchpad in frame" src="../../images/2d-touchpad-finger-dots.png" /></p>
 <h3 id="annotation-overlay-175">Annotation Overlay (#175)<a class="headerlink" href="#annotation-overlay-175" title="Permanent link">&para;</a></h3>
-<p><code>ControllerModel2DView.Annotations.cs</code> (a partial of the same class) draws one mapping chip per row at the canvas edge, with a 1 px cold leader line to the control anchor, an ember output dot, and a hover detail strip. Off by default. The hosting page pushes the session state in on bind.</p>
-<p>Constants (identical to the 3D view's annotation layer):</p>
+<p><code>ControllerModel2DView.Annotations.cs</code> (a partial of the same class) draws the picture's legend: one tag per row that has a source, at the canvas edge, with a 1 px cold leader line at 0.40 opacity to the control's anchor, and a detail strip docked at the foot of the picture while the pointer is on a tag. The tag's face is the output's name (<code>TargetLabel</code>). Its tooltip and the detail strip show every source feeding the row with its device, and one arrow into the output, capped at 12 rows with a <code>+N</code> tail. Off by default. The overlay state is session-only (<code>PadViewModel.AnnotationOverlayEnabled</code>): the hosting page pushes it in on bind and writes it back on <code>AnnotationsToggled</code>.</p>
+<p>The 3D view's legend uses the same two helpers, so the two legends stand and light alike.</p>
 <table>
 <thead>
 <tr>
 <th>Constant</th>
 <th>Value</th>
+<th>Source</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>AnnotationChipHeight</code></td>
 <td>20</td>
+<td><code>LegendColumn.ChipHeight</code></td>
 </tr>
 <tr>
-<td><code>AnnotationChipGap</code></td>
-<td>6</td>
+<td>Gap between tags</td>
+<td>6, closing to 2 in a short picture</td>
+<td><code>LegendColumn.Gap</code>, <code>LegendColumn.LeastGap</code></td>
 </tr>
 <tr>
 <td><code>AnnotationEdgeMargin</code></td>
 <td>8</td>
+<td><code>LegendColumn.EdgeMargin</code></td>
 </tr>
 <tr>
 <td><code>AnnotationDetailMaxRows</code></td>
 <td>12</td>
-</tr>
-<tr>
-<td>Timer interval</td>
-<td>150 ms</td>
+<td>the partial itself</td>
 </tr>
 </tbody>
 </table>
-<p>Anchors come from the active layout table: <code>SetAnnotationAnchors()</code> stores each overlay's rect center by TargetName, skipping <code>TriggerBase</code> rows. <code>ResolveAnnotationAnchor()</code> first translates raw grid names (Nintendo slots, and Extended slots on a Valve profile) through <code>NintendoPreviewMap.ToPreview</code>, then falls back from a direct name to the stick ring for <code>LeftThumbAxisX/Y</code> and <code>RightThumbAxisX/Y</code>. <code>LayoutAnnotations()</code> translates every anchor through the live <code>Viewbox</code> transform, splits chips into left and right columns, then runs a two-pass slot assignment (downward greedy, upward overflow fix) so chips never overlap. Re-layout is event-driven (size change, rebuild, source-text refresh), not per-frame. The 150 ms timer only expires flashes and evaluates ember dots.</p>
+<p>Anchors come from the active layout table: <code>SetAnnotationAnchors()</code> stores each overlay's rect center by TargetName, skipping <code>TriggerBase</code> rows. <code>ResolveAnnotationAnchor()</code> first translates raw grid names (Nintendo slots, and Extended slots on a Valve profile) through <code>NintendoPreviewMap.ToPreview</code>, then falls back from a direct name to the stick ring for <code>LeftThumbAxisX/Y</code> and <code>RightThumbAxisX/Y</code>. <code>LayoutAnnotations()</code> translates every anchor through the live <code>Viewbox</code> transform, drops a tag whose anchor falls outside the canvas, and splits the rest into left and right columns at the canvas's middle.</p>
+<p><code>LegendColumn.Tops()</code> (<code>Views/LegendColumn.cs</code>) places each column. A tag stands beside its control where it can and is pushed down by the tag above it, so tags never overlap. A column that would run past the picture's foot is pushed up from the foot. The first tag stands a gap below the buttons in the picture's top corners (<code>CornerBottom()</code>, the height of <code>CornerTools</code>, which also covers the page's 2D/3D switch at the left). In a picture too short for that, the gap closes toward 2, and a column too long even then takes the corner's room as well. Re-layout is event-driven (size change, rebuild, source-text refresh), not per-frame, and the partial runs no timer.</p>
 <p>The size change is the overlay canvas's own <code>SizeChanged</code>, not the view's. <code>AnnotationCanvas</code> stays collapsed, and unmeasured, until the toggle shows it, so its first size is what lays the chips out. With the handler on the view, turning the overlay on drew nothing until the window was resized.</p>
-<p><code>AnnotationToggleButton</code> (glyph E8EC, top-right) flips <code>AnnotationsEnabled</code> and raises <code>AnnotationsToggled</code>. Chip clicks raise <code>AnnotationChipNavigateRequested</code> with the row's <code>TargetSettingName</code>.</p>
+<p>A tag is lit by its control's output (<code>Views/TagLight.cs</code>). <code>UpdateAnnotationChipLights()</code> runs in the render pass. A button's tag is dark or fully lit. A trigger's tag, and a stick axis's, takes ember by how far the output is from rest: <code>TagLight.AnalogLevel</code> reads the trigger's pull, or the axis's distance from center times two, from 0 to 1. <code>TagLight.StepOf</code> cuts that level into 16 steps (<code>Steps</code>). A level under 0.02 (<code>Rest</code>) is rest and lights nothing, so a worn stick's idle reading stays dark. The first step out of rest jumps to 0.35 of full (<code>FirstShare</code>), so the least movement shows, and the rest follows the level. <code>TagLight.Paint</code> gives a tag at rest the theme's <code>SteelLineSoftBrush</code> edge and <code>TextFillColorSecondaryBrush</code> name, a fully lit tag <code>EmberBrush</code> for both, and a step between a frozen mix of each rest color and ember. A tag's brushes change only when its step does. This replaced a 250 ms blue flash on press, an ember output dot beside each tag, and the two level bars that stood beside each trigger's tag. A raw row name is read as the control it is drawn as (<code>ToPreview</code>), so the tags of a Nintendo or Valve slot light too.</p>
+<p><code>AnnotationToggleButton</code> (glyph E8EC, top-right) flips <code>AnnotationsEnabled</code> and raises <code>AnnotationsToggled</code>. While on, its glyph and edge take <code>ColdBrush</code>. A tag click raises <code>AnnotationChipNavigateRequested</code> with the row's <code>TargetSettingName</code>, and <code>PadPage.OnAnnotationChipNavigate</code> picks that control, so the bar under the picture shows its row with its editor open.</p>
 <!-- SCREENSHOT: 2d-annotation-overlay -->
 <p><img alt="2D controller preview with annotation chips and leader lines enabled" src="../../images/2d-annotation-overlay.png" /></p>
 <hr />
+<h2 id="home-cards-and-the-devices-page">Home cards and the Devices page<a class="headerlink" href="#home-cards-and-the-devices-page" title="Permanent link">&para;</a></h2>
+<p><strong>Files:</strong> <code>PadForge.App/Common/StagePictures.cs</code>, <code>PadForge.App/Models2D/LiveArt.cs</code>, <code>PadForge.App/Controls/LiveArtStage.cs</code></p>
+<p>A controller's card on Home shows the picture its own page shows. <code>InputService.PictureOf</code> picks it: while the controller page shows the 3D view, a still of the 3D model (see <a href="../3d-model-system/">3D Model System</a>), and while it shows the 2D view, the 2D art. A model that cannot be drawn falls back to the 2D art, as the page does. <code>Use2DControllerView</code> is the one switch for both.</p>
+<p><code>StagePictures.HasBody</code> follows the page's rule. Xbox and PlayStation controllers always have a body, their family's fallback where the preset is unknown. Nintendo and Extended controllers have one only when <code>HasDedicatedArt</code> reports PadForge's own art for the preset, since another family's body under their name would be wrong. Keyboard + Mouse, MIDI and VR controllers have none, and the card shows the type's symbol.</p>
+<p><code>StagePictures.PathFor</code> resolves the folder through <code>ResolveAssetFolders</code> and the base render of the finish chosen on the controller page (<code>Controller2DColorways</code>, entry 0 when none is chosen). <code>StagePictures.LayoutOf(folder)</code> is the same twelve-way table <code>BuildCanvas</code> switches on. <code>LayoutMarks</code> records where each button, stick click, trigger and stick is drawn, for the marks that light over a picture that does not move.</p>
+<p><code>StagePictures.Color(path)</code> builds the picture once per path through <code>LiveArt.From</code>. At rest the layers make it, in <code>BuildCanvas</code> order: the triggers behind the body, the body, the sticks and the printed marks. The picture is cut to what is drawn in it and fitted into 352 by 232 (<code>BoxWidth</code>, <code>BoxHeight</code>), twice its size on screen. <code>StagePictures.Gray</code> makes a gray copy of the same shape for a controller that is not forging.</p>
+<p>While a controller forges, the card draws its 2D art moving in the picture's place (<code>LiveArtStage</code>, the <code>CardLiveArt</code> style in <code>HomePage.xaml</code>). Each <code>LiveArt</code> layer has a kind: <code>Still</code>, <code>Stick</code>, <code>Trigger</code>, <code>Button</code> or <code>StickClick</code>. <code>LiveArtStage.OnRender</code> draws them over the picture's box (<code>HeldGlow.PictureBox</code>), driven by the card's <code>StagePose</code>: a stick's art shifts by its raw axis over 32767 times the layout's <code>StickMaxTravel</code>, with up on the stick up on the picture, a trigger's art is clipped from the bottom by its pull, a held button's art is drawn, and a stick's click art is drawn whole while clicked and at <code>ControllerModel2DView.StickTouchOpacity</code> while its top is touched. The stage takes no clicks, no screen reader reads it, and it always lays out left to right. A still of the 3D model moves through <code>LiveStage</code> instead.</p>
+<p>The Devices page shows the selected device's picture by the same rule (<code>InputService.UpdateSelectedDevicePicture</code>). <code>StagePictures.ForDevice(vendorId, productId)</code> takes the first preset in the catalog with the device's own ids and art of its own, in that family's first finish. A preset is one device on one link, so the same pad on another link or through its own dongle is in no preset. <code>StagePictures.SameController</code> maps those ids to the preset whose body is theirs, from SDL's <code>src/joystick/controller_list.h</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Ids</th>
+<th>Device</th>
+<th>Preset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>28DE:1101</code>, <code>28DE:1105</code>, <code>28DE:1106</code>, <code>28DE:1142</code></td>
+<td>2015 Steam Controller: first hardware, Bluetooth in both firmwares, wireless dongle</td>
+<td><code>steam-controller</code></td>
+</tr>
+<tr>
+<td><code>28DE:1303</code>, <code>28DE:1304</code>, <code>28DE:1305</code></td>
+<td>2026 Steam Controller: Bluetooth and its two dongles</td>
+<td><code>steam-controller-2</code></td>
+</tr>
+<tr>
+<td><code>054C:0BA0</code></td>
+<td>DualShock 4 through Sony's wireless adaptor</td>
+<td><code>dualshock-4-v2</code></td>
+</tr>
+<tr>
+<td><code>045E:02E0</code>, <code>045E:0B20</code></td>
+<td>Xbox One S pad on Bluetooth, first firmware and Bluetooth LE</td>
+<td><code>xbox-one-s-bt</code></td>
+</tr>
+<tr>
+<td><code>045E:0B0C</code>, <code>045E:0B21</code></td>
+<td>Xbox Adaptive Controller on Bluetooth and Bluetooth LE</td>
+<td><code>xbox-adaptive</code></td>
+</tr>
+</tbody>
+</table>
+<p>A device no preset names gets no picture, for the same reason a Nintendo card without its own art gets none.</p>
+<hr />
 <h2 id="controllerschematicview">ControllerSchematicView<a class="headerlink" href="#controllerschematicview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/ControllerSchematicView.xaml</code>, <code>ControllerSchematicView.xaml.cs</code></p>
-<p>Procedurally generated view for custom Extended controllers. Displays stick circles, trigger bars, POV compasses, and button grids. About 938 lines of code-behind.</p>
+<p>Procedurally generated view for custom Extended controllers. Displays stick circles, trigger bars, POV compasses, and button grids. About 979 lines of code-behind.</p>
 <h3 id="xaml-structure_1">XAML Structure<a class="headerlink" href="#xaml-structure_1" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nt">&lt;Viewbox</span><span class="w"> </span><span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span><span class="nt">&gt;</span>
 <a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">    </span><span class="nt">&lt;Canvas</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;SchematicCanvas&quot;</span><span class="w"> </span><span class="na">ClipToBounds=</span><span class="s">&quot;True&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
@@ -7483,24 +7783,25 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Rectangle</span><span class="w"> </span><span class="n">Background</span><span class="p">;</span><span class="w">           </span><span class="c1">// Border rectangle</span>
 <a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Rectangle</span><span class="w"> </span><span class="n">Fill</span><span class="p">;</span><span class="w">                 </span><span class="c1">// Fill bar (grows from bottom)</span>
 <a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">;</span>
-<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a><span class="p">}</span>
-<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a>
-<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a><span class="k">private</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PovWidget</span>
-<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a><span class="p">{</span>
-<a id="__codelineno-31-21" name="__codelineno-31-21" href="#__codelineno-31-21"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PovIndex</span><span class="p">;</span>
-<a id="__codelineno-31-22" name="__codelineno-31-22" href="#__codelineno-31-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Polygon</span><span class="w"> </span><span class="n">Arrow</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Direction arrow polygon</span>
-<a id="__codelineno-31-23" name="__codelineno-31-23" href="#__codelineno-31-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Ellipse</span><span class="w"> </span><span class="n">Outer</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Outer boundary circle</span>
-<a id="__codelineno-31-24" name="__codelineno-31-24" href="#__codelineno-31-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">RotateTransform</span><span class="w"> </span><span class="n">Rotate</span><span class="p">;</span><span class="w">         </span><span class="c1">// Retained transform, mutated per change</span>
-<a id="__codelineno-31-25" name="__codelineno-31-25" href="#__codelineno-31-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">FlashPrefix</span><span class="p">;</span><span class="w">             </span><span class="c1">// Prebuilt &quot;RawPovN&quot;</span>
-<a id="__codelineno-31-26" name="__codelineno-31-26" href="#__codelineno-31-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">LastPov</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">MinValue</span><span class="p">;</span><span class="w">     </span><span class="c1">// Transition-only repaint</span>
-<a id="__codelineno-31-27" name="__codelineno-31-27" href="#__codelineno-31-27"></a><span class="p">}</span>
-<a id="__codelineno-31-28" name="__codelineno-31-28" href="#__codelineno-31-28"></a>
-<a id="__codelineno-31-29" name="__codelineno-31-29" href="#__codelineno-31-29"></a><span class="k">private</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ButtonWidget</span>
-<a id="__codelineno-31-30" name="__codelineno-31-30" href="#__codelineno-31-30"></a><span class="p">{</span>
-<a id="__codelineno-31-31" name="__codelineno-31-31" href="#__codelineno-31-31"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ButtonIndex</span><span class="p">;</span>
-<a id="__codelineno-31-32" name="__codelineno-31-32" href="#__codelineno-31-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Ellipse</span><span class="w"> </span><span class="n">Circle</span><span class="p">;</span><span class="w">                 </span><span class="c1">// Button circle</span>
-<a id="__codelineno-31-33" name="__codelineno-31-33" href="#__codelineno-31-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">LastPressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// -1 unknown, else 0/1</span>
-<a id="__codelineno-31-34" name="__codelineno-31-34" href="#__codelineno-31-34"></a><span class="p">}</span>
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">LabelWidth</span><span class="p">;</span><span class="w">              </span><span class="c1">// The next widget steps past the wider of bar and label</span>
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a><span class="p">}</span>
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a>
+<a id="__codelineno-31-20" name="__codelineno-31-20" href="#__codelineno-31-20"></a><span class="k">private</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PovWidget</span>
+<a id="__codelineno-31-21" name="__codelineno-31-21" href="#__codelineno-31-21"></a><span class="p">{</span>
+<a id="__codelineno-31-22" name="__codelineno-31-22" href="#__codelineno-31-22"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">PovIndex</span><span class="p">;</span>
+<a id="__codelineno-31-23" name="__codelineno-31-23" href="#__codelineno-31-23"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Polygon</span><span class="w"> </span><span class="n">Arrow</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Direction arrow polygon</span>
+<a id="__codelineno-31-24" name="__codelineno-31-24" href="#__codelineno-31-24"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Ellipse</span><span class="w"> </span><span class="n">Outer</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Outer boundary circle</span>
+<a id="__codelineno-31-25" name="__codelineno-31-25" href="#__codelineno-31-25"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">RotateTransform</span><span class="w"> </span><span class="n">Rotate</span><span class="p">;</span><span class="w">         </span><span class="c1">// Retained transform, mutated per change</span>
+<a id="__codelineno-31-26" name="__codelineno-31-26" href="#__codelineno-31-26"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">FlashPrefix</span><span class="p">;</span><span class="w">             </span><span class="c1">// Prebuilt &quot;RawPovN&quot;</span>
+<a id="__codelineno-31-27" name="__codelineno-31-27" href="#__codelineno-31-27"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">LastPov</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">MinValue</span><span class="p">;</span><span class="w">     </span><span class="c1">// Transition-only repaint</span>
+<a id="__codelineno-31-28" name="__codelineno-31-28" href="#__codelineno-31-28"></a><span class="p">}</span>
+<a id="__codelineno-31-29" name="__codelineno-31-29" href="#__codelineno-31-29"></a>
+<a id="__codelineno-31-30" name="__codelineno-31-30" href="#__codelineno-31-30"></a><span class="k">private</span><span class="w"> </span><span class="k">sealed</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ButtonWidget</span>
+<a id="__codelineno-31-31" name="__codelineno-31-31" href="#__codelineno-31-31"></a><span class="p">{</span>
+<a id="__codelineno-31-32" name="__codelineno-31-32" href="#__codelineno-31-32"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ButtonIndex</span><span class="p">;</span>
+<a id="__codelineno-31-33" name="__codelineno-31-33" href="#__codelineno-31-33"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Ellipse</span><span class="w"> </span><span class="n">Circle</span><span class="p">;</span><span class="w">                 </span><span class="c1">// Button circle</span>
+<a id="__codelineno-31-34" name="__codelineno-31-34" href="#__codelineno-31-34"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">LastPressed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="w">           </span><span class="c1">// -1 unknown, else 0/1</span>
+<a id="__codelineno-31-35" name="__codelineno-31-35" href="#__codelineno-31-35"></a><span class="p">}</span>
 </code></pre></div>
 <p>POVs and buttons are reference types with a retained transform and a last-painted value because the repaint used to allocate a fresh <code>RotateTransform</code> per POV per frame, and <code>SetResourceReference</code> re-resolves the key on every call with no equality short-circuit. Both now paint only on a transition. The arrow still lives inside a fixed-size <code>Canvas</code> so <code>RenderTransformOrigin</code> (0.5, 0.5) lands on the POV center, but the widget holds the transform rather than the container.</p>
 <h3 id="viewmodel-binding_1">ViewModel Binding<a class="headerlink" href="#viewmodel-binding_1" title="Permanent link">&para;</a></h3>
@@ -7541,7 +7842,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 2. <strong>Crosshair lines</strong> (<code>Line</code> x2). Horizontal and vertical at 50% opacity
 3. <strong>Position dot</strong> (<code>Ellipse</code>). 10 px accent-colored dot at center
 4. <strong>Direction arrow</strong> (<code>Polygon</code> inside <code>Canvas</code>). Hidden until flash/hover, rotated via <code>RotateTransform</code>
-5. <strong>Label</strong> (<code>TextBlock</code>). "Stick N" above the circle</p>
+5. <strong>Label</strong> (<code>TextBlock</code>). "Stick N" above the circle (<code>Preview_Stick_Format</code>)</p>
 <p><strong>Hover:</strong> <code>MouseMove</code> on the outer circle determines quadrant from mouse position, shows direction arrow with <code>HoverBrush</code>, highlights stroke.</p>
 <p><strong>Click-to-record</strong> quadrant detection:</p>
 <table>
@@ -7576,7 +7877,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p>Creates:
 1. <strong>Background</strong> (<code>Rectangle</code>). Dim stroke, dark fill, rounded corners, hand cursor
 2. <strong>Fill bar</strong> (<code>Rectangle</code>). Accent-colored, height 0 initially, grows from bottom
-3. <strong>Label</strong>. "TN" above the bar</p>
+3. <strong>Label</strong>. "Trigger N" above the bar (<code>Preview_Trigger_Format</code>). <code>RebuildLayout</code> steps the next widget past the wider of the bar and its label</p>
 <p><strong>Click-to-record:</strong> fires <code>RawAxis{axisIdx}</code>.</p>
 <h4 id="createpovwidget">CreatePovWidget<a class="headerlink" href="#createpovwidget" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="k">private</span><span class="w"> </span><span class="n">PovWidget</span><span class="w"> </span><span class="nf">CreatePovWidget</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="p">)</span>
@@ -7584,7 +7885,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p>Creates:
 1. <strong>Outer circle</strong> (<code>Ellipse</code>). Dim stroke, dark background
 2. <strong>Arrow</strong> (<code>Polygon</code> inside <code>Canvas</code>). Triangular, rotated around POV center, initially hidden
-3. <strong>Label</strong>. "D-Pad" (1 POV) or "POV N" (multiple)</p>
+3. <strong>Label</strong>. "D-Pad" (1 POV, <code>Preview_DPad</code>) or "POV N" (multiple, <code>Preview_POV_Format</code>)</p>
 <p><strong>Hover:</strong> direction arrow rotated to mouse quadrant (0/90/180/270 degrees).</p>
 <p><strong>Click-to-record:</strong> quadrant detection fires <code>RawPov{index}Up</code>, <code>Down</code>, <code>Left</code>, or <code>Right</code>.</p>
 <h4 id="createbuttonwidget">CreateButtonWidget<a class="headerlink" href="#createbuttonwidget" title="Permanent link">&para;</a></h4>
@@ -7710,7 +8011,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <hr />
 <h2 id="kbmpreviewview">KBMPreviewView<a class="headerlink" href="#kbmpreviewview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/KBMPreviewView.xaml</code>, <code>KBMPreviewView.xaml.cs</code></p>
-<p>WPF <code>UserControl</code> for Keyboard+Mouse virtual controllers. Displays the slot's keyboard above its mouse: the generic keyboard on Windows input or the picked keyboard's board, and the mouse with the controls the picked mouse has. About 986 lines of code-behind. Every key, mouse control, arrow and lock light is a click-to-record control as well as a display.</p>
+<p>WPF <code>UserControl</code> for Keyboard+Mouse virtual controllers. Displays the slot's keyboard above its mouse: the generic keyboard on Windows input or the picked keyboard's board, and the mouse with the controls the picked mouse has. About 1,041 lines of code-behind. Every key, mouse control, arrow and lock light is a click-to-record control as well as a display.</p>
 <h3 id="xaml-structure_2">XAML Structure<a class="headerlink" href="#xaml-structure_2" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="nt">&lt;Grid&gt;</span>
 <a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="nt">&lt;Grid.RowDefinitions&gt;</span>
@@ -7732,7 +8033,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p><code>BuildKeyboardCanvas()</code> draws the picked keyboard as its board when <code>KeyboardFamilies.For(KbmKeyboardDevice)</code> has a drawing (<code>BuildDeviceKeyboard</code>), and the generic keyboard otherwise (<code>BuildGenericKeyboard</code>): on Windows input, and for a keyboard profile no drawing covers, such as one a user imported.</p>
 <p>The generic keyboard is <code>KeyboardKeyItem.BuildLayout()</code> (full ANSI QWERTY with numpad, 556x136 layout units) plus four media keys over the number pad (Mute, Volume Down, Volume Up, Play/Pause, as Segoe MDL2 Assets glyphs), where 108-key boards have them. The mapping grid carries the rest of the media and browser keys.</p>
 <p>A board drawing is one of eleven key sets in <code>KeyboardFamilies.g.cs</code>, which <code>tools/gen_kbm_layouts.py</code> generates from QMK's layout data (<code>layouts/default</code>, <code>keyboards/hhkb/jp</code>) and Keychron's QMK fork for the Q6: full size ANSI, ISO and with four keys over the number pad, tenkeyless, 75 percent, 65 percent with and without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Each <code>LayoutKey</code> holds its position and size in key units (24 px each) and the HID usage it sends. <code>KeyboardFamilies</code> maps each of HIDMaestro's 51 keyboard profiles to a set, and <code>KbmHidDeviceTests</code> holds that table to the catalog, so a profile a later SDK adds cannot go undrawn. A board no QMK layout matches draws as the nearest set, marked <code>Approximate</code>, and the canvas adds the caption <code>Pad_Kbm_Preview_Approximate</code> under it.</p>
-<p>The Lighting tab's <strong>Key Colors</strong> card draws a lit device's lights with <code>KeyLightsView</code> (<code>KeyLightsView.cs</code>), built in code the way <code>BuildDeviceKeyboard</code> builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the <code>KeyboardFamilies.g.cs</code> set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through <code>KeyTargetPickerViewModel</code>.</p>
+<p>The Lights section's <strong>Key Colors</strong> card draws a lit device's lights with <code>KeyLightsView</code> (<code>KeyLightsView.cs</code>), built in code the way <code>BuildDeviceKeyboard</code> builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the <code>KeyboardFamilies.g.cs</code> set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through <code>KeyTargetPickerViewModel</code>, and the Map Key Lights dialog (<code>MapKeyLightsDialog.xaml</code>).</p>
 <p>Each board key stands for the row the input layout gives it: <code>KbmHidKeyMap.TargetOf(usage, UiLayout())</code> turns its usage into the virtual-key index of its row, and a layout change redraws the board. A language switch rebuilds both canvases once the switch's other handlers have run (<code>Strings.CultureChanged</code>), so the tooltips and the approximate-board caption take the new language. Its legend comes from, in order, <code>KeyboardFamilies.FixedLegend</code> (Apple's modifier symbols on a Mac board, the JIS keys' own legends, <code>Fn</code> for a key that sends nothing), a media glyph for a consumer usage, the character the layout types (<code>KbmHidKeyMap.CharacterLegend</code>), and <code>ShortLegend</code>. A key the picked keyboard cannot send (<code>KbmDeviceCaps</code>), or that no row reaches (<code>InputManager.IsKbmKeyTarget</code>), is drawn at 35 percent and takes no clicks.</p>
 <p>Every live key has:
 - <code>CornerRadius(3)</code> rounded corners
@@ -7886,7 +8187,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <hr />
 <h2 id="midipreviewview">MidiPreviewView<a class="headerlink" href="#midipreviewview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/MidiPreviewView.xaml</code>, <code>MidiPreviewView.xaml.cs</code></p>
-<p>WPF <code>UserControl</code> for MIDI virtual controllers. Displays a piano keyboard for note outputs and vertical CC sliders. About 797 lines of code-behind. The same control also runs in an input mode on the Devices page (see MIDI Input Mode below).</p>
+<p>WPF <code>UserControl</code> for MIDI virtual controllers. Displays a piano keyboard for note outputs and vertical CC sliders. About 815 lines of code-behind. The same control also runs in an input mode on the Devices page (see MIDI Input Mode below).</p>
 <h3 id="xaml-structure_3">XAML Structure<a class="headerlink" href="#xaml-structure_3" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="nt">&lt;Viewbox</span><span class="w"> </span><span class="na">Stretch=</span><span class="s">&quot;Uniform&quot;</span><span class="nt">&gt;</span>
 <a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">    </span><span class="nt">&lt;Canvas</span><span class="w"> </span><span class="na">x:Name=</span><span class="s">&quot;MidiCanvas&quot;</span><span class="w"> </span><span class="na">ClipToBounds=</span><span class="s">&quot;True&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
@@ -8031,7 +8332,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p>Creates:
 1. <strong>Background</strong> (<code>Rectangle</code>). Dim stroke, dark fill, rounded corners, hand cursor
 2. <strong>Fill bar</strong> (<code>Rectangle</code>). Accent-colored, height 0 initially, grows from bottom
-3. <strong>Label</strong>. CC number below the bar (centered, 9 pt)</p>
+3. <strong>Label</strong>. CC number below the bar (centered, font size 9)</p>
 <p><strong>Click-to-record:</strong> fires <code>MidiCC{index}</code>.</p>
 <h3 id="buildpianokeys">BuildPianoKeys<a class="headerlink" href="#buildpianokeys" title="Permanent link">&para;</a></h3>
 <p>Two-pass layout:
@@ -8112,7 +8413,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <hr />
 <h2 id="vrpreviewview">VRPreviewView<a class="headerlink" href="#vrpreviewview" title="Permanent link">&para;</a></h2>
 <p><strong>File:</strong> <code>PadForge.App/Views/VRPreviewView.xaml</code>, <code>VRPreviewView.xaml.cs</code></p>
-<p>Live preview for a VR slot (#49). About 645 lines of code-behind. Same <code>Viewbox &gt; Canvas</code> shape as the schematic and MIDI views, with the canvas named <code>VrCanvas</code>.</p>
+<p>Live preview for a VR slot (#49). About 671 lines of code-behind. Same <code>Viewbox &gt; Canvas</code> shape as the schematic and MIDI views, with the canvas named <code>VrCanvas</code>.</p>
 <p>One VR slot drives both SteamVR hands, so the art is the pair side by side: <code>2DModels/VRCONTROLLER/VRController_base.png</code> at 975x726, with a per-element tint layer composited over it.</p>
 <h3 id="elements">Elements<a class="headerlink" href="#elements" title="Permanent link">&para;</a></h3>
 <p>A private <code>Elem(File, X, Y, W, H, Target)</code> record table lists twelve elements, six per hand:</p>
@@ -8276,7 +8577,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </tr>
 <tr>
 <td><code>RegistryChanged</code></td>
-<td>Raised on every <code>LoadRegistry</code>, <code>Register</code>, and <code>Unregister</code>. The Menus tab refreshes its list on it, and <code>MenuIconResolver</code> drops its cache.</td>
+<td>Raised on every <code>LoadRegistry</code>, <code>Register</code>, and <code>Unregister</code>. The Icon Packages card refreshes its list on it, and <code>MenuIconResolver</code> drops its cache.</td>
 </tr>
 <tr>
 <td><code>Register(filePath, out probedName)</code></td>
@@ -8318,7 +8619,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p><code>ProbePackageName</code> reads at most 64 KB of it (<code>MaxManifestChars</code>), takes the <code>name</code> string, replaces <code>/</code> and <code>\</code> with spaces so the reference grammar survives, and falls back to the file name without extension when the manifest is absent, malformed, or nameless. A zip with no image entry probes to null and is refused.</p>
 <h3 id="menuiconresolver">MenuIconResolver<a class="headerlink" href="#menuiconresolver" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.App/Common/MenuIconResolver.cs</code></p>
-<p><code>Resolve(string iconName)</code> returns a frozen, cached <code>BitmapImage</code> or null. Three forms, tested in this order:</p>
+<p><code>Resolve(string iconName)</code> returns a frozen, cached <code>BitmapSource</code> or null. Three forms, tested in this order:</p>
 <table>
 <thead>
 <tr>
@@ -8348,7 +8649,8 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <p>Every loader reads the picture's bytes (a package entry, or a loose file or Steam art through the same 16 MB bound, <code>ReadCapped</code>, which takes the length and the bytes from one open handle, so a file replaced after its size was checked cannot bring a larger one in) and decodes them through <code>BoundedBitmap.FromBytes</code> into a 256 by 256 box (<code>IconDecodeSize</code>, raised from 96 for #413). The size comes from the header first, and both decode dimensions are set from it, so a tall picture fits the box's height: a width bound alone let a 227-byte PNG one pixel wide and 20,000 high decode to 512 MB at a width of 80, and to gigabytes at these loaders' 256. One 60,000 high threw <code>OverflowException</code> at 256, which no loader caught. A picture taller than it is wide now decodes to the box's height, 128 by 256 for a 100 by 200 icon where it was 256 by 512. The pixels are copied into a frozen <code>BitmapSource</code>, since a <code>BitmapImage</code> built on a stream keeps the stream and its bytes for as long as it lives. Misses cache as null so a menu rebuild never re-probes the disk, which is why the whole cache clears on <code>IconPackageManager.RegistryChanged</code>. No loader throws: <code>BoundedBitmap</code> returns null for a picture WPF cannot decode (<code>FileFormatException</code>, <code>OverflowException</code>, WIC's out-of-memory and unmapped results among them), and the loaders catch the file errors.</p>
 <p>SVG was declined. Steam ships its binding icons at 256 px, and a cell at its largest (200% of the icon box at 400% menu scale) draws 240 DIP, so a 256 px decode covers every size the overlay draws.</p>
 <h3 id="overlay-rendering">Overlay rendering<a class="headerlink" href="#overlay-rendering" title="Permanent link">&para;</a></h3>
-<p><code>MenuOverlayWindow.PlaceCellContent(item, showLabels, index, cx, cy, maxLabelWidth, fontSize, scale)</code> resolves <code>item.Icon</code> through <code>MenuIconResolver.Resolve</code>. A resolved icon is an <code>Image</code> of <code>30 * Math.Max(scale, 0.7)</code> pixels times the cell's <code>IconScalePercent</code> (clamped to 25..200) over 100, centered on the cell, raised by <code>iconSize * 0.45</code> when a label is also shown, with the label placed <code>iconSize * 0.55</code> below center. A null result renders the label alone, the pre-icon behavior. Icons are not hit-test visible and do not restyle on hover, so only labels register in <code>_cellLabels</code>.</p>
+<p>A fourth form never reaches <code>Resolve</code>: an emoji or other single character stored as the icon itself (#471). <code>MenuIconResolver.IsGlyph</code> accepts a reference of one text element (<code>StringInfo</code>, so a flag or a joined sequence counts as one), at most 32 characters, that does not start with whitespace or a control character. Shift layer icons have always used that form, and <code>ResolveLayerIcon</code> draws a layer's icon as its picture, its emoji, or the default ⇧.</p>
+<p><code>MenuOverlayWindow.PlaceCellContent(item, showLabels, index, cx, cy, maxLabelWidth, fontSize, scale)</code> draws an emoji icon as text in the label brush at 0.8 of the icon box, in the emoji face (<code>TextFaces.Emoji</code>), and resolves any other <code>item.Icon</code> through <code>MenuIconResolver.Resolve</code>. A resolved icon is an <code>Image</code> of <code>30 * Math.Max(scale, 0.7)</code> pixels times the cell's <code>IconScalePercent</code> (clamped to 25..200) over 100, centered on the cell, raised by <code>iconSize * 0.45</code> when a label is also shown, with the label placed <code>iconSize * 0.55</code> below center. A null result renders the label alone, the pre-icon behavior. Icons are not hit-test visible and do not restyle on hover, so only labels register in <code>_cellLabels</code>.</p>
 <h3 id="editor-ui">Editor UI<a class="headerlink" href="#editor-ui" title="Permanent link">&para;</a></h3>
 <p><strong>File:</strong> <code>PadForge.App/Views/PadPage.xaml.cs</code></p>
 <table>
@@ -8361,19 +8663,15 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <tbody>
 <tr>
 <td><code>MenuCellChooseIcon_Click</code></td>
-<td>Builds a <code>PickSoundDialog</code> item list: <code>Menu_Icon_None</code> when the cell has an icon, then every <code>ListIcons</code> entry of every registered package as <code>pficon://</code> references. <code>allowBrowse: true</code> adds the file-browser entry. An empty list skips the dialog and browses directly.</td>
-</tr>
-<tr>
-<td><code>BrowseMenuIconFromDisk</code></td>
-<td><code>OpenFileDialog</code> filtered to the image extensions plus <code>*.pficons</code>. A <code>.pficons</code> pick registers the pack and binds its single icon, or prompts with <code>PromptPickFromList</code> when it holds several. An image pick stores <code>IconPackageManager.MakeStoredPath(file)</code>.</td>
+<td>Opens the shared icon picker under the button (<code>IconPickerHost.Open</code>, #471) with the cell's icon marked and <code>Menu_Icon_None</code> as the clear choice, and stores the chosen reference through <code>MenuCellItem.SetIcon</code>.</td>
 </tr>
 <tr>
 <td><code>IconPackageAdd_Click</code></td>
-<td><code>OpenFileDialog</code> for <code>.pficons</code>, then <code>Register</code>.</td>
+<td><code>OpenFileDialog</code> for <code>.pficons</code>, multi-select, then <code>Register</code> for each file.</td>
 </tr>
 <tr>
 <td><code>IconPackageCreate_Click</code></td>
-<td><code>OpenFileDialog</code> (multi-select images, title <code>Pad_Menus_IconPackages_PickImages</code>), <code>SaveFileDialog</code> for the destination, <code>ExportPackage</code>, then <code>Register</code>.</td>
+<td><code>OpenFileDialog</code> (multi-select images, title <code>Pad_Menus_IconPackages_PickImages</code>, the keyboard screen's picture filter), <code>SaveFileDialog</code> for the destination, <code>ExportPackage</code>, then <code>Register</code>.</td>
 </tr>
 <tr>
 <td><code>IconPackageRemove_Click</code></td>
@@ -8385,7 +8683,8 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 </tr>
 </tbody>
 </table>
-<p>The Icon Packages card sits on the Menus tab (<code>PadPage.xaml</code>, strings <code>Pad_Menus_IconPackages_*</code>) and mirrors the Sound Packages card. The per-cell icon preview binds <code>MenuCellItem.IconImage</code>, which calls <code>MenuIconResolver.Resolve</code> when <code>HasIcon</code>.</p>
+<p>The icon picker (<code>Views/IconPicker.xaml</code>) serves menu cells and the shift layer dialog alike. Its Emoji tab is the catalog the shift layer dialog has always offered (<code>ShiftActivatorDialog.EmojiCatalog</code>), and its Images tab draws every registered package's entries as pictures, read through <code>IconPackageManager.ReadIcons</code> (at most 2048 entries and 128 MB per package, <code>MaxPickerIcons</code> and <code>MaxPickerBytes</code>). Browse Files runs <code>IconPickerHost.BrowseFromDisk</code>: an <code>OpenFileDialog</code> for the image extensions plus <code>.pficons</code>. A package is registered, and one with a single entry is chosen at once. One with several opens the picker again on that package's pictures. A loose image stores <code>IconPackageManager.MakeStoredPath(file)</code> through <code>StoredImagePath</code>, which keeps a leading <code>.\</code> on a file directly in PadForge's folder, since a bare name would read as a Steam icon name.</p>
+<p>The Icon Packages card sits in the controller page's Macros &amp; Menus section (<code>PadPage.xaml</code>, strings <code>Pad_Menus_IconPackages_*</code>) and mirrors the Sound Packages card. The per-cell icon preview binds <code>MenuCellItem.IconImage</code>, which calls <code>MenuIconResolver.Resolve</code> when the cell has an icon that is not an emoji (<code>HasIcon &amp;&amp; !IsGlyphIcon</code>).</p>
 <h3 id="persistence">Persistence<a class="headerlink" href="#persistence" title="Permanent link">&para;</a></h3>
 <p><code>PadForge.App/Services/SettingsService.cs</code> carries <code>IconPackageData { Name, Path }</code> and <code>AppSettings.IconPackages</code> (<code>[XmlArray("IconPackages")]</code>) beside <code>SoundPackages</code>. Load calls <code>IconPackageManager.LoadRegistry</code> from the array. Save calls <code>SaveRegistry</code> and writes it back. The registry is app-wide, not per profile. Profiles carry only the <code>pficon://</code> references in their cells.</p>
 <h3 id="profile-transfer">Profile transfer<a class="headerlink" href="#profile-transfer" title="Permanent link">&para;</a></h3>
@@ -8430,8 +8729,8 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><strong>ViewModel interface</strong>. Read from <code>PadViewModel</code>, fire <code>ControllerElementRecordRequested</code> with PadSetting target names.</li>
 <li><strong>Bind/Unbind lifecycle</strong>. <code>PadPage.BindActiveModelView()</code> calls <code>Unbind()</code> on all six, then <code>Bind(vm)</code> on the active one. Only one view processes <code>CompositionTarget.Rendering</code> at a time.</li>
 <li><strong>Dirty-flag rendering</strong>. <code>CompositionTarget.Rendering</code> gated by <code>_dirty</code>, set by <code>PropertyChanged</code>. Every handler also returns early while the control is hidden or the window is minimized.</li>
-<li><strong>Interactions</strong>. Click-to-record, hover highlight, flash animation (Map All). Same target names across views.</li>
-<li><strong>Model selection</strong> (2D/3D only). <code>EnsureModel()</code> resolves the asset folder via <code>HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)</code>, which picks one of <code>"DS4"</code>, <code>"DualSense"</code>, <code>"DUALSENSEEDGE"</code>, <code>"XBOXONE"</code>, <code>"XBOXSERIES"</code>, <code>"SWITCHPRO"</code>, <code>"SWITCH2PRO"</code>, <code>"STEAMDECK"</code>, <code>"STEAMCONTROLLER"</code>, <code>"STEAMCONTROLLER2"</code>, or <code>"XBOX360"</code> for the 2D view (the 3D view takes the tuple's second folder). Extended slots without dedicated art route to <code>ControllerSchematicView</code> and VR slots to <code>VRPreviewView</code>, so this logic fires for Xbox, PlayStation, and Nintendo slots and for Extended slots on the five Valve profiles.</li>
+<li><strong>Interactions</strong>. Click-to-record, hover highlight, flash animation (Map All), and the picked-control ring through <code>IPictureWithPick</code>. Same target names across views.</li>
+<li><strong>Model selection</strong> (2D/3D only). <code>EnsureModel()</code> resolves the asset folder via <code>HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)</code>, which picks one of <code>"DS3"</code>, <code>"DS4"</code>, <code>"DualSense"</code>, <code>"DUALSENSEEDGE"</code>, <code>"XBOXONE"</code>, <code>"XBOXSERIES"</code>, <code>"SWITCHPRO"</code>, <code>"SWITCH2PRO"</code>, <code>"STEAMDECK"</code>, <code>"STEAMCONTROLLER"</code>, <code>"STEAMCONTROLLER2"</code>, or <code>"XBOX360"</code> for the 2D view (the 3D view takes the tuple's second folder). Extended slots without dedicated art route to <code>ControllerSchematicView</code> and VR slots to <code>VRPreviewView</code>, so this logic fires for Xbox, PlayStation, and Nintendo slots and for Extended slots on the five Valve profiles.</li>
 </ol>
 <p>Key differences:</p>
 <table>
@@ -8523,7 +8822,7 @@ During hover, clip is opened to full image (<code>Rect(0, 0, w, h)</code>).</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: 2D PNG assets (<code>2DModels/</code>) included as WPF <code>Resource</code> items</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

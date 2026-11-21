@@ -19,7 +19,7 @@ The engine side lives in `PadForge.Engine/Common/BlissBox/`:
 | `BlissBoxApi.cs` | The switch as the engine sees it, and the hook that names a port's objects. |
 | `BlissBoxGamepadMap.cs` | The placement `BlissBoxControllers.GamepadMap` returns: the port input behind each standardized gamepad position, whether the hat is the D-pad, and a DualShock 2's pressure axes. |
 
-The app side: `PadForge.App/Common/Input/BlissBoxPort.cs` (the HID channel and the worker thread), `BlissBoxRuntime.cs` (the ports, their pairing with SDL rows, the state merge, the object names), `InputManager.BlissBox.cs` (Step 1's phase 1l), `PadForge.App/Services/DreamcastScreenService.cs` (the VMU screens and the ports' saved choices), `InputService.BlissBox.cs` (status lines and the port's Devices page detail pane), `MainWindow.BlissBox.cs` (the port's actions), and the two dialogs `BlissBoxPlayerDialog` and `DreamcastScreenDialog`.
+The app side: `PadForge.App/Common/Input/BlissBoxPort.cs` (the HID channel and the worker thread), `BlissBoxRuntime.cs` (the ports, their pairing with SDL rows, the state merge, the object names), `InputManager.BlissBox.cs` (Step 1's phase 1l), `PadForge.App/Services/DreamcastScreenService.cs` (the VMU screens and the ports' saved choices), `InputService.BlissBox.cs` (status lines and the port's panel on the Devices page), `MainWindow.BlissBox.cs` (the port's actions), and the two dialogs `BlissBoxPlayerDialog` and `DreamcastScreenDialog`.
 
 ---
 
@@ -253,4 +253,4 @@ No test runs against an adapter. PadForge's reading of every report is unverifie
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

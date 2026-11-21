@@ -18,8 +18,9 @@ This is the developer-side companion to [Import from reWASD and DS4Windows](../g
 | `PadForge.App/Common/ConfigImport/DirectInputKeys.cs` | DirectInput scan code to virtual key, through the active keyboard layout. |
 | `PadForge.Engine/Common/Mapping/BoundedReads.cs` | The bounded source descriptors (`Between`, `Sector`, `Stage`) the importers write and the engine reads. |
 | `PadForge.App/Views/ImportConfigDialog.xaml(.cs)` | The preview. |
-| `PadForge.App/MainWindow.xaml.cs` | `OnImportProfile`, `ImportProfileFromFile`, `ImportForeignConfig`, and the sink `AddWorkshopProfile`. |
-| `PadForge.App/Views/ProfilesPage.xaml.cs` | The drop zone (`IsImportableFile`, `ProfileList_Drop`). |
+| `PadForge.App/MainWindow.xaml.cs` | `ShowGetProfiles`, `ImportProfileFile`, `ImportProfileFromFile`, and the sink `AddWorkshopProfile`. |
+| `PadForge.App/Views/GetProfilesDialog.xaml(.cs)` | Get Profiles' **Import a File** tab: the Open dialog (`ChooseFile`), its drop zone and the refusal line under it. |
+| `PadForge.App/Views/ProfilesPage.xaml.cs` | The page's drop zone (`IsImportableFile`, `IsProfileFileDrag`, `ProfileList_Drop`) and the drop tile (`DropTile_Click`). |
 
 The report type is the Workshop importer's: `TranslationReport` and `TranslationStatus` (`PadForge.SteamWorkshop/Translation`). The reason vocabulary is separate. `ImportReasons` holds `Import_Tr_*` resource keys, and Steam's list stays locked to what its translator emits.
 
@@ -27,11 +28,11 @@ The report type is the Workshop importer's: `TranslationReport` and `Translation
 
 ## Entry points
 
-`OnImportProfile` opens a `Microsoft.Win32.OpenFileDialog` whose first filter is `Profiles_ImportFilterAll` over `*.pfprofile;*.rewasd;*.xml`, followed by the `.pfprofile` filter, `FileDialog_ForeignProfileFilter` and all files. `ForeignConfigImporter.ProfileFolders` yields `CommonDocuments\reWASD\Profiles` and `ApplicationData\DS4Windows\Profiles` when each exists, and each becomes a `FileDialogCustomPlace`.
+`ShowGetProfiles(GetProfilesTab.File)` opens Get Profiles on **Import a File**, from the page's drop tile (`ProfilesPage.DropTile_Click` runs `GetProfilesCommand` with `"File"`). There `GetProfilesDialog.ChooseFile`, behind **Import…** and a click on the drop zone, opens a `Microsoft.Win32.OpenFileDialog` whose first filter is `Profiles_ImportFilterAll` over `*.pfprofile;*.rewasd;*.xml`, followed by the `.pfprofile` filter, `FileDialog_ForeignProfileFilter` and all files. `ForeignConfigImporter.ProfileFolders` yields `CommonDocuments\reWASD\Profiles` and `ApplicationData\DS4Windows\Profiles` when each exists, and each becomes a `FileDialogCustomPlace`. The dialog's `FileImporter` is `MainWindow.ImportProfileFile`. A refused file writes its reason to `FileProblemText` under the drop zone and keeps the window open. A drop on the zone reads each importable file and stops at the first refusal.
 
-`ProfilesPage.IsImportableFile` accepts a `.pfprofile` or anything `ForeignConfigImporter.HandlesFile` accepts (`.rewasd` or `.xml`, case-insensitive). The drop handler calls `ImportProfileFile` once per accepted file.
+`ProfilesPage.IsImportableFile` accepts a `.pfprofile` or anything `ForeignConfigImporter.HandlesFile` accepts (`.rewasd` or `.xml`, case-insensitive). The page's drop handler calls `ImportProfileFile` (the `ImportProfileFromFile` action MainWindow hands it) once per accepted file, and a refusal goes to the message line with `SetStatus(..., persist: true)`.
 
-`ImportProfileFromFile` sends anything that is not a `.pfprofile` to `ImportForeignConfig`, which calls `ForeignConfigImporter.Translate(path)`. A refused result puts `Strings.Get(result.RefusedKey)` on the status bar (`SetStatus(..., persist: true)`) and stops. Otherwise it shows `ImportConfigDialog` with `ImportSink = AddWorkshopProfile`, the sink the Workshop and starter profiles land through. The dialog calls the sink with `applyAfter: false`, so the active profile is untouched. `AddWorkshopProfile` dedupes the name with `SettingsManager.UniqueProfileName`, adds the profile and its list item, and marks settings dirty. The status line is `Status_WorkshopImported_Format` with the report's three counts.
+`ImportProfileFile(path, owner)` sends anything that is not a `.pfprofile` to `ForeignConfigImporter.Translate(path)`. A refused result returns `Strings.Get(result.RefusedKey)` as the problem and stops. Otherwise it shows `ImportConfigDialog` over `owner` with `ImportSink = AddWorkshopProfile`, the sink the Workshop and starter profiles land through. The dialog calls the sink with `applyAfter: false`, so the active profile is untouched. `AddWorkshopProfile` dedupes the name with `SettingsManager.UniqueProfileName`, adds the profile and its list item, and marks settings dirty. The message is `Status_WorkshopImported_Format` with the report's three counts.
 
 ---
 
@@ -137,7 +138,7 @@ A profile color is `ProfileColor`: `LightbarColor`, `Reactive`, held 250 ms and 
 - **Gamepad.** Button ids follow reWASD-Powertools' `gamepad-buttons.md` and each file's own `description`, never the index in shunt's `rewasd_all_buttons_and_keys.json`. `GamepadSkipReason` names a third stick (213..235), a gyro tilt zone (74..76, 145..162) and a lean in Tilt mode (72, 73).
 - **Activators.** `TriggerFor` maps `long` to `HoldForMs`, `double` to `DoublePress`, `triple` to `TriplePress`, `release` to `OnRelease`, `start` to `OnPress`. `single` is `SinglePress` beside a double or triple, `ShortPress` beside a long press (sharing that sibling's `longwaittime`), and `OnPress` alone. Defaults: `longwaittime` 300, `doublewaittime` 442. `LowerMacros` writes held plain outputs under `hold_until_release` on single or start as rows when `CanRow` allows (up to three inputs, gates on the source's device), `repeat` as a repeating `WhileHeld`, `turbo` as `Turbo`, and `toggle` through `LowerToggle`.
 - **Jumps.** `LowerJump` makes a held or toggled jump a layer activator carrying `DelayMs`, `PostponeMapping`, `HostLayerMask`, the long-press delay, the double-press window and `FireOnRelease`. A jump back to Base on release from the layer the same control engaged is the file's own Hold and writes nothing more. Every other jump is a `SwitchLayer` macro.
-- **Commands.** `CommandAction` maps command types: 1 Toggle Virtual Controllers Disabled, 2 Disconnect Controller, 3 Toggle Window, 4 and 6 gyro toggle, 15 and 16 gyro on and off, 5 and 18 Gyro Recenter, 7 log off, 8 shut down, 9 sleep, 13 hibernate, 17 restart (each a `RunProgram` of `shutdown.exe` or, for sleep, `powershell.exe`), 11 Win + Print Screen, 12 Alt + F4, 101..108 and 120 Toggle Screen Overlay (109 and 110 skipped, `NinthCrosshair`), 130..137 radial navigation, and 1000..1999 a program.
+- **Commands.** `CommandAction` maps command types: 1 Toggle Virtual Controllers Disabled, 2 Disconnect Controller, 3 Toggle Window, 4 and 6 gyro toggle, 15 and 16 gyro on and off, 5 and 18 Gyro Recenter, 7 log off, 8 shut down, 9 sleep, 13 hibernate, 17 restart (each a `RunProgram` of `shutdown.exe` or, for sleep, `powershell.exe`), 11 Win + Print Screen, 12 Alt + F4, 101..110 `ToggleCrosshair` with `CrosshairNumber` 1..10 and 120 the same with `CrosshairNumber` 0 (every crosshair), each reported Partial (`Crosshair`: the look lives in reWASD's own settings), 130..137 radial navigation, and 1000..1999 a program.
 - **Radial menus.** One `MenuDefinitionEntry` per top circle, `MenuKind.Radial`, `FireType = TouchRelease`, on the layer its sectors' mappings sit on, hosted on the stick the navigation commands name (right stick by default).
 - **Mouse regions.** `LowerRegion` writes a `MouseLimitRegion` hold pair, the file's rectangle as insets and offsets against `GetSystemMetrics`.
 - **Lightbar.** `ReadLed` lowers `config.led.default` and each shift's entry: solid, `rainbow` (6000 ms), `breath`, `heartbeat`, `stroboscope`, `shimmer`.
@@ -188,4 +189,4 @@ PadForge reads users' own files from published facts. It ships no copy of either
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

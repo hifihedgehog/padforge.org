@@ -11,7 +11,7 @@ PadForge is tested with NVDA. Every control the Tab key reaches has a name a scr
 <source src="/assets/video/padforge-tutorial-keyboard-and-nvda.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-keyboard-and-nvda.vtt" default>
 </video>
-<figcaption>A controller added, a DualSense assigned and the Mappings table opened with the keyboard alone while NVDA reads each control, then a row opened and closed, recorded live in PadForge 5.2.2 in 2 minutes 44 seconds. Long runs of Tab presses are shortened. The narration is a generated voice and the other voice is NVDA, with English captions of both. <a href="/assets/video/padforge-tutorial-keyboard-and-nvda-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>A controller added, a DualSense assigned and the Mappings table opened with the keyboard alone while NVDA reads each control, then a row opened and closed, recorded live in PadForge 5.2.2, before PadForge 6 rebuilt the interface, in 2 minutes 44 seconds. Long runs of Tab presses are shortened. The narration is a generated voice and the other voice is NVDA, with English captions of both. <a href="/assets/video/padforge-tutorial-keyboard-and-nvda-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
@@ -24,14 +24,14 @@ PadForge runs as administrator, and Windows lets a screen reader read an adminis
 
 - A button that shows only a symbol speaks what its tooltip says, such as "Record" on the record buttons.
 - A field or slider speaks the setting it changes: "Web Controller Port, edit, 8080".
-- The controller type buttons on the Dashboard and in the sidebar speak as radio buttons, checked on the slot's current type: "Nintendo, radio button, checked". The filter chips on the Devices page and the tag chips in the Workshop speak the same way, checked on the current filter.
-- The engine and slot power buttons speak as toggle buttons, pressed while on, then their state: "Enabled, toggle button, pressed, Awaiting devices".
+- The controller type buttons, in the bar a controller's type chip opens on Home and in the sidebar, speak as radio buttons, checked on the controller's current type: "Nintendo, radio button, checked". The filter chips on the Devices page and the tag chips in the Workshop speak the same way, checked on the current filter.
+- The engine's flame and each controller's state pill speak as toggle buttons, pressed while on, then their state: "Enabled, toggle button, pressed, Awaiting devices".
 - The arrows of a scroll bar or a number box, and the buttons at the top right of the window, speak their names: "Scroll Up", "Increase", "Minimize".
-- Each cell of the Mappings table speaks what it holds: the output, the source, the live value, or "Does not apply" for a dead zone the row has no use for.
+- Each row of the mapping list speaks its output and its source, and an open row's live value speaks as **Value**.
 - A sensitivity curve speaks the point its keys move: "Point 2 of 4, input 50%, output 38%".
 - Page titles and section titles are headings.
 - Each dialog speaks as a dialog when it opens.
-- Status changes are spoken as they happen: the message in the status bar at the bottom of the window, and the status lines on the Dashboard, Settings and Devices pages, such as a server starting or a driver's install status. They are spoken only while PadForge is the active window, so nothing interrupts a game.
+- Status changes are spoken as they happen: the message line at the bottom of the window, and the status lines on Home, the Extras pages, Settings and Devices, such as a server starting or a driver's install status. They are spoken only while PadForge is the active window, so nothing interrupts a game.
 
 ## Keys
 
@@ -39,22 +39,26 @@ PadForge runs as administrator, and Windows lets a screen reader read an adminis
 | --- | --- |
 | Tab, Shift+Tab | Move to the next or previous control |
 | Space, Enter | Press the focused button, chip, swatch or tile. On a sidebar entry, open its page |
-| Escape | Close the dialog or the open list |
-| Ctrl+Tab, Ctrl+Shift+Tab | With the focus inside a tab of a controller's page, move to the next or previous tab |
-| Alt+Up, Alt+Down | On the Macros tab, move the selected step of the action sequence up or down one place |
+| Escape | Close the dialog or the open list. Under a controller's picture, let go of the picked control |
+| Ctrl+K | Open Search from anywhere in the window |
+| Ctrl+Tab, Ctrl+Shift+Tab | With the focus inside a section of a controller's page, move to the next or previous section |
+| Alt+Left | On an extra's page, go back to the Extras catalog. The keyboard's Back key does the same |
+| Alt+Up, Alt+Down | In the macro editor, move the selected step of the action sequence up or down one place |
 
-A dialog opened from the keyboard starts with the focus on its first control. The Add Controller list and the profile list do the same: the arrow keys and Tab move through them, and Escape closes them and puts the focus back on what opened them.
+![Search open on the word trigger: results under Settings, Pages, Actions and Documentation, each with its place on a second line, and the keys in its foot](../images/search.png)
 
-## The Mappings table
+A dialog opened from the keyboard starts with the focus on its first control. Add a Controller and the profile list do the same: the arrow keys and Tab move through them, and Escape closes them and puts the focus back on what opened them.
 
-Tab reaches each row of the table, and a row speaks its output and its source.
+## The mapping list
+
+In the **List** view of a controller's first section, Tab reaches each row, and a row speaks its output and its source.
 
 | Key | What it does |
 | --- | --- |
 | Tab, Shift+Tab | Move to the next or previous row |
 | Enter, Space | Open the row's settings, or close them |
 
-On a row, the arrow keys, Page Up, Page Down, Home, End, letters and digits do nothing. A keyboard can feed the controller you are setting up, and those are the keys it maps, so pressing one to test a mapping never changes the table. The tab's closed pickers ignore the same keys.
+On a row, the arrow keys, Page Up, Page Down, Home, End, letters and digits do nothing. A keyboard can feed the controller you are setting up, and those are the keys it maps, so pressing one to test a mapping never changes the list. The section's closed pickers ignore the same keys.
 
 ## Sensitivity curves
 
@@ -72,7 +76,7 @@ Tab reaches each curve. The point the keys move is drawn orange while the curve 
 
 ## The Key Colors picture
 
-The picture of lights on the Lighting tab's **Key Colors** card, and the key picker of the **Set Key Colors** macro action, is one Tab stop. Each light is a toggle a screen reader reads by name.
+The picture of lights on the **Key Colors** card, in the controller's **Lights & Sound** section, and the key picker of the **Set Key Colors** macro action, is one Tab stop. Each light is a toggle a screen reader reads by name.
 
 | Key | What it does |
 | --- | --- |
@@ -82,4 +86,4 @@ The picture of lights on the Lighting tab's **Key Colors** card, and the key pic
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

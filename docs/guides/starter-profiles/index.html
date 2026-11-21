@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1423,6 +1419,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1491,7 +1495,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1988,6 +1992,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -2184,6 +2216,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -2220,6 +2280,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2979,6 +3095,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3572,6 +3694,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3852,6 +4002,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3944,6 +4122,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4460,9 +4666,13 @@ assign any controller, and play.</em></p>
 kind of game instead of a single title. Nothing about them is locked:
 saving one adds an ordinary profile you can edit, exactly like importing
 a community config.</p>
-<p>Open them from <strong>Profiles</strong> with <strong>Browse Starter Profiles</strong>, beside
-Browse Community Configs.</p>
-<p><img alt="The starter profile gallery, showing each archetype with its output type and a one-line description" src="../../images/profiles-starter-gallery.png" /></p>
+<p>The <strong>Profiles</strong> page shows the first four under <strong>Starter Profiles</strong>:
+Desktop, WASD and Mouse, Hotbar, and Point and Click. A click on a tile
+adds that profile. <strong>See All</strong> beside the row, or <strong>Get Profiles</strong> at the
+top of the page, opens the <strong>Starters</strong> tab of Get Profiles with all
+thirteen. Pick one there and click <strong>Save Profile</strong>, or double-click it,
+or press Enter.</p>
+<p><img alt="The Starters tab of Get Profiles, showing each archetype with its output type and a one-line description" src="../../images/profiles-starter-gallery.png" /></p>
 <hr />
 <h2 id="why-they-work-on-any-controller">Why they work on any controller<a class="headerlink" href="#why-they-work-on-any-controller" title="Permanent link">&para;</a></h2>
 <p>A starter profile never names hardware. Its rows bind abstract inputs
@@ -4508,6 +4718,10 @@ wanted a gamepad.</p>
 <td>Shooters and action games</td>
 </tr>
 <tr>
+<td><strong>Hotbar</strong></td>
+<td>MMOs and ability-heavy games</td>
+</tr>
+<tr>
 <td><strong>Point and Click</strong></td>
 <td>Adventure games and cursor-driven games</td>
 </tr>
@@ -4527,10 +4741,6 @@ wanted a gamepad.</p>
 <td><strong>Media Remote</strong></td>
 <td>Playback and seeking</td>
 </tr>
-<tr>
-<td><strong>Hotbar</strong></td>
-<td>MMOs and ability-heavy games</td>
-</tr>
 </tbody>
 </table>
 <h3 id="gamepad">Gamepad<a class="headerlink" href="#gamepad" title="Permanent link">&para;</a></h3>
@@ -4546,12 +4756,12 @@ hand.</p>
 </thead>
 <tbody>
 <tr>
-<td><strong>Fighting Games</strong></td>
-<td>2D fighters, set up to clear the rules</td>
-</tr>
-<tr>
 <td><strong>Emulation</strong></td>
 <td>RetroArch and the frontends built on it</td>
+</tr>
+<tr>
+<td><strong>Fighting Games</strong></td>
+<td>2D fighters, set up to clear the rules</td>
 </tr>
 <tr>
 <td><strong>Racing</strong></td>
@@ -4570,8 +4780,8 @@ hand.</p>
 <hr />
 <h2 id="a-few-worth-knowing-about">A few worth knowing about<a class="headerlink" href="#a-few-worth-knowing-about" title="Permanent link">&para;</a></h2>
 <h3 id="desktop-opens-an-on-screen-keyboard-on-x">Desktop opens an on-screen keyboard on X<a class="headerlink" href="#desktop-opens-an-on-screen-keyboard-on-x" title="Permanent link">&para;</a></h3>
-<p>Desktop carries a <strong>Keyboard</strong> menu, the Keyboard menu style with the Grid layout and its default controls. X opens it, where Valve's desktop scheme puts Show Keyboard. While it is open a press a keyboard control takes stays the keyboard's, so X types Backspace there and B closes it, as Steam's keyboard closes. Earlier versions sent Win+Ctrl+O from a macro on X instead. Edit the menu on the slot's <strong>Menus</strong> tab. See <a href="../menus/">Menus</a>.</p>
-<p>The Windows key is Paddle 1, on pads that have paddles. It stays off Start because the quiet layer is a long press of Start.</p>
+<p>Desktop carries a <strong>Keyboard</strong> menu, the Keyboard menu style with the Grid layout and its default controls. X opens it, where Valve's desktop scheme puts Show Keyboard. While it is open a press a keyboard control takes stays the keyboard's, so X types Backspace there and B closes it, as Steam's keyboard closes. Earlier versions sent Win+Ctrl+O from a macro on X instead. Edit the menu in the controller page's <strong>Macros &amp; Menus</strong> section. See <a href="../menus/">Menus</a>.</p>
+<p>The Windows key is Paddle 1, on pads that have paddles. It stays off Start because Start is half of the quiet layer's Guide and Start hold.</p>
 <h3 id="hotbar-puts-32-abilities-behind-two-triggers">Hotbar puts 32 abilities behind two triggers<a class="headerlink" href="#hotbar-puts-32-abilities-behind-two-triggers" title="Permanent link">&para;</a></h3>
 <p>Hold the left trigger for eight slots on the D-pad and face buttons, hold
 the right trigger for a different eight, and double-tap-and-hold either
@@ -4684,7 +4894,7 @@ and taking one back is the thing this design exists to avoid.</p>
 <li><a href="../shift-layers/">Shift Layers</a> explains the mechanism the Hotbar and
   Emulation profiles are built on.</li>
 </ul>
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

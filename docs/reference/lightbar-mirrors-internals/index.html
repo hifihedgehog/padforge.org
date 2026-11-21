@@ -40,10 +40,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1171,6 +1167,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1239,7 +1243,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1736,6 +1740,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1932,6 +1964,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1968,6 +2028,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2727,6 +2843,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3320,6 +3442,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3600,6 +3750,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3692,6 +3870,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4001,9 +4207,9 @@
 
 <h1 id="lightbar-mirrors-internals">Lightbar Mirrors Internals<a class="headerlink" href="#lightbar-mirrors-internals" title="Permanent link">&para;</a></h1>
 <p><code>ChromaLightbarService</code> and <code>LightsyncLightbarService</code> were removed in <code>0b0c3003</code>, along with the Dashboard toggles that started them. Their behavior now lives in the per-device peripheral outputs: the Razer Chroma and Logitech LIGHTSYNC rows take a virtual controller's lighting once they are assigned to it. The Chroma REST session moved to the Chroma backend, and the LIGHTSYNC worker moved to the LED SDK backend, which loads the Logitech engine through the same loader. <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a> covers them.</p>
-<p>The migration of the two toggles into assignments is still <code>PeripheralSwitchMigration</code> (<code>PeripheralSwitchMigration.cs</code>), unchanged in 5.3.0. What 5.3.0 changed sits in the backends the rows reach: <code>ChromaBackend</code>, <code>LedSdkBackend</code> and <code>GameSenseBackend</code> paint a claim's <code>KeyFrame</code> light by light where a device's map has more than one light, and <code>PeripheralRowKind</code> gained <code>AsusAura</code>, <code>MsiMysticLight</code> and <code>CorsairIcue</code>, whose rows reach <code>AuraSdkBackend</code>, <code>MysticLightBackend</code> and <code>IcueBackend</code>. <a href="../peripheral-outputs-internals/#vendor-rows">Peripheral Outputs Internals</a> has the rows and <a href="../peripheral-outputs-internals/#the-sdk-routes">the SDK routes</a> the backends.</p>
+<p>The migration of the two toggles into assignments is still <code>PeripheralSwitchMigration</code> (<code>PeripheralSwitchMigration.cs</code>), whose behavior 5.3.0 and 6.0.0 left unchanged. What 5.3.0 changed sits in the backends the rows reach: <code>ChromaBackend</code>, <code>LedSdkBackend</code> and <code>GameSenseBackend</code> paint a claim's <code>KeyFrame</code> light by light where a device's map has more than one light, and <code>PeripheralRowKind</code> gained <code>AsusAura</code>, <code>MsiMysticLight</code> and <code>CorsairIcue</code>, whose rows reach <code>AuraSdkBackend</code>, <code>MysticLightBackend</code> and <code>IcueBackend</code>. <a href="../peripheral-outputs-internals/#vendor-rows">Peripheral Outputs Internals</a> has the rows and <a href="../peripheral-outputs-internals/#the-sdk-routes">the SDK routes</a> the backends.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

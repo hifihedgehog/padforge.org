@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3477,6 +3599,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3757,6 +3907,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3849,6 +4027,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4298,7 +4504,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Views/ProfilesPage.xaml</code></td>
-<td>The <strong>Allow External Control by Launchers and Scripts</strong> checkbox, under the auto-switch checkbox in the profile management card.</td>
+<td>The <strong>Allow External Control by Launchers and Scripts</strong> switch, in the Profiles page's own <strong>External Control</strong> card (<code>ExternalControlCard</code>).</td>
 </tr>
 </tbody>
 </table>
@@ -4365,11 +4571,11 @@
 <td><code>StartExternalControlIfEnabled</code> creates and starts the server.</td>
 </tr>
 <tr>
-<td>Checkbox turned on, engine running</td>
+<td>Switch turned on, engine running</td>
 <td>Same. With the engine stopped nothing starts, and the next engine start brings the pipe up.</td>
 </tr>
 <tr>
-<td>Checkbox turned off</td>
+<td>Switch turned off</td>
 <td><code>StopExternalControl</code> disposes the server, clears the pin, invalidates the foreground cache. With no server running it does nothing, so a pin stays.</td>
 </tr>
 <tr>
@@ -4424,7 +4630,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>ExternalActivate</code> resolves the argument by id first, then by case-insensitive name. It sets the pin before the switch so the foreground monitor cannot race the apply. If the target is already active it returns <code>ok &lt;name&gt;</code> without switching. Otherwise it saves the outgoing profile's state, sets <code>ActiveProfileId</code>, applies the profile, runs <code>ResetRuntimeStateForProfileSwitch</code> (the choke point every switch lane funnels through, which also resolves the <a href="../settings-and-serialization/#profiledata">per-profile polling rate</a>), and updates the status bar. <code>ExternalDeactivate</code> clears the pin, invalidates the foreground monitor's cache, and if a named profile was active saves its state and applies Default.</p>
+<p><code>ExternalActivate</code> resolves the argument by id first, then by case-insensitive name. It sets the pin before the switch so the foreground monitor cannot race the apply. If the target is already active it returns <code>ok &lt;name&gt;</code> without switching. Otherwise it saves the outgoing profile's state, sets <code>ActiveProfileId</code>, applies the profile, runs <code>ResetRuntimeStateForProfileSwitch</code> (the choke point every switch lane funnels through, which also resolves the <a href="../settings-and-serialization/#profiledata">per-profile polling rate</a>), and shows the switch on the message line at the foot of the window (<code>MainViewModel.StatusText</code>). <code>ExternalDeactivate</code> clears the pin, invalidates the foreground monitor's cache, and if a named profile was active saves its state and applies Default.</p>
 <hr />
 <h2 id="the-held-profile-state-machine">The held-profile state machine<a class="headerlink" href="#the-held-profile-state-machine" title="Permanent link">&para;</a></h2>
 <p><code>SettingsManager.ExternalProfilePinActive</code> is a static bool, never persisted (<code>ExternalControlTests.ThePinIsNeverPersisted</code>). While it is true, <code>ForegroundMonitorService.CheckForegroundWindow</code> returns before reading the foreground window, after the auto-switch enable check.</p>
@@ -4447,11 +4653,11 @@
 </tr>
 <tr>
 <td>Cleared by the user</td>
-<td><code>NoteManualProfileSwitch</code>, called ahead of every manual switch: the Profiles page Load button (Default included), the status-bar switcher, a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script.</td>
+<td><code>NoteManualProfileSwitch</code>, called ahead of every manual switch: the Profiles page <strong>Load</strong> button (Default included), the switcher that opens from the title bar's profile pill (<code>TitleProfilePill</code>), a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script.</td>
 </tr>
 <tr>
 <td>Cleared by lifecycle</td>
-<td><code>StopExternalControl</code> (checkbox off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance <code>--profile</code> while the pipe is off survives an engine stop.</td>
+<td><code>StopExternalControl</code> (switch off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance <code>--profile</code> while the pipe is off survives an engine stop.</td>
 </tr>
 </tbody>
 </table>
@@ -4492,7 +4698,7 @@
 <li><a href="../services-layer/">Services Layer</a>: where <code>InputService</code> and <code>ForegroundMonitorService</code> sit.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

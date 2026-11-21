@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -1943,6 +1975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -1979,6 +2039,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2874,6 +2990,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3467,6 +3589,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3747,6 +3897,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3839,6 +4017,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4257,8 +4463,8 @@
 <p>PadForge finds <code>dhd64.dll</code> in this order: a copy you chose with <strong>Choose dhd64.dll…</strong>, the folder the <code>FDSDK</code> environment variable names, the folder Force Dimension's installer recorded, each <code>sdk-*</code> folder under <code>Program Files\Force Dimension</code> or <code>Program Files\ForceDimension</code>, newest first, and System32, where the installer also puts a copy. A copy you choose takes over within a few seconds with no restart, and a Falcon open on another copy closes and opens again on it.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Settings</strong>, find the <strong>Novint Falcon</strong> card and tick <strong>Drive Novint Falcon</strong>. It is off by default. While the engine runs, the card says which library loaded, for example <em>Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll</em>.</p>
-<p><img alt="The Novint Falcon card in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension's SDK buttons" src="../../images/settings-novint-falcon.png" /></p>
+<p>Open <strong>Settings</strong>, find the <strong>Novint Falcon</strong> row in the <strong>Hardware Support</strong> card, and turn on <strong>Drive Novint Falcon</strong>. It is off by default. While the engine runs, the row says which library loaded, for example <em>Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll</em>.</p>
+<p><img alt="The Novint Falcon row in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension’s SDK buttons" src="../../images/settings-novint-falcon.png" /></p>
 <p>Each open Falcon gets a row on the <a href="../devices/">Devices</a> page, and the row's detail pane says how that Falcon is doing:</p>
 <ul>
 <li><em>Falcon 1234: pull the handle all the way out, then push it all the way in, to home it</em></li>
@@ -4267,7 +4473,7 @@
 <p>The homing line shows for 20 seconds after a Falcon opens, then the rate Force Dimension's library reports. After power-up the Falcon has to be homed before its positions hold: pull the grip all the way out toward you, then push it all the way in.</p>
 <p>An open Falcon belongs to PadForge alone. FalconJoyForce and Force Dimension's own tools cannot open it while <strong>Drive Novint Falcon</strong> is on, and a Falcon another program holds shows as open in another program. Turning the switch off closes every Falcon.</p>
 <h3 id="the-driver">The driver<a class="headerlink" href="#the-driver" title="Permanent link">&para;</a></h3>
-<p>Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, in Windows' driver store, and Windows gives it to a Falcon when it is plugged in. When no Falcon opens, the card says why:</p>
+<p>Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, in Windows' driver store, and Windows gives it to a Falcon when it is plugged in. When no Falcon opens, the row says why:</p>
 <table>
 <thead>
 <tr>
@@ -4294,7 +4500,7 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Install Falcon Driver</strong> shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the card says <em>The dhd64.dll you chose did not load, so PadForge uses the copy above.</em>, and the copy in use keeps its Falcons.</p>
+<p><strong>Install Falcon Driver</strong> shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the row says <em>The dhd64.dll you chose did not load, so PadForge uses the copy above.</em>, and the copy in use keeps its Falcons.</p>
 <hr />
 <h2 id="the-row">The row<a class="headerlink" href="#the-row" title="Permanent link">&para;</a></h2>
 <p>The Falcon's row on the <a href="../devices/">Devices</a> page has three axes and four buttons:</p>
@@ -4330,8 +4536,8 @@
 <p>On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute firmware maps it: Left/Right and Up/Down on the right stick, and buttons 1 to 4 on the right trigger, the left trigger, the right bumper and the right stick's click. In/Out starts unmapped.</p>
 <hr />
 <h2 id="how-it-feels">How it feels<a class="headerlink" href="#how-it-feels" title="Permanent link">&para;</a></h2>
-<p>A slot with a Falcon shows a <strong>Novint Falcon</strong> section on its <a href="../force-feedback/">Force Feedback</a> tab. Each slot keeps its own settings, so a profile carries them per game.</p>
-<p><img alt="The Novint Falcon section on an Xbox slot's Force Feedback tab, above the slot's rumble settings" src="../../images/pad-forcefeedback-falcon.png" /></p>
+<p>A Falcon picked in the <strong>Driven by</strong> row of a controller's header shows a <strong>Novint Falcon</strong> card in the <strong>Rumble &amp; Haptics</strong> section, above the <a href="../force-feedback/">Force Feedback</a> card. Its settings belong to the slot, as the card's description says, so a profile carries them per game. <strong>Feel</strong>, <strong>Centering Spring</strong> and <strong>Force Limit</strong> are on the card. The rest are under <strong>More</strong>.</p>
+<p><img alt="The Novint Falcon card on an Xbox slot, above the Force Feedback card" src="../../images/pad-forcefeedback-falcon.png" /></p>
 <table>
 <thead>
 <tr>
@@ -4392,7 +4598,7 @@
 <p><strong>Aim</strong>: the stick follows how fast the handle moves, like a mouse, through three speed zones. At very low speed it follows the handle's offset from where the handle was a moment before, so slow, fine aiming still moves the view. Holding the handle against its edge, past 81% of its reach, keeps turning in the nearest of the four directions until the handle comes back inside 76%. A wall from 78% to 95% of the reach marks the edge, with a ridge just before the turning border and a small nudge on the way back in.</p>
 <hr />
 <h2 id="a-games-force">A game's force<a class="headerlink" href="#a-games-force" title="Permanent link">&para;</a></h2>
-<p>Rumble reaches the Falcon after the tab's <strong>Overall Gain</strong>, <strong>Left Motor</strong>, <strong>Right Motor</strong>, <strong>Swap Left and Right Motors</strong> and <strong>Fold Trigger Rumble into Main Motors</strong>, as it reaches any controller. <strong>Overall Gain</strong> then scales the kick, the shake and the effects below.</p>
+<p>Rumble reaches the Falcon after the Force Feedback card's <strong>Overall Gain</strong>, <strong>Left Motor</strong>, <strong>Right Motor</strong>, <strong>Swap Left and Right Motors</strong> and <strong>Fold Trigger Rumble into Main Motors</strong>, as it reaches any controller. <strong>Overall Gain</strong> then scales the kick, the shake and the effects below.</p>
 <ul>
 <li><strong>The kick</strong> is 8 N at full rumble and at least 4.5 N, held while the rumble keeps coming, and it fades faster after a weak shot than after a strong one.</li>
 <li><strong>The shake</strong> wanders in direction every 140 milliseconds and runs between 3.2 and 9 N, under the 7.8 N cap on the handle's left/right and up/down force.</li>
@@ -4406,7 +4612,7 @@
 <p>A Falcon shared over <a href="../../guides/remote-link/">Remote Link</a> feels the game on the other PC, with the feel set on that PC's virtual controller page, when both PCs run 5.2.0 or later. With an older PC on either end, it gets no force from the other PC.</p>
 <p>See the technical page, <a href="../../reference/novint-falcon-internals/">Novint Falcon Internals</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

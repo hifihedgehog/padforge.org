@@ -7,7 +7,7 @@ For the user-facing side see [Updates](../features/updates.md).
 | File | Responsibility |
 | --- | --- |
 | `PadForge.App/Services/UpdateService.cs` | The check, the download and its checksum, the record of an install waiting for the next launch, the handover to the helper, the swap, the lease, and the cleanup. |
-| `PadForge.App/Services/UpdateController.cs` | The Updates card: the timer, Check Now, Install and Restart, the background download, and every status line. UI thread only. |
+| `PadForge.App/Services/UpdateController.cs` | The Updates card and the About page's update line: the timer, Check Now, Install and Restart, Release Notes, the background download, and every status line. UI thread only. |
 | `PadForge.App/App.xaml.cs` | `OnStartup`: helper mode, the lease check, the single-instance lock, and the waiting install. The helper's two dialogs. |
 | `PadForge.App/PadForge.App.csproj` | `StampBuildIdentity`, which writes the build's commit count and hash into the assembly. |
 | `.github/workflows/build.yml` | The rolling dev release the pre-release channel reads. |
@@ -86,7 +86,7 @@ Everything lives under `%TEMP%\PadForge_Update`, never beside `PadForge.exe`:
             PadForge.exe
 ```
 
-The install key is the first 16 hex characters of the SHA-256 of the installed exe's full path, taken in upper case, so two portable copies never install, delete or reuse each other's files.
+The install key is the first 16 hex characters, in lower case, of the SHA-256 of the installed exe's full path written in upper case, so two portable copies never install, delete or reuse each other's files.
 
 ---
 
@@ -115,7 +115,7 @@ The helper has 60 seconds (`HelperReadyTimeout`) to set Ready. If it does not, e
 3. **Handshake.** It sets Ready and waits for Commit for as long as the old copy runs. The old copy exiting without a commit means install nothing.
 4. **Wait for the old copy.** Every two minutes (`OldCopyNoticeInterval`) it asks whether to keep waiting, in a small window that answers itself once the old copy exits. Cancel skips the update, and PadForge still starts again once the old copy has closed.
 5. **Swap.** `Swap` copies the installed exe into `recovery-<attempt>` and checks it against its hash, then copies itself over the installed exe and checks that against the payload hash. If the second step fails, the old exe goes back and is checked again. Each step makes up to 60 attempts, 500 ms apart, while antivirus or the loader holds a file, and no retry writes over the only good copy.
-6. **Restart.** On success it starts the installed exe with `--updated` in front of the original arguments, and the new copy's status bar says it was updated. A failure to start names the recovery folder. A failed swap that restored the old exe restarts it and reports the error. A swap that could not restore it names the folder that holds the copy, and starts nothing.
+6. **Restart.** On success it starts the installed exe with `--updated` in front of the original arguments, and the new copy's message line says it was updated. A failure to start names the recovery folder. A failed swap that restored the old exe restarts it and reports the error. A swap that could not restore it names the folder that holds the copy, and starts nothing.
 
 The helper runs before settings load and before any window exists, so its two dialogs follow the Windows display language rather than PadForge's own.
 
@@ -159,6 +159,8 @@ The first tick also asks for the cleanup, since a copy that has run 20 seconds f
 
 A check that comes back up to date, or finds no build for this PC, deletes the pending record too, so a pulled release never installs behind the card.
 
+The About page reads the same state. `SettingsViewModel.AboutSubLine` shows *Up to date.* after a check that found this build the newest (`Status` with `upToDate`, which sets `IsUpToDate`), the card's own line while a check runs, has failed or has found an update, and the subtitle alone before any check. Its **Check for Updates** and **Release Notes** buttons raise the card's commands. `ReleaseNotesUrl` opens the offer's release page, or the repository's releases list while nothing is offered, and refuses any address outside `https://github.com/hifihedgehog/PadForge/`.
+
 Every line is worded when it is shown, so the card follows a language change. The reasons for a stalled download and for an installer that failed are translated. Any other reason, an HTTP status, a note from the check such as `unexpected release data`, or an error from Windows or the network, is shown as it came.
 
 ---
@@ -200,4 +202,4 @@ Tests: `UpdateServiceTests`, `UpdateControllerTests` and `UpdateStatusCultureTes
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

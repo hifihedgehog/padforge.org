@@ -1,15 +1,17 @@
 # Bass Shakers
 
-*The Bass Shakers tab routes the game rumble and force feedback a virtual
+*The Bass Shakers card routes the game rumble and force feedback a virtual
 controller receives to an audio output as low-frequency tones, for bass
 shakers and subwoofers.*
 
 <!-- SCREENSHOT: pad-bass-shakers -->
-![The Bass Shakers tab with the Rumble to Audio card and its four voices](../images/pad-bass-shakers.png)
+![The Bass Shakers card with its More open on the four voices](../images/pad-bass-shakers.png)
 
-The tab is per slot. It works with Xbox, DualShock 3, DualShock 4, DualSense,
+The **Bass Shakers** card is the last card in the **Rumble & Haptics** section
+of a controller's page. Its settings belong to the whole controller, not to a
+device, so its chip reads **Whole controller**. It works with Xbox, DualShock 3, DualShock 4, DualSense,
 and Nintendo Switch Pro virtual controllers, plus Extended virtual controllers
-with force feedback, such as racing wheels, and the Steam Deck Controller (Composite) profile. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
+with force feedback, such as racing wheels. It also works with the Steam Deck Controller (Composite), the SInput Gamepad and the Joypad-OS Steam Input Gamepad. Game feedback and Test Rumble play through the audio output. Macro rumble stays on the controller.
 
 A game that supports the DualSense's haptics over USB plays them through the
 controller's audio rather than as rumble. On a **DualSense (PS5): Full** or
@@ -19,19 +21,22 @@ games reach the shaker too.
 
 ---
 
-## Rumble to Audio card
+## The card
+
+**Route Rumble to an Audio Output** is on the card. The rest are under its
+**More** row, with the four voices and the shaker check after them.
 
 | Control | What it does |
 | --- | --- |
 | **Route Rumble to an Audio Output** | Plays the game rumble and force feedback this virtual controller receives as low-frequency tones on the selected audio output. Turning it off keeps every setting. |
 | **Output Device** | The playback device that receives the rumble tones. System Default follows the Windows default playback device. If the selected device disappears, audio stays off until it returns. |
 | **Channel Mode** | **Mono (All Channels)** plays every voice on both channels of the stereo stream. **Controller Stereo** splits them like the controller: low motor and left trigger on the left channel, high motor and right trigger on the right. |
-| **Master Gain** | Overall loudness applied after each voice's own gain. Keep headroom so the four voices do not clip when they play together. |
+| **Master Gain** | Overall loudness applied after each voice’s own gain. Keep headroom so the four voices do not clip when they play together. |
 
 A status line under the Output Device picker reads "Audio output is not running." while
 the routing is off, "Playing to {device}." while it runs, and warns when
 the selected output device is unavailable. Bluetooth audio devices add
-noticeable latency, and the card says so.
+noticeable latency, and the card says so under the picker.
 
 ---
 
@@ -46,7 +51,7 @@ Four feedback channels each get their own row: **Low Motor**,
 | Frequency | Tone frequency for this channel, 20–120 Hz. |
 | Gain | Loudness of this channel before master gain. |
 | Level meter | Live bar showing the game feedback this channel receives, before its gain and Master Gain. **Test** and **Frequency Sweep** do not move it. |
-| **Test** | Plays this channel's tone for 1.5 seconds at its set gain. |
+| **Test** | Plays this channel’s tone for 1.5 seconds at its set gain. |
 
 Default frequencies: 40 Hz low motor, 80 Hz high motor, 60 Hz on both
 triggers. Every voice starts enabled at 100% gain. Master Gain starts at
@@ -56,7 +61,7 @@ triggers. Every voice starts enabled at 100% gain. Master Gain starts at
 
 ## Frequency Sweep
 
-**Frequency Sweep** sweeps a tone from 20 to 120 Hz over eight seconds on
+Under **Check the Shakers**, **Frequency Sweep** sweeps a tone from 20 to 120 Hz over eight seconds on
 the low motor routing. Note where your shaker responds strongest and set
 the voice frequencies there. **Stop** ends a running test or sweep.
 
@@ -66,8 +71,8 @@ the voice frequencies there. **Stop** ends a running test or sweep.
 
 The enable, output device, channel mode, and master gain rows each carry a
 reset button, and each voice row carries one that restores that voice to
-enabled, 100% gain, and its default frequency. The Rumble to Audio card
-header carries a **Reset All** that returns the output device, channel mode,
+enabled, 100% gain, and its default frequency. The card's
+header carries a **Reset All** (**Reset Rumble to Audio**) that returns the output device, channel mode,
 master gain, and all four voices to their defaults. It leaves the routing
 toggle as you set it, since the enable row has its own reset.
 
@@ -83,4 +88,4 @@ toggle as you set it, since the enable row has its own reset.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

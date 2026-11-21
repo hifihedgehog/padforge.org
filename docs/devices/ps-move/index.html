@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2862,6 +2978,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3455,6 +3577,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3735,6 +3885,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3827,6 +4005,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4229,12 +4435,12 @@
 <!-- SCREENSHOT: move-pair -->
 <p><img alt="The Pair a Controller dialog set to PlayStation Move / Navigation" src="../../images/move-pair.png" /></p>
 <ol>
-<li>Open the <a href="../../features/devices/">Devices</a> page and click <strong>Pair</strong>.</li>
-<li>Set <strong>Controller Family</strong> to <strong>PlayStation Move / Navigation</strong>.</li>
-<li>Connect the controller with a USB cable and click <strong>Pair</strong>. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.</li>
+<li>Open the <a href="../../features/devices/">Devices</a> page and click <strong>Pair a Controller</strong>.</li>
+<li>Set <strong>Controller Family</strong> to <strong>PlayStation Move / Navigation</strong>. The dialog's title changes to <strong>Pair a Move or Navigation Controller</strong>.</li>
+<li>Connect the controller with a USB cable and click <strong>Pair</strong>. PadForge writes this PC's address into the controller and, on a wand, saves its motion calibration.</li>
 <li>Unplug and press the controller's <strong>PS</strong> button. It connects over Bluetooth.</li>
 </ol>
-<p>Docking an original Move or a Navigation controller over USB also runs this on its own, so a controller that has never been paired pairs the first time you plug it in.</p>
+<p>Docking an original Move or a Navigation controller over USB also runs this on its own when the controller does not already hold this PC's address, so a controller that has never been paired pairs the first time you plug it in.</p>
 <hr />
 <h2 id="usb">USB<a class="headerlink" href="#usb" title="Permanent link">&para;</a></h2>
 <p>USB is a pairing and charging dock, not an input path, for the original Move (ZCM1). It does not stream input over the cable. The PS4-era Move (ZCM2) and the Navigation controller do stream over USB.</p>
@@ -4250,7 +4456,7 @@
 <tbody>
 <tr>
 <td><strong>Gyroscope</strong></td>
-<td>Three axes, feeding the whole <a href="../../guides/gyro/">Gyro</a> pipeline: gyro-to-stick, gyro-to-mouse, Aim Engage, and the DSU motion server.</td>
+<td>Three axes, feeding the whole <a href="../../guides/gyro/">Gyro</a> pipeline: gyro-to-stick, gyro-to-mouse, aim engage, and the DSU motion server.</td>
 </tr>
 <tr>
 <td><strong>Accelerometer</strong></td>
@@ -4258,7 +4464,7 @@
 </tr>
 <tr>
 <td><strong>Buttons</strong></td>
-<td>Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. Move sits on the right shoulder, beside the trigger.</td>
+<td>Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. The Move button maps as the right shoulder button.</td>
 </tr>
 <tr>
 <td><strong>Trigger</strong></td>
@@ -4266,15 +4472,15 @@
 </tr>
 </tbody>
 </table>
-<p>The wand's sphere is an output, not a source. PadForge drives it from the <a href="../../features/lighting/">Lighting</a> tab, and it idles at the slot's player color.</p>
+<p>The wand's sphere is an output, not a source. PadForge drives it from the Lighting card in the controller page's <strong>Lights &amp; Sound</strong> section (<a href="../../features/lighting/">Lighting</a>), and while nothing else sets it, it shows the slot's player color: blue, red, green or pink for players 1 to 4.</p>
 <p>The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors. L2 is its only analog trigger, and it maps like any other trigger, pressure and all.</p>
 <p>Before 4.3.0 that trigger read at rest no matter how hard it was pulled. The pressure was being written to an axis nothing reads: PadForge was numbering the pad's axes by their position in the standard gamepad layout, and the Navigation controller does not carry the axes in between, so every index past its sticks was off by the ones it skips.</p>
 <p>The Navigation controller shares the DualShock 3's report layout, so until 4.3.2 its picker and preview also listed everything a DualShock 3 has: a right stick, R2, Square, Triangle, R1, Select, Start, and R3, none of which exist on the pad. Those read as dead placeholders forever. PadForge now asks the pad which standardized buttons and axes it actually declares and shows only those, the same as every other controller. The numbering stays the DualShock 3's, so a saved mapping keeps its meaning across both pads. Only the phantoms drop out of the lists.</p>
 <p>Over Bluetooth, the Navigation controller needs the pairing driver's startup order exactly: the output report first, then the input stream, then a single enable packet about a second later and only if no input has arrived. The DualShock 3 tolerates that enable being sent early and repeated. The Navigation controller answers a repeat by dropping the link, which is why it connected and went silent before 4.3.2.</p>
 <hr />
 <h2 id="using-the-motion">Using the motion<a class="headerlink" href="#using-the-motion" title="Permanent link">&para;</a></h2>
-<p>The Move's gyro is an ordinary motion source once it is mapped, so everything the <a href="../../guides/gyro/">Gyro guide</a> describes applies: reference frames, real-world calibration, Aim Engage, and Gyro Tilt.</p>
-<p>Because the wand is held rather than gripped in two hands, Aim Engage is usually the right pairing. Motion that is always live is disorienting when the device is also being waved.</p>
+<p>The Move's gyro is an ordinary motion source once it is mapped, so everything the <a href="../../guides/gyro/">Gyro guide</a> describes applies: the Gyro card in the controller page's <strong>Motion &amp; Touch</strong> section, its reference frames, real-world calibration, aim engage and <strong>Gyro Tilt</strong>.</p>
+<p>Because the wand is held rather than gripped in two hands, an <strong>Aim Engage Button</strong> (in the Gyro card's <strong>Engage</strong> fold) is usually the right pairing. Motion that is always live is disorienting when the device is also being waved.</p>
 <hr />
 <h2 id="sharp-shooter-and-racing-wheel">Sharp Shooter and Racing Wheel<a class="headerlink" href="#sharp-shooter-and-racing-wheel" title="Permanent link">&para;</a></h2>
 <p>An original Move (ZCM1) connected over Bluetooth reads the two accessories Sony made for its EXT socket. Plug one into the Move and it appears as its own device on the <a href="../../features/devices/">Devices</a> page for as long as it stays attached, so the Move keeps the same sources with or without it. Assign the accessory to the Move's slot to use both.</p>
@@ -4292,7 +4498,7 @@
 </tr>
 <tr>
 <td><strong>PlayStation Move Sharp Shooter</strong></td>
-<td>Reload on the X position, the three weapon positions as <strong>Misc 2</strong>, <strong>Misc 3</strong> and <strong>Misc 4</strong>, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move.</td>
+<td>Reload on the left face button (Square on a PlayStation layout, X on an Xbox one), the three weapon positions as <strong>Misc 2</strong>, <strong>Misc 3</strong> and <strong>Misc 4</strong>, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move.</td>
 </tr>
 </tbody>
 </table>
@@ -4313,7 +4519,7 @@
 <li><a href="../dualshock-3/">DualShock 3</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

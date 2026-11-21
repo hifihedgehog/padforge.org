@@ -13,7 +13,7 @@ For the user-facing side see [Game Mods](../features/game-mods.md).
 | `PadForge.App/Services/GameModPortFiles.cs` | The two files mods read their port from. |
 | `PadForge.App/Services/DsxStandIn.cs` | The DSX.exe stand-in: extracting it, starting it and the job object that ends it. |
 | `PadForge.DsxStandIn/Program.cs` | The stand-in itself, a .NET Framework program that waits for PadForge to exit. |
-| `PadForge.App/Services/InputService.GameMods.cs` | Start and stop with the engine and the Dashboard switches, the status line, the pad page lines and the Devices line. |
+| `PadForge.App/Services/InputService.GameMods.cs` | Start and stop with the engine and the Game Mods switches on the Extras page, the status line, the pad page lines and the Devices line. |
 | `PadForge.App/Common/Input/UserEffectsDispatcher.cs` | Where a mod's hold meets the Sony effects pass: `FillFromModHold`, `ModHoldEnded`, `NotifyModEffectsChanged` and the `TryGetInboundTriggerEffects` fallback. |
 | `PadForge.App/Common/Input/InputManager.Step5.VirtualDevices.cs` | The trigger threshold, on the hand-off to the virtual controller, for the gamepad state and the raw surface. |
 
@@ -82,7 +82,7 @@ An instruction that sets a value already held changes nothing, so a mod that res
 
 ### Which virtual controller an index reaches
 
-`GameModEffects.OrderedSlots` lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order `SettingsManager.SlotOrders.GetGlobalSlotNumber` numbers them on the Dashboard. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use `ForSlotCached`, which resolves the order at most every 250 ms. `RefreshOrder` resolves it and swaps the cached copy, and when the order changed while a mod holds anything, every virtual controller in the old order and the new one is told (`NotifySlot`): the pad an index left gives the mod's values back and the pad it reached takes them, with no new packet. The Dashboard tick calls it too, once a second, which covers a moment when no virtual controller polls.
+`GameModEffects.OrderedSlots` lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order `SettingsManager.SlotOrders.GetGlobalSlotNumber` numbers them, the numbers the sidebar shows. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use `ForSlotCached`, which resolves the order at most every 250 ms. `RefreshOrder` resolves it and swaps the cached copy, and when the order changed while a mod holds anything, every virtual controller in the old order and the new one is told (`NotifySlot`): the pad an index left gives the mod's values back and the pad it reached takes them, with no new packet. `InputService.UpdateGameModLines` calls it too, once a second from `InputService.UpdateDashboard`, which covers a moment when no virtual controller polls.
 
 ### Releases
 
@@ -108,7 +108,7 @@ The pad keeps a trigger program, a mute light or a player row until something ov
 
 A change to a hold calls `NotifyModEffectsChanged` for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (`ModChangeTimerMs`, a `HasTimerDemand` term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through `LightPeripheral` where no game color is live, and a change requests their refresh through `GameLightbarCapture.NotifyChanged`. A mod's color also covers Screen Color's per-light spread (#559): the spread's picture rides the claim only while no game, mod, macro or overlay color is showing (`baseModeShows` in `UserEffectsDispatcher`).
 
-`TryGetInboundTriggerEffects` hands `AtToImpulseTranslator` the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.
+`TryGetInboundTriggerEffects` hands `AtToImpulseTranslator` the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. The Flydigi Apex lane (`UserEffectsDispatcher.Flydigi.cs`, #586) reads the same call, so an Apex pad on the slot plays the mod's block as the pad can. A macro's block comes after the mod's, the Sony pass's order.
 
 ## The threshold
 
@@ -123,7 +123,7 @@ Step 5 applies the held thresholds right before submit, after button SOCD, on a 
 
 Every packet gets a reply at once, sent before the packet is applied, because the mods that wait for one block on `Receive` with no timeout. The reply carries DSX's fields and casing: `Status` ("DSX Received UDP Instructions", DSX's own text), `TimeReceived`, `isControllerConnected`, `BatteryLevel`, and the v3 `Devices` list. `GameModStatusDevices` builds that list at most every 250 ms: one entry per controller index, describing the first online Sony pad on that virtual controller, with DSX's `DeviceType` (0 DualSense, 1 Edge, 2 and 3 DualShock 4 v1 and v2, 4 the wireless adapter) and `ConnectionType` (0 USB, 1 Bluetooth, 2 the adapter).
 
-The Dashboard line comes from `GameModServer.FormatStatus`: why the server is not listening, or the last sender's program and the Dashboard number of the virtual controller its index reaches. An index past every virtual controller with a PlayStation controller, while some have one, gets its own line naming the index (`GameMods_SendingPastControllers_Format`). A start that found the port bound by another program is tried again every 3 seconds (`InputService.PortInUseRetryMs`) from the Dashboard tick, while the switch is on and the engine runs, and a language change keeps a failed start's reason on the card.
+The status line on the Game Mods tile and page comes from `GameModServer.FormatStatus`: why the server is not listening, or the last sender's program and the sidebar number of the virtual controller its index reaches. An index past every virtual controller with a PlayStation controller, while some have one, gets its own line naming the index (`GameMods_SendingPastControllers_Format`). A start that found the port bound by another program is tried again every 3 seconds (`InputService.PortInUseRetryMs`) from `UpdateGameModLines`, while the switch is on and the engine runs, and a language change keeps a failed start's reason on the page.
 
 ### Port files
 
@@ -144,4 +144,4 @@ The Dashboard line comes from `GameModServer.FormatStatus`: why the server is no
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

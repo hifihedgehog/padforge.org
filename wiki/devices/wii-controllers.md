@@ -11,12 +11,12 @@ The Windows pairing wizard can't pair a Wii controller on its own. The controlle
 ## Pairing a Wii controller
 
 1. Open the [Devices](../features/devices.md) page.
-2. Click **Pair**, next to **Refresh**. The **Pair a Controller** dialog opens.
+2. Click **Pair a Controller**, at the top of the page. The **Pair a Wii Remote** dialog opens.
 3. Leave **Controller Family** on **Nintendo Wii**. The other entries pair a **Sony DualShock 3**, a **PlayStation Move / Navigation** controller, a **Serial Controller (COM Port)** and a **DJI RC or RC 2 (Network)**.
-4. Click **Pair** in the dialog to start scanning. The **Pair** button dims and the progress ring spins.
+4. Click **Pair** in the dialog to start scanning. The **Pair** button gives way to **Cancel** while the scan runs.
 5. Press the red **SYNC** button under the battery cover on the back of the controller.
 6. The controller appears in the found list and pairs on its own. You don't select it.
-7. On success, the **Pair** button disappears and **Cancel** becomes **Done**. Click **Done** to close.
+7. On success, **Cancel** becomes **Done**. Click **Done** to close.
 
 Pressing SYNC bonds the controller. You pair once, and it reconnects on any button press afterward.
 
@@ -28,7 +28,7 @@ Check **Temporary Pairing (Hold 1 and 2)** before you scan, then hold the **1** 
 
 ## Supported controllers
 
-PadForge reads all four forms. Each maps as a normal pad on the [Mappings](../features/mappings.md) tab.
+PadForge reads all four forms. Each maps as a normal pad in the **Mappings** section of the controller page ([Mappings](../features/mappings.md)).
 
 | Controller | Layout |
 |---|---|
@@ -58,7 +58,7 @@ None of them reads behind an active Motion Plus, and none has the IR pointer.
 
 Every Wii controller's D-pad maps as a single POV hat. Older builds also listed the four D-pad directions as separate raw rows in the picker. Those raw rows are gone. A mapping made against an old raw D-pad row no longer fires, so re-record it onto the POV hat.
 
-The hat turns with the remote's hold. Set **Held As** on the Gyro tab to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See [Holds](#holds).
+The hat turns with the remote's hold. Set **Held As** in the Gyro card's **Grip** fold to one of the two sideways holds and the remote's physical Right reads as Up, so Up on the mapping table is up in the hold. See [Holds](#holds).
 
 ---
 
@@ -68,7 +68,7 @@ A Mayflash DolphinBar in mode 4 lists four remote slots to Windows, and PadForge
 
 The bar gives no serial number for a remote. PadForge reads the remote's factory calibration from its memory and uses it as the serial, so a remote keeps its slot assignment and mappings in whichever of the bar's four slots it lands in. The serial is read again at every connection, since another remote can sync into the slot.
 
-- An empty bar slot gets no controller card. A slot that fails every write is not a remote, however much input it sends. A remote that syncs into it later appears once it answers a status request.
+- An empty bar slot gets no device row. A slot that fails every write is not a remote, however much input it sends. A remote that syncs into it later appears once it answers a status request.
 - A remote saved under the bar slot it sat in before 5.3.0 takes that entry over the first time it connects with a serial. Its slot assignments carry over. An entry that is online is never taken.
 
 Nobody has run a DolphinBar with this code yet. The driver change was written against mode 4.
@@ -85,7 +85,7 @@ The Nunchuk accelerometer sources work over Remote Link too, so a Nunchuk shared
 
 ### Holds
 
-The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The **Grip** card on the [Gyro](../guides/gyro.md#grip) tab, row **Held As**, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the [DSU Motion Server](../reference/dsu-motion-server.md) feed.
+The driver delivers the remote's motion in the aiming frame only. Hold the remote sideways and every axis a game reads is a quarter turn off. The **Held As** row, in the **Grip** fold of the Gyro card ([Gyro](../guides/gyro.md#grip)) in the controller page's **Motion & Touch** section, rotates the gyro, the accelerometer, and gravity into the frame of the hold you are using. It applies to the mapping rows, to the motion a Nintendo or PlayStation slot reports, and to the [DSU Motion Server](../reference/dsu-motion-server.md) feed.
 
 | Held As | The hold |
 |---|---|
@@ -96,11 +96,11 @@ The driver delivers the remote's motion in the aiming frame only. Hold the remot
 
 The two sideways holds differ only in which way the buttons face, and they need different rotations, so pick the one that matches. The D-pad turns with the grip in both sideways holds. Changing the hold recenters the motion neutrals, so hold the remote still for a moment afterward. The Nunchuk is its own body in the other hand and keeps its own frame.
 
-Since 4.4.0 the Gyro tab shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the Grip, Motion Steering, and Gyro Tilt cards and hides the gyro-rate cards.
+The Gyro card shows for a remote without Motion Plus as well. On an accelerometer-only remote it carries the **Grip**, **Motion Steering** and **Gyro Tilt** folds and hides what acts on gyro rates: Motion Passthrough, the calibration, the sensitivity, the live rates, and the **Engage**, **Response Shaping** and **Reference Frame** folds.
 
 ### Emulators
 
-Keep **Apply Gyro Tuning to Motion Passthrough** on the Gyro tab off. It is off by default. An emulator integrates the rate it receives, and with the box checked the tab's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on [Gyro](../guides/gyro.md#motion-passthrough).
+Keep **Motion Passthrough** on the Gyro card at **Raw**, the default. An emulator integrates the rate it receives, and on **Tuned** the card's default tuning runs smoothing and a 3°/s deadzone on that rate first, which leaves the integrated orientation drifting after a tilt and wrong after a sharp turn. Details on [Gyro](../guides/gyro.md#motion-passthrough).
 
 The Motion Plus zero is calibrated when the remote connects. The scale is fixed in the driver, which reads no calibration block from the remote, so a fast turn can read a little short. See [Wii Controllers Internals](../reference/wii-controllers-internals.md#motion-plus-calibration-known-limitation).
 
@@ -118,11 +118,11 @@ The aim corrects for twist. Roll the remote in your hand and the pointer stays o
 
 **IR Offscreen** reads on when the camera loses sight of the sensor bar, so aiming off the screen registers as a press. Many lightgun games reload when you point off-screen, and this source drives that. It fits a button, an Up or Down key of an Incremental or Ramp source, and a macro trigger.
 
-A **Pointer** tab appears when the assigned device has an IR camera. It holds two cards.
+An **IR Pointer** card appears in the controller page's **Motion & Touch** section when the assigned device has an IR camera. It holds the pointer mode up front and the tuning under **More**.
 
 ### Pointer Mode
 
-The **Pointer Mode** card sets how the aim drives the OS cursor. Pick one of four modes:
+The card's **Mode** row sets how the aim drives the OS cursor. Pick one of four modes:
 
 - **Mouse**: the cursor follows where you point, one-to-one.
 - **FPS Mouse**: the offset from screen center becomes cursor velocity, for first-person games. This mode adds an **FPS Speed** slider (5 to 100, default 35) that sets cursor speed at full aim.
@@ -132,33 +132,33 @@ The **Pointer Mode** card sets how the aim drives the OS cursor. Pick one of fou
 The mode shapes the cursor only. **IR Pointer X** and **IR Pointer Y** mapped to a stick or button keep reading the raw aim.
 
 <!-- SCREENSHOT: wii-pointer-mode -->
-![The Pointer Mode card with the mode dropdown and the FPS Speed slider](../images/wii-pointer-mode.png)
+![The IR Pointer card with the Mode dropdown and the FPS Speed slider](../images/wii-pointer-mode.png)
 
 ### Pointer tuning
 
-The tuning card lines the pointer up with your screen:
+The rows under the card's **More** line the pointer up with your screen:
 
 - **Sensor Bar Position**: **Centered**, **Above the Screen**, or **Below the Screen**. Set this to where your sensor bar actually sits so the pointer lines up.
-- **Vertical Offset**: shifts the pointer up or down to compensate for the bar's height.
-- **Smoothing**: steadies the pointer against camera jitter.
+- **Vertical Offset**: shifts the pointer up or down to compensate for the bar's height, 0 to 50 percent.
+- **Smoothing**: steadies the pointer against camera jitter, 0 to 100 percent.
 
 Each IR Pointer source row also has a **Sensitivity** dial, from 0.1 to 5.0.
 
 A remote calibrated as a light gun ignores **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits.
 
-![The Pointer tab with sensor-bar position, vertical offset, smoothing, and per-source sensitivity](../images/pad-pointer.png)
+![The IR Pointer card with sensor-bar position, vertical offset and smoothing under More](../images/pad-pointer.png)
 
 ### Light gun
 
-Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the [Devices](../features/devices.md#light-gun) page, and in its **Light Gun** section click **Calibrate**. Four targets appear in turn. From where you play, point the remote at each one and press **B**. Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The section's reset button returns the remote to its default range.
+Calibrate the remote to your screen and the crosshair lands on the spot it points at. Select the remote on the [Devices](../features/devices.md#light-gun) page, and on its **Gun Calibration** row click **Calibrate**. Four targets appear in turn. From where you play, point the remote at each one and press **B**. Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. The row's reset button returns the remote to its default range.
 
 <!-- SCREENSHOT: devices-light-gun -->
-![The Light Gun section of a Wii Remote's row on the Devices page](../images/devices-light-gun.png)
+![The Gun Calibration row of a Wii Remote on the Devices page](../images/devices-light-gun.png)
 
 For a light-gun game that aims with a stick:
 
 - Map **IR Pointer X** and **IR Pointer Y** onto one stick of whichever virtual controller the game or emulator reads.
-- Leave that stick's **Deadzone X** and **Deadzone Y** at 0 on the [Sticks](../features/stick-deadzones.md) tab. Above 0, the default **Scaled Radial** shape keeps the stick inside a circle, which cuts off the screen's corners.
+- Leave that stick's **Deadzone** at 0 in the controller page's **Sticks & Triggers** section ([Stick Deadzones](../features/stick-deadzones.md)). Above 0, the default **Scaled Radial** shape keeps the stick inside a circle, which cuts off the screen's corners.
 - Set the emulator's own deadzone for that stick to 0 and its saturation to full. MAME, for one, starts at a 0.15 deadzone and 0.85 saturation.
 - Map **IR Offscreen** to the game's reload button.
 
@@ -180,7 +180,7 @@ The board's factory calibration is read automatically, so weight reads in real k
 
 ## Speaker
 
-A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. It appears on the [Audio](../features/controller-audio.md) tab like other speaker-capable controllers.
+A Wii Remote can play macro sounds through its built-in speaker. The speaker is low-rate audio, so it handles beeps and short cues rather than music. Its settings are on the Audio card in the controller page's **Lights & Sound** section ([Controller Audio](../features/controller-audio.md)), as for other controllers with a speaker.
 
 ---
 
@@ -202,9 +202,9 @@ The two hands read independently, so the left half can drive the cursor while th
 **Left Joy-Con Accelerometer**, **Left Joy-Con Lean** and **Left Joy-Con Shake** are the same three sources that show as **Nunchuk Accelerometer**, **Nunchuk Lean** and **Nunchuk Shake** on a Wii Remote. The gyro rows have no Nunchuk counterpart. The Nunchuk carries no gyro.
 
 - Joy-Con 2 pairs expose the same left-side sources.
-- The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the [Gyro](../guides/gyro.md) tab all apply, and those device-level sliders tune both halves at once. The per-row **Sensitivity** dial is the independent knob.
+- The left sensor runs through the same pipeline as the primary one. The sensitivity, response shaping, and engage controls on the [Gyro](../guides/gyro.md) card all apply, and those device-level sliders tune both halves at once. The per-row **Sensitivity** dial is the independent knob.
 - Gyro calibration samples both halves in one run and stores a separate bias for each, so hold both halves still.
-- The [Devices](../features/devices.md) page shows the left half's readings as **Aux Gyroscope** and **Aux Accelerometer** telemetry blocks.
+- The [Devices](../features/devices.md) page shows the left half's readings as **Aux Gyroscope** and **Aux Accelerometer**.
 - The left-side sources work over [Remote Link](../guides/remote-link.md), like the Nunchuk pair.
 
 ### One slot for every Joy-Con grip
@@ -264,11 +264,11 @@ Each Mouse Motion row has a **Sensitivity** dial. This needs PadForge's bundled 
 
 ## Related pages
 
-- [Devices](../features/devices.md): the Pair button and the paired controller's device card.
+- [Devices](../features/devices.md): the Pair a Controller button and the paired controller's row.
 - [Gyro](../guides/gyro.md): tune the Wii Remote's motion sensors and set the hold.
 - [Wii Controllers Internals](../reference/wii-controllers-internals.md): the pairing ceremony, the sensor frame, and the Motion Plus calibration limitation.
 - [Driver Management](../features/driver-management.md): HIDMaestro and HidHide driver setup.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

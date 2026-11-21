@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -1943,6 +1975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -1979,6 +2039,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2879,6 +2995,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3472,6 +3594,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3752,6 +3902,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3844,6 +4022,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4259,13 +4465,15 @@
 <p>A VR headset is the third source. PadForge talks to an OpenXR runtime directly and reads the headset pose into the same six axes, so a headset drives the same mappings an OpenTrack webcam would.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open the <a href="../dashboard/">Dashboard</a>, find the <strong>Head Tracking</strong> section, and turn on <strong>Enable UDP Tracking Input</strong>, <strong>Enable FreeTrack 2.0 Shared Memory Input</strong>, <strong>Enable OpenXR Headset Input</strong>, or any combination. The three run together.</p>
-<!-- SCREENSHOT: dashboard-head-tracking -->
-<p><img alt="Dashboard, Head Tracking section with its toggles, port, ranges, and status line" src="../../images/dashboard-head-tracking.png" /></p>
+<p>Open <strong>Extras</strong> in the sidebar and click the <strong>Head Tracking</strong> tile. Under <strong>Sources</strong>, turn on <strong>Enable UDP Tracking Input</strong>, <strong>Enable FreeTrack 2.0 Shared Memory Input</strong>, <strong>Enable OpenXR Headset Input</strong>, or any combination. The three run together.</p>
+<p>The page's own switch, <strong>Head Tracking</strong>, is on while any of the three is on. Turned off, it remembers which were on, and turned on again it brings those back. The first time, it turns on UDP and FreeTrack, and the headset input waits to be chosen, since it opens an OpenXR session. The reset beside it turns all three off. The tile's switch in the Extras catalog is the same switch.</p>
+<!-- SCREENSHOT: extras-head-tracking -->
+<p><img alt="The Head Tracking page in Extras: its switch, the status line with Set Neutral, Sources and Range" src="../../images/dashboard-head-tracking.png" /></p>
 <table>
 <thead>
 <tr>
 <th>Control</th>
+<th>Where</th>
 <th>Default</th>
 <th>Range</th>
 <th>Notes</th>
@@ -4274,57 +4482,65 @@
 <tbody>
 <tr>
 <td><strong>Enable UDP Tracking Input</strong></td>
+<td>Sources</td>
 <td>Off</td>
 <td></td>
 <td>Opens the UDP listener. An authored profile opinion applies to this input only.</td>
 </tr>
 <tr>
 <td><strong>Enable FreeTrack 2.0 Shared Memory Input</strong></td>
+<td>Sources</td>
 <td>Off</td>
 <td></td>
 <td>Reads <code>FT_SharedMem</code> independently of UDP. It has its own authored profile opinion.</td>
 </tr>
 <tr>
 <td><strong>Enable OpenXR Headset Input</strong></td>
+<td>Sources</td>
 <td>Off</td>
 <td></td>
 <td>Reads a VR headset's pose through an OpenXR runtime, with or without SteamVR.</td>
 </tr>
 <tr>
-<td><strong>OpenXR Runtime</strong></td>
-<td>System Default</td>
-<td>installed runtimes</td>
-<td>Which runtime to read the headset from. The choice affects PadForge only and never the system default.</td>
-</tr>
-<tr>
-<td><strong>UDP Port</strong></td>
-<td>4242</td>
-<td>1 to 65535</td>
-<td>The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off.</td>
-</tr>
-<tr>
-<td><strong>Rotation Range (Degrees)</strong></td>
+<td><strong>Rotation Range (degrees)</strong></td>
+<td>Range</td>
 <td>90</td>
 <td>1 to 180</td>
 <td>Head rotation that moves yaw, pitch, and roll to full deflection. Global, applied live.</td>
 </tr>
 <tr>
 <td><strong>Translation Range (cm)</strong></td>
+<td>Range</td>
 <td>30</td>
 <td>1 to 500</td>
 <td>Head travel that moves X, Y, and Z to full deflection. Global, applied live.</td>
 </tr>
 <tr>
+<td><strong>UDP Port</strong></td>
+<td>More</td>
+<td>4242</td>
+<td>1 to 65535</td>
+<td>The port OpenTrack's "UDP over network" output sends to. Global. Disabled while UDP input is off.</td>
+</tr>
+<tr>
+<td><strong>OpenXR Runtime</strong></td>
+<td>More</td>
+<td>System Default</td>
+<td>installed runtimes</td>
+<td>Which runtime to read the headset from. The choice affects PadForge only and never the system default.</td>
+</tr>
+<tr>
 <td><strong>Set Neutral</strong></td>
+<td>Beside the status line</td>
 <td></td>
 <td></td>
 <td>Makes your current position the neutral. Applies to the OpenXR input only, and re-zeros the headset and both VR controllers together.</td>
 </tr>
 </tbody>
 </table>
-<p>Each numeric field has a reset button. Changing an input toggle reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line under the controls reads <strong>Stopped</strong> while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.</p>
+<p>Each setting has a reset button, and Sources and Range each carry a <strong>Reset All</strong>. Changing an input switch reopens the runtime reader. Changing the UDP port does so only while UDP is enabled. The status line reads <strong>Stopped</strong> while the feature is off or the engine is down, and otherwise carries the same text as the Head Tracker row's detail pane on the Devices page.</p>
 <h3 id="per-axis-range">Per-Axis Range<a class="headerlink" href="#per-axis-range" title="Permanent link">&para;</a></h3>
-<p>Under the shared ranges sits a <strong>Per-Axis Range</strong> group with one field for each of the six axes: <strong>Yaw</strong>, <strong>Pitch</strong>, <strong>Roll</strong>, <strong>Lean Left and Right</strong>, <strong>Rise and Crouch</strong>, and <strong>Lean Forward and Back</strong>. A field set to anything other than zero governs that axis on its own. Zero follows the shared range above. Rotation fields are degrees and travel fields are centimeters, matching the shared pair.</p>
+<p>Under <strong>More</strong> sits a <strong>Per-Axis Range</strong> group with one field for each of the six axes: <strong>Yaw</strong>, <strong>Pitch</strong>, <strong>Roll</strong>, <strong>Lean Left and Right</strong>, <strong>Rise and Crouch</strong>, and <strong>Lean Forward and Back</strong>. A field set to anything other than zero governs that axis on its own. Zero follows the shared range above. Rotation fields are degrees, 0 to 180, and travel fields are centimeters, 0 to 500, matching the shared pair.</p>
 <p>The box always shows what you pinned, not what is in effect. A field reading zero means that axis follows the shared range, and it keeps reading zero however the shared range changes. Each of the six fields has its own reset button.</p>
 <p>This is for an axis whose comfortable travel does not match the rest. Neck rotation covers 90 degrees easily while leaning forward covers far less, so pinning <strong>Lean Forward and Back</strong> low gives that axis full deflection over the distance you actually move.</p>
 <h3 id="the-device-row">The device row<a class="headerlink" href="#the-device-row" title="Permanent link">&para;</a></h3>
@@ -4380,13 +4596,13 @@
 <p>Every axis rests at center. Yaw right and X right read high, like a stick pushed right. The vertical axes are stored the way a stick reports them, up at the low end, so mapping Head Pitch onto a stick's Y axis needs no inversion. Roll and Head Z pass through with the sign OpenTrack sends.</p>
 <!-- SCREENSHOT: devices-head-tracking -->
 <p><img alt="Devices page, Head Tracker row selected, with the status line and six axes" src="../../images/devices-head-tracking.png" /></p>
-<p>The row has no buttons, no hiding section, and no Input Mode section. It starts unmapped: auto-map does not cover head trackers, so each axis is bound by hand.</p>
+<p>The row has no buttons, no <strong>Hide from Games (HidHide)</strong> switch, and no <strong>Force Raw Joystick Mode (Bypass Gamepad Remapping)</strong> switch. It starts unmapped: auto-map does not cover head trackers, so each axis is bound by hand.</p>
 <p>With every input off, the runtime reader is retired. Stored assignments and mappings remain. FreeTrack-only input opens no UDP socket or receive thread.</p>
 <p>Older settings keep their effective enabled state on upgrade. A profile with no input opinion leaves that input unchanged.</p>
 <hr />
 <h2 id="setting-up-opentrack">Setting up OpenTrack<a class="headerlink" href="#setting-up-opentrack" title="Permanent link">&para;</a></h2>
 <p>Two outputs work, and both can be on at once.</p>
-<p><strong>UDP over network.</strong> In OpenTrack's Output list choose <em>UDP over network</em>, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under <strong>UDP Port</strong> in PadForge (default 4242). Click Start. The status line changes from <em>Waiting for a tracker on UDP port 4242.</em> to <em>Receiving over UDP from 127.0.0.1:port.</em>, where the port is the one OpenTrack sent from.</p>
+<p><strong>UDP over network.</strong> In OpenTrack's Output list choose <em>UDP over network</em>, open its settings, and set the address to 127.0.0.1 (OpenTrack's default is 192.168.0.2, which is another machine) and the port to the one shown under <strong>UDP Port</strong> in PadForge (default 4242, under the Head Tracking page's <strong>More</strong>). Click Start. The status line changes from <em>Waiting for a tracker on UDP port 4242.</em> to <em>Receiving over UDP from 127.0.0.1:port.</em>, where the port is the one OpenTrack sent from.</p>
 <p><strong>freetrack 2.0 Enhanced.</strong> If a game already reads FreeTrack from OpenTrack, keep that output and turn on <strong>Enable FreeTrack 2.0 Shared Memory Input</strong> in PadForge. You can leave UDP input off. PadForge reads the same <code>FT_SharedMem</code> block the game does, so both see the pose. The status line says <em>Receiving from FreeTrack shared memory.</em> PadForge never moves the axes from a pose that was already in the block when it opened. Only a fresh write counts, so a stale pose left by an earlier session cannot pin a stick.</p>
 <p>Phone trackers and other programs that send the OpenTrack UDP format can point straight at PadForge on the same port. PadForge adds an inbound firewall rule named <strong>PadForge Head Tracking</strong> for the port when UDP input opens.</p>
 <p>When OpenTrack stops, or the camera loses the face, the axes return to center after one second without a pose, so a stick is never left pinned. The row stays online, so mappings can be made before the tracker is started.</p>
@@ -4394,7 +4610,7 @@
 <h2 id="setting-up-an-openxr-headset">Setting up an OpenXR headset<a class="headerlink" href="#setting-up-an-openxr-headset" title="Permanent link">&para;</a></h2>
 <p>Turn on <strong>Enable OpenXR Headset Input</strong> and leave <strong>OpenXR Runtime</strong> on <em>System Default</em>, which uses the runtime registered as the machine's active one. If that runtime's library is missing, PadForge uses the first other registered runtime whose library is on disk. The dropdown lists each registered runtime whose library is still on disk, so you can read from one while another stays the system default. Picking a runtime here never changes the system default. A runtime whose manifest survives an uninstall is not offered, but one you had already chosen stays listed so the setting does not silently move.</p>
 <p>PadForge asks the runtime for a session that runs without drawing anything, so no game has to be open. It submits no frames, though a given runtime may still show its own status window. A runtime that cannot supply one reports <em>This runtime cannot supply a background session</em>, and the headset input stays off while the other two inputs carry on.</p>
-<p>Meta's runtime, the one a Quest uses over Link, leaves out the extension PadForge needs for that session in every version Khronos has published an extension list for, the latest being 1.205.0. No list exists for later versions. SteamVR's runtime has it and reads a Quest over Link or Air Link, so choose <strong>SteamVR</strong> under <strong>OpenXR Runtime</strong>. The list holds only runtimes Windows has registered. If SteamVR is missing from it, open SteamVR's settings, go to OpenXR, click <em>Set SteamVR as OpenXR Runtime</em>, and leave PadForge on <em>System Default</em>. Then turn <strong>Enable OpenXR Headset Input</strong> off and back on, because PadForge reads the system runtime only when that input starts. The SteamVR button makes SteamVR the runtime for every OpenXR program on the PC, and <em>Set Meta Horizon Link as active</em>, under Settings and then General in the Meta Horizon Link app, switches back. Both buttons need an administrator account. Reading a Quest through SteamVR has not been tried with a headset.</p>
+<p>Meta's runtime, the one a Quest uses over Link, leaves out the extension PadForge needs for that session in every version Khronos has published an extension list for, the latest being 1.205.0. No list exists for later versions. SteamVR's runtime has it and reads a Quest over Link or Air Link, so choose <strong>SteamVR</strong> under <strong>OpenXR Runtime</strong>. The list holds only runtimes Windows has registered. If SteamVR is missing from it, open SteamVR's settings, go to OpenXR, click <em>Set SteamVR as OpenXR Runtime</em>, and leave PadForge on <em>System Default</em>. Then turn <strong>Enable OpenXR Headset Input</strong> off and back on, because PadForge reads the system runtime only when that input starts. The SteamVR button makes SteamVR the runtime for every OpenXR program on the PC, and it needs an administrator account. Reading a Quest through SteamVR has not been tried with a headset.</p>
 <p>The status line reports each stage:</p>
 <table>
 <thead>
@@ -4441,7 +4657,7 @@
 <p><strong>Set Neutral</strong> makes your current position the zero point. It applies to the OpenXR input only, because OpenTrack and FreeTrack already center their own pose before sending it. It re-zeros the headset and both <a href="../vr-controller-input/">VR controllers</a> together, so hold them where you want their neutral to be.</p>
 <hr />
 <h2 id="mapping-it">Mapping it<a class="headerlink" href="#mapping-it" title="Permanent link">&para;</a></h2>
-<p>On the Pad page, pick <strong>Head Yaw</strong> as the source of the right stick's X axis, then set the right stick's <strong>Deadzone</strong> on the <strong>Sticks</strong> tab for the angle you want ignored. A mapping row's own deadzone slider applies only to button targets. The stick's <strong>Deadzone</strong> and <strong>Sensitivity Curves</strong> and the row's <strong>Invert</strong> box are the same controls a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.</p>
+<p>On the controller page, pick <strong>Head Yaw</strong> as the source of the right stick's X axis in the Mappings section, then set the right stick's <strong>Deadzone</strong> in the <strong>Sticks &amp; Triggers</strong> section for the angle you want ignored. A mapping row's own deadzone slider applies only to button targets. The stick's <strong>Deadzone</strong> and <strong>Sensitivity Curves</strong> and the row's <strong>Invert</strong> box are the same controls a physical stick gets. OpenTrack's own mapping curves still apply first, so a curve shaped in OpenTrack arrives already shaped.</p>
 <p>The six axes bind anywhere an axis does. An Any Device source never reads them, so pick the tracker by name. Assigning the tracker preserves existing Any Device rows. It does not append named gamepad defaults to those rows. If an earlier version already added an unwanted extra source, remove that extra once while retaining the Any Device source.</p>
 <hr />
 <h2 id="what-it-does-not-do">What it does not do<a class="headerlink" href="#what-it-does-not-do" title="Permanent link">&para;</a></h2>
@@ -4451,7 +4667,7 @@
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../dashboard/">Dashboard</a>: the Head Tracking section.</li>
+<li><a href="../dashboard/#head-tracking">Extras</a>: the Head Tracking page.</li>
 <li><a href="../devices/">Devices</a>: the Head Tracker row.</li>
 <li><a href="../vr-controller-input/">VR Controller Input</a>: the two hand controllers, read from the same OpenXR runtime.</li>
 <li><a href="../../reference/head-tracking-internals/">Head Tracking Internals</a>: the UDP and FreeTrack wire facts, for whoever has to change the code.</li>
@@ -4459,7 +4675,7 @@
 <li><a href="../headset-motion/">Headset Head Tracking</a>: head rotation from a Sony headset, a different source.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3582,6 +3704,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3862,6 +4012,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3954,6 +4132,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4520,20 +4726,24 @@
 </tr>
 <tr>
 <td><code>PadForge.App/MainWindow.xaml.cs</code></td>
-<td><code>OnImportProfile</code>, <code>ImportProfileFromFile</code>, <code>ImportForeignConfig</code>, and the sink <code>AddWorkshopProfile</code>.</td>
+<td><code>ShowGetProfiles</code>, <code>ImportProfileFile</code>, <code>ImportProfileFromFile</code>, and the sink <code>AddWorkshopProfile</code>.</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/GetProfilesDialog.xaml(.cs)</code></td>
+<td>Get Profiles' <strong>Import a File</strong> tab: the Open dialog (<code>ChooseFile</code>), its drop zone and the refusal line under it.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Views/ProfilesPage.xaml.cs</code></td>
-<td>The drop zone (<code>IsImportableFile</code>, <code>ProfileList_Drop</code>).</td>
+<td>The page's drop zone (<code>IsImportableFile</code>, <code>IsProfileFileDrag</code>, <code>ProfileList_Drop</code>) and the drop tile (<code>DropTile_Click</code>).</td>
 </tr>
 </tbody>
 </table>
 <p>The report type is the Workshop importer's: <code>TranslationReport</code> and <code>TranslationStatus</code> (<code>PadForge.SteamWorkshop/Translation</code>). The reason vocabulary is separate. <code>ImportReasons</code> holds <code>Import_Tr_*</code> resource keys, and Steam's list stays locked to what its translator emits.</p>
 <hr />
 <h2 id="entry-points">Entry points<a class="headerlink" href="#entry-points" title="Permanent link">&para;</a></h2>
-<p><code>OnImportProfile</code> opens a <code>Microsoft.Win32.OpenFileDialog</code> whose first filter is <code>Profiles_ImportFilterAll</code> over <code>*.pfprofile;*.rewasd;*.xml</code>, followed by the <code>.pfprofile</code> filter, <code>FileDialog_ForeignProfileFilter</code> and all files. <code>ForeignConfigImporter.ProfileFolders</code> yields <code>CommonDocuments\reWASD\Profiles</code> and <code>ApplicationData\DS4Windows\Profiles</code> when each exists, and each becomes a <code>FileDialogCustomPlace</code>.</p>
-<p><code>ProfilesPage.IsImportableFile</code> accepts a <code>.pfprofile</code> or anything <code>ForeignConfigImporter.HandlesFile</code> accepts (<code>.rewasd</code> or <code>.xml</code>, case-insensitive). The drop handler calls <code>ImportProfileFile</code> once per accepted file.</p>
-<p><code>ImportProfileFromFile</code> sends anything that is not a <code>.pfprofile</code> to <code>ImportForeignConfig</code>, which calls <code>ForeignConfigImporter.Translate(path)</code>. A refused result puts <code>Strings.Get(result.RefusedKey)</code> on the status bar (<code>SetStatus(..., persist: true)</code>) and stops. Otherwise it shows <code>ImportConfigDialog</code> with <code>ImportSink = AddWorkshopProfile</code>, the sink the Workshop and starter profiles land through. The dialog calls the sink with <code>applyAfter: false</code>, so the active profile is untouched. <code>AddWorkshopProfile</code> dedupes the name with <code>SettingsManager.UniqueProfileName</code>, adds the profile and its list item, and marks settings dirty. The status line is <code>Status_WorkshopImported_Format</code> with the report's three counts.</p>
+<p><code>ShowGetProfiles(GetProfilesTab.File)</code> opens Get Profiles on <strong>Import a File</strong>, from the page's drop tile (<code>ProfilesPage.DropTile_Click</code> runs <code>GetProfilesCommand</code> with <code>"File"</code>). There <code>GetProfilesDialog.ChooseFile</code>, behind <strong>Import…</strong> and a click on the drop zone, opens a <code>Microsoft.Win32.OpenFileDialog</code> whose first filter is <code>Profiles_ImportFilterAll</code> over <code>*.pfprofile;*.rewasd;*.xml</code>, followed by the <code>.pfprofile</code> filter, <code>FileDialog_ForeignProfileFilter</code> and all files. <code>ForeignConfigImporter.ProfileFolders</code> yields <code>CommonDocuments\reWASD\Profiles</code> and <code>ApplicationData\DS4Windows\Profiles</code> when each exists, and each becomes a <code>FileDialogCustomPlace</code>. The dialog's <code>FileImporter</code> is <code>MainWindow.ImportProfileFile</code>. A refused file writes its reason to <code>FileProblemText</code> under the drop zone and keeps the window open. A drop on the zone reads each importable file and stops at the first refusal.</p>
+<p><code>ProfilesPage.IsImportableFile</code> accepts a <code>.pfprofile</code> or anything <code>ForeignConfigImporter.HandlesFile</code> accepts (<code>.rewasd</code> or <code>.xml</code>, case-insensitive). The page's drop handler calls <code>ImportProfileFile</code> (the <code>ImportProfileFromFile</code> action MainWindow hands it) once per accepted file, and a refusal goes to the message line with <code>SetStatus(..., persist: true)</code>.</p>
+<p><code>ImportProfileFile(path, owner)</code> sends anything that is not a <code>.pfprofile</code> to <code>ForeignConfigImporter.Translate(path)</code>. A refused result returns <code>Strings.Get(result.RefusedKey)</code> as the problem and stops. Otherwise it shows <code>ImportConfigDialog</code> over <code>owner</code> with <code>ImportSink = AddWorkshopProfile</code>, the sink the Workshop and starter profiles land through. The dialog calls the sink with <code>applyAfter: false</code>, so the active profile is untouched. <code>AddWorkshopProfile</code> dedupes the name with <code>SettingsManager.UniqueProfileName</code>, adds the profile and its list item, and marks settings dirty. The message is <code>Status_WorkshopImported_Format</code> with the report's three counts.</p>
 <hr />
 <h2 id="reading-the-file">Reading the file<a class="headerlink" href="#reading-the-file" title="Permanent link">&para;</a></h2>
 <p><code>ForeignConfigReader</code> treats the file as hostile.</p>
@@ -4669,7 +4879,7 @@
 <li><strong>Gamepad.</strong> Button ids follow reWASD-Powertools' <code>gamepad-buttons.md</code> and each file's own <code>description</code>, never the index in shunt's <code>rewasd_all_buttons_and_keys.json</code>. <code>GamepadSkipReason</code> names a third stick (213..235), a gyro tilt zone (74..76, 145..162) and a lean in Tilt mode (72, 73).</li>
 <li><strong>Activators.</strong> <code>TriggerFor</code> maps <code>long</code> to <code>HoldForMs</code>, <code>double</code> to <code>DoublePress</code>, <code>triple</code> to <code>TriplePress</code>, <code>release</code> to <code>OnRelease</code>, <code>start</code> to <code>OnPress</code>. <code>single</code> is <code>SinglePress</code> beside a double or triple, <code>ShortPress</code> beside a long press (sharing that sibling's <code>longwaittime</code>), and <code>OnPress</code> alone. Defaults: <code>longwaittime</code> 300, <code>doublewaittime</code> 442. <code>LowerMacros</code> writes held plain outputs under <code>hold_until_release</code> on single or start as rows when <code>CanRow</code> allows (up to three inputs, gates on the source's device), <code>repeat</code> as a repeating <code>WhileHeld</code>, <code>turbo</code> as <code>Turbo</code>, and <code>toggle</code> through <code>LowerToggle</code>.</li>
 <li><strong>Jumps.</strong> <code>LowerJump</code> makes a held or toggled jump a layer activator carrying <code>DelayMs</code>, <code>PostponeMapping</code>, <code>HostLayerMask</code>, the long-press delay, the double-press window and <code>FireOnRelease</code>. A jump back to Base on release from the layer the same control engaged is the file's own Hold and writes nothing more. Every other jump is a <code>SwitchLayer</code> macro.</li>
-<li><strong>Commands.</strong> <code>CommandAction</code> maps command types: 1 Toggle Virtual Controllers Disabled, 2 Disconnect Controller, 3 Toggle Window, 4 and 6 gyro toggle, 15 and 16 gyro on and off, 5 and 18 Gyro Recenter, 7 log off, 8 shut down, 9 sleep, 13 hibernate, 17 restart (each a <code>RunProgram</code> of <code>shutdown.exe</code> or, for sleep, <code>powershell.exe</code>), 11 Win + Print Screen, 12 Alt + F4, 101..108 and 120 Toggle Screen Overlay (109 and 110 skipped, <code>NinthCrosshair</code>), 130..137 radial navigation, and 1000..1999 a program.</li>
+<li><strong>Commands.</strong> <code>CommandAction</code> maps command types: 1 Toggle Virtual Controllers Disabled, 2 Disconnect Controller, 3 Toggle Window, 4 and 6 gyro toggle, 15 and 16 gyro on and off, 5 and 18 Gyro Recenter, 7 log off, 8 shut down, 9 sleep, 13 hibernate, 17 restart (each a <code>RunProgram</code> of <code>shutdown.exe</code> or, for sleep, <code>powershell.exe</code>), 11 Win + Print Screen, 12 Alt + F4, 101..110 <code>ToggleCrosshair</code> with <code>CrosshairNumber</code> 1..10 and 120 the same with <code>CrosshairNumber</code> 0 (every crosshair), each reported Partial (<code>Crosshair</code>: the look lives in reWASD's own settings), 130..137 radial navigation, and 1000..1999 a program.</li>
 <li><strong>Radial menus.</strong> One <code>MenuDefinitionEntry</code> per top circle, <code>MenuKind.Radial</code>, <code>FireType = TouchRelease</code>, on the layer its sectors' mappings sit on, hosted on the stick the navigation commands name (right stick by default).</li>
 <li><strong>Mouse regions.</strong> <code>LowerRegion</code> writes a <code>MouseLimitRegion</code> hold pair, the file's rectangle as insets and offsets against <code>GetSystemMetrics</code>.</li>
 <li><strong>Lightbar.</strong> <code>ReadLed</code> lowers <code>config.led.default</code> and each shift's entry: solid, <code>rainbow</code> (6000 ms), <code>breath</code>, <code>heartbeat</code>, <code>stroboscope</code>, <code>shimmer</code>.</li>
@@ -4747,7 +4957,7 @@
 <li><a href="../settings-and-serialization/">Settings and Serialization</a>: <code>ProfileData</code> and how it persists.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

@@ -10,10 +10,10 @@ PadForge learns them on your machine. There is no table of models inside the app
 
 ## Turning it on
 
-Open **Settings**, find the **Handheld PC Buttons** card, and turn on **Enable Handheld PC Buttons**.
+Open **Settings**, find the **Hardware Support** card under **Hardware**, and turn on **Enable Handheld PC Buttons**.
 
 <!-- SCREENSHOT: settings-handheld-buttons -->
-![Settings page, Handheld PC Buttons card with its toggle](../images/settings-handheld-buttons.png)
+![Settings page, Hardware Support card with Enable Handheld PC Buttons](../images/settings-handheld-buttons.png)
 
 Two rows appear on the [Devices](devices.md) page, both named after your machine (the firmware's product name, or its family name when the product name is a bare model code such as 83RU):
 
@@ -28,17 +28,17 @@ With the toggle off, nothing runs: no device rows, no keyboard hook, no vendor H
 
 ## Learning a button
 
-Select the **Hidden Buttons** row and click **Learn / Manage Hidden Buttons**. The **Hidden Buttons** dialog names your machine, warns if a vendor tool is running, and walks one press under **Learn a Button**:
+Select the **Hidden Buttons** row on the Devices page and click **Learn / Manage Hidden Buttons** at the foot of its **Settings** card. The **Hidden Buttons** dialog warns if a vendor tool is running, and a learn starts as it opens. The live line walks three steps:
 
-1. **Start Learning**. For one second the dialog reads *Hands off. Reading the idle state…* while PadForge samples every vendor report on the machine, so bytes that move on their own (motion sensor words, counters) can never become a button.
-2. *Press the hidden button now, then let go…* You have three seconds. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
-3. *One moment…* PadForge listens a second longer for a key that reports late or only on release.
+1. *Hands off. Reading the idle state…* For one second PadForge samples every vendor report on the machine, so bytes that move on their own (motion sensor words, counters) can never become a button.
+2. *Press and hold the button now.* You have three seconds. A hold and a tap both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.
+3. *Let go of the button.* PadForge listens a second longer for a key that reports late or only on release.
 
-Whatever the press changed is shown under **Source:** as the key combination the firmware typed (*Keys: Ctrl + Win + F17*), the report field that flipped (*report 04, byte 20, bit 0x80*), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a list appears and you pick one. Give the button a name and click **Register**.
+Whatever the press changed shows at the end of the live line: the key combination the firmware typed (*Keys: Ctrl + Win + F17*), the report field that flipped (*report 04, byte 20, bit 0x80*), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a **Source** list appears and you pick one. Give the button a name and click **Register**. **Start Over** runs another learn.
 
-If nothing changed, the dialog says so and counts what it watched: *Watched 3 vendor reports and 10 event classes. During the press: 0 reports, 0 events.* Press again, inside the highlighted window.
+If nothing changed, the dialog says so and counts what it watched: *No change was seen. Select Start Over, then press and hold the button when asked. Vendor reports watched: 3. Event classes watched: 10. Reports during the press: 0. Events during the press: 0.*
 
-Repeat for every paddle and key. The **Learned Buttons** list below shows each one with a **Remove** button. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. **Remove** clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.
+Repeat for every paddle and key. The list under **Learned on** *your machine* shows each one with a **Remove** button, and its tooltip names what the button was learned from. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. **Remove** clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.
 
 ---
 
@@ -60,11 +60,11 @@ A learned button binds anywhere a real button does. The mapping picker and the r
 
 ## Watching it live
 
-The **Hidden Buttons** row's detail pane lists every learned button with its source, and lights each one in cold blue while it is down. If the vendor's daemon (Legion Space, Armoury Crate, MSI Center M, Zotac's quick settings, AYASpace) is running, the pane says *… is running. It still reacts to these buttons until you stop it.* The check runs every four seconds.
+Select the **Hidden Buttons** row and its **Test Inputs** card lists every learned button under **Hidden Buttons**, lighting each one in cold blue while it is down. If the vendor's daemon (Legion Space, Armoury Crate, MSI Center M, Zotac's quick settings, AYASpace) is running, the row says *… is running. It still reacts to these buttons until you stop it.* The check runs every four seconds.
 
 ## Sharing a set
 
-**Export…** writes the learned set to a JSON file named after your machine (`Legion-Go-hidden-buttons.json`), and **Import…** reads one in. An imported button keeps its stored index when that index is free, and takes the lowest free one otherwise. One owner's learn pass seeds every machine of that model.
+**Export…**, in the dialog's foot, writes the learned set to a JSON file named after your machine (`Legion-Go-hidden-buttons.json`), and **Import…** reads one in. An imported button keeps its stored index when that index is free, and takes the lowest free one otherwise. One owner's learn pass seeds every machine of that model.
 
 ---
 
@@ -88,9 +88,9 @@ The **Motion** row feeds the same gyro pipeline every controller uses: gyro aim,
 ## Related pages
 
 - [Devices](devices.md): the Hidden Buttons and Motion rows.
-- [Settings](settings.md): the Handheld PC Buttons card.
+- [Settings](settings.md): the Hardware Support card.
 - [Handheld PC Buttons Internals](../reference/handheld-buttons-internals.md): the three delivery paths and the learner, for whoever has to change the code.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

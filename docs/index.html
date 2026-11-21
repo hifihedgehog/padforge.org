@@ -42,10 +42,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="stylesheets/extra.css">
     
@@ -1235,6 +1231,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1303,7 +1307,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1800,6 +1804,34 @@
   
   
     <li class="md-nav__item">
+      <a href="features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="features/nfc-tags/" class="md-nav__link">
         
   
@@ -1996,6 +2028,34 @@
   
   
     <li class="md-nav__item">
+      <a href="features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="features/keyboard-screens/" class="md-nav__link">
         
   
@@ -2032,6 +2092,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2791,6 +2907,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3384,6 +3506,34 @@
   
   
     <li class="md-nav__item">
+      <a href="reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3664,6 +3814,34 @@
   
   
     <li class="md-nav__item">
+      <a href="reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3756,6 +3934,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4111,7 +4317,7 @@ does.</p>
   <a href="features/">
     <span class="pf-eyebrow">Every control</span>
     <h3>Features</h3>
-    <p>What every page, tab, and card in the app does, one page per feature.</p>
+    <p>What every page, section and card in the app does, one page per feature.</p>
   </a>
   <a href="devices/">
     <span class="pf-eyebrow">Your hardware</span>
@@ -4126,7 +4332,7 @@ does.</p>
   <a href="reference/">
     <span class="pf-eyebrow">Go deep</span>
     <h3>Technical Reference</h3>
-    <p>Architecture, the 1000 Hz input pipeline, drivers, and every protocol PadForge speaks.</p>
+    <p>Architecture, the input pipeline that runs up to 10000 times a second, drivers, and every protocol PadForge speaks.</p>
   </a>
 </div>
 
@@ -4146,8 +4352,9 @@ does.</p>
   bass-shaker audio output, NFC tag triggers.</li>
 <li><strong>Beyond the controller.</strong> An <a href="features/on-screen-keyboard/">On-Screen Keyboard</a>
   you steer from a controller, a <a href="features/screen-overlay/">Screen Overlay</a> above
-  other windows, and <a href="features/twitch-chat/">Twitch Chat</a> commands that press
-  a slot's buttons.</li>
+  other windows, a <a href="features/crosshair/">Crosshair</a> and a
+  <a href="features/magnifier/">Magnifier</a> over a game, and
+  <a href="features/twitch-chat/">Twitch Chat</a> commands that press a controller's buttons.</li>
 <li><strong>Config import.</strong> Bring an existing Steam Input, reWASD or DS4Windows
   config across. Each setting PadForge can carry lands on a control you can
   edit, and the rest is listed with the reason. <a href="guides/steam-workshop-import/">Steam Workshop import</a> browses
@@ -4159,7 +4366,7 @@ does.</p>
 </ul>
 <p>PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 <a href="https://github.com/hifihedgehog/PadForge">github.com/hifihedgehog/PadForge</a>.</p>
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

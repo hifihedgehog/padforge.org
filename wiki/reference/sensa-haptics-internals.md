@@ -13,8 +13,8 @@ The user-facing page is [Mice, Keyboards and Vendor Rows](../features/peripheral
 | `PadForge.App/Common/Input/Peripherals/PeripheralOutputHost.cs` | `SensaLifecycle`: the worker runs while the row is assigned or Identify buzzes it |
 | `PadForge.App/Common/Input/Peripherals/PeripheralOutputs.cs` | The row's level and the backend state |
 | `PadForge.App/Common/Input/InputManager.Step2.UpdateInputStates.cs` | `ApplyForceFeedback`, which sets the level |
-| `PadForge.App/Common/Input/Peripherals/PeripheralRouteText.cs` | The Force Feedback tab's line |
-| `PadForge.App/Services/PeripheralSwitchMigration.cs` | The retired Dashboard switch becomes an assignment |
+| `PadForge.App/Common/Input/Peripherals/PeripheralRouteText.cs` | The Force Feedback card's line |
+| `PadForge.App/Services/PeripheralSwitchMigration.cs` | The retired switch becomes an assignment |
 | `PadForge.App/PadForge.App.csproj` | The vendored engine and provider |
 | `PadForge.App/Resources/Interhaptics/x64/` | `HAR.dll`, `Interhaptics.RazerProvider.dll` |
 | `PadForge.Tests/SensaHapticsTests.cs` | The bench, which runs the real engine |
@@ -34,7 +34,7 @@ The two DLLs are vendored from that repository's `Runtime/Plugins/x64`, the same
 
 The engine targets body parts, never one device, so one row stands for every Sensa HD device at once. `PeripheralOutputRow` (`PeripheralOutputRow.cs` line 68) with kind `RazerSensa` is a device with no inputs: name Razer Sensa, path `razersensa://local`, vendor ID `0x5046`, product ID `0x5345`, device type `PeripheralHaptics`, and an id hashed from `pfrazersensa` (`PeripheralOutputRow.IdentityFor` (`PeripheralOutputRow.cs` line 146)), so an assignment of it survives across sessions.
 
-Step 1's phase 1m opens the row while `InputManager.PeripheralRowWanted` (`InputManager.PeripheralRows.cs` line 30) holds: Synapse's Chroma runtime is installed and the process is x64 (`PlatformSupport.SensaAvailable`). `PeripheralLinker.Build` (`PeripheralLinker.cs` line 607) gives it the one `Interhaptics` path, `sensa`, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback tab a gamepad gets, with the controller's rumble reaching it through its own settings.
+Step 1's phase 1m opens the row while `InputManager.PeripheralRowWanted` (`InputManager.PeripheralRows.cs` line 30) holds: Synapse's Chroma runtime is installed and the process is x64 (`PlatformSupport.SensaAvailable`). `PeripheralLinker.Build` (`PeripheralLinker.cs` line 615) gives it the one `Interhaptics` path, `sensa`, as a vendor row. The user assigns it to a virtual controller like any device, and it gets the Force Feedback card a gamepad gets, in the controller page's Rumble & Haptics section, with the controller's rumble reaching it through its own settings.
 
 ---
 
@@ -139,7 +139,7 @@ The `finally` runs on every exit path, faults included (`SENSA worker fault: {ty
 
 ### The host runs it
 
-`PeripheralOutputHost.SensaLifecycle` (`PeripheralOutputHost.cs` line 720) decides when a worker exists. It runs on every link pass, every 500 ms or sooner when devices change or Identify begins or ends:
+`PeripheralOutputHost.SensaLifecycle` (`PeripheralOutputHost.cs` line 736) decides when a worker exists. It runs on every link pass, every 500 ms or sooner when devices change or Identify begins or ends:
 
 - The row is linked (online, with its `sensa` path), it is assigned (`SettingsManager.SlotOrders.GetIdentityPlayerNumber` answers above 0) or Identify buzzes it (`PeripheralOutputs.IsIdentifying`), and no worker runs: the host creates a service, subscribes its report, starts it, and logs `PERIPHERAL Sensa worker started (row assigned)` or `PERIPHERAL Sensa worker started (Identify)`.
 - A worker whose thread ended on its own while the row stays assigned, because `HAR.dll` did not load, `AddParametricEffect` failed, or a straggling predecessor kept the slot, is stopped and started again after `SensaRestartMs` (30000), the worker's own provider retry, so a missing engine does not spin. The state reads `Waiting` meanwhile, and the host logs `PERIPHERAL Sensa worker ended on its own, starting again later`.
@@ -151,7 +151,7 @@ Only the current worker reports. The report closure drops a state from a service
 
 ## The row's level
 
-Step 2 writes the level. The row is a haptic peripheral (`PeripheralOutputs.TakesHaptics` (`PeripheralOutputs.cs` line 484)), so `InputManager.ApplyForceFeedback` (`InputManager.Step2.UpdateInputStates.cs` line 729) makes its force-feedback cache on first use, runs each slot's rumble through the row's own Force Feedback settings on that slot, takes the strongest across the slots it is on, and folds trigger rumble into the motors. On a change it hands the result to `PeripheralOutputs.SetMotors` (`PeripheralOutputs.cs` line 716), which stores the stronger motor over 65535. Identify's pulse train writes the level too, for a row no controller holds (`InputService.IdentifyDevice`). The engine's silence edges (stop, focus suspend and the crash quiesce) zero the level through `PeripheralOutputs.SilenceHaptics` (`PeripheralOutputs.cs` line 765), and the next Step 2 pass sends again the level a game still asks for. The crash path then waits for the worker to render the zero (`SensaHapticsService.WaitForSilence`), inside the 250 ms `PanicQuiesceOutputs` gives the peripheral host. The worker marks a tick as in flight before it reads the level and records the level it rendered after the render, so the wait ends on a rendered zero with no tick in flight, at once when no worker runs, or when its time runs out, and it returns whether the worker went quiet.
+Step 2 writes the level. The row is a haptic peripheral (`PeripheralOutputs.TakesHaptics` (`PeripheralOutputs.cs` line 484)), so `InputManager.ApplyForceFeedback` (`InputManager.Step2.UpdateInputStates.cs` line 750) makes its force-feedback cache on first use, runs each slot's rumble through the row's own Force Feedback settings on that slot, takes the strongest across the slots it is on, and folds trigger rumble into the motors. On a change it hands the result to `PeripheralOutputs.SetMotors` (`PeripheralOutputs.cs` line 716), which stores the stronger motor over 65535. Identify's pulse train writes the level too, for a row no controller holds (`InputService.IdentifyDevice`). The engine's silence edges (stop, focus suspend and the crash quiesce) zero the level through `PeripheralOutputs.SilenceHaptics` (`PeripheralOutputs.cs` line 765), and the next Step 2 pass sends again the level a game still asks for. The crash path then waits for the worker to render the zero (`SensaHapticsService.WaitForSilence`), inside the 250 ms `PanicQuiesceOutputs` gives the peripheral host. The worker marks a tick as in flight before it reads the level and records the level it rendered after the render, so the wait ends on a rendered zero with no tick in flight, at once when no worker runs, or when its time runs out, and it returns whether the worker went quiet.
 
 The worker reads it through `SensaHapticsService.RowAmplitude` (`SensaHapticsService.cs` line 163), which is `PeripheralOutputs.AmplitudeOf` for the row's id, every `tickMs` (default 16), clamps it to 0..1, and calls `SetEventIntensity` only on change. Intensity is the whole translation: one effect, one target, one amplitude. There is no stereo targeting and no pitch mapping.
 
@@ -159,7 +159,7 @@ The worker reads it through `SensaHapticsService.RowAmplitude` (`SensaHapticsSer
 
 ## The status line
 
-The Force Feedback tab's line comes from `PeripheralRouteText.Haptics` (`PeripheralRouteText.cs` line 30):
+The Force Feedback card's line comes from `PeripheralRouteText.Haptics` (`PeripheralRouteText.cs` line 30):
 
 | Condition | Line |
 |---|---|
@@ -168,7 +168,7 @@ The Force Feedback tab's line comes from `PeripheralRouteText.Haptics` (`Periphe
 | The row's record says haptics and the row has no path, in an x64 process | `Pad_ForceFeedback_RouteSensaWaiting` |
 | The same in an ARM64 process | `Common_NotAvailableOnArm64` |
 
-The first three rows hold while the engine runs (`PeripheralOutputs.Running`) and the tab's slot is live (`PeripheralOutputs.SlotLive`), and the line is empty otherwise. The ARM64 row shows whatever the engine or the slot does. `PeripheralRouteText.Haptics(UserDevice, bool, bool)` takes the platform's answer as an argument, which is how the tests reach the ARM64 row.
+The first three rows hold while the engine runs (`PeripheralOutputs.Running`) and the card's slot is live (`PeripheralOutputs.SlotLive`), and the line is empty otherwise. The ARM64 row shows whatever the engine or the slot does. `PeripheralRouteText.Haptics(UserDevice, bool, bool)` takes the platform's answer as an argument, which is how the tests reach the ARM64 row.
 
 `SensaServiceState` (`SensaHapticsService.cs` line 10) keeps its four values, `Stopped`, `WaitingForRuntime`, `Active` and `Unsupported`, and the host folds them into the backend state as above. An ARM64 process never opens the row, so its line comes from the record alone.
 
@@ -178,7 +178,7 @@ The first three rows hold while the engine runs (`PeripheralOutputs.Running`) an
 
 There is no switch. The row is a device like any other: its assignments and its Force Feedback settings per virtual controller persist with the settings and ride profiles as entries.
 
-The Dashboard's Razer Sensa section and its switch are gone. `AppSettingsData.EnableSensaHaptics` (`SettingsService.cs` line 7294) and the profile's `bool?` opinion, `ProfileData.EnableSensaHaptics` (`SettingsService.cs` line 8386), are read once by `PeripheralSwitchMigration` and never written, since `ShouldSerializeEnableSensaHaptics` returns false on both. `PeripheralSwitchMigration.Switches` (`PeripheralSwitchMigration.cs` line 49) lists the switch, and `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns one that was on into an assignment of the Razer Sensa row:
+The Razer Sensa section and its switch that PadForge 5 had on its Dashboard are gone, and neither Home nor Extras carries them. `AppSettingsData.EnableSensaHaptics` (`SettingsService.cs` line 7381) and the profile's `bool?` opinion, `ProfileData.EnableSensaHaptics` (`SettingsService.cs` line 8561), are read once by `PeripheralSwitchMigration` and never written, since `ShouldSerializeEnableSensaHaptics` returns false on both. `PeripheralSwitchMigration.Switches` (`PeripheralSwitchMigration.cs` line 49) lists the switch, and `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns one that was on into an assignment of the Razer Sensa row:
 
 - In the live settings when the active profile's opinion, else the global value, was on.
 - In the default profile's stored state, while a named profile is active, and in each stored profile, each by its own opinion, else the global value.
@@ -227,7 +227,7 @@ The row goes to the first created virtual controller in display order, the slot 
 | `Service_NextWorkerWaitsForAStragglingPredecessor` | The predecessor-join rule |
 | `Service_GivesUpOnAWedgedPredecessorInsteadOfBlockingForever` | The bounded join: the successor quits without starting its engine |
 | `Service_AStartAfterATimedOutStop_LeavesTheOldWorkerStopped` | A `Start` after a `Stop` whose join gave up leaves the old worker stopped, and the successor runs its own bring-up once that worker has ended |
-| `TheWorkerStreamsTheRowsLevel_AndTheGlobalSwitchIsGone` | Source pins: the worker reads the row's level, the Step 5 lane and the Dashboard card are gone, the switch's two legs are read-only, and the host tests the row's assignment for the worker |
+| `TheWorkerStreamsTheRowsLevel_AndTheGlobalSwitchIsGone` | Source pins: the worker reads the row's level, the Step 5 lane is gone, neither `HomePage.xaml` nor `ExtrasPage.xaml` holds the switch or its status, the switch's two legs are read-only, and the host tests the row's assignment for the worker |
 | `TheKoreanStringsSpellHaptic` | The Korean Sensa strings spell haptic the way every other Korean string does |
 
 `PeripheralOutputsTests.cs` covers the row's side:
@@ -247,4 +247,4 @@ Live rendering on Sensa hardware was not verified by the maintainer.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

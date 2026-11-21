@@ -13,71 +13,76 @@ You need PadForge installed and running. If it is not,
 <source src="/assets/video/padforge-tutorial-first-controller.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-first-controller.vtt" default>
 </video>
-<figcaption>The install and every step on this page in 1 minute 40 seconds, recorded live in PadForge 5.2.0. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-first-controller-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The install and the same steps in 1 minute 40 seconds, recorded live in PadForge 5.2.0, before PadForge 6 rebuilt the interface, so the screens differ from the steps below. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-first-controller-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
 
-## 1. Create the virtual controller
+## 1. Plug in your pad
 
-On the [Dashboard](../features/dashboard.md), click the **Add Controller**
-card in the **Virtual Controllers** section. It follows the last controller
-card, and on a fresh install it is the only card there. The same popup opens
-from the **Add Controller** card in the sidebar's controller section.
+Connect the physical controller you want to use, wired or Bluetooth. Until a
+virtual controller exists, [Home](../features/dashboard.md) is one page: a
+card at the top names the controller PadForge sees and reads **Connected**.
+With nothing plugged in it reads **No controller connected**. A Bluetooth pad
+that is not paired yet pairs from **Pair a Bluetooth controller** at the foot
+of the page, which opens the [Devices](../features/devices.md) page.
 
-Pick **Xbox**. Almost every PC game with controller support reads
-Xbox-style input natively, so it is what to pick when you do not know what
-to pick. The other types are there when you need them: PlayStation for
-ports with Circle and Cross prompts, Nintendo for games with Switch
-prompts (a virtual Switch Pro or Switch 2 Pro Controller), Extended for
-sim titles that read DirectInput, Keyboard + Mouse, MIDI, and VR for a
-SteamVR hand pair.
+## 2. Pick what games should see
 
-![The Add Controller popup](../images/add-controller-popup.png)
+Under **What should games see?**, click **Xbox**. Almost every PC game with
+controller support reads Xbox-style input natively, so it is what to pick
+when you do not know what to pick. **PlayStation** sits beside it, for games
+with PlayStation prompts, touchpad and lightbar, and **Keyboard + Mouse**
+plays keyboard and mouse games with a pad. The line under the tiles links
+the other four: Nintendo (a virtual Switch Pro or Switch 2 Pro Controller)
+for games with Switch prompts, Extended for wheels, flight sticks and custom
+layouts, MIDI, and VR for a SteamVR hand pair.
 
-Adding the slot installs nothing yet. The first time you assign a pad to
-an Xbox, PlayStation, Nintendo, or Extended slot (step 3), PadForge installs
-the HIDMaestro driver automatically. There is no button to click, and the
-startup UAC prompt already covered it.
+The click makes the controller and gives it the pad Home named. The
+controller's entry appears in the sidebar under **Controllers**, and its page
+opens.
 
-## 2. Plug in your pad
+![Add a Controller](../images/add-controller-popup.png)
 
-Connect the physical controller you want to use, wired or Bluetooth. Open
-the **[Devices](../features/devices.md)** page. A card for the pad appears
-the moment Windows sees it, with its name, type, and capabilities on the
-card.
+Once a controller exists, Home shows the controllers instead. To add another,
+click **Add Controller** in the sidebar, or its card on Home. **Add a
+Controller** opens: pick the device under **Driven By**, or **Choose Later**,
+then click a type under **Common** (Xbox, PlayStation, Nintendo) or **More
+Outputs** (Keyboard + Mouse, Extended, MIDI, VR). The controller is added as
+soon as you click.
 
-## 3. Assign it to the slot
+Making the controller is the only step. The first time an Xbox, PlayStation,
+Nintendo or Extended controller comes up, PadForge installs the HIDMaestro
+driver by itself. There is no button to click.
 
-Click the pad's card to select it, then under **Virtual Controller
-Assignment** in the detail pane click the slot pill for the controller you
-created in step 1. A slot badge appears on the card, and the physical pad
-now routes through that virtual controller. Clicking the pill again takes
-the pad off. You can also drag the pad's card onto the controller's card in
-the sidebar, or drag the controller's card onto the pad's card.
+## 3. See it working
 
-Because your pad is a recognized gamepad, PadForge fills in the default
-mapping on assignment: sticks, triggers, buttons, and D-pad, all
-pre-assigned to their standard positions. The slot is already playable.
+The controller's page opens on its first section, **Mappings**, with the
+**Picture** view. Press buttons and move sticks on your pad: the picture of
+the controller follows. Because your pad is a recognized gamepad, its sticks,
+triggers, buttons and D-pad were mapped 1:1 when the controller was made. The
+controller is already playable.
 
-## 4. See it working
+Switch to **List** to see every row. Open a row, and its **Value** shows what
+the game gets, live.
 
-Back on the Dashboard, click the slot's card to open its configuration,
-then open the **Mappings** tab. Press buttons and move sticks on your pad.
-The **Value** column updates in real time, and what you see there is
-exactly what the game gets.
+The pad shows under **Driven by** at the top of the page. To give the
+controller another device, click **Add Device**, which opens the Devices
+page. There, select the device and click the controller under **Used By**,
+or drag the device onto the controller in the sidebar. A second click on the
+controller under **Used By** takes the device off.
 
-## 5. Launch a game
+## 4. Launch a game
 
 Start any game with controller support. It sees a standard Xbox pad.
 
 One thing can go wrong here: if the game reacts twice to every press, it
 is seeing both your physical pad and the virtual one. Install **HidHide**
 from the [Settings](../features/settings.md) page, then on the
-[Devices](../features/devices.md) page select your pad and tick **Hide from
-Games (HidHide)** under **Input Hiding** in the detail pane. Pads assigned
-after HidHide is installed get that box ticked automatically. If you do not
-see double input, you do not need it.
+[Devices](../features/devices.md) page select your pad and turn on **Hide
+from Games (HidHide)** in its **Settings** card. A pad assigned after HidHide
+is installed has it turned on already. If you do not see double input, you
+do not need it.
 
 ---
 
@@ -86,9 +91,9 @@ see double input, you do not need it.
 - [A Five-Minute Remap](five-minute-remap.md) changes your first binding.
 - The [Guides](../guides/index.md) each walk one task end to end, from
   gyro aiming to using your phone as a controller.
-- The [Features](../features/index.md) pages document every control on
-  every tab.
+- The [Features](../features/index.md) pages document every control in
+  every section.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

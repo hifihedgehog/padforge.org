@@ -23,47 +23,60 @@ Each slot has its own:
 - [Menus](../guides/menus.md)
 - [Shift Layers](../guides/shift-layers.md)
 
-The Pad page Copy / Paste / Copy From operations carry every per-device tuning on this list along with the mapping table. A Motion Gyro or Motion Accelerometer row that loses every input when its devices are matched to the target slot is dropped, as device cleanup does, so the target's motion auto-map fills it again. A motion row you switched off by emptying it, or one marked not to inherit, copies as it is. See [Button and Axis Mappings](mappings.md) for the matching rules.
+The controller page's Copy / Paste / Copy From operations carry every per-device tuning on this list along with the mapping table. A Motion Gyro or Motion Accelerometer row that loses every input when its devices are matched to the target slot is dropped, as device cleanup does, so the target's motion auto-map fills it again. A motion row you switched off by emptying it, or one marked not to inherit, copies as it is. See [Button and Axis Mappings](mappings.md) for the matching rules.
 
 ---
 
 ## Add a controller
 
-Open the Add Controller popup from either spot:
+**Add a Controller** opens over the page from any of these:
 
-- **[Dashboard](dashboard.md).** Click the **Add Controller** card at the bottom of the controller list.
-- **Sidebar.** Click the **+** button in the controller section.
+- **[Home](dashboard.md).** The **Add Controller** tile after the last controller card, or **Use It** on Home's offer for a new device.
+- **Sidebar.** **Add Controller** under the controller pills. It shrinks to a bare **+** when the sidebar is narrow.
+- **[Devices](devices.md).** **Use It** on the row of a connected game controller nothing uses, or **New Controller** under **Used By** in a device's panel.
+- **Home's first page.** "More types: Nintendo, Extended, MIDI and VR", while no controller exists. Its three tiles make an Xbox, PlayStation or Keyboard + Mouse controller at once.
 
-Pick the type you want.
+![Add a Controller](../images/add-controller-popup.png)
 
-![The Add Controller popup](../images/add-controller-popup.png)
+The dialog reads "Pick what games should see. The controller is added as soon as you click." Top to bottom:
 
-### Type buttons
+- **Driven By** lists the connected game controllers that nothing uses, each with its link and battery, then **Choose Later**. The first is picked. The new controller takes the device picked here. Opened for one device (from an offer, **Use It** or **New Controller**), the dialog lists that device. With no device to offer, the line is left out.
+- **Common** holds three tiles: **Xbox** ("The layout most PC games expect."), **PlayStation** ("For games with PlayStation prompts, touchpad and lightbar.") and **Nintendo** ("Switch button layout, for games and emulators that expect it.").
+- **More Outputs** holds four smaller tiles: **Keyboard + Mouse** ("Keys, cursor and scroll from a pad."), **Extended** ("Wheels, flight sticks and custom layouts."), **MIDI** ("Notes and control changes for music software.") and **VR** ("Virtual VR controllers through SteamVR.").
+- The foot: "To change the type later, click the type chip on the controller. It takes one click."
 
-| Button | Creates |
-|--------|---------|
-| **Xbox icon** | Xbox virtual controller (needs HIDMaestro) |
-| **PlayStation icon** | PlayStation virtual controller (needs HIDMaestro) |
-| **Switch logo icon** | Nintendo virtual controller (needs HIDMaestro) |
-| **Joystick icon** | Extended DirectInput joystick (needs HIDMaestro) |
-| **Keyboard icon** | Keyboard+Mouse output (no driver) |
-| **Musical note icon** | MIDI output device (Windows MIDI Services, or the legacy MIDI API without it) |
-| **VR icon** | SteamVR hand pair (needs SteamVR) |
+A click on a tile makes the controller, closes the dialog and opens the new controller's page. The X or Escape closes the dialog with nothing made.
 
-### Dimmed buttons
+### Tile drivers
 
-A type button shows faded when:
+| Tile | Creates |
+|------|---------|
+| **Xbox** | Xbox virtual controller (needs HIDMaestro) |
+| **PlayStation** | PlayStation virtual controller (needs HIDMaestro) |
+| **Nintendo** | Nintendo virtual controller (needs HIDMaestro) |
+| **Keyboard + Mouse** | Keyboard and mouse output (no driver for Windows input) |
+| **Extended** | Extended DirectInput joystick (needs HIDMaestro) |
+| **MIDI** | MIDI output device (Windows MIDI Services, or the legacy MIDI API without it) |
+| **VR** | SteamVR hand pair (needs SteamVR) |
 
-- **Type at capacity.** The cursor turns into a "no" icon. The tooltip shows the cap.
-- **Missing dependency.** Two types dim when what they need is absent: MIDI when no MIDI API starts ("MIDI (not running, see the Windows MIDI Services card in Settings)") and VR without SteamVR ("VR (requires SteamVR)"). Xbox, PlayStation, Nintendo, Extended, and Keyboard+Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
+### Tiles that cannot be used
 
-The Add Controller card disappears when all 16 slots are in use.
+A tile dims and its line says why when:
+
+- **MIDI has no API.** "Windows MIDI Services is not responding. See it in Settings, under Drivers.", or the reason the Windows MIDI Services row in Settings gives. Its tooltip reads "MIDI (not running, see Windows MIDI Services in Settings, under Drivers)".
+- **SteamVR is missing.** "Needs SteamVR. Install it from Settings, under Drivers." Tooltip: "VR (requires SteamVR)".
+- **A VR controller exists.** "There is a VR controller already. One drives both hands."
+- **The type is at its cap.** The tooltip names the cap, such as "Xbox (max 16)".
+
+Xbox, PlayStation, Nintendo, Extended and Keyboard + Mouse never dim for a missing driver. See [Driver Management](driver-management.md).
+
+With 16 controllers the dialog says so: "PadForge has 16 controllers, the most it can run. Delete one to add another." Home's **Add Controller** tile and the sidebar's entry are gone while every type is at capacity.
 
 ---
 
 ## Pick a type
 
-Pick the type when you create the slot. You can also switch an existing slot's type from the type chip on its card. See [Slot cards](#slot-cards).
+Pick the type when you add the controller. You can also switch an existing controller's type from the type chip on its sidebar pill or Home card. See [Changing a controller's type](#changing-a-controllers-type).
 
 ### Xbox
 
@@ -71,43 +84,43 @@ The default. 2 sticks, 2 triggers, 1 D-Pad, 11 buttons, plus Share on the Xbox S
 
 ### PlayStation
 
-HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. The two DualShock 3 presets have 11 buttons, Select and Start where the others have Share and Options, and no touchpad, as on the real pad. The slot ships as a DualSense. Switch to DualShock 4, DualShock 3, or DualSense Edge from the slot's profile picker. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
+HIDMaestro-backed. 2 sticks, 2 triggers, 1 D-Pad, 12 buttons including the touchpad click. The DualSense presets add Mic Mute, and the DualSense Edge adds its back paddles and Fn buttons. The two DualShock 3 presets have 11 buttons, Select and Start where the others have Share and Options, and no touchpad, as on the real pad. The controller ships as a DualSense. Switch to DualShock 4, DualShock 3 or DualSense Edge from the **Preset** picker in the page header. Pick this type for PlayStation PC ports with Circle / Cross / Triangle / Square prompts, emulators that need touchpad or lightbar, or motion streaming through the [DSU Motion Server](../reference/dsu-motion-server.md).
 
 For PCSX2 and RPCS3, pick **DualShock 3 (SIXAXIS): Full**. It presents a DualShock 3 the way Sony's sixaxis driver and DsHidMini's SXS mode do, with analog L2 and R2, the accelerometer and yaw gyro, and pressure on ten buttons, which its grid's [button pressure](mappings.md#button-pressure) rows set. A game's rumble comes back through it to your controller. The plain **DualShock 3 (SIXAXIS)** preset passes game rumble back too.
 
-![PlayStation slot: the preset picker selects DualShock 4, DualShock 3, DualSense, or DualSense Edge, with the controller view below](../images/pad-playstation-configbar.png)
+![PlayStation controller: the Preset picker selects DualShock 4, DualShock 3, DualSense or DualSense Edge, with the controller view below](../images/pad-playstation-configbar.png)
 
 ### Nintendo
 
-HIDMaestro-backed. Four presets: **Nintendo Switch Pro Controller** (the default), **Nintendo Switch Pro Controller (USB)**, **Nintendo Switch 2 Pro Controller**, and **Nintendo Switch 2 Pro Controller: Full**. Pick one from the slot's preset dropdown.
+HIDMaestro-backed. Four presets: **Nintendo Switch Pro Controller** (the default), **Nintendo Switch Pro Controller (USB)**, **Nintendo Switch 2 Pro Controller**, and **Nintendo Switch 2 Pro Controller: Full**. Pick one from the **Preset** picker in the page header.
 
-The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Both Switch 2 Pro presets carry 21, adding C, GL, and GR among others, on their own wire order. None of the three has analog triggers (ZL and ZR are digital buttons), so the Trigger Deadzones tab does not appear. There is no Customize surface on any of them. The slot deploys the preset as-is.
+The Switch Pro preset gives 2 sticks, 1 D-Pad, and 14 buttons with Nintendo lettering: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture. Both Switch 2 Pro presets carry 21, adding C, GL, and GR among others, on their own wire order. None of the three has analog triggers (ZL and ZR are digital buttons), so Trigger Deadzones does not appear in Sticks & Triggers. There is no Customize surface on any of them. The controller deploys the preset as-is.
 
-On the Switch Pro preset, map a motion source on the slot, or a stick on the [Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll) rows, and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and the Bass Shakers tab both work.
+On the Switch Pro preset, map a motion source on the slot, or a stick on the [Motion Pitch, Yaw and Roll](mappings.md#motion-pitch-yaw-and-roll) rows, and it streams into the virtual pad's gyro and accelerometer, so games and emulators that read Switch Pro motion get it natively. Rumble the game sends to that virtual pad is decoded, so [Force Feedback](force-feedback.md) to the mapped device and Bass Shakers both work.
 
 The two Switch 2 Pro presets are one pad in two forms, and the program that reads it decides which to pick.
 
 **Nintendo Switch 2 Pro Controller** is a HID gamepad. DirectInput, Windows.Gaming.Input, browsers and every other program read its buttons and sticks. It carries neither motion nor rumble: its input report has no motion data, and HIDMaestro decodes no rumble for it.
 
-**Nintendo Switch 2 Pro Controller: Full** is the pad as it appears over USB, with the second interface a program has to start it through. Steam reads it, and so does a program whose SDL is built with libusb. They get the gyro and the accelerometer, from a motion source on the slot or from the Motion rows, and the rumble they send comes back to the mapped device and the Bass Shakers tab. Every other program sees a gamepad that never reports, which is what a real Switch 2 Pro Controller on a cable gives it on Windows. Like the default PlayStation preset, it rides HIDMaestro's USB transport, which installs the first time a slot needs it (see [Driver Management](driver-management.md)).
+**Nintendo Switch 2 Pro Controller: Full** is the pad as it appears over USB, with the second interface a program has to start it through. Steam reads it, and so does a program whose SDL is built with libusb. They get the gyro and the accelerometer, from a motion source on the slot or from the Motion rows, and the rumble they send comes back to the mapped device and Bass Shakers. Every other program sees a gamepad that never reports, which is what a real Switch 2 Pro Controller on a cable gives it on Windows. Like the default PlayStation preset, it rides HIDMaestro's USB transport, which installs the first time a slot needs it (see [Driver Management](driver-management.md)).
 
 HIDMaestro's release tests ran the Full preset against Steam and against PadForge's own SDL build. No game has been run on it from PadForge yet, and stock SDL3 has not been run against it.
 
 Joy-Cons, the NSO retro pads, and the GameCube adapter are not in this category. Their profiles live under Extended.
 
-![Nintendo slot: the preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
+![Nintendo controller: the Preset picker holds Nintendo Switch Pro Controller, with the controller view below](../images/pad-nintendo-configbar.png)
 
 ### Extended (HIDMaestro)
 
-A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The slot's configuration bar sets how many of each the device exposes and picks the Custom entry or one of the 96 HIDMaestro profiles the Extended picker lists (HOTAS, wheels, third-party gamepads, and Valve's controllers). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout, except on the Valve profiles, which draw the pad itself.
+A customizable virtual joystick. Up to 8 axes, 128 buttons, 4 POV hats. The **Preset** picker picks the Custom entry or one of the 102 HIDMaestro profiles it lists for Extended, and the Extended card under the picture sets how many of each the device exposes with **Customize** (HOTAS, wheels, third-party gamepads, and Valve's controllers). The DirectInput device name Windows reports comes from the active profile. A schematic view shows the live HID layout, except on the Valve profiles, which draw the pad itself.
 
 Sim titles (DCS World, MSFS, X-Plane, iRacing) read DirectInput best. Extended slots also deliver [force feedback](force-feedback.md) to sim titles that support it.
 
-![Extended (HIDMaestro) Controller view: profile / customize bar at top, procedural schematic of the live HID layout below](../images/pad-extended-configbar.png)
+![Extended (HIDMaestro) controller: the Preset picker in the header, the schematic of the live HID layout and the Extended card below](../images/pad-extended-configbar.png)
 
 #### Valve personas
 
-Five profiles in the Extended picker are Valve pads. Pick one and the slot takes that pad's identity, its control names in the mapping grid, and its body in the Preview tab.
+Five profiles in the Extended picker are Valve pads. Pick one and the slot takes that pad's identity, its control names in the mapping grid, and its body in the picture.
 
 | Profile | Identity | Input frame |
 |---|---|---|
@@ -143,7 +156,7 @@ Switching one Valve profile to another moves every binding to the same control o
 
 Always available. Sends keyboard and mouse input instead of emulating a gamepad. Map buttons to keys, sticks to mouse movement, triggers to scroll. Good for older PC games without controller support, accessibility setups where a gamepad is easier to hold than a keyboard, and desktop or non-game use. An interactive keyboard-and-mouse preview lights up in real time as you press buttons.
 
-A bar above the slot's tabs picks what each half sends through. **Keyboard** and **Mouse** both start at **Windows Input**, which needs no driver: PadForge types and moves the pointer through Windows itself, and programs can tell that the input came from software. Either half can instead pick one of HIDMaestro's 51 keyboard or 52 mouse models. The slot then sends through a virtual keyboard or mouse that Windows and the programs that read devices see as that hardware, and HIDMaestro installs itself the first time a slot needs it. Each picker shows while the slot's surface mode drives its half, and each has a reset button.
+A line at the foot of the picture's card picks what each half sends through. **Keyboard** and **Mouse** both start at **Windows Input**, which needs no driver: PadForge types and moves the pointer through Windows itself, and programs can tell that the input came from software. Either half can instead pick one of HIDMaestro's 51 keyboard or 52 mouse models. The slot then sends through a virtual keyboard or mouse that Windows and the programs that read devices see as that hardware, and HIDMaestro installs itself the first time a slot needs it. Each picker shows while the slot's surface mode drives its half, and each has a reset button.
 
 Tags beside a picked model say what it can send: **Keys at Once** (how many keys it holds down together, or **Any**), **Media Keys** and **Lock Lights** on a keyboard, and **Buttons**, **Wheel** and **Tilt Wheel** on a mouse. The mapping table hides the rows the model cannot send and keeps their bindings, so they come back with Windows input or a model that has them. A keyboard with a mouse report of its own, such as the ThinkPad Compact Keyboard with its TrackPoint, also appears in the Mouse picker as **Same Device as the Keyboard**, and a mouse with keys appears in the Keyboard picker as **Same Device as the Mouse**. Picking it makes one device serve both halves, as the hardware does. [Supported Devices](../devices/supported.md#virtual-keyboards-and-mice) lists every model.
 
@@ -153,9 +166,9 @@ The key rows run past F12: F13 to F24, the key an ISO keyboard has beside Left S
 
 Numpad Enter has its own row, apart from Enter, and its own entry in the SOCD key lists. The preview keyboard drew the key, but no row existed for a click on it to record into.
 
-The Output tab carries a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
+The output cards under the picture include a **Simultaneous Opposite Cardinal Directions (SOCD)** card. On a Keyboard+Mouse slot it cleans opposing key pairs, Snap Tap style: when both keys of a pair are held, the chosen rule decides which press the game sees. The modes are Off, Last Wins (Snap Tap), Neutral, and First Wins. Add your own key pairs. This keeps fighting-game and platformer inputs legal on keyboard.
 
-When a mouse is the slot's selected device, a **Mouse** tab appears carrying the **Mouse Gestures** card. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can arm the recognizer, each carrying its own five gestures, and a Custom option arms it from a recorded input on any device instead. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures on the Mappings tab, or use them as macro triggers.
+When a mouse is the controller's selected device, the **Mouse Gestures** card appears in Sticks & Triggers. Hold a gesture button, flick, and one action fires on release: left, right, up, down, or a plain click below the flick distance. Any of the five mouse buttons can arm the recognizer, each carrying its own five gestures, and a Custom option arms it from a recorded input on any device instead. Flick Distance is in raw counts and Cooldown is in milliseconds. Map the five gestures in the mapping list, or use them as macro triggers.
 
 ![The Mouse Gestures card on a Keyboard and Mouse slot](../images/pad-mouse-gestures.png)
 
@@ -172,12 +185,12 @@ Xbox, PlayStation, Nintendo, and Extended slots get the same card for button pai
 <source src="/assets/video/padforge-tutorial-padforge-as-a-midi-device.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-padforge-as-a-midi-device.vtt" default>
 </video>
-<figcaption>A MIDI virtual controller fed by a DualSense: its channel, CC and note settings, the CC bars and note keys, and the Windows MIDI Services card, recorded live in PadForge 5.2.2 in 59 seconds. No music app was connected during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-padforge-as-a-midi-device-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>A MIDI virtual controller fed by a DualSense: its channel, CC and note settings, the CC bars and note keys, and the Windows MIDI Services card, recorded live in PadForge 5.2.2 in 59 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. No music app was connected during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-padforge-as-a-midi-device-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
-Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. A configuration bar on the slot's page sets channel, CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. A sustain pedal or other on/off controller (CC 64 to 69) that PadForge left on is turned off on its old channel and CC number when either changes, and when the slot stops. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
+Backed by Windows MIDI Services. Axes send Control Change (CC) messages. Buttons send Note On / Note Off. The **MIDI Output** card under the picture sets the channel, and under its **More** the CC count, note count, starting CC and note numbers, and velocity. Changes reach a running slot on its next poll, on the same port, so a DAW listening to it stays connected. A sustain pedal or other on/off controller (CC 64 to 69) that PadForge left on is turned off on its old channel and CC number when either changes, and when the slot stops. Creates a system-wide virtual MIDI device with no third-party loopback software needed. Turn any gamepad into a MIDI controller for DAWs (Ableton Live, FL Studio, Reaper), VJ software, or stage lighting.
 
-Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The configuration bar then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. A slot that cannot open its port says why in the status bar: no port picked ("Virtual Controller *N* has no Output Port. Pick one on its page."), a port that is not connected, a port already in use, or a port that did not open. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
+Without Windows MIDI Services, the slot runs on the legacy MIDI API, which cannot create a device. The **MIDI Output** card then adds **Output Port**, and the slot sends to the existing port picked there, such as a MIDI interface, a synth or a loopback driver. A slot that cannot open its port says why in the message line: no port picked ("Virtual Controller *N* has no Output Port. Pick one on its page."), a port that is not connected, a port already in use, or a port that did not open. See [The legacy MIDI API](driver-management.md#the-legacy-midi-api).
 
 ![MIDI controller configuration](../images/pad-midi-configbar.png)
 
@@ -185,28 +198,38 @@ Without Windows MIDI Services, the slot runs on the legacy MIDI API, which canno
 
 Backed by HIDMaestro's OpenVR driver and needs SteamVR installed. One slot drives both SteamVR hands, left and right, so only one VR slot can exist at a time. There is no per-slot VR config: the driver ships one identity and haptics fan out like game rumble. The driver registers its devices only while a consumer is live, so an idle machine shows no phantom controllers.
 
-The Sticks, Triggers, and Output tabs hide on a VR slot. See [Virtual VR Controllers](vr-controllers.md).
+Sticks & Triggers and the output cards hide on a VR controller. See [Virtual VR Controllers](vr-controllers.md).
 
 > **Note:** You can switch any slot to MIDI or VR and back to a gamepad type. Switching to MIDI needs a MIDI API that starts (Windows MIDI Services or the legacy MIDI API), and switching to VR needs SteamVR. Each switch re-runs auto-mapping for the new type.
 
 ---
 
-## Slot cards
+## Controllers in the sidebar and on Home
 
-A slot shows as a card on the [Dashboard](dashboard.md) and as an entry in the sidebar. Each card carries the slot's type chip, its number among slots of that type, and its Preset name.
+Every controller has a pill in the sidebar, under the **Controllers** label that follows Home, Devices, Profiles and Extras, and a card on [Home](dashboard.md#controllers). The controller's page header shows the same type mark on a larger tile, which takes no click.
 
-| Card | Layout |
+| Where | Layout |
 |---|---|
-| Sidebar | Power flame, slot number, type chip, `#N`, Preset name, then the delete **X**, which shows while the pointer is on the card |
-| Dashboard | A title row with the power flame and the slot number. Under it, the type chip, `#N` and the Preset name. |
+| Sidebar pill | Power flame, controller number, type chip, `#N`, Preset name, then the delete **X**, which shows while the pointer is on the pill or the X has the keyboard focus |
+| Home card | Type tile, type name and `#N`, Preset name, state pill and delete **X** in its head, then the picture and **Driven by**. See [Home](dashboard.md#detailed-card). |
 
-- **Type chip.** The icon of the slot's type. On the Dashboard card it is ember while the slot has devices mapped and steel while it has none. Click it and the type bar that Add Controller uses opens under the card, with the slot's current type lit. Click another type to change the slot. Clicking the current type changes nothing. MIDI and VR carry the same requirements as when you add them.
-- **`#N`.** The slot's number among the slots of its type. The second Xbox slot reads `#2`.
-- **Preset name.** On Xbox, PlayStation, Nintendo and Extended slots, the name of the slot's HIDMaestro profile, such as the DualSense. On a Keyboard+Mouse slot, the name of the input mode the slot's bar picks. On MIDI and VR slots, the type's name, since they have no Preset. A long name is cut at rest, scrolls to its end while the pointer is on the card, and shows whole in its tooltip.
+A pill is a full-round outline as wide as the sidebar. The open controller's pill has an ember outline and a warm fill. Of the others, a forging pill has a soft ember outline and a soft light around it, a waiting one a gold outline, and a cold one a plain hairline.
 
-A click on the rest of the card opens the slot's page.
+- **Power flame.** Turns the controller on or off. Its tooltip is the state: Disabled, Initializing, No device, Engine stopped, Virtual controller failed, Awaiting devices, Idle or Forging.
+- **Controller number.** The controller's place among all of them: 1, 2, 3 and on.
+- **Type chip.** The type's mark. Ember while the controller is forging, steel otherwise. Click it to open the type bar. See [Changing a controller's type](#changing-a-controllers-type).
+- **`#N`.** The controller's number among the controllers of its type. The second Xbox controller reads `#2`.
+- **Preset name.** On Xbox, PlayStation, Nintendo and Extended controllers, the name of the controller's HIDMaestro profile, such as the DualSense. On a Keyboard + Mouse controller, the input surfaces its **Input Surfaces** picker sets. On MIDI and VR controllers, the type's name, since they have no Preset. A long name trims at rest, scrolls to its end while the pointer is on the pill, and shows whole in its tooltip.
 
-A type change re-runs auto-mapping for the slot's devices, moves the slot to the end of its type group, resets the Preset to the new type's default and returns the stick and trigger dead zone settings to their defaults. A Preset is not remembered per type. A [profile](../guides/profiles.md) keeps one.
+A click on the rest of the pill opens the controller's page. Drag a device's row from the [Devices](devices.md) page onto a pill to assign the device to that controller.
+
+**Add Controller** follows the last pill while at least one type has room.
+
+### Changing a controller's type
+
+Click a type chip, on a sidebar pill or a Home card, and the type bar opens with the controller's current type lit: beside the pill, or under the card. Click another type to change the controller. Clicking the current type changes nothing. MIDI and VR carry the same requirements as when you add them, and say why when they cannot be picked.
+
+A type change re-runs auto-mapping for the controller's devices, moves the controller to the end of its type group, resets the Preset to the new type's default and returns the stick and trigger dead zone settings to their defaults. A Preset is not remembered per type. A [profile](../guides/profiles.md) keeps one.
 
 ---
 
@@ -270,131 +293,135 @@ The [DSU/Cemuhook motion protocol](../reference/dsu-motion-server.md) supports a
 
 ### Enable and disable
 
-Each slot has a **power flame** on the left of its [Dashboard](dashboard.md) card. Click to toggle on or off. Its fill and glow show the slot's state, and hovering it shows the status word.
+Click the power flame on a controller's sidebar pill, or the state pill on its [Home](dashboard.md#controller-state) card, to turn it on or off. The page header's power button does the same, with the state word beside it. The flame's fill and glow show the controller's state.
 
 | Flame | Meaning |
 |-------|---------|
-| **Ember, with a glow** | Enabled with devices mapped, output live. Stays ember through the inactivity grace period (all of the slot's mapped devices offline for the **Inactivity Timeout**, default 60 seconds, set on the [Settings](settings.md) page, 0 disables it). |
-| **Gold** | Enabled and mapped, but no live virtual controller. Nothing is connected, the engine is stopped, or the inactivity timeout fired and tore the controller down. The slot config is kept. A device coming back while the engine runs rebuilds the virtual controller. |
-| **Gold, hover reads "Virtual controller failed"** | The driver could not create the virtual controller. Switching the slot's profile or toggling the slot retries the create. |
+| **Ember, with a glow** | Enabled with devices mapped, output live. Stays ember through the inactivity grace period (all of the controller's mapped devices offline for the **Inactivity Timeout**, default 60 seconds, set on the [Settings](settings.md#inactivity-timeout) page, 0 disables it). |
+| **Gold** | Enabled and mapped, but no live virtual controller. Nothing is connected, the engine is stopped or idle, or the inactivity timeout fired and tore the controller down. The configuration is kept. A device coming back while the engine runs rebuilds the virtual controller. |
+| **Gold, tooltip "Virtual controller failed"** | The driver could not create the virtual controller. Switching the controller's Preset or toggling it retries the create. |
 | **Steel outline** | Off, or on with no devices mapped. Games cannot see it. Settings are kept. |
 | **Flashing ember** | Initializing. The virtual controller is coming up. |
 
-Disabling a slot hides it from games without losing config.
+Disabling a controller hides it from games without losing its configuration.
 
 ### Delete
 
-Click the **X** on a slot's [Dashboard](dashboard.md) card or next to its name in the sidebar.
+Click the **X** on a controller's sidebar pill or its Home card, or **Delete** in the **More** menu of its page header. One click deletes, with no confirmation.
 
 - The virtual controller is removed from the system.
-- All settings (mappings, deadzones, macros) are permanently deleted.
-- Physical devices are unassigned from this slot only.
-- Remaining slots shift down. Deleting slot 2 of four renumbers slots 3 and 4 to 2 and 3.
+- All its settings (mappings, deadzones, macros) are permanently deleted.
+- Physical devices are unassigned from this controller only.
+- The remaining controllers shift down. Deleting controller 2 of four renumbers 3 and 4 to 2 and 3.
 
-> **Tip:** To hide a controller temporarily without losing settings, disable the slot instead.
+> **Tip:** To hide a controller temporarily without losing settings, disable it instead.
 
 ---
 
-## Reorder slots
+## Reorder controllers
 
-Drag and drop controller cards on the [Dashboard](dashboard.md) or sidebar entries to change slot order.
+Drag a controller's card on [Home](dashboard.md#opening-and-reordering) or its pill in the sidebar to change the order.
 
 ### How to reorder
 
-1. Click and hold a controller card or sidebar entry.
+1. Press and hold a card or a pill.
 2. Drag it to the spot you want.
 3. Release.
 
 ### Why order matters
 
-Slot order sets the controller number. **Controller 1** is whichever slot is first. Games assign player numbers based on this order. Emulators bind slots to player ports.
+The order sets the controller number. **Controller 1** is whichever comes first. Games assign player numbers based on this order. Emulators bind controllers to player ports.
 
 ### What happens on reorder
 
-Reordering two slots of the same type does not disconnect the game, as long as both use the same controller preset. The swap is instant and the game keeps seeing both controllers.
+Reordering two controllers of the same type does not disconnect the game, as long as both use the same Preset. The swap is instant and the game keeps seeing both controllers.
 
-- **Same preset on both moved slots.** No rebuild. The game notices nothing.
-- **Different presets.** Only the positions whose preset changed rebuild and reconnect at their new spot. Slots that kept their preset stay connected.
-- **Disabled or no-device slots.** Invisible to games. Moving them changes nothing until a device comes back.
+- **Same Preset on both moved controllers.** No rebuild. The game notices nothing.
+- **Different Presets.** Only the positions whose Preset changed rebuild and reconnect at their new spot. Controllers that kept their Preset stay connected.
+- **Disabled or no-device controllers.** Invisible to games. Moving them changes nothing until a device comes back.
 
 ### Automatic type grouping
 
-New slots group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard+Mouse, MIDI, VR. This keeps XInput numbering predictable.
+New controllers group by type. Xbox first, then PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, VR. This keeps XInput numbering predictable.
 
-Dragging reorders slots inside a type group. Cross-type drops are ignored, so the grouping itself stays fixed.
+Dragging reorders controllers inside a type group. Cross-type drops are ignored, so the grouping itself stays fixed.
 
 ---
 
-## Open a slot
+## Open a controller
 
-Click a controller card on the [Dashboard](dashboard.md) or its sidebar entry. The slot's config page opens with a row of tabs.
+Click a controller's card on [Home](dashboard.md) or its pill in the sidebar. The controller's page opens with its header and a row of six sections.
 
 <!-- SCREENSHOT: pad-config-tabs -->
-![The config tab row on a slot page](../images/pad-config-tabs.png)
+![The header and the six section buttons of a controller's page](../images/pad-config-tabs.png)
 
-Four tabs are always there:
+The header holds the type tile, the type name and number, the **Preset** picker (**Input Surfaces** on a Keyboard + Mouse controller), the power button with its state word and the **More** menu. A second line holds a pill for each device that drives the controller and **Add Device**. A VR controller's header says whether SteamVR is there.
 
-- **Preview**: live interactive controller view ([3D and 2D Visualization](visualization.md)).
-- **Mappings**: maps physical inputs to virtual outputs, with shift layers ([Button and Axis Mappings](mappings.md)).
-- **Macros**: combo triggers and action sequences ([Macros](../guides/macros.md)).
-- **Menus**: on-screen ring and grid menus opened from a stick or touchpad ([Menus](../guides/menus.md)).
+| Section | What it holds |
+|---------|---------------|
+| **Mappings** | Two views under a switch. **Picture**: the live controller view ([3D and 2D Visualization](visualization.md)) with the picked control's rows under it, then the output cards (the SOCD cleaner and **Keep Controller Awake**), an Extended controller's card, or a MIDI controller's **MIDI Output** card. **List**: every mapping row, with shift layers ([Button and Axis Mappings](mappings.md)). A Keyboard + Mouse controller names this section **Keys & Mouse**, a MIDI controller **Notes & Controls**, and a VR controller **Hands**. |
+| **Sticks & Triggers** | [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md) and a mouse's gestures. |
+| **Rumble & Haptics** | [Force Feedback](force-feedback.md), [Impulse Triggers](impulse-triggers.md), [Adaptive Triggers](adaptive-triggers.md), the [Wheel](wheel.md) and Bass Shakers. |
+| **Motion & Touch** | [Gyro](../guides/gyro.md), [Touchpad](touchpad.md) and the IR pointer. |
+| **Lights & Sound** | [Lighting](lighting.md) and [Controller Audio](controller-audio.md). |
+| **Macros & Menus** | [Macros](../guides/macros.md) and [Menus](../guides/menus.md), a list of both beside the editor of the one picked. |
 
-Two more slot-tier tabs appear conditionally.
+A section shows only while one of its parts has something for this controller and its selected device, so a controller with no gyro, touchpad or pointer has no Motion & Touch. Mappings and Macros & Menus are always there.
 
-**Bass Shakers** shows on Xbox, PlayStation, and Nintendo slots, and on Extended slots with force feedback enabled (the Force Feedback checkbox decides when Customize is on, the profile's own descriptor when it is off). With Customize off it also shows on the Steam Deck Controller (Composite) profile, whose rumble commands PadForge decodes without a force feedback descriptor. It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended slots without force feedback, Keyboard+Mouse, MIDI, and VR slots have no feedback surface and hide it.
+**Bass Shakers** shows on Xbox, PlayStation and Nintendo controllers, and on Extended controllers with force feedback enabled (the Force Feedback switch decides when Customize is on, the profile's own descriptor when it is off). With Customize off it also shows on the Steam Deck Controller (Composite), SInput Gamepad and Joypad-OS Steam Input Gamepad profiles, whose rumble commands PadForge decodes without a force feedback descriptor. It routes the game rumble and force feedback the virtual controller receives to an audio output as low-frequency tones for bass shakers and subwoofers. Extended controllers without force feedback, Keyboard + Mouse, MIDI and VR controllers have no feedback surface and hide it.
 
-**Output** carries the slot's output-behavior cards. It shows on every slot type except MIDI and VR. The SOCD cleaner is on it for every type that shows the tab. **Keep Controller Awake** sits beside it on Xbox and PlayStation slots only. That card holds a small stick deflection so games that switch their prompts the moment they see mouse or keyboard input keep treating the pad as the active device.
+The output cards show on every type except MIDI and VR. The SOCD cleaner is among them for every type that shows them. **Keep Controller Awake** sits beside it on Xbox and PlayStation controllers only. That card holds a small stick deflection so games that switch their prompts the moment they see mouse or keyboard input keep treating the pad as the active device.
 
-The rest appear based on the physical device selected in the slot's device dropdown, not the slot's output type. Assign a DualSense to a PlayStation slot and the Adaptive Triggers tab appears. Assign a DualShock 4 to the same slot and it does not, because the DualShock 4 has no adaptive triggers. Switch the device dropdown and the tabs follow the newly selected device.
+The other parts follow the physical device selected in the header, not the controller's output type. Assign a DualSense to a PlayStation controller and Adaptive Triggers appears. Assign a DualShock 4 to the same controller and it does not, because the DualShock 4 has no adaptive triggers. Select another device and the parts follow it.
 
-| Tab | Appears for |
-|-----|-------------|
-| [Stick Deadzones](stick-deadzones.md) | every slot except MIDI and VR (gated by slot type, not the device) |
-| [Trigger Deadzones](trigger-deadzones.md) | every slot except Keyboard+Mouse, MIDI, and VR (gated by slot type, not the device). Nintendo and Extended slots whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital |
-| [Force Feedback](force-feedback.md) | a stick-class input (hidden for keyboard, mouse, touchpad, and MIDI) |
-| [Gyro](../guides/gyro.md) | a gyro or an accelerometer. The gyro-rate cards need a gyro |
-| [Impulse Triggers](impulse-triggers.md) | Xbox One / Elite / Series trigger motors |
-| [Adaptive Triggers](adaptive-triggers.md) | a DualSense or DualSense Edge |
-| [Lighting](lighting.md) | a lightbar or lit sphere (DualSense family, DualShock 4, PS Move), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), or a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip) |
-| [Touchpad](touchpad.md) | a touch surface (DualShock 4, DualSense, the Steam Controller family, Steam Deck, Windows Precision Touchpads) |
-| [Controller Audio](controller-audio.md) | a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Joy-Con, Switch Pro Controller, Steam Controller 2015, Steam Deck, Steam Controller 2026) |
-| [Wheel](wheel.md) | a racing wheel. A recognized Logitech, Fanatec, or Thrustmaster model gets rotation range, auto-center, and RPM shift LEDs. A generic force feedback wheel gets the auto-center row alone |
-| Pointer | an IR camera ([Wii Remote](../devices/wii-controllers.md)) |
-| Mouse | a mouse (per-device mouse-gesture settings) |
+| Part | Section | Appears for |
+|-----|---------|-------------|
+| [Stick Deadzones](stick-deadzones.md) | Sticks & Triggers | every controller except MIDI and VR (gated by type, not the device) |
+| [Trigger Deadzones](trigger-deadzones.md) | Sticks & Triggers | every controller except Keyboard + Mouse, MIDI and VR (gated by type, not the device). Nintendo and Extended controllers whose profile has no analog triggers hide it too, since the Switch Pro's ZL / ZR are digital |
+| Mouse gestures | Sticks & Triggers | a mouse |
+| [Force Feedback](force-feedback.md) | Rumble & Haptics | a stick-class input, a haptic mouse or keyboard, or a Novint Falcon (hidden for other keyboards, mice, touchpads and MIDI) |
+| [Impulse Triggers](impulse-triggers.md) | Rumble & Haptics | Xbox One / Elite / Series trigger motors |
+| [Adaptive Triggers](adaptive-triggers.md) | Rumble & Haptics | a DualSense or DualSense Edge |
+| [Wheel](wheel.md) | Rumble & Haptics | a racing wheel. A recognized Logitech, Fanatec or Thrustmaster model gets the Wheel card (rotation range, RPM shift LEDs) and the Centering card. A wheel routed through SDL with a spring or a constant force gets the Centering card alone |
+| [Gyro](../guides/gyro.md) | Motion & Touch | a gyro or an accelerometer. The gyro-rate cards need a gyro |
+| [Touchpad](touchpad.md) | Motion & Touch | a touch surface (DualShock 4, DualSense, the Steam Controller family, Steam Deck, Windows Precision Touchpads) |
+| IR pointer | Motion & Touch | an IR camera ([Wii Remote](../devices/wii-controllers.md)) |
+| [Lighting](lighting.md) | Lights & Sound | a lightbar or lit sphere (DualSense family, DualShock 4, PS Move), a Guide LED (Xbox One / Elite / Series, 2015 Steam Controller), a HOME button LED (Switch Pro Controller, right Joy-Con, combined Joy-Con pair, charging grip), or the lighting of a keyboard, mouse or vendor row |
+| [Controller Audio](controller-audio.md) | Lights & Sound | a speaker (DualSense family, DualShock 4, Wii Remote), or a haptic actuator that plays macro sounds as tones (Joy-Con, Switch Pro Controller, Steam Controller 2015, Steam Deck, Steam Controller 2026) |
 
-Keyboard+Mouse slots keep the [Stick Deadzones](stick-deadzones.md) tab for mapping the sticks to mouse movement and scroll. MIDI slots hide the stick and trigger tabs, since a MIDI slot maps to CC and note values, not sticks and triggers.
+Keyboard + Mouse controllers keep [Stick Deadzones](stick-deadzones.md) for mapping the sticks to mouse movement and scroll. MIDI controllers hide the stick and trigger parts, since a MIDI controller maps to CC and note values, not sticks and triggers.
 
 ---
 
-## Multi-slot device assignment
+## One device on several controllers
 
-One physical controller can feed multiple slots at once.
+One physical controller can feed several virtual controllers at once.
 
 ### Use cases
 
-- **Split output.** One controller drives an Xbox slot (for the game) and a MIDI slot (for music) at the same time.
-- **Mirrored output.** Same controller into two Xbox slots so two in-game characters move identically.
-- **Sim rigs.** Route one HOTAS to multiple Extended slots with different axis configs.
+- **Split output.** One controller drives an Xbox controller (for the game) and a MIDI controller (for music) at the same time.
+- **Mirrored output.** The same controller into two Xbox controllers so two in-game characters move identically.
+- **Sim rigs.** Route one HOTAS to several Extended controllers with different axis configs.
 
 ### How to assign
 
-1. **[Devices](devices.md) page.** Each device card shows numbered slot toggles. Click a number to assign or unassign.
-2. **Sidebar.** Drag a device onto a sidebar controller entry.
-3. **The offer banner.** With [Assignment Prompts](settings.md#assignment-prompts) on, a slot's page shows a banner when a game-input device is online and not yet on that slot: "*Device name* just connected. Assign it to this virtual controller?" with **Assign** and **Not Now**. Two settings decide who is offered, both on by default. **Offer New Devices to the Open Virtual Controller** covers devices PadForge has never seen before. **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** covers any device, new or known, while the open slot has nothing assigned. The banner is a standing condition, not a one-shot event: it appears whether the device connected before or after you opened the page, and it stays until you assign the device, click Not Now (which dismisses that device for that slot for the rest of the session), or the device goes offline. Keyboards, mice, touchpads, and media-key devices are never offered, and nothing is offered on the first device walk after the engine starts.
+1. **[Devices](devices.md) page.** A device's panel lists a chip for each controller under **Used By**. Click a chip to assign or unassign.
+2. **Sidebar.** Drag a device's row onto a controller's pill.
+3. **The offer band.** With [Assignment Prompts](settings.md#assignment-prompts) on, a controller's page shows a band under **Driven by** when a game-input device is online and not yet on that controller: "*Device name* just connected. Assign it to this virtual controller?" with **Assign** and **Not Now**. Two settings decide who is offered, both on by default. **Offer New Devices to the Open Virtual Controller** covers devices PadForge has never seen before. **Offer Any Connecting Device When the Open Virtual Controller Has No Devices** covers any device, new or known, while the open controller has nothing assigned. The band is a standing condition, not a one-shot event: it appears whether the device connected before or after you opened the page, and it stays until you assign the device, click Not Now (which dismisses that device for that controller for the rest of the session), or the device goes offline. Keyboards, mice, touchpads and media-key devices are never offered, and nothing is offered on the first device walk after the engine starts.
 
-Each slot-device pairing has its own mappings, deadzones, and settings. The same controller in slot 1 and slot 3 can have completely different configs.
+Each pairing of a device and a controller has its own mappings, deadzones and settings. The same device on controller 1 and controller 3 can have completely different configs.
 
 ---
 
 ## Related pages
 
-- [Dashboard](dashboard.md): virtual controller cards and engine status.
-- [Devices](devices.md): assign physical controllers to slots.
+- [Home](dashboard.md): the controller cards and engine status.
+- [Devices](devices.md): assign physical controllers to virtual controllers.
 - [Installation](../start/installation.md): first-time setup and driver install.
-- [Profiles](../guides/profiles.md): save and switch slot configs per game.
+- [Profiles](../guides/profiles.md): save and switch controller configs per game.
 - [Button and Axis Mappings](mappings.md): map physical inputs to virtual outputs, with shift layers.
-- [Shift Layers](../guides/shift-layers.md): per-slot overlay mapping tables.
-- [Macros](../guides/macros.md): button combo triggers, axis triggers, and Custom Expression triggers.
+- [Shift Layers](../guides/shift-layers.md): per-controller overlay mapping tables.
+- [Macros](../guides/macros.md): button combo triggers, axis triggers and Custom Expression triggers.
 - [Menus](../guides/menus.md): on-screen ring and grid menus.
 - [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md): stick and trigger tuning.
 - [Force Feedback](force-feedback.md) and [Impulse Triggers](impulse-triggers.md): body-rumble and trigger-motor effects.
@@ -402,9 +429,9 @@ Each slot-device pairing has its own mappings, deadzones, and settings. The same
 - [Touchpad](touchpad.md) and [Controller Audio](controller-audio.md): touchpad gestures and speaker output.
 - [Gyro](../guides/gyro.md): motion-sensor mapping.
 - [Wheel](wheel.md): native force-feedback wheel settings.
-- [Virtual VR Controllers](vr-controllers.md): the VR slot type and its SteamVR hand pair.
+- [Virtual VR Controllers](vr-controllers.md): the VR type and its SteamVR hand pair.
 - [Driver Management](driver-management.md): driver requirements per controller type.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

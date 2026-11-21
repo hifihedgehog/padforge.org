@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3801,6 +3951,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3893,6 +4071,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4372,11 +4578,19 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/HeadTrackingRuntime.cs</code></td>
-<td>Static mirror of the Dashboard controls the poll thread reads</td>
+<td>Static mirror of the Head Tracking page's controls the poll thread reads</td>
 </tr>
 <tr>
 <td><code>PadForge.App/ViewModels/DashboardViewModel.cs</code></td>
-<td>The head-tracking properties (three input toggles, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and <code>HeadTrackingStatus</code></td>
+<td>The head-tracking properties (three input switches, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and <code>HeadTrackingStatus</code></td>
+</tr>
+<tr>
+<td><code>PadForge.App/ViewModels/DashboardViewModel.Extras.cs</code></td>
+<td>The Extras page's switch, <code>HeadTrackingAnyEnabled</code>, with <code>HeadTrackingLastSources</code> and <code>HeadTrackingStartingSources</code> (UDP and FreeTrack), and the Sources and Range cards' Reset All commands</td>
+</tr>
+<tr>
+<td><code>PadForge.App/Views/ExtrasPage.xaml</code></td>
+<td>The Head Tracking page: its switch, the status line with Set Neutral, Sources, Range, and More</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.cs</code></td>
@@ -4440,7 +4654,7 @@
 </tr>
 </tbody>
 </table>
-<p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page draws neither the Input Hiding nor the Input Mode section. <code>CreateDefaultPadSetting</code> auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.</p>
+<p>The path is a URI scheme, so <code>DeviceRowViewModel.IsInternalVirtual</code> is true and the Devices page shows neither the Hide from Games switch (<code>ShowHidHideToggle</code>) nor the Force Raw Joystick Mode switch (<code>ShowInputModeSection</code>). <code>CreateDefaultPadSetting</code> auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.</p>
 <hr />
 <h2 id="lifecycle-phase-1i">Lifecycle: Phase 1i<a class="headerlink" href="#lifecycle-phase-1i" title="Permanent link">&para;</a></h2>
 <p><code>UpdateHeadTrackerDevice</code> runs on the poll thread after the handheld phase. Off with nothing to retire, it returns after five volatile field reads and takes no lock. Otherwise it retires the runtime row when every input is off, the user removed it or either VR controller row from the Devices page, or <code>ConfigVersion</code> no longer equals <code>HeadTrackingRuntime.Version</code>, and opens a fresh one from <code>FromCurrentSettings</code> while any input is enabled. There are three inputs since 4.5.0: UDP, FreeTrack and OpenXR. The OpenXR side is documented separately in <a href="../openxr-input-internals/">OpenXR Input Internals</a>. Stored assignments and mappings survive retirement.</p>
@@ -4540,7 +4754,7 @@
 </tr>
 <tr>
 <td>Long datagram</td>
-<td>Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with <code>MessageSize</code> and is dropped.</td>
+<td>Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with <code>SocketError.MessageSize</code> and is dropped.</td>
 </tr>
 <tr>
 <td>NaN or infinity in any field</td>
@@ -4727,7 +4941,7 @@
 </ul>
 <p>With no session standing, that event, a lost instance and a failed poll each end the source as <code>Ended</code>. On SteamVR none of the three recoveries runs (<code>OpenXrSession.IsOpenVrClientLibrary</code>), and <code>OpenXrSession.TryCreate</code> refuses to create an instance again on an OpenVR client library. SteamVR's runtime library is the OpenVR client library the OpenVR input shares in the same process, it reports its own quit to an instance with no session as <code>XrEventDataInstanceLossPending</code>, and it never sends <code>XR_SESSION_STATE_LOSS_PENDING</code>. Those three facts are read from the library, not seen in a run (<a href="../openxr-input-internals/#residual">OpenXR Input Internals</a>). On SteamVR a missing headset is final and every loss ends as <code>Ended</code>.</p>
 <p>A stop for good settles through <code>OpenXrHeadPoseSource.SettledOn</code>: <code>Ended</code> once a session has stood, <code>Failed</code> in place of <code>NoHeadset</code>, and the reason otherwise. <code>Settle</code> writes one line with what was read, <code>OpenXR: {what} ({read}), so the source stops ({state})</code>. An <code>xrGetSystem</code> error other than <code>XR_ERROR_FORM_FACTOR_UNAVAILABLE</code> is <code>Failed</code>, and a lost instance is <code>Ended</code> from any call of session creation (<code>OpenXrSession.FailureOf</code>). A refused <code>xrBeginSession</code> ends the source (<code>OpenXrSession.EndOfBegin</code>). A session state event or a reference space change that names another session is dropped, and so is one that arrives while no session stands (<code>OpenXrSession.IsAboutThisSession</code>). The live session's reference space change recaptures the neutral. The lines the link writes about an instance or a session (the controllers, a session that runs, an event storm) are written once until a pose arrives, like the source's own (<code>OpenXrHeadPoseSource.SayFromLink</code>). Every number in an OpenXR line is written in the invariant culture (<code>OpenXrInterop.Number</code>), so a log reads the same under every Windows regional format.</p>
-<p>The same text lands in two places, each rebuilt only when <code>StatusVersion</code> moves. The Devices row's line comes from <code>UpdateDevicesRawState</code>, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Dashboard's <code>HeadTrackingStatus</code> comes from <code>UpdateHeadTrackingStatus</code> on the dashboard tick and reads <code>Stopped</code> (<code>Common_Stopped</code>) while the feature is off, the engine is down, or the row has not opened.</p>
+<p>The same text lands in two places, each rebuilt only when <code>StatusVersion</code> moves. The Devices row's line comes from <code>UpdateDevicesRawState</code>, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Extras page's line, <code>HeadTrackingStatus</code>, comes from <code>UpdateHeadTrackingStatus</code> on the dashboard tick and reads <code>Stopped</code> (<code>Common_Stopped</code>) while the feature is off, the engine is down, or the row has not opened. The same pass sets <code>IsHeadTrackingReceiving</code>, which burns the page's status flame while a source delivers a pose.</p>
 <hr />
 <h2 id="the-firewall-rule">The firewall rule<a class="headerlink" href="#the-firewall-rule" title="Permanent link">&para;</a></h2>
 <p><code>WebControllerServer.EnsureInboundFirewallRule("PadForge Head Tracking", "UDP", port)</code> runs <code>netsh advfirewall firewall delete rule name=...</code> then <code>add rule ... dir=in action=allow protocol=UDP localport=&lt;port&gt;</code>. Delete-then-add needs no parsing of netsh's localized output, is idempotent, and clears the pile-up a port change used to leave behind. It is queued on the thread pool from <code>Open</code> only when UDP is enabled, since netsh can block for seconds, and it is best effort.</p>
@@ -4786,7 +5000,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a> for where Phase 1i sits</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

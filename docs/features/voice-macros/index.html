@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2045,6 +2077,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2081,6 +2141,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2840,6 +2956,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3433,6 +3555,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3713,6 +3863,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3805,6 +3983,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4207,16 +4413,15 @@
 </tr>
 </tbody>
 </table>
-<p>Every microphone row exposes <strong>Any Phrase</strong> plus one button per registered phrase. A DualSense row, or a Bluetooth DualShock 4 row, additionally offers <strong>Any Voice Phrase</strong> and one <strong>Voice Phrase</strong> source per phrase in its mapping dropdown, alongside its sticks and buttons. A Bluetooth DualShock 4 shared over <a href="../../guides/remote-link/">Remote Link</a> offers the same sources on the other PC when both PCs run 5.2.0 or later.</p>
+<p>Every microphone row exposes <strong>Any Phrase</strong> plus one button per registered phrase. A DualSense, or a Bluetooth DualShock 4, also offers <strong>Any Voice Phrase</strong> and one <strong>Voice Phrase</strong> source per phrase among its mapping sources, beside its sticks and buttons. A Bluetooth DualShock 4 shared over <a href="../../guides/remote-link/">Remote Link</a> offers the same sources on the other PC when both PCs run 5.2.0 or later.</p>
 <hr />
 <p><img alt="A microphone row on the Devices page, with Manage Voice Macros" src="../../images/devices-voice.png" /></p>
 <h2 id="registering-phrases">Registering phrases<a class="headerlink" href="#registering-phrases" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Manage Voice Macros</strong> from a Microphone row, a Bluetooth DualSense row or a Bluetooth DualShock 4 row on the Devices page. The dialog holds everything:</p>
+<p>On the <a href="../devices/">Devices</a> page, select a Microphone row, a Bluetooth DualSense row or a Bluetooth DualShock 4 row, and press <strong>Manage Voice Macros</strong> at the foot of its <strong>Settings</strong> card. The dialog holds everything:</p>
 <ul>
-<li><strong>Enable Voice Macros</strong> turns listening on.</li>
-<li><strong>Listening</strong> picks <strong>Always</strong> or <strong>Push to Talk</strong>. Always keeps the microphone open. Push to Talk listens only while a bound <strong>Voice Listen (While Held)</strong> macro is held, which also keeps a Bluetooth DualSense's mic session closed and a Bluetooth DualShock 4's microphone off while idle, costing no bandwidth or battery.</li>
-<li><strong>Minimum Confidence</strong> sets how sure the recognizer must be before a phrase fires. It defaults to 0.80, and the slider runs 0.50 to 0.99. Raise it if stray speech triggers macros, lower it if your phrases are missed.</li>
-<li>Type a phrase, give it a name, and press <strong>Register</strong>. The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below <strong>Minimum Confidence</strong> or the talk key was up.</li>
+<li>Type the phrase to say in the first box, a button name in the second, and press <strong>Register</strong> (or Enter in either box). The phrase joins the <strong>Phrases</strong> list, where <strong>Remove</strong> takes it out again.</li>
+<li>The live readout shows every recognition with its confidence, whether or not it fired. A registered phrase's row lights only when the recognition actually fires, so a dark row beside a readout line means it fell below <strong>Minimum Confidence</strong> or the talk key was up.</li>
+<li><strong>More</strong> holds the settings. <strong>Enable Voice Macros</strong> turns listening on. <strong>Listening</strong> picks <strong>Always</strong> or <strong>Push to Talk</strong>. Always keeps the microphone open. Push to Talk listens only while a bound <strong>Voice Listen (While Held)</strong> macro is held, which also keeps a Bluetooth DualSense's mic session closed and a Bluetooth DualShock 4's microphone off while idle, costing no bandwidth or battery. <strong>Minimum Confidence</strong> sets how sure the recognizer must be before a phrase fires. It defaults to 0.80, and the slider runs 0.50 to 0.99. Raise it if stray speech triggers macros, lower it if your phrases are missed. Each setting has its own reset button.</li>
 </ul>
 <p>Short, distinct phrases recognize best. Two phrases that rhyme will fight each other.</p>
 <hr />
@@ -4224,8 +4429,8 @@
 <h2 id="binding-phrases">Binding phrases<a class="headerlink" href="#binding-phrases" title="Permanent link">&para;</a></h2>
 <p>A phrase button binds anywhere a real button does:</p>
 <ul>
-<li><strong>Mappings</strong>. Pick <strong>Voice Phrase: name</strong> from a DualSense or Bluetooth DualShock 4 row's input dropdown, or the named phrase button on a Microphone row, and target any output.</li>
-<li><strong>Macros</strong>. A phrase works as a macro trigger, picked from the trigger list or recorded by simply saying it while recording.</li>
+<li><strong>Mappings</strong>. On a controller page, pick <strong>Voice Phrase: name</strong> as a mapping row's source from an assigned DualSense or Bluetooth DualShock 4, or the named phrase button of an assigned Microphone, and target any output.</li>
+<li><strong>Macros</strong>. In the controller page's <strong>Macros</strong> section, a phrase works as a macro trigger, picked from the trigger list or recorded by simply saying it while recording.</li>
 <li><strong>Shift layers</strong>. A phrase works as a layer activator. A recognition is a 175 ms pulse rather than a held key, so use <strong>Toggle</strong> mode: say the phrase to enter the layer, say it again to leave.</li>
 <li><strong>Recording</strong>. All three recorders (mapping rows, macro triggers, expression variables) hear phrases and capture the specific phrase you said, not the Any button.</li>
 </ul>
@@ -4233,7 +4438,7 @@
 <p>Words typed in Twitch chat become buttons the same way. See <a href="../twitch-chat/">Twitch Chat</a>.</p>
 <hr />
 <h2 id="watching-it-live">Watching it live<a class="headerlink" href="#watching-it-live" title="Permanent link">&para;</a></h2>
-<p>Every DualSense, Bluetooth DualShock 4 and Microphone row's details pane carries a <strong>Voice Macros</strong> section at the end of the raw input state. Each registered phrase lights the moment it is recognized, which is the quickest way to check that listening works before binding anything.</p>
+<p>Select a DualSense, Bluetooth DualShock 4 or Microphone row on the Devices page, and its <strong>Test Inputs</strong> card carries a <strong>Voice Macros</strong> section. Each registered phrase lights the moment it is recognized, which is the quickest way to check that listening works before binding anything.</p>
 <hr />
 <h2 id="limitations-stated-plainly">Limitations, stated plainly<a class="headerlink" href="#limitations-stated-plainly" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4242,7 +4447,7 @@
 <li>On the full DualSense or DualShock 4 profile, the virtual device's headset microphone carries the phrases, and the pad does not double-listen beside it.</li>
 <li>The first time voice macros are on with a phrase registered, PadForge unpacks the model from inside itself, which takes a few seconds. Until it finishes, recognition falls back to the Windows speech engine, which is markedly worse at single words. Nothing is downloaded, so this works on a machine that has never been online. If the Vosk library itself will not load, recognition stays on the Windows speech engine for that run, and the diagnostics log says why.</li>
 </ul>
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

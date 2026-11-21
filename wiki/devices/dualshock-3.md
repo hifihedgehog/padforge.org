@@ -5,13 +5,13 @@
 <!-- SCREENSHOT: ds3-pair -->
 ![The Pair a Controller dialog set to Sony DualShock 3](../images/ds3-pair.png)
 
-Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a bundled Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all.
+Windows can't pair a DualShock 3 from its own Bluetooth screen. The controller connects in a way the built-in Bluetooth stack turns away, so a normal "Add a device" pairing never completes. PadForge handles it with a short USB step and a bundled Bluetooth driver, so you pair from inside the app. Over a cable, no pairing is needed at all. PadForge reads the pad itself, so no other DualShock 3 driver is needed. Coming from DsHidMini? See [below](#coming-from-dshidmini).
 
 ---
 
 ## USB: plug in and play
 
-Connect the controller with a USB cable and it works right away. PadForge claims the pad and reads it as a standard gamepad. No pairing, no setup.
+Connect the controller with a USB cable and it works right away. PadForge binds its own WinUSB driver to the pad and reads it as a standard gamepad. No pairing, no setup.
 
 One exception: if another PlayStation controller driver is already installed, PadForge leaves the controller to it and stays out of the way. Uninstall the other driver to let PadForge read the pad.
 
@@ -23,8 +23,8 @@ Bluetooth needs a one-time pairing. The controller has to be on a USB cable for 
 
 1. Open the [Devices](../features/devices.md) page.
 2. Connect the DualShock 3 to the PC with a USB cable.
-3. Click **Pair**, next to **Refresh**. The **Pair a Controller** dialog opens.
-4. Set **Controller Family** to **Sony DualShock 3**.
+3. Click **Pair a Controller**, at the top of the page. The pairing dialog opens.
+4. Set **Controller Family** to **Sony DualShock 3**. The dialog's title changes to **Pair a DualShock 3**.
 5. Click **Pair** in the dialog. The status line shows each step. The first time, PadForge's bundled PlayStation Bluetooth driver installs on its own.
 6. When it finishes, unplug the controller and press the **PS** button. It connects over Bluetooth and appears in the device list.
 7. Click **Done** to close.
@@ -32,7 +32,7 @@ Bluetooth needs a one-time pairing. The controller has to be on a USB cable for 
 After this, press **PS** any time to reconnect. You pair once.
 
 <!-- SCREENSHOT: devices-ds3 -->
-![A paired DualShock 3 on the Devices page with its slot badge and battery](../images/devices-ds3.png)
+![A paired DualShock 3 on the Devices page with its slot and battery](../images/devices-ds3.png)
 
 ### One identity, either way
 
@@ -43,18 +43,18 @@ The controller carries the same identity over USB and Bluetooth. A mapping you s
 ## What works
 
 <!-- SCREENSHOT: pad-playstation-ds3 -->
-![A PlayStation slot on the DualShock 3 (SIXAXIS) preset, with the DualShock 3 model in the Preview tab](../images/pad-playstation-ds3.png)
+![A PlayStation slot on the DualShock 3 (SIXAXIS) preset, with the DualShock 3 model on the controller page](../images/pad-playstation-ds3.png)
 
 | Feature | Detail |
 |---|---|
 | **USB** | Plug in with a cable and play. No pairing. |
 | **Bluetooth** | Connects after the one-time pairing above. Press **PS** to wake it. |
-| **Buttons and sticks** | The full pad maps like any other gamepad on the [Mappings](../features/mappings.md) tab. |
+| **Buttons and sticks** | The full pad maps like any other gamepad in the **Mappings** section of the controller page ([Mappings](../features/mappings.md)). |
 | **Pressure buttons** | Ten buttons report analog pressure, each as its own source. They appear as **Axis 6** through **Axis 15**. The legend is [below](#pressure-sensitive-buttons). |
 | **Motion** | The gyro and accelerometer drive gyro aiming and the motion server. The DS3's gyro senses turning left and right only, and PadForge can fill pitch and roll from the accelerometer. |
 | **Rumble** | Both motors, over USB and Bluetooth. |
 | **Player light** | Lights the controller's number, 1 through 4. |
-| **Battery** | The charge level shows on the device card, wired or wireless. |
+| **Battery** | The charge level shows in the **Battery** column of the Devices page, wired or wireless. |
 
 ---
 
@@ -62,16 +62,16 @@ The controller carries the same identity over USB and Bluetooth. A mapping you s
 
 The DualShock 3's built-in motion sensors flow through the same pipeline as any other motion pad. Gyro-to-mouse, gyro-to-stick, and motion mapping all work. The DS3's gyro senses one axis of rotation, turning the pad left and right. The accelerometer reads all three axes. See [Gyro](../guides/gyro.md) for calibration, sensitivity, and the engage controls. The motion also broadcasts to the [DSU Motion Server](../reference/dsu-motion-server.md) for emulators.
 
-Turn on [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) on the Gyro tab to fill tilting and rolling from the accelerometer, the idea behind the DS3 gyro simulation in the DS4Windows forks. The guide lists what an accelerometer can and can't see.
+Turn on [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) on the Gyro card, in the controller page's **Motion & Touch** section, to fill tilting and rolling from the accelerometer, the idea behind the DS3 gyro simulation in the DS4Windows forks. The guide lists what an accelerometer can and can't see.
 
-**Calibrate the yaw by hand.** Many pads rest far enough off center to read a steady turn while still. Put the pad down, give it half a minute after it connects, and press **Calibrate Gyro** on the Gyro tab. The automatic pass at connect won't take an offset that large on this pad ([why](../guides/gyro.md#calibration)). A calibration from an earlier version no longer counts, so calibrate again after updating. Calibrate again too after swapping to another DualShock 3, after moving between PadForge's own connection and DsHidMini, after updating DsHidMini, and after a Bluetooth pad's first USB connection under DsHidMini, which hands DsHidMini the pad's calibration.
+**Calibrate the yaw by hand.** Many pads rest far enough off center to read a steady turn while still. Put the pad down, give it half a minute after it connects, and press **Calibrate Gyro** on the Gyro card. The automatic pass at connect won't take an offset that large on this pad ([why](../guides/gyro.md#calibration)). A calibration from an earlier version no longer counts, so calibrate again after updating. Calibrate again too after swapping to another DualShock 3, after moving between PadForge's own connection and DsHidMini, after updating DsHidMini, and after a Bluetooth pad's first USB connection under DsHidMini, which hands DsHidMini the pad's calibration.
 
-**Yaw direction.** PadForge reads a genuine DualShock 3's yaw the same way over USB, over Bluetooth, and through DsHidMini 3.15.0 or later: turning the pad left reads positive, as on other controllers. Through DsHidMini before 3.15.0 a genuine pad still reads backwards until DsHidMini is updated. If you checked **Invert Yaw (X)** on 4.5.3 or earlier to correct a genuine pad on PadForge's own USB or Bluetooth connection, uncheck it. Through DsHidMini, leave it checked until DsHidMini is 3.15.0 or later, then uncheck it.
+**Yaw direction.** PadForge reads a genuine DualShock 3's yaw the same way over USB, over Bluetooth, and through DsHidMini 3.15.0 or later: turning the pad left reads positive, as on other controllers. Through DsHidMini before 3.15.0 a genuine pad still reads backwards until DsHidMini is updated. If you turned on **Invert Yaw (X)** on 4.5.3 or earlier to correct a genuine pad on PadForge's own USB or Bluetooth connection, turn it off. Through DsHidMini, leave it on until DsHidMini is 3.15.0 or later, then turn it off.
 
-Some third-party pads turn the sensor the other way. If turning left moves the aim right, check **Invert Yaw (X)** on the Gyro tab. It flips PadForge's own gyro aim in Local space, and it reaches the virtual controller and the DSU server only with **Apply Gyro Tuning to Motion Passthrough** on. In Player or World space with Pitch and Roll Simulation on, yaw and roll combine before the invert, so on such a pad use Local space.
+Some third-party pads turn the sensor the other way. If turning left moves the aim right, turn on **Invert Yaw (X)** on the Gyro card. It flips PadForge's own gyro aim in Local space, and it reaches the virtual controller and the DSU server only with **Motion Passthrough** set to **Tuned**. In Player or World space with Pitch and Roll Simulation on, yaw and roll combine before the invert, so on such a pad use Local space.
 
 <!-- SCREENSHOT: pad-ds3-gyro -->
-![The Gyro tab for a DualShock 3 with reference frame and sensitivity controls](../images/pad-ds3-gyro.png)
+![The Gyro card for a DualShock 3 with reference frame and sensitivity controls](../images/pad-ds3-gyro.png)
 
 ---
 
@@ -98,13 +98,13 @@ The **Record** button won't find these for you. Pressing a face button during a 
 
 ## Removing the controller
 
-Remove the controller from the [Devices](../features/devices.md) list and the Bluetooth pairing of every DualShock 3 on this PC clears too, so none of them reconnects on its own later. To use one again, run the pairing above once more.
+Remove the controller from the [Devices](../features/devices.md) list, with the X at the end of its row, and the Bluetooth pairing of every DualShock 3 on this PC clears too, so none of them reconnects on its own later. To use one again, run the pairing above once more.
 
 ---
 
 ## Coming from DsHidMini
 
-PadForge reads the DualShock 3 itself, so DsHidMini is not needed. In DsHidMini's XInput mode, a DualShock 3 and a Navigation controller both report the ID of an Xbox One controller. PadForge then lists both as **Xbox One Controller** and treats them as two controllers of one model, so their cards follow the order they connect. On PadForge's own connection, each has its own name and its own card.
+PadForge reads the DualShock 3 itself, over USB and Bluetooth, with motion, pressure buttons, rumble, the player light and battery, so DsHidMini is not needed. Use PadForge's own connection. In DsHidMini's XInput mode, a DualShock 3 and a Navigation controller both report the ID of an Xbox One controller. PadForge then lists both as **Xbox One Controller** and treats them as two controllers of one model, so their cards follow the order they connect. On PadForge's own connection, each has its own name and its own card.
 
 PadForge never takes a controller from another vendor's driver, so remove DsHidMini first: uninstall **Nefarius DsHidMini Driver** from Windows' installed apps. Leave BthPS3 installed, since PadForge uses it too. Then plug the DualShock 3 in by USB, or pair it for Bluetooth as above. A Navigation controller pairs the same way, with **Controller Family** set to **PlayStation Move / Navigation** ([PlayStation Move](ps-move.md)).
 
@@ -118,7 +118,7 @@ One exception: with another DualShock 3 driver such as DsHidMini installed, the 
 
 When PadForge starts and finds a PlayStation Bluetooth driver older than the one it carries, it updates it, as long as no controller is connected through that driver at that moment. The update restarts Bluetooth once, so your other Bluetooth devices drop for a few seconds and reconnect. With one connected, the update waits for the next start or pairing. With DsHidMini installed, PadForge leaves the driver to DsHidMini's own setup. The driver PadForge carries, BthPS3 3.2.1, fixes a Windows crash (a blue screen) when a DualShock 3 disconnects over Bluetooth, which versions 2.12.0 to 3.2.0 could cause.
 
-**Uninstall** on the **BthPS3 Bluetooth Driver** card in [Settings](../features/settings.md) removes the PlayStation Bluetooth driver and the WinUSB driver PadForge gives a DualShock 3 for pairing. It waits while a controller is connected over Bluetooth, and leaves the Bluetooth driver to DsHidMini where DsHidMini is installed. See [Driver Management](../features/driver-management.md#bthps3).
+**Uninstall** on the **BthPS3 Bluetooth** row in [Settings](../features/settings.md) removes the PlayStation Bluetooth driver and the WinUSB driver PadForge gives a DualShock 3 for pairing. It leaves the Bluetooth driver in place while a controller is connected over Bluetooth, and leaves it to DsHidMini where DsHidMini is installed. See [Driver Management](../features/driver-management.md#bthps3).
 
 ---
 
@@ -141,11 +141,11 @@ When PadForge starts and finds a PlayStation Bluetooth driver older than the one
 
 ## Related pages
 
-- [Devices](../features/devices.md): the Pair button and the paired controller's device card.
+- [Devices](../features/devices.md): the Pair a Controller button and the paired controller's row.
 - [Gyro](../guides/gyro.md): tune the DualShock 3's motion sensors.
 - [DSU Motion Server](../reference/dsu-motion-server.md): broadcast the motion to emulators.
 - [Driver Management](../features/driver-management.md): HIDMaestro and HidHide driver setup.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

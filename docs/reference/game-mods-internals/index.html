@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4394,7 +4600,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.GameMods.cs</code></td>
-<td>Start and stop with the engine and the Dashboard switches, the status line, the pad page lines and the Devices line.</td>
+<td>Start and stop with the engine and the Game Mods switches on the Extras page, the status line, the pad page lines and the Devices line.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/UserEffectsDispatcher.cs</code></td>
@@ -4563,7 +4769,7 @@
 <p><code>GameModEffects</code> keeps one <code>Hold</code> per controller index: the two trigger blocks, the lightbar, the player lights, the mute light and the two thresholds, each with the <code>GameModSender</code> that set it. Holds never change once published. A change copies the array under a lock and publishes it, and readers take the published copy without a lock, since the polling thread reads the thresholds every cycle.</p>
 <p>An instruction that sets a value already held changes nothing, so a mod that resends its state every frame, as the GTA V mods do, costs no writes. If a different sender sends the same value, it becomes the value's owner and nothing is written. An index below 0 means every controller, as in DSZ. A threshold of 0 holds nothing and has no owner.</p>
 <h3 id="which-virtual-controller-an-index-reaches">Which virtual controller an index reaches<a class="headerlink" href="#which-virtual-controller-an-index-reaches" title="Permanent link">&para;</a></h3>
-<p><code>GameModEffects.OrderedSlots</code> lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order <code>SettingsManager.SlotOrders.GetGlobalSlotNumber</code> numbers them on the Dashboard. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use <code>ForSlotCached</code>, which resolves the order at most every 250 ms. <code>RefreshOrder</code> resolves it and swaps the cached copy, and when the order changed while a mod holds anything, every virtual controller in the old order and the new one is told (<code>NotifySlot</code>): the pad an index left gives the mod's values back and the pad it reached takes them, with no new packet. The Dashboard tick calls it too, once a second, which covers a moment when no virtual controller polls.</p>
+<p><code>GameModEffects.OrderedSlots</code> lists the virtual controllers mods can reach: created and enabled, with an online DualSense, DualSense Edge or DualShock 4 assigned, in the order <code>SettingsManager.SlotOrders.GetGlobalSlotNumber</code> numbers them, the numbers the sidebar shows. Index 0 is the first. It takes the devices lock and then the settings lock, never both at once, then the leaf slot-order lock, so the effects pass may call it under the devices lock in the documented order. The polling thread's readers, the threshold and the impulse translation, use <code>ForSlotCached</code>, which resolves the order at most every 250 ms. <code>RefreshOrder</code> resolves it and swaps the cached copy, and when the order changed while a mod holds anything, every virtual controller in the old order and the new one is told (<code>NotifySlot</code>): the pad an index left gives the mod's values back and the pad it reached takes them, with no new packet. <code>InputService.UpdateGameModLines</code> calls it too, once a second from <code>InputService.UpdateDashboard</code>, which covers a moment when no virtual controller polls.</p>
 <h3 id="releases">Releases<a class="headerlink" href="#releases" title="Permanent link">&para;</a></h3>
 <p>A hold's values end when:</p>
 <ul>
@@ -4582,7 +4788,7 @@
 </ul>
 <p>The pad keeps a trigger program, a mute light or a player row until something overwrites it, and the pass leaves an idle subsystem unasserted (<code>GateMirroredSubsystem</code>), so a game's last program persists after the game stops writing. A mod's hold ends on purpose, so <code>ModHoldEnded</code> asserts each of those subsystems once more on the pass after a hold ends, carrying PadForge's own value: Off for a trigger or a mute light the pad page leaves unset.</p>
 <p>A change to a hold calls <code>NotifyModEffectsChanged</code> for the slot it reaches. It queues one pass on the thread pool, since the caller is the receive thread and must answer the next packet without waiting on a HID write, and it keeps the slot's 30 Hz writer alive for two seconds (<code>ModChangeTimerMs</code>, a <code>HasTimerDemand</code> term), so a mod that changes its effects every frame is written at the pass's own rate. The lighting rows a slot lights take the hold's color through <code>LightPeripheral</code> where no game color is live, and a change requests their refresh through <code>GameLightbarCapture.NotifyChanged</code>. A mod's color also covers Screen Color's per-light spread (#559): the spread's picture rides the claim only while no game, mod, macro or overlay color is showing (<code>baseModeShows</code> in <code>UserEffectsDispatcher</code>).</p>
-<p><code>TryGetInboundTriggerEffects</code> hands <code>AtToImpulseTranslator</code> the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. A macro's block comes after the mod's, the Sony pass's order.</p>
+<p><code>TryGetInboundTriggerEffects</code> hands <code>AtToImpulseTranslator</code> the mod's block for a trigger the game never wrote, so an Xbox controller with Translate Adaptive Trigger Vibrations plays a mod's vibrations on its impulse triggers. The Flydigi Apex lane (<code>UserEffectsDispatcher.Flydigi.cs</code>, #586) reads the same call, so an Apex pad on the slot plays the mod's block as the pad can. A macro's block comes after the mod's, the Sony pass's order.</p>
 <h2 id="the-threshold">The threshold<a class="headerlink" href="#the-threshold" title="Permanent link">&para;</a></h2>
 <p>Step 5 applies the held thresholds right before submit, after button SOCD, on a copy, so the pad page's preview and the impulse translation still read the real pull. Two paths carry it:</p>
 <ul>
@@ -4592,7 +4798,7 @@
 <h2 id="the-server">The server<a class="headerlink" href="#the-server" title="Permanent link">&para;</a></h2>
 <p><code>GameModServer</code> follows <code>DsuMotionServer</code>: a UDP socket bound to 127.0.0.1, <code>SIO_UDP_CONNRESET</code> turned off so a mod that closes its socket cannot end the receive loop, a background receive thread with a 500 ms timeout for the sender watch, and an <code>OffLimitsForTest</code> fence on the default port. Datagrams from any address but loopback are dropped.</p>
 <p>Every packet gets a reply at once, sent before the packet is applied, because the mods that wait for one block on <code>Receive</code> with no timeout. The reply carries DSX's fields and casing: <code>Status</code> ("DSX Received UDP Instructions", DSX's own text), <code>TimeReceived</code>, <code>isControllerConnected</code>, <code>BatteryLevel</code>, and the v3 <code>Devices</code> list. <code>GameModStatusDevices</code> builds that list at most every 250 ms: one entry per controller index, describing the first online Sony pad on that virtual controller, with DSX's <code>DeviceType</code> (0 DualSense, 1 Edge, 2 and 3 DualShock 4 v1 and v2, 4 the wireless adapter) and <code>ConnectionType</code> (0 USB, 1 Bluetooth, 2 the adapter).</p>
-<p>The Dashboard line comes from <code>GameModServer.FormatStatus</code>: why the server is not listening, or the last sender's program and the Dashboard number of the virtual controller its index reaches. An index past every virtual controller with a PlayStation controller, while some have one, gets its own line naming the index (<code>GameMods_SendingPastControllers_Format</code>). A start that found the port bound by another program is tried again every 3 seconds (<code>InputService.PortInUseRetryMs</code>) from the Dashboard tick, while the switch is on and the engine runs, and a language change keeps a failed start's reason on the card.</p>
+<p>The status line on the Game Mods tile and page comes from <code>GameModServer.FormatStatus</code>: why the server is not listening, or the last sender's program and the sidebar number of the virtual controller its index reaches. An index past every virtual controller with a PlayStation controller, while some have one, gets its own line naming the index (<code>GameMods_SendingPastControllers_Format</code>). A start that found the port bound by another program is tried again every 3 seconds (<code>InputService.PortInUseRetryMs</code>) from <code>UpdateGameModLines</code>, while the switch is on and the engine runs, and a language change keeps a failed start's reason on the page.</p>
 <h3 id="port-files">Port files<a class="headerlink" href="#port-files" title="Permanent link">&para;</a></h3>
 <p><code>GameModPortFiles.Write</code> runs on a worker after each successful bind and leaves both files alone while a process named DSX runs that is not the stand-in (<code>RunningProcessList</code>, the app's one process walk):</p>
 <ul>
@@ -4605,7 +4811,7 @@
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
 <p><code>GameModTests</code> replays the packets of the mods DSZ's tests capture, checks every encoding against Nielk1's formulas and the chosen tables, the lights, the holds and their owners, the releases, the controller order, the dispatcher's fill and its order in the pass, the threshold, the server over a real loopback socket, sender identification against the test's own socket, the port-file rule on temporary paths, and the stand-in, which the test extracts and runs. The default port and the real port files are fenced in the test host (<code>GameModPortOffLimits</code>, <code>GameModPortFilesOffLimits</code>).</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

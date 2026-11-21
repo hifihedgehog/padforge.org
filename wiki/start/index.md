@@ -8,23 +8,24 @@ remapped controller, and none of them need prior knowledge.*
 2. **Plug in your device.** PadForge lists it on the Devices page the moment
    Windows sees it. Controllers, keyboards, wheels, Wii Remotes, MIDI gear,
    and phones over the local network all count.
-3. **Assign it to a slot.** A slot is one virtual controller. Pick what
-   the slot should look like to games (Xbox, PlayStation, Nintendo,
-   Extended, Keyboard + Mouse, MIDI, or VR), then select your device on the
-   Devices page and click that slot's pill under **Virtual Controller
-   Assignment**. If the device is a recognized gamepad, the default
-   mapping is already playable.
+3. **Make a virtual controller for it.** A virtual controller is what games
+   see: Xbox, PlayStation, Nintendo, Extended, Keyboard + Mouse, MIDI, or VR.
+   Before any exists, Home asks **What should games see?** and offers Xbox,
+   PlayStation and Keyboard + Mouse, with the other four a link away. One click
+   makes the controller, and the controller PadForge sees drives it. If that
+   device is a recognized gamepad, its buttons, sticks and triggers are mapped
+   1:1 and the controller is already playable.
 
 Two walkthroughs carry you through both ends of that list:
 
 - **[Your First Controller](first-controller.md)** goes from a fresh
   install to a game seeing a virtual pad.
 - **[A Five-Minute Remap](five-minute-remap.md)** changes your first
-  binding and shows the three ways to bind anything.
+  binding and shows the ways to bind anything.
 
 From there, the [Guides](../guides/index.md) take over: each one walks a
 single task from start to finish.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

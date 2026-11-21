@@ -2,7 +2,7 @@
 
 *Any device with a web browser becomes a game controller for your PC.*
 
-Open the URL PadForge shows on the [Dashboard](../features/dashboard.md) from a phone, tablet, or another networked device. The tab shows up on the [Devices](../features/devices.md) page as a real input device, ready to assign to any [slot](../features/controller-slots.md).
+Open the address PadForge shows on its **Web Controller** page from a phone, tablet, or another networked device. The tab shows up on the [Devices](../features/devices.md) page as a real input device, ready to assign to any [slot](../features/controller-slots.md).
 
 Useful for an extra controller, a phone as a second pad, or touchscreen play on a tablet.
 
@@ -13,7 +13,7 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 <source src="/assets/video/padforge-tutorial-web-controller.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-web-controller.vtt" default>
 </video>
-<figcaption>The server turned on, its address opened in a browser on the same PC, PadForge's certificate accepted once, the Xbox 360 layout assigned to a virtual controller and its stick dragged, recorded live in PadForge 5.2.1 in 1 minute 19 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-web-controller-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The server turned on, its address opened in a browser on the same PC, PadForge's certificate accepted once, the Xbox 360 layout assigned to a virtual controller and its stick dragged, recorded live in PadForge 5.2.1 in 1 minute 19 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-web-controller-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
@@ -24,21 +24,25 @@ Useful for an extra controller, a phone as a second pad, or touchscreen play on 
 
 ### 1. Turn on the server
 
-1. On the [Dashboard](../features/dashboard.md), check **Enable Web Controller Server** in the **Web Controller** section.
-2. PadForge shows a URL, for example `https://192.168.1.100:8080`. When the certificate cannot be bound it shows `http://` instead, with a note on the card saying why.
-3. The Dashboard shows the server status and how many browser tabs are connected.
+1. Open **Extras** in the sidebar and click the **Web Controller** tile, in the **More Ways to Play** group.
+2. Turn on **Enable Web Controller Server** at the top of the page, or the switch on the tile.
+3. The **Connect a Phone** card shows a QR code, three steps and the address, for example `https://192.168.1.100:8080`, with **Copy Address** beside it. When the certificate cannot be bound the address starts with `http://` instead, and a line under it says why. While the server does not serve, the address's place says why, such as a port in use.
+4. The **Phones** card beside it names each phone connected now. With none it reads *No phones connected.*
+
+While the server is on, [Home](../features/dashboard.md) shows a Web Controller tile whose **Show QR** button opens this page.
 
 ### 2. Open the URL on your phone
 
-1. On the phone, tablet, or other device, open any web browser.
-2. Go to the URL PadForge shows.
-3. The landing page loads with the layout choices.
+1. On the phone, tablet, or other device, scan the QR code with the camera, or open any web browser and go to the address PadForge shows.
+2. The phone's home page loads with the layout choices.
 
 ### 3. Pick a layout
 
-The landing page has a **Your name** field above the cards. A name typed there stays in that browser. The gamepad layouts, **Browser Gamepad** and your own pads send it, so a streamer with several phones connected can tell them apart on the Devices page. It holds up to 24 characters.
+The home page has a **Your Name** field. A name typed there stays in that browser. The gamepad layouts, **Browser Gamepad** and your own pads send it, so a streamer with several phones connected can tell them apart on the Devices page. It holds up to 24 characters.
 
-PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, **Touchpad**, **Web Menus**, and **Build Your Own**. Each saved custom layout adds its own card.
+Under **Pick a Layout** stand four tiles: **Xbox Series X|S**, **DualSense**, **Switch Pro** and **Touchpad**. **More Layouts** opens the other ten: **Xbox 360**, **Xbox One**, **DualShock 4**, **DualSense Edge**, **Switch 2 Pro**, **Steam Deck**, **Steam Controller**, **Browser Gamepad**, **Web Menus** and **Build Your Own**. Each pad you saved adds its own tile there. That is fourteen built-in layouts in all.
+
+A tap on a tile picks it, and the **Continue** button opens it. Continue names the pick, as in **Continue with DualSense**, and the phone remembers the layout and finish it opened last, so the next visit offers them first with the note *Last used on this phone*.
 
 - The touchscreen gamepad layouts use the same 2D controller art the desktop app shows. Tap a trigger and its fill snaps to full.
 - Layouts with a touchpad add a drag surface on the controller art, with its own click pill beside it.
@@ -48,7 +52,7 @@ PadForge has fourteen built-in cards: ten gamepad layouts, **Browser Gamepad**, 
 ### 4. Assign the controller to a slot
 
 1. The browser controller shows up on the [Devices](../features/devices.md) page named for the layout you picked: **Xbox 360 Web Controller 1**, **DualShock 4 Web Controller 1**, **Web Touchpad 1**, or **Web Menus 1** (each layout numbers its own devices starting at 1).
-2. Click its card, then click the slot's pill under **Virtual Controller Assignment**. Same as any physical controller. A phone that sent a name shows it after a colon, as in **Xbox 360 Web Controller: Sam**.
+2. Assign it to a controller slot on the Devices page, the same as any physical controller. A phone that sent a name shows it after a colon, as in **Xbox 360 Web Controller: Sam**.
 3. Done. Start playing.
 
 With [Remote Link](remote-link.md#4-share-and-assign), the web controller also appears on paired PCs. Assign it to a slot on the PC running the game. [Remote assignment](remote-link.md#assign-devices-from-the-other-pc) lets a streaming PC change those assignments after the gaming PC grants permission. A Web Menus phone is not shared, since its taps fire the menus of the PC it connects to.
@@ -63,7 +67,7 @@ The web controller is built into PadForge. Nothing extra to install. The phone o
 
 | Requirement | Details |
 |-------------|---------|
-| **Port** | TCP 8080 (default), settable on the [Dashboard](../features/dashboard.md) |
+| **Port** | TCP 8080 (default), set as **Web Controller Port** on the Web Controller page, under **More**. 1024 to 65535. |
 | **Firewall** | Every time the server starts, PadForge rewrites its "PadForge Web Controller" inbound rule to allow the port in use. The [plain HTTP address](#plain-http-address) gets a rule of its own, "PadForge Web Controller (HTTP)", which PadForge removes when that address stops or is set to This PC Only. Third-party firewalls may need a manual TCP allow rule for each port. |
 | **Max clients** | 16 browser tabs at once |
 
@@ -98,11 +102,11 @@ The touchscreen gamepad layouts draw the same 2D controller art the desktop app 
 | **Web Menus** | A slot's Touch Grid menus as tiles |
 | **Build Your Own** | Drag widgets onto a blank pad |
 
-Switch layouts at any time by going back to the landing page.
+Switch layouts at any time by going back to the home page.
 
 ### Finishes
 
-Xbox 360, Xbox Series X|S, DualShock 4, and DualSense carry a row of color swatches on their card. The Xbox 360 row has the default and **WLG**. Tap a swatch instead of the card and the layout opens with the art drawn in that finish.
+Xbox 360, Xbox Series X|S, DualShock 4, and DualSense come in several finishes. Pick one of those layouts and a **Finish** row of color dots shows under the tiles. The Xbox 360 row has the default and **WLG**. Tap a dot, then **Continue**, and the layout opens with the art drawn in that finish.
 
 ### Lights, on the page
 
@@ -116,7 +120,7 @@ The layouts whose hardware has lighting draw it on the controller itself, where 
 
 Both follow whatever the slot is doing, so a game that drives the lightbar drives it here too, and the indicator row lights the same symmetric pattern a DualSense shows: one LED in the middle for player one, the outer pair for player two, outward from there.
 
-A web DualShock 4 or DualSense is configurable from the [Lighting](../features/lighting.md) tab exactly like a physical one. Pick a color, a mode, or an animation and the phone shows it. Animated modes run the same engine the hardware pads use rather than a still approximation of it.
+A web DualShock 4 or DualSense is configurable from the controller page's **Lights & Sound** section exactly like a physical one (see [Lighting](../features/lighting.md)). Pick a color, a mode, or an animation and the phone shows it. Animated modes run the same engine the hardware pads use rather than a still approximation of it.
 
 ![The DualSense layout](../images/web-dualsense.png)
 
@@ -138,7 +142,7 @@ The Switch Pro layout carries the Capture button, and the Switch 2 Pro adds the 
 
 A multi-touch surface that maps straight to the DualShock 4 / DualSense touchpad on the assigned PlayStation slot. Use it as a second input device when a phone or tablet is already in another player's hands and the DS4 / DS5 touchpad is the missing piece. No buttons or sticks, touchpad input only.
 
-The same surface also drives every [Touchpad](../features/touchpad.md)-tab feature on the slot it's assigned to:
+The same surface also drives every [touchpad](../features/touchpad.md) feature of the slot it is assigned to:
 
 - **Mouse Output**: relative cursor control. The **Response** row's **Trackpad** mode slows fine positioning and speeds up fast drags, an acceleration curve ported from libinput.
 - **Absolute Pointer**: the Touchpad Pointer sources warp the cursor to where your finger sits on the pad.
@@ -153,9 +157,13 @@ Each slot the phone is assigned to carries its own toggles and tuning.
 
 ## Build your own layout
 
-The **Build Your Own** card opens a builder that starts from a blank pad. Tap **Edit** to bring up the toolbar, add widgets (buttons, sticks, trigger sliders, a D-pad, a touch area), drag them where your thumbs actually sit, name the pad, and save. A pad holds up to 64 widgets.
+**Build Your Own** opens a builder that starts from a blank pad. Tap **Edit** in the lower left corner to bring up the tools, a panel its grip moves, which fades while you drag a control. **+ Add widget** adds buttons, sticks, trigger sliders, a D-pad or a touch area, and a new one lands in the free place nearest the middle. Drag each where your thumbs sit, resize it, name the pad, and **Save**. **Grid** snaps to a square grid, **Remove** takes out the selected widget, and **Delete pad** deletes the pad. A pad holds up to 64 widgets.
 
-Saved pads live in PadForge's own settings file beside the executable, machine-wide rather than inside a profile, and each one gets its own card on the landing page next to the stock layouts. A saved pad shows up on the [Devices](../features/devices.md) page under its own name, and its shape follows its widgets: a pad built from two buttons and a stick offers exactly that in the mapping picker.
+A control keeps its shape on any screen. Its size is measured against the screen's shorter side, so a stick and a D-pad stay square and a button stays a circle or a pill. Controls that sit together move as a group: a group on the left keeps its distance from the left edge, one on the right from the right edge, one at the middle stays there, and every group keeps its distance from the bottom. Where groups would meet or leave the screen, the whole pad is drawn smaller.
+
+A pad can be played held sideways or upright. It keeps one arrangement for each way of holding the screen. The first edit made on a screen held the other way gives the pad its own arrangement for it, and **Auto-fit**, shown while the pad has both, gives that arrangement up and fits the other one again. A pad saved before PadForge 6.0.0 has no screen shape stored, and the page works one out from its round controls.
+
+Saved pads live in PadForge's own settings file beside the executable, machine-wide rather than inside a profile, and each one gets its own tile under **More Layouts** on the home page. A saved pad shows up on the [Devices](../features/devices.md) page under its own name, and its shape follows its widgets: a pad built from two buttons and a stick offers exactly that in the mapping picker.
 
 ![The custom controller builder](../images/web-custom.png)
 
@@ -163,7 +171,7 @@ Saved pads live in PadForge's own settings file beside the executable, machine-w
 
 ## Browser Gamepad: a controller paired to the phone
 
-Pick **Browser Gamepad** on the layouts page and the phone's browser reads a controller that is paired to the phone, or built into the handheld the page is open on, and forwards it to PadForge as its own device, named **Browser Gamepad 1**, then 2 for a second pad. Nothing is installed on the phone and nothing is paired to the PC.
+Pick **Browser Gamepad** on the home page and the phone's browser reads a controller that is paired to the phone, or built into the handheld the page is open on, and forwards it to PadForge as its own device, named **Browser Gamepad 1**, then 2 for a second pad. Nothing is installed on the phone and nothing is paired to the PC.
 
 Press a button on the controller first. Browsers hide a connected controller from every page until you press something on it, so the page shows a prompt until then. After that press the pad appears with its name, its layout, and its button and axis counts, and PadForge sees it on the Devices page. Assign it to a slot like any other controller.
 
@@ -186,13 +194,13 @@ Where the browser allows a page to go fullscreen, which Android Chrome does, eac
 
 ## Web Menus
 
-Pick **Web Menus** on the landing page and the phone shows a slot's [Touch Grid menus](menus.md) as pages of tiles. Tap a tile and its cell fires on the PC: the key, controller button, or macro the cell carries, and every mapping row, macro trigger, or shift layer that reads the cell. A phone propped beside the keyboard becomes a panel of your own commands for the game on the screen.
+Pick **Web Menus** on the home page and the phone shows a slot's [Touch Grid menus](menus.md) as pages of tiles. Tap a tile and its cell fires on the PC: the key, controller button, or macro the cell carries, and every mapping row, macro trigger, or shift layer that reads the cell. A phone propped beside the keyboard becomes a panel of your own commands for the game on the screen.
 
 ### Set it up
 
 1. Open **Web Menus** on the phone. It shows up on the [Devices](../features/devices.md) page as **Web Menus 1**.
 2. Assign it to the slot whose menus you want, the same way as any controller. Until then the page says **Not on a slot**. The phone has no buttons or sticks of its own, so assigning it beside the slot's controller adds nothing but its tiles.
-3. On that slot's **Menus** tab, turn on **Show on Web Controller** for each Touch Grid menu the phone should show. The checkbox appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says **No menus to show**.
+3. In that controller's **Macros & Menus** section, select each Touch Grid menu the phone should show and turn on **Show on Web Controller**, under the menu's **More** fold. The checkbox appears on Touch Grid menus, and on a Radial Ring menu only while it is still on from the menu's time as a Touch Grid, so it can be turned off. Until one is on, the page says **No menus to show**.
 
 Each marked menu is one page, and a tab strip across the top switches between them. A phone assigned to several slots shows the pages of every slot, and each tab then names its slot.
 
@@ -229,28 +237,28 @@ The top of the page names the PC's active profile. Tap it for the profile list, 
 
 The page can read the phone's own gyroscope and accelerometer and stream them to the slot as motion, so tilting the handset aims.
 
-Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors and Browser Gamepad's keep-the-screen-on request still works. The Dashboard card then says why under the status line. When another program's certificate holds the port, choosing another port brings HTTPS back.
+Browsers only hand out sensor readings over a secure connection. PadForge binds a self-signed certificate and serves the controller over **HTTPS** whenever that binding succeeds, which needs PadForge running elevated. If the binding fails it falls back to plain HTTP, and everything except the phone sensors and Browser Gamepad's keep-the-screen-on request still works. The **Connect a Phone** card then says why under the address. When another program's certificate holds the port, choosing another port brings HTTPS back.
 
 Because the certificate is self-signed, the phone shows a one-time warning the first time it connects. Accept it and the connection is remembered.
 
-Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. Tap it to start streaming and tap it again to stop. Browsers that ask permission for the sensors, Safari on iOS among them, ask on that tap, so there the button is required, not optional. The Touchpad page has no motion button.
+Motion is off until you ask for it. When the page is served over HTTPS and the browser exposes the sensors, a **Motion** button appears in the bottom right corner of any gamepad layout. It turns ember while motion is sent. Tap it to start streaming and tap it again to stop. Browsers that ask permission for the sensors, Safari on iOS among them, ask on that tap, so there the button is required, not optional. The Touchpad page has no motion button.
 
 Opened over plain HTTP on a touch device, a gamepad layout shows **Motion needs HTTPS** in that corner instead. When PadForge also serves HTTPS, the note reads **Motion: open over HTTPS**, and tapping it opens the same layout on the secure address.
 
-A **QR code** on the Dashboard's Web Controller card gets the phone to the right address without anyone typing it.
+The **QR code** on the Connect a Phone card gets the phone to the right address without anyone typing it.
 
 ## Plain HTTP address
 
-Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller card can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.
+Some browsers refuse PadForge's self-signed certificate outright, and a tunnel or reverse proxy that reaches the PC from outside brings a certificate of its own. For both, the Web Controller page can serve a second address over plain HTTP, on its own port, beside the main one. The main address does not change.
 
-Check **Also Serve Plain HTTP** on the [Dashboard](../features/dashboard.md). The plain address uses port `8081` unless you pick another, and it cannot share the main address's port.
+Turn on **Also Serve Plain HTTP** on the Web Controller page, under **More**. The plain address uses port `8081` unless you set another as **Plain HTTP Port**, and it cannot share the main address's port. While the server runs, the **Plain HTTP Address** row under it shows the address with **Copy Address** and its own QR code, or why the address is not served.
 
 <!-- SCREENSHOT: dashboard-web-plain -->
-![The Plain HTTP Address section of the Web Controller card](../images/dashboard-web-plain.png)
+![The More fold of the Web Controller page with Also Serve Plain HTTP on, the Plain HTTP Port, This PC Only, the Access Code with New Code, and the Plain HTTP Address with its QR code](../images/dashboard-web-plain.png)
 
 ### The access code
 
-Every request to the plain address needs the card's **Access Code**, ten letters and digits. The address the card shows carries it, as in `http://192.168.1.100:8081/?code=7KQ2M9XH4P`, and so does the QR code beside it. The first page trades the code for a browser-session cookie, so the pages and the connection after it need nothing more. A browser that restores its last session can keep that cookie after it is closed and opened again, and **New Code** is what shuts it out. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.
+Every request to the plain address needs the page's **Access Code**, ten letters and digits. The address the page shows carries it, as in `http://192.168.1.100:8081/?code=7KQ2M9XH4P`, and so does the QR code beside it. The first page trades the code for a browser-session cookie, so the pages and the connection after it need nothing more. A browser that restores its last session can keep that cookie after it is closed and opened again, and **New Code** is what shuts it out. Opening the plain address without the code, or with a replaced one, gets a page saying the controller opens only with its access code.
 
 **New Code** replaces the code and disconnects everyone on the plain address. Their pages stop working until they open the address with the new code. The main address and its clients are not affected, and the main address asks for no code.
 
@@ -258,11 +266,11 @@ The code is stored in `PadForge.xml` encrypted for this PC, so a copy of the fil
 
 ### This PC Only
 
-**This PC Only** admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at `http://localhost:8081`. Share the tunnel's public address with `/?code=` and the access code on the end. The card shows the local address with the code, and no QR code, since a phone cannot open `localhost`.
+**This PC Only** admits only this PC on the plain address and removes the plain port's firewall rule. It is for a tunnel or reverse proxy running on this PC, cloudflared, ngrok or Caddy for example, pointed at `http://localhost:8081`. Share the tunnel's public address with `/?code=` and the access code on the end. The page shows the local address with the code, and no QR code, since a phone cannot open `localhost`.
 
 ### The controller picture for OBS
 
-The plain address also serves a read-only page that draws a slot's controller, lit from its live output, on a transparent background. It is meant for an OBS browser source, so viewers of a stream can watch the controller that [Twitch Chat](../features/twitch-chat.md) is pressing. The [Twitch Chat](../features/dashboard.md#twitch-chat) card on the Dashboard shows its address once the plain address runs, as `/display.html?code=` and the access code. Use that address, not the main one. OBS's browser source refuses the main address because its certificate is self-signed. **This PC Only** is enough when OBS runs on this PC.
+The plain address also serves a read-only page that draws a slot's controller, lit from its live output, on a transparent background. It is meant for an OBS browser source, so viewers of a stream can watch the controller that [Twitch Chat](../features/twitch-chat.md) is pressing. The [Twitch Chat](../features/twitch-chat.md) page's **Picture for Your Broadcast** card shows its address once the plain address runs, as `/display.html?code=` and the access code. Use that address, not the main one. OBS's browser source refuses the main address because its certificate is self-signed. **This PC Only** is enough when OBS runs on this PC.
 
 The page sends nothing and takes no client slot. Up to four open at once. See [The controller picture for OBS](../features/twitch-chat.md#the-controller-picture-for-obs).
 
@@ -291,8 +299,8 @@ The web controller stays connected for instant input. Updates send the moment yo
 
 | Status | Meaning |
 |--------|---------|
-| **Connected** | Active connection. Input reaches PadForge. |
-| **Disconnected** | Connection lost. Tap to reconnect. |
+| **Connected** | Active connection. Input reaches PadForge. A controller page shows it in a pill at the top's middle. |
+| **Disconnected. Tap to reconnect.** | Connection lost. The message covers the page, and a tap reconnects. |
 
 **Latency:** a Wi-Fi hop costs more than a wired controller does. Fine for casual, puzzle, and platform games. Fast competitive play may feel a touch less responsive.
 
@@ -320,7 +328,7 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 |-------------|---------|
 | **Network** | PC and device on the same local network (Wi-Fi), or a tunnel or reverse proxy to the plain HTTP address |
 | **Port** | TCP 8080 (default), not blocked by the firewall. The optional plain HTTP address adds TCP 8081 (default). |
-| **Orientation** | Every gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout works in portrait or landscape. |
+| **Orientation** | Every built-in gamepad layout needs landscape and shows a "Rotate to landscape mode" warning in portrait. The Touchpad layout and a pad you build work in portrait or landscape. |
 | **Browser** | Any current browser (Chrome, Safari, Firefox, Edge) |
 | **Touch** | Touchscreen recommended for analog stick and multi-touch input |
 | **Max clients** | 16 browser tabs at once |
@@ -329,8 +337,8 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ## Related pages
 
-- [Dashboard](../features/dashboard.md): turn on and configure the web controller server.
-- [Devices](../features/devices.md): see the web controller card and assign it to a slot.
+- [Home](../features/dashboard.md): the Web Controller tile while the server is on.
+- [Devices](../features/devices.md): see the web controller's row and assign it to a slot.
 - [Twitch Chat](../features/twitch-chat.md): the controller picture for an OBS browser source.
 - [Controller Slots](../features/controller-slots.md): create a virtual controller for the web controller to feed.
 - [Troubleshooting](../troubleshooting.md): help with connection issues.
@@ -338,4 +346,4 @@ The refresh works around an iOS Safari bug. On iOS, the connection fails on the 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

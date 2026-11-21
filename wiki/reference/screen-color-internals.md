@@ -13,7 +13,7 @@ For the user-facing side see [Screen Color](../features/screen-color.md).
 | `ScreenColorMath.cs` | `ScreenFrame`, `ScreenRect` and `ScreenColorMath`: areas, Average, Most Common, saturation, brightness, smoothing, rotation and the scRGB conversion. Stateless. |
 | `PadForge.App/Common/Input/Peripherals/ScreenPicture.cs` | `ScreenPicture`, the spread picture a key frame carries, and `LightPlacement`, where each light of a device sits. |
 
-The settings live on `DeviceSlotConfig` (the `ScreenColor*` properties) and `DeviceSlotConfigData`, and the Lighting tab's panel is in `PadPage.xaml` and `PadPage.xaml.cs`.
+The settings live on `DeviceSlotConfig` (the `ScreenColor*` properties) and `DeviceSlotConfigData`, and the panel on the **Lighting** card of a controller's **Lights & Sound** section is in `PadPage.xaml` and `PadPage.xaml.cs`.
 
 ---
 
@@ -26,7 +26,7 @@ The settings live on `DeviceSlotConfig` (the `ScreenColor*` properties) and `Dev
 
 Results are keyed by `ResultKey(Display, Area, Method, Saturation, Brightness, Smoothing)`. Devices with the same settings share one result, so a slot's devices cost one calculation between them. A result no device has asked for in `ForgetMs` (10,000 ms) is dropped the next time a new key is added. The source holds one lock, `s_gate`, only for arithmetic on a picture of a few thousand cells at the most.
 
-`StateOf(display)` reports a worker's state for the Lighting tab without starting or touching one.
+`StateOf(display)` reports a worker's state for the Lighting card without starting or touching one.
 
 ---
 
@@ -54,7 +54,7 @@ Retirement is two-sided. `Step` sees `IsIdle` and calls the source's `Retire`, w
 
 `ScreenCaptureState` has five values:
 
-| State | Set when | Lighting tab |
+| State | Set when | Lighting card |
 | --- | --- | --- |
 | `Stopped` | No worker for the display, or it retired | Nothing |
 | `Capturing` | A grabber was built, or a frame arrived | Nothing |
@@ -208,7 +208,7 @@ A light with no place has NaN coordinates and takes the device's one color.
 
 ## Where the colors go
 
-The one color comes from `Ds5EffectSynthesizer.ComputeLightbarColor`, whose `LightbarMode.ScreenColor` case calls `ScreenColorSource.ColorFor`. Every lit device shares that core through `Ds4EffectSynthesizer.ResolveLightbarRgb`: the DualSense and DualSense Edge, the DualShock 4, the PS Move sphere, the Web Controller's drawn lightbar, and mice, keyboards and lighting rows through `PeripheralLightingColor.Resolve`.
+The one color comes from `Ds5EffectSynthesizer.ComputeLightbarColor`, whose `LightbarMode.ScreenColor` case calls `ScreenColorSource.ColorFor`. Every lit device shares that core. The DualSense and DualSense Edge call it from `Ds5EffectSynthesizer`'s own lightbar pass. The DualShock 4, the PS Move sphere, the Web Controller's drawn lightbar, and mice, keyboards and lighting rows (through `PeripheralLightingColor.Resolve`) reach it through `Ds4EffectSynthesizer.ResolveLightbarRgb`.
 
 The picture goes to peripherals only. In `UserEffectsDispatcher`, when a device's mode is Screen Color, `ScreenColorSpread` is on and the base mode shows (no fresh game color, no macro override, no Input Reactive pulse), `PictureFor` is attached to the device's key frame with `KeyFrame.WithPicture`. `LightRenderer.Render` then gives each light its own color first, then its key's or group's, then the picture's cell at its place, then the fill. A background a frame sets covers the picture. A game's lightbar, a game mod's color, a macro color and the Input Reactive pulse cover the spread because it is the base mode's color light by light.
 
@@ -218,11 +218,11 @@ The picture goes to peripherals only. In `UserEffectsDispatcher`, when a device'
 
 ---
 
-## The Lighting tab
+## The Lighting card
 
-The panel shows under the **Mode** box when it is set to Screen Color. Its rows bind to `DeviceSlotConfig`. The Display box has no binding: `PadPage.ShowScreenDisplays` fills it from `ScreenDisplayChoice.ListFor(saved)`, the primary first, then each `System.Windows.Forms.Screen` by its number, then the saved display when it is not connected. A list swapped under a two-way binding clears the selection and writes that back into the setting, so the box follows the MIDI port box's pattern instead. `ScreenDisplayChoice.ToString` returns the line's words, so a screen reader reads them.
+The panel shows under the **Mode** box of the **Lighting** card when it is set to Screen Color, led by the mode's line (`Pad_Lighting_ScreenHint`) and the status line (`ScreenColorStatus`). Its rows bind to `DeviceSlotConfig`. The Display box has no binding: `PadPage.ShowScreenDisplays` fills it from `ScreenDisplayChoice.ListFor(saved)`, the primary first, then each `System.Windows.Forms.Screen` by its number, then the saved display when it is not connected. A list swapped under a two-way binding clears the selection and writes that back into the setting, so the box follows the MIDI port box's pattern instead. `ScreenDisplayChoice.ToString` returns the line's words, so a screen reader reads them.
 
-`SyncScreenColorStatus` runs on a one-second `DispatcherTimer` while the tab shows the mode. It refreshes the Display box and shows the Waiting or Unavailable line from `ScreenColorSource.StateOf`. The spread checkbox shows only while the Key Colors card does (`KeyColors.IsVisible`), on a device with more than one light. The tab's preview draws a gradient from `#58B6E4` to `#E48A58` and reads nothing, so it never keeps a capture running.
+`SyncScreenColorStatus` runs on a one-second `DispatcherTimer` only while `ScreenColorStatusRuns(IsVisible, SelectedSection, LightbarMode)` holds: the page shows, the selected section is `PadViewModel.LightsSection`, and the mode is Screen Color. A hidden page, another section or another mode stops the timer and collapses the status line. The page's visibility change, a section change, a device change and a mode or display change each call it again, so the timer starts when the section comes back. It refreshes the Display box and shows the Waiting or Unavailable line from `ScreenColorSource.StateOf`. The spread checkbox shows only while the Key Colors card does (`KeyColors.IsVisible`, `LightMap.PerLight`), on a device with more than one light. The card's preview draws a gradient from `#58B6E4` to `#E48A58` and reads nothing, so it never keeps a capture running.
 
 ---
 
@@ -262,6 +262,8 @@ The setters clamp to the ranges, and each has a reset command. `DeviceSlotConfig
 | `ScreenColorMacroTests` | The mode in a macro cycle |
 | `ScreenDisplayListTests` | The Display box's list, a gone display, the words a screen reader hears, a language change, selection |
 
+`PadForge.Tests/PadViewsAuditFixTests.cs` holds the status timer's gate: `TheScreenColorTimer_RunsOnlyWhileTheLightsSectionShowsThatMode` and `TheScreenColorTimer_ReadsAgainWhenTheSectionOrThePageShowsOrHides`.
+
 The tests drive the worker through `ScriptedGrabber` and the source's seams (`GrabberSeam`, `ListedSeam`, `ResolvesSeam`, `ClockSeam`, `StartSeam`). `TestHostFences` sets `ScreenColorSource.OffLimitsForTest` for the whole test process, so a test without a seam starts no capture of the real screen.
 
 ---
@@ -274,4 +276,4 @@ The tests drive the worker through `ScriptedGrabber` and the source's seams (`Gr
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

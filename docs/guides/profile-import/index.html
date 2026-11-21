@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1323,6 +1319,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1391,7 +1395,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1888,6 +1892,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -2084,6 +2116,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -2120,6 +2180,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2879,6 +2995,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3472,6 +3594,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3752,6 +3902,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3844,6 +4022,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4258,10 +4464,12 @@
 <p>PadForge reads both tools' files directly. You pick or drop the file, a preview lists every binding with its status, and <strong>Import</strong> adds the result to your profile list as a new profile. Nothing runs and nothing changes until you click <strong>Import</strong>, and the profile you have loaded stays loaded.</p>
 <hr />
 <h2 id="open-a-file">Open a file<a class="headerlink" href="#open-a-file" title="Permanent link">&para;</a></h2>
-<p>Two ways in, both on the <strong>Profiles</strong> page:</p>
+<p><img alt="Get Profiles on its Import a File tab" src="../../images/profiles-get-file.png" /></p>
+<p>Three ways in, all from the <strong>Profiles</strong> page:</p>
 <ul>
-<li><strong>Import…</strong> opens a file dialog. Its first filter, <strong>Profiles</strong>, shows <code>.pfprofile</code>, <code>.rewasd</code> and <code>.xml</code> files together. The other filters narrow it to PadForge profiles, reWASD, DS4Windows, or all files.</li>
-<li>Drag the file from Explorer onto the profile list. The dashed <strong>Drop to Import Profile</strong> overlay appears while a <code>.pfprofile</code>, <code>.rewasd</code> or <code>.xml</code> file is over it. Dropping several files imports each one in turn.</li>
+<li>Click <strong>Get Profiles</strong> and open <strong>Import a File</strong>. <strong>Import…</strong> in its foot, or a click on its drop zone, opens a file dialog. The dialog's first filter, <strong>Profiles</strong>, shows <code>.pfprofile</code>, <code>.rewasd</code> and <code>.xml</code> files together. The other filters narrow it to PadForge profiles, reWASD, DS4Windows, or all files. A file dropped on that zone imports too.</li>
+<li>Click the dashed drop tile after the last profile card (<strong>Drop a profile file here</strong>). It opens <strong>Get Profiles</strong> on <strong>Import a File</strong>.</li>
+<li>Drag the file from Explorer onto the profile cards. The dashed <strong>Drop to Import Profile</strong> overlay appears while a <code>.pfprofile</code>, <code>.rewasd</code> or <code>.xml</code> file is over them. Dropping several files imports each one in turn.</li>
 </ul>
 <p>The dialog adds the two tools' profile folders to its places pane when they exist on this PC:</p>
 <table>
@@ -4283,11 +4491,11 @@
 </tbody>
 </table>
 <p>A DS4Windows build that keeps its profiles beside its own executable is not added. Browse to its <code>Profiles</code> folder yourself.</p>
-<p>PadForge decides what a file is from its contents, never from the extension. A file that opens with <code>{</code> is read as reWASD JSON. An XML file has to have a <code>DS4Windows</code> root element. Anything else is refused, and the status bar says why:</p>
+<p>PadForge decides what a file is from its contents, never from the extension. A file that opens with <code>{</code> is read as reWASD JSON. An XML file has to have a <code>DS4Windows</code> root element. Anything else is refused. On the <strong>Import a File</strong> tab the reason shows under the drop zone and the window stays open. A file dropped on the profile cards gives the reason on the message line at the foot of the window:</p>
 <table>
 <thead>
 <tr>
-<th>Status bar</th>
+<th>Message</th>
 <th>When</th>
 </tr>
 </thead>
@@ -4317,14 +4525,14 @@
 <hr />
 <h2 id="the-preview">The preview<a class="headerlink" href="#the-preview" title="Permanent link">&para;</a></h2>
 <!-- SCREENSHOT: import-preview -->
-<p><img alt="The Import Profile preview over the Profiles page, for a reWASD config named Star Courier: ten Clean rows and one Skipped gyro tilt zone" src="../../images/import-preview.png" /></p>
+<p><img alt="The Import Profile preview over the Profiles page, for a reWASD config named Star Courier: ten bindings under Imported Cleanly and one Skipped gyro tilt zone under Needs a Look" src="../../images/import-preview.png" /></p>
 <p>The <strong>Import Profile</strong> window opens over the Profiles page. From the top:</p>
 <ul>
-<li>The file and its tool: "Star Courier.rewasd, a reWASD file".</li>
-<li>The name it lands under: 'Becomes the profile "Star Courier".' A name that is taken gets a number, and the preview shows the numbered name.</li>
-<li>Three counts, <strong>Clean</strong>, <strong>Partial</strong> and <strong>Skipped</strong>.</li>
+<li>Under the title, the file, its tool, and the name it lands under: "Star Courier.rewasd, a reWASD file. It becomes the profile Star Courier." A name that is taken gets a number, and the preview shows the numbered name.</li>
+<li>Three counts, each in a tile: <strong>Clean</strong>, <strong>Partial</strong> and <strong>Skipped</strong>. A <strong>Partial</strong> or <strong>Skipped</strong> count above zero is drawn in gold.</li>
+<li><strong>Needs a Look</strong>: each binding that came across with a difference, or did not come across, in a box of its own. The box names the source and, after an arrow, what it became, then <strong>Skipped</strong> or <strong>Partial</strong> and the reason in full. <strong>Skipped</strong> bindings come first, then <strong>Partial</strong>, each group in the file's own order.</li>
+<li><strong>Imported Cleanly</strong>: the bindings that came across as they were, two to a line, the file's name for each and what it became.</li>
 <li>A note on what the profile does when it loads and what you still have to do. It names every program the profile's buttons run and every program it starts on load, before you accept anything.</li>
-<li>One row per binding: a status dot, the source, an arrow, and what it became. <strong>Skipped</strong> rows come first, then <strong>Partial</strong>, then <strong>Clean</strong>, each group in the file's own order. A <strong>Skipped</strong> or <strong>Partial</strong> row carries its reason in full under it.</li>
 </ul>
 <table>
 <thead>
@@ -4382,8 +4590,8 @@
 </table>
 <hr />
 <h2 id="import">Import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h2>
-<p>Click <strong>Import</strong> to add the profile, or <strong>Cancel</strong> to close the preview without adding anything. The status bar confirms the result: "Imported 'Star Courier': 10 clean, 0 partial, 1 skipped".</p>
-<p>Import adds a new profile and does not load it. Your active profile stays as it was. Select the new one and click <strong>Load</strong>, or let auto-switch pick it up. From then on it is an ordinary profile: edit it, export it, or delete it like any other.</p>
+<p>Click <strong>Import</strong> to add the profile, or <strong>Cancel</strong> to close the preview without adding anything. The message line confirms the result: "Imported “Star Courier”: 10 clean, 0 partial, 1 skipped".</p>
+<p>Import adds a new profile and does not load it. Your active profile stays as it was. Click <strong>Load</strong> on the new profile's card, or let auto-switch pick it up. From then on it is an ordinary profile: edit it, export it, or delete it like any other.</p>
 <h3 id="what-the-profile-holds">What the profile holds<a class="headerlink" href="#what-the-profile-holds" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Slots.</strong> One controller slot per virtual controller the file uses, then one <strong>Keyboard + Mouse</strong> slot when anything sends keys or mouse. A reWASD Xbox 360 pad becomes an Xbox 360 slot, Xbox One over Bluetooth an Xbox One S slot, DualShock 4 and DualShock 3 the PlayStation presets of the same name, and Switch Pro a Nintendo slot. A DS4Windows profile whose output is DS4 gets a DualShock 4 slot, any other an Xbox 360 slot, and a <code>DinputOnly</code> profile gets no controller slot.</li>
@@ -4444,7 +4652,7 @@
 </tr>
 <tr>
 <td>Other commands</td>
-<td>Toggle virtual controllers, toggle the window, disconnect, gyro on, off and toggle, gyro recenter, Win + Print Screen, Alt + F4. Crosshair commands 1 to 8 become <strong>Toggle Screen Overlay</strong> on overlays 1 to 8, and the crosshair command for every crosshair (type 120) becomes <strong>Toggle Screen Overlay</strong> on <strong>Every Overlay</strong> (<a href="../../features/screen-overlay/">Screen Overlay</a>).</td>
+<td>Toggle virtual controllers, toggle the window, disconnect, gyro on, off and toggle, gyro recenter, Win + Print Screen, Alt + F4. Crosshair commands 1 to 10 (types 101 to 110) become <strong>Toggle Crosshair</strong> on crosshairs 1 to 10, and the command for every crosshair (type 120) becomes <strong>Toggle Crosshair</strong> on <strong>Every Crosshair</strong> (<a href="../../features/crosshair/">Crosshair</a>).</td>
 </tr>
 <tr>
 <td>Lightbar</td>
@@ -4541,7 +4749,7 @@
 <tbody>
 <tr>
 <td>Partial</td>
-<td>reWASD stopped these inputs reaching Windows. Turn on Consume Mapped Inputs for the device on the Devices page.</td>
+<td>reWASD stopped these inputs reaching Windows. Turn on Consume Mapped Inputs for the device on the Devices page, which stops the ones this profile maps.</td>
 <td>Turn on <strong>Consume Mapped Inputs (Hooks)</strong> for the keyboard or mouse.</td>
 </tr>
 <tr>
@@ -4551,7 +4759,7 @@
 </tr>
 <tr>
 <td>Partial</td>
-<td>reWASD hid this controller from games.</td>
+<td>reWASD hid this controller from games. Turn on Hide from Games for it on the Devices page.</td>
 <td>Turn on <strong>Hide from Games (HidHide)</strong> for it on the Devices page.</td>
 </tr>
 <tr>
@@ -4571,8 +4779,8 @@
 </tr>
 <tr>
 <td>Partial</td>
-<td>Nothing in this file opens this layer.</td>
-<td>Give the layer a button on the Mappings tab.</td>
+<td>Nothing in this file opens this layer. Under Mappings, right-click the layer and pick Configure Activator.</td>
+<td>Give the layer a button with <strong>Configure Activator…</strong> in the layer's right-click menu, in the controller page's <strong>Mappings</strong> section.</td>
 </tr>
 <tr>
 <td>Partial</td>
@@ -4586,8 +4794,8 @@
 </tr>
 <tr>
 <td>Partial</td>
-<td>A crosshair lives inside reWASD.</td>
-<td>The button toggles a Screen Overlay. Give that overlay your own picture.</td>
+<td>reWASD keeps its crosshairs in its own settings, not in the config. Set yours up on the Crosshair page.</td>
+<td>The button toggles a PadForge crosshair. Set its look on the <strong>Crosshair</strong> page under Extras.</td>
 </tr>
 <tr>
 <td>Partial</td>
@@ -4601,8 +4809,8 @@
 </tr>
 <tr>
 <td>Partial</td>
-<td>A touchpad diagonal is two directions at once, which the touchpad reports only with D-Pad Mode on 8-Way.</td>
-<td>Set D-Pad Mode to 8-Way on the Touchpad tab.</td>
+<td>A touchpad diagonal is two directions at once, which the touchpad reports only when its D-Pad Mode under Motion &amp; Touch is 8-Way.</td>
+<td>Set <strong>D-Pad Mode</strong> to <strong>8-Way</strong> in the controller page's <strong>Motion &amp; Touch</strong> section.</td>
 </tr>
 <tr>
 <td>Partial</td>
@@ -4631,8 +4839,8 @@
 </tr>
 <tr>
 <td>Partial</td>
-<td>Scroll, tap or an absolute region on the touchpad did not come across.</td>
-<td>Set them on the Touchpad tab.</td>
+<td>Scroll, tap or an absolute region on the touchpad did not come across. Set them under Motion &amp; Touch.</td>
+<td>Set them in the controller page's <strong>Motion &amp; Touch</strong> section.</td>
 </tr>
 <tr>
 <td>Partial or Skipped</td>
@@ -4641,12 +4849,12 @@
 </tr>
 <tr>
 <td>Skipped</td>
-<td>PadForge reads the gyro's direction past one threshold, and reWASD gives no unit for a gyro zone's edge.</td>
-<td>Map the gyro on the Mappings tab.</td>
+<td>PadForge reads the gyro’s direction past one threshold, and reWASD gives no unit for a gyro zone’s edge.</td>
+<td>Map the gyro in the controller page's <strong>Mappings</strong> section.</td>
 </tr>
 <tr>
 <td>Skipped</td>
-<td>In Tilt mode, reWASD's Lean is a turn around the vertical axis, and a motion sensor gives no angle for that turn.</td>
+<td>In Tilt mode, reWASD’s Lean is a turn around the vertical axis, and a motion sensor gives no angle for that turn.</td>
 <td>None.</td>
 </tr>
 <tr>
@@ -4661,23 +4869,23 @@
 </tr>
 <tr>
 <td>Skipped</td>
-<td>PadForge runs eight Screen Overlays, and this is reWASD's ninth or tenth crosshair.</td>
+<td>reWASD keeps its crosshairs in its own settings, not in the config.</td>
+<td>A crosshair's picture and look. Set them on the <strong>Crosshair</strong> page under Extras.</td>
+</tr>
+<tr>
+<td>Skipped</td>
+<td>Stick jitter and shaking, or analog key actuation points, did not come across.</td>
 <td>None.</td>
 </tr>
 <tr>
 <td>Skipped</td>
-<td>Crosshair pictures, stick jitter and shaking, analog key actuation points.</td>
-<td>None.</td>
-</tr>
-<tr>
-<td>Skipped</td>
-<td>A macro cannot press the touchpad click. A mapping on the Mappings tab can.</td>
+<td>A macro cannot press this input, followed by its name. A row under Mappings can.</td>
 <td>Map it as a row.</td>
 </tr>
 <tr>
 <td>Skipped</td>
-<td>Steering wheel emulation on an axis PadForge does not know.</td>
-<td>Map the wheel on the Mappings tab.</td>
+<td>Steering wheel emulation did not come across. Map the wheel under Mappings.</td>
+<td>DS4Windows named an axis PadForge does not know. Map the wheel in the controller page's <strong>Mappings</strong> section.</td>
 </tr>
 <tr>
 <td>Skipped</td>
@@ -4686,7 +4894,7 @@
 </tr>
 <tr>
 <td>Skipped</td>
-<td>A special action is missing from <code>Actions.xml</code> beside the Profiles folder.</td>
+<td>This profile names a special action missing from <code>Actions.xml</code> beside its Profiles folder, followed by its name.</td>
 <td>Copy <code>Actions.xml</code> along with the profile and import again.</td>
 </tr>
 <tr>
@@ -4699,14 +4907,14 @@
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../profiles/">Profiles</a>: the Import button, the drop zone and the profile list.</li>
+<li><a href="../profiles/">Profiles</a>: Get Profiles, the drop tile and the profile cards.</li>
 <li><a href="../switching/">Switching from Another Tool</a>: moving one game at a time, with a way back.</li>
 <li><a href="../shift-layers/">Shift Layers</a>, <a href="../macros/">Macros</a> and <a href="../menus/">Menus</a>: where the layers, press types and radial menus land.</li>
 <li><a href="../../features/devices/">Devices</a>: assign your controller, and the <strong>Consume Mapped Inputs (Hooks)</strong> and <strong>Hide from Games (HidHide)</strong> switches.</li>
 <li><a href="../../reference/profile-import-internals/">Profile Import Internals</a>: how the importers work.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

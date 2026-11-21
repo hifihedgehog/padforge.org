@@ -7,7 +7,7 @@
 ```mermaid
 graph TB
     subgraph "Presentation Layer. PadForge.App"
-        UI[WPF Views<br/>Dashboard . Pad . Devices . Settings . Profiles . About]
+        UI[WPF Views<br/>Home . Devices . Profiles . Extras . Controller page . Settings . About]
         VM[ViewModels<br/>PadViewModel . DashboardViewModel . DevicesViewModel . SettingsViewModel]
     end
 
@@ -49,7 +49,7 @@ graph TB
     subgraph "External Systems"
         SDL3[SDL3.dll<br/>Custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button]
         OXI[OpenXInput<br/>xinput1_4 shim]
-        HM[HIDMaestro<br/>UMDF2 user-mode driver<br/>ships 344 profiles, PadForge offers 246 it can deploy<br/>+ native OpenVR driver for the VR slot]
+        HM[HIDMaestro<br/>UMDF2 user-mode driver, or USB devices on usbip-win2<br/>ships 344 profiles, PadForge offers 246 it can deploy<br/>+ native OpenVR driver for the VR slot]
         HH[HidHide Driver]
         WMS[Windows MIDI Services<br/>or legacy WinMM]
         WASAPI[Windows Audio<br/>WASAPI Loopback + Render]
@@ -123,12 +123,12 @@ Seven projects (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.
 | **PadForge.App** | `net10.0-windows10.0.26100.0` (WPF, WinExe) | UI, input pipeline, virtual controllers, services |
 | **PadForge.Engine** | `net10.0-windows` (Class Library) | Shared data types, SDL3 P/Invoke, device wrappers, input state structures |
 | **PadForge.SteamWorkshop** | `net10.0-windows` (Class Library) | Steam Workshop config import (#9, v4.1): anonymous Steam clients over SteamKit2, VDF parser, Steam Input config model and translator, file cache. References Engine. See [Steam Workshop Config Import Internals](steam-workshop-import-internals.md) |
-| **PadForge.Tests** | `net10.0-windows10.0.26100.0` (xUnit) | Unit tests. References both App and Engine (`Microsoft.NET.Test.Sdk` + `xunit` + `coverlet.collector`) |
+| **PadForge.Tests** | `net10.0-windows10.0.26100.0` (xUnit) | Unit tests. References App, Engine and NativeChecks (`Microsoft.NET.Test.Sdk` + `xunit` + `coverlet.collector`) |
 | **PadForge.SteamWorkshop.Tests** | `net10.0-windows` (xUnit) | Parser, client, cache, and translator tests, including 30 golden Workshop fixtures |
 | **PadForge.NativeChecks** | `net10.0-windows` (console Exe) | Out-of-process checks the test suite runs against a bundled `SDL3.dll` (joystick, keyboard, and mouse enumeration, button mapping). References Engine |
 | **PadForge.DsxStandIn** | `net462` (WinExe, assembly name `DSX`) | The 5.5 KB DSX.exe stand-in for game mods that check for a running DSX (#529). It waits on PadForge's process and exits with it. PadForge.App builds it and embeds the exe as the resource `PadForge.DsxStandIn.exe`. See [Game Mods Internals](game-mods-internals.md) |
 
-`PadForge.App` references `PadForge.Engine` and `PadForge.SteamWorkshop`. The Engine has no WPF dependencies and is reusable. App, Engine, and SteamWorkshop use `GenerateAssemblyInfo=false` and share `AssemblyVersion` / `AssemblyFileVersion` via the repo-root `SharedVersion.cs` linked into each of their csproj files (`<Compile Include="..\SharedVersion.cs" Link="Properties\SharedVersion.cs" />`). Per-project `Properties/AssemblyInfo.cs` carries no version attributes.
+`PadForge.App` references `PadForge.Engine` and `PadForge.SteamWorkshop`, and builds `PadForge.DsxStandIn` through a project reference that takes no assembly (`ReferenceOutputAssembly="false"`) and embeds its exe. The Engine has no WPF dependencies and is reusable. App, Engine, and SteamWorkshop use `GenerateAssemblyInfo=false` and share `AssemblyVersion` / `AssemblyFileVersion` via the repo-root `SharedVersion.cs` linked into each of their csproj files (`<Compile Include="..\SharedVersion.cs" Link="Properties\SharedVersion.cs" />`). Per-project `Properties/AssemblyInfo.cs` carries no version attributes.
 
 ---
 
@@ -140,8 +140,10 @@ Seven projects (PadForge.App, PadForge.Engine, PadForge.SteamWorkshop, PadForge.
 PadForge.App/
   Program.cs                          # Process entry (StartupObject): answers a give-back task's run before WPF loads, then starts App
   App.xaml / App.xaml.cs              # WPF application: update-helper and pending-update checks, single-instance mutex, single-file OpenXInput SetDllDirectory, global exception handling
-  MainWindow.xaml / MainWindow.xaml.cs # Shell: app branding bar, sidebar navigation, page hosting, event wiring
-  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (two entries: the DualShock 3 under DsHidMini SDF / SXS and the PS VR Aim Controller, #506)
+  MainWindow.xaml / MainWindow.xaml.cs # Shell: title bar with Search and the profile switcher, sidebar, page hosting, event wiring
+  MainWindow.BlissBox.cs / .Falcon.cs / .FlydigiScreen.cs / .KeyboardScreens.cs  # The shell's handlers for those devices' actions and dialogs
+  app.manifest                        # requireAdministrator, per-monitor DPI awareness
+  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (three entries: the DualShock 3 under DsHidMini SDF / SXS, the PS VR Aim Controller (#506) and the GameSir G7 Pro)
   Properties/
     AssemblyInfo.cs                   # Assembly metadata only (title, copyright, theme, COM GUID). AssemblyVersion + AssemblyFileVersion live in ..\SharedVersion.cs, linked into the App, Engine, and SteamWorkshop csproj files.
 
@@ -151,7 +153,6 @@ PadForge.App/
     CurveLut.cs                       # Sensitivity curve LUT generation (per-axis response curves)
     DriverInstaller.cs                # HidHide install, Windows MIDI Services runtime install and uninstall, SteamVR install without Steam (steamcmd). Legacy ViGEmBus / vJoy uninstall
     HidHideController.cs              # HidHide IOCTL API: blacklist/whitelist/cloaking via \\.\HidHide
-    MarqueeBehavior.cs                # WPF attached behavior for scrolling/marquee text animation
     MappingDisplayResolver.cs         # Descriptor → grid display label, including the contextual aux-motion labels
     ProfileTransfer.cs                # Profile export / import payloads
     SoundPackageManager.cs            # Sound package install, listing, and lookup for macro sound actions
@@ -161,7 +162,7 @@ PadForge.App/
     TextDirection.cs                  # Gives each TextBlock in a right-to-left window the direction its own text needs
     VirtualKey.cs                     # Windows VK code → display name lookup table
 
-    Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs
+    Telemetry/                        # Racing-telemetry sources feeding wheel RPM LEDs and wheel centering (#588)
       TelemetryHub.cs                 # Demand-driven owner of the sources, publishes one current snapshot for FFB dispatch. Keeps a source closed on a port the Game Telemetry row holds (YieldPort, ReclaimPort)
       ITelemetrySource.cs             # Source interface, and IUdpTelemetrySource for the sources that bind a port
       GameTelemetryRowSource.cs       # The Game Telemetry row's engine values, first in the hub's order (#531)
@@ -170,6 +171,7 @@ PadForge.App/
       AssettoCorsaTelemetrySource.cs / IRacingTelemetrySource.cs / MadnessTelemetrySource.cs
       RFactor1TelemetrySource.cs / RFactor2TelemetrySource.cs / RaceRoomTelemetrySource.cs
       RpmLedMap.cs                    # RPM fraction → per-vendor LED bitmask
+      SurfaceGrips.cs                 # Each game's surface or weather field as road grip for wheel centering (#588)
 
     Input/
       AudioBassDetector.cs            # WASAPI loopback capture + 8th-order IIR bass extraction
@@ -183,7 +185,7 @@ PadForge.App/
       InputManager.Step4.CombineOutputStates.cs # Multi-device merge per slot
       InputManager.Step4b.EvaluateMacros.cs     # Macro trigger/action state machine
       InputManager.Step5.VirtualDevices.cs      # HIDMaestro + MIDI + KBM virtual controller lifecycle (HM lifecycle on thread pool)
-      InputManager.Step6.RetrieveOutputStates.cs # Copy combined states for UI display
+      InputManager.Step6.PublishSteeringAngles.cs # Steering angle frame per slot
       InputManager.MenuRuntime.cs     # Radial / touch menu runtime: per-(slot, device, menu) hover-commit contexts (#9)
       HMaestroVirtualController.cs    # IVirtualController for HIDMaestro (Xbox, PlayStation, Nintendo, Extended)
       HMaestroVRController.cs         # IVirtualController for the VR slot type (#49): one HMVRController drives both SteamVR hands
@@ -244,11 +246,16 @@ PadForge.App/
   ViewModels/
     ViewModelBase.cs                  # Base class: INotifyPropertyChanged, OnCultureChanged hook
     MainViewModel.cs                  # Shell VM: navigation, sidebar items, profile list, Pads[] array
-    DashboardViewModel.cs             # Per-slot status cards, virtual controller status
+    DashboardViewModel.cs             # Behind Home and Extras: the controller cards, the engine state, and each extra's switch and status
+    DashboardViewModel.Home.cs / .Cards.cs / .Extras.cs / .Crosshairs.cs / .FirstRun.cs  # Its Home, card, Extras, crosshair and first-run parts
+    AddControllerViewModel.cs         # Add a Controller (#574): the type tiles and the device that drives the new controller
+    SearchViewModel.cs                # Search (#574), opened from the title bar's box or Ctrl+K
     PadViewModel.cs                   # Per-slot mapping/settings/deadzone/macro configuration
-    PadViewModel.Mouse.cs             # Mouse tab state: per-(slot, device) mouse-gesture settings (#200)
-    PadViewModel.Touchpad.cs          # Touchpad tab state: per-(slot, device, pad) gesture settings
-    PadViewModel.AudioDsp.cs          # Audio tab state: crossfeed / EQ / limiter settings per (slot, device) (#347)
+    PadViewModel.Sections.cs          # The controller page's six sections and which of the page's former tabs each holds (#574)
+    PadViewModel.Mouse.cs             # Mouse Gestures group state (Sticks & Triggers): per-(slot, device) mouse-gesture settings (#200)
+    PadViewModel.Touchpad.cs          # Touchpad group state (Motion & Touch): per-(slot, device, pad) gesture settings
+    PadViewModel.AudioDsp.cs          # Audio group state (Lights & Sound): crossfeed / EQ / limiter settings per (slot, device) (#347)
+    PadViewModel.Centering.cs         # Wheel centering's card and the Release Test (#588)
     DevicesViewModel.cs               # Physical device list with live input visualization
     DeviceRowViewModel.cs             # Single device card in the Devices page
     SettingsViewModel.cs              # App-level settings (polling rate, driver status, etc.)
@@ -258,18 +265,25 @@ PadForge.App/
     ShiftLayerInfo.cs                 # VM wrapper around one ShiftActivator on a slot's MappingSet (#61)
     MenuEditorItem.cs                 # Editor VM for one radial / touch menu on a slot's MappingSet, write-through like the mapping grid (#9)
     MidiSlotConfig.cs                 # Per-slot MIDI config: channel, velocity, CC/note counts, legacy output port
-    DeviceSlotConfig.cs               # Per-slot, per-device output config (Adaptive Triggers + Lighting tabs, a mouse's or keyboard's Control This Device’s Lighting switch, #494)
+    DeviceSlotConfig.cs               # Per-slot, per-device output config (the Adaptive Triggers and Lighting groups, a mouse's or keyboard's Control This Device’s Lighting switch, #494)
     KbmSlotConfig.cs                  # Per-slot keyboard+mouse output config (SOCD / Snap Tap, #205)
     ExtendedSlotConfig.cs                 # Extended VC config: axis/button/POV/stick/trigger counts (HIDMaestro Extended profile)
     StickConfigItem.cs                # Thumbstick deadzone / anti-deadzone / linear config
     TriggerConfigItem.cs              # Trigger deadzone / anti-deadzone / max range config
     ProfileShortcutViewModel.cs       # Global button-combo → profile-switch shortcut row (GlobalMacroData)
-    RemoteLinkNearbyPeer.cs           # One PadForge PC discovered on the LAN, shown in Dashboard "Nearby PCs" (#138)
+    RemoteLinkNearbyPeer.cs           # One PadForge PC discovered on the LAN, listed on the Remote Link page in Extras (#138)
     RemoteLinkTrustedPeer.cs          # One trusted peer row in the Settings paired-peer manager (#138)
+    CrosshairItem.cs / MagnifierItem.cs # One crosshair, and the magnifier, as their Extras pages edit them (#585)
+
+  Search/
+    SearchService.cs, SearchIndexBuilder.cs, SearchMatcher.cs, SearchNavigator.cs, ...  # Search (#574): an index built from the pages' own markup, the live pages, controllers, devices and profiles, the documentation, and the way to each result
 
   Views/
-    DashboardPage.xaml(.cs)           # Card-based dashboard with per-slot status and 3D/2D preview
-    PadPage.xaml(.cs)                 # Mapping grid, deadzone sliders, macros
+    HomePage.xaml(.cs), HomePage.Cards.cs # Home (#574): a card per controller with its live 3D or 2D picture, the engine's state, Add Controller
+    PadPage.xaml(.cs)                 # The controller page: a header and six sections, from Mappings to Macros & Menus (#574)
+    ExtrasPage.xaml(.cs)              # Extras (#574): a catalog of twelve tiles, each opening the page of one optional feature
+    AddControllerView.xaml(.cs)       # Add a Controller, hosted in a ShellDialog (#574)
+    SearchPanel.xaml(.cs)             # Search (#574): the query, the grouped results and the key hints, hosted in a ShellDialog
     DevicesPage.xaml(.cs)             # Physical device list with live input visualization
     SettingsPage.xaml(.cs)            # Polling rate, driver install, Updates card (#457)
     ProfilesPage.xaml(.cs)            # Profile management: save/load/delete
@@ -300,13 +314,18 @@ PadForge.App/
     ControllerModelSteamDeck.cs       # Steam Deck mesh (#337/#338)
     ControllerModelSteamController.cs # 2015 Steam Controller mesh (#337/#338)
     ControllerModelSteamController2.cs # 2026 Steam Controller mesh (#337/#338)
+    ControllerPose.cs / ModelGlow.cs  # How far sticks tilt and triggers turn, and how held parts light, shared by the controller page and Home's cards
+    ControllerStill.cs / LiveModel.cs # A Home card's still picture of a model, and the frozen model the card moves (#574)
 
   Models2D/
     ControllerOverlayLayout.cs        # 2D overlay positioning data (button/stick coordinates)
     Controller2DColorways.cs          # Per-colorway sprite variants for the 2D overlays
     NintendoPreviewMap.cs             # Raw-HID button index to Nintendo preview target mapping
+    PadTouchArea.cs                   # A touchpad's touch area in its click sprite's pixels
+    LiveArt.cs                        # A controller's 2D art as a Home card moves it (#574)
 
   2DModels/                           # PNG sprites from Gamepad-Asset-Pack (MIT)
+    DS3/                              # DualShock 3 sprites, drawn by tools/dualshock3_art.py
     DS4/                              # DualShock 4 sprites
     DualSense/                        # DualSense sprites
     DUALSENSEEDGE/                    # DualSense Edge sprites
@@ -320,6 +339,7 @@ PadForge.App/
     MOUSE/                            # Mouse layers for the KBM preview
 
   3DModels/                           # OBJ meshes, loaded from the assembly's resource stream (MSBuild renames the folder to _3DModels)
+    DS3/                              # DualShock 3 meshes, flat, split by tools/dualshock3_mesh.py
     DS4/                              # DualShock 4 meshes
     DualSense/                        # DualSense meshes (Touchpad split out for click-mapping)
     DualSenseEdge/                    # DualSense Edge meshes
@@ -334,7 +354,8 @@ PadForge.App/
     CurveEditor.xaml(.cs)             # Interactive sensitivity curve editor (Bezier/linear)
     RangeSlider.cs                    # Dual-thumb range slider (deadzone min/max)
     TriggerTravelArc.xaml(.cs)        # Trigger travel arc visual for the adaptive-trigger surfaces
-    EqCurveControl.cs                 # Graphic EQ response curve for the controller-audio DSP tab (#347)
+    EqCurveControl.cs                 # Graphic EQ response curve for the controller-audio DSP group (#347)
+    SettingRow.cs, SegmentButton.cs, FoldList.cs, ExtraTile.cs, ShellDialog.cs, SearchField.cs, ...  # The PadForge 6 controls the boards draw (#574)
 
   Views/Controls/
     LabeledShapeIcon.xaml(.cs)        # Labeled shape glyph
@@ -355,30 +376,28 @@ PadForge.App/
     EnumEqualityVisibilityConverter.cs / EnumIndexConverter.cs  # Enum comparison and index binding
     IndexLessThanVisibilityConverter.cs / IndexToLetterConverter.cs / OneBasedIndexConverter.cs
     HexToBrushConverter.cs / RgbToBrushConverter.cs  # Color string or RGB triple → Brush
-    ExeIconConverter.cs               # Executable path → its shell icon
     CultureLanguageConverter.cs       # Culture → the language its picker row declares (#504)
-    UppercaseConverter.cs             # String → upper case
     EqBandTypeNameConverter.cs        # EQ band type enum → display name (#347)
+    EnumEqualityConverter.cs          # Enum name match → bool
+    BracketPartConverter.cs           # The part of a string before, inside or after its first bracket pair, for an in-sentence link (#574)
+    BytePercentConverter.cs           # A 0 to 255 byte setting shown as a percent (#574)
+    FoldSummaryConverters.cs / ResetAllNameConverter.cs  # A folded card's On / Off, and the screen-reader name of a card's Reset All (#574)
+    LogScaleConverter.cs              # A whole number on a 0 to 100 slider by its logarithm
 
   Resources/
     ControllerIcons.xaml              # XAML resource dictionary with controller icon geometries
+    Shell.xaml                        # The sidebar's line icons and the templates that draw the sidebar (#574)
+    Dialogs.xaml                      # The frame every PadForge 6 dialog is, and the parts the dialog boards repeat (#574)
     ZackslyIcons/                     # Vendor button-glyph icon set
     BthPS3/                           # Microsoft-signed BthPS3 + BthPS3PSM drivers and the DS3 WinUSB INF (embedded)
     PadForge.ico                      # Application icon
     PadForge-logo.png                 # App logo bitmap (WPF Resource)
     PadForge-icon.png                 # App icon bitmap (WPF Resource)
     Strings/
-      Strings.resx                    # Base (English) UI string resources
-      Strings.Designer.cs            # Hand-written INotifyPropertyChanged resource accessor
-      Strings.de.resx                # German
-      Strings.es.resx                # Spanish
-      Strings.fr.resx                # French
-      Strings.it.resx                # Italian
-      Strings.ja.resx                # Japanese
-      Strings.ko.resx                # Korean
-      Strings.nl.resx                # Dutch
-      Strings.pt-BR.resx             # Brazilian Portuguese
-      Strings.zh-Hans.resx           # Simplified Chinese
+      Strings.resx                    # Base (American English) UI string resources
+      Strings.Designer.cs             # Hand-written INotifyPropertyChanged resource accessor
+      Strings.<tag>.resx              # One translation per file, en-GB among them (see Localization)
+      Languages.tsv                   # The one list of languages the catalog reads
     SDL3/x64/SDL3.dll                 # SDL3 native library (custom fork: HM filter + Switch 2 Pro + 16-XInput + Share button)
     SDL3/arm64/, OpenXInput/arm64/, VisualCpp/arm64/   # ARM64 copies for the win-arm64 build (4.5.1, preliminary)
     SDL3/x64/libusb-1.0.dll           # libusb for HIDAPI backend (Switch 2 support)
@@ -387,23 +406,30 @@ PadForge.App/
     OpenXInput/x64/xinput1_4.dll      # OpenXInput fork. Single-file-embedded into PadForge.exe. SetDllDirectory at launch resolves it ahead of System32. Filters HM virtuals from PadForge's own XInput view
     Interhaptics/x64/HAR.dll          # Interhaptics engine, P/Invoked lazily by SensaHapticsService, the Razer Sensa row's worker (#374, #494)
     Interhaptics/x64/Interhaptics.RazerProvider.dll  # HAR.dll's Razer Sensa backend
-    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v2.3.0, x64 and ARM64 driver payloads in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
+    Corsair/x64/iCUESDK.x64_2019.dll  # Corsair's iCUE SDK 4.0.84 redist library, loaded while iCUE runs (#557)
+    MysticLight/x64/MysticLight_SDK_x64.dll  # MSI's Mystic Light SDK 1.0.0.8, loaded while Mystic Light runs (#557)
+    WinMD/Windows.Devices.Midi2.winmd # Metadata of the in-box Windows MIDI Services API, projected at build time
+    HIDMaestro/HIDMaestro.Core.dll    # HIDMaestro SDK v2.3.0, x64 and ARM64 payloads of its driver and of usbip-win2's host controller in one assembly (HMContext, HMProfile, HMController, SubmitState, SubmitRawReport)
     HidHide_1.5.230_x64.exe           # Embedded HidHide installer (x64 build only)
     HidHideArm64/                     # HidHide_ARM64.zip (the Microsoft-signed ARM64 driver) + nefconc.exe, embedded in both builds for ARM64 machines
 
   WebAssets/
-    index.html                        # Landing page with Xbox 360 and DS4 layout cards
+    index.html                        # The phone's home page: the layout used last, four common layouts, More Layouts (#574)
+    js/home_client.js                 # Its client: the layout tiles, the finish dots, the viewer's name (#555, #574)
+    css/padforge.css                  # The colors and shared parts of every page, the app's dark brushes (#574)
     controller.html                   # Controller UI shell (dynamic overlay layout)
     touchpad.html                     # Touchpad surface UI
-    css/controller.css                # Responsive dark theme with touch-optimized zones
+    css/controller.css                # The playing page: a controller's 2D art with touch zones over it
     js/controller_client.js           # WebSocket client, touch handling, layout renderer
     js/nipplejs.min.js                # Virtual joystick library for analog sticks
     custom.html                       # Browser-side custom pad builder (#296)
     js/custom_client.js               # Builder client, persists layouts via /api/custom-layouts (#296)
+    js/pad_fit.js                     # Places a custom pad's controls on a screen of any shape, each keeping its size and shape
     gamepad.html                      # Browser Gamepad: forwards a controller paired to the phone (#402, #415)
     js/gamepad_client.js              # Its client: Gamepad API reads, the ping echo, resync (#402)
     js/fullscreen.js                  # Fullscreen toggle where the browser offers element fullscreen (#402)
     menus.html                        # Web Menus: a slot's Touch Grid menus as tiles, with the profile picker (#471)
+    display.html, js/display_client.js, css/layout_view.css, js/layout_view.js  # The controller picture page for a stream's browser source (#555), and the resting drawing it shares with the home page's cards
 
   Themes/
     Generic.xaml                      # Custom control default styles (RangeSlider)
@@ -478,7 +504,7 @@ PadForge.Engine/
 
   RemoteLink/                   # Peer-to-peer controller sharing over LAN or the internet (#138, #294). Off by default
     LinkServer.cs               # TCP control listener (pairing handshake) + UDP input/feedback stream
-    LinkDiscovery.cs            # LAN discovery of nearby PadForge PCs (Dashboard "Nearby PCs")
+    LinkDiscovery.cs            # LAN discovery of nearby PadForge PCs (the Remote Link page's nearby list)
     LinkConnection.cs           # ILinkControlChannel: transport-agnostic duplex control channel
     LinkHandshake.cs            # SAS pairing handshake, yields the 32-byte session key + trust material
     LinkSession.cs              # AEAD seal/open of datagrams on the input/feedback channel
@@ -497,9 +523,11 @@ PadForge.Engine/
     NatProfile.cs / PortPredictor.cs # NAT behavior classification and the port guess a symmetric NAT needs (#294)
     HolePuncher.cs              # UDP hole punch against the peer's candidate addresses (#294)
     PunchedConnection.cs        # The datagram path a landed punch yields (#294)
-    RendezvousProtocol.cs       # Candidate exchange over the rendezvous lane (#294)
     IrohRelayClient.cs          # iroh relay client, the guaranteed lane when a punch cannot land (#294)
     LinkCode.cs                 # Short shareable link code that carries the peer identity (#294)
+    LinkAssignments.cs          # The versioned, bounded remote-assignment payloads inside a session (LinkAssignmentCodec)
+    LinkConnectionLifetime.cs   # One connection's device inventory, slot reservations and reconnect authorization
+    LinkAdmissionCoordinator.cs / OwnedLinkCallbacks.cs # Admission attempts by server epoch and revocation, and callbacks keyed to their owner
     Dht/                        # First-contact signaling over the public BitTorrent DHT (#294), because
                                 #   an idle host's router drops the caller's probes and neither side can
                                 #   punch first: Bencode, Krpc, UdpKrpcTransport, Bep44Record (BEP 44
@@ -520,8 +548,8 @@ tools/
   combomeasure/                 # WPF width-measurement harness for the lighting pickers in every language
   rowmeasure/                   # The same harness for fixed-size rows (Profiles shortcut row, raw hat strip, equalizer row, gesture recorder hint, pad page first tier) in every language
   build-libvosk-arm64.sh        # Builds the ARM64 libvosk.dll bundled at PadForge.App/Resources/Vosk/arm64
-  capture_all.ps1               # Full screenshot capture orchestration (+ _wrapper for elevation)
-  capture_vr.ps1 / capture_web.ps1 / capture_colorways.ps1 / capture_mouse_gestures.ps1
+  l10n/                         # Translation checker, resx writer, and the rules every translation passes
+  capture_all.ps1               # The one screenshot script: every wiki and README screenshot in one run (+ _wrapper for elevation)
   prep_xml_for_capture.ps1      # Preps PadForge.xml with sample slots and macros for capture runs
   convert_screenshots.ps1 / add_slots_via_ui.ps1 / probe_macro_list.ps1
   mirror_screenshots.py         # Mirrors captured shots into the repo and the site, erroring on any gap
@@ -533,6 +561,7 @@ tools/
   verify_site_carousel.ps1      # Site carousel check
   overlay_positions.py          # 2D controller overlay coordinate generator
   gen_mouse_art.py / gen_2d_colorways.py / gen_dualsense_edge_art.py / gen_switchpro_s2_art.py
+  gen_*.py                      # Also the lighting-table generators that write the *.g.cs files (#557)
   steam_controller_2015_mesh.py / steam_controller_2026_mesh.py  # Valve STEP to per-part OBJs
   dualshock3_mesh.py / dualshock3_art.py  # DualShock 3 mesh split and its drawn 2D set
   steam_controller_2026_pads.py / steam_deck_stick_well.py       # Mesh fix-ups on those sets
@@ -577,7 +606,7 @@ The `Common/Input/`, `Services/`, `Engine/Data/`, and `Engine/RemoteLink/` trees
 
 - `Haptics/` (`HapticToneEncoder`, `HapticToneReducer`, `WiiSpeakerAdpcm`, and since 4.4.0 `TritonPcmEncoder` for the 2026 Steam Controller's native PCM haptics, #381). Since 4.1.0: `Menus/` (`MenuDefinitionEntry`, `MenuEvaluator`, `MenuSelectionMath`) and `Touchpad/SwipeHapticsEvaluator.cs`. The `RemoteLink/` subtree is listed in full above.
 
-New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, `LogitechGKeys = 37`, `AnalogKeyboard = 38`, `WebMenus = 39`, the vendor rows' `PeripheralLighting = 40` and `PeripheralHaptics = 41` (#494), `KeyboardScreenKeys = 42` (#519), `NovintFalcon = 43` (#521) and `GameTelemetry = 44` (#531) under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
+New `InputDeviceType` values `Touchpad = 26`, `Midi = 27`, `Nfc = 28`, `ConsumerControl = 29` (append-only, serialized as ints in `PadForge.xml`) make NFC readers, Consumer Control collections, and MIDI devices device sources. Later cycles appended `HeadsetMotion = 30`, `Microphone = 31`, `HandheldButtons = 32`, `SystemMotion = 33`, `HeadTracker = 34`, `Tablet = 35`, `VrController = 36`, `LogitechGKeys = 37`, `AnalogKeyboard = 38`, `WebMenus = 39`, the vendor rows' `PeripheralLighting = 40` and `PeripheralHaptics = 41` (#494), `KeyboardScreenKeys = 42` (#519), `NovintFalcon = 43` (#521), `GameTelemetry = 44` (#531) and `TwitchChat = 45` (#555) under the same rule. A Remote Link peer's shared controller surfaces through `RemotePeerDevice` (an `ISdlInputDevice`), carrying the peer's own device type.
 
 ### Since 4.1.0
 
@@ -586,11 +615,11 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 - **Flick stick (#225)**. `SourceKindRuntime.TickFlickStick` turns stick rotation into calibrated mouse counts on the dedicated `KbmRawState.MouseFlickX` lane, resolved layer-aware off the `KbmMouseX` row and forwarded 1:1 by the KBM VC (no `MouseSensitivity`, no velocity accumulator)
 - **Absolute touchpad pointer (#9 B-15)**. A "Touchpad N Pointer" source family that claims the `MouseAbsX/Y` absolute-cursor lane while a finger is engaged (Steam's `mouse_region` behavior). The KBM VC positions the cursor via `SetCursorPos` on the primary monitor
 - **Touchpad swipe haptics (#219)**. `Engine/Touchpad/SwipeHapticsEvaluator.cs` accumulates finger travel into per-detent ticks. `TouchpadPulseService.cs` delivers 80 ms pulses through the Sony dispatcher's rumble bytes, `HapticToneService.QueueTouchpadPulse` covers the Steam Controller family
-- **Radial / touch menus (#9 B-17)**. `Engine/Menus/` (definition model on the slot's `MappingSet`), `InputManager.MenuRuntime.cs` (per-(slot, device, menu) hover-commit runtime), `MenuEditorItem.cs` (Menus tab VM), `MenuOverlayWindow.xaml(.cs)` (click-through HUD)
+- **Radial / touch menus (#9 B-17)**. `Engine/Menus/` (definition model on the slot's `MappingSet`), `InputManager.MenuRuntime.cs` (per-(slot, device, menu) hover-commit runtime), `MenuEditorItem.cs` (the menu editor's VM in Macros & Menus), `MenuOverlayWindow.xaml(.cs)` (click-through HUD)
 - **Mouse-gesture Custom activation (#216)**. A sixth gesture-activation session armed by a recorded cross-device input (keyboard key, gamepad button, wheel pedal) held while gesturing
 - **Switch HOME LED (#226)**. `SwitchHomeLedSetter.cs`, the third #209 Guide LED lane (see the writer list above)
 - **Nintendo virtual controllers (#215/#246)**. `VirtualControllerType.Nintendo`, a fourth HM-backed slot family. A console-family face like Xbox / PlayStation (own group, icon, Nintendo button lettering) riding the Extended raw-HID data path on a catalog profile (`switch-pro` by default, with the Switch 2 Pro's `switch2-pro-controller` and `switch2-pro-controller-composite` also in the picker). No Customize surface: the slot always deploys the catalog profile as-is
-- **Rumble to Audio / Bass Shakers (#236)**. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones. `RumbleAudioService` + `RumbleAudioSampleProvider` (App) render, `LfeOutputState` (Engine) packs the four voices into one long, and the poll loop's `UpdateRumbleAudioLane` publishes once per tick from the slot's `MappingSet.RumbleAudio` config. Surfaced as the per-slot "Bass Shakers" tab
+- **Rumble to Audio / Bass Shakers (#236)**. Routes the game feedback each slot's virtual controller receives to WASAPI render endpoints as low-frequency sine tones. `RumbleAudioService` + `RumbleAudioSampleProvider` (App) render, `LfeOutputState` (Engine) packs the four voices into one long, and the poll loop's `UpdateRumbleAudioLane` publishes once per tick from the slot's `MappingSet.RumbleAudio` config. Surfaced as the Bass Shakers group under Rumble & Haptics
 - **Controller-button SOCD (#240)**. `SlotButtonSocd.cs` extends #205's keyboard Snap Tap to gamepad and raw-HID slots: pair cleaning on the slot's final combined output right before the Step 5 submit, configured via `MappingSet.SocdMode` / `SocdPairs`
 
 ### Since 4.2.0
@@ -636,11 +665,11 @@ The 4.1.0 cycle's Workshop import (#9) and its discussion spin-offs added:
 **Engine**
 
 - `Common/SpaceMouseDecoder.cs`, `Common/GamepadObjectNames.cs`, `Common/SyntheticInstanceId.cs`
-- `RemoteLink/`. The #294 internet lane, listed in full in the tree above: `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `RendezvousProtocol`, `UdpControlChannel`, `IrohRelayClient`, `LinkCode`. Direct punch first, iroh relay as the guaranteed fallback
+- `RemoteLink/`. The #294 internet lane, listed in full in the tree above: `StunClient`, `NatProfile`, `PortPredictor`, `HolePuncher`, `PunchedConnection`, `UdpControlChannel`, `IrohRelayClient`, `LinkCode`. Direct punch first, iroh relay as the guaranteed fallback
 
 ### Peripheral outputs (#494)
 
-A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an output device of that controller, the way a DualSense is. It takes the controller's lighting through its own Lighting tab when PadForge can light it, and its rumble through its own Force Feedback tab when it can rumble. A device is lit through its vendor's software while that software runs. While it does not, PadForge lights the device on its own where it has a path to it: Logitech HID++, a Razer or SteelSeries control collection, or a HID LampArray collection. This subsystem replaced the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirror services and the Razer Sensa switch (#374), and none of it has a Dashboard setting. Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
+A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an output device of that controller, the way a DualSense is. It takes the controller's lighting through its own Lighting group under Lights & Sound when PadForge can light it, and its rumble through its own Force Feedback group under Rumble & Haptics when it can rumble. A device is lit through its vendor's software while that software runs. While it does not, PadForge lights the device on its own where it has a path to it: Logitech HID++, a Razer or SteelSeries control collection, or a HID LampArray collection. This subsystem replaced the Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirror services and the Razer Sensa switch (#374). Detail on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 
 **App `Common/Input/Peripherals/`**
 
@@ -650,7 +679,7 @@ A mouse, keyboard, lit unit or vendor row assigned to a virtual controller is an
 - `PeripheralOutputRow.cs`. The Razer Chroma, Logitech LIGHTSYNC, SteelSeries GG and Razer Sensa rows, synthetic devices with no inputs
 - `PeripheralUnitRow.cs`. The row of a lit unit no mouse or keyboard row reaches: a headset, a mousepad or a light strip that Windows lists as a HID LampArray
 - `PeripheralLightingColor.cs` / `GameLightbarCapture.cs`. One device's color for one slot under the game's lightbar, and that lightbar as a DualShock 4 or DualSense virtual controller receives it
-- `PeripheralRouteText.cs`. The line the Lighting and Force Feedback tabs show: where the output goes, and why it does not show
+- `PeripheralRouteText.cs`. The line the Lighting and Force Feedback groups show: where the output goes, and why it does not show
 - `PeripheralProductIds.cs`. Product IDs that name a Razer or SteelSeries device's kind
 - `HidppBackend.cs` / `HidppUnits.cs` / `HidppLightPlan.cs`. The Logitech HID++ worker: unit discovery, receiver pairing tables, battery reads, feature 0x19B0 waveforms, and the light plans for features 0x8070 and 0x8071 with their per-key partners 0x8080 and 0x8081
 - `IDirectUnitBackend.cs` / `DirectBackends.cs`. The contract of a backend that lights or rumbles one device at a time, and the one place those backends are made
@@ -693,7 +722,7 @@ Game mods written for DSX send DualSense trigger programs and lights as JSON ove
 - `GameModServer.cs`. The loopback UDP server: one receive thread, the reply to each packet, and the senders it watches
 - `GameModPortFiles.cs`. The two port files mods read, written when the server starts
 - `DsxStandIn.cs`. Extracts and runs the DSX.exe stand-in, tied to PadForge's lifetime by a kill-on-close job object
-- `InputService.GameMods.cs`. The server's lifetime, the Dashboard status line, and the Devices and pad page lines
+- `InputService.GameMods.cs`. The server's lifetime, the Game Mods tile's and page's status line in Extras, and the Devices and pad page lines
 
 **`PadForge.DsxStandIn/`**
 
@@ -706,7 +735,7 @@ Driving games send their telemetry over UDP, and Assetto Corsa publishes it in s
 - `TelemetryFrame.cs`, `TelemetryDecoders.cs`, `TelemetryReader.cs`. The frame, one decoder per game family, and the format choice with Auto-Detect's hold
 - `KunosSharedMemory.cs`. Assetto Corsa's three pages, opened read-only
 - `CustomTelemetryFormat.cs`. The user's packet formats and their readers
-- `GameTelemetryRuntime.cs`. The Dashboard mirror, the expression values and the wheel lights' engine values
+- `GameTelemetryRuntime.cs`. The mirror of the Game Telemetry settings the engine reads, the expression values and the wheel lights' engine values
 - `GameTelemetryDevice.cs`. The row: the socket, the forward socket, the axes and buttons
 
 **App `Common/Input/`**
@@ -716,7 +745,7 @@ Driving games send their telemetry over UDP, and Assetto Corsa publishes it in s
 
 **App `Services/`**
 
-- `InputService.GameTelemetry.cs`. The Dashboard status line and flame, and the Devices panel line
+- `InputService.GameTelemetry.cs`. The status line of the Game Telemetry tile and page in Extras, and the Devices panel line
 
 ### Since 5.2.2, shipped in 5.3.0
 
@@ -749,7 +778,7 @@ Driving games send their telemetry over UDP, and Assetto Corsa publishes it in s
 - `ChatGamepadPlacement.cs`, `ChatTurns.cs`. Where the usual words sit in SDL's gamepad layout, and who approves a viewer's `!claim`. Engine `Common/GamepadPlacement.cs` is the placement rule the Bliss-Box ports share
 - App `Services/DisplayPose.cs` and `WebAssets/display.html` draw the controller for a stream's browser source. `Views/ChatCommandsDialog.xaml(.cs)` edits the word list
 
-**Screen Overlay** (#560). `Views/ScreenOverlay.xaml(.cs)` is a borderless, never-focused window that shows what a keyboard screen shows, `Views/ScreenOverlayContentView.cs` draws its content, and `ViewModels/ScreenOverlayItem.cs` is one overlay's group on the Dashboard card, identified by its number.
+**Screen Overlay** (#560). `Views/ScreenOverlay.xaml(.cs)` is a borderless, never-focused window that shows what a keyboard screen shows, `Views/ScreenOverlayContentView.cs` draws its content, and `ViewModels/ScreenOverlayItem.cs` is one overlay's group on the Screen Overlay page in Extras, identified by its number.
 
 **Key colors and lighting backends** (#557). Detailed on [Peripheral Outputs Internals](peripheral-outputs-internals.md).
 
@@ -784,6 +813,20 @@ Driving games send their telemetry over UDP, and Assetto Corsa publishes it in s
 
 Engine `Common/Tablets/` holds the pen tablet capture (`WindowsTabletDevice`, `TabletCaptureQueue`) that the taken-touchpad capture copies. See [Touchpads](driver-installation-internals.md#touchpads).
 
+### Since 5.3.1, shipped in 6.0.0
+
+**The interface** (#574). PadForge 6 rebuilt the interface in place. The sidebar holds Home, Devices, Profiles, Extras, a Controllers label over one entry per controller, and Add Controller, with Settings and About in its footer (`MainWindow.xaml.cs`, `BuildNavigationItems`). `Views/HomePage.xaml(.cs)` and `HomePage.Cards.cs` replaced the Dashboard. `Views/ExtrasPage.xaml(.cs)` is a catalog of the optional features, twelve tiles that each open a page (`ExtrasPage.Keys`). The controller page groups its former tabs into six sections (`ViewModels/PadViewModel.Sections.cs`). Search is `Search/` and `Views/SearchPanel.xaml(.cs)`, Add a Controller is `Views/AddControllerView.xaml(.cs)` with `ViewModels/AddControllerViewModel.cs`, and the parts the shell and the dialogs share are `Resources/Shell.xaml`, `Resources/Dialogs.xaml`, `Views/DialogWindow.cs` and `Controls/ShellDialog.cs`. Home's cards move their pictures through `Models3D/ControllerStill.cs`, `LiveModel.cs`, `ControllerPose.cs`, `ModelGlow.cs` and `Models2D/LiveArt.cs`. `DashboardViewModel` kept its name and backs Home and Extras.
+
+**Polling rate.** The loop's rate is a number of passes a second, 60 to 10,000 (`InputManager.PollingRateHz`), resolved from the global setting and a profile's override by `Common/Input/PollingRates.cs`. `PollSchedule.cs` says when each pass is due, `EveryPassFrameGate.cs` spaces the frames sent on every pass at high rates, and `InputManager.PollLoad.cs` writes what the passes cost on the heartbeat line. See [Engine Thread](#1-engine-thread-inputmanager-polling-rate).
+
+**SInput pads** (#584). Engine `Common/SInputControllerIdentity.cs` names the SInput pads SDL opens, and App `Common/Input/SInputReportPacker.cs` packs report 0x01 of the Extended SInput Gamepad persona. `Common/Input/HMaestroSubmitLane.cs` sends a virtual controller's frames from a thread of its own on a profile with a protocol host, whose submit can wait up to 200 ms for the driver, so the poll thread does not wait.
+
+**Flydigi Apex** (#586). Engine `Flydigi/` (the protocol, the trigger effects and their translator, the screen format) and App `Common/Input/Flydigi/` (the service, the session, the screen's pictures and sender), with `UserEffectsDispatcher.Flydigi.cs`, `Peripherals/HidFamilies/FlydigiApexLighting.cs`, `MainWindow.FlydigiScreen.cs` and `Views/FlydigiScreenDialog.xaml(.cs)`. Detail on [Flydigi Apex Internals](flydigi-apex-internals.md).
+
+**Crosshairs and the magnifier** (#585). App `Common/Crosshairs/`, `Services/CrosshairData.cs`, `Services/MagnifierService.cs`, `Services/InputService.Crosshairs.cs`, `Common/Input/InputManager.Crosshairs.cs` (the macro toggles), `Controls/CrosshairView.cs`, `Controls/MagnifierViews.cs` and `Views/PixelOverlay.cs`. Detail on [Crosshair and Magnifier Internals](crosshair-magnifier-internals.md).
+
+**Wheel centering** (#588). Engine `Common/Steering/` (the steering model, the vehicle, road grip, the Release Test), App `Common/Input/WheelCenteringWriter.cs` and `WheelCenteringFacts.cs`, `Common/Telemetry/SurfaceGrips.cs`, `Services/InputService.Centering.cs`, `ViewModels/PadViewModel.Centering.cs`, `Controls/SteeringCharts.cs` and `Views/ReleaseTestDialog.xaml(.cs)`. Detail on [Wheel Centering Internals](wheel-centering-internals.md).
+
 ### PadForge.SteamWorkshop
 
 ```
@@ -802,7 +845,7 @@ Added for the Steam Workshop config import (#9, v4.1). Full detail on [Steam Wor
 
 ---
 
-## Key Design Decisions
+## Design Decisions
 
 ### Why SDL3 (not DirectInput or raw XInput)
 
@@ -818,10 +861,10 @@ Added for the Steam Workshop config import (#9, v4.1). Full detail on [Steam Wor
 
 PadForge makes **no** XInput call to read controller input. XInput slot assignment (0–3) for a new HIDMaestro Xbox virtual controller is deterministic: Step 5 gates the driver's `CreateController` calls by visual position so `xinputhid` allocates kernel slots in creation order, and SDL's XInput backend never sees the HM slots, because the OpenXInput fork's `xinput1_4.dll` it loads skips HIDMaestro devices. The only direct `xinput1_4.dll` P/Invoke anywhere is `XInputGetCapabilitiesEx` / `XInputPowerOff` (ordinals 108 / 103) in `BluetoothLinkHelper`, for host-side Bluetooth power-off (#162).
 
-Key SDL3 hints:
+The SDL3 hints that set this up:
 
 ```csharp
-SDL_SetHint(SDL_HINT_JOYSTICK_XINPUT, "1");                // Xbox enumeration via XInput backend
+SDL_SetHint(SDL_HINT_XINPUT_ENABLED, "1");                 // Xbox enumeration via XInput backend ("SDL_XINPUT_ENABLED")
 SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1"); // Background input without focus
 SDL_SetHint(SDL_HINT_JOYSTICK_HIDAPI_SWITCH2, "1");         // Switch 2 Pro (custom fork)
 ```
@@ -837,11 +880,11 @@ Virtual Xbox, PlayStation, Nintendo, Extended, and VR controllers all come from 
 | DualSense native | A real virtual DualSense (lightbar, adaptive triggers, mic LED, touchpad). ViGEmBus only emulated Xbox 360 and DS4 |
 | Per-controller `OutputReceived` | One callback per virtual device delivers full game output (rumble, lightbar, AT, FFB). Feeds Sony's `UserEffectsDispatcher` and the FFB decoder |
 | One marker to filter | Every HM device carries `HIDMAESTRO` in its path or hardware IDs (a composite persona on its emulated host controller), so one classifier filters them from SDL enumeration. v2's two drivers needed two filters and produced N² phantom controllers at edge cases |
-| User-mode (UMDF2) | No kernel-mode HID stack to fight with, no SetupAPI device-node rebuild rules, no `vJoyInterface.dll` handle generation logic |
+| User-mode (UMDF2) | No kernel-mode HID stack to fight with, no SetupAPI device-node rebuild rules, no `vJoyInterface.dll` handle generation logic. On Windows on ARM every virtual controller is a USB device on usbip-win2's host controller, which HIDMaestro installs in place of its own driver, and Windows' own drivers bind it. On x64 so are the composite USB personas and the profiles whose backend is USB/IP, such as Xbox One S Controller (Model 1708): Full |
 
 ### Why Polling (not event-driven)
 
-The input pipeline is a **fixed-rate polling loop** (stable 1000 Hz):
+The input pipeline is a **fixed-rate polling loop**, 1000 passes a second by default and 60 to 10,000 as set:
 
 | Reason | Detail |
 |---|---|
@@ -862,7 +905,7 @@ ViewModels extend `ObservableObject` (CommunityToolkit.Mvvm). Properties are han
 
 VMs expose commands and raise events instead of calling services or the input pipeline, with a few static-service calls as the exception (PadViewModel drives `RumbleAudioService`'s Bass Shakers test tones directly):
 
-1. VMs raise events (e.g. `PadViewModel.SelectedDeviceChanged`, `MainViewModel.StartEngineRequested`, `DevicesViewModel.AssignToSlotRequested`)
+1. VMs raise events (e.g. `PadViewModel.SelectedDeviceChanged`, `PadViewModel.GyroCalibrateRequested`, `DevicesViewModel.ToggleSlotRequested`)
 2. `MainWindow.xaml.cs` or service classes subscribe
 3. Handlers call `InputService`, `SettingsService`, etc.
 
@@ -893,9 +936,9 @@ App.OnStartup()
 
 See [Updates Internals](updates-internals.md) for the update steps.
 
-### App Branding Bar
+### Title Bar
 
-The custom title bar was replaced with an **app branding bar**. A styled bar at the top of the window that uses `ExtendsContentIntoTitleBar` to blend the hamburger menu button and application icon into the window chrome. The branding bar draws no background of its own: the window's Mica backdrop, and in the dark theme the Ember steel layer under all content (#175), show through it, so it matches the window in light and dark mode.
+The window extends its content into the title bar (`ExtendsContentIntoTitleBar`) over a Mica backdrop. The bar (`AppBrandingBar` in `MainWindow.xaml`, 52 pixels high) holds the PadForge mark and name, the Search box, the profile switcher, and the window's own buttons from WPF-UI's `TitleBar`, which keeps Snap Layouts. A click on the Search box, or Ctrl+K anywhere, opens Search. The bar sits on the window's darkest ground (`SteelWindowBrush`) with a hairline under it (#574), and while the engine runs a warm light (`TitleWarmth`) lies across it.
 
 ---
 
@@ -935,7 +978,7 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## InputManager Partial Class Split
 
-`InputManager` is a `partial class` split across 21 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
+`InputManager` is a `partial class` split across 33 files for **pipeline stage isolation**. Each file owns one stage's fields, helpers, and state. This avoids a 5000+ line monolith while keeping stages in a single class (they share per-slot arrays and virtual controller references).
 
 | File | Stage | Responsibility |
 |---|---|---|
@@ -955,13 +998,20 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 | `InputManager.Step4.CombineOutputStates.cs` | Step 4 | Merge device OutputStates per slot into `CombinedOutputStates[]` (max-wins axes, OR buttons) |
 | `InputManager.Step4b.EvaluateMacros.cs` | Step 4b | Evaluate macro triggers, execute actions (button/axis overrides, volume OSD, toggle) |
 | `InputManager.Step5.VirtualDevices.cs` | Step 5 | Create/destroy `IVirtualController` (HM lifecycle on thread pool, see [HIDMaestro Deep Dive](hidmaestro-deep-dive.md)), submit `CombinedOutputStates[]` via `HMController.SubmitState` / `SubmitRawReport` (HM) or per-VC paths (VR / MIDI / KBM), XInput slot detection |
-| `InputManager.Step6.RetrieveOutputStates.cs` | Step 6 | Copy `CombinedOutputStates[]` → `RetrievedOutputStates[]` for UI |
+| `InputManager.Step6.PublishSteeringAngles.cs` | Step 6 | Publish each Xbox / PlayStation slot's steering angle frame (`PublishSteeringAngleFrame`) |
 | `InputManager.GyroTilt.cs` | Steps 2–3 helper | Gyro Tilt, the degree-ranged hold mode beside the usual rate mode: Step 2 updates the gravity estimate per (device, slot), Step 3 reads it |
 | `InputManager.GyroSimulation.cs` | Steps 2–3 helper | Pitch and Roll Simulation for a DualShock 3 (#474): Step 2 updates the accelerometer rate estimate per (device, slot), Step 3 reads it |
 | `InputManager.MenuPublication.cs` | Steps 2-5 | The publication scope Steps 2 through 5 run inside, so a menu cannot observe a half-written frame |
 | `InputManager.SteeringAngleRumble.cs` | Steps 6, 2 helper | Steering Angle Rumble: Step 6 publishes each Xbox / PlayStation slot's combined frame, and the next Step 2 force-feedback pass turns the chosen virtual stick axis into rumble |
 | `InputManager.Tablets.cs` | Step 1 helper | Windows pen and drawing tablet rows, and their capture state |
 | `InputManager.MotionRows.cs` | Steps 3–4 and the motion stage | The Motion Pitch, Yaw and Roll rows (#475): Step 3 reads them per device, Step 4 combines them, and `ApplyMotionRows` composes the slot's motion after the macro pass for Step 5 and DSU |
+| `InputManager.PollLoad.cs` | The loop | What the passes cost, by part of a pass, written on the heartbeat line every 10 s |
+| `InputManager.GameTelemetry.cs` | Step 1 | Game telemetry (#531), Phase 1i2: the Game Telemetry row's lifecycle, run by the poll thread itself |
+| `InputManager.TwitchChat.cs` | Step 1 | Twitch chat (#555), Phase 1i3: the Twitch Chat row's lifecycle, the Game Telemetry row's shape |
+| `InputManager.WinUsbKeyboards.cs` | Step 1 | Keyboards and mice bound to WinUSB (#549): a worker finds and opens them on the sweep's cadence, and the poll thread registers and retires their rows |
+| `InputManager.Touchpads.cs` | Step 1 helper | Precision touchpads PadForge reads alone: the captured touchpad's motion and buttons fed to its mouse row |
+| `InputManager.OnScreenKeyboard.cs`, `.Output.cs`, `.TextFocus.cs` | Steps 2–5 | The On-Screen Keyboard (#566): its runtime on the poll thread, where its keys go (Types Through), and Open When a Text Box Is Selected |
+| `InputManager.Crosshairs.cs` | Step 4b helper | The Toggle Crosshair, Toggle Magnifier and Magnifier (While Held) macros (#585), carried out on the UI thread |
 | `InputManager.PressureRows.cs` | Steps 3–5 | The button pressure rows (discussion #476): Step 3 reads them per device, Step 4 keeps the harder press per button, and Step 5 hands them to the DualShock 3 (SIXAXIS): Full virtual controller |
 
 `SettingsManager` is also a partial class. Its collection types are declared alongside the Step 1 code that populates them.
@@ -970,9 +1020,9 @@ The engine thread reads `SettingsManager` without referencing the WPF-dependent 
 
 ## Threading Model
 
-Fourteen documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is a Dashboard service: `HeadTrackingRuntime` is a static mirror the Dashboard view model writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
+Seventeen documented execution contexts. Some run whenever the engine runs, the rest start on demand. The on-demand device services added since 4.2.0 spin their own named threads on top of these (`OpenVrConsumer` for #287, `SpaceMouseMonitor` / `SpaceMouseRead` for #288, `PsMoveDirectRead` / `PsMoveDirectWrite` for #277, `VoiceMacro` for #317, `PadForge.HeadTrackerUdp` for #355), each publishing through the same `ISdlInputDevice` or SDL virtual-joystick seam Step 1 already reads. Head tracking (#355) is an extra: `HeadTrackingRuntime` is a static mirror the Home and Extras view model (`DashboardViewModel`) writes on the UI thread and the poll thread reads. Its UDP and FreeTrack inputs switch independently. Each has a global value (`AppSettingsData.HeadTrackingEnabled`, `AppSettingsData.HeadTrackingFreeTrack`) and a nullable per-profile opinion (`ProfileData.EnableHeadTracking`, `ProfileData.EnableHeadTrackingFreeTrack`), and the global value stands whenever the active profile has no opinion. The OpenXR input (#403), the port, and the ranges are global only. With every input off there is no device row, no UDP socket, no FreeTrack mapping, and no thread.
 
-### 1. Engine Thread (InputManager, 1000 Hz)
+### 1. Engine Thread (InputManager, polling rate)
 
 ```csharp
 _pollingThread = new Thread(() => PollingLoop(generation, pollRun))
@@ -983,34 +1033,34 @@ _pollingThread = new Thread(() => PollingLoop(generation, pollRun))
 };
 ```
 
-Runs the 6-step pipeline (see [Input Pipeline](input-pipeline.md)). Uses a 3-tier sleep strategy with wall-clock drift compensation:
+Runs the 6-step pipeline (see [Input Pipeline](input-pipeline.md)) `PollingRateHz` times a second: 1000 by default, 60 to 10,000 (`MinPollingRateHz`, `MaxPollingRateHz`), set on the Settings page or by the active profile, and read before every pass, so a change takes effect at once.
 
-1. **Tier 1. HR Waitable Timer**: `CreateWaitableTimerExW` with `CREATE_WAITABLE_TIMER_HIGH_RESOLUTION` (Windows 10 1803+). Sub-ms kernel sleep, near-zero CPU. Sleeps `remaining - 0.1ms`, leaving the tail for spin-wait.
-2. **Tier 2. Multimedia Timer**: `timeSetEvent` + `ManualResetEvent.WaitOne` (x360ce-style fallback). A periodic callback at the polling interval (1 ms by default) signals the event.
-3. **Tier 3. Thread.Sleep(1)**: Legacy fallback when remaining > 1.5ms and both timers unavailable.
-4. **Final spin-wait**: `Thread.SpinWait(1)` loop against `Stopwatch.ElapsedTicks` for sub-ms cycle boundary.
+The passes stand on one schedule (`PollSchedule`), and the thread sleeps between them on a waitable timer. It does not spin. `PollingLoop` makes the timer with `CreateWaitableTimerExW` and `CREATE_WAITABLE_TIMER_HIGH_RESOLUTION`, an ordinary one if that fails, and `SleepOnTimer` falls back to `Thread.Sleep` when no timer arms. Windows wakes the thread on its clock's tick, so a pass starts up to one tick late and the processor rests for the whole wait.
 
-**Drift compensation**: Each cycle accumulates `expectedTicks += targetTicks` and compares against `wallClock.ElapsedTicks`. Late cycles shorten. Early cycles lengthen. Drift exceeding 10 cycles (e.g., after system sleep) resets the wall clock.
+- `timeBeginPeriod(1)` holds a one-millisecond clock for the loop's life.
+- Above 1000 passes a second (`FineClockAboveHz`) the loop also asks Windows for its finest clock (`NtSetTimerResolution`, half a millisecond on the PCs measured in the code's comments), and gives it back below that rate and while idle.
+- When the rate is above the wakes' own rate, or a wake landed late, the passes owed run back to back. The schedule bounds that, so a processor that cannot hold the rate still sleeps between its bursts (#331).
+- `PollingLoop` is compiled optimized before its first pass (`AggressiveOptimization`), so the runtime's mid-loop recompile no longer holds the thread between two passes.
 
-`timeBeginPeriod(1)` is set for the polling loop's lifetime. **Auto-idle** (~20 Hz via `Thread.Sleep(50)`) activates when no created+enabled slot has an online mapped device, unless a Remote Link peer is connected or a virtual controller is still waiting out its inactivity timeout. Timing target recalculates each cycle from the adjustable `PollingIntervalMs` (default 1ms, configurable in Settings).
+**Auto-idle** (about 20 passes a second, `Thread.Sleep(50)`) activates when no created and enabled slot has an online mapped device, unless a paired Remote Link peer is connected or a virtual controller is still waiting out its inactivity timeout. With **Continue Polling When Window Loses Focus** off and PadForge in the background, the loop sends neutral states once and then runs about 10 passes a second (`ApplyFocusSuspension`, `Thread.Sleep(100)`). Both branches restart the schedule, so no burst follows them.
 
 ### 2. UI Thread (WPF Dispatcher, ~30 Hz)
 
 `InputService` runs a `DispatcherTimer` at ~33ms interval:
 
-- Reads `RetrievedOutputStates[]` / `RetrievedKbmRawStates[]` for dashboard/schematic display
+- Reads `CombinedOutputStates[]` / `CombinedKbmRawStates[]` for Home's cards and the controller page's picture
 - Reads `UserDevice.InputState` for Devices page live visualization (only when visible)
 - Pushes macro snapshots from PadViewModels to `MacroSnapshots[]`
 - Updates `SlotControllerTypes[]`, `SlotCustomLayouts[]`, `SlotRawHidSurface[]`, `_midiConfigs[]`
 - Syncs device list from `UserDevices` → `DevicesViewModel` (via `DeviceService`)
-- Updates dashboard statistics (frequency, device count, online status)
+- Updates the engine figures Home shows (polling rate, online devices)
 - Runs macro trigger recording
 
 All WPF binding occurs on this thread. Engine results use atomic reference swap (`Volatile.Read`/write) or value copy semantics.
 
 ### 3. WASAPI Audio Thread (AudioBassDetector)
 
-`AudioBassDetector` uses NAudio's `WasapiCapture` in loopback mode. NAudio's internal capture thread delivers audio buffers via `DataAvailable`. The callback runs an 8th-order cascaded IIR low-pass filter (configurable cutoff, default 80 Hz) and updates a volatile `_bassEnergy` float (0.0–1.0). The engine reads this in Step 2 via `AudioBassDetector.MotorValue` (the 0..65535 projection of `BassEnergy`) and merges it with game rumble via `max()`. The UI meter reads `BassEnergy`.
+`AudioBassDetector` uses NAudio's `WasapiCapture` in loopback mode. NAudio's internal capture thread delivers audio buffers via `DataAvailable`. The callback runs an 8th-order cascaded IIR low-pass filter (configurable cutoff, 20 to 2000 Hz, default 80 Hz) and updates a volatile `_bassEnergy` float (0.0–1.0). The engine reads this in Step 2 via `AudioBassDetector.MotorValue` (the 0..65535 projection of `BassEnergy`) and merges it with game rumble via `max()`. The UI meter reads `BassEnergy`.
 
 Implements `IMMNotificationClient` to restart capture on default audio device change.
 
@@ -1063,7 +1113,7 @@ Created when a device has **Consume Mapped Inputs (Hooks)** enabled, or when a g
 ### 8. Web Controller Server Thread
 
 ```csharp
-var acceptThread = new Thread(() => AcceptLoop(ownedListener, token, generation))
+var acceptThread = new Thread(() => AcceptLoop(ownedListener, token, generation, servedPlain))
 {
     Name = "PadForge.WebServer",
     IsBackground = true
@@ -1075,7 +1125,7 @@ Created when the web controller server is enabled. Runs an `HttpListener` accept
 ### 9. Mouse Injector Thread (InputManager, ~500 Hz)
 
 ```csharp
-_mouseInjectorThread = new Thread(() => MouseInjectorLoop(generation))
+_mouseInjectorThread = new Thread(() => MouseInjectorLoop(generation, pollThread))
 {
     Name = "PadForge.MouseInjector",
     IsBackground = true,
@@ -1083,9 +1133,9 @@ _mouseInjectorThread = new Thread(() => MouseInjectorLoop(generation))
 };
 ```
 
-Started in `Start()` right after the polling thread, so it runs whenever the engine runs. The poll thread and the KBM virtual controller accumulate macro mouse-move deltas with `Interlocked.Add` into `_pendingMouseDx` / `_pendingMouseDy` (scroll into `_pendingScroll` / `_pendingScrollH`). This thread drains them with `Interlocked.Exchange`, issues `SendInput` (one call per lane: movement, wheel, horizontal wheel), then `Thread.Sleep(2)` while input keeps arriving (~500 Hz cap, held near 2 ms by the poll loop's `timeBeginPeriod(1)`). With nothing pending it parks on a wait handle until the poll thread signals a new delta.
+Started in `Start()` right after the polling thread, so it runs whenever the engine runs. The poll thread and the KBM virtual controller accumulate macro mouse-move deltas with `Interlocked.Add` into `_pendingMouseDx` / `_pendingMouseDy` (scroll into `_pendingScroll` / `_pendingScrollH`). Keys, buttons and Text Blocks the poll thread queues go out through the same thread, in order (`FlushPendingInput`). This thread drains the deltas with `Interlocked.Exchange`, issues `SendInput`, then waits 2 ms on `MouseWorkSignal` while input keeps arriving (~500 Hz cap for moves, held near 2 ms by the poll loop's `timeBeginPeriod(1)`). A queued key or button ends that wait at once. With nothing pending it parks on the same signal until the poll thread queues something.
 
-Injected mouse movement is processed synchronously: it traverses every process's low-level mouse hook chain. A `SendInput` on the poll thread itself could collapse the 1000 Hz poll rate to ~200 Hz, which is why the syscall is offloaded here. Accumulated delta is batched, never dropped. On shutdown the loop drains one final flush.
+Injected input is processed synchronously: it traverses every process's low-level hook chain. A `SendInput` on the poll thread itself could collapse a 1000 Hz poll rate to ~200 Hz, which is why the syscall is offloaded here. Accumulated delta is batched, never dropped. On shutdown the loop waits for the poll thread to end, then sends everything queued before the stop.
 
 ### 10. Remote Link Server (async loops, on demand)
 
@@ -1097,7 +1147,7 @@ Injected mouse movement is processed synchronously: it traverses every process's
 
 ### 12. Peripheral Outputs (PeripheralOutputHost, with the engine)
 
-`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s, walks the present HID collections for the direct backends, and runs the link pass every 500 ms. It starts eight workers: the `PeripheralHidpp` and `PeripheralGameSense` threads, the Razer Chroma and Logitech LED SDK loops on the thread pool, and one thread for each direct backend, `PeripheralLampArray`, `PeripheralSteelSeries`, `PeripheralRazer` and `PeripheralTouchSense`. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and each Logitech iFeel mouse bound to WinUSB has a `TouchSenseMouse` thread that reads its input reports. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
+`InputService.Start()` starts `PeripheralOutputHost` (#494) beside the engine, and `Stop()` disposes it. The host owns a `PeripheralLink` thread, which reads vendor software presence every 5 s, walks the present HID collections for the direct backends, and runs the link pass every 500 ms. It starts fourteen workers: the `PeripheralHidpp` and `PeripheralGameSense` threads, the Razer Chroma and Logitech LED SDK loops on the thread pool, and one thread for each of the ten direct backends `DirectBackends.Create` lists, `PeripheralLampArray`, `PeripheralSteelSeries`, `PeripheralHidLighting`, `PeripheralOpenRgb`, `PadForge AURA SDK`, `PadForge MYSTIC LIGHT SDK`, `PeripheralIcue`, `PeripheralWootingSdk`, `PeripheralRazer` and `PeripheralTouchSense`. A `SensaHaptics` thread runs only while the Razer Sensa row is assigned to a virtual controller or Identify buzzes it, and each Logitech iFeel mouse bound to WinUSB has a `TouchSenseMouse` thread that reads its input reports. Neither the poll thread nor an effects dispatcher calls a vendor's software or writes to a mouse or keyboard. Step 2 stores haptic levels and the dispatchers store lighting claims in `PeripheralOutputs`, each behind a lock-free store or a leaf lock, and every device or vendor call runs on the worker that owns it.
 
 ### 13. Game Mod Server Thread (GameModServer, on demand)
 
@@ -1126,8 +1176,7 @@ Each display a Screen Color lighting mode reads (#559) gets a background thread 
 | `UserDevices.Items` | Engine (Step 1) | UI, Engine | `SyncRoot` lock |
 | `UserSettings.Items` | UI thread | Engine (Steps 2–5) | `SyncRoot` lock |
 | `UserDevice.InputState` | Engine (Step 2) | UI timer | Atomic ref swap |
-| `CombinedOutputStates[]` | Engine (Steps 4, 4b) | Engine (Steps 5, 6) | Single-thread write |
-| `RetrievedOutputStates[]` | Engine (Step 6) | UI timer | Value copy (struct) |
+| `CombinedOutputStates[]` | Engine (Steps 4, 4b) | Engine (Steps 5, 6), UI timer | Single-thread write, value copy (struct) on the UI read |
 | `VibrationStates[]` | HIDMaestro callbacks, UI test rumble, Step 5 teardown | Engine (Step 2) | Volatile fields |
 | `MacroSnapshots[]` | UI timer | Engine (Step 4b) | Atomic ref swap |
 | `SlotControllerTypes[]` | UI timer | Engine (Step 5) | Volatile read |
@@ -1141,7 +1190,7 @@ Each display a Screen Color lighting mode reads (#559) gets a background thread 
 | `RumbleAudioService` voice packs | Engine (poll lane) | WASAPI render thread | Volatile long (four packed voices) |
 | `PeripheralOutputs` link table (#494) | `PeripheralLink` thread | Engine (Step 2), effects dispatchers, peripheral workers, UI | Immutable table swapped whole (`Volatile.Write`) |
 | `PeripheralOutputs` haptic levels | Engine (Step 2), Remote Link relay, Identify | HID++, GameSense, TouchSense and Sensa workers | Leaf lock per row on write, volatile bits on read |
-| `PeripheralOutputs` lighting claims | Effects dispatchers | Chroma, LED SDK, GameSense, HID++, LampArray, Razer and SteelSeries workers, the Pad page's route line | `ConcurrentDictionary`, leaf lock per claim |
+| `PeripheralOutputs` lighting claims | Effects dispatchers | Every lighting worker (Chroma, LED SDK, GameSense, HID++ and the lighting direct backends), the controller page's route line | `ConcurrentDictionary`, leaf lock per claim |
 | `PeripheralOutputs` direct units and unit rows (#494) | `PeripheralLink` thread | Engine (Step 1 phase 1m), peripheral workers, UI | Immutable snapshots swapped whole (`Volatile.Write`) |
 | A direct backend's snapshot and crash record | Its worker thread | `PeripheralLink` thread, the crash path | Immutable, swapped whole |
 | `GameModEffects` holds (#529) | Game mod server thread, UI (Clear Mod Effects), server stop | Effects dispatchers, Engine (Step 5 thresholds), UI timer | Copy-on-write array published whole under a leaf lock, read with `Volatile.Read` |
@@ -1214,10 +1263,10 @@ Step 5: UpdateVirtualDevices()
   │    MIDI: Windows MIDI Services → virtual MIDI port, or WinMM → the port the slot picked
   │
   ▼
-Step 6: RetrieveOutputStates()
-  │  Copy CombinedOutputStates[] → RetrievedOutputStates[]
-  │  Copy CombinedKbmRawStates[] → RetrievedKbmRawStates[]
-  │  (Value copy, consumed by UI timer at 30 Hz)
+Step 6: PublishSteeringAngles()
+  │  Pack CombinedOutputStates[i] → _steeringAngleFrames[i] (Xbox / PlayStation slots)
+  │  (Read by the next pass's Step 2 for Steering Angle Rumble.
+  │   The UI timer reads CombinedOutputStates[] itself at 30 Hz)
   │
   ▼
 Game reads virtual controller via XInput / DirectInput / SDL / raw HID
@@ -1247,9 +1296,9 @@ Step 2: ApplyForceFeedback() (engine thread)
   │    Everything else → SDL_RumbleJoystick or SDL haptic effects
 ```
 
-Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio path (#236): once per tick the poll loop's `UpdateRumbleAudioLane` publishes each slot's packed voice state to `RumbleAudioService`, which renders it as low-frequency tones on the configured audio endpoint (the "Bass Shakers" tab).
+Since 4.1.0 the same inbound feedback also feeds the optional Rumble to Audio path (#236): once per tick the poll loop's `UpdateRumbleAudioLane` publishes each slot's packed voice state to `RumbleAudioService`, which renders it as low-frequency tones on the configured audio endpoint (the Bass Shakers group under Rumble & Haptics).
 
-Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual controller records the lightbar color a game writes (`GameLightbarCapture`). The slot's `UserEffectsDispatcher` turns each lit mouse's, keyboard's, unit row's or vendor row's Lighting tab mode into a color under that game color, and stores it in `PeripheralOutputs` as the slot's claim on the device, with the device's Lighting Hold. The workers paint the claim that rules each device or shared path: a device's own claim beats a vendor row, then the smaller displayed player number wins. Which worker paints a device follows the link table. While the vendor's program runs that is the Razer Chroma, Logitech LED SDK or SteelSeries GameSense worker, and otherwise the HID++, Razer, SteelSeries or LampArray worker that reaches the device on its own. See [Input Pipeline](input-pipeline.md#peripheral-outputs-494).
+Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual controller records the lightbar color a game writes (`GameLightbarCapture`). The slot's `UserEffectsDispatcher` turns each lit mouse's, keyboard's, unit row's or vendor row's Lighting mode into a color under that game color, and stores it in `PeripheralOutputs` as the slot's claim on the device, with the device's Lighting Hold. The workers paint the claim that rules each device or shared path: a device's own claim beats a vendor row, then the smaller displayed player number wins. Which worker paints a device follows the link table. While the vendor's program runs that is the Razer Chroma, Logitech LED SDK or SteelSeries GameSense worker, or the OpenRGB, ASUS Aura, MSI Mystic Light, Corsair iCUE or Wooting SDK backend (#557). Otherwise it is the HID++ worker or the direct backend that reaches the device on its own: LampArray, SteelSeries, Razer, or the HID lighting worker of the OpenRGB controller families. See [Input Pipeline](input-pipeline.md#peripheral-outputs-494).
 
 ---
 
@@ -1258,7 +1307,7 @@ Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual contro
 | Package | Version | Project | Purpose |
 |---|---|---|---|
 | **CommunityToolkit.Mvvm** | 8.4.2 | App | MVVM: `ObservableObject`, `SetProperty`, `RelayCommand` |
-| **Concentus** | 2.2.2 | App | Pure-C# Opus encoder for the DualSense Bluetooth speaker |
+| **Concentus** | 2.2.2 | App | Pure-C# Opus encoder and decoder for the DualSense Bluetooth speaker and microphone |
 | **HelixToolkit.Core.Wpf** | 2.27.3 | App | 3D viewport for controller model visualization |
 | **Microsoft.Windows.CsWinRT** | 2.3.1 | App | Generates the projection of the in-box `Windows.Devices.Midi2` from `Resources/WinMD` |
 | **Microsoft.Windows.Devices.Midi2** | 1.0.16-rc.3.7 | App | Projection of the Windows MIDI Services App SDK runtime: Microsoft's install, or the build the Settings card installs |
@@ -1272,7 +1321,7 @@ Lighting takes a parallel path (#494). A DualShock 4 or DualSense virtual contro
 | **System.Security.Cryptography.ProtectedData** | 10.0.13 | Engine | DPAPI wrap of the Remote Link private identity key at rest (#138) |
 | **SteamKit2** | 3.5.0 | SteamWorkshop | Anonymous Steam CM session for Workshop search (#9). LGPL-2.1: its license.txt grants 2.1 or any later version, and its package metadata says LGPL-2.1-only. protobuf-net and ZstdSharp.Port arrive transitively |
 
-`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `1.9.0.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
+`HIDMaestro.Core.dll` is referenced as a project-local `<Reference>` (`Resources/HIDMaestro/HIDMaestro.Core.dll`), not a NuGet package. The DLL is copied from a tagged HIDMaestro release build to keep PadForge pinned to a known-good HIDMaestro snapshot. The shipped build reports file version `2.3.0.0`. See [HIDMaestro Deep Dive](hidmaestro-deep-dive.md).
 
 Native libraries folded into `PadForge.exe` and extracted at first launch to the single-file extraction directory (`%TEMP%\.net\PadForge\<hash>\`). Each architecture folder below has an `arm64` twin the ARM64 build takes, except `Interhaptics`, `Corsair` and `MysticLight`, which ship x64 only:
 
@@ -1300,7 +1349,7 @@ PadForge **must** be built with `dotnet publish` (not `dotnet build`). Produces 
 dotnet publish PadForge.App/PadForge.App.csproj -c Release
 ```
 
-Key publish properties (`PadForge.App.csproj`):
+The publish properties (`PadForge.App.csproj`):
 
 ```xml
 <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
@@ -1313,7 +1362,7 @@ Key publish properties (`PadForge.App.csproj`):
 
 Output: `PadForge.App/bin/Release/net10.0-windows10.0.26100.0/win-x64/publish/PadForge.exe`, or `win-arm64/publish/` with `-r win-arm64`. See [Building for ARM64](build-and-publish.md#building-for-arm64).
 
-`SDL3.dll`, `libusb-1.0.dll`, `msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll` (x64 only), `xinput1_4.dll`, `HAR.dll`, and `Interhaptics.RazerProvider.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root), each read from the `$(NativeArch)` folder (`x64` or `arm64`) of its resource directory. A publish without `SDL3.dll`, `libusb-1.0.dll`, or `xinput1_4.dll` is refused (the `RequireBundledNatives` target). With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. On x64, `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj. The ARM64 build drops those four and takes its own `libvosk.dll` from a `<Content>` item.
+`SDL3.dll`, `libusb-1.0.dll`, `msvcp140.dll`, `vcruntime140.dll`, `vcruntime140_1.dll` (x64 only), `xinput1_4.dll`, `HAR.dll`, `Interhaptics.RazerProvider.dll`, `iCUESDK.x64_2019.dll` and `MysticLight_SDK_x64.dll` are declared as `<Content>` items with `CopyToOutputDirectory=PreserveNewest` and `Link="filename"` (flattened to root), each read from the `$(NativeArch)` folder (`x64` or `arm64`) of its resource directory. A publish without `SDL3.dll`, `libusb-1.0.dll` or `xinput1_4.dll` is refused (the `RequireBundledNatives` target), and so is an x64 publish without the iCUE or Mystic Light library and an ARM64 publish without its `libvosk.dll`. With `PublishSingleFile=true` plus `IncludeNativeLibrariesForSelfExtract=true` they get folded into the single-file EXE and extracted to a `%TEMP%\.net\PadForge\<hash>\` directory at first launch, so `PadForge.exe` ships standalone with no adjacent DLLs required at deploy time. The `<Content>` declaration is what makes the build pick them up at all. Without it the publish output would lack them entirely. On x64, `libvosk.dll` and the three MinGW runtime DLLs ride in the same way, added by the Vosk package's targets file rather than by the csproj. The ARM64 build drops those four and takes its own `libvosk.dll` from a `<Content>` item.
 
 `UseWindowsForms=true` is set in the csproj. Required for `System.Windows.Forms.NotifyIcon` (system tray). WinForms implicit usings are removed to avoid WPF type ambiguities.
 
@@ -1325,6 +1374,9 @@ Embedded resources (extracted at install/runtime):
 | `HidHideArm64/HidHide_ARM64.zip`, `HidHideArm64/nefconc.exe` | The ARM64 HidHide driver and the tool that installs it (both builds) |
 | `BthPS3/**/*` | BthPS3 + BthPS3PSM drivers and the DS3 WinUSB INF |
 | `gamecontrollerdb_padforge.txt` | PadForge SDL gamepad mapping additions |
+| `PadForge.DsxStandIn.exe` | The DSX.exe stand-in for DSX game mods, built by `PadForge.DsxStandIn` (`EmbedDsxStandIn` target) |
+| `Views/PadPage.xaml`, `SettingsPage.xaml`, `ExtrasPage.xaml`, `DevicesPage.xaml`, `ProfilesPage.xaml` | The pages' own markup, which Search builds its index from (`PadForge.SearchSources.*`, #574) |
+| `LICENSE`, `Resources/Strings/Languages.tsv` | The third-party notices (`PadForge.ThirdPartyNotices.txt`) and the language list |
 | `3DModels/**/*.obj`, `*.png`, `*.jpg` | 3D controller meshes and atlases. The `EmbedPackedArt` target Brotli-packs the meshes and PNG atlases (`.objbr`, `.pngbr`), and the JPEG atlases embed as they are |
 | `VoiceModels/*.zip` | The Vosk voice model, packed by `EmbedPackedArt` |
 | `WebAssets/**/*` | Web controller frontend (served by WebControllerServer) |
@@ -1362,7 +1414,7 @@ Unicode does not mirror arrows, so a string that shows a flow with an arrow poin
 
 WPF's bidi pass has no bracket-pair rule. In a right-to-left paragraph, the closing bracket of "Igor Budzhak (MIT)" followed by Arabic takes the paragraph's direction and is drawn mirrored on the far side of the name. `Common/BidiText.cs` puts each Latin stretch that holds a bracket pair into a `Run` of its own with `FlowDirection` set to left to right, an embedding that keeps both brackets inside it, and the translation rules keep the textbook fix, a direction mark, out of every string. Its `Text` property binds in place of `TextBlock.Text`, and its `ToolTip` property in place of `ToolTip`. Every string on the About page, the formula chips' tooltips and the pad page strings whose translations held such a pair go through it. `BidiTextTests` draws a credit both ways and checks the closing bracket's position.
 
-Every other TextBlock in a right-to-left window is handled by `Common/TextDirection.cs`, data and template parts included. `UiLanguage` sets its inherited `Watch` property on each right-to-left window, so WPF calls back for every element that joins the tree. A class handler for `Loaded` would miss most TextBlocks, because WPF raises `Loaded` only on elements with handlers of their own. Text with no right-to-left letter that the window's direction would draw differently, such as a device named "Controller (XBOX 360 For Windows)" or text that starts with a digit, takes the direction of its first letter, left to right, as HTML's `dir="auto"` does. Its alignment and padding are mirrored with it, so it stays in place. Text that mixes right-to-left letters with Latin bracketed stretches gets those stretches as left-to-right Runs. New Inlines cost a laid-out TextBlock the binding on its `Text`, so the class first takes the text over: it copies the binding on `Text`, the binding a template or style put there, or the `Content` of the ContentPresenter that shows the string, and builds the Runs from that source on every change. Text a trigger sets and Inlines written with formatting are left alone. Tooltips and context menus are watched as they open. `TextDirectionTests` draws device names, bound text, template text, ContentPresenter strings and a tooltip in a right-to-left window, and an unwatched copy of the device name as the positive control.
+Every other TextBlock in a right-to-left window is handled by `Common/TextDirection.cs`, data and template parts included. `UiLanguage` sets its inherited `Watch` property on each right-to-left window, so WPF calls back for every element that joins the tree. A class handler for `Loaded` would miss most TextBlocks, because WPF raises `Loaded` only on elements with handlers of their own. Text with no right-to-left letter that the window's direction would draw differently, such as a device named "Controller (XBOX 360 For Windows)" or text that starts with a digit, takes the direction of its first letter, left to right, as HTML's `dir="auto"` does. So does a number label such as a slot's "#1", which a right-to-left line draws as "1#", and any text with no right-to-left letter that a block trims, so its ellipsis falls after the last letter shown. Its alignment and padding are mirrored with it, so it stays in place. Text that mixes right-to-left letters with Latin bracketed stretches gets those stretches as left-to-right Runs. New Inlines cost a laid-out TextBlock the binding on its `Text`, so the class first takes the text over: it copies the binding on `Text`, the binding a template or style put there, or the `Content` of the ContentPresenter that shows the string, and builds the Runs from that source on every change. Text a trigger sets and Inlines written with formatting are left alone. Tooltips and context menus are watched as they open. `TextDirectionTests` draws device names, bound text, template text, ContentPresenter strings and a tooltip in a right-to-left window, and an unwatched copy of the device name as the positive control.
 
 ### Translation Rules
 
@@ -1372,7 +1424,7 @@ Every other TextBlock in a right-to-left window is handled by `Common/TextDirect
 
 Despite the `<auto-generated>` header, this file is **hand-written** (not ResXFileCodeGenerator). It implements `INotifyPropertyChanged` so XAML bindings update on language change.
 
-Key design:
+Design:
 
 - **Singleton**: `Strings.Instance` is the binding source for all XAML strings.
 - **Weak event pattern**: Instance-method handlers stored as `(WeakReference<object>, MethodInfo)` to avoid preventing GC. Static/lambda handlers use strong references. Dead entries pruned on every raise.
@@ -1408,13 +1460,13 @@ WPF updates all bound text when `ChangeCulture()` fires `PropertyChanged`.
 
 Chinese, Japanese and Korean share their characters, and WPF picks the font for one from the language its text is declared in: Microsoft YaHei UI under `zh-Hans`, Microsoft JhengHei UI under `zh-Hant`, Yu Gothic UI under `ja`, Malgun Gothic under `ko`. Text with no declared language is `en-US`, which takes the last row of WPF's fallback font table, where the Japanese font comes first. Until this was added, a Simplified Chinese interface was drawn in Yu Gothic UI (#504).
 
-Only those three languages are declared. A window's language is also the culture its bindings format and parse numbers in, and the pad page has some 250 number boxes that read and write the en-US notation. Declared German would read a typed `0.5` as 5. The Chinese, Japanese and Korean cultures write numbers as en-US does. `UiLanguageTests` checks that against every number format in the markup and every such culture .NET knows.
+Only those three languages are declared. A window's language is also the culture its bindings format and parse numbers in, and the pad page has hundreds of number boxes that read and write the en-US notation. Declared German would read a typed `0.5` as 5. The Chinese, Japanese and Korean cultures write numbers as en-US does. `UiLanguageTests` checks that against every number format in the markup and every such culture .NET knows.
 
 Each row of the language picker declares its own language through `CultureLanguageConverter`, so each language's name is drawn in its own font whatever language the interface is in. The binding names `ConverterCulture`, because WPF refuses a binding on `Language` that would take its culture from the property being set.
 
 ---
 
-## Key Static / Singleton Classes
+## Static and Singleton Classes
 
 | Class | Location | Lifetime | Role |
 |---|---|---|---|
@@ -1442,7 +1494,7 @@ Up to **16 virtual controller slots** (`MaxPads = 16`). Per-type limits:
 | Keyboard+Mouse | 16 | `MaxKeyboardMouseSlots = MaxPads` |
 | VR | 1 | `MaxVrSlots = 1` |
 
-The "Add Controller" button hides when all 16 slots are in use.
+The sidebar's Add Controller entry and Home's Add Controller tile hide when all 16 slots are in use.
 
 VR is the one type capped below the global count. One slot already drives both SteamVR hands, so a second would fight the first over the same pair of devices. `SettingsManager.CanSlotTakeType()` enforces the cap in one place, because a type switch on an existing slot could otherwise mint a second VR slot past the add-popup's own check.
 
@@ -1463,8 +1515,6 @@ public RawHidState[] CombinedRawHidStates;      // Step 4 output (raw-HID axes/b
 public MidiRawState[] CombinedMidiRawStates;    // Step 4 output (MIDI)
 public KbmRawState[] CombinedKbmRawStates;      // Step 4 output (KeyboardMouse)
 public VrRawState[] CombinedVrRawStates;        // Step 4 output (VR: the slot's left+right hand pair)
-public Gamepad[] RetrievedOutputStates;          // Step 6 output (UI display)
-public KbmRawState[] RetrievedKbmRawStates;     // Step 6 output (KBM UI preview)
 public Vibration[] VibrationStates;              // HIDMaestro feedback
 public MotionSnapshot[] MotionSnapshots;         // DSU motion data
 public MacroItem[][] MacroSnapshots;             // Macro definitions
@@ -1483,7 +1533,7 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 - [Services Layer](services-layer.md): `InputService`, `SettingsService`, `DeviceService`, `RecorderService`, `ForegroundMonitorService`
 - [Engine Library](engine-library.md): `Gamepad`, `CustomInputState`, `IVirtualController`, `PadSetting`, `UserDevice`
 - [ViewModels](viewmodels.md): `PadViewModel`, `DashboardViewModel`, `DevicesViewModel`, `SettingsViewModel`
-- [XAML Views](xaml-views.md): `DashboardPage`, `PadPage`, `DevicesPage`, `SettingsPage`
+- [XAML Views](xaml-views.md): `HomePage`, `PadPage`, `ExtrasPage`, `DevicesPage`, `SettingsPage`
 - [Settings and Serialization](settings-and-serialization.md): XML persistence, `SettingsManager`, `SettingsService` data flow
 - [Virtual Controllers](../features/virtual-controllers.md): `IVirtualController` implementations (`HMaestroVirtualController` for Xbox / PlayStation / Nintendo / Extended, `HMaestroVRController` for VR, plus MIDI and KB+M)
 - [HIDMaestro Deep Dive](hidmaestro-deep-dive.md): HM SDK surface, thread-pool lifecycle, OpenXInput shim, bubble-down cascade
@@ -1493,4 +1543,4 @@ Pad indices are data identity. A pad's mappings, profile, devices, and settings 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

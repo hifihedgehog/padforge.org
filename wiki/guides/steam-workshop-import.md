@@ -2,8 +2,6 @@
 
 *Browse community-made Steam Input controller configs for any game, read a per-binding translation manifest, and save the result as a ready-to-use PadForge profile.*
 
-<!-- SCREENSHOT: workshop-browse (capture post-deploy: Browse Community Configs dialog, game open, config cards and translation manifest visible) -->
-
 Steam Workshop holds years of community controller layouts built in Steam Input. PadForge reads those configs straight from Steam and translates them into its own mappings, shift layers, macros, and on-screen menus. Nothing applies blind. A manifest shows what became of the config's bindings before you save anything.
 
 <figure class="pf-video">
@@ -13,31 +11,31 @@ Steam Workshop holds years of community controller layouts built in Steam Input.
 <source src="/assets/video/padforge-tutorial-steam-workshop-import.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-steam-workshop-import.vtt" default>
 </video>
-<figcaption>Community Configs turned on, an Elden Ring config found and opened, its manifest read and saved as a profile, recorded live in PadForge 5.2.0 in 1 minute 1 second. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steam-workshop-import-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Community Configs turned on, an Elden Ring config found and opened, its manifest read and saved as a profile, recorded live in PadForge 5.2.0 in 1 minute 1 second. PadForge 6 moved the browser into the Community tab of Get Profiles, so its layout differs from the film. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-steam-workshop-import-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
 
 ## Turn it on
 
-![The Workshop browser before the community-config opt-in is enabled](../images/workshop-cold.png)
+![The Community tab of Get Profiles before the community-config opt-in is enabled](../images/workshop-cold.png)
 
 The feature is off by default. PadForge sends nothing to Steam until you enable it.
 
-1. Open **Settings** and find the **Community Configs** card.
-2. Check **Enable Community Configs**.
+1. Open **Settings**, pick **Data & Privacy**, and find the **Community Configs** card.
+2. Switch on **Enable Community Configs**. **What Is Sent** on the card opens the full account below.
 
 What the toggle allows, exactly:
 
 - PadForge connects directly to Steam, and only when you act: searching for a game, opening a game's config list, opening one config, or clicking the update check. Never at startup, never in the background.
-- The servers contacted are all Steam's own: `store.steampowered.com` (game search), `api.steampowered.com` (Steam's server directory and the update check), the Steam connection servers that directory names (config lists and their details, over an anonymous session), `steamcommunity.com` (creator names), `cdn.steamusercontent.com` (the config files), `cdn.cloudflare.steamstatic.com` (game artwork), and Steam's avatar servers, such as `avatars.fastly.steamstatic.com` (creator avatars). Steam's own data names the config-file and avatar hosts.
+- The servers contacted are all Steam's own: `store.steampowered.com` (game search), `api.steampowered.com` (Steam's server directory and the update check), the Steam connection servers that directory names (config lists and their details, over an anonymous session), `steamcommunity.com` (creator names), `cdn.steamusercontent.com` (the config files), and `cdn.cloudflare.steamstatic.com` (game artwork). Steam's own data names the config-file host.
 - PadForge sends your search text, the ids of the games, configs and creators involved (for the update check, the ids of the configs you imported), and its own version number. The anonymous Steam logon also sends the OS type, a language, and a machine id built from SHA-1 hashes of the Windows machine GUID, the MAC addresses of the physical network adapters, and the boot disk serial. No Steam sign-in, no Steam account needed, no telemetry, no third-party service.
 
 The card carries three more controls:
 
 | Control | What it does |
 |---|---|
-| **Show Legacy Workshop Configs** | Lists configs from before 2017 too. Those have no downloadable file on Steam's servers, so PadForge marks them with a **LEGACY** badge and reads them through Steam instead. See [Legacy configs](#legacy-configs). |
+| **Show Legacy Workshop Configs** | Lists configs from before 2017 too. Those have no downloadable file on Steam's servers, so PadForge marks them with a **Legacy** badge and reads them through Steam instead. See [Legacy configs](#legacy-configs). |
 | **Clear Cached Configs** | Empties the local cache of search results, config files, and artwork. See [The cache](#the-cache). |
 | **Check Imported Profiles for Updates** | Asks Steam whether any config you imported has been updated since. See [Check for updates](#check-for-updates). |
 
@@ -51,27 +49,26 @@ See [Settings](../features/settings.md) for the card in context.
 
 ![Searching the Steam Workshop for a game](../images/workshop-search.png)
 
-Open the **Profiles** page and click **Browse Community Configs**. The button is always there. If Community Configs is still off, the dialog opens on an unlit "The Forge Is Cold" panel that names the Steam servers involved and offers the **Enable Community Configs** step right in place.
+Open the **Profiles** page, click **Get Profiles**, and pick the **Community** tab. The tab is always there. If Community Configs is still off, it opens on an unlit "The Forge Is Cold" panel that names the Steam servers involved and offers **Enable Community Configs** right in place.
 
 ### Find the game
 
-Type at least two characters into **Search Games**. The search runs half a second after you stop typing and shows the top matches with their cover art and a config count per game. Click a game (or press Enter for the first match) to open its config list.
+Type at least two characters into **Search Games**, beside the tabs. The search runs half a second after you stop typing and lists the matches under **Games** with their cover art, a config count per game, and how fully the game supports a controller as Steam says ("full controller support"). Click a game, or press Enter for the picked or first match, to open its config list. **Search Games** over the list goes back to the games.
 
-### Read the config cards
+### Read the config list
 
-The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the first 30 configs Steam returns (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.
+The game's configs list ranked by rating. A filter row above the list carries an **All** chip plus one chip per controller type found in the first page of 30 configs Steam returns (Steam Deck, Steam Controller, DualSense, and so on). Click a chip to narrow the list to configs built for that controller.
 
-**Sorted By** re-orders the list by Rating, Trending, Newest, Subscribers, or Most Votes. Steam returns every order in descending rank, so **Ascending** reverses only the configs already loaded, not the game's whole list. **Search These Configs** asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.42 seconds after you stop typing, or on Enter. Escape clears it.
+**Sorted By** re-orders the list by Rating, Trending, Newest, Subscribers, or Most Votes. Steam returns every order in descending rank, so the direction chip beside it (**Descending** or **Ascending**) reverses only the configs already loaded, not the game's whole list. **Search These Configs** asks Steam for configs whose title matches that text, so it searches the game's whole Workshop list rather than only the configs already loaded. The search runs 0.42 seconds after you stop typing, or on Enter. Escape clears it.
 
-Each card shows:
+Each row shows:
 
 | Element | Meaning |
 |---|---|
-| Title and creator | The config's Workshop title, the creator's Steam name and avatar, and when it was last updated ("by Kaz · updated 3 mo ago"). |
-| Vote bar | The share of positive votes, as a filled bar plus a percentage and the total vote count. A full bar means everyone who voted, voted up. It is a quality signal, not a popularity count. |
-| Subscriber count | How many Steam users subscribed to the config ("12k subscribers"), shown only when Steam reports at least one. This is the popularity count. |
-| Controller chips | Which controller the config was built for. Steam Deck chips render in a colder color. |
-| **LEGACY** badge | A pre-2017 config with no downloadable file. Only shown when **Show Legacy Workshop Configs** is on. |
+| Title | The config's Workshop title. |
+| Second line | The creator's Steam name and when the config was last updated ("by Kaz · updated 3 mo ago"), then the vote count and the share of positive votes ("41 votes · 93%") when it has votes, then how many Steam users subscribed ("12k subscribers") when Steam reports at least one. The share is a quality signal. The subscriber count is the popularity count. |
+| Controller chips | Up to two, for the controllers the config was built for. Steam Deck chips render in a colder color. |
+| **Legacy** badge | A pre-2017 config with no downloadable file. Only shown when **Show Legacy Workshop Configs** is on. |
 
 ---
 
@@ -79,7 +76,7 @@ Each card shows:
 
 ![The translation manifest listing what each binding became](../images/workshop-manifest.png)
 
-Click a card and PadForge downloads the config, translates it, and fills the manifest pane. Three stat blocks summarize the run:
+Click a config and PadForge downloads it, translates it, and fills the **What Comes Across** pane beside the list. Three counts summarize the run:
 
 | Stat | Meaning |
 |---|---|
@@ -87,7 +84,7 @@ Click a card and PadForge downloads the config, translates it, and fills the man
 | **Partial** | The binding is expressed, but with a documented behavioral difference, or it needs one step from you before it works. The row's reason says which. |
 | **Skipped** | The binding is not expressed. The row's reason says why. |
 
-Below the stats, a drawing of the controller lights the inputs the config binds. Under it comes one row per binding, grouped by the physical control it came from (Left Trackpad, Face Buttons, Gyro, and so on). Each row shows a status dot, the source, the target, and a reason for anything that is not a plain translation.
+A drawing of the controller over the counts lights the inputs the config binds. Under the counts comes one row per binding, grouped by the physical control it came from (Left Trackpad, Face Buttons, Gyro, and so on), and by layer under a band with the layer's name when the config has more than one. Each row shows a status dot, the Steam binding, what it becomes, and a reason for anything that is not a plain translation. A long reason shows whole in its tooltip.
 
 Real examples of each status:
 
@@ -95,9 +92,13 @@ Real examples of each status:
 - **Partial**: "circular scroll wheel approximated as a vertical drag" (a touchpad scratch wheel becomes a linear finger drag), or "camera reset approximated as a gyro recenter" (PadForge re-references its own gyro aim state, the equivalent state it owns).
 - **Skipped**: "12 in-game actions, Steam-only, no game-side hook" (bindings that call the game's own action API, which only Steam can deliver), or "player-number change is a Steam-client action, no equivalent".
 
-### Preset chips
+### Becomes
 
-Steam Input configs can carry several action sets (Default, Driving, Menu, and so on). Each appears as a chip in the manifest footer, all included by default. Click a chip to leave that set out, and the manifest re-translates live without it. Included sets beyond the first become [Shift Layers](shift-layers.md) in the imported profile.
+**Becomes**, beside the pane's title, picks the virtual controller the config's buttons and sticks land on: **Xbox** (the first choice) or **PlayStation**. Both read the same bindings, so the rows are the same either way. A config with only keys and mouse offers **Keyboard + Mouse** and nothing else. The keys and mouse of any config always go to a Keyboard + Mouse controller. A change runs the translation again.
+
+### Layers
+
+Steam Input configs can carry several action sets (Default, Driving, Menu, and so on). With two or more, each appears as a chip on the **Layers** line under the pane's title, all included by default. Click a chip to leave that set out, and the pane re-translates live without it. Included sets beyond the first become [Shift Layers](shift-layers.md) in the imported profile.
 
 ---
 
@@ -105,22 +106,22 @@ Steam Input configs can carry several action sets (Default, Driving, Menu, and s
 
 ![An imported config applied as an ordinary PadForge profile](../images/workshop-applied.png)
 
-Two buttons finish the job:
+Two buttons at the foot of Get Profiles finish the job:
 
 | Button | What it does |
 |---|---|
-| **Save Profile** | Saves the translated profile to your [Profiles](profiles.md) grid. |
+| **Save Profile** | Saves the translated profile to your [Profiles](profiles.md) page. |
 | **Save and Apply** | Saves it and loads it immediately. |
 
-Imports always create a new profile. If the name is taken, PadForge appends a number. The status bar confirms the result: "Imported 'Skyrim DS4': 31 clean, 4 partial, 2 skipped".
+Imports always create a new profile. If the name is taken, PadForge appends a number. The message line confirms the result: "Imported “Skyrim DS4”: 31 clean, 4 partial, 2 skipped".
 
 ### What an imported profile looks like
 
-The profile carries only the virtual controllers the config actually drives. A config that mixes both natures gets two pads, a pure keyboard/mouse layout gets a single Keyboard + Mouse pad, and a plain controller passthrough gets a single Xbox pad:
+The profile carries only the virtual controllers the config actually drives. A config that mixes both natures gets two pads, a pure keyboard/mouse layout gets a single Keyboard + Mouse pad, and a plain controller passthrough gets a single gamepad. The gamepad is the type **Becomes** picked, Xbox or PlayStation. The rest of this page calls it the Xbox pad, its default:
 
 | Pad | Type | Gets | When it exists |
 |---|---|---|---|
-| First | **Xbox** | Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). Plain bindings become explicit mapping rows. Turbo, long-press, double-press, and release bindings become macros instead. | The config binds any controller output, switches to a layer that holds controller rows or macros, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold). |
+| First | **Xbox** or **PlayStation** | Every controller-shaped output, remapped (a paddle acting as A, a crossed trigger, a swapped stick) or plain passthrough (A stays A, a matched stick or trigger pull). Plain bindings become explicit mapping rows. Turbo, long-press, double-press, and release bindings become macros instead. | The config binds any controller output, switches to a layer that holds controller rows or macros, or carries a macro that reads this pad's output or writes a virtual-controller button or axis (turbo, toggle, hold). |
 | Next | **Keyboard + Mouse** | Every plain key, mouse button, mouse move, and scroll binding, including flick stick and absolute-pointer rows. | The config binds a plain key or mouse output, or it has no controller-shaped output at all and still carries a macro or an on-screen menu (something has to host them). |
 
 All created pads read the same physical controller. Radial menus, touch menus, and hotbars land on every created pad, so they follow whichever pad the game reads. The one exception is the keyboard menu that Steam's Show Keyboard becomes: it goes on a single pad, the Xbox pad when the import made one.
@@ -137,21 +138,22 @@ Where everything lands:
 - **Mouse regions on a touchpad** become the absolute [Touchpad Pointer](../features/touchpad.md#absolute-pointer) sources, so the cursor warps to your finger inside the config's region.
 - **PlayStation touchpad halves** map onto the left and right halves of the single DS4 or DualSense pad.
 - **Per-group sensitivity** from the config carries over as per-source Sensitivity on the affected rows, including per-row touchpad mouse sensitivity.
+- **Gates and shaping** the import puts on a source show on that source's line in the mapping table: **Only While**, **And While**, **Curve**, **Outer Range**, **Anti-Deadzone**, **Deadzone Shape** and **Inner Deadzone**, each with its reset. A flick stick's values show on the Flick Stick card, and they survive a save made before you assign a controller.
 
 ### After the import
 
 1. **Assign your controller.** The imported profile ships with no device assignments, so its Gamepad sources wait for whichever pad you give each slot. Assign your physical controller to every pad the import created.
-2. **Attach the game.** Select the profile, click **Edit**, and add the game's executable with **Browse...**. With **Auto-Switch Profiles Based on Foreground Application** checked on the Profiles page (it starts off), PadForge then loads the profile whenever the game gains focus, like any other profile.
+2. **Attach the game.** Open the profile card's **More** menu, pick **Edit…**, and add the game's executable under **Games That Load It** with **Browse…** or **Add a Running Game**. With **Switch Profiles by Game** on, on the Profiles page's **Automatic Switching** card (it starts off), PadForge then loads the profile whenever the game gains focus, like any other profile.
 3. **Hide the physical pad if needed.** If the game sees both your real pad and the virtual one, cloak the real pad on the [Devices](../features/devices.md) page.
 
 ---
 
 ## Legacy configs
 
-Configs uploaded before 2017 predate Steam's config download servers, so PadForge cannot fetch them directly. With **Show Legacy Workshop Configs** on, they appear in the list with a **LEGACY** badge. Click one and PadForge tries two things in order:
+Configs uploaded before 2017 predate Steam's config download servers, so PadForge cannot fetch them directly. With **Show Legacy Workshop Configs** on, they appear in the list with a **Legacy** badge. Click one and PadForge tries two things in order:
 
-1. **Your Steam install.** If you are subscribed to the config in Steam, Steam has already downloaded it, and PadForge reads it from your Steam folder on the spot. The manifest fills like any other config.
-2. **A subscribe prompt.** If there is no local copy, the manifest pane explains and offers **Open in Steam Workshop**. Subscribe on the page that opens, let Steam download it, then click another config and back to this one.
+1. **Your Steam install.** If you are subscribed to the config in Steam, Steam has already downloaded it, and PadForge reads it from your Steam folder on the spot. **What Comes Across** fills like any other config.
+2. **A subscribe prompt.** If there is no local copy, the pane explains and offers **Open in Steam Workshop**. Subscribe on the page that opens, let Steam download it, then click another config and back to this one.
 
 The same local-folder fallback also rescues a newer config whose download link has gone dead on Steam's side.
 
@@ -161,12 +163,12 @@ The same local-folder fallback also rescues a newer config whose download link h
 
 Every imported profile remembers which Workshop config it came from and the config's revision date at import time. **Check Imported Profiles for Updates** on the [Settings](../features/settings.md) Community Configs card compares those against Steam in one query:
 
-- Everything current: the status bar reports "Imported profiles are up to date (3 checked)".
-- Something stale: a **Workshop Updates** dialog lists each affected profile and its config, and offers **Browse Community Configs** as the re-import route. Re-importing saves a new profile, so your hand edits to the old one survive.
+- Everything current: the message line reports "Imported profiles are up to date (3 checked)".
+- Something stale: a **Workshop Updates** dialog lists each affected profile and its config, and offers **Browse Community Configs**, which opens the **Community** tab of Get Profiles, as the re-import route. Re-importing saves a new profile, so your hand edits to the old one survive.
 
 Two notes on the record-keeping:
 
-- A profile forked with **Save As** counts as your own work. It drops the Workshop link and is never flagged.
+- A profile forked with **Save As…** counts as your own work. It drops the Workshop link and is never flagged. **Save Current Setup Here** over an imported profile drops the link too.
 - The check needs **Enable Community Configs** on. With the opt-in off, the button reports "Enable Community Configs to check for updates" and touches nothing.
 
 ---
@@ -220,7 +222,7 @@ The Outer Ring Command (the edge member) fires in the modes where Steam's class 
 
 ### Gyro
 
-- The gyro's on and off buttons carry over: Choose Gyro Button(s), or an older config's single gyro button, with the behavior (on while held, the default, off while held, or toggle) and the any-or-all rule. A config with no gyro button gets Steam's default, the right trackpad touch (the right trackpad or right stick touch on handheld configs). One button that turns the gyro on, or toggles it, becomes the device's gyro engage button. Buttons that turn it off while held become the ratchet. Several buttons, an all-buttons rule, or action sets that differ run as a rule per action set, with no setting of its own to edit.
+- The gyro's on and off buttons carry over: Choose Gyro Button(s), or an older config's single gyro button, with the behavior (on while held, the default, off while held, or toggle) and the any-or-all rule. A config with no gyro button gets Steam's default, the right trackpad touch (the right trackpad or right stick touch on handheld configs). One button that turns the gyro on, or toggles it, becomes the device's gyro engage button. Buttons that turn it off while held become the ratchet. Several buttons, an all-buttons rule, or action sets that differ run as a rule per action set. Once you assign the controller, that rule and the ratchet show on the controller's Gyro card as its **Layer**, **Gyro On**, **Gyro On Buttons** and **Needs** rows, and a re-center on engage as **Re-Center When Gyro Turns On**, where you can read and change them.
 - The gyro mouse and gyro stick modes read Steam's conversion style: Yaw, Roll, Yaw plus Roll, and Advanced with its angle offset translate whole, and Player Space and World Space set the device's gyro space. Laser Pointer reads yaw and is named. Gyro Natural Sensitivity (default 250) and the Vertical/Horizontal Output Mixer carry onto the rows.
 - An older gyro mode's turning axis (yaw, roll, or yaw and roll) imports with Steam's own join: for yaw and roll together, the signed length of the two, or the residual when they oppose and roll is at least yaw. Steam Deck, SteamOS handheld, and Zotac Zone configs default to yaw and roll.
 - Rotation reads the `rotation_2` setting. The older `rotation` moves in only for the absolute mouse, the mouse joystick, and flick stick, times 1.5 on a handheld's mouse. An original Steam Controller's trackpads default to 15 degrees on the right and -15 on the left in those modes.
@@ -238,7 +240,7 @@ Steam Input has a few features PadForge does not reproduce, and a few it reprodu
 |---|---|
 | In-game actions | Skipped. These bindings call the game's own action API, which only Steam can deliver. |
 | Steam client actions (system key 0, player number, lizard mode, and the Steam-overlay verbs) | Skipped, with the action named. Three translate instead, without a manifest row: screenshot and system key 1 (the Capture button) tap PrintScreen, and the keyboard popup becomes a **Keyboard** menu, opened by the same input. |
-| Circular scrolling (the scroll-wheel mode on a touchpad or stick) | Partial: the circular scratch becomes a vertical drag (the finger on a touchpad, the Y deflection on a stick), and a scroll-wheel list steps forward only. Directional swipes translate whole. |
+| Circular scrolling (the scroll-wheel mode on a touchpad or stick) | Partial: the circular scratch becomes a vertical drag (the finger on a touchpad, the Y deflection on a stick), and a scroll-wheel list steps forward only. The scroll wheel's click and touch members fire as plain inputs on their surface. Directional swipes translate whole. |
 | Mouse regions on a stick or trigger | Partial: a cursor-clamp macro holds the region while the input is engaged. On a touchpad the region translates Clean as the absolute pointer instead. On the gyro it is Skipped. |
 | Menu cell icons | Render when your local Steam client has the icon art. An unrecognized icon reference is named per cell and the cell keeps its text label. App-provided icons (Steam-internal) fall back to text silently. |
 | Menus hosted on a surface with no direction read | Skipped, with the host named. Sticks, touchpads, the D-pad, the face diamond, and the gyro all host menus, so only a hand-edited config lands here. |
@@ -259,7 +261,7 @@ Features that skipped in older PadForge versions and translate whole now: double
 ## Troubleshooting
 
 - **Double input, or the game reacts twice per press.** The imported profile replaces what the Steam config did. It does not need Steam Input running. If Steam Input is still active for the game, both layers fire. Disable Steam Input for that game (Steam > game properties > Controller), or close Steam, and cloak the physical pad on the [Devices](../features/devices.md) page.
-- **Steam Is Unreachable.** The dialog could not reach Steam. Check your connection and click **Retry**. Profiles you already imported keep working: they live on this PC. In the manifest pane the same title also heads a config that would not read, and the line under it says why.
+- **Steam Is Unreachable.** The dialog could not reach Steam. Check your connection and click **Retry**. Profiles you already imported keep working: they live on this PC. In the **What Comes Across** pane the same title also heads a config that would not read, and the line under it says why.
 - **A config's bindings do nothing in game.** Check that every imported pad has your physical controller assigned, and that the profile is the active one.
 - **No Configs for This Game Yet.** Steam Workshop has no community controller configs for that game. You can be the first: build one in Steam, and it appears here. The same panel appears when **Search These Configs** or a filter chip matches nothing, and when every config the game has is legacy while **Show Legacy Workshop Configs** is off.
 
@@ -267,7 +269,7 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ## Related pages
 
-- [Profiles](profiles.md): where imported profiles land, and the Browse Community Configs entry point.
+- [Profiles](profiles.md): where imported profiles land, and Get Profiles, the entry point.
 - [Settings](../features/settings.md): the Community Configs card, cache clearing, and the update check.
 - [Button and Axis Mappings](../features/mappings.md): the Gamepad sources imported mappings use.
 - [Shift Layers](shift-layers.md): what action sets become.
@@ -279,4 +281,4 @@ Features that skipped in older PadForge versions and translate whole now: double
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

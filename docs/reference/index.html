@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4066,11 +4272,11 @@ Nothing here is required reading for using the app.</p>
 <tbody>
 <tr>
 <td><a href="architecture-overview/">Architecture Overview</a></td>
-<td>The three projects and how data flows between them</td>
+<td>The seven projects of the solution and how data flows between them</td>
 </tr>
 <tr>
 <td><a href="input-pipeline/">Input Pipeline</a></td>
-<td>The six-step, 1000 Hz loop from raw input to virtual output</td>
+<td>The six-step loop from raw input to virtual output, 60 to 10000 passes a second and 1000 by default</td>
 </tr>
 <tr>
 <td><a href="engine-library/">Engine Library</a></td>
@@ -4175,6 +4381,10 @@ Nothing here is required reading for using the app.</p>
 <td>Screen capture sampling and how the colors reach the lighting devices</td>
 </tr>
 <tr>
+<td><a href="crosshair-magnifier-internals/">Crosshair and Magnifier Internals</a></td>
+<td>The crosshair and magnifier windows over a game, how they are drawn, and the macro actions that drive them</td>
+</tr>
+<tr>
 <td><a href="twitch-chat-internals/">Twitch Chat Internals</a></td>
 <td>The chat connection, command parsing and how chat input becomes controller input</td>
 </tr>
@@ -4215,6 +4425,10 @@ Nothing here is required reading for using the app.</p>
 <td>DirectInput FFB effects</td>
 </tr>
 <tr>
+<td><a href="wheel-centering-internals/">Wheel Centering Internals</a></td>
+<td>Centering a wheel from a car's steering: the vehicle model, the force each wheel family takes, and the Release Test</td>
+</tr>
+<tr>
 <td><a href="midi-input-internals/">MIDI Input Internals</a></td>
 <td>MIDI parsing and routing</td>
 </tr>
@@ -4243,6 +4457,10 @@ Nothing here is required reading for using the app.</p>
 <td>The three delivery paths a hidden button can arrive on, and the learners</td>
 </tr>
 <tr>
+<td><a href="flydigi-apex-internals/">Flydigi Apex Internals</a></td>
+<td>The three Apex protocol dialects, the session, the lighting models and the two ways a picture reaches the screen</td>
+</tr>
+<tr>
 <td><a href="wii-controllers-internals/">Wii Controllers Internals</a></td>
 <td>Extensions, Motion Plus, IR camera</td>
 </tr>
@@ -4257,7 +4475,7 @@ Nothing here is required reading for using the app.</p>
 </tbody>
 </table>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

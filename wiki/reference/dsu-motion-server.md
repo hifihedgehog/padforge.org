@@ -2,9 +2,6 @@
 
 *PadForge broadcasts gyro and accelerometer data from your controller over UDP so emulators can use motion in Wii, Wii U, Switch, and 3DS games.*
 
-<!-- SCREENSHOT: dashboard -->
-![The Motion Server controls on the Dashboard](../images/dashboard.png)
-
 ---
 
 ## What it is
@@ -29,7 +26,7 @@ Any app that asks for a "cemuhook motion server" or "DSU server" speaks this for
 
 ## Controllers that report motion
 
-Passing a controller's own motion through needs a gyro and accelerometer in that controller. Motion made from other inputs needs neither: assign an input to **Motion Pitch**, **Yaw** or **Roll** on a PlayStation, Nintendo or Valve-profile slot, and DSU broadcasts it from slots 1 to 4 while DSU is on. The table below covers controllers with sensors.
+Passing a controller's own motion through needs a gyro and accelerometer in that controller. Motion made from other inputs needs neither: assign an input to **Motion Pitch**, **Yaw** or **Roll** on a PlayStation or Nintendo slot, or an Extended slot on a Valve or SInput profile, and DSU broadcasts it from slots 1 to 4 while DSU is on. The table below covers controllers with sensors.
 
 | Reports motion | No motion sensors |
 |---|---|
@@ -43,6 +40,7 @@ Passing a controller's own motion through needs a gyro and accelerometer in that
 | Steam Deck built-in controller | |
 | 2015 Steam Controller | |
 | 2026 Steam Controller | |
+| SInput pads whose features reply reports a gyroscope and accelerometer | |
 
 The [Devices](../features/devices.md) page shows live gyro and accelerometer values for any controller that has them.
 
@@ -52,41 +50,41 @@ The [Devices](../features/devices.md) page shows live gyro and accelerometer val
 
 1. Plug in a controller that reports motion.
 2. Assign it to one of slots 1–4. Any virtual controller type works. An **Xbox** slot broadcasts its controller's motion the same as a **PlayStation** slot, with no motion mapping needed.
-3. On the [Dashboard](../features/dashboard.md), tick **Enable DSU Motion Server (CemuHook Motion Provider Protocol)**.
-4. Leave the **Port** box at **26760**, or type a different number. The reset button next to it returns the port to 26760.
-5. Start the input engine with the play button.
-6. The status indicator lights up orange and the line beside it reads **Listening on :26760**. Point your emulator at `127.0.0.1` port `26760` (see tables below).
+3. Open **Extras** in the sidebar and turn on the **Motion Server** tile's switch, or open the tile and turn on **Enable DSU Motion Server (CemuHook Motion Provider Protocol)** at the top of its page.
+4. Leave the port at **26760**, or open **More** on the Motion Server page and type a different number in the **Motion Server Port** box. The reset button next to it returns the port to 26760.
+5. Start the input engine with the flame button on Home's **Input Engine** card.
+6. The flame on the Motion Server page's status card turns from gold to ember and the line beside it reads **Listening on port 26760**. Point your emulator at `127.0.0.1` port `26760` (see tables below).
 
 Motion data flows the moment both ends are running.
 
-### Per-slot tuning lives on the Gyro tab
+### Per-slot tuning lives on the Gyro card
 
-The DSU broadcast starts from the calibrated gyro stream. The [Gyro](../guides/gyro.md) tab holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the **Grip** hold, the **Compass** magnetometer anchor on controllers that carry one, the **Easy Aim Threshold** stick gate, and the **Aim Engage Button** picker. Both gates zero gyro output while their condition is not met.
+The DSU broadcast starts from the calibrated gyro stream. The [Gyro](../guides/gyro.md) card, in the **Motion & Touch** section of the slot's controller page, holds the tuning, stored per device, per slot: calibration, sensitivity (horizontal and vertical), deadzone, smoothing, response curve, acceleration, invert, real-world calibration, reference frame (Local / Player / World), the **Grip** hold, the **Compass** magnetometer anchor on controllers that carry one, the **Easy Aim Threshold** stick gate, and the **Aim Engage Button** picker. Both gates zero gyro output while their condition is not met.
 
-Whether those controls reach the broadcast depends on one switch. The Gyro tab's **Apply Gyro Tuning to Motion Passthrough** toggle, under the **Motion Passthrough** header, is off by default. Left off, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and both gates stay out of it, so emulators see motion whether or not the engage button is held. Turn it on and the broadcast follows the full tab tuning, the Easy Aim and Aim Engage gates included. With a gate configured and the toggle on, the DSU gyro reads zero while the gate is not satisfied, the same as a Gyro mapping row. Calibration drift correction applies either way.
+Whether those controls reach the broadcast depends on one choice. The Gyro card's **Motion Passthrough** row picks **Raw** or **Tuned**, and **Raw** is the default. On Raw, the broadcast sends the calibrated reading straight through. Sensitivity, smoothing, and both gates stay out of it, so emulators see motion whether or not the engage button is held. On Tuned, the broadcast follows the card's full tuning, the Easy Aim and Aim Engage gates included. With a gate configured and Tuned picked, the DSU gyro reads zero while the gate is not satisfied, the same as a Gyro mapping row. Calibration drift correction applies either way.
 
 The accelerometer stream skips the tuning chain. Sensitivity, deadzone, smoothing, curve, and both gates are gyro-only, so the broadcast carries the scaled accelerometer reading.
 
-Three things still reach it. **Grip** rotates the body gyro, the body accelerometer, and gravity together in both states of the passthrough toggle, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. On a DualShock 3, [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) fills the gyro's pitch and roll from the accelerometer in both states as well. And the Motion Accelerometer row's own **Invert** checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.
+Three things still reach it. **Grip** rotates the body gyro, the body accelerometer, and gravity together on Raw and on Tuned, because a hold is a fact about the frame rather than a tuning choice. An aux accelerometer source (a Nunchuk, a pair's left Joy-Con) keeps its own frame. On a DualShock 3, [Pitch and Roll Simulation](../guides/gyro.md#pitch-and-roll-simulation) fills the gyro's pitch and roll from the accelerometer on both as well. And the Motion Accelerometer row's own **Invert** checkbox flips all three accel axes, the same way the Motion Gyro row's does for gyro.
 
-### The Mappings grid picks the source device
+### The Mappings section picks the source device
 
-A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller), carries a **Motion Gyro** row and a **Motion Accelerometer** row in its Mappings grid, created automatically when a motion-capable device is assigned. Those rows feed the DSU broadcast, and the virtual controller's motion report where its preset has one: the plain DualShock 3 (SIXAXIS), plain Switch 2 Pro and plain Steam Deck Controller presets have none. While either row exists, DSU follows the rows alone. A channel with no row sends nothing, and so does a row emptied of sources. A row whose devices are all offline hands the channel to another row for the same sensor, on any layer, that has a live device, and sends nothing only when no such row exists.
+A **PlayStation** or **Nintendo** slot, or an **Extended** slot running a Valve profile (Steam Deck, or either Steam Controller) or the SInput profile, carries a **Motion Gyro** row and a **Motion Accelerometer** row in its **Mappings** section, created automatically when a motion-capable device is assigned. Those rows feed the DSU broadcast, and the virtual controller's motion report where its preset has one: the plain DualShock 3 (SIXAXIS), plain Switch 2 Pro and plain Steam Deck Controller presets have none. While either row exists, DSU follows the rows alone. A channel with no row sends nothing, and so does a row emptied of sources. A row whose devices are all offline hands the channel to another row for the same sensor, on any layer, that has a live device, and sends nothing only when no such row exists.
 
-A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the **Strongest** combine mode uses. The virtual controller itself carries no motion on such a slot. Those slots have no Motion Pitch, Yaw or Roll rows either, so motion from a stick or buttons reaches DSU only from a PlayStation, Nintendo, or Valve slot.
+A slot with neither row, such as an Xbox, Keyboard + Mouse, MIDI, or VR slot, still broadcasts. DSU combines the sensors of every enabled device assigned to the slot, axis by axis, and keeps the reading with the largest magnitude, the rule the **Strongest** combine mode uses. The virtual controller itself carries no motion on such a slot. Those slots have no Motion Pitch, Yaw or Roll rows either, so motion from a stick or buttons reaches DSU only from a PlayStation, Nintendo, Valve-profile or SInput-profile slot.
 
 - Several motion devices on one slot stack as sources on the same row. The row's **Combine** setting merges their readings axis by axis: **Strongest** by default, or **Combined**, **Average**, or **Custom**.
 - The rows follow shift layers. While a layer is active its own Motion Gyro row applies, and a layer with no Motion Gyro row of its own uses the Base row. A layer row emptied of sources, or marked **Do Not Inherit** with none, switches the channel off on that layer.
 - On a Joy-Con pair, the source picker also offers **Left Joy-Con Motion Gyro** and **Left Joy-Con Accelerometer** to stream the left half's sensors instead of the pair's primary stream. A Wii Remote with a Nunchuk attached offers **Nunchuk Accelerometer** the same way.
 - The [Motion Pitch, Yaw and Roll](../features/mappings.md#motion-pitch-yaw-and-roll) rows add motion from a stick or buttons. While one of them has an input, DSU sends the frame the virtual controller reports: the real sensors from the two rows above plus the simulated turn and lean, or the simulated motion alone on a slot with no sensors.
 
-The Dashboard switch is the global on / off. There is no per-slot DSU enable toggle. Slots 1–4 broadcast when DSU is on. Slots 5–16 are above the protocol cap and never broadcast.
+The Motion Server switch is the global on / off. There is no per-slot DSU enable toggle. Slots 1–4 broadcast when DSU is on. Slots 5–16 are above the protocol cap and never broadcast.
 
 ---
 
 ## Emulator setup
 
-All four guides assume the default port `26760`. To move it, change the **Port** box on the Dashboard and the port in the emulator so both match.
+All four guides assume the default port `26760`. To move it, change the **Motion Server Port** box under **More** on the Motion Server page and the port in the emulator so both match.
 
 > `127.0.0.1` means "this computer." Use it when PadForge and the emulator run on the same PC.
 
@@ -133,10 +131,10 @@ The DSU format only carries 4 slots. PadForge supports 16. Slots 5–16 do not a
 
 Default UDP port: **26760**. Every emulator expects this number out of the box.
 
-The **Port** box sits under the DSU toggle on the Dashboard. It accepts 1024 to 65535. The button beside it resets the value to 26760.
+The **Motion Server Port** box sits under **More** on the Motion Server page (Extras > Motion Server). It accepts 1024 to 65535. The button beside it resets the value to 26760.
 
 <!-- SCREENSHOT: dsu-port-box -->
-![The DSU Port box and reset button on the Dashboard](../images/dsu-port-box.png)
+![The Motion Server page with More open on the Motion Server Port box](../images/dsu-port-box.png)
 
 - The number has to match on both ends.
 - No other DSU server (BetterJoy, DS4Windows) can hold the same port.
@@ -158,19 +156,19 @@ If a direction reads backward on your controller, say which one on the [issue tr
 
 | Problem | Fix |
 |---|---|
-| Emulator does not see motion | Check the DSU status line reads **Listening on :26760**. Check the engine is running (play button). |
+| Emulator does not see motion | Check the Motion Server page's status line reads **Listening on port 26760**. Check the engine is running (the flame button on Home). |
 | Status reads **Port 26760 in use** | Stop BetterJoy or DS4Windows, and the server starts within 3 seconds, or set a different Port and change the emulator to match. |
 | Motion directions are wrong | Open an issue with the controller model and what's flipped. |
 | Only one controller has motion | DSU caps at 4 slots. Move the motion device to slots 1–4. |
 | Device has no motion sensors | Some controllers (Xbox) ship without a gyro. Check the [Devices](../features/devices.md) page. |
-| Emulator says "connected" but no values | The physical controller has to be assigned to a slot, not only detected on the Devices page. |
-| Emulator connected, controller assigned, still no motion | Check the slot's **Motion Gyro** and **Motion Accelerometer** rows on the Mappings grid. While either row exists, DSU reads only those rows, so a row with no source, or one whose device is offline, sends no motion. Add the controller as a source on each row. |
+| Emulator says "connected" but no values | The physical controller has to be assigned to a slot. A controller the Devices page lists but no slot uses sends no motion. |
+| Emulator connected, controller assigned, still no motion | Check the slot's **Motion Gyro** and **Motion Accelerometer** rows in its **Mappings** section. While either row exists, DSU reads only those rows, so a row with no source, or one whose device is offline, sends no motion. Add the controller as a source on each row. |
 
 ---
 
 ## Related pages
 
-- [Dashboard](../features/dashboard.md): master DSU on/off and status indicator.
+- [Home](../features/dashboard.md): the engine's start button, and the Motion Server tile while the server is on.
 - [Controller Slots](../features/controller-slots.md): per-slot DSU broadcast and Gyro Aim mapping.
 - [Devices](../features/devices.md): which controllers report motion.
 - [Settings](../features/settings.md): language, polling, drivers.
@@ -178,4 +176,4 @@ If a direction reads backward on your controller, say which one on the [issue tr
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -20,10 +20,11 @@ theme:
   custom_dir: wiki/overrides
   logo: assets/logo.png
   favicon: assets/icon.png
-  # Fonts load in wiki/overrides/main.html (Archivo, Instrument Sans,
-  # JetBrains Mono, matching the landing page); Material's own Google
-  # Fonts loader stays off.
+  # No web font: the docs use the system's Segoe UI Variable, as the app
+  # and the landing page do (stylesheets/extra.css). Material's own Google
+  # Fonts loader stays off, and wiki/overrides/main.html loads nothing.
   font: false
+  # Both schemes take the app's brushes, set in stylesheets/extra.css.
   palette:
     # Light
     - media: "(prefers-color-scheme: light)"
@@ -95,7 +96,7 @@ nav:
       - Switching from another tool: guides/switching.md
   - Features:
       - features/index.md
-      - Dashboard: features/dashboard.md
+      - Home: features/dashboard.md
       - Devices: features/devices.md
       - Controller Slots: features/controller-slots.md
       - Virtual Controllers: features/virtual-controllers.md
@@ -113,6 +114,7 @@ nav:
       - Controller Audio: features/controller-audio.md
       - Bass Shakers: features/bass-shakers.md
       - Wheels: features/wheel.md
+      - Wheel Centering: features/wheel-centering.md
       - NFC Tags: features/nfc-tags.md
       - Voice Macros: features/voice-macros.md
       - Handheld PC Buttons: features/handheld-buttons.md
@@ -120,8 +122,11 @@ nav:
       - Logitech G-Keys: features/logitech-g-keys.md
       - Analog Keyboards: features/analog-keyboards.md
       - Bliss-Box Adapters: features/bliss-box.md
+      - Flydigi Apex Controllers: features/flydigi-apex.md
       - Keyboard Screens: features/keyboard-screens.md
       - Screen Overlay: features/screen-overlay.md
+      - Crosshair: features/crosshair.md
+      - Magnifier: features/magnifier.md
       - Twitch Chat: features/twitch-chat.md
       - Novint Falcon: features/novint-falcon.md
       - Game Mods: features/game-mods.md
@@ -165,6 +170,7 @@ nav:
       - Profile Import Internals: reference/profile-import-internals.md
       - On-Screen Keyboard Internals: reference/on-screen-keyboard-internals.md
       - Screen Color Internals: reference/screen-color-internals.md
+      - Crosshair and Magnifier Internals: reference/crosshair-magnifier-internals.md
       - Twitch Chat Internals: reference/twitch-chat-internals.md
       - Controller Audio Internals: reference/controller-audio-internals.md
       - Steam Controller Haptics Internals: reference/steam-controller-haptics-internals.md
@@ -175,10 +181,12 @@ nav:
       - Head Tracking Internals: reference/head-tracking-internals.md
       - OpenXR Input Internals: reference/openxr-input-internals.md
       - Wheel Force Feedback Internals: reference/wheel-ffb-internals.md
+      - Wheel Centering Internals: reference/wheel-centering-internals.md
       - MIDI Input Internals: reference/midi-input-internals.md
       - Logitech G-Keys Internals: reference/logitech-g-keys-internals.md
       - Analog Keyboards Internals: reference/analog-keyboards-internals.md
       - Bliss-Box Internals: reference/bliss-box-internals.md
+      - Flydigi Apex Internals: reference/flydigi-apex-internals.md
       - Keyboard Screens Internals: reference/keyboard-screens-internals.md
       - Novint Falcon Internals: reference/novint-falcon-internals.md
       - Game Mods Internals: reference/game-mods-internals.md

@@ -3,11 +3,11 @@
 *Setup walkthroughs for the controller families that need more than plug in and play.*
 
 Most controllers work in PadForge with no special setup: plug in, assign to
-a slot, play. The pages in this section exist for the families that have
+a virtual controller, play. The pages in this section exist for the families that have
 extra capabilities or extra setup steps worth their own walkthrough.
 
 Looking for one specific controller, wheel or stick? [**Supported Devices**](supported.md)
-lists every one PadForge knows by name, all 2,669 of them, grouped by family, the RGB keyboards, mice and other devices PadForge lights included.
+lists every one PadForge knows by name, all 2,687 of them, grouped by family, the RGB keyboards, mice and other devices PadForge lights included.
 
 | Family | Why it has a page |
 | --- | --- |
@@ -29,4 +29,8 @@ A handheld gaming PC's hidden paddles and menu keys have their own feature
 page, [Handheld PC Buttons](../features/handheld-buttons.md), because they
 are learned on the machine rather than recognized by USB identity.
 
-*Last updated for PadForge 5.3.0.*
+The Flydigi Apex 4, Apex 5 and Apex 6 Pro have a feature page too,
+[Flydigi Apex](../features/flydigi-apex.md), for their trigger effects,
+lighting and the screen on the pad.
+
+*Last updated for PadForge 6.0.0.*

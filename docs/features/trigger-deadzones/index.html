@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -2060,6 +2064,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2256,6 +2288,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2292,6 +2352,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -3051,6 +3167,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3644,6 +3766,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3924,6 +4074,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -4016,6 +4194,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4599,11 +4805,12 @@
 
 <h1 id="trigger-deadzones">Trigger Deadzones<a class="headerlink" href="#trigger-deadzones" title="Permanent link">&para;</a></h1>
 <p><em>Set a floor, a ceiling, an anti-deadzone, and a sensitivity curve for every trigger.</em></p>
-<p><img alt="Trigger deadzone settings with range slider and sensitivity curve" src="../../images/pad-triggers.png" /></p>
-<p>Triggers go from 0% released to 100% pressed in one direction. The Triggers tab carves out which part of the physical pull counts and reshapes the response on top.</p>
+<p><img alt="A trigger's card in the Sticks &amp; Triggers section, with its range slider and sensitivity curve" src="../../images/pad-triggers.png" /></p>
+<p>Triggers go from 0% released to 100% pressed in one direction. The trigger cards in the controller page's <strong>Sticks &amp; Triggers</strong> section carve out which part of the physical pull counts and reshape the response on top. Each trigger has a card, two to a row where they fit, with <strong>Reset All</strong> in its head. The card holds <strong>Range</strong>, <strong>Anti-Deadzone</strong> and the <strong>Sensitivity</strong> preset with its curve, then the live instrument. Its <strong>More</strong> holds the same values typed as numbers.</p>
+<p>These cards shape a device's trigger outputs. A single mapping source can carry shaping of its own as well, on its line in the Mappings section: see <a href="../mappings/#source-shaping">source shaping</a>.</p>
 <hr />
 <h2 id="floor-and-ceiling">Floor and ceiling<a class="headerlink" href="#floor-and-ceiling" title="Permanent link">&para;</a></h2>
-<p>Each trigger has a range slider with two handles. The two handles set the active physical range.</p>
+<p>Each trigger's <strong>Range</strong> row is a slider with two handles. The two handles set the active physical range.</p>
 <h3 id="floor-left-handle">Floor (left handle)<a class="headerlink" href="#floor-left-handle" title="Permanent link">&para;</a></h3>
 <p>Any physical value below the floor counts as 0% output.</p>
 <ul>
@@ -4776,7 +4983,7 @@
 <p>Press and release the trigger to watch both stages move together.</p>
 <hr />
 <h2 id="setting-values">Setting values<a class="headerlink" href="#setting-values" title="Permanent link">&para;</a></h2>
-<p>Every slider has 0.1% precision. Each value has a percentage field and a digit field, so the Range row carries one pair for each handle:</p>
+<p>Every slider has 0.1% precision. The card's <strong>More</strong> types the values as numbers: each end of the Range in percent and as a raw value, and the Anti-Deadzone as a raw value.</p>
 <table>
 <thead>
 <tr>
@@ -4799,7 +5006,7 @@
 <p>A profile imported from reWASD or DS4Windows brings its triggers' response curves to the <strong>Sensitivity Curve</strong> card when the card is still linear, as the nearest curve it can draw. A card you already shaped keeps its curve. See <a href="../../guides/profile-import/">Profile Import</a>.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
-<p>Every row has a reset button (circular arrow icon) that restores the default. Reset All at the top of each trigger section resets everything for that trigger in one click.</p>
+<p>Every row has a reset button (circular arrow icon) that restores the default. <strong>Reset All</strong> in each trigger card's head resets everything for that trigger in one click.</p>
 <hr />
 <h2 id="recommended-settings-by-genre">Recommended settings by genre<a class="headerlink" href="#recommended-settings-by-genre" title="Permanent link">&para;</a></h2>
 <p>Starting points only. Test in-game and adjust.</p>
@@ -4930,7 +5137,7 @@
 <p>Keep defaults. Physical range maps 1:1 to virtual.</p>
 <hr />
 <h2 id="custom-directinput-triggers">Custom DirectInput triggers<a class="headerlink" href="#custom-directinput-triggers" title="Permanent link">&para;</a></h2>
-<p>When a slot uses Extended output with the <strong>Customize</strong> toggle on, the Triggers tab follows the <strong>Triggers</strong> field:</p>
+<p>When a slot uses Extended output with the <strong>Customize</strong> toggle on, the trigger cards follow the <strong>Triggers</strong> field:</p>
 <table>
 <thead>
 <tr>
@@ -4941,7 +5148,7 @@
 <tbody>
 <tr>
 <td>0</td>
-<td>Triggers tab is hidden</td>
+<td>No trigger cards</td>
 </tr>
 <tr>
 <td>1</td>
@@ -4953,14 +5160,14 @@
 </tr>
 <tr>
 <td>3–8</td>
-<td>Each extra trigger gets its own row. Each uses 1 of the 8 axes shared with sticks.</td>
+<td>Each extra trigger gets its own card. Each uses 1 of the 8 axes shared with sticks.</td>
 </tr>
 </tbody>
 </table>
 <p>Every trigger gets its own range slider, anti-deadzone, sensitivity curve, and live instrument.</p>
 <hr />
 <h2 id="stick-assisted-analog-trigger">Stick-assisted analog trigger<a class="headerlink" href="#stick-assisted-analog-trigger" title="Permanent link">&para;</a></h2>
-<p>Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live on the <strong>Mappings</strong> tab (see <a href="../mappings/">Button and Axis Mappings</a>), not this one, but the result is an analog trigger.</p>
+<p>Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live in the <strong>Mappings</strong> section (see <a href="../mappings/#stick-trim">Button and Axis Mappings</a>), not on the trigger cards, but the result is an analog trigger.</p>
 <p>Set it up on a trigger output:</p>
 <ol>
 <li>Map a digital input (a button) to the trigger.</li>
@@ -5006,7 +5213,7 @@
 <li><a href="../adaptive-triggers/">Adaptive Triggers</a>: DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

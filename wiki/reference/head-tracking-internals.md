@@ -8,8 +8,10 @@ The user-facing page is [Head Tracking](../features/head-tracking.md). This one 
 |---|---|
 | `PadForge.Engine/Common/HeadPose.cs` | Pure decoders and scaling, no Windows calls |
 | `PadForge.App/Common/Input/HeadTrackerDevice.cs` | The row: UDP receive thread, FreeTrack polling, silence, status. `FreeTrackReader` lives in the same file. |
-| `PadForge.App/Common/Input/HeadTrackingRuntime.cs` | Static mirror of the Dashboard controls the poll thread reads |
-| `PadForge.App/ViewModels/DashboardViewModel.cs` | The head-tracking properties (three input toggles, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and `HeadTrackingStatus` |
+| `PadForge.App/Common/Input/HeadTrackingRuntime.cs` | Static mirror of the Head Tracking page's controls the poll thread reads |
+| `PadForge.App/ViewModels/DashboardViewModel.cs` | The head-tracking properties (three input switches, the OpenXR runtime picker, the UDP port, two shared ranges, six per-axis ranges), their reset commands, the Set Neutral command, and `HeadTrackingStatus` |
+| `PadForge.App/ViewModels/DashboardViewModel.Extras.cs` | The Extras page's switch, `HeadTrackingAnyEnabled`, with `HeadTrackingLastSources` and `HeadTrackingStartingSources` (UDP and FreeTrack), and the Sources and Range cards' Reset All commands |
+| `PadForge.App/Views/ExtrasPage.xaml` | The Head Tracking page: its switch, the status line with Set Neutral, Sources, Range, and More |
 | `PadForge.App/Services/InputService.cs` | `BuildHeadTrackerStatus`, `UpdateHeadTrackingStatus`, the Devices row status |
 | `PadForge.App/Services/SettingsService.cs` | `AppSettingsData.HeadTracking*`, `ProfileData.EnableHeadTracking`, `EnableHeadTrackingFreeTrack`, and format markers |
 | `PadForge.App/Services/WebControllerServer.cs` | `EnsureInboundFirewallRule`, shared with the web controller |
@@ -30,7 +32,7 @@ The user-facing page is [Head Tracking](../features/head-tracking.md). This one 
 | Axes | Six `AbsoluteAxis` objects at `InputIndex` 0 to 5, named Head Yaw, Head Pitch, Head Roll, Head X, Head Y, Head Z, GUIDs X, Y, Z, Rx, Ry, Rz |
 | Buttons, hats, rumble, gyro, touchpad | None |
 
-The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and the Devices page draws neither the Input Hiding nor the Input Mode section. `CreateDefaultPadSetting` auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.
+The path is a URI scheme, so `DeviceRowViewModel.IsInternalVirtual` is true and the Devices page shows neither the Hide from Games switch (`ShowHidHideToggle`) nor the Force Raw Joystick Mode switch (`ShowInputModeSection`). `CreateDefaultPadSetting` auto-maps only gamepads, Bliss-Box ports with a placed controller, and touchpads or tablets on a PlayStation output, so the row starts unmapped by design.
 
 ---
 
@@ -68,7 +70,7 @@ OpenTrack's "UDP over network" output (`proto-udp/ftnoir_protocol_ftn.cpp`) send
 | Units | Translation in centimeters, rotation in degrees |
 | Signs | Positive yaw moves OpenTrack's mouse output right, positive pitch moves it up (`proto-mouse` invert table) |
 | Short datagram | Dropped |
-| Long datagram | Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with `MessageSize` and is dropped. |
+| Long datagram | Up to 256 bytes, the first 48 are read and the rest ignored, as OpenTrack's own UDP tracker does. A longer one fails the 256-byte receive with `SocketError.MessageSize` and is dropped. |
 | NaN or infinity in any field | The whole datagram is dropped (`tracker-udp` rule) |
 
 The socket is IPv4 UDP bound to `IPAddress.Any` on the port (`HeadTrackerDevice.UdpBindAddress`, which the tests set to loopback), with `ExclusiveAddressUse` so a second listener on the same port (OpenTrack's own UDP tracker) surfaces as a bind failure instead of stealing half the datagrams, and `SIO_UDP_CONNRESET` cleared so an ICMP port-unreachable does not throw out of the next receive (the DSU server's rule). The receive thread is `PadForge.HeadTrackerUdp`, a 256-byte buffer, and after ten consecutive socket errors it sleeps 50 ms between retries. A bind failure sets `UdpBindFailed`, and `GetCurrentState` tries the bind again every 3 seconds (`UdpRetryMs`, `RetryUdpBind`), one attempt at a time and never after `Dispose`, so closing the program that held the port brings the listener up without the row reopening.
@@ -166,7 +168,7 @@ With no session standing, that event, a lost instance and a failed poll each end
 
 A stop for good settles through `OpenXrHeadPoseSource.SettledOn`: `Ended` once a session has stood, `Failed` in place of `NoHeadset`, and the reason otherwise. `Settle` writes one line with what was read, `OpenXR: {what} ({read}), so the source stops ({state})`. An `xrGetSystem` error other than `XR_ERROR_FORM_FACTOR_UNAVAILABLE` is `Failed`, and a lost instance is `Ended` from any call of session creation (`OpenXrSession.FailureOf`). A refused `xrBeginSession` ends the source (`OpenXrSession.EndOfBegin`). A session state event or a reference space change that names another session is dropped, and so is one that arrives while no session stands (`OpenXrSession.IsAboutThisSession`). The live session's reference space change recaptures the neutral. The lines the link writes about an instance or a session (the controllers, a session that runs, an event storm) are written once until a pose arrives, like the source's own (`OpenXrHeadPoseSource.SayFromLink`). Every number in an OpenXR line is written in the invariant culture (`OpenXrInterop.Number`), so a log reads the same under every Windows regional format.
 
-The same text lands in two places, each rebuilt only when `StatusVersion` moves. The Devices row's line comes from `UpdateDevicesRawState`, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Dashboard's `HeadTrackingStatus` comes from `UpdateHeadTrackingStatus` on the dashboard tick and reads `Stopped` (`Common_Stopped`) while the feature is off, the engine is down, or the row has not opened.
+The same text lands in two places, each rebuilt only when `StatusVersion` moves. The Devices row's line comes from `UpdateDevicesRawState`, the preview loop, keyed on the device instance plus its version (a reopen restarts the version at 0, so a version-only key kept a retired device's line). The Extras page's line, `HeadTrackingStatus`, comes from `UpdateHeadTrackingStatus` on the dashboard tick and reads `Stopped` (`Common_Stopped`) while the feature is off, the engine is down, or the row has not opened. The same pass sets `IsHeadTrackingReceiving`, which burns the page's status flame while a source delivers a pose.
 
 ---
 
@@ -219,4 +221,4 @@ Confirmed by reading and by the replay tests: the datagram layout, the heap offs
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -5,26 +5,28 @@
 A Screen Overlay shows anything a [keyboard screen](keyboard-screens.md) can show, in a borderless window on the PC's own display. It needs no keyboard screen, opens no device and runs with **Drive Keyboard Screens** off. Up to eight overlays run at once, each with its own window and its own choice of what to show.
 
 <!-- SCREENSHOT: dashboard-screen-overlay -->
-![The Dashboard's Screen Overlay card with one overlay, its Enable Screen Overlay box unticked, the Opacity slider at 80 percent, the Choose What It Shows…, Reset Position and Add Overlay buttons, and the status line reading Stopped](../images/dashboard-screen-overlay.png)
+![The Screen Overlay page under Extras with one overlay card: Overlay 1 and its status, Reset All, the Enable Screen Overlay switch, the Shows row with Choose What It Shows…, the Opacity slider at 80 percent and Reset Position, and Add Overlay at the top](../images/dashboard-screen-overlay.png)
 
 ---
 
-## The card
+## The page
 
-The [Dashboard](dashboard.md#screen-overlay)'s **Screen Overlay** card starts with one overlay, off. The overlay windows show while the input engine runs.
+Open **Extras** in the sidebar and click the **Screen Overlay** tile, in the **On Screen** group. The page starts with one overlay, off. The overlay windows show while the input engine runs.
+
+The tile's own switch is on while any overlay is on. Turned off, it turns every overlay off and remembers which were on. Turned on again, it brings those back, or the first overlay when it remembers none.
+
+Each overlay has a card. Its head names it, **Overlay 1**, **Overlay 2** and so on, with its status beside the name: **Running** or **Stopped**. A running overlay with nothing to show says why, as **Running, no picture chosen** or **Running, no lightbar color**. **Reset All** puts the overlay's switch, what it shows, its opacity and its place back to their defaults.
 
 | Control | What it does |
 |---|---|
 | **Enable Screen Overlay** | Shows the overlay's window. Off by default. |
+| **Shows** | What the overlay shows now, and **Choose What It Shows…**, which opens the overlay's dialog, below. |
 | **Opacity** | How opaque the overlay's content is, 0 to 100%, 80% by default. The outline and grip that show while you arrange it keep theirs. |
-| **Choose What It Shows…** | Opens the overlay's dialog, below. |
-| **Reset Position** | Centers the overlay on the monitor it was last on. |
-| **Remove** | Removes this overlay. Shown only while the card holds more than one. |
-| **Add Overlay** | Adds an overlay, up to eight. |
+| **Place on Screen** | **Reset Position** centers the overlay on the monitor it was last on. |
+| **Remove** | In the card's head. Removes this overlay. Shown only while the page holds more than one. |
+| **Add Overlay** | At the top of the page. Adds an overlay, up to eight. |
 
-Under each overlay a flame and a line show whether its window is up: **Running** or **Stopped**. A running overlay with nothing to show says why, as **Running, no picture chosen** or **Running, no lightbar color**.
-
-With more than one overlay, each group is titled **Screen Overlay 1**, **Screen Overlay 2** and so on. A new overlay takes the lowest free number, and an overlay keeps its number when another is removed, so a macro that names overlay 3 always reaches the same window.
+A new overlay takes the lowest free number, and an overlay keeps its number when another is removed, so a macro that names overlay 3 always reaches the same window. Macros and the overlay's dialog call it by its full name, **Screen Overlay 3**.
 
 ---
 
@@ -58,7 +60,7 @@ While PadForge is the window in front, every overlay that is up shows an outline
 
 - Drag with the right mouse button, or one finger on a touch screen, to move it.
 - Drag the grip to size it. An overlay opens at 320 by 240 and goes no smaller than 80 by 60.
-- An overlay with nothing to show says so in its middle: *No picture chosen.*, *No DualShock 4 or DualSense lightbar color to show.* or *Nothing to show yet. Choose what it shows on the Dashboard.*
+- An overlay with nothing to show says so in its middle: *No picture chosen.*, *No DualShock 4 or DualSense lightbar color to show.* or *Nothing to show yet. Choose what it shows on the Screen Overlay page, under Extras.*
 
 While any other program is in front, the outline and grip go away and clicks pass through the overlay to the program beneath it. The overlay never takes the focus from a game and has no taskbar button. Once a second it goes back above a game that made its own window topmost after the overlay came up. PadForge's own radial menu and flyouts stay above it.
 
@@ -68,7 +70,7 @@ The overlay remembers the monitor you leave it on, and a new overlay opens cente
 
 ## Macros
 
-A macro on any slot reaches the overlays, whether or not their windows are up, and needs neither **Drive Keyboard Screens** nor a Devices row. Each overlay action has an **Overlay** box: **Every Overlay**, or **Screen Overlay 1** to **Screen Overlay 8**. **Every Overlay** means each overlay on the card.
+A macro on any slot reaches the overlays, whether or not their windows are up, and needs neither **Drive Keyboard Screens** nor a Devices row. Each overlay action has an **Overlay** box: **Every Overlay**, or **Screen Overlay 1** to **Screen Overlay 8**. **Every Overlay** means each overlay on the page.
 
 | Action | On an overlay |
 |---|---|
@@ -84,16 +86,16 @@ A show keeps its clock while its window is down, so a window that comes up shows
 
 ## Profiles
 
-Each [profile](../guides/profiles.md) keeps the card's overlays: which exist, each one's switch, opacity, monitor, place and size. A profile switch puts up the overlays that profile has on and takes down the rest. A profile saved before 5.3.0 has one overlay, off.
+Each [profile](../guides/profiles.md) keeps the page's overlays: which exist, each one's switch, opacity, monitor, place and size. A profile switch puts up the overlays that profile has on and takes down the rest. A profile saved before 5.3.0 has one overlay, off.
 
 ---
 
 ## Imported profiles
 
-A reWASD crosshair lives inside reWASD, so the [import](../guides/profile-import.md) cannot bring the crosshair's picture. A button that toggles crosshair 1 to 8 becomes **Toggle Screen Overlay** for the overlay of that number, and reWASD's crosshair command type 120 becomes **Toggle Screen Overlay** for **Every Overlay**. The import reports each one as Partial, *A crosshair lives inside reWASD. Show your own picture with a Screen Overlay.* Give the overlay your own picture with **Choose What It Shows…**. PadForge runs eight overlays, so a button for reWASD's ninth or tenth crosshair is skipped with its own line.
+The [import](../guides/profile-import.md) turns a reWASD button that toggles one of its ten crosshairs into **Toggle Crosshair** for PadForge's crosshair of that number, and reWASD's command for every crosshair into **Toggle Crosshair** for **Every Crosshair**. Those land on the [Crosshair](crosshair.md) page, not on a Screen Overlay.
 
 See the technical page, [Keyboard Screens Internals](../reference/keyboard-screens-internals.md#the-screen-overlay).
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

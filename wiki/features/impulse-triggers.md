@@ -1,21 +1,23 @@
 # Impulse Triggers
 
-*A separate Pad-page tab that drives the trigger motors on physical Xbox One, Elite, and Series pads. Game passthrough, audio-driven trigger rumble, and a steady-force override all live on this tab.*
+*A card in the controller page's Rumble & Haptics section that drives the trigger motors on physical Xbox One, Elite, and Series pads. Game passthrough, audio-driven trigger rumble, and a steady-force override all live on this card.*
 
 <!-- SCREENSHOT: pad-impulse-triggers -->
-![Impulse Triggers tab with Overall Gain, per-trigger gain, Constant Trigger Force, and Audio Bass Trigger Rumble cards](../images/pad-impulse-triggers.png)
+![Impulse Triggers card with Overall Gain, Trigger Motor Activity, and the Audio Bass Trigger Rumble card](../images/pad-impulse-triggers.png)
 
 ---
 
-## When the tab shows
+## When the card shows
 
-The Impulse Triggers tab appears when the active source device has trigger motors. That covers Xbox One (original wired, 2015 firmware, S wired, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (wired, Wireless Adapter, and Bluetooth). Any other pad that reports trigger-rumble capability surfaces the tab too. Pick any of those in the Pad page's source picker and the tab appears.
+The **Impulse Triggers** card appears in the **Rumble & Haptics** section when the device picked in the **Driven by** row of the controller's header has trigger motors. That covers Xbox One (original wired, 2015 firmware, S wired, S Bluetooth, Wireless Adapter), Xbox Elite (original wired), Xbox Elite Series 2 (wired and Bluetooth), and Xbox Series X|S (wired, Wireless Adapter, and Bluetooth). Any other pad that reports trigger-rumble capability shows the card too.
 
-DualSense and DualSense Edge do not surface this tab. Their trigger motors are written through DualSense's own effects channel, the **Vibration** mode on the [Adaptive Triggers](adaptive-triggers.md) tab, not Microsoft's impulse-trigger protocol. The same Xbox impulse data that a game sends gets routed there automatically, so a DualSense playing Forza still buzzes both triggers.
+A [Flydigi Apex](flydigi-apex.md) 4, 5 or 6 Pro gets the card as well. Its triggers play the levels: by force on an Apex 4 and 5, and by vibration on an Apex 6 Pro. The card's title explains it in its tooltip, and **Translate Adaptive Trigger Vibrations** is hidden, since the pad plays adaptive trigger effects itself.
 
-Xbox 360 and most third-party pads have no trigger motors and the tab stays hidden.
+DualSense and DualSense Edge do not show this card. Their trigger motors are written through DualSense's own effects channel, the **Vibration** mode on the [Adaptive Triggers](adaptive-triggers.md) card, not Microsoft's impulse-trigger protocol. The same Xbox impulse data that a game sends gets routed there automatically, so a DualSense playing Forza still buzzes both triggers.
 
-The tab is **per pad per slot**. Every physical pad mapped to the slot keeps its own Impulse Triggers, Constant Trigger Force, and Audio Bass Trigger Rumble values. Pick a different device in the assigned-devices dropdown and the tab rebinds to that device.
+Xbox 360 and most third-party pads have no trigger motors and the card stays hidden.
+
+The card's settings belong to the device picked in the Driven by row, so its chip reads **This device**. Every physical pad mapped to the controller keeps its own Impulse Triggers, Constant Trigger Force, and Audio Bass Trigger Rumble values. Pick a different device in the Driven by row and the card follows it.
 
 For body-motor rumble, the FFB pipeline for wheels and sticks, and audio bass rumble on the body motors, see [Force Feedback](force-feedback.md).
 
@@ -29,6 +31,8 @@ The impulse data arrives on the virtual controller's HID lane, so the slot needs
 
 ### Settings
 
+Overall Gain is on the card. The rest are under **More**.
+
 | Setting | Range | Default | What it does |
 |---|---|---|---|
 | Overall Gain | 0–100% | 100% | Scales both trigger motors together, on top of the per-trigger sliders below. |
@@ -37,21 +41,21 @@ The impulse data arrives on the virtual controller's HID lane, so the slot needs
 | Swap Left and Right Trigger Motors | On/Off | Off | Flips which physical trigger motor receives the left vs. right signal. Use when the trigger pulses feel reversed. |
 | Translate Adaptive Trigger Vibrations | On/Off | Off | When a game drives this slot as a virtual DualSense, a [game mod made for DSX](game-mods.md) sends trigger effects, or a macro plays an [Adaptive Trigger Effect](game-telemetry.md#adaptive-trigger-effect), the vibration-style adaptive trigger effects play on this controller's impulse trigger motors. Resistance-style effects have no vibration equivalent and are ignored. |
 
-While a game mod sends trigger effects to this virtual controller, an orange line under the tab's description names its program.
+While a game mod sends trigger effects to this virtual controller, an orange line above the card names its program.
 
 ### Test buttons
 
-**Test Left Trigger** and **Test Right Trigger** fire a short pulse on the selected device only, so you can verify one pad without buzzing the others.
+Under **More**, the Left Trigger and Right Trigger rows each have a **Test** button (**Test Left Trigger**, **Test Right Trigger**). Each fires a short pulse on the selected device only, so you can verify one pad without buzzing the others.
 
 ### Trigger motor activity
 
-Real-time bars show the current magnitude on each trigger motor as games drive them. Use the bars to confirm a game is sending impulse data, to watch which trigger a game favors, and to tune the scale sliders while you see the result.
+The **Trigger Motor Activity** bars on the card show the current magnitude on each trigger motor as games drive them. Use the bars to confirm a game is sending impulse data, to watch which trigger a game favors, and to tune the scale sliders while you see the result.
 
 ---
 
 ## Constant Trigger Force
 
-A per-device override that applies a continuous force to each trigger motor until you toggle off. Same override-with-resume behavior as Constant Force on the [Force Feedback](force-feedback.md) tab. Game-driven trigger force takes over while active and the constant force resumes when the game stops sending.
+A per-device override, under the card's **More**, that applies a continuous force to each trigger motor until you turn it off. Same override-with-resume behavior as Constant Force on the [Force Feedback](force-feedback.md#constant-force) card. Game-driven trigger force takes over while active and the constant force resumes when the game stops sending.
 
 ### Settings
 
@@ -67,15 +71,15 @@ These two sliders read as a plain value from 0.00 to 1.00, not a percentage.
 
 ## Audio Bass Trigger Rumble
 
-A separate audio-bass channel that drives the trigger motors instead of the body motors. Captures system audio via Windows loopback, isolates bass with a low-pass filter, and converts bass energy into trigger motor magnitude. Runs alongside the body-motor Audio Rumble on the [Force Feedback](force-feedback.md) tab. They share the loopback capture but keep independent sensitivity, cutoff, and per-motor scaling.
+A separate audio-bass channel that drives the trigger motors instead of the body motors. It folds open as a card of its own under the Impulse Triggers card. Captures system audio via Windows loopback, isolates bass with a low-pass filter, and converts bass energy into trigger motor magnitude. Runs alongside the body-motor Audio Rumble on the [Force Feedback](force-feedback.md#audio-rumble) card. They share the loopback capture but keep independent sensitivity, cutoff, and per-motor scaling.
 
 ### Settings
 
 | Setting | Range | Default | What it does |
 |---|---|---|---|
 | Drive Trigger Motors from Audio | On/Off | Off | Routes audio bass into the trigger motors on the selected device. |
-| Sensitivity | 1.0–20.0 | 4.0 | Bass intensity multiplier for the trigger channel. |
-| Bass Cutoff (Hz) | 20–200 Hz | 80 Hz | Low-pass cutoff for the trigger channel. |
+| Sensitivity | 1.0–60.0 | 4.0 | Bass intensity multiplier for the trigger channel. |
+| Bass Cutoff (Hz) | 20–2000 Hz | 80 Hz | Low-pass cutoff for the trigger channel. |
 | Left Trigger | 0–100% | 100% | Audio-driven level for the left trigger motor. |
 | Right Trigger | 0–100% | 100% | Audio-driven level for the right trigger motor. |
 
@@ -90,8 +94,9 @@ The Level meter shows current bass energy on the trigger channel as audio plays.
 | Xbox One | Trigger motors driven directly (game passthrough, constant force, audio bass) |
 | Xbox Elite (original and Series 2) | Trigger motors driven directly |
 | Xbox Series X\|S | Trigger motors driven directly |
+| Flydigi Apex 4, 5 and 6 Pro | Played in the pad's own triggers. See [Flydigi Apex](flydigi-apex.md). |
 | DualSense / DualSense Edge | Received as Adaptive Trigger Vibration |
-| Xbox 360, generic, most third-party pads | No trigger motors. Tab is hidden. |
+| Xbox 360, generic, most third-party pads | No trigger motors. The card is hidden. |
 
 DualSense pads receive impulse data as Adaptive Trigger Vibration mode. Plug a DualSense into the same virtual Xbox slot as an Xbox One+ pad and trigger pulses fire on both in step.
 
@@ -99,17 +104,16 @@ On Xbox One, Elite, and Series pads, PadForge drives the trigger motors directly
 
 When the physical pad is plugged into another PC and shared over [Remote Link](../guides/remote-link.md), the same trigger output crosses the link. Game passthrough, constant trigger force, and audio bass trigger rumble all reach the remote pad's trigger motors.
 
-The slot-tier [Bass Shakers](bass-shakers.md) tab can also play game trigger feedback as audio tones: its **Left Trigger** and **Right Trigger** voices each get a tone, and **Controller Stereo** mode splits them to the left and right speaker channels.
+The whole-controller [Bass Shakers](bass-shakers.md) card can also play game trigger feedback as audio tones: its **Left Trigger** and **Right Trigger** voices each get a tone, and **Controller Stereo** mode splits them to the left and right speaker channels.
 
 ---
 
 ## Reset controls
 
-Every slider has its own reset button. Each card has a reset button for the whole card.
+Every slider has its own reset button.
 
-- **Reset Impulse Triggers**: resets the whole tab. Overall Gain 100%, both Impulse triggers 100%, Swap off, Translate Adaptive Trigger Vibrations off, and the Constant Trigger Force and Audio Bass Trigger Rumble cards back to their defaults.
-- **Reset Constant Trigger Force**: toggle off, left 0.00, right 0.00. Affects this card only.
-- **Reset Audio Trigger Rumble**: disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects this card only.
+- **Reset All** on the Impulse Triggers card (**Reset Impulse Triggers**): Overall Gain 100%, both triggers 100%, Swap off, Translate Adaptive Trigger Vibrations off, Constant Trigger Force off at 0.00 on both triggers, and the Audio Bass Trigger Rumble card back to its defaults.
+- **Reset All** on the Audio Bass Trigger Rumble card (**Reset Audio Trigger Rumble**): disabled, sensitivity 4.0, cutoff 80 Hz, both triggers 100%. Affects that card only.
 
 ---
 
@@ -117,7 +121,7 @@ Every slider has its own reset button. Each card has a reset button for the whol
 
 | Problem | Try this |
 |---|---|
-| No trigger rumble at all | Check the assigned device is an Xbox One / Elite / Series pad or a DualSense. Xbox 360 and most third-party pads have no trigger motors. |
+| No trigger rumble at all | Check the assigned device is an Xbox One / Elite / Series pad, a Flydigi Apex or a DualSense. Xbox 360 and most third-party pads have no trigger motors. |
 | Trigger pulses feel reversed | Turn on **Swap Left and Right Trigger Motors**. |
 | Audio-driven trigger rumble silent | Confirm audio plays through your default output device. Check the Level meter. Raise sensitivity if it barely moves. |
 | Game-driven trigger rumble missing on DualSense | The DualSense receives impulse data as Adaptive Trigger Vibration. Confirm the slot's virtual controller is an Xbox One, Elite, or Series type, not a Virtual Xbox 360, and that the game actually writes impulse trigger data. An Xbox One+ pad in the same slot is not required. When one is there, its Trigger Motor Activity bars show whether the data arrives. |
@@ -129,10 +133,11 @@ Every slider has its own reset button. Each card has a reset button for the whol
 
 - [Force Feedback](force-feedback.md): body-motor rumble, audio bass rumble on body motors, Trigger Routing (routes the main motors into the trigger channel), FFB for wheels and sticks, Constant Force.
 - [Adaptive Triggers](adaptive-triggers.md): DualSense trigger resistance, weapon, vibration, slope, and multi-position effects.
+- [Flydigi Apex](flydigi-apex.md): the Apex pads, whose triggers play both trigger cards.
 - [Devices](devices.md): check trigger-motor capability per device.
 - [Bass Shakers](bass-shakers.md): play the trigger feedback channels as audio tones.
 - [Controller Slots](controller-slots.md): create and configure virtual controllers.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

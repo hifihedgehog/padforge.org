@@ -9,12 +9,14 @@
 <source src="/assets/video/padforge-tutorial-updates-and-drivers.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-updates-and-drivers.vtt" default>
 </video>
-<figcaption>The Updates card, then the driver cards' Uninstall buttons, recorded live in PadForge 5.2.0 in 58 seconds. Nothing was uninstalled. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-updates-and-drivers-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The Updates card, then the driver cards' Uninstall buttons, recorded live in PadForge 5.2.0 in 58 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. Nothing was uninstalled. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-updates-and-drivers-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ![The Updates card in Settings, after a check](../images/settings-updates.png)
 
-The **Updates** card sits in **Settings**, between **Window** and **Input Engine**. It first shipped in PadForge 4.5.3. Version 4.5.2 and older have no updater, so updating from them takes one download from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest). Every version from 4.5.3 on updates itself.
+The **Updates** card is the last card in the **General** group of **Settings**, under **Window**. Its first row is the status line: *PadForge* and the version number before any check has run, then what the last check found. **Check Now** sits at the end of that row, and a progress bar shows under it while an update downloads. The **About** page shows the same state under PadForge's name and has its own **Check for Updates** and **Release Notes** buttons.
+
+The updater first shipped in PadForge 4.5.3. Version 4.5.2 and older have no updater, so updating from them takes one download from the [latest release](https://github.com/hifihedgehog/PadForge/releases/latest). Every version from 4.5.3 on updates itself.
 
 ---
 
@@ -26,15 +28,15 @@ The **Updates** card sits in **Settings**, between **Window** and **Input Engine
 | **Install Updates Automatically** | Off | Downloads a new version in the background and installs it the next time PadForge starts. Shown only while the automatic check is on. |
 | **Include Pre-Releases** | Off | Also offers the dev build of the latest commit, which gets fixes and features first and has had less testing. A newer release is still offered when the dev build has nothing newer. |
 
-Each switch has a **Reset** button beside it.
+Each switch has a reset button beside it, and **Reset All** in the card's header resets all three.
 
 ## The buttons
 
 - **Check Now** checks right away, whether or not the automatic check is on.
 - **Install and Restart** appears once a newer version is found. It downloads that version if it is not downloaded yet, closes PadForge, puts the new `PadForge.exe` in place of the old one, and starts it again.
-- **Release Notes** appears beside it and opens that version's page on GitHub.
+- **Release Notes** appears beside it and opens that version's page on GitHub. On the **About** page the button is always there, and before an update is found it opens the list of releases.
 
-When an automatic check finds a new version, the status bar says so as well: *PadForge 4.5.4 is available. Install it from Settings.*
+When an automatic check finds a new version, the message line at the lower left of the window says so as well, and the message stays until another replaces it: *PadForge 4.5.4 is available. Install it from Settings.*
 
 ---
 
@@ -43,7 +45,7 @@ When an automatic check finds a new version, the status bar says so as well: *Pa
 1. PadForge downloads the zip built for your PC's processor: `win-x64` on an x64 PC, `win-arm64` on an ARM64 PC. The machine decides, so an x64 copy running under emulation on an ARM64 PC moves to the ARM64 build.
 2. It checks the download against the SHA-256 checksum GitHub publishes for that file and refuses it on any mismatch. From the zip it takes `PadForge.exe` and nothing else.
 3. PadForge closes. The downloaded copy saves a copy of the old `PadForge.exe`, then writes itself over it and checks the result.
-4. The new version starts with the arguments the old one had, so a copy started with `--profile` comes back with it. The status bar reads *PadForge was updated to 4.5.4 (r3700@1a2b3c4).*
+4. The new version starts with the arguments the old one had, so a copy started with `--profile` comes back with it. The message line reads *PadForge was updated to 4.5.4 (r3700@1a2b3c4).*
 
 Nothing is written beside `PadForge.exe`. The download, the copy of the old version and the record of an install waiting for the next start all live in `%TEMP%\PadForge_Update`. Once PadForge has run for 20 seconds with no check or download under way, it deletes the old copy and every download except one still waiting to install.
 
@@ -67,7 +69,7 @@ With **Include Pre-Releases** on, the check reads the rolling dev build as well 
 
 Every build between two releases carries the same version number, so dev builds compare by commit count. When a newer dev build and a newer release are both on offer, the dev build wins, unless the release has a higher major version than yours: each major version has a dev feed of its own.
 
-The card and **Diagnostics** show the running build the same way. *4.5.3 (r3682@176208e)* is version 4.5.3, built from commit `176208e`, with 3682 commits in its history. A build made without git shows the version alone.
+The **App Version** row of the **Diagnostics** card, and the card's up-to-date line, show the running build the same way. *4.5.3 (r3682@176208e)* is version 4.5.3, built from commit `176208e`, with 3682 commits in its history. A build made without git shows the version alone.
 
 Changing **Include Pre-Releases** drops any offer on the card and anything waiting to install. With the automatic check on, PadForge then checks again on the channel you picked.
 
@@ -88,14 +90,14 @@ With **Check for Updates Automatically** off, the updater contacts nothing until
 | Message | What it means |
 |---|---|
 | *Checking for updates…* | A check started with **Check Now** is running. |
-| *PadForge 4.5.3 (r3682@176208e) is up to date.* | Nothing newer on the channels you picked. |
+| *PadForge 4.5.3 (r3682@176208e) is up to date.* | Nothing newer on the channels you picked. The **About** page says *Up to date.* |
 | *PadForge 4.5.4 is available.* | A newer release. **Install and Restart** and **Release Notes** appear. |
 | *Pre-release r3690 (c4a1b2d) is available.* | A newer dev build, with **Include Pre-Releases** on. |
 | *Downloading the update: 42%* | The download is running. |
 | *PadForge 4.5.4 is downloaded and installs the next time PadForge starts.* | **Install Updates Automatically** has it ready. |
 | *Could not check for updates: HTTP 503* | GitHub could not be reached or answered with an error. The reason follows the colon. |
 | *GitHub is limiting requests from this network. Try again later.* | See [What PadForge sends](#what-padforge-sends). |
-| *The newest version has no build for this PC's processor yet.* | The newer version has no zip for your processor, which happens when a dev build's ARM64 job fails. |
+| *The newest version has no build for this PC’s processor yet.* | The newer version has no zip for your processor, which happens when a dev build's ARM64 job fails. |
 | *The download did not match the checksum GitHub published for it, so PadForge did not install it.* | The download was damaged, or the downloaded copy changed on disk before it ran. Click **Install and Restart** to download it again. |
 | *PadForge could not install the update: The download stopped responding.* | No data arrived for 60 seconds, or GitHub did not answer within 30 seconds. |
 | *PadForge could not install the update: The installer did not report that it started.* | The downloaded copy did not answer within 60 seconds and was stopped. PadForge keeps running as it was. |
@@ -117,4 +119,4 @@ With **Check for Updates Automatically** off, the updater contacts nothing until
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

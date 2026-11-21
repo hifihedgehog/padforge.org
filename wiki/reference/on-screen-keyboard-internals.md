@@ -19,7 +19,7 @@ For the user-facing side see [On-Screen Keyboard](../features/on-screen-keyboard
 | `OskView.cs` | The immutable snapshot the window draws. |
 | `PadForge.App/Views/OnScreenKeyboardWindow.xaml(.cs)` | The window: keys, hint bar, close button, top-bar drag and corner grip. |
 | `PadForge.App/Services/InputService.OnScreenKeyboard.cs` | The UI-timer leg: hands the poll thread the layout and repeat timing, draws the snapshot, saves what the window and the keyboard's own keys changed. |
-| `PadForge.App/ViewModels/MenuEditorItem.Keyboard.cs` | The Menus tab's keyboard rows, the Keyboard Controls card and the Keyboard card. |
+| `PadForge.App/ViewModels/MenuEditorItem.Keyboard.cs` | The keyboard rows of the menu editor in the controller page's Macros & Menus section: Layout, Opens With, Opens On and Open When a Text Box Is Selected in the Opens block, the Keyboard block's rows, and Keyboard Controls under them. |
 
 ---
 
@@ -175,7 +175,7 @@ A menu's own keyboard (`OskMenuKeyboard`) exists while its menu is enabled and n
 | `OnScreenKeyboardEngineTests` | The engine on a fake US layout: Grid, Split and Wheel controls, wrap, Shift latch and lock, symbols page, repeat at Windows' timing, hold-to-move and its tap rule, the layout and Fn keys, pointers, suggestions, dead keys and the ISO key. |
 | `OnScreenKeyboardMenuTests` | The runtime: Opens With and every Opens On mode, controls that take Opens With's press, the controller at rest and silent after the close, devices going offline or joining, takeover by another menu, restricted peers, layers and the settle window, text focus, Types Through to a slot and to the menu's own keyboard, its identity key, non-gamepad devices at rest, the watcher's timeout and once-per-element reports, and Step 2's two states. |
 | `OnScreenKeyboardWindowsLayoutTests` | Every installed layout read through `ToUnicodeEx`, the US layout as Windows types it, ABNT2's /? key on a keyboard device, and each family's hint labels. |
-| `MenuEditorKeyboardTests` | The Menus tab: the style and its defaults, each layout's rows and names, recording (gestures and menu cells only for Opens With), pointer rows, press points, resets, Types Through, Opens On, the symbols box, and the D-pad and face-button openers. |
+| `MenuEditorKeyboardTests` | The menu editor: the style and its defaults, each layout's rows and names, recording (gestures and menu cells only for Opens With), pointer rows, press points, resets, Types Through, Opens On, the symbols box, and the D-pad and face-button openers. |
 | `KeyboardMenuSlotDeviceTests` | Input lists per device, Copy From Slot and paste moving inputs to the target slot's controller, and the Types Through list after the slots renumber. |
 | `WorkshopKeyboardMenuImportTests` | The Show Keyboard import: the menu, its slot, its press modes, a stick half with a second input, its layer, and a binding with no input. |
 | `StarterProfileCatalogTests` | The Desktop starter's keyboard menu. |
@@ -191,4 +191,4 @@ A menu's own keyboard (`OskMenuKeyboard`) exists while its menu is enabled and n
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

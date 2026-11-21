@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -657,10 +653,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
+  <a href="#1-open-the-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Open the mapping table
+        1. Open the controller
       
     </span>
   </a>
@@ -1306,6 +1302,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1374,7 +1378,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1871,6 +1875,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -2067,6 +2099,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -2103,6 +2163,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2862,6 +2978,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3455,6 +3577,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3735,6 +3885,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3827,6 +4005,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4126,10 +4332,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-open-the-mapping-table" class="md-nav__link">
+  <a href="#1-open-the-controller" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Open the mapping table
+        1. Open the controller
       
     </span>
   </a>
@@ -4231,45 +4437,48 @@ moves cover any rebind you will ever make.</em></p>
 <source src="/assets/video/padforge-tutorial-five-minute-remap.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-five-minute-remap.vtt" default>
 </video>
-<figcaption>The A and B swap picked from each row's Source list, then a stick deadzone and a trigger's range, recorded live in PadForge 5.2.0 in 1 minute 10 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-five-minute-remap-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>The A and B swap picked from each row's Source list, then a stick deadzone and a trigger's range, recorded live in PadForge 5.2.0 in 1 minute 10 seconds, before PadForge 6 rebuilt the interface, so the screens differ from the steps below. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-five-minute-remap-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 <hr />
-<h2 id="1-open-the-mapping-table">1. Open the mapping table<a class="headerlink" href="#1-open-the-mapping-table" title="Permanent link">&para;</a></h2>
-<p>On the <a href="../../features/dashboard/">Dashboard</a>, click the slot's card to
-open its configuration, then open the <strong>Mappings</strong> tab. One table drives
-the whole slot: each row is one output the game sees. Rows run in order:
-buttons, D-Pad, triggers, left stick, right stick. PlayStation slots add
-touchpad and motion rows at the end, and Nintendo slots add the motion
-rows.</p>
-<p><img alt="Button and axis mapping grid with source, value, and record columns" src="../../images/pad-mappings.png" /></p>
+<h2 id="1-open-the-controller">1. Open the controller<a class="headerlink" href="#1-open-the-controller" title="Permanent link">&para;</a></h2>
+<p>In the sidebar, under <strong>Controllers</strong>, click the controller's entry. Its page
+opens on the first section, <strong>Mappings</strong>, which has two views of one mapping
+table. <strong>Picture</strong> shows the controller, and over it the hint "Click a
+control, then press the input that should drive it." <strong>List</strong> shows every row:
+each row is one output the game sees, in bands that run buttons, D-Pad,
+triggers, left stick, right stick. PlayStation controllers add touchpad and
+motion rows at the end, and Nintendo controllers add the motion rows.</p>
+<p><img alt="The Mappings section's list of rows, with their sources" src="../../images/pad-mappings.png" /></p>
 <h2 id="2-record-the-first-swap">2. Record the first swap<a class="headerlink" href="#2-record-the-first-swap" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Find the <strong>A</strong> row. Button rows sit at the top, A first.</li>
-<li>Click the record icon on that row. The icon switches to a stop
-   glyph, its tooltip reads "Recording...", and the row pulses orange.</li>
+<li>In <strong>Picture</strong>, click the <strong>A</strong> button on the controller's picture. A ring
+   marks it, its rows show under the picture, and PadForge starts recording
+   for it.</li>
 <li>Press <strong>B</strong> on your physical pad.</li>
 </ol>
-<p>PadForge captures the press, fills in the source, and stops recording.
-The A output is now driven by the physical B button.</p>
+<p>PadForge captures the press, fills in the source, and stops recording. The
+message line at the bottom of the window reads "Recorded “A” ←" followed by
+the input's name. The A output is now driven by the physical B button.</p>
 <blockquote>
 <p><strong>Tip:</strong> Press only the input you want. Wiggling a stick while pressing
 a button can catch the stick instead.</p>
 </blockquote>
 <h2 id="3-record-the-other-half">3. Record the other half<a class="headerlink" href="#3-record-the-other-half" title="Permanent link">&para;</a></h2>
-<p>Do the same on the <strong>B</strong> row: click its record icon, press <strong>A</strong> on the
-pad. The swap is complete.</p>
+<p>Do the same with <strong>B</strong>: click it on the picture, press <strong>A</strong> on the pad. The
+swap is complete.</p>
 <h2 id="4-verify-on-the-spot">4. Verify on the spot<a class="headerlink" href="#4-verify-on-the-spot" title="Permanent link">&para;</a></h2>
-<p>Press A and B on the pad and watch the <strong>Value</strong> column. Each press lights
-the swapped row in real time, and what you see there is exactly what the
-game gets. No save step, no apply step. Your mapping persists in
-<code>PadForge.xml</code> next to the executable.</p>
+<p>Press A and B on the pad and watch the picked control's <strong>Value</strong> under the
+picture. What you see there is exactly what the game gets. No save step, no
+apply step. Your mapping persists in <code>PadForge.xml</code> next to the executable.</p>
 <hr />
 <h2 id="when-recording-grabs-the-wrong-input">When recording grabs the wrong input<a class="headerlink" href="#when-recording-grabs-the-wrong-input" title="Permanent link">&para;</a></h2>
-<p>Use the source dropdown instead. It is one list of every input the slot
-can see, grouped under device-name headers, with the <strong>(Any Device)</strong>
-group first. Pick an entry ("B", "Axis 3", "POV 0 Up") and it assigns on
-the spot, same result as recording.</p>
+<p>Use the <strong>Source</strong> list instead. In <strong>List</strong>, click a row to open it. Each of
+its sources has a line with a <strong>Source</strong> list, <strong>Record</strong> and <strong>Clear</strong>. The
+list holds every input the controller's devices offer, grouped under
+device-name headers, with the <strong>(Any Device)</strong> group first. Pick an entry
+("B", "Axis 3", "POV 0 Up") and it assigns on the spot, same result as
+recording.</p>
 <p>Clearing has three scopes:</p>
 <table>
 <thead>
@@ -4282,26 +4491,26 @@ the spot, same result as recording.</p>
 <tbody>
 <tr>
 <td><strong>Clear</strong></td>
-<td>on the row</td>
+<td>at a row's end</td>
 <td>the primary source and its options (invert, half-axis, deadzone)</td>
 </tr>
 <tr>
 <td><strong>Clear</strong></td>
-<td>on an extra source</td>
-<td>that source only, the emptied slot stays on the row</td>
+<td>on a source's line</td>
+<td>that source's input only. The source stays on the row</td>
 </tr>
 <tr>
 <td><strong>Clear All</strong></td>
-<td>Mappings tab toolbar</td>
-<td>every row completely, tuning included, after a confirmation</td>
+<td>the <strong>More</strong> menu after <strong>Map All</strong> in the list, and the header's <strong>More</strong> menu</td>
+<td>every mapping on the layer shown, with extra sources and combine settings reset to defaults, after a confirmation</td>
 </tr>
 </tbody>
 </table>
 <h2 id="when-you-want-to-remap-everything">When you want to remap everything<a class="headerlink" href="#when-you-want-to-remap-everything" title="Permanent link">&para;</a></h2>
-<p><strong>Map All</strong>, on the Preview tab or the Mappings tab toolbar, walks
-every row in order: it highlights a row, prompts for the matching input,
-captures it, and moves on. The fastest way to set up an unrecognized
-device (a generic joystick, an arcade encoder) from scratch.</p>
+<p><strong>Map All</strong>, at the end of the section's top row in both views, walks every
+row in order: it marks a row, prompts for the matching input, captures it,
+and moves on. It is the fastest way to set up an unrecognized device (a
+generic joystick, an arcade encoder) from scratch.</p>
 <hr />
 <h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4311,7 +4520,7 @@ device (a generic joystick, an arcade encoder) from scratch.</p>
   <a href="../../guides/shift-layers/">Shift Layers</a>.</li>
 <li>Timed sequences on one press: <a href="../../guides/macros/">Macros</a>.</li>
 </ul>
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

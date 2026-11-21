@@ -24,7 +24,7 @@ PadForge is one executable in a ZIP, and it keeps its settings in `PadForge.xml`
 
 ### How do I make a DualSense look like an Xbox controller?
 
-Add an Xbox controller on the [Dashboard](features/dashboard.md), then on the [Devices](features/devices.md) page drag the DualSense onto it in the sidebar. PadForge knows the DualSense and maps it for you: Cross drives A, Circle B, Square X and Triangle Y, and the sticks, triggers and D-pad sit where an Xbox pad has them. Games see an Xbox controller, and a game's rumble still shakes the DualSense. More: [Your First Controller](start/first-controller.md).
+With the DualSense connected and no controller made yet, [Home](features/dashboard.md) asks what games should see: click **Xbox**, and the new controller takes the DualSense. Later, click **Add Controller** in the sidebar, pick the DualSense under **Driven By** and click **Xbox**, or drag the DualSense from the [Devices](features/devices.md) page onto an Xbox controller in the sidebar. PadForge knows the DualSense and maps it for you: Cross drives A, Circle B, Square X and Triangle Y, and the sticks, triggers and D-pad sit where an Xbox pad has them. Games see an Xbox controller, and a game's rumble still shakes the DualSense. More: [Your First Controller](start/first-controller.md).
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -33,16 +33,16 @@ Add an Xbox controller on the [Dashboard](features/dashboard.md), then on the [D
 <source src="/assets/video/padforge-tutorial-dualsense-as-xbox.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-dualsense-as-xbox.vtt" default>
 </video>
-<figcaption>Recorded live in PadForge 5.2.0, 1 minute 8 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-as-xbox-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Recorded live in PadForge 5.2.0, before PadForge 6 rebuilt the interface, 1 minute 8 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-dualsense-as-xbox-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ### Can PadForge import my DS4Windows, reWASD or SimHub setup?
 
-DS4Windows and reWASD, yes. Click **Import…** on the Profiles page, or drop the file on the profile list, and pick a reWASD `.rewasd` config or a DS4Windows profile `.xml`. A preview marks every binding **Clean**, **Partial** or **Skipped** with its reason, and **Import** adds it as a new profile without loading it. SimHub files are not read. Keep the old tool until the imported profile does everything the game needs. More: [Import from reWASD and DS4Windows](guides/profile-import.md) and [Switching from Another Tool](guides/switching.md).
+DS4Windows and reWASD, yes. On the Profiles page, click **Get Profiles**, open **Import a File** and click **Import…**, or drop the file on the **Drop a profile file here** tile. Pick a reWASD `.rewasd` config or a DS4Windows profile `.xml`. A preview marks every binding **Clean**, **Partial** or **Skipped** with its reason, and **Import** adds it as a new profile without loading it. SimHub files are not read. Keep the old tool until the imported profile does everything the game needs. More: [Import from reWASD and DS4Windows](guides/profile-import.md) and [Switching from Another Tool](guides/switching.md).
 
 ### I hid my controller, but the game sees no controller at all. What should I check?
 
-An empty slot creates nothing. Start the engine, turn the slot on and assign an online device to it, then reopen any game that only looks for controllers at startup. A failed HIDMaestro setup leaves "Error: Failed to initialize HIDMaestro." in the status bar, and it runs again when you turn the slot off and on, change its type or profile, or reconnect its controller. More: [Extended Controllers Not Working](troubleshooting.md#extended-controllers-not-working).
+A controller with no device creates nothing. Start the engine, turn the controller on and assign an online device to it, then reopen any game that only looks for controllers at startup. A failed HIDMaestro setup leaves "Error: Failed to initialize HIDMaestro." in the message line at the bottom of the window, and it runs again when you turn the controller off and on, change its type or profile, or reconnect its controller. More: [Extended Controllers Not Working](troubleshooting.md#extended-controllers-not-working).
 
 ### Does an automatic update replace PadForge while it is running?
 
@@ -110,19 +110,19 @@ Over USB or the Xbox Wireless Adapter, the paddles read through Windows' GameInp
 
 ### Can my mouse or keyboard light up and rumble with a virtual controller?
 
-Yes, once it is assigned to a virtual controller on the Devices page. Check **Control This Device’s Lighting** on its **Lighting** tab and it takes the controller's lighting. PadForge lights Logitech, Razer and SteelSeries devices itself while their own software is closed, and through that software while it runs. It also lights any device Windows Dynamic Lighting can drive, while Dynamic Lighting is off for that device. Rumble reaches the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710 through SteelSeries GG, and Logitech's iFeel mice after a driver switch, which stops Windows using the mouse as a pointer until its driver is restored. More: [Mice, Keyboards and Vendor Rows](features/peripherals.md).
+Yes, once it is assigned to a virtual controller on the Devices page. Check **Control This Device’s Lighting** on its **Lighting** card, in the controller's **Lights & Sound** section, and it takes the controller's lighting. PadForge lights Logitech, Razer and SteelSeries devices itself while their own software is closed, and through that software while it runs. It also lights any device Windows Dynamic Lighting can drive, while Dynamic Lighting is off for that device. Rumble reaches the Logitech MX Master 4, the SteelSeries Rival 500, 700 and 710 through SteelSeries GG, and Logitech's iFeel mice after a driver switch, which stops Windows using the mouse as a pointer until its driver is restored. More: [Mice, Keyboards and Vendor Rows](features/peripherals.md).
 
 ### Does a MIDI slot need Windows MIDI Services?
 
-No. Without it, PadForge uses the legacy MIDI API that every Windows has, and each MIDI slot sends to an existing port you pick on the slot's page. With it, each MIDI slot gets its own port that any music app can open, named PadForge MIDI 1, PadForge MIDI 2 and so on. Microsoft removed its runtime installers on October 1, 2026, so on Windows 11 24H2 and later, until Windows carries the API itself, **Install** on the Windows MIDI Services card in Settings adds PadForge's own build of the runtime. More: [Windows MIDI Services](features/driver-management.md#windows-midi-services).
+No. Without it, PadForge uses the legacy MIDI API that every Windows has, and each MIDI slot sends to an existing port you pick on the slot's page. With it, each MIDI slot gets its own port that any music app can open, named PadForge MIDI 1, PadForge MIDI 2 and so on. Microsoft removed its runtime installers on October 1, 2026, so on Windows 11 24H2 and later, until Windows carries the API itself, **Install** on the Windows MIDI Services row in Settings, under Drivers, adds PadForge's own build of the runtime. More: [Windows MIDI Services](features/driver-management.md#windows-midi-services).
 
 ---
 
 ## Mappings
 
-### Why is there no Triggers tab on a Keyboard + Mouse slot?
+### Why is there no Triggers card on a Keyboard + Mouse controller?
 
-That tab tunes the analog triggers a virtual gamepad sends, and a Keyboard + Mouse slot sends none. When a physical trigger drives a key, set where it presses with the row's **Axis-to-Button Deadzone**. More: [Axis-to-Button Deadzone](features/mappings.md#axis-to-button-deadzone).
+That card, in the **Sticks & Triggers** section, tunes the analog triggers a virtual gamepad sends, and a Keyboard + Mouse slot sends none. When a physical trigger drives a key, set where it presses with the row's **Axis-to-Button Deadzone**. More: [Axis-to-Button Deadzone](features/mappings.md#axis-to-button-deadzone).
 
 ### Button 0 maps to the first virtual button. Is that off by one?
 
@@ -134,7 +134,7 @@ No. Raw source names count from zero, while virtual outputs follow the numbering
 
 ### How do I make a touchpad act like a thumbstick that recenters on release?
 
-Turn on **Stick / D-Pad Output** on the Touchpad tab and map **Touchpad Stick X** and **Y** to the stick. Where the finger lands becomes the center, and moving away from it pushes the stick. **Max Radius** and **Inner Deadzone** set its travel and rest. More: [Touchpad](features/touchpad.md).
+Turn on **Stick / D-Pad Output** on the **Touchpad** card, in the controller's **Motion & Touch** section, and map **Touchpad Stick X** and **Y** to the stick. Where the finger lands becomes the center, and moving away from it pushes the stick. **Max Radius** and **Inner Deadzone** set its travel and rest. More: [Touchpad](features/touchpad.md).
 
 ### Should mouse steering use Mouse Speed, Mouse Position or Ramp?
 
@@ -150,7 +150,7 @@ No. It is a mode on a mapping row that reads how deep the key is. One **Distance
 
 ### How can one press hold aim without a macro or a shift layer?
 
-Set the aim row's **Primary Mode** to **Toggle**. One press holds the output and the next lets it go. A trigger holds a full pull, a button stays pressed, and a stick holds full deflection. The hold ends when the row stops running, such as when its layer closes or its device goes offline. More: [Source kinds](features/mappings.md#source-kinds).
+Set the aim row's **Mode** to **Toggle**. One press holds the output and the next lets it go. A trigger holds a full pull, a button stays pressed, and a stick holds full deflection. The hold ends when the row stops running, such as when its layer closes or its device goes offline. More: [Source kinds](features/mappings.md#source-kinds).
 
 ### My mapping grid is blank. Were my mappings erased?
 
@@ -206,7 +206,7 @@ No. A profile holds every slot, mapping, macro and menu at once, so switching it
 
 ### Does a profile's polling rate change each controller's rate?
 
-No. It replaces the engine's polling interval while the profile is active, and every slot shares that loop. A controller's own USB report rate does not change. More: [Polling rate override](guides/profiles.md#polling-rate-override).
+No. It replaces the engine's polling rate while the profile is active, and every controller shares that loop. A controller's own USB report rate does not change. More: [Polling rate override](guides/profiles.md#polling-rate-override).
 
 ---
 
@@ -266,15 +266,15 @@ A DualSense connected over both Bluetooth and USB mutes its USB audio, so PadFor
 
 ### Do Bass Shakers play the soundtrack or simulator telemetry?
 
-Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. On a DualSense (PS5): Full or DualSense Edge (PS5): Full virtual controller, it also follows the haptics a game plays through the controller's audio. Macro rumble stays on the controller. More: [Rumble to Audio card](features/bass-shakers.md#rumble-to-audio-card).
+Neither. Bass Shakers turns the rumble and force feedback a game sends to a virtual controller into tones on an audio output you pick. On a DualSense (PS5): Full or DualSense Edge (PS5): Full virtual controller, it also follows the haptics a game plays through the controller's audio. Macro rumble stays on the controller. More: [Bass Shakers](features/bass-shakers.md#the-card).
 
 ### Why does Constant Force pull my wheel to one side?
 
-**Constant Force** applies a fixed push in one direction, wherever the wheel points. **Auto Centering Strength** on the Wheel tab is the spring that returns it. On the generic force feedback path the two share one effect, so turning on Constant Force stops the spring. More: [Constant Force](features/force-feedback.md#constant-force).
+**Constant Force** applies a fixed push in one direction, wherever the wheel points. **Auto Centering Strength** on the **Wheel** card, in the controller's **Rumble & Haptics** section, is the spring that returns it. On the generic force feedback path Constant Force takes the wheel from the spring, so turning on Constant Force stops the spring. Rumble does not stop it: rumble plays on top of the spring, except on a wheel whose driver holds one effect at a time, where the spring keeps it and rumble waits. More: [Constant Force](features/force-feedback.md#constant-force).
 
-### Why do Keyboard + Mouse and MIDI slots have a Force Feedback tab?
+### Why do Keyboard + Mouse and MIDI controllers have a Force Feedback card?
 
-The tab also drives the physical device assigned to the slot. **Audio Rumble** turns the PC's sound into rumble, and **Test Rumble** checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the tab too. More: [Audio Rumble](features/force-feedback.md#audio-rumble).
+The card, in the **Rumble & Haptics** section, also drives the physical device assigned to the controller. **Audio Rumble** turns the PC's sound into rumble, and **Test Rumble** checks the device, neither of which needs a game. A haptic mouse or the Razer Sensa row gets the card too. More: [Audio Rumble](features/force-feedback.md#audio-rumble).
 
 ---
 
@@ -286,7 +286,7 @@ No. **Browser Gamepad** forwards a controller paired to the phone. Phone motion 
 
 ### Why does the phone page say Motion needs HTTPS?
 
-Browsers give sensor readings only to pages on a secure connection. PadForge serves the controller over HTTPS whenever it can bind its self-signed certificate to the port. If the binding fails it falls back to plain HTTP, where everything works except phone motion and Browser Gamepad's keep-the-screen-on request, and the Dashboard card says why under its status line. When another program's certificate holds the port, choosing another port brings HTTPS back. A page opened at the plain HTTP address while PadForge also serves HTTPS shows **Motion: open over HTTPS** instead, and tapping it opens the same layout on the secure address. More: [Phone motion](guides/web-controller.md#phone-motion).
+Browsers give sensor readings only to pages on a secure connection. PadForge serves the controller over HTTPS whenever it can bind its self-signed certificate to the port. If the binding fails it falls back to plain HTTP, where everything works except phone motion and Browser Gamepad's keep-the-screen-on request, and the Web Controller page in Extras says why under its status line. When another program's certificate holds the port, choosing another port brings HTTPS back. A page opened at the plain HTTP address while PadForge also serves HTTPS shows **Motion: open over HTTPS** instead, and tapping it opens the same layout on the secure address. More: [Phone motion](guides/web-controller.md#phone-motion).
 
 ### Can the streaming PC assign its web controller to slots on the gaming PC?
 
@@ -300,7 +300,7 @@ No. A copied identity moves pairings to a new PC, but two PCs running the same i
 
 No. On a local network the PCs find each other by broadcast. Over the internet, a connection code lets them try a direct path, and n0's free public relays carry the session when no direct path works. A connection code only finds the other PC. The pairing check decides trust. More: [Remote Link](guides/remote-link.md).
 
-### Does Limit This PC to Gamepad Input Only block every non-gamepad action from a remote PC?
+### Does Gamepad Only block every non-gamepad action from a remote PC?
 
 No. It blocks keyboard and mouse output, scrolling, cursor moves and VR slots for that PC. **Run Program** and MIDI still work. More: [Staying safe: gamepad-only](guides/remote-link.md#staying-safe-gamepad-only).
 
@@ -334,4 +334,4 @@ A recognized phrase is a 175 ms press, not a held key. To make a phrase change s
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

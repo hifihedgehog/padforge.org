@@ -3,11 +3,11 @@
 *Turn a stick, a touchpad, the D-pad, the face buttons or any two recorded axes into an on-screen ring, grid or hotbar of commands, or open the On-Screen Keyboard.*
 
 <!-- SCREENSHOT: pad-menus -->
-![The Menus tab listing three menus, Combat Wheel, Text Chat and Ability Bar, with Combat Wheel selected and its cell bindings below](../images/pad-menus.png)
+![The Macros & Menus section listing three menus, Combat Wheel, Text Chat and Ability Bar, with Combat Wheel selected and its cells in the editor](../images/pad-menus.png)
 
 A menu puts a set of commands on an input surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the [Steam Workshop](steam-workshop-import.md) bring theirs along.
 
-Each slot has its own menu list. Open a slot, switch to the **Menus** tab, and click **Add**. **Remove** and **Duplicate** manage the list.
+Each slot has its own menu list. Open a controller, go to its **Macros & Menus** section, and click the **+** beside **Menus** (**New Menu**). The selected menu's **More** button holds **Duplicate**, **Remove Last Cell** and **Remove**, and its **Enabled** switch turns it off without deleting it.
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -16,7 +16,7 @@ Each slot has its own menu list. Open a slot, switch to the **Menus** tab, and c
 <source src="/assets/video/padforge-tutorial-shift-layers-and-menus.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-shift-layers-and-menus.vtt" default>
 </video>
-<figcaption>A Pit Stop shift layer held on the left shoulder, then a four-cell radial menu on the right stick whose first cell, Map, presses Back, recorded live in PadForge 5.2.1 in 1 minute 18 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-shift-layers-and-menus-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>A Pit Stop shift layer held on the left shoulder, then a four-cell radial menu on the right stick whose first cell, Map, presses Back, recorded live in PadForge 5.2.1 in 1 minute 18 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-shift-layers-and-menus-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
@@ -65,7 +65,7 @@ The **Opens With** picker sets the input that opens and steers the menu. It read
 The **Hotbar** style is Steam Input's hotbar: a single row of cells, run by four controls.
 
 <!-- SCREENSHOT: pad-menus-hotbar -->
-![The Menus tab with the Ability Bar menu selected, its Style set to Hotbar](../images/pad-menus-hotbar.png)
+![The Macros & Menus section with the Ability Bar menu selected, its Style set to Hotbar](../images/pad-menus-hotbar.png)
 
 | Control | What it does |
 |---|---|
@@ -109,7 +109,7 @@ A hotbar has no **Click Input** or **Layer Holds the Menu Open** row. Its **Laye
 
 ## Cells
 
-**Cells** sets how many cells the menu carries, 1 to 20. For a radial menu that is the ring count, with the optional **Center Cell** on top. Each cell has:
+**Add Cell** under the cell list adds a cell, **Remove Last Cell** in the menu's **More** menu takes the last one off, and the reset beside **Add Cell** puts the count back. A menu carries 1 to 20 cells. For a radial menu that is the ring count, with the optional **Center Cell** on top. Each cell has:
 
 - A **Label**, rendered on the overlay.
 - A binding: **None**, a **Keyboard Key**, a **Controller Button**, or a **Macro**.
@@ -129,7 +129,7 @@ Renaming the macro updates every cell that names it. A cell whose macro no longe
 
 ### Cells as sources
 
-Every cell also fires as a menu-item source, pickable in [Mappings](../features/mappings.md) rows and macro triggers as entries like **Menu 1 Cell 3**. A cell set to **None** still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows **Used by a mapping or macro** in its binding picker while it has no direct binding of its own.
+Every cell also fires as a menu-item source, pickable in [Mappings](../features/mappings.md) rows and macro triggers as entries like **Menu 1 Cell 3**. The picker shows each cell's own number. A Radial Ring's cells count from 1, and its **Center Cell**, headed **Center** in the cell list, is **Cell 0** in a picker. A Touch Grid's and a Hotbar's cells count from 0. A cell set to **None** still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows **Used by a mapping or macro** in its binding picker while it has no direct binding of its own.
 
 A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding.
 
@@ -137,12 +137,12 @@ A menu imported from the Steam Workshop can carry richer cell behavior (key comb
 
 ## Cell icons
 
-Each cell row carries an icon button (tooltip: **Choose this cell's icon: an emoji, an entry from an icon package, or an image file.**). It opens a picker under the button, and every choice in it is drawn as itself.
+Each cell row carries an icon button (tooltip: **Choose this cell’s icon: an emoji, an entry from an icon package, or an image file.**). It opens a picker under the button, and every choice in it is drawn as itself.
 
 <!-- SCREENSHOT: icon-picker -->
 ![The icon picker on its Emoji tab. Menu cells and shift layers open the same picker.](../images/icon-picker.png)
 
-- **Emoji** lists the emoji by category, the same catalog the [shift layer](shift-layers.md) dialog uses.
+- **Emoji** lists the emoji by category, the same catalog the [Shift Layer](shift-layers.md) window uses.
 - **Images** shows the pictures in every added icon package, grouped by package. **Browse Files…** at its foot opens a file browser.
 
 **No Icon** at the bottom of the picker clears the icon. The icon the cell holds now is marked, and the picker opens on its tab and its emoji category. A pick closes the picker, and so does a click anywhere else or Escape. Tab moves through the picker. The cell row shows the icon the cell carries.
@@ -156,11 +156,11 @@ On the overlay the icon draws at the center of the cell, 30 pixels tall at the m
 
 ### Icon packages
 
-![The Icon Packages block on the Menus tab](../images/menu-icon-packs.png)
+![The Icon Packages card under the menus](../images/menu-icon-packs.png)
 
 An icon package is one zip file of images with the `.pficons` extension. PadForge reads straight from the file and never unpacks it. Keep packages next to `PadForge.exe` to stay portable.
 
-The **Icon Packages** block on the **Menus** tab manages them:
+The **Icon Packages** card, folded to one line under the menu editor in the **Macros & Menus** section, manages them:
 
 | Button | What it does |
 |---|---|
@@ -180,13 +180,13 @@ While a menu is engaged, a click-through overlay draws the ring or grid at the c
 
 Per-menu appearance controls: **Show Labels**, **Screen Position** (X and Y percent, default centered), **Size** (10–400%), and **Opacity** (5–100%, default 90).
 
-The overlay itself is optional. The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Menu Overlay** toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.
+The overlay itself is optional. The **Overlays** page under **Extras** carries a **Menu Overlay** switch, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.
 
 ---
 
 ## On a phone
 
-A Touch Grid menu can also appear on a phone. Turn on **Show on Web Controller** (tooltip: **Shows this menu as a page of the web controller's Web Menus layout, where a tap on a tile fires its cell.**) and the menu becomes a page of tiles on every phone that runs the web controller's [Web Menus](web-controller.md#web-menus) layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.
+A Touch Grid menu can also appear on a phone. Turn on **Show on Web Controller** (tooltip: **Shows this menu as a page of the web controller’s Web Menus layout, where a tap on a tile fires its cell.**) and the menu becomes a page of tiles on every phone that runs the web controller's [Web Menus](web-controller.md#web-menus) layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.
 
 The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's **Layer** and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.
 
@@ -208,7 +208,7 @@ The row reset restores **Any Layer** and turns layer-held opening off.
 
 ## Reset buttons
 
-Every setting row on the Menus tab carries a per-field reset, and the overlay card has a reset of its own.
+Every setting row of a menu carries a per-field reset, and the overlay settings share **Reset Menu Geometry**.
 
 ---
 
@@ -222,8 +222,7 @@ Every setting row on the Menus tab carries a per-field reset, and the overlay ca
 - [Profiles](profiles.md): exported profiles carry the icon packages their menus use.
 - [Touchpad](../features/touchpad.md): the other things a touchpad surface can do.
 - [Web Controller](web-controller.md#web-menus): the phone page that shows marked Touch Grid menus as tiles.
-- [Dashboard](../features/dashboard.md): the Menu Overlay toggle.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

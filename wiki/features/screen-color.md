@@ -2,20 +2,22 @@
 
 *A lighting mode that follows the colors on your screen: one color for a lightbar, or the screen spread across a keyboard's keys.*
 
-Screen Color is a base mode on a device's [Lighting](lighting.md) tab. Pick **Screen Color** in the **Mode** box and the device takes its color from one area of one display. PadForge reads the finished desktop picture from Windows while a device uses the mode. It stores none of it, and it reads nothing from a game and writes nothing into one.
+Screen Color is a base mode on the **Lighting** card of a controller's **Lights & Sound** section ([Lighting](lighting.md)). Pick **Screen Color** in the **Mode** box and the device takes its color from one area of one display. PadForge reads the finished desktop picture from Windows while a device uses the mode. It stores none of it, and it reads nothing from a game and writes nothing into one.
 
 <!-- SCREENSHOT: pad-lighting-screen-color -->
-![The Lighting tab of a DualSense in the PlayStation slot with Mode set to Screen Color, showing the Display, Screen Area, Color, Saturation, Brightness and Smoothing rows](../images/pad-lighting-screen-color.png)
+![The Lighting card of a DualSense in the PlayStation slot's Lights & Sound section with Mode set to Screen Color, showing the Display, Screen Area, Color, Saturation, Brightness and Smoothing rows](../images/pad-lighting-screen-color.png)
 
 ---
 
 ## Where it works
 
-Every device whose Lighting tab has the **Mode** box can use it: a DualSense, DualSense Edge or DualShock 4 lightbar, a PS Move sphere, the lightbar a [Web Controller](../guides/web-controller.md) draws, and a mouse, keyboard or lighting row from [Mice, Keyboards and Vendor Rows](peripherals.md). The **Set Lightbar Mode** and **Cycle Lightbar Modes** macros offer it too.
+Every device whose Lighting card has the **Mode** box can use it: a DualSense, DualSense Edge or DualShock 4 lightbar, a PS Move sphere, the lightbar a [Web Controller](../guides/web-controller.md) draws, and a mouse, keyboard or lighting row from [Mice, Keyboards and Vendor Rows](peripherals.md). The **Set Lightbar Mode** and **Cycle Lightbar Modes** macros offer it too.
 
 A game's lightbar, a [game mod's](game-mods.md) color, a macro's color and the Input Reactive pulse cover Screen Color the way they cover any base mode, and it comes back when they end (see [Priority chain](lighting.md#priority-chain)).
 
-The tab's preview shows a blue-to-orange wash for this mode. The preview reads nothing from the screen.
+Under the **Mode** box the card says *Follows the colors on your screen. While a device uses this mode, PadForge reads the finished picture from Windows. It stores none of it and changes nothing in any game.*
+
+The card's preview shows a blue-to-orange wash for this mode. The preview reads nothing from the screen.
 
 ---
 
@@ -33,7 +35,7 @@ The tab's preview shows a blue-to-orange wash for this mode. The preview reads n
 | **Saturation** | 100% | 0 to 200% | 0% is the color's gray, 100% the color as it is, and above 100% a more vivid color. |
 | **Brightness** | 100% | 0 to 100% | A share of the color's strength. |
 | **Smoothing** | 30% | 0 to 100% | How slowly the light follows a change. 0% jumps at once. Each percent adds 1 ms to the fade's time constant, so 100% is 100 ms and the default settles within about 100 ms. |
-| **Spread the Screen Across This Device's Lights** | On | On, off | Shown only for a device with more than one light. On, each light shows the part of the area under its own place on the device. Off, the whole device shows one color. |
+| **Spread the Screen Across This Device’s Lights** | On | On, off | Shown only for a device with more than one light. On, each light shows the part of the area under its own place on the device. Off, the whole device shows one color. |
 
 The steps run in that order: the area, then **Color**, then **Saturation**, then **Brightness**, then **Smoothing**. Each row has a reset button.
 
@@ -47,7 +49,7 @@ With the spread on, PadForge cuts the area into a picture of at most 32 by 16 ce
 - A keyboard that reports no positions uses the standard keyboard layout that holds the most of its keys.
 - Zones and edge lights are placed in order from left to right.
 
-A light with none of these shows the device's one color. A color set for a key, a group or a single light on the tab's [**Key Colors** or **Zone Colors**](lighting.md#key-colors) card stays over the picture. A game, mod or macro color covers the picture the way it covers the one color.
+A light with none of these shows the device's one color. A color set for a key, a group or a single light on the section's [**Key Colors** or **Zone Colors**](lighting.md#key-colors) card stays over the picture. A game, mod or macro color covers the picture the way it covers the one color.
 
 ---
 
@@ -59,11 +61,13 @@ PadForge reads the screen through Windows' Desktop Duplication. Where that canno
 - On Windows 10 versions before 2004, the pointer shows in the picture Windows.Graphics.Capture hands over. Desktop Duplication never includes it.
 - A rotated display is read the way it shows on screen.
 
-While Windows holds the desktop, for a UAC prompt or the lock screen, the light keeps its last color and the tab says *Windows is holding the screen for now, so the light keeps its last color.* PadForge tries again at least once a second.
+While Windows holds the desktop, for a UAC prompt or the lock screen, the light keeps its last color and the card says *Windows is holding the screen for now, so the light keeps its last color.* PadForge tries again at least once a second.
 
-When neither way runs, the tab says *PadForge can't read the screen on this PC right now and keeps trying. Save Snapshot in Settings records the reason.* The waits between tries grow to 8 seconds. **Save Snapshot** on the [Settings](settings.md) page writes the reason Windows gave. A capture that ends three times in a row with no picture also brings that line up.
+When neither way runs, the card says *PadForge can’t read the screen on this PC right now and keeps trying. Save Snapshot in Settings records the reason.* The waits between tries grow to 8 seconds. **Save Snapshot** on the [Settings](settings.md) page writes the reason Windows gave. A capture that ends three times in a row with no picture also brings that line up.
 
-A display change, such as a new resolution, an HDR switch or a display unplugged, rebuilds the capture. The light keeps its last color meanwhile, and the tab shows no line unless the rebuild fails.
+A display change, such as a new resolution, an HDR switch or a display unplugged, rebuilds the capture. The light keeps its last color meanwhile, and the card shows no line unless the rebuild fails.
+
+The card checks these states and the list of displays once a second, and only while the **Lights & Sound** section shows with the mode on Screen Color. The light itself follows the screen whatever page is open.
 
 ---
 
@@ -95,4 +99,4 @@ See the technical page, [Screen Color Internals](../reference/screen-color-inter
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

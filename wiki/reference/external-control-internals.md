@@ -15,7 +15,7 @@ This is the developer-side companion to the external control section of [Profile
 | `PadForge.App/Services/ForegroundMonitorService.cs` | `CheckForegroundWindow` returns early while the pin is held. |
 | `PadForge.App/Common/SettingsManager.cs` | `EnableExternalControl` (persisted opt-in) and `ExternalProfilePinActive` (runtime only). |
 | `PadForge.App/App.xaml.cs` | `ParseProfileCommand`, the first-instance `PendingProfileCommand` (applied by `InputService.Start`), and the second-instance pipe forward. |
-| `PadForge.App/Views/ProfilesPage.xaml` | The **Allow External Control by Launchers and Scripts** checkbox, under the auto-switch checkbox in the profile management card. |
+| `PadForge.App/Views/ProfilesPage.xaml` | The **Allow External Control by Launchers and Scripts** switch, in the Profiles page's own **External Control** card (`ExternalControlCard`). |
 
 Tests: `PadForge.Tests/ExternalControlTests.cs`.
 
@@ -61,8 +61,8 @@ The pipe serves while the engine is running, the same gate as the DSU server:
 | Event | Effect |
 |---|---|
 | Engine start, opt-in on | `StartExternalControlIfEnabled` creates and starts the server. |
-| Checkbox turned on, engine running | Same. With the engine stopped nothing starts, and the next engine start brings the pipe up. |
-| Checkbox turned off | `StopExternalControl` disposes the server, clears the pin, invalidates the foreground cache. With no server running it does nothing, so a pin stays. |
+| Switch turned on, engine running | Same. With the engine stopped nothing starts, and the next engine start brings the pipe up. |
+| Switch turned off | `StopExternalControl` disposes the server, clears the pin, invalidates the foreground cache. With no server running it does nothing, so a pin stays. |
 | Engine stop | `StopExternalControl`, same effects. |
 | Reset to Defaults | Opt-in and pin both cleared. |
 
@@ -84,7 +84,7 @@ The pipe serves while the engine is running, the same gate as the DSU server:
 | anything else | `error unknown-command` |
 | executor threw or returned null | `error internal` |
 
-`ExternalActivate` resolves the argument by id first, then by case-insensitive name. It sets the pin before the switch so the foreground monitor cannot race the apply. If the target is already active it returns `ok <name>` without switching. Otherwise it saves the outgoing profile's state, sets `ActiveProfileId`, applies the profile, runs `ResetRuntimeStateForProfileSwitch` (the choke point every switch lane funnels through, which also resolves the [per-profile polling rate](settings-and-serialization.md#profiledata)), and updates the status bar. `ExternalDeactivate` clears the pin, invalidates the foreground monitor's cache, and if a named profile was active saves its state and applies Default.
+`ExternalActivate` resolves the argument by id first, then by case-insensitive name. It sets the pin before the switch so the foreground monitor cannot race the apply. If the target is already active it returns `ok <name>` without switching. Otherwise it saves the outgoing profile's state, sets `ActiveProfileId`, applies the profile, runs `ResetRuntimeStateForProfileSwitch` (the choke point every switch lane funnels through, which also resolves the [per-profile polling rate](settings-and-serialization.md#profiledata)), and shows the switch on the message line at the foot of the window (`MainViewModel.StatusText`). `ExternalDeactivate` clears the pin, invalidates the foreground monitor's cache, and if a named profile was active saves its state and applies Default.
 
 ---
 
@@ -98,8 +98,8 @@ Without the pin the requester's case fails: focusing the game fires the foregrou
 |---|---|
 | Set | `ExternalActivate`, before the switch |
 | Cleared by the script | `ExternalDeactivate` |
-| Cleared by the user | `NoteManualProfileSwitch`, called ahead of every manual switch: the Profiles page Load button (Default included), the status-bar switcher, a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script. |
-| Cleared by lifecycle | `StopExternalControl` (checkbox off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance `--profile` while the pipe is off survives an engine stop. |
+| Cleared by the user | `NoteManualProfileSwitch`, called ahead of every manual switch: the Profiles page **Load** button (Default included), the switcher that opens from the title bar's profile pill (`TitleProfilePill`), a controller profile shortcut, and a Workshop profile applied from the browse dialog. The user outranks a script. |
+| Cleared by lifecycle | `StopExternalControl` (switch off, engine stop) while the pipe is serving, Reset to Defaults, app restart. A pin set by a first-instance `--profile` while the pipe is off survives an engine stop. |
 
 When `ExternalDeactivate` or `StopExternalControl` drops the pin, the monitor's dedup cache is invalidated (`InvalidateCache`), because it holds pre-pin state and a still-focused matched game must re-fire its rule on the next check. A manual switch drops it through `NoteManualProfileSwitch`, which sets the monitor's manual override instead. `ExternalControlTests.PinReleaseInvalidatesTheForegroundCache` and `AManualSwitchReleasesThePin` pin both halves.
 
@@ -138,4 +138,4 @@ Because the exe is elevated, this form prompts UAC when called from a normal pro
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

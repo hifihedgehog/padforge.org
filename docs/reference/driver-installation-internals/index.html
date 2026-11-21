@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -4274,6 +4396,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -4554,6 +4704,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -4646,6 +4824,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -5859,9 +6065,9 @@
 
 <h1 id="driver-installation-internals">Driver Installation Internals<a class="headerlink" href="#driver-installation-internals" title="Permanent link">&para;</a></h1>
 <p><em>How PadForge installs, detects, and removes the drivers behind its virtual controllers: HIDMaestro, HidHide, Windows MIDI Services, SteamVR, the DualShock 3 Bluetooth stack, and the legacy v2 leftovers.</em></p>
-<p>PadForge v5 deals with six drivers/services and a legacy v2 cleanup path:</p>
+<p>PadForge 6 deals with six drivers and services and a legacy v2 cleanup path:</p>
 <ol>
-<li><strong>HIDMaestro</strong> is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types. It is <strong>not</strong> installed by <code>DriverInstaller</code>. The driver binaries, INF and profiles all ship inside <code>HIDMaestro.Core.dll</code>. <code>HMContext.InstallDriver()</code> (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by <code>HMVR.EnsureDriverRegistered()</code> rather than by <code>InstallDriver()</code>. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.</li>
+<li><strong>HIDMaestro</strong> is the user-mode UMDF2 driver behind the Xbox, PlayStation, Nintendo, and Extended slot types on x64. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver. It is <strong>not</strong> installed by <code>DriverInstaller</code>. The driver binaries, INF, the host controller's driver and the profiles all ship inside <code>HIDMaestro.Core.dll</code>. <code>HMContext.InstallDriver()</code> (called lazily the first time one of those four slot types activates) registers them with Windows. VR slots ride HIDMaestro too, but through its OpenVR driver, registered with SteamVR by <code>HMVR.EnsureDriverRegistered()</code> rather than by <code>InstallDriver()</code>. MIDI and Keyboard+Mouse slots use no driver of HIDMaestro's at all.</li>
 <li><strong>HidHide</strong> is the kernel-mode driver that hides physical controllers from games. On an x64 machine it is an embedded WiX Burn bootstrapper EXE, installed and removed through <code>msiexec</code>. On an ARM64 machine it is upstream's Microsoft-signed ARM64 driver package, installed and removed by <code>HidHideArm64Installer</code> with upstream's own tool, nefcon.</li>
 <li><strong>Windows MIDI Services</strong> is part of Windows 11 25H2 from the late-November 2026 update. Microsoft removed its separate runtime's installers on 2026-10-01, so on a PC without the in-box API <code>DriverInstaller</code> installs PadForge's build of the same runtime from hifihedgehog/PadForge-MIDI-Runtime, checked against a pinned SHA-256, and detects and uninstalls Microsoft's install and PadForge's alike. <code>MidiApiSelection</code> picks which API runs, and the legacy WinMM API needs no install.</li>
 <li><strong>SteamVR</strong> is installed without the Steam client, by downloading Valve's <code>steamcmd</code> and running the anonymous <code>app_update</code> for app 250820 (issue #49). Uninstall is offered only for the install PadForge itself created.</li>
@@ -5925,7 +6131,7 @@
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        VX[&quot;One-device xusb22 package&lt;br/&gt;signed on this machine&quot;]
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    end
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;HIDMaestro UMDF2 driver&lt;br/&gt;(344 profiles bundled in the SDK,&lt;br/&gt;246 of them offered in PadForge)&quot;]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    HM --&gt;|&quot;InstallDriver() inside HIDMaestro.Core.dll&quot;| HM_DRV[&quot;x64: HIDMaestro UMDF2 driver&lt;br/&gt;ARM64: usbip-win2 host controller&lt;br/&gt;(344 profiles bundled in the SDK,&lt;br/&gt;246 of them offered in PadForge)&quot;]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    HH --&gt;|&quot;x64: HidHide_1.5.230_x64.exe&lt;br/&gt;/extract -&gt; msiexec /i HidHide.msi&lt;br/&gt;ARM64: nefconc install, then class filters&quot;| HH_DRV[&quot;HidHide kernel driver&quot;]
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    MS --&gt;|&quot;vc_redist.x64.exe if older than 14.51&lt;br/&gt;-&gt; msiexec /i PadForge-MIDI-Runtime-*.msi&quot;| MS_SVC[&quot;C:\Program Files\PadForge MIDI Runtime&lt;br/&gt;(the in-box API needs no install)&quot;]
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    SV --&gt;|&quot;steamcmd.zip -&gt; +app_update 250820&lt;br/&gt;-&gt; HMVR.SetSteamVRPathHint&quot;| SV_DIR[&quot;SteamVR payload&lt;br/&gt;(default C:\SteamVR)&quot;]
@@ -5964,7 +6170,7 @@
 <td><code>HIDMaestro.Core.dll</code> (referenced via <code>HintPath</code>, not embedded)</td>
 <td>Managed assembly</td>
 <td>varies by version</td>
-<td>HIDMaestro SDK and bundled UMDF2 driver. Loaded by the CLR. <code>HMContext.InstallDriver()</code> registers the driver with Windows the first time an HM-backed slot is created.</td>
+<td>HIDMaestro SDK, its bundled UMDF2 driver, and usbip-win2's host controller driver. Loaded by the CLR. <code>HMContext.InstallDriver()</code> registers the driver with Windows the first time an HM-backed slot is created.</td>
 </tr>
 <tr>
 <td><code>Resources\HidHide_1.5.230_x64.exe</code></td>
@@ -6012,7 +6218,7 @@
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">&lt;LogicalName&gt;</span>BthPS3.%(RecursiveDir)%(Filename)%(Extension)<span class="nt">&lt;/LogicalName&gt;</span>
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">&lt;/EmbeddedResource&gt;</span>
 </code></pre></div>
-<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. The current build ships HIDMaestro 2.3.0, 5.2.0 through 5.3.1 shipped 2.1.0, and 5.1.0 shipped 2.0.3. 1.12.0, 2.0.0 and 2.1.0 each changed the driver, so the first slot that needs it after the update reinstalls the driver once. 1.9.0 asked Inf2Cat for its ARM64 catalog with <code>/os:10_ARM64</code>, which Inf2Cat refuses, so on an ARM64 PC its install stopped before the driver reached the store. 1.9.1 asks for <code>10_RS3_ARM64</code> (HM#63). The 1.6 line introduced the native OpenVR driver behind the VR slot type.</p>
+<p><code>HIDMaestro.Core.dll</code> is a <code>&lt;Reference&gt;</code>, not a <code>&lt;ProjectReference&gt;</code>. Using a project reference would build from source and pull in unstable in-progress work from the HIDMaestro repo. Updates happen by copying the Release build of <code>HIDMaestro.Core.dll</code> from the HIDMaestro repo into <code>Resources\HIDMaestro\</code> after a tag is cut there. The current build ships HIDMaestro 2.3.0, 5.2.0 through 5.3.1 shipped 2.1.0, and 5.1.0 shipped 2.0.3. 1.12.0, 2.0.0 and 2.1.0 each changed the driver, so the first slot that needs it after the update reinstalls the driver once. 2.3.0 carries the 2.1.0 driver unchanged, so nothing reinstalls on x64. The 1.6 line introduced the native OpenVR driver behind the VR slot type.</p>
 <hr />
 <h2 id="shared-helpers">Shared Helpers<a class="headerlink" href="#shared-helpers" title="Permanent link">&para;</a></h2>
 <p>Helpers reused across the install flows. <code>ExtractEmbeddedResource</code> and <code>CleanupTempDir</code> are internal, because <code>HidHideArm64Installer</code> uses them too. The rest are private.</p>
@@ -6065,7 +6271,7 @@
 <hr />
 <h2 id="hidmaestro">HIDMaestro<a class="headerlink" href="#hidmaestro" title="Permanent link">&para;</a></h2>
 <p>PadForge does not ship a separate HIDMaestro installer EXE or MSI, and <code>DriverInstaller</code> has no <code>InstallHIDMaestro</code> method. The removal is HIDMaestro's own (<a href="#removal">Removal</a>). The HM SDK assembly (<code>HIDMaestro.Core.dll</code>) bundles the UMDF2 driver binaries, INF and 344 device profiles. PadForge's pickers offer 246 that can be deployed: <code>HMaestroProfileCatalog</code> keeps only profiles whose <code>HMProfile.IsDeployable</code> is true, which is a captured HID descriptor or, for a USB/IP profile with no HID interface, a GIP interface that carries its reports (<code>xbox-one-s-full</code>), leaves out the one it withholds (<code>WithheldProfileIds</code>, the GameCube adapter's Full persona), and adds its own synthetic Custom profile. The 51 keyboards and 52 mice go to the Keyboard+Mouse slot's pickers (<code>KeyboardProfiles</code>, <code>MouseProfiles</code>) and the 143 controllers to the others. Driver registration happens lazily via the SDK, the first time an Xbox, PlayStation, Nintendo, or Extended slot is created, or a Keyboard+Mouse slot set to a keyboard or mouse model (typically during the first engine <code>Start()</code> that has such a slot configured).</p>
-<p>Composite personas need one more driver. The seven profiles whose <code>backend</code> is <code>usbip</code> (<code>dualsense-composite</code>, <code>dualsense-edge-composite</code>, <code>dualshock-4-v2-composite</code>, <code>steam-controller-2</code>, <code>steam-controller-composite</code>, <code>steam-deck-composite</code> and <code>switch2-pro-controller-composite</code>) attach through usbip-win2's virtual USB host controller. HIDMaestro 2.0.1 and later carry usbip-win2 0.9.8.1's host controller driver inside <code>HIDMaestro.Core.dll</code>, three files for each architecture: x64 from the release installer, whose driver Microsoft certified, and ARM64 from the same tag's build from the project's signing service, whose drivers Microsoft attestation-signed. It checks each file against its pinned SHA-256 and installs only the host controller, the first time a composite controller is created (<code>HMContext.CreateController</code> reaches <code>UsbipDriverInstaller.EnsureInstalled</code>): it registers the <code>ROOT\USB</code> devnode usbip-win2's own <code>devnode.exe</code> would, installs the driver on it through Windows' driver update, and records the install under <code>HKLM\SOFTWARE\HIDMaestroUsbip</code>. It never runs usbip-win2's installer and never installs its root-hub filter, so no USB root hub restarts. PadForge makes no call of its own. HIDMaestro 1.9.2 through 2.0.0 ran the 0.9.8.1 installer itself with <code>/VERYSILENT /SUPPRESSMSGBOXES /NORESTART</code>, and the removal's usbip-win2 option takes what that left. Since 2.0.3 that includes the root-hub filter, whose removal restarts every USB 3 root hub. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall. One still carrying the 0.9.7.7 or 0.9.7.5 host controller that HIDMaestro installed through 1.9.1 moves to 0.9.8.1 by one driver update in place, only in a Windows session where that controller has carried no device yet, and <code>HIDMAESTRO_KEEP_TRANSPORT=1</code> turns the move off. HIDMaestro moves only a host controller whose driver file matches a build it installed, so another program's usbip-win2 of a different build keeps its version, and it adds its own hardware ID, <code>ROOT\HIDMAESTRO_UDE</code>, to every usbip-win2 host controller it finds. It asks the driver which request format it speaks, 0.9.7.x, 0.9.8.0 or 0.9.8.1, before each attach, stop or device-list request. The detach request has one format in all three.</p>
+<p>HIDMaestro's backend is a choice (<code>HMBackend</code>), and PadForge leaves it at <code>Auto</code>: <code>EnsureHMaestroContext</code> builds <code>new HMContext()</code>, which takes the machine's backend, the UMDF2 driver on x64 and USB/IP on ARM64. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver: <code>InstallDriver()</code> installs the host controller there, and Windows' own drivers bind each controller. On x64 the eleven profiles whose <code>backend</code> is <code>usbip</code> ride the host controller too: <code>dualsense-composite</code>, <code>dualsense-edge-composite</code>, <code>dualshock-4-v2-composite</code>, <code>steam-controller-2</code>, <code>steam-controller-composite</code>, <code>steam-deck-composite</code>, <code>switch2-pro-controller-composite</code>, <code>xbox-one-s-full</code> (a wired Xbox One S pad that Windows' own Xbox drivers bind), <code>joycon-l-usb</code> and <code>joycon-r-usb</code> (the Joy-Cons in the Charging Grip), and <code>gamecube-adapter</code>, which PadForge withholds. HIDMaestro 2.0.1 and later carry usbip-win2 0.9.8.1's host controller driver inside <code>HIDMaestro.Core.dll</code>, three files for each architecture. It checks each file against its pinned SHA-256 and installs only the host controller, the first time a controller needs it (<code>HMContext.CreateController</code> reaches <code>UsbipDriverInstaller.EnsureInstalled</code>): it registers the <code>ROOT\USB</code> devnode usbip-win2's own <code>devnode.exe</code> would, installs the driver on it through Windows' driver update, and records the install under <code>HKLM\SOFTWARE\HIDMaestroUsbip</code>. It never runs usbip-win2's installer and never installs its root-hub filter, so no USB root hub restarts. PadForge makes no call of its own. HIDMaestro 1.9.2 through 2.0.0 ran the 0.9.8.1 installer itself with <code>/VERYSILENT /SUPPRESSMSGBOXES /NORESTART</code>, and the removal's usbip-win2 option takes what that left. Since 2.0.3 that includes the root-hub filter, whose removal restarts every USB 3 root hub. A machine that already has usbip-win2 with its host controller stopped gets a device restart instead of a reinstall. One still carrying the 0.9.7.7 or 0.9.7.5 host controller that HIDMaestro installed through 1.9.1 moves to 0.9.8.1 by one driver update in place, only in a Windows session where that controller has carried no device yet, and <code>HIDMAESTRO_KEEP_TRANSPORT=1</code> turns the move off. HIDMaestro moves only a host controller whose driver file matches a build it installed, so another program's usbip-win2 of a different build keeps its version, and it adds its own hardware ID, <code>ROOT\HIDMAESTRO_UDE</code>, to every usbip-win2 host controller it finds. It asks the driver which request format it speaks, 0.9.7.x, 0.9.8.0 or 0.9.8.1, before each attach, stop or device-list request. The detach request has one format in all three.</p>
 <h3 id="ensurehmaestrocontext">EnsureHMaestroContext()<a class="headerlink" href="#ensurehmaestrocontext" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.Step5.VirtualDevices.cs</code> owns the HM lifecycle:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">EnsureHMaestroContext</span><span class="p">()</span>
@@ -6108,7 +6314,7 @@
 <p>A failed setup holds for five seconds (<code>HmSetupRetryHoldMs</code>), so the other slots of the same start fail fast instead of each running the setup again, since creates run one at a time. The next create after that runs it again. A slot whose create failed keeps its own latch, which only a change to that slot clears: turning it off and on, a type or profile change, or a device reconnect. A retry therefore follows the user's next change, or a slot created later, and never loops on its own. A failure used to set a flag that only an engine stop cleared. A successful retry raises <code>ErrorResolved</code>, and <code>InputService.ClearResolvedError</code> clears "Error: Failed to initialize HIDMaestro." from the status line while it is still the message shown. An engine stop resets the hold with the context (<code>DisposeHMaestroContextOnShutdown</code>).</p>
 <p><code>preserveInstall: true</code> is load-bearing on every sweep. The preserving overload still evicts every stale device node, which is the only thing that blocks the install. The flag guards driver-package removal and the <code>HKLM\SOFTWARE\HIDMaestro</code> delete, and that key holds the VR driver's registration gate plus the <code>SteamVRPath</code> hint. Sweeping without it sent a VR slot back to re-extracting <code>driver_hidmaestro.dll</code> into a running <code>vrserver.exe</code> whenever a session mixed a VR slot with a conventional one, and cost the next launch a full deploy by discarding the manifest hash.</p>
 <h3 id="settings-page-surface">Settings page surface<a class="headerlink" href="#settings-page-surface" title="Permanent link">&para;</a></h3>
-<p>The HIDMaestro card in <code>SettingsPage.xaml</code> shows an Ember flame lit while the driver is in the driver store (a <code>Path</code> styled <code>LivenessFlameBase</code> whose <code>DataTrigger</code> on <code>IsHIDMaestroInstalled</code> sets <code>Fill="{DynamicResource EmberBrush}"</code> and the <code>#FF6B2C</code> <code>DropShadowEffect</code>, as the HidHide card's does), the localized "Installed" or "Not Installed" beside it (<code>HIDMaestroStatusText</code>), the SDK assembly version below, and an <strong>Uninstall</strong> button (<code>EmberDestructiveButton</code>, <code>UninstallHIDMaestroCommand</code>). <code>MainWindow.RefreshHIDMaestroStatus</code> sets <code>IsHIDMaestroInstalled</code> from <code>HIDMaestroRemoval.IsDriverInstalled()</code> at startup, on the five-second driver status timer and after a removal. The version string is bound to <code>HIDMaestroVersion</code>, computed once at startup by <code>SettingsViewModel.GetEmbeddedHidMaestroVersion()</code> (a view-model method, not markup):</p>
+<p>The HIDMaestro row of the <strong>Drivers</strong> card in <code>SettingsPage.xaml</code> shows a dot that turns ember while the driver of this PC's HIDMaestro backend is installed (an <code>Ellipse</code> styled <code>DriverDot</code> whose <code>DataTrigger</code> on <code>IsHIDMaestroInstalled</code> sets its <code>Fill</code> and <code>Stroke</code> to <code>EmberBrush</code>, as the HidHide row's does), the name over the line "Creates the virtual controllers." (<code>Settings_HIDMaestroLine</code>), the localized "Installed" or "Not Installed" (<code>HIDMaestroStatusText</code>) with the SDK assembly version beside it, and an <strong>Uninstall</strong> button (<code>DriverAction</code>, <code>UninstallHIDMaestroCommand</code>). <code>MainWindow.RefreshHIDMaestroStatus</code> sets <code>IsHIDMaestroInstalled</code> from <code>HIDMaestroRemoval.IsDriverInstalled()</code> at startup, on the five-second driver status timer and after a removal. <code>IsDriverInstalled()</code> gives the answer HIDMaestro's own <code>HMContext.IsDriverInstalled</code> gives for <code>Auto</code>, from two static probes that construct no context. On the USB/IP backend (<code>HMContext.MachineBackend</code>), as on Windows on ARM, it is the presence of usbip-win2's host controller (<code>HMContext.IsUsbipBackendAvailable</code>). On the UMDF2 backend it is a <code>hidmaestro.inf_*</code> folder under <code>DriverStore\FileRepository</code>. The version string is bound to <code>HIDMaestroVersion</code>, computed once at startup by <code>SettingsViewModel.GetEmbeddedHidMaestroVersion()</code> (a view-model method, not markup):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GetEmbeddedHidMaestroVersion</span><span class="p">()</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">try</span>
@@ -6148,13 +6354,14 @@
 <p><strong>OEM-name orphan recovery.</strong> Before any virtuals are created, <code>App.xaml.cs</code> calls <code>HIDMaestro.HMOemNameOverride.RecoverOrphans()</code> to replay OEM-name overrides left by a prior session that never ran its cleanup <code>Clear</code> (crash, force-kill, power loss). This restores the DirectInput OEM-name table in HKLM to its pre-override state. Idempotent (a no-op when no orphan records exist) and best-effort (a swallow-all <code>try/catch</code>).</p>
 <p>Graceful shutdown does not call <code>RemoveAllVirtualControllers()</code>. <code>InputManager.Stop()</code> tears each virtual down with <code>DestroyAllVirtualControllers()</code>, then <code>DisposeHMaestroContextOnShutdown()</code> disposes the static <code>HMContext</code>. PadForge has had no exit sweep of its own since HIDMaestro 2.0.0: the sweep can no longer reach a running program's controllers, and HIDMaestro's own <code>ProcessExit</code> handler, added with its owner claim at the program's first cleanup, <code>InstallDriver</code> or create, removes the controllers a program did not dispose. A killed PadForge's controllers go with the next sweep of any program on the PC.</p>
 <h3 id="removal">Removal<a class="headerlink" href="#removal" title="Permanent link">&para;</a></h3>
-<p>Settings, HIDMaestro Driver, <strong>Uninstall</strong> runs HIDMaestro 2.0.1's own removal (<code>HMUninstall</code>). It takes every HIDMaestro controller and device record, the driver packages, the signing certificate, HIDMaestro's registry keys and files and its OpenVR registration, and puts back the joy.cpl names and GameInput tables a controller changed while they still hold what HIDMaestro wrote. <code>HIDMaestroRemoval.Preview</code> fills <code>UninstallHIDMaestroDialog</code>, and <code>HIDMaestroRemoval.Run(includeUsbip, stopEngine)</code> stops the engine and calls <code>HMaestroVirtualController.RemoveHIDMaestro</code>, the one call site, fenced in the test host. <a href="../hidmaestro-deep-dive/#removing-hidmaestro">HIDMaestro Deep Dive</a> covers the flow. Removing HIDMaestro's devices in Device Manager or a package with <code>pnputil /delete-driver</code> leaves the rest behind. On a PC without PadForge, <code>HIDMaestroUninstall.exe</code> from the HIDMaestro release ZIP runs the same removal.</p>
+<p>Settings, Drivers, HIDMaestro's <strong>Uninstall</strong> runs the removal HIDMaestro added in 2.0.1 (<code>HMUninstall</code>). It takes every HIDMaestro controller and device record, the driver packages, the signing certificate, HIDMaestro's registry keys and files and its OpenVR registration, and puts back the joy.cpl names and GameInput tables a controller changed while they still hold what HIDMaestro wrote. <code>HIDMaestroRemoval.Preview</code> fills <code>UninstallHIDMaestroDialog</code>, and <code>HIDMaestroRemoval.Run(includeUsbip, stopEngine)</code> stops the engine and calls <code>HMaestroVirtualController.RemoveHIDMaestro</code>, the one call site, fenced in the test host. <a href="../hidmaestro-deep-dive/#removing-hidmaestro">HIDMaestro Deep Dive</a> covers the flow. Removing HIDMaestro's devices in Device Manager or a package with <code>pnputil /delete-driver</code> leaves the rest behind. On a PC without PadForge, <code>HIDMaestroUninstall.exe</code> from the HIDMaestro release ZIP runs the same removal.</p>
 <hr />
 <h2 id="hidhide">HidHide<a class="headerlink" href="#hidhide" title="Permanent link">&para;</a></h2>
 <p>A kernel driver follows the machine, so <code>PlatformSupport.IsArm64Machine</code> picks the path, whichever build is running.</p>
 <h3 id="installhidhide">InstallHidHide()<a class="headerlink" href="#installhidhide" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">InstallHidHide</span><span class="p">()</span>
 </code></pre></div>
+<p>The install runs inside <code>HidHideController.AnnounceThisProcessWhile</code>, which maps PadForge's own image every 20 ms while it runs and once after (<a href="#dos-device-path-conversion">DOS Device Path Conversion</a>).</p>
 <p>On an x64 machine: extract embedded <code>HidHide_1.5.230_x64.exe</code> to a staging folder of this attempt's own under <code>%TEMP%\PadForge_HidHide\</code>, run <code>/extract</code> to unpack the MSI, locate <code>HidHide.msi</code> (with <code>HidHide*.msi</code> glob fallback), then run <code>msiexec /i "{msiPath}" /qb /norestart</code> via <code>RunMsiElevated</code>. The staging folder is deleted in <code>finally</code>, except after a timeout, when the installer may still be reading it.</p>
 <p>On an ARM64 machine: <code>HidHideArm64Installer.Install()</code>. See <a href="#the-arm64-path">The ARM64 path</a>.</p>
 <h3 id="uninstallhidhide">UninstallHidHide()<a class="headerlink" href="#uninstallhidhide" title="Permanent link">&para;</a></h3>
@@ -6424,7 +6631,7 @@
 <tbody>
 <tr>
 <td><code>EnsureSigningCertificate()</code></td>
-<td>Finds or creates a <code>CN=PadForge DS3 WinUSB</code> code-signing certificate in <code>LocalMachine\My</code>, ten-year validity, Code Signing EKU. Re-imported with <code>PersistKeySet \| MachineKeySet</code> so <code>signtool</code> can read the private key, then added to <code>My</code>, <code>Root</code>, and <code>TrustedPublisher</code>. Returns the thumbprint.</td>
+<td>Finds or creates a <code>CN=PadForge DS3 WinUSB</code> code-signing certificate in <code>LocalMachine\My</code>, ten-year validity, Code Signing EKU. Re-imported with <code>PersistKeySet \| MachineKeySet</code> so the private key lands in the machine key store, where every later signing reads it back, then added to <code>My</code>, <code>Root</code>, and <code>TrustedPublisher</code>. Returns the thumbprint.</td>
 </tr>
 <tr>
 <td><code>SignDriverPackage(dir, catalogName, log)</code></td>
@@ -6436,7 +6643,8 @@
 </tr>
 </tbody>
 </table>
-<p><code>RunTool</code> drains stdout and stderr asynchronously with a 120 s timeout and kills a timed-out child, because a synchronous <code>ReadToEnd</code> on one stream deadlocks once the child fills the other stream's pipe buffer, and both tools write warnings to stderr as a matter of course.</p>
+<p><code>DriverPackageCatalog</code> writes one catalog for each name an INF's <code>CatalogFile</code> entry gives, catalog version 2, with each INF as a SHA-1 and a SHA-256 member and, as attributes, the hardware IDs of every models section (<code>HWID1</code>, <code>HWID2</code> and on) and then <code>OS</code>. It refuses an INF below the package's top folder and one with no models section decorated for the machine's architecture. No Inf2Cat.exe or signtool.exe runs, and nothing comes from HIDMaestro. <code>DriverPackageCatalogTests</code> holds the writer to the catalog Inf2Cat wrote for a frozen test package.</p>
+<p><code>RunTool</code> drains stdout and stderr asynchronously with a 120 s default timeout and kills a timed-out child, because a synchronous <code>ReadToEnd</code> on one stream deadlocks once the child fills the other stream's pipe buffer. Its one caller is the BthPS3 removal, which runs BthPS3's own uninstaller through it.</p>
 <h3 id="ensurewinusbbound">EnsureWinUsbBound()<a class="headerlink" href="#ensurewinusbbound" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">EnsureWinUsbBound</span><span class="p">(</span><span class="n">Action</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="n">CancellationToken</span><span class="w"> </span><span class="n">ct</span><span class="p">)</span>
 <a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">EnsureWinUsbBound</span><span class="p">(</span>
@@ -6477,9 +6685,9 @@
 </code></pre></div>
 <p>Copies every manifest resource whose name starts with <code>BthPS3.</code> to <code>%TEMP%\PadForge\BthPS3Drivers\</code>, turning the <code>LogicalName</code> back into a relative path. Cached in a static after the first call, re-extracting only if the directory has since vanished. Nothing deletes it: the packages are re-read on every repair and every WinUSB bind.</p>
 <h3 id="removal_1">Removal<a class="headerlink" href="#removal_1" title="Permanent link">&para;</a></h3>
-<p>Settings, BthPS3 Bluetooth Driver, <strong>Uninstall</strong> removes the stack. PadForge installs it without BthPS3's setup, so Windows lists no program to uninstall, and nothing else removes it. <code>BthPS3Removal</code> (<code>PadForge.App/Services/BthPS3Removal.cs</code>) reads the PC into a <code>MachineState</code> and plans from it with <code>Plan</code>, a pure function: BthPS3's own setup's product (found by its display name, <code>Nefarius BthPS3 Bluetooth Drivers</code>, in the machine's uninstall list), the <code>BthPS3PSM</code> class filter, the <code>BthPS3</code> and <code>BthPS3PSM</code> services, the <code>bthps3.inf</code>, <code>bthps3_pdo_null_device.inf</code> and <code>bthps3psm.inf</code> packages in the driver database, the two binaries under <code>System32\drivers</code>, PadForge's <code>ds3_winusb.inf</code> packages and its signing certificate. <code>UninstallBthPS3Dialog</code> shows the plan from <code>Preview</code>, and <code>Run(stopEngine)</code> stops the engine, reads the PC again and removes what it finds.</p>
+<p>Settings, Drivers, BthPS3 Bluetooth's <strong>Uninstall</strong> removes the stack. PadForge installs it without BthPS3's setup, so Windows lists no program to uninstall, and nothing else removes it. <code>BthPS3Removal</code> (<code>PadForge.App/Services/BthPS3Removal.cs</code>) reads the PC into a <code>MachineState</code> and plans from it with <code>Plan</code>, a pure function: BthPS3's own setup's product (found by its display name, <code>Nefarius BthPS3 Bluetooth Drivers</code>, in the machine's uninstall list), the <code>BthPS3PSM</code> class filter, the <code>BthPS3</code> and <code>BthPS3PSM</code> services, the <code>bthps3.inf</code>, <code>bthps3_pdo_null_device.inf</code> and <code>bthps3psm.inf</code> packages in the driver database, the two binaries under <code>System32\drivers</code>, PadForge's <code>ds3_winusb.inf</code> packages and its signing certificate. <code>UninstallBthPS3Dialog</code> shows the plan from <code>Preview</code>, and <code>Run(stopEngine)</code> stops the engine, reads the PC again and removes what it finds.</p>
 <p>The steps follow BthPS3's own removal, <code>UninstallDrivers</code> in <code>BthPS3Installer/CustomActions.cs</code>, in its order: the filter's class registration, the profile service's advertisement withdrawn through a radio that is on (an off radio is switched on for it, as <code>HostRadio</code>'s constructor does, and switched off again at the end), the radio off with IOCTL <code>0x411184</code> and state 4, the radio device restarted with the port cycle <code>CycleBluetoothRadio</code> uses and a wait for its interface to leave and return, each package deleted from the store (<code>DriverStore.RemoveDriver</code>), and the radio on with state 2. When BthPS3's own setup installed the stack, its uninstaller runs first (<code>msiexec /x {product} /qn /norestart</code> through <code>RunTool</code>), and the steps then act on what it left. That setup leaves the two services and their binaries, which its INFs copy to <code>System32\drivers</code> (<code>DefaultDestDir = 12</code>). PadForge deletes the services through the Service Control Manager and the binaries, and Windows finishes either at its next start while the driver is still loaded. The WinUSB packages go through <code>Devcon.DeleteDriver</code> (<code>DiUninstallDriver</code>, then <code>SetupUninstallOEMInf</code>), so a docked controller gets back the driver Windows gives it, as <code>VendorUsbDriverInstaller.Restore</code> gives a node back. The certificate leaves <code>My</code>, <code>Root</code> and <code>TrustedPublisher</code> with its private key, and stays while another package in the driver database names it as signer.</p>
-<p>The stack stays while <code>IsDsHidMiniInstalled</code> is true, since DsHidMini needs it, and the preview lists it as kept. A removal that would take the stack is held while <code>TryProbeBthPs3Children</code> finds a controller on <code>BTHPS3BUS</code> or fails, the gate <code>MayReplaceDriversNow</code> keeps for the driver update: the radio restart tears a connected controller down, which is the 0x10D bugcheck under BthPS3 2.12.0 to 3.2.0 (nefarius/BthPS3#182). What the PC holds after the steps decides each item's outcome. Each step that changes the PC asks <code>OffLimitsForTest</code> first (<code>TestHostFenceTests</code>), and <code>BthPS3RemovalTests</code> runs the plan and the run against fakes. The Settings card reads <code>IsAnyBthPs3DriverInstalled</code>, two registry reads, on the driver status timer.</p>
+<p>The stack stays while <code>IsDsHidMiniInstalled</code> is true, since DsHidMini needs it, and the preview lists it as kept. A removal that would take the stack is held while <code>TryProbeBthPs3Children</code> finds a controller on <code>BTHPS3BUS</code> or fails, the gate <code>MayReplaceDriversNow</code> keeps for the driver update: the radio restart tears a connected controller down, which is the 0x10D bugcheck under BthPS3 2.12.0 to 3.2.0 (nefarius/BthPS3#182). What the PC holds after the steps decides each item's outcome. Each step that changes the PC asks <code>OffLimitsForTest</code> first (<code>TestHostFenceTests</code>), and <code>BthPS3RemovalTests</code> runs the plan and the run against fakes. The Settings row reads <code>IsAnyBthPs3DriverInstalled</code>, two registry reads, on the driver status timer.</p>
 <hr />
 <h2 id="controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller">Controllers Windows leaves without a driver (VendorUsbDriverInstaller)<a class="headerlink" href="#controllers-windows-leaves-without-a-driver-vendorusbdriverinstaller" title="Permanent link">&para;</a></h2>
 <p><strong>Files:</strong> <code>PadForge.App/Services/VendorUsbDriverInstaller.cs</code> (<code>PadForge.Services</code>), <code>PadForge.App/Common/Input/VendorUsbBindingService.cs</code> (<code>PadForge.Common.Input</code>)</p>
@@ -6526,7 +6734,7 @@
 </code></pre></div>
 <ol>
 <li>Refuses the ID when any present node it names sits outside <code>from</code> and is not already on the target driver. <code>from</code> defaults to no driver and <code>HidUsb</code>, or no driver alone for xusb22. <code>UpdateDriverForPlugAndPlayDevices</code> takes every node the ID names, so a second unit of the same model on another vendor's driver would otherwise go with it.</li>
-<li>Writes the INF to <code>StagingDirectory(BindId)</code>, or to <code>StagingDirectory(BindId + "_xusb22")</code> for an xusb22 package, each package in its own folder, because Inf2Cat catalogs every INF it finds in one.</li>
+<li>Writes the INF to <code>StagingDirectory(BindId)</code>, or to <code>StagingDirectory(BindId + "_xusb22")</code> for an xusb22 package, each package in its own folder, because the catalog step catalogs every INF it finds in one.</li>
 <li>Signs the package through <code>Ds3DriverInstaller.SignDriverPackage</code> with this machine's certificate, fresh on every bind, and checks the chain with <code>IsCatalogTrusted</code>.</li>
 <li><code>Devcon.Install</code> (DiInstallDriver) stocks the driver store, so a later plug-in with no driver takes the package on its own.</li>
 <li><code>UpdateDriverForPlugAndPlayDevices</code> with <code>INSTALLFLAG_FORCE | INSTALLFLAG_NONINTERACTIVE</code> binds the node now, because driver ranking prefers an inbox driver, <code>HidUsb</code> here, over a package signed on this machine.</li>
@@ -6581,12 +6789,12 @@
 <p>A TouchSense mouse (#494), a Logitech iFeel Mouse or iFeel MouseMan, is bound so that PadForge can play rumble on its buzz motor (<a href="../peripheral-outputs-internals/#touchsense">Peripheral Outputs Internals</a>). Three rules are its own:</p>
 <ul>
 <li>It is offered the bind only when its own mouse collection declares the buzz report (<code>TouchSenseBinding.NodeDeclaresBuzz</code>): one output value of seven bytes on usage page <code>0xFF00</code>, usage 2, with no report ID and no feature report, read from what hid.dll already parsed, through an open with no access right. Only the iFeel Mouse's descriptor is on record, so a sibling's IDs alone do not say that it takes the frames. That is also why the kind is bound from <code>HidUsb</code> alone: a node with no driver has no mouse collection to read.</li>
-<li>It is bound one device at a time (<code>VendorUsbDriverInstaller.BindsOneDeviceAtATime</code>). The forced update takes every present node the plan's ID names, whichever one was chosen. <code>WhyNotBind</code> therefore answers <code>BindRefusal.OthersPluggedIn</code> while another mouse of the model sits on Windows' driver, the bind is refused before the confirm and again after it, and the status bar shows <code>Status_DriverBindOthersPluggedIn</code>. Its confirm speaks of the one mouse the user chose, and a second one would stop being a pointer unasked.</li>
+<li>It is bound one device at a time (<code>VendorUsbDriverInstaller.BindsOneDeviceAtATime</code>). The forced update takes every present node the plan's ID names, whichever one was chosen. <code>WhyNotBind</code> therefore answers <code>BindRefusal.OthersPluggedIn</code> while another mouse of the model sits on Windows' driver, the bind is refused before the confirm and again after it, and the message line shows <code>Status_DriverBindOthersPluggedIn</code>. Its confirm speaks of the one mouse the user chose, and a second one would stop being a pointer unasked.</li>
 <li>PadForge holds the bound mouse's one WinUSB handle itself, and a handle held open keeps Windows from restarting the node. <code>VendorUsbDriverInstaller.LetGoOf</code> closes it before Windows is asked to change the node's driver and keeps the mouse closed until the wait for the new driver is over (<code>TouchSenseChannels.Hold</code>), since the device pass looks for bound mice every second and would open the mouse again in the middle of the switch.</li>
 </ul>
 <p><code>DevicesViewModel.RefreshDriverOffer</code> asks <code>QueryOptIn</code> when a device is selected, and sweeps the USB nodes only when <code>IsOptInRow</code> says the row's IDs belong to an opt-in device. The answer is a bind offer when a node sits on a driver its target is bound from, or a restore offer when a node is on WinUSB with PadForge's interface active. A pad on the wireless receiver reports the wireless controller's 045E:02A1, so a row with that ID stands for the receiver. Before a bind, <code>MainWindow.SwitchDriverAsync</code> states the cost in a <code>ConfirmDialog</code>, then calls <code>Bind</code> with the target's <code>From</code> list. A restore calls <code>Restore</code> with no prompt. A bind adds the ID to <code>AppSettingsData.WinUsbOptIns</code>, and a restore removes every ID that names the node.</p>
 <p><code>Restore(instanceId)</code> reads the node's <code>DEVPKEY_Device_DriverInfPath</code> and <code>DEVPKEY_Device_DriverProvider</code>, refuses a package whose provider is not <code>PadForge</code>, and deletes it with <code>Devcon.DeleteDriver</code>, which calls DiUninstallDriver to install the best remaining driver on every device the package served, then SetupUninstallOEMInf to take the package out of the driver store. <code>Restore</code> then polls for the node to leave WinUSB.</p>
-<p><code>MainWindow.CheckOptedInDrivers</code> runs 8 s into each start. <code>MovedBack</code> lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the status bar names them.</p>
+<p><code>MainWindow.CheckOptedInDrivers</code> runs 8 s into each start. <code>MovedBack</code> lists the opted-in IDs whose node Windows has put back on the driver it was taken from, from its INF directory or Windows Update, and the message line names them.</p>
 <h3 id="keyboards-and-mice-use-only-in-padforge">Keyboards and mice (Use Only in PadForge)<a class="headerlink" href="#keyboards-and-mice-use-only-in-padforge" title="Permanent link">&para;</a></h3>
 <p><strong>Files:</strong> <code>PadForge.App/Services/WinUsbKeyboardBinding.cs</code>, <code>PadForge.App/Common/Input/WinUsbKeyboards/</code> (<code>WinUsbKeyboardChannel</code>, <code>WinUsbKeyboardDevice</code>, <code>WinUsbMouseDevice</code>, <code>HidKeyboardReports</code>, <code>HidMouseReports</code>, <code>KeyboardTakeovers</code>), <code>PadForge.App/Views/KeepDriverDialog.xaml.cs</code>, <code>PadForge.App/Services/GiveBackTask.cs</code>, <code>PadForge.App/Services/GiveBackRun.cs</code> (#549)</p>
 <p>A keyboard's or mouse's Devices row offers <strong>Use Only in PadForge</strong>. The switch binds the row's USB node to the same WinUSB package as the other kinds, so Windows stops typing with the keyboard or moving the pointer with the mouse, and PadForge reads the device itself. <code>WinUsbKeyboardBinding.QueryOffer(devicePath, nodes, ..., kind)</code> makes the offer:</p>
@@ -6618,7 +6826,7 @@
 <li><code>_viewModel.Settings.LegacyDriverCleanupOffered</code> is <code>false</code> (per-user once-only flag persisted in <code>PadForge.xml</code>), and</li>
 <li>At least one of <code>DriverInstaller.IsExtendedInstalled()</code> (vJoy) or <code>DriverInstaller.GetViGEmVersion() != null</code> (ViGEmBus) returns truthy.</li>
 </ol>
-<p>If neither legacy driver is detected, the flag is flipped to <code>true</code> and the offer is silently skipped. Otherwise PadForge raises a <code>Wpf.Ui.Controls.MessageBox</code> titled "Legacy Driver Cleanup", listing the detected legacy drivers, and offers Uninstall / Keep buttons. On Uninstall, <code>UninstallViGEmBus()</code> and <code>UninstallVJoy()</code> run on a worker thread through <code>RunDriverOperationAsync</code> (the "Removing legacy drivers…" overlay), each gated on its own detection result (<code>if (hasViGEm)</code> / <code>if (hasExtended)</code>) and each inside its own <code>try/catch</code>. They used to run inline on the dispatcher, which froze the window for the whole removal. Because each call has its own try block, a throw from <code>UninstallViGEmBus()</code> no longer skips <code>UninstallVJoy()</code>. Every caught failure is worded by <code>DescribeDriverFailure</code> and collected, and the collection feeds one follow-up "Cleanup encountered an error" dialog. The flag is flipped to <code>true</code> afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.</p>
+<p>If neither legacy driver is detected, the flag is flipped to <code>true</code> and the offer is silently skipped. Otherwise PadForge shows a <code>ConfirmDialog</code> titled "Legacy Driver Cleanup", listing the detected legacy drivers, with <strong>Uninstall</strong> and <strong>Keep</strong> buttons. On Uninstall, <code>UninstallViGEmBus()</code> and <code>UninstallVJoy()</code> run on a worker thread through <code>RunDriverOperationAsync</code> (the "Removing legacy drivers…" overlay), each gated on its own detection result (<code>if (hasViGEm)</code> / <code>if (hasExtended)</code>) and each inside its own <code>try/catch</code>. They used to run inline on the dispatcher, which froze the window for the whole removal. Because each call has its own try block, a throw from <code>UninstallViGEmBus()</code> no longer skips <code>UninstallVJoy()</code>. Every caught failure is worded by <code>DescribeDriverFailure</code> and collected, and the collection feeds one follow-up "Cleanup encountered an error" notice (<code>ConfirmDialog.Notice</code>). The flag is flipped to <code>true</code> afterward regardless of outcome, including a caught uninstall failure, to avoid re-prompting on every launch.</p>
 <p>The whole entry point is wrapped in a top-level <code>try/catch</code> that swallows everything because it runs as <code>async void</code> from the dispatcher. An unhandled exception there would surface as a generic "unexpected error" dialog at startup. On detection failure, the flag is <strong>not</strong> flipped, so the next launch retries.</p>
 <h3 id="detection">Detection<a class="headerlink" href="#detection" title="Permanent link">&para;</a></h3>
 <h4 id="isextendedinstalled-vjoy">IsExtendedInstalled() (vJoy)<a class="headerlink" href="#isextendedinstalled-vjoy" title="Permanent link">&para;</a></h4>
@@ -7085,6 +7293,7 @@
 <h3 id="dos-device-path-conversion">DOS Device Path Conversion<a class="headerlink" href="#dos-device-path-conversion" title="Permanent link">&para;</a></h3>
 <p>Whitelist requires DOS device paths (<code>\Device\HarddiskVolumeN\...</code>), not regular paths (<code>C:\...</code>). <code>ToDosDevicePath()</code> converts via <code>QueryDosDeviceW</code>.</p>
 <p>The driver does not compare that conversion, though. It records each process by the image name its first load-image notification carries (HidHide <code>Logic.c</code> <code>OnSystemLoadImage</code>, <code>Config.c</code> <code>HidHideProcessIdRegister</code>) and matches the list against that name (<code>Config.c</code> <code>HidHideProcessIdCheckFullImageNameAgainstWhitelist</code>). The drive-letter conversion names a different path for the same file when PadForge's folder sits on a volume mounted inside another drive, on a SUBST drive, or behind a junction. <code>SyncWhitelist</code> therefore also lists <code>CurrentProcessNativeImagePath()</code>, which is <code>QueryFullProcessImageNameW</code> with <code>PROCESS_NAME_NATIVE</code>: the kernel's own name for the image.</p>
+<p>A PadForge that was running when the driver first started has no name in the driver, or a DLL's: the first image mapped into it after the driver's start. The driver refuses a process it has no name for at a hidden device. <code>HidHideController.AnnounceThisProcess</code> maps PadForge's own exe as an image (<code>CreateFileMappingW</code> with <code>SEC_IMAGE</code>, then <code>MapViewOfFile</code>) and lets go of it at once. No code of the image runs, and Windows reports the mapping to every image-load callback under the exe's native path. The driver keeps the first name it hears for a process, so the call changes nothing once the driver knows PadForge. It runs every 20 ms (<code>AnnounceEvery</code>) while an install of HidHide runs and once after (<code>AnnounceThisProcessWhile</code>), at the first apply that finds the driver (<code>_hidHideAnnounced</code> in <code>ApplyDeviceHiding</code>), and after a refusal at the <a href="#self-access-check">self-access check</a>, which then opens the device once more. A process that mapped another image between the driver's start and its first announcement keeps that image's name in the driver until it exits.</p>
 <h3 id="self-access-check">Self-Access Check<a class="headerlink" href="#self-access-check" title="Permanent link">&para;</a></h3>
 <p>PadForge reads every device it hides, and SDL opens each HID device again on every enumeration and drops one it cannot open (hidapi <code>windows/hid.c</code> <code>hid_enumerate</code>, <code>open_device(path, FALSE)</code>). A device HidHide hides from PadForge itself therefore dies at the next device arrival. In discussion #484 a Wii Remote was hidden at 22:13:30.242 and SDL removed it at 30.982, while the slot's virtual controller was being created, and it stayed gone until it was paired again.</p>
 <p>A whitelist entry does not settle every case. The inverse flag may be set: <code>Whitelisted</code> returns the negation, so a listed program is the one refused. Or the name HidHide recorded for the process may match no entry: <code>HidHideProcessIdRegister</code> records each process under the image name of the first load-image notification it sees for it.</p>
@@ -7127,7 +7336,7 @@
 </table>
 <p>Guards are <code>Func&lt;bool&gt;</code> delegates on <code>SettingsViewModel</code>, injected by <code>MainWindow.xaml.cs</code>. <code>RefreshDriverGuards()</code> re-evaluates <code>CanExecute</code> on those three uninstall commands after slot creation, deletion, or type changes.</p>
 <p>SteamVR adds ownership on top of usage. <code>UninstallSteamVrCommand</code> is gated on <code>IsSteamVrInstalled &amp;&amp; IsSteamVrOwned &amp;&amp; !HasAnyVrSlots()</code>, and <code>ShowSteamVrUninstall</code> hides the button entirely when the install is Steam's own. <code>RefreshDriverGuards()</code> re-evaluates it alongside the other two, and the two ownership properties also raise <code>NotifyCanExecuteChanged</code> from their own setters, refreshed by <code>RefreshMidiServicesStatus()</code>. The runtime refusal is enforced a second time inside <code>UninstallSteamVR()</code>, which throws when <code>vrserver</code> is running, and <code>MainWindow</code> checks the same process before showing the confirm dialog.</p>
-<p>HIDMaestro has no Install command, since PadForge installs its driver with the first virtual controller. Its <strong>Uninstall</strong> (#518) and the BthPS3 card's <strong>Uninstall</strong> carry no slot guard and stay enabled even with nothing left to remove, so the dialog lists what remains or says nothing does. HIDMaestro's removal stops the engine first and refuses while another program built on HIDMaestro runs, which its preview names. The BthPS3 removal waits while a PlayStation controller is connected over Bluetooth. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either.</p>
+<p>HIDMaestro has no Install command, since PadForge installs its driver with the first virtual controller. Its <strong>Uninstall</strong> (#518) and the BthPS3 Bluetooth row's <strong>Uninstall</strong> carry no slot guard and stay enabled even with nothing left to remove, so the dialog lists what remains or says nothing does. HIDMaestro's removal stops the engine first and refuses while another program built on HIDMaestro runs, which its preview names. The BthPS3 removal waits while a PlayStation controller is connected over Bluetooth. The legacy v2 cleanup dialog is single-shot and does not appear on the Settings page, so it has no guard either.</p>
 <hr />
 <h2 id="elevation-strategy">Elevation Strategy<a class="headerlink" href="#elevation-strategy" title="Permanent link">&para;</a></h2>
 <p>PadForge requires elevation unconditionally. <code>app.manifest</code> declares:</p>
@@ -7312,7 +7521,7 @@
 <li><a href="../xaml-views/">XAML Views</a>: <code>SettingsPage</code> driver install/uninstall buttons and guards</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

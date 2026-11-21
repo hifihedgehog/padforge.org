@@ -8,10 +8,13 @@ PadForge reads both tools' files directly. You pick or drop the file, a preview 
 
 ## Open a file
 
-Two ways in, both on the **Profiles** page:
+![Get Profiles on its Import a File tab](../images/profiles-get-file.png)
 
-- **Import…** opens a file dialog. Its first filter, **Profiles**, shows `.pfprofile`, `.rewasd` and `.xml` files together. The other filters narrow it to PadForge profiles, reWASD, DS4Windows, or all files.
-- Drag the file from Explorer onto the profile list. The dashed **Drop to Import Profile** overlay appears while a `.pfprofile`, `.rewasd` or `.xml` file is over it. Dropping several files imports each one in turn.
+Three ways in, all from the **Profiles** page:
+
+- Click **Get Profiles** and open **Import a File**. **Import…** in its foot, or a click on its drop zone, opens a file dialog. The dialog's first filter, **Profiles**, shows `.pfprofile`, `.rewasd` and `.xml` files together. The other filters narrow it to PadForge profiles, reWASD, DS4Windows, or all files. A file dropped on that zone imports too.
+- Click the dashed drop tile after the last profile card (**Drop a profile file here**). It opens **Get Profiles** on **Import a File**.
+- Drag the file from Explorer onto the profile cards. The dashed **Drop to Import Profile** overlay appears while a `.pfprofile`, `.rewasd` or `.xml` file is over them. Dropping several files imports each one in turn.
 
 The dialog adds the two tools' profile folders to its places pane when they exist on this PC:
 
@@ -22,9 +25,9 @@ The dialog adds the two tools' profile folders to its places pane when they exis
 
 A DS4Windows build that keeps its profiles beside its own executable is not added. Browse to its `Profiles` folder yourself.
 
-PadForge decides what a file is from its contents, never from the extension. A file that opens with `{` is read as reWASD JSON. An XML file has to have a `DS4Windows` root element. Anything else is refused, and the status bar says why:
+PadForge decides what a file is from its contents, never from the extension. A file that opens with `{` is read as reWASD JSON. An XML file has to have a `DS4Windows` root element. Anything else is refused. On the **Import a File** tab the reason shows under the drop zone and the window stays open. A file dropped on the profile cards gives the reason on the message line at the foot of the window:
 
-| Status bar | When |
+| Message | When |
 |---|---|
 | "PadForge could not read that file." | The file is missing or locked. |
 | "That file is too large to be a profile." | It is over 16 MB, or a reWASD file holds more than 64 shifts, more than 5000 entries in one table, or an input set of more than four inputs. |
@@ -37,15 +40,15 @@ PadForge decides what a file is from its contents, never from the extension. A f
 ## The preview
 
 <!-- SCREENSHOT: import-preview -->
-![The Import Profile preview over the Profiles page, for a reWASD config named Star Courier: ten Clean rows and one Skipped gyro tilt zone](../images/import-preview.png)
+![The Import Profile preview over the Profiles page, for a reWASD config named Star Courier: ten bindings under Imported Cleanly and one Skipped gyro tilt zone under Needs a Look](../images/import-preview.png)
 
 The **Import Profile** window opens over the Profiles page. From the top:
 
-- The file and its tool: "Star Courier.rewasd, a reWASD file".
-- The name it lands under: 'Becomes the profile "Star Courier".' A name that is taken gets a number, and the preview shows the numbered name.
-- Three counts, **Clean**, **Partial** and **Skipped**.
+- Under the title, the file, its tool, and the name it lands under: "Star Courier.rewasd, a reWASD file. It becomes the profile Star Courier." A name that is taken gets a number, and the preview shows the numbered name.
+- Three counts, each in a tile: **Clean**, **Partial** and **Skipped**. A **Partial** or **Skipped** count above zero is drawn in gold.
+- **Needs a Look**: each binding that came across with a difference, or did not come across, in a box of its own. The box names the source and, after an arrow, what it became, then **Skipped** or **Partial** and the reason in full. **Skipped** bindings come first, then **Partial**, each group in the file's own order.
+- **Imported Cleanly**: the bindings that came across as they were, two to a line, the file's name for each and what it became.
 - A note on what the profile does when it loads and what you still have to do. It names every program the profile's buttons run and every program it starts on load, before you accept anything.
-- One row per binding: a status dot, the source, an arrow, and what it became. **Skipped** rows come first, then **Partial**, then **Clean**, each group in the file's own order. A **Skipped** or **Partial** row carries its reason in full under it.
 
 | Status | Meaning |
 |---|---|
@@ -69,9 +72,9 @@ The note can say:
 
 ## Import
 
-Click **Import** to add the profile, or **Cancel** to close the preview without adding anything. The status bar confirms the result: "Imported 'Star Courier': 10 clean, 0 partial, 1 skipped".
+Click **Import** to add the profile, or **Cancel** to close the preview without adding anything. The message line confirms the result: "Imported “Star Courier”: 10 clean, 0 partial, 1 skipped".
 
-Import adds a new profile and does not load it. Your active profile stays as it was. Select the new one and click **Load**, or let auto-switch pick it up. From then on it is an ordinary profile: edit it, export it, or delete it like any other.
+Import adds a new profile and does not load it. Your active profile stays as it was. Click **Load** on the new profile's card, or let auto-switch pick it up. From then on it is an ordinary profile: edit it, export it, or delete it like any other.
 
 ### What the profile holds
 
@@ -97,7 +100,7 @@ Import adds a new profile and does not load it. Your active profile stays as it 
 | Radial menus | Radial [menus](menus.md) on the layer that opens them. A sub-menu's sectors join the main ring. |
 | Mouse regions | A **Limit Mouse Region** macro held while the button is down. |
 | Program and power commands | **Run Program**, named in the preview. |
-| Other commands | Toggle virtual controllers, toggle the window, disconnect, gyro on, off and toggle, gyro recenter, Win + Print Screen, Alt + F4. Crosshair commands 1 to 8 become **Toggle Screen Overlay** on overlays 1 to 8, and the crosshair command for every crosshair (type 120) becomes **Toggle Screen Overlay** on **Every Overlay** ([Screen Overlay](../features/screen-overlay.md)). |
+| Other commands | Toggle virtual controllers, toggle the window, disconnect, gyro on, off and toggle, gyro recenter, Win + Print Screen, Alt + F4. Crosshair commands 1 to 10 (types 101 to 110) become **Toggle Crosshair** on crosshairs 1 to 10, and the command for every crosshair (type 120) becomes **Toggle Crosshair** on **Every Crosshair** ([Crosshair](../features/crosshair.md)). |
 | Lightbar | Per layer: a solid color, or the rainbow, breath, heartbeat, stroboscope and shimmer patterns, played by an **Always** macro. |
 | Gyro | Gyro mode reads roll and pitch, Tilt mode reads lean. Gyro to a stick on a PlayStation or Nintendo slot drives that slot's motion. |
 | Use for UDP server | The profile turns on the DSU motion server while it is loaded. |
@@ -129,43 +132,43 @@ The reasons below are condensed from the preview's text, which names the control
 
 | Status | Reason in the preview | What to do |
 |---|---|---|
-| Partial | reWASD stopped these inputs reaching Windows. Turn on Consume Mapped Inputs for the device on the Devices page. | Turn on **Consume Mapped Inputs (Hooks)** for the keyboard or mouse. |
+| Partial | reWASD stopped these inputs reaching Windows. Turn on Consume Mapped Inputs for the device on the Devices page, which stops the ones this profile maps. | Turn on **Consume Mapped Inputs (Hooks)** for the keyboard or mouse. |
 | Partial | In reWASD, a mapped key still reaches Windows because the file maps it without an unmap. With Consume Mapped Inputs on, PadForge holds it back. | Leave the switch off if the game needs that key too. |
-| Partial | reWASD hid this controller from games. | Turn on **Hide from Games (HidHide)** for it on the Devices page. |
+| Partial | reWASD hid this controller from games. Turn on Hide from Games for it on the Devices page. | Turn on **Hide from Games (HidHide)** for it on the Devices page. |
 | Partial | reWASD stopped mouse movement reaching Windows. PadForge holds back keys and mouse buttons but not movement. | The pointer still moves. |
 | Partial | This file keeps two controllers apart. In PadForge, any controller on the slot fires these mappings. | Use one controller per slot. |
 | Partial | reWASD sent this controller to another device through an adapter. | PadForge plays it on this PC. Remote Link sends it to another PC running PadForge. |
-| Partial | Nothing in this file opens this layer. | Give the layer a button on the Mappings tab. |
+| Partial | Nothing in this file opens this layer. Under Mappings, right-click the layer and pick Configure Activator. | Give the layer a button with **Configure Activator…** in the layer's right-click menu, in the controller page's **Mappings** section. |
 | Partial | Its sub-menus became more slots on one ring. | None. Every action is still on the ring. |
 | Partial | The radial menu commits when the stick re-centers or the layer ends. reWASD's Apply button is not used. | None. |
-| Partial | A crosshair lives inside reWASD. | The button toggles a Screen Overlay. Give that overlay your own picture. |
+| Partial | reWASD keeps its crosshairs in its own settings, not in the config. Set yours up on the Crosshair page. | The button toggles a PadForge crosshair. Set its look on the **Crosshair** page under Extras. |
 | Partial | The movement speed or flick did not come across. | Set the speed on the slot. |
 | Partial | PadForge reads Gyro Left and Right from roll and Lean from yaw, reWASD's default. The file does not record whether reWASD's Preferences swapped them. | Swap the rows if your reWASD did. |
-| Partial | A touchpad diagonal is two directions at once, which the touchpad reports only with D-Pad Mode on 8-Way. | Set D-Pad Mode to 8-Way on the Touchpad tab. |
+| Partial | A touchpad diagonal is two directions at once, which the touchpad reports only when its D-Pad Mode under Motion & Touch is 8-Way. | Set **D-Pad Mode** to **8-Way** in the controller page's **Motion & Touch** section. |
 | Partial | The layers tune a stick or trigger differently, so each keeps its own tuning, and the curve comes across as the nearest power curve. | None. |
 | Partial | DS4Windows came back to this profile from another one on a button. | Add a **Profile Shortcut** for this profile on the Profiles page. |
 | Partial | DS4Windows placed the pointer where the stick points. In PadForge the stick moves the pointer. | None. |
 | Partial | A stick direction reads the stick before its rotation, or before its zones and curve. DS4Windows read it after. | None. |
 | Partial | DS4Windows shapes a radial stick, or the gyro dead zone, by the angle of the push. | A straight push plays the same. A diagonal one differs. |
-| Partial | Scroll, tap or an absolute region on the touchpad did not come across. | Set them on the Touchpad tab. |
+| Partial | Scroll, tap or an absolute region on the touchpad did not come across. Set them under Motion & Touch. | Set them in the controller page's **Motion & Touch** section. |
 | Partial or Skipped | This setting did not come across, followed by its name. | Covers settings with no published unit or counterpart: reWASD's report rate, virtual USB hub, extended inputs, macro time unit and some stick and mouse settings, and DS4Windows' extra gyro buttons beyond the first, the touchpad's Release button mode, rotation and threshold, the gyro mouse threshold, the gyro stick's maximum output and other entries. |
-| Skipped | PadForge reads the gyro's direction past one threshold, and reWASD gives no unit for a gyro zone's edge. | Map the gyro on the Mappings tab. |
-| Skipped | In Tilt mode, reWASD's Lean is a turn around the vertical axis, and a motion sensor gives no angle for that turn. | None. |
+| Skipped | PadForge reads the gyro’s direction past one threshold, and reWASD gives no unit for a gyro zone’s edge. | Map the gyro in the controller page's **Mappings** section. |
+| Skipped | In Tilt mode, reWASD’s Lean is a turn around the vertical axis, and a motion sensor gives no angle for that turn. | None. |
 | Skipped | An Xbox virtual controller has no motion. | Pick a PlayStation or Nintendo controller type to send motion. |
 | Skipped | PadForge reads two sticks, and this names a third. | None. |
-| Skipped | PadForge runs eight Screen Overlays, and this is reWASD's ninth or tenth crosshair. | None. |
-| Skipped | Crosshair pictures, stick jitter and shaking, analog key actuation points. | None. |
-| Skipped | A macro cannot press the touchpad click. A mapping on the Mappings tab can. | Map it as a row. |
-| Skipped | Steering wheel emulation on an axis PadForge does not know. | Map the wheel on the Mappings tab. |
+| Skipped | reWASD keeps its crosshairs in its own settings, not in the config. | A crosshair's picture and look. Set them on the **Crosshair** page under Extras. |
+| Skipped | Stick jitter and shaking, or analog key actuation points, did not come across. | None. |
+| Skipped | A macro cannot press this input, followed by its name. A row under Mappings can. | Map it as a row. |
+| Skipped | Steering wheel emulation did not come across. Map the wheel under Mappings. | DS4Windows named an axis PadForge does not know. Map the wheel in the controller page's **Mappings** section. |
 | Skipped | PadForge has no such setting, followed by its name. | DS4Windows' rumble auto-stop, mouse acceleration, button-to-mouse speed, stick fuzz, square stick, anti-snapback, delta acceleration, low-battery flash and charging light. |
-| Skipped | A special action is missing from `Actions.xml` beside the Profiles folder. | Copy `Actions.xml` along with the profile and import again. |
+| Skipped | This profile names a special action missing from `Actions.xml` beside its Profiles folder, followed by its name. | Copy `Actions.xml` along with the profile and import again. |
 | Skipped | An unknown input, output, command or controller button. | The row names it. |
 
 ---
 
 ## Related pages
 
-- [Profiles](profiles.md): the Import button, the drop zone and the profile list.
+- [Profiles](profiles.md): Get Profiles, the drop tile and the profile cards.
 - [Switching from Another Tool](switching.md): moving one game at a time, with a way back.
 - [Shift Layers](shift-layers.md), [Macros](macros.md) and [Menus](menus.md): where the layers, press types and radial menus land.
 - [Devices](../features/devices.md): assign your controller, and the **Consume Mapped Inputs (Hooks)** and **Hide from Games (HidHide)** switches.
@@ -173,4 +176,4 @@ The reasons below are condensed from the preview's text, which names the control
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -8,9 +8,9 @@ A Bliss-Box adapter (the 4-Play, Gamer-Pro and Gamer-Pro jr., and the Advanced m
 
 ## Turning it on
 
-Open **Settings**, find the **Input Engine** card, and tick **Read Bliss-Box Adapters**. It is off by default.
+Open **Settings**, find the **Hardware Support** card, and turn on **Read Bliss-Box Adapters**. It is off by default.
 
-Each port's row names the controller in it, on its detail pane on the Devices page. The line under the checkbox says *No Bliss-Box port found.* when there is none.
+Each port's row on the Devices page then names the controller in it, in the panel of the selected row. Beside the switch, *No Bliss-Box port found.* shows when there is none.
 
 Close the Bliss-Box API Tool and DeviceBuddy while the switch is on, since they talk to the adapter over the same channel.
 
@@ -21,11 +21,11 @@ Close the Bliss-Box API Tool and DeviceBuddy while the switch is on, since they 
 
 ## The port on the Devices page
 
-Select a port's card on the [Devices](devices.md) page, and its detail pane carries a line with its player number, the controller in it and the adapter's firmware:
+Select a port's row on the [Devices](devices.md) page, and its panel carries a line with its player number, the controller in it and the adapter's firmware:
 
 *Bliss-Box port 1 · DualShock 2 · firmware 4.86*
 
-Under the line are the port's actions. Each one appears only when it applies:
+The port's actions and its switch sit in the same panel. Each one appears only when it applies:
 
 | Action | Shows when |
 |---|---|
@@ -82,7 +82,7 @@ Sticks and the D-pad land on the virtual controller's sticks and D-pad, and Star
 
 The N64 follows SDL's mapping exactly. Its C buttons do not form a right stick, and C-Right lands on Misc 2, which only the Switch 2 Pro's C button and the 18th button of a numbered Extended layout take. Bind them yourself if a game wants them elsewhere.
 
-A port assigned while it is empty, unplugged or holding a controller with no default mapping gets its default mapping once PadForge can place its controls: with the switch on, when the adapter reports a controller that has a default mapping, and with the switch off, when the port connects. Until then the slot shows nothing from the port. A row you set, record or clear in the meantime keeps what you gave it, and the rest fill in. **Clear All** on the Base layer, **Paste** and **Copy From...** on the slot, and turning on **Force Raw Joystick Mode (Bypass Gamepad Remapping)** for the port cancel the pending mapping. A change to the **DualShock 3 (SIXAXIS): Full** preset while the port's DualShock 2 is unplugged fills its pressure rows the same way once it is back.
+A port assigned while it is empty, unplugged or holding a controller with no default mapping gets its default mapping once PadForge can place its controls: with the switch on, when the adapter reports a controller that has a default mapping, and with the switch off, when the port connects. Until then the slot shows nothing from the port. A row you set, record or clear in the meantime keeps what you gave it, and the rest fill in. **Clear All** on the Base layer, **Paste** and **Copy From…** on the slot, and turning on **Force Raw Joystick Mode (Bypass Gamepad Remapping)** for the port cancel the pending mapping. A change to the **DualShock 3 (SIXAXIS): Full** preset while the port's DualShock 2 is unplugged fills its pressure rows the same way once it is back.
 
 A slot mapped with a controller in the port keeps that mapping when you plug in a different kind of controller. To map the new one fresh, unassign the port from the slot and assign it again.
 
@@ -96,7 +96,7 @@ A DualShock 2's twelve pressure-sensitive buttons (the four D-pad directions, th
 
 Put one on a trigger and the press depth is the trigger pull. Put one on a button and it presses once the depth passes the row's **Axis-to-Button Deadzone**, so a light touch and a full press can do different things. The buttons themselves still work as ordinary buttons.
 
-Select the port's card and a **DualShock 2 Pressure** panel in its detail pane shows each button's depth as a bar and a percentage.
+Select the port's row and a **DualShock 2 Pressure** readout in its panel shows each button's depth as a bar and a percentage.
 
 PadForge asks for the pressures every 50 ms, DeviceBuddy's own rate, and only while a DualShock 2 is in the port. On firmware 3.0 and a GPA the request costs the adapter none of its own controller reads.
 
@@ -113,7 +113,7 @@ A port's rumble goes through the adapter's own motor commands, for the controlle
 | DualShock, DualShock 2 | Two. The game's low-frequency motor drives the large one and the high-frequency motor the small one, each at its own strength. |
 | GameCube controller, Dreamcast controller, N64 controller, Dreamcast fishing rod | One, at the stronger of the game's two levels. The Dreamcast ASCII pad is sent nothing. |
 
-Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. That includes the neGcon, which has no motor, and the JogCon, whose force feedback the adapter does not drive. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. **Fold Trigger Rumble into Main Motors** on the Pad page folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.
+Any other controller is sent nothing, since every motor command costs a 3.x adapter one of its own controller reads. That includes the neGcon, which has no motor, and the JogCon, whose force feedback the adapter does not drive. SDL's rumble stays off these ports while the switch is on, because it blends both motors into one effect. **Fold Trigger Rumble into Main Motors**, in the controller page's **Rumble & Haptics** section, folds the game's trigger rumble into these motors, as it does on any controller without trigger motors.
 
 On a GPA a running motor is told again every 100 ms, as the API Tool does to hold rumble on, and a new level goes out at once. On a 3.x adapter, where each command costs a controller read, both motors are sent their levels together at most once every 100 ms, so a game that changes its rumble every frame never holds the controller's input still. A send carries the strongest level the game asked for since the last one when that is stronger than what the motor runs, so a short hit between two sends is still felt. A change can take up to 100 ms to arrive there, a steady level is sent again once a second, and a send the adapter refused goes again with the next. When the game stops the motors, when you unassign the controller, and when PadForge stops, the motors are told to stop. A controller plugged into the port takes the game's current level.
 
@@ -125,7 +125,7 @@ The motors change hands on the input engine's next cycle after you turn the swit
 
 A dance mat presses left and right, or up and down, at once. A D-pad cannot, and the hat the adapter reads a D-pad as cannot show it. So once opposite directions have been pressed together, the adapter also sends the four directions as buttons of their own, which the mapping picker lists as **Up Arrow**, **Down Arrow**, **Left Arrow** and **Right Arrow**. Map those, not the hat. A 3.x adapter keeps sending them until it starts a new search after a controller its own search found. A controller already plugged in when the adapter powered up is found another way, so the arrows it turned on keep coming for the next controller too, until that one is unplugged. While such an adapter searches an empty port, it reports all four arrows held, and PadForge clears them once it reads that the adapter is searching, within half a second unless the port is storing a picture. A GPA keeps sending them until it powers off, until a ColecoVision controller, Super Action Controller or ColecoVision wheel is plugged in, until it reads an Atari port as a Trak-Ball, or until its settings go back to their defaults. It sends them from power-up when its stored setting for them is on. A GPA never turns them on for the Genesis 3-button pad or the FM Towns pad, and the PC-FX pad's own buttons share their bits, so PadForge names them for none of the three, and only for a controller whose layout has a D-pad. On a 3.x adapter the Jaguar's keypad sits on those four buttons, so there they keep the keypad's names.
 
-On a 3.x adapter, select a PlayStation dance mat's card and tick **Read Arrows One by One**, and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips most of its own reads of the pad while they do. Once opposite directions have been pressed and the adapter sends the arrows itself, PadForge stops asking, until another controller is plugged in.
+On a 3.x adapter, select a PlayStation dance mat's row and turn on **Read Arrows One by One**, and PadForge asks the pad for its four directions itself, through the adapter's native channel, so the arrows work from the first step. The requests run back to back, 16 ms apart, and the adapter skips most of its own reads of the pad while they do. Once opposite directions have been pressed and the adapter sends the arrows itself, PadForge stops asking, until another controller is plugged in.
 
 ---
 
@@ -135,7 +135,7 @@ On a 3.x adapter, select a PlayStation dance mat's card and tick **Read Arrows O
 
 | Show | The VMU shows |
 |---|---|
-| **The Adapter's Picture** | The picture the adapter keeps. PadForge writes nothing, and puts back the picture it found if it wrote one since. |
+| **The Adapter’s Picture** | The picture the adapter keeps. PadForge writes nothing, and puts back the picture it found if it wrote one since. |
 | **Profile Name** | The active profile's name, following each profile switch. |
 | **Profile Number** | The active profile's place in the profile list. The Default profile is 0. |
 | **Profile Picture** | The active profile's own picture, or its name when it has none. Each profile keeps its own. |
@@ -179,7 +179,7 @@ If the adapter refuses its own picture back, PadForge leaves the player number a
 - VMU saves cannot be read: Dreamcast accessories do not answer the adapter's native channel. PlayStation and GameCube memory cards plug into the console, not the controller cable, so the adapter never sees them.
 - Storing a new picture holds the controller's input still while the adapter writes it, up to about two thirds of a second when every byte changes. A clock or play time pauses the pad briefly once a minute, and a macro show at each picture.
 - The adapter's picture memory is rated for 100,000 writes. A clock or play time rewrites its last digit once a minute, which reaches that rating after about ten weeks of display around the clock, and a looping macro show at a picture a second reaches it in about a day.
-- The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose **The Adapter's Picture** to put the adapter's own back.
+- The VMU keeps the last picture PadForge showed after PadForge closes or the switch goes off. Choose **The Adapter’s Picture** to put the adapter's own back.
 - On a GPA, every picture write also arms the Dreamcast driver's 10 ms full-power rumble, for DeviceBuddy's writes as for PadForge's. Storing a picture that changes more than a few bytes takes longer than that, so the pulse ends before it reaches the pack. A rumble already running is different: the write takes over its timer and runs the pack at full power until PadForge sends its level again, right after the write.
 - The Saturn racing controller and mission stick report as a Saturn 3D Control Pad. The mission stick's throttle arrives as **Right Trigger**, and an axis a controller does not send stays at its midpoint, which reads as a half-pressed trigger: **Left Trigger** on the mission stick, both triggers on the racing controller.
 - For up to half a second after a GameCube, Dreamcast or Saturn 3D pad leaves its port, longer while the port is storing a picture, its triggers read as half pressed, until the adapter reports the port empty.
@@ -190,12 +190,12 @@ If the adapter refuses its own picture back, PadForge leaves the player number a
 
 ## Related pages
 
-- [Settings](settings.md): the Input Engine card and its Read Bliss-Box Adapters switch.
-- [Devices](devices.md): the port's card, its detail pane and its actions.
+- [Settings](settings.md): the Hardware Support card and its Read Bliss-Box Adapters switch.
+- [Devices](devices.md): the port's row, its panel and its actions.
 - [Button and Axis Mappings](mappings.md): deadzones and the Axis-to-Button Deadzone that a pressure button presses past.
 - [Macros](../guides/macros.md): the Show Dreamcast Screen action.
 - [Bliss-Box Internals](../reference/bliss-box-internals.md): every report and rule, for whoever has to change the code.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

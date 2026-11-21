@@ -91,7 +91,7 @@ Names come from the SDK where it supplies one. A keyboard name gets the M-state 
 
 Synthetic identity follows the handheld row's convention: VID `0x4C47` ("LG") and PID `0x474B` ("GK").
 
-The row attaches whether or not the SDK starts, because the status line on the Settings **Input Engine** card reads the row's state to name the reason. A row that vanishes leaves that line empty and tells the user nothing about why.
+The row attaches whether or not the SDK starts, because the status line under the switch on the Settings **Hardware Support** card reads the row's state to name the reason. A row that vanishes leaves that line empty and tells the user nothing about why.
 
 Buttons are written every poll, pressed or not, so a released key produces its falling edge.
 
@@ -114,4 +114,4 @@ Test coverage is uneven. The decode, the button map and the pulse have real beha
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

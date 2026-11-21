@@ -35,7 +35,7 @@ does.</p>
   <a href="features/">
     <span class="pf-eyebrow">Every control</span>
     <h3>Features</h3>
-    <p>What every page, tab, and card in the app does, one page per feature.</p>
+    <p>What every page, section and card in the app does, one page per feature.</p>
   </a>
   <a href="devices/">
     <span class="pf-eyebrow">Your hardware</span>
@@ -50,7 +50,7 @@ does.</p>
   <a href="reference/">
     <span class="pf-eyebrow">Go deep</span>
     <h3>Technical Reference</h3>
-    <p>Architecture, the 1000 Hz input pipeline, drivers, and every protocol PadForge speaks.</p>
+    <p>Architecture, the input pipeline that runs up to 10000 times a second, drivers, and every protocol PadForge speaks.</p>
   </a>
 </div>
 
@@ -70,8 +70,9 @@ does.</p>
   bass-shaker audio output, NFC tag triggers.
 - **Beyond the controller.** An [On-Screen Keyboard](features/on-screen-keyboard.md)
   you steer from a controller, a [Screen Overlay](features/screen-overlay.md) above
-  other windows, and [Twitch Chat](features/twitch-chat.md) commands that press
-  a slot's buttons.
+  other windows, a [Crosshair](features/crosshair.md) and a
+  [Magnifier](features/magnifier.md) over a game, and
+  [Twitch Chat](features/twitch-chat.md) commands that press a controller's buttons.
 - **Config import.** Bring an existing Steam Input, reWASD or DS4Windows
   config across. Each setting PadForge can carry lands on a control you can
   edit, and the rest is listed with the reason. [Steam Workshop import](guides/steam-workshop-import.md) browses
@@ -84,4 +85,4 @@ does.</p>
 PadForge is free, and its source is available under CC BY-NC-SA 4.0. The code, issues, and releases live at
 [github.com/hifihedgehog/PadForge](https://github.com/hifihedgehog/PadForge).
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

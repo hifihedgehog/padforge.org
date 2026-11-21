@@ -16,7 +16,7 @@
         <link rel="prev" href="../on-screen-keyboard-internals/">
       
       
-        <link rel="next" href="../twitch-chat-internals/">
+        <link rel="next" href="../crosshair-magnifier-internals/">
       
       
         
@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3529,10 +3651,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-lighting-tab" class="md-nav__link">
+  <a href="#the-lighting-card" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Lighting tab
+        The Lighting card
       
     </span>
   </a>
@@ -3576,6 +3698,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3868,6 +4018,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3960,6 +4138,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4425,10 +4631,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-lighting-tab" class="md-nav__link">
+  <a href="#the-lighting-card" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Lighting tab
+        The Lighting card
       
     </span>
   </a>
@@ -4522,7 +4728,7 @@
 </tr>
 </tbody>
 </table>
-<p>The settings live on <code>DeviceSlotConfig</code> (the <code>ScreenColor*</code> properties) and <code>DeviceSlotConfigData</code>, and the Lighting tab's panel is in <code>PadPage.xaml</code> and <code>PadPage.xaml.cs</code>.</p>
+<p>The settings live on <code>DeviceSlotConfig</code> (the <code>ScreenColor*</code> properties) and <code>DeviceSlotConfigData</code>, and the panel on the <strong>Lighting</strong> card of a controller's <strong>Lights &amp; Sound</strong> section is in <code>PadPage.xaml</code> and <code>PadPage.xaml.cs</code>.</p>
 <hr />
 <h2 id="data-flow">Data flow<a class="headerlink" href="#data-flow" title="Permanent link">&para;</a></h2>
 <ol>
@@ -4532,7 +4738,7 @@
 <li>The source computes the color or picture for the device's settings from the newest frame, smooths it toward the target, and returns it.</li>
 </ol>
 <p>Results are keyed by <code>ResultKey(Display, Area, Method, Saturation, Brightness, Smoothing)</code>. Devices with the same settings share one result, so a slot's devices cost one calculation between them. A result no device has asked for in <code>ForgetMs</code> (10,000 ms) is dropped the next time a new key is added. The source holds one lock, <code>s_gate</code>, only for arithmetic on a picture of a few thousand cells at the most.</p>
-<p><code>StateOf(display)</code> reports a worker's state for the Lighting tab without starting or touching one.</p>
+<p><code>StateOf(display)</code> reports a worker's state for the Lighting card without starting or touching one.</p>
 <hr />
 <h2 id="the-worker">The worker<a class="headerlink" href="#the-worker" title="Permanent link">&para;</a></h2>
 <p><code>ScreenCaptureWorker.Start</code> runs <code>Run</code> on a background thread named <code>PadForge Screen Color</code>, at <code>ThreadPriority.BelowNormal</code>, in the MTA. Each <code>Step</code> returns the milliseconds to wait before the next, or -1 once the worker has retired.</p>
@@ -4601,7 +4807,7 @@
 <tr>
 <th>State</th>
 <th>Set when</th>
-<th>Lighting tab</th>
+<th>Lighting card</th>
 </tr>
 </thead>
 <tbody>
@@ -4778,14 +4984,14 @@
 <p>A light with no place has NaN coordinates and takes the device's one color.</p>
 <hr />
 <h2 id="where-the-colors-go">Where the colors go<a class="headerlink" href="#where-the-colors-go" title="Permanent link">&para;</a></h2>
-<p>The one color comes from <code>Ds5EffectSynthesizer.ComputeLightbarColor</code>, whose <code>LightbarMode.ScreenColor</code> case calls <code>ScreenColorSource.ColorFor</code>. Every lit device shares that core through <code>Ds4EffectSynthesizer.ResolveLightbarRgb</code>: the DualSense and DualSense Edge, the DualShock 4, the PS Move sphere, the Web Controller's drawn lightbar, and mice, keyboards and lighting rows through <code>PeripheralLightingColor.Resolve</code>.</p>
+<p>The one color comes from <code>Ds5EffectSynthesizer.ComputeLightbarColor</code>, whose <code>LightbarMode.ScreenColor</code> case calls <code>ScreenColorSource.ColorFor</code>. Every lit device shares that core. The DualSense and DualSense Edge call it from <code>Ds5EffectSynthesizer</code>'s own lightbar pass. The DualShock 4, the PS Move sphere, the Web Controller's drawn lightbar, and mice, keyboards and lighting rows (through <code>PeripheralLightingColor.Resolve</code>) reach it through <code>Ds4EffectSynthesizer.ResolveLightbarRgb</code>.</p>
 <p>The picture goes to peripherals only. In <code>UserEffectsDispatcher</code>, when a device's mode is Screen Color, <code>ScreenColorSpread</code> is on and the base mode shows (no fresh game color, no macro override, no Input Reactive pulse), <code>PictureFor</code> is attached to the device's key frame with <code>KeyFrame.WithPicture</code>. <code>LightRenderer.Render</code> then gives each light its own color first, then its key's or group's, then the picture's cell at its place, then the fill. A background a frame sets covers the picture. A game's lightbar, a game mod's color, a macro color and the Input Reactive pulse cover the spread because it is the base mode's color light by light.</p>
 <p><code>UserEffectsDispatcher.ColorKeepsChanging(mode, baseModeShows)</code> is true for Screen Color while the base mode shows, and <code>PeripheralOutputs.SetLighting</code> carries it in the claim as <code>KeepsChanging</code>. A HID lighting model that stores each picture (<code>HoldMs</code> above 0) is sent nothing while it is true, in <code>HidLightingBackend.Paint</code>, and keeps showing its last picture. <code>SteelSeriesDirectBackend</code> treats its two headsets that store pictures the same way. A keyboard that also has a LampArray interface takes the changing colors through <code>LampArrayBackend</code>, which sends no lamp twice inside the device's minimum update interval (HID Usage Tables 1.6, section 26.3). See <a href="../peripheral-outputs-internals/">Peripheral Outputs Internals</a>.</p>
 <p><code>UserEffectsDispatcher.IsAnimated</code> counts Screen Color among the modes that keep the effects timer running.</p>
 <hr />
-<h2 id="the-lighting-tab">The Lighting tab<a class="headerlink" href="#the-lighting-tab" title="Permanent link">&para;</a></h2>
-<p>The panel shows under the <strong>Mode</strong> box when it is set to Screen Color. Its rows bind to <code>DeviceSlotConfig</code>. The Display box has no binding: <code>PadPage.ShowScreenDisplays</code> fills it from <code>ScreenDisplayChoice.ListFor(saved)</code>, the primary first, then each <code>System.Windows.Forms.Screen</code> by its number, then the saved display when it is not connected. A list swapped under a two-way binding clears the selection and writes that back into the setting, so the box follows the MIDI port box's pattern instead. <code>ScreenDisplayChoice.ToString</code> returns the line's words, so a screen reader reads them.</p>
-<p><code>SyncScreenColorStatus</code> runs on a one-second <code>DispatcherTimer</code> while the tab shows the mode. It refreshes the Display box and shows the Waiting or Unavailable line from <code>ScreenColorSource.StateOf</code>. The spread checkbox shows only while the Key Colors card does (<code>KeyColors.IsVisible</code>), on a device with more than one light. The tab's preview draws a gradient from <code>#58B6E4</code> to <code>#E48A58</code> and reads nothing, so it never keeps a capture running.</p>
+<h2 id="the-lighting-card">The Lighting card<a class="headerlink" href="#the-lighting-card" title="Permanent link">&para;</a></h2>
+<p>The panel shows under the <strong>Mode</strong> box of the <strong>Lighting</strong> card when it is set to Screen Color, led by the mode's line (<code>Pad_Lighting_ScreenHint</code>) and the status line (<code>ScreenColorStatus</code>). Its rows bind to <code>DeviceSlotConfig</code>. The Display box has no binding: <code>PadPage.ShowScreenDisplays</code> fills it from <code>ScreenDisplayChoice.ListFor(saved)</code>, the primary first, then each <code>System.Windows.Forms.Screen</code> by its number, then the saved display when it is not connected. A list swapped under a two-way binding clears the selection and writes that back into the setting, so the box follows the MIDI port box's pattern instead. <code>ScreenDisplayChoice.ToString</code> returns the line's words, so a screen reader reads them.</p>
+<p><code>SyncScreenColorStatus</code> runs on a one-second <code>DispatcherTimer</code> only while <code>ScreenColorStatusRuns(IsVisible, SelectedSection, LightbarMode)</code> holds: the page shows, the selected section is <code>PadViewModel.LightsSection</code>, and the mode is Screen Color. A hidden page, another section or another mode stops the timer and collapses the status line. The page's visibility change, a section change, a device change and a mode or display change each call it again, so the timer starts when the section comes back. It refreshes the Display box and shows the Waiting or Unavailable line from <code>ScreenColorSource.StateOf</code>. The spread checkbox shows only while the Key Colors card does (<code>KeyColors.IsVisible</code>, <code>LightMap.PerLight</code>), on a device with more than one light. The card's preview draws a gradient from <code>#58B6E4</code> to <code>#E48A58</code> and reads nothing, so it never keeps a capture running.</p>
 <hr />
 <h2 id="settings">Settings<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
 <table>
@@ -4903,6 +5109,7 @@
 </tr>
 </tbody>
 </table>
+<p><code>PadForge.Tests/PadViewsAuditFixTests.cs</code> holds the status timer's gate: <code>TheScreenColorTimer_RunsOnlyWhileTheLightsSectionShowsThatMode</code> and <code>TheScreenColorTimer_ReadsAgainWhenTheSectionOrThePageShowsOrHides</code>.</p>
 <p>The tests drive the worker through <code>ScriptedGrabber</code> and the source's seams (<code>GrabberSeam</code>, <code>ListedSeam</code>, <code>ResolvesSeam</code>, <code>ClockSeam</code>, <code>StartSeam</code>). <code>TestHostFences</code> sets <code>ScreenColorSource.OffLimitsForTest</code> for the whole test process, so a test without a seam starts no capture of the real screen.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
@@ -4912,7 +5119,7 @@
 <li><a href="../input-pipeline/">Input Pipeline</a></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 
@@ -4967,13 +5174,13 @@
         
         
           
-          <a href="../twitch-chat-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Twitch Chat Internals">
+          <a href="../crosshair-magnifier-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Crosshair and Magnifier Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Twitch Chat Internals
+                Crosshair and Magnifier Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

@@ -23,15 +23,15 @@ Logitech Gaming Software's LCD Emulator shows what LGS shows on the screens of i
 
 ## Turning it on
 
-Open **Settings**, find the **Keyboard Screens** card and tick **Drive Keyboard Screens**. It is off by default. While the engine runs, the card names only what the feature as a whole is missing, for example:
+Open **Settings** and turn on **Drive Keyboard Screens** on the **Hardware Support** card. It is off by default. While the engine runs, the line under the switch names only what the feature as a whole is missing, for example:
 
 - *Arx Control: needs Logitech Gaming Software 8.52 or later*
 - *S.T.R.I.K.E. 7: needs Strike7API.dll, so download it or choose a copy*
 - *Keyboard Screens: no screen found*
 
-The card also holds the S.T.R.I.K.E. 7 library's buttons. Everything about one screen is on that screen's row.
+While the switch is on, the S.T.R.I.K.E. 7 library's buttons sit under it. Everything about one screen is on that screen's row.
 
-![The Keyboard Screens card in Settings, with Drive Keyboard Screens on and the lines a PC with no screen shows](../images/settings-keyboard-screens.png)
+![Drive Keyboard Screens on the Hardware Support card in Settings, switched on, with the lines a PC with no screen shows](../images/settings-keyboard-screens.png)
 
 ## Each screen's row
 
@@ -44,15 +44,15 @@ The Devices page lists a row for each screen PadForge finds:
 | **Logitech Arx Control** | While Logitech Gaming Software's Arx library is installed |
 | **Mad Catz S.T.R.I.K.E. 7 Screen** | While Strike7API.dll loads |
 
-Select a row to see its line, for example:
+Select a row to see its line under the device's name, for example:
 
 - *Monochrome Screen: through Logitech Gaming Software*
 - *Monochrome Screen: directly on the G510*
-- *Color Screen: binding WinUSB to the G19's screen*
+- *Color Screen: binding WinUSB to the G19’s screen*
 - *Arx Control: waiting for a phone with Arx Control*
 - *S.T.R.I.K.E. 7: pick PadForge on the V.E.N.O.M. screen*
 
-The button under the line opens that screen's dialog. It is named for the kind of screen, the way **Dreamcast Screen…** is: **Monochrome Screen…**, **Color Screen…**, **Arx Control…** or **S.T.R.I.K.E. 7…**.
+A button among the panel's tools opens that screen's dialog. It is named for the kind of screen, the way **Dreamcast Screen…** is: **Monochrome Screen…**, **Color Screen…**, **Arx Control…** or **S.T.R.I.K.E. 7…**.
 
 ### Logitech Gaming Software or direct
 
@@ -71,9 +71,9 @@ Arx Control is a phone app that shows applets from Logitech Gaming Software 8.52
 
 ### S.T.R.I.K.E. 7
 
-The S.T.R.I.K.E. 7 draws through Mad Catz's Strike7API.dll, which talks to the keyboard's own software, so that software has to be running. PadForge does not ship the library. **Download Strike7API.dll** on the Settings card fetches Mad Catz's SDK from AIDA64's server, where AIDA64 points its users for the same file, checks the download against its known SHA-256 and keeps only the 64-bit library in PadForge's temporary folder. PadForge checks that copy again each time it loads it. **Choose Strike7API.dll…** uses a copy you already have instead. A download that finishes takes the place of a copy you chose, and one that fails leaves your choice as it was.
+The S.T.R.I.K.E. 7 draws through Mad Catz's Strike7API.dll, which talks to the keyboard's own software, so that software has to be running. PadForge does not ship the library. **Download Strike7API.dll** in Settings fetches Mad Catz's SDK from AIDA64's server, where AIDA64 points its users for the same file, checks the download against its known SHA-256 and keeps only the 64-bit library in PadForge's temporary folder. PadForge checks that copy again each time it loads it. **Choose Strike7API.dll…** uses a copy you already have instead. A download that finishes takes the place of a copy you chose, and one that fails leaves your choice as it was.
 
-The library needs Microsoft's Visual C++ 2008 runtime, and PadForge loads it once the runtime is there. When the Settings card says it needs Microsoft's Visual C++ 2008 runtime, **Install Visual C++ 2008 Runtime** on the card downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
+The library needs Microsoft’s Visual C++ 2008 runtime, and PadForge loads it once the runtime is there. When the line in Settings says it needs Microsoft’s Visual C++ 2008 runtime, **Install Visual C++ 2008 Runtime** under the switch downloads Microsoft's redistributable, checks Microsoft's signature on it and installs it.
 
 PadForge's applet shows on the V.E.N.O.M. screen as an icon. Pick it there to show PadForge's picture, and the home key leaves it. On a picture larger than the screen, drag a finger across the screen to move the picture.
 
@@ -97,7 +97,7 @@ The ARM64 build of PadForge draws the Logitech screens directly. It cannot drive
 
 Text is drawn as large as it fits, dark on a monochrome screen's backlight and light on a color screen's black. A monochrome screen cuts a picture to black and white at half brightness, and shows a lightbar color's brightness as a dot pattern.
 
-**Lightbar Color** follows the color PadForge sends the controller, whatever sets it: the Lighting tab, a game or a macro. With two keyboards in two slots, each screen shows its own player's color. Until a color has reached a lightbar, PadForge shows nothing on the screen, and the row's line says it is waiting for one.
+**Lightbar Color** follows the color PadForge sends the controller, whatever sets it: the **Lighting** card in the controller's **Lights & Sound** section, a game or a macro. With two keyboards in two slots, each screen shows its own player's color. Until a color has reached a lightbar, PadForge shows nothing on the screen, and the row's line says it is waiting for one.
 
 ### The dialog
 
@@ -134,4 +134,4 @@ See [Macros](../guides/macros.md) and the technical page, [Keyboard Screens Inte
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

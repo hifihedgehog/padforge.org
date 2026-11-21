@@ -12,7 +12,7 @@ Confirmed working on the **WH-1000XM5** family over Bluetooth.
 
 Discovery is by capability, not by a hardcoded model list. PadForge looks for a HID device exposing a **Sensor page (0x20), usage 0xE1** collection whose sensor-description feature report begins with the marker `#AndroidHeadTracker#`. Any headset presenting that collection is a candidate, whatever its name.
 
-Pair the headphones to Windows as you normally would. When PadForge recognizes the tracker, it appears on the **Devices** page as its own device alongside your controllers, and it carries a headphone icon in the slot's device roster on the Pad page.
+Pair the headphones to Windows as you normally would. When PadForge recognizes the tracker, it appears on the **Devices** page as its own device alongside your controllers, and it carries a headphone icon in the slot's device list on the controller page.
 
 Because it is motion-only, it reports no buttons, no sticks, and no triggers. It contributes rotation, plus acceleration when its descriptor exposes an accelerometer.
 
@@ -61,4 +61,4 @@ Worth knowing, because it explains the behavior you will see:
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

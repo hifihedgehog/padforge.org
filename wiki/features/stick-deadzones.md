@@ -2,9 +2,11 @@
 
 *Stop drift, defeat in-game deadzones, and reshape stick response per axis.*
 
-![Stick deadzone settings with circular preview and sliders](../images/pad-sticks.png)
+![A stick's card in the Sticks & Triggers section, with its live preview and sliders](../images/pad-sticks.png)
 
-The Sticks tab runs each thumbstick through a fixed chain of processing stages. Every slider has a row reset, and every section has a Reset All. Each stick keeps its own values. On a Keyboard + Mouse slot the tab also carries a per-stick [speed multiplier](#mouse-and-scroll-speed) and the [Flick Stick](#flick-stick) card.
+The controller page's **Sticks & Triggers** section runs each thumbstick through a fixed chain of processing stages. Each stick has a card of its own, two to a row where they fit. The card's head names the stick, shows its deadzone, and carries **Reset All** for the whole card. Up front sit one **Deadzone** slider and one **Sensitivity** preset that set both axes together, and the **Center** row with **Calibrate Center**. The live preview follows. **More** opens the rest in place: **Center Point**, **Deadzone** (the shape and each axis on its own), **Range**, **Steering** (see [Steering](../guides/steering.md)), and **Sensitivity Curves**. Each stick remembers whether its More is open. Every slider has a row reset, and each stick keeps its own values. On a Keyboard + Mouse slot the section also carries a per-stick [Speed](#mouse-and-scroll-speed) row and the [Flick Stick](#flick-stick) card.
+
+These cards shape a device's stick outputs. A single mapping source can carry shaping of its own as well, on its line in the Mappings section: see [source shaping](mappings.md#source-shaping).
 
 ---
 
@@ -213,7 +215,7 @@ The Range section sets how far you push a stick to reach full output. It has a b
 
 ### Calibrate Boundary (recommended)
 
-![The Range section of the Sticks tab, with Calibrate Boundary and the four range sliders](../images/pad-sticks-boundary-calibration.png)
+![The Range group of a stick's card, with Calibrate Boundary and the four range sliders](../images/pad-sticks-boundary-calibration.png)
 
 No stick reaches a perfect circle. The corners fall short, and worn sticks lose reach unevenly. Boundary calibration measures the exact edge your stick can physically reach, then rescales every position so your full motion maps onto a clean circle. Nothing gets clipped, at any angle.
 
@@ -286,7 +288,7 @@ A profile imported from reWASD or DS4Windows brings its sticks' response curves 
 
 ## Reset buttons
 
-Every row has a reset button (circular arrow icon) that restores the default. Reset All at the top of each stick section resets everything for that stick in one click.
+Every row has a reset button (circular arrow icon) that restores the default. **Reset All** in each stick card's head resets everything for that stick in one click.
 
 ---
 
@@ -363,13 +365,13 @@ Axial isolates each axis for clean cardinal movement without diagonals. Higher d
 
 ## Mouse and scroll speed
 
-On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Sensitivity** row that multiplies that speed.
+On a Keyboard + Mouse slot the two sticks are **Mouse Movement** and **Scroll Wheel**, and their output is a speed. Full deflection moves the cursor at 1,200 px/s and turns the wheel about 33 notches per second, independent of the polling interval. Each of these sticks carries a **Speed** row up front that multiplies that speed.
 
 The Mouse Movement stick also carries a **Momentum** row: trackball mode for the stick. Flick the stick and release, and the cursor keeps traveling on the fling, decelerating to a stop on the same constant-friction physics the [touchpad's Momentum](touchpad.md#mouse-output) uses. The launch takes the strongest push of the last tenth of a second, so a quick flick flings at the speed the drag was moving, while a slow guided return to center parks the cursor without a fling. Moving the stick again catches the coast. The **Momentum Glide** slider is the same 0.80–1.00 friction band as the touchpad's: at 1.00 nothing slows the coast, and only the stick stops it. Off by default, per slot and device.
 
 | Setting | Range | Default |
 |---|---|---|
-| Sensitivity | 0.1–5.0× | 1.0× |
+| Speed | 0.1–5.0× | 1.0× |
 
 The row has its own reset button. Gamepad sticks do not get it. There the deadzone stage already maps full deflection to full scale, and the response curves own the shaping.
 
@@ -383,8 +385,8 @@ Flick stick turns a thumbstick into a compass for mouse-driven camera control. D
 
 Flick stick outputs mouse movement, so it lives on a Keyboard + Mouse slot. Two steps:
 
-1. On the **Mappings** tab, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's **(Any Device)** group, next to **Left Half** and **Right Half** variants that read one half of a single pad as the whole surface.
-2. Tune the **Flick Stick** card, which appears on the Sticks tab of a Keyboard + Mouse slot.
+1. In the **Mappings** section, map **Flick Stick (Right Stick)** (or **Flick Stick (Left Stick)**) to Mouse X. The source works on any layer, so a shift layer can carry it. On a touchpad-equipped device, **Flick Stick (Touchpad 1)** works the same way: the finger's position plays the stick's role, and lifting the finger releases. It sits in the source picker's **(Any Device)** group, next to **Left Half** and **Right Half** variants that read one half of a single pad as the whole surface.
+2. Tune the **Flick Stick** card, which appears in the **Sticks & Triggers** section of a Keyboard + Mouse slot.
 
 | Setting | Default | What it does |
 |---|---|---|
@@ -409,11 +411,11 @@ Two practical notes:
 
 ## Custom DirectInput sticks
 
-When a slot uses Extended output with the **Customize** toggle on, the Sticks tab adapts to the number of sticks the layout is set to:
+When a slot uses Extended output with the **Customize** toggle on, the **Sticks & Triggers** section adapts to the number of sticks the layout is set to:
 
 | Number of sticks | Behavior |
 |---|---|
-| 0 | Sticks tab is empty |
+| 0 | No stick cards |
 | 1 | Controls for Stick 1 only |
 | 2 | Stick 1 and Stick 2 (same as Xbox or PlayStation) |
 | 3–4 | Extra sticks shown. Each uses 2 of the 8 axes shared with triggers. |
@@ -427,10 +429,11 @@ Every stick gets its own deadzone, anti-deadzone, linear setting, and preview.
 - [Controller Slots](controller-slots.md): create and configure virtual controllers.
 - [Button and Axis Mappings](mappings.md): map physical stick axes to virtual outputs.
 - [Trigger Deadzones](trigger-deadzones.md): same shape of settings for triggers.
-- [Force Feedback](force-feedback.md): rumble and haptic settings on the same tab row.
+- [Force Feedback](force-feedback.md): rumble and haptic settings in the Rumble & Haptics section.
+- [Steering](../guides/steering.md): the Steering group in each stick's More.
 - [Gyro](../guides/gyro.md): motion aiming that pairs with flick stick.
 - [3D and 2D Visualization](visualization.md): watch the stick move on the controller model.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

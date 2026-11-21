@@ -2,7 +2,7 @@
 
 *Share a controller, wheel, or HOTAS between PCs, on your own network or across the internet. A device plugged into one drives a game on another, and the feedback comes back to the real hardware.*
 
-![Remote Link section on the Dashboard](../images/remote-link.png)
+![The Remote Link page under Extras](../images/remote-link.png)
 
 Remote Link connects two PadForge PCs, on the same network or on opposite sides of the internet. A device plugged into one PC (the owner) shows up in another PC's PadForge (the consumer) as an ordinary input device, ready to assign to a [slot](../features/controller-slots.md) and map like anything else. The game on the consumer sees a virtual controller and never knows the hardware is in another room.
 
@@ -47,13 +47,13 @@ Tag reads travel with the input. Tap a tag on a shared Switch controller that ha
 
 ### 1. Turn on Remote Link on each PC
 
-On the [Dashboard](../features/dashboard.md), open the **Remote Link** section and enable it. Each PC starts listening and begins announcing itself to the local network.
+Open **Extras** in the sidebar and click the **Remote Link** tile, in the **Send It Elsewhere** group. Turn on **Enable Remote Link Server** at the top of the page, or the switch on the tile. Each PC starts listening and begins announcing itself to the local network. The status card under the page's head says whether the server runs, with a flame that burns while it does, and why when it does not.
 
 ### 2. Find the other PC
 
-On the same network, a PC running Remote Link shows up under **Nearby PCs (Not Paired)**. Click it and pair.
+On the same network, a PC running Remote Link shows up in the **Pair Another PC** card with its name and address. Click its **Pair** button. With none in sight the card reads *No unpaired PCs nearby.*
 
-On different networks, or when discovery is blocked, use codes. Each PC shows a **This PC's Code** box, a dash-grouped string like `A7K2M-...`. Copy yours and send it to the other person over any chat. Paste theirs into **Or Connect by Address (Advanced)**. You both click **Pair / Connect**, and the two PCs find each other with no VPN and no port forward. A code lasts 24 hours and re-mints itself when this PC's public address moves, so copy it fresh at connect time.
+On different networks, or when discovery is blocked, use codes. The same card shows **This PC’s Code** once it is made, a dash-grouped string like `A7K2M-...`, with **Copy** beside it. Copy yours and send it to the other person over any chat. Paste theirs into **Connect by Address**, under the page's **More** fold. You both click **Pair / Connect**, and the two PCs find each other with no VPN and no port forward. A code lasts 24 hours and re-mints itself when this PC's public address moves, so copy it fresh at connect time.
 
 The same box still takes a plain address. Type `192.168.1.20:27500` to name a host directly.
 
@@ -77,8 +77,8 @@ Both PCs need a build with remote assignment support.
 
 Web controllers travel over Remote Link like other input devices, and remote assignment lets you choose their slots from the PC sharing them. Web Menus is the exception: its taps fire the menus of the PC the phone connects to, so Remote Link does not share it. For a two-PC streaming setup:
 
-1. On the gaming PC, open **Remote Link > Paired PCs**, find the streaming PC, and check **Allow Remote Assignment Changes**. The same option is available during pairing. It starts off, including for existing pairings.
-2. On the streaming PC, find the gaming PC under **Paired PCs** and click **Assign Shared Devices**.
+1. On the gaming PC, open the Remote Link page, find the streaming PC in the **Paired PCs** card, and turn on **Allow Remote Assignment Changes** under its line. The same option is available during pairing. It starts off, including for existing pairings.
+2. On the streaming PC, find the gaming PC under **Paired PCs** and click **Assign Shared Devices**. The button shows while that PC is connected.
 3. Select a shared device, then check the virtual controllers it should feed on the gaming PC. Clear a checkbox to remove that assignment. One device can feed several controllers.
 
 The dialog shows the destination PC and active profile. Changes use that PC's normal mapping and save process without opening its window or changing the foreground application. Other devices and assignments stay in place.
@@ -89,19 +89,21 @@ If the destination's settings change while the dialog is open, review the refres
 
 ### Automatic reconnect
 
-Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. Auto-reconnect is on by default and can be turned off in the Remote Link settings.
+Pairing records the other PC as trusted. After that, trusted PCs reconnect on their own the moment they find each other, on the local network or across the internet, with no code to re-enter. **Auto-Reconnect** is on by default and can be turned off under the Remote Link page's **More** fold.
 
 Trust is tied to each PC's cryptographic identity, not its name. Renaming a PC does not break a pairing. The display name is only there so you can tell your paired PCs apart.
 
 Discovery on the local network broadcasts this PC's name, its identity fingerprint, the protocol version and the link port to the subnet, and appearing in that list grants nothing. Paired PCs exchange device names, ids, types and capabilities alongside the input, rumble and audio they carry. Over the internet, PadForge asks public STUN servers for its outside address, uses the public BitTorrent DHT to meet a PC by code and to find paired PCs that moved, and falls back to n0's free iroh relays when no direct path exists. The DHT record carries the public signing key, and a relay sees public keys, nonces and signatures before the encrypted session starts. [Remote Link Internals](../reference/remote-link-internals.md) names every server.
 
-To end a pairing, find the PC under **Paired PCs** and click **Revoke**. **Revoke All** drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.
+Each paired PC's line in the **Paired PCs** card has a flame that burns while it is connected, its name over its state, **Pair / Connect** while it is on this network and not connected, **Rename**, which puts the cursor in its name to type over it, and **Revoke**. Pointing at the name shows the PC's machine name and its key's fingerprint. An emptied name goes back to the PC's own.
+
+To end a pairing, click **Revoke** on its line. **Revoke All**, at the card's head, drops every trusted PC at once. A revoked PC cannot reconnect until it pairs again.
 
 ---
 
 ## Staying safe: gamepad-only
 
-A paired PC can drive this one's gamepad output. Whether it can also send keyboard, mouse, and scroll input here, directly or through macros, is your choice. The pairing dialog has a gamepad-only checkbox, **Limit This PC to Gamepad Input Only**. It starts off, so check it when you pair a PC you do not fully control. To change the setting for a PC you already paired, revoke it and pair again.
+A paired PC can drive this one's gamepad output. Whether it can also send keyboard, mouse, and scroll input here, directly or through macros, is your choice. The pairing dialog has a **Gamepad Only** checkbox. It starts off, so check it when you pair a PC you do not fully control. A PC paired that way says *gamepad only* in its state line. To change the setting for a PC you already paired, revoke it and pair again.
 
 With gamepad-only on, a shared device cannot type, click, or scroll on this PC. A Keyboard + Mouse or VR controller it feeds sends nothing, and macros it triggers, or macros on a slot it feeds, skip their keyboard, mouse, scroll, and cursor actions. Their other actions still run, Run Program included, and a MIDI controller it feeds still plays.
 
@@ -109,7 +111,7 @@ With gamepad-only on, a shared device cannot type, click, or scroll on this PC. 
 
 ## Identity protection
 
-Each PadForge install has a Remote Link identity, the key that pairings trust. You choose how it is stored:
+Each PadForge install has a Remote Link identity, the key that pairings trust. You choose how it is stored, in **Pairing Identity** under the Remote Link page's **More** fold:
 
 | Mode | Stored as | Use when |
 |---|---|---|
@@ -129,7 +131,7 @@ Remote Link finds other PCs on your **local network** automatically. Discovery i
 |---|---|
 | Discovery | UDP broadcast on port 27501 (same subnet only) |
 | Connection | Direct PC-to-PC on port 27500 by default, encrypted end to end. The port carries both a TCP listener (the handshake when you dial an address) and a UDP socket (the input and feedback stream, and hole punching). |
-| Listening port | 27500 by default. Change it per PC in the Remote Link settings (any port from 1024 to 65535). The reset button next to the field restores 27500. |
+| Listening port | 27500 by default. Change it per PC as **Remote Link Port**, under the Remote Link page's **More** fold (any port from 1024 to 65535). The reset button next to the field restores 27500. |
 | Internet reach | Outbound only. The public-address probe and the relay fallback both dial out, so no inbound rule and no port forward. |
 | Firewall | Allow PadForge through the firewall on each PC |
 
@@ -143,7 +145,7 @@ Where a direct path cannot exist, the link falls back to the free public relays 
 
 After the first pairing, codes are done. Each PC publishes its current endpoints under its long-term identity key, so a paired PC that moves to a new network is found and reconnects on its own.
 
-Some networks cannot be punched at all. On a mobile hotspot or carrier-grade NAT, the Remote Link card says so before you try, and names a VPN like Tailscale as the way around it. The relay still carries the link where the punch fails.
+Some networks cannot be punched at all. On a mobile hotspot or carrier-grade NAT, the **Pair Another PC** card says so under the code before you try, and names a VPN like Tailscale as the way around it. The relay still carries the link where the punch fails.
 
 ---
 
@@ -164,7 +166,6 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ## Related pages
 
-- [Dashboard](../features/dashboard.md): turn Remote Link on, pair, and manage paired PCs.
 - [Devices](../features/devices.md): see shared devices and assign them to slots.
 - [Controller Slots](../features/controller-slots.md): create the virtual controller a shared device feeds.
 - [Force Feedback](../features/force-feedback.md): the rumble and force-feedback that returns over the link.
@@ -177,4 +178,4 @@ Pairing runs a fresh key exchange and signs the whole exchange with each PC's lo
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

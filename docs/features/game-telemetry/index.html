@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -1943,6 +1975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -1979,6 +2039,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2946,6 +3062,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3539,6 +3661,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3819,6 +3969,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3911,6 +4089,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4389,7 +4595,7 @@
 
 <h1 id="game-telemetry">Game Telemetry<a class="headerlink" href="#game-telemetry" title="Permanent link">&para;</a></h1>
 <p><em>Driving games send PadForge their speed, RPM, gear, pedals and steering. Map them like a controller's inputs, start macros with them, and use them to play adaptive trigger effects on a DualSense.</em></p>
-<p>Most driving games can send their telemetry to other programs. Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2 and the truck simulators send it over the network, and Assetto Corsa and Assetto Corsa Competizione publish it in shared memory. Turn on <strong>Listen for Game Telemetry</strong> and PadForge reads it. The values appear on a <strong>Game Telemetry</strong> row on the <a href="../devices/">Devices</a> page. From there you can map them like any input, trigger <a href="../../guides/macros/">macros</a> with them, or compare them in a Custom Expression. While PadForge listens, a wheel's <a href="../wheel/#rpm-shift-leds">RPM shift LEDs</a> read the game from here too.</p>
+<p>Most driving games can send their telemetry to other programs. Forza, F1, the Codemasters rally games, EA SPORTS WRC, BeamNG.drive, Live for Speed, Project CARS 2, Automobilista 2 and the truck simulators send it over the network, and Assetto Corsa and Assetto Corsa Competizione publish it in shared memory. Turn on <strong>Listen for Game Telemetry</strong> and PadForge reads it. The values appear on a <strong>Game Telemetry</strong> row on the <a href="../devices/">Devices</a> page. From there you can map them like any input, trigger <a href="../../guides/macros/">macros</a> with them, or compare them in a Custom Expression. While PadForge listens, a wheel's <a href="../wheel/#rpm-shift-leds">RPM shift LEDs</a> read the game from here too, and so does a wheel's <a href="../wheel-centering/">Vehicle mode centering</a>, which takes the car's speed and the road's surface.</p>
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
        poster="/assets/video/padforge-tutorial-game-telemetry-poster.jpg"
@@ -4397,20 +4603,20 @@
 <source src="/assets/video/padforge-tutorial-game-telemetry.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-game-telemetry.vtt" default>
 </video>
-<figcaption>Listen for Game Telemetry, the Game Telemetry row, and a Custom Expression macro that vibrates the right trigger when a = RPM (% of Max) passes 95, recorded live in PadForge 5.2.1 in 1 minute 17 seconds. No game sent telemetry during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-game-telemetry-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Listen for Game Telemetry, the Game Telemetry row, and a Custom Expression macro that vibrates the right trigger when a = RPM (% of Max) passes 95, recorded live in PadForge 5.2.1 in 1 minute 17 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. No game sent telemetry during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-game-telemetry-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
 <ol>
-<li>On the <a href="../dashboard/">Dashboard</a>, find the <strong>Game Telemetry</strong> section and tick <strong>Listen for Game Telemetry</strong>. It is off by default.</li>
+<li>Open <strong>Extras</strong> in the sidebar and click the <strong>Game Telemetry</strong> tile. Turn on <strong>Listen for Game Telemetry</strong>, on the tile or on the page it opens. It is off by default.</li>
 <li>Pick your game under <strong>Game</strong>, or leave it on <strong>Auto-Detect</strong>, which tells the game from its packets.</li>
-<li>Set <strong>Port</strong> to the port the game sends to. It starts at <strong>20777</strong>, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking <strong>Project CARS 2 and Automobilista 2</strong> sets it to 5606, and picking <strong>Euro Truck Simulator 2 and American Truck Simulator</strong> sets it to 49001, since those games always send there. Picking another game afterward puts 20777 back, unless you changed the port in the meantime. With <strong>Assetto Corsa and Assetto Corsa Competizione</strong> picked, <strong>Port</strong> and <strong>Forward to Port</strong> are grayed out, since PadForge reads those games from shared memory.</li>
+<li>Open <strong>More</strong> and set <strong>Game Telemetry Port</strong> to the port the game sends to. It starts at <strong>20777</strong>, the port F1, the Codemasters games and EA SPORTS WRC use unless changed. Picking <strong>Project CARS 2 and Automobilista 2</strong> sets it to 5606, and picking <strong>Euro Truck Simulator 2 and American Truck Simulator</strong> sets it to 49001, since those games always send there. Picking another game afterward puts 20777 back, unless you changed the port in the meantime. With <strong>Assetto Corsa and Assetto Corsa Competizione</strong> picked, <strong>Game Telemetry Port</strong> and <strong>Forward to Port</strong> are grayed out, since PadForge reads those games from shared memory.</li>
 <li>Turn on the game's telemetry output and point it at this PC and that port (see <a href="#setting-up-each-game">Setting up each game</a>).</li>
 <li>Start the input engine with the play button.</li>
 </ol>
 <p>PadForge listens on every network address, so a game on another PC or on an Xbox can send to this PC's address. The first time it listens, PadForge adds a Windows Firewall rule named <strong>PadForge Game Telemetry</strong> for the port.</p>
-<p><img alt="The Game Telemetry section on the Dashboard with Listen for Game Telemetry on" src="../../images/dashboard-game-telemetry.png" /></p>
+<p><img alt="The Game Telemetry page with Listen for Game Telemetry on" src="../../images/dashboard-game-telemetry.png" /></p>
 <h3 id="the-status-line">The status line<a class="headerlink" href="#the-status-line" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4448,9 +4654,9 @@
 </table>
 <p>With a forward port set, the line ends with <em>Forwarding to port 20778.</em></p>
 <h3 id="forward-to-port">Forward to Port<a class="headerlink" href="#forward-to-port" title="Permanent link">&para;</a></h3>
-<p>Only one program can listen on a port. When another tool, such as SimHub or a dashboard app, also needs the game's packets, give PadForge the game's port and set <strong>Forward to Port</strong> to a port the other tool listens on. PadForge copies every packet that arrives, read or not, to that port on this PC (127.0.0.1). <strong>0</strong> forwards nothing, and so does a forward port equal to the listening port.</p>
+<p>Only one program can listen on a port. When another tool, such as SimHub or a dashboard app, also needs the game's packets, give PadForge the game's port and set <strong>Forward to Port</strong>, under <strong>More</strong>, to a port the other tool listens on. PadForge copies every packet that arrives, read or not, to that port on this PC (127.0.0.1). <strong>0</strong> forwards nothing, and so does a forward port equal to the listening port.</p>
 <h3 id="full-speed">Full Speed<a class="headerlink" href="#full-speed" title="Permanent link">&para;</a></h3>
-<p><strong>Full Speed (km/h)</strong> is the speed that moves the row's Speed axis all the way. It starts at 300 km/h. A speed past it holds the axis at full. Custom Expression variables read the speed in km/h or mph whatever this is set to.</p>
+<p><strong>Full Speed (km/h)</strong>, under <strong>More</strong>, is the speed that moves the row's Speed axis all the way. It starts at 300 km/h. A speed past it holds the axis at full. Custom Expression variables read the speed in km/h or mph whatever this is set to.</p>
 <h3 id="profiles">Profiles<a class="headerlink" href="#profiles" title="Permanent link">&para;</a></h3>
 <p>The switch, the game, the port, the forward port and Full Speed are saved in each <a href="../../guides/profiles/">profile</a> and change with it. The custom formats are one list for every profile.</p>
 <hr />
@@ -4514,7 +4720,7 @@
 <p>The Microsoft Store and Xbox app editions of Forza Horizon 4 and Forza Motorsport 7 cannot send to 127.0.0.1 until Windows exempts them from network isolation, with the <code>CheckNetIsolation LoopbackExempt</code> command or Fiddler's EnableLoopback utility. The Steam editions and Forza Motorsport (2023) need nothing. Forza-Telemetry-Splitter's notes call ports 5200 to 5300 Forza's reserved range, so pick a port outside it.</p>
 <hr />
 <h2 id="the-game-telemetry-row">The Game Telemetry row<a class="headerlink" href="#the-game-telemetry-row" title="Permanent link">&para;</a></h2>
-<p>While the switch is on, the <a href="../devices/">Devices</a> page lists a <strong>Game Telemetry</strong> row. It stays there with no game running, so you can map it before you start one. Its panel shows the same status line as the Dashboard.</p>
+<p>While the switch is on, the <a href="../devices/">Devices</a> page lists a <strong>Game Telemetry</strong> row. It stays there with no game running, so you can map it before you start one. Its panel shows the same status line as the Game Telemetry page.</p>
 <table>
 <thead>
 <tr>
@@ -4575,7 +4781,7 @@
 </table>
 <p>Forza (its IsRaceOn flag), Project CARS 2 (its game state) and Assetto Corsa (its status) say whether you are driving, and so does a custom format with a Driving field.</p>
 <p>A second with no packets returns every axis and button to rest. The truck simulator plugin sends only when a value changes, so a parked truck can stay quiet for a long time. Its values hold for ten seconds.</p>
-<p>Map the row on a virtual controller's <a href="../mappings/">Mappings</a> tab like any device: the throttle onto a trigger, the gear buttons onto shift buttons, Driving onto a mode switch. PadForge never maps it by itself. The row's axes and buttons can also trigger macros, so a macro can fire on Gear 6 or past a point on the Brake axis.</p>
+<p>Map the row in a virtual controller's <a href="../mappings/">mappings</a> like any device: the throttle onto a trigger, the gear buttons onto shift buttons, Driving onto a mode switch. PadForge never maps it by itself. The row's axes and buttons can also trigger macros, so a macro can fire on Gear 6 or past a point on the Brake axis.</p>
 <h3 id="games-padforge-reads">Games PadForge reads<a class="headerlink" href="#games-padforge-reads" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4586,6 +4792,7 @@
 <th>Gear</th>
 <th>Pedals</th>
 <th>Steering</th>
+<th>Road surface</th>
 </tr>
 </thead>
 <tbody>
@@ -4596,6 +4803,7 @@
 <td>Yes</td>
 <td>Throttle, brake, clutch, handbrake</td>
 <td>Yes</td>
+<td>Puddles only</td>
 </tr>
 <tr>
 <td>Forza (Sled packets)</td>
@@ -4604,6 +4812,7 @@
 <td>No</td>
 <td>No</td>
 <td>No</td>
+<td>Puddles only</td>
 </tr>
 <tr>
 <td>F1 22 to F1 25</td>
@@ -4611,6 +4820,7 @@
 <td>Yes</td>
 <td>Yes</td>
 <td>Throttle, brake, clutch</td>
+<td>Yes</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -4620,6 +4830,7 @@
 <td>Yes</td>
 <td>Throttle, brake, clutch</td>
 <td>Yes</td>
+<td>No</td>
 </tr>
 <tr>
 <td>EA SPORTS WRC</td>
@@ -4628,6 +4839,7 @@
 <td>Yes</td>
 <td>Throttle, brake, clutch, handbrake</td>
 <td>Yes</td>
+<td>No</td>
 </tr>
 <tr>
 <td>BeamNG.drive, Live for Speed</td>
@@ -4635,6 +4847,7 @@
 <td>RPM only</td>
 <td>Yes</td>
 <td>Throttle, brake, clutch, handbrake</td>
+<td>No</td>
 <td>No</td>
 </tr>
 <tr>
@@ -4644,6 +4857,7 @@
 <td>Yes</td>
 <td>Throttle, brake, clutch, handbrake</td>
 <td>Yes</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>Assetto Corsa, ACC</td>
@@ -4651,6 +4865,7 @@
 <td>Yes</td>
 <td>Yes</td>
 <td>Throttle, brake, clutch</td>
+<td>Yes</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -4660,10 +4875,12 @@
 <td>Yes, up to 18</td>
 <td>Throttle, brake, clutch</td>
 <td>Yes</td>
+<td>No</td>
 </tr>
 </tbody>
 </table>
 <p>A game that sends no max RPM gets the highest RPM seen since it started sending, so the RPM axis reads as a share of that.</p>
+<p>The road surface is not an axis on the row. It goes, with the speed, to a wheel's <a href="../wheel-centering/">Vehicle mode centering</a>, which reads the speed to weight the steering and the surface to know the road's grip. Where a game sends no surface, Grip set to From the Game uses Dry.</p>
 <p>Auto-Detect keeps the game it found. Another game takes over after three of its packets in a row, or after a second of silence, so one stray packet cannot switch the row.</p>
 <hr />
 <h2 id="telemetry-in-custom-expression-triggers">Telemetry in Custom Expression triggers<a class="headerlink" href="#telemetry-in-custom-expression-triggers" title="Permanent link">&para;</a></h2>
@@ -4717,11 +4934,11 @@
 <ul>
 <li>A <strong>Name</strong>. It cannot hold <code>:</code> or <code>|</code>.</li>
 <li><strong>Packets</strong>: <strong>Binary</strong> or <strong>JSON</strong>.</li>
-<li>For binary, a <strong>Length (Bytes)</strong>: only packets of exactly that size are read with the format. For JSON, a <strong>Required Key</strong> every packet carries.</li>
-<li><strong>Big-Endian</strong>, for a packet that writes each number with its most significant byte first. Games on a PC almost always write the least significant byte first.</li>
+<li>For binary, a <strong>Length (bytes)</strong>: only packets of exactly that size are read with the format. For JSON, a <strong>Required Key</strong> every packet carries.</li>
+<li>A <strong>Byte Order</strong>: <strong>Little-Endian</strong> puts each number's least significant byte first, as games on a PC almost always write it. <strong>Big-Endian</strong> is for a packet that writes the most significant byte first.</li>
 <li><strong>Gear Values</strong>, for a gear field with its own numbers for reverse and neutral, as Forza's 0 and 11 are. Without them, a negative gear is reverse and 0 is neutral.</li>
 </ul>
-<p><img alt="The Custom Telemetry Formats window open on a binary format named My Rally Game" src="../../images/telemetry-format-editor.png" /></p>
+<p><img alt="The Custom Formats window open on a binary format named My Rally Game" src="../../images/telemetry-format-editor.png" /></p>
 <p>Each field reads a number and multiplies it by its <strong>Scale</strong>:</p>
 <table>
 <thead>
@@ -4767,11 +4984,11 @@
 <li><strong>Trigger</strong>: <strong>Right (R2)</strong>, <strong>Left (L2)</strong> or <strong>Both (L2 and R2)</strong>.</li>
 <li><strong>Effect</strong>: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration, or one of the named presets: GameCube, Very Soft, Soft, Medium, Hard, Very Hard, Hardest, Rigid, Choppy and Vibrating Pulse. DSX's Vibrate Trigger is <strong>Vibration</strong> with the <strong>Start Zone</strong> at 0, the <strong>Strength</strong> at 8 and the <strong>Frequency</strong> the mod gives, 10 when it gives none, the same bytes a mod sends for it.</li>
 <li>The chosen effect's settings, each with its range: zones from 0 at rest to 9 at full pull, strengths, frequencies in Hz.</li>
-<li><strong>Holds</strong>: <strong>While the Macro's Trigger Is Held</strong>, <strong>For a Set Time</strong> (with a <strong>Time</strong> from 1 to 60,000 milliseconds), or <strong>Until Stopped</strong>.</li>
+<li><strong>Holds</strong>: <strong>While the Macro’s Trigger Is Held</strong>, <strong>For a Set Time</strong> (with a <strong>Time</strong> from 1 to 60,000 milliseconds), or <strong>Until Stopped</strong>.</li>
 </ul>
 <p><strong>Stop Adaptive Trigger Effect</strong> ends what a macro holds on the chosen trigger, for an effect that holds until stopped.</p>
 <p>An end zone has to be past its start zone, and Galloping's second foot past its first. Values that break that rule play nothing, and the action says so.</p>
-<p>A game's own trigger effect comes first, then a game mod's, then a macro's. When the macro's effect ends, the trigger returns to its setting on the <a href="../adaptive-triggers/">Adaptive Triggers</a> tab. An Xbox controller with <strong>Translate Adaptive Trigger Vibrations</strong> on, on the <a href="../impulse-triggers/">Impulse Triggers</a> tab, plays a macro's vibrating effects on its trigger motors.</p>
+<p>A game's own trigger effect comes first, then a game mod's, then a macro's. When the macro's effect ends, the trigger returns to its setting on the <a href="../adaptive-triggers/">Adaptive Triggers</a> card. An Xbox controller with <strong>Translate Adaptive Trigger Vibrations</strong> on, on the <a href="../impulse-triggers/">Impulse Triggers</a> card, plays a macro's vibrating effects on its trigger motors.</p>
 <p>Bow, Galloping and Machine are not official DualSense effects, and a firmware update could remove them.</p>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4789,7 +5006,7 @@
 </ul>
 <p>See the technical page, <a href="../../reference/game-telemetry-internals/">Game Telemetry Internals</a>.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

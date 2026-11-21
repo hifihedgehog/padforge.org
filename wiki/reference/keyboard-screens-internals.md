@@ -6,7 +6,7 @@ For the user-facing side see [Keyboard Screens](../features/keyboard-screens.md)
 
 | File | Responsibility |
 | --- | --- |
-| `PadForge.App/Services/KeyboardScreenService.cs` | Each screen's mode, kept by its row, the macros' shows, stopwatch and pan, a line for each screen's row and the Settings card's lines. Composes each screen's picture on the UI thread. |
+| `PadForge.App/Services/KeyboardScreenService.cs` | Each screen's mode, kept by its row, the macros' shows, stopwatch and pan, a line for each screen's row and the lines under the Settings switch. Composes each screen's picture on the UI thread. |
 | `PadForge.App/Common/Input/KeyboardScreens/KeyboardScreenHost.cs` | The worker thread that runs every engine, finds the screens, picks the picture LGS shows and deals LGS's keys to the screens. |
 | `KeyboardScreenInfo.cs` | One screen: its id, kind, name and model, and its row's identity. |
 | `KeyboardScreenFormats.cs` | Screen sizes, wire formats, each kind's key layout and the USB identities. |
@@ -21,7 +21,7 @@ For the user-facing side see [Keyboard Screens](../features/keyboard-screens.md)
 | `PadForge.App/Views/ScreenOverlay.xaml.cs` | The Screen Overlay's window: its styles, click-through, drag, grip and pan. |
 | `PadForge.App/Views/ScreenOverlayContentView.cs` | What an overlay shows, drawn to its window's size. |
 | `PadForge.App/Views/OverlayPlacement.cs` | Where an overlay window sits, by monitor and DPI. |
-| `PadForge.App/ViewModels/ScreenOverlayItem.cs` | One overlay on the Dashboard card. |
+| `PadForge.App/ViewModels/ScreenOverlayItem.cs` | One overlay on the Screen Overlay page of Extras. |
 | `PadForge.App/Services/InputService.KeyboardScreens.cs` | The service's tick, and the overlay windows' lifecycle and toggles. |
 | `PadForge.Engine/Common/Logitech/LogitechServerCatalog.cs` | Finds LGS's libraries by their class registrations. |
 | `PadForge.Engine/Common/Logitech/LogitechLcdLibrary.cs`, `LogitechArxLibrary.cs` | The LCD and Arx exports. |
@@ -190,7 +190,7 @@ The four actions are numbered 58 to 61 in `MacroActionType`: Show Keyboard Scree
 
 `AppSettingsData` holds `KeyboardScreensEnabled` (off by default), `Strike7LibraryPath` (absent for PadForge's download) and the `KeyboardScreens` list. The list holds one `Screen` element per screen whose choices differ from the defaults, the way `BlissBoxPorts` keeps a Dreamcast pad's: a `Device` attribute holding the row's InstanceGuid, `Mode` (Lightbar Color by default), `Picture`, `PanX`, `PanY`, and the overlay's `Zoom` and `LightbarSlot`. Loading drops an entry with no readable device and a second entry for one device, puts an unknown mode back to the default and a negative pan to zero. Each profile keeps its own `KeyboardScreenPicture`, which every screen in Profile Picture mode shows, and the Default profile's is `DefaultProfileKeyboardScreenPicture`.
 
-The Settings card holds the switch, the S.T.R.I.K.E. 7 library's buttons and lines for the feature as a whole (`SubsystemLines`): Arx Control's or the S.T.R.I.K.E. 7's library while neither has a row, and no screen found when there is no row at all. It sets nothing for one screen and names none. Each screen's line and dialog are on its row's panel.
+The **Hardware Support** card in Settings holds the switch, the S.T.R.I.K.E. 7 library's buttons under it and lines for the feature as a whole (`SubsystemLines`): Arx Control's or the S.T.R.I.K.E. 7's library while neither has a row, and no screen found when there is no row at all. It sets nothing for one screen and names none. Each screen's line and dialog are on its row's panel.
 
 ---
 
@@ -208,7 +208,7 @@ The Settings card holds the switch, the S.T.R.I.K.E. 7 library's buttons and lin
 
 Each engine reports a screen's held keys to `KeyboardScreenKeys` under the screen's id and its own name, `hid`, `g19` or `lgs`, and the screen's row reads their union, so two keyboards stay apart. A key that goes down stays asserted for at least 175 ms, the G-key row's pulse, so a tap between two polls still gives a macro its edge. The poll thread's sweep makes a row for each screen the host publishes and retires a row whose screen left, the Falcons' shape, and a row the user removes from the Devices page comes back while its screen is still there. Like the G-keys, a row numbers its own buttons from 0, so it never answers an (Any Device) mapping.
 
-The row's panel on the Devices page shows the screen's line and a button named for its kind, which opens the screen's dialog (`ConfigureKeyboardScreen` in `MainWindow.KeyboardScreens.cs`), the Dreamcast Screen button's place.
+The row's panel on the Devices page shows the screen's line under the device's name and, among the panel's tools, a button named for its kind, which opens the screen's dialog (`ConfigureKeyboardScreen` in `MainWindow.KeyboardScreens.cs`), the Dreamcast Screen button's place.
 
 ---
 
@@ -222,9 +222,9 @@ An overlay is a number from 1 to `KeyboardScreenInfo.MaxOverlays` (8). `Keyboard
 
 What an overlay shows is a `KeyboardScreenData` entry in the global `KeyboardScreens` list, with two fields only an overlay uses: `Zoom`, the Chosen Picture's size in percent of the size that fits the window (100 by default, `MaxZoom` 2000), and `LightbarSlot`, the slot whose lightbar the Lightbar mode follows (`LowestSlot`, -1, for the lowest slot with a color). `Normalize` clamps both.
 
-The window's own settings are a `ScreenOverlayData` per overlay: a `Number` attribute and `Enabled` (false), `Opacity` (0.8), `Monitor` (0), `Left` and `Top` (`OverlayPlacement.NoPlace`, -100000, for no saved place) and `Width` and `Height` (320 and 240). `AppSettingsData` and every `ProfileData` hold them as `ScreenOverlays`, one `Overlay` element each. A profile switch loads the profile's list with `DashboardViewModel.LoadScreenOverlays`, and the profile snapshot saves the card's list into the profile. A null list, from a file before the overlay, is one overlay, off. Loading drops an entry whose number is outside 1 to 8 or already taken.
+The window's own settings are a `ScreenOverlayData` per overlay: a `Number` attribute and `Enabled` (false), `Opacity` (0.8), `Monitor` (0), `Left` and `Top` (`OverlayPlacement.NoPlace`, -100000, for no saved place) and `Width` and `Height` (320 and 240). `AppSettingsData` and every `ProfileData` hold them as `ScreenOverlays`, one `Overlay` element each. A profile switch loads the profile's list with `DashboardViewModel.LoadScreenOverlays`, and the profile snapshot saves the page's list into the profile. A null list, from a file before the overlay, is one overlay, off. Loading drops an entry whose number is outside 1 to 8 or already taken.
 
-`ScreenOverlayItem` is one overlay on the Dashboard card. Its setters clamp `Opacity` to 0 to 1, `Width` to at least 80 and `Height` to at least 60. `DashboardViewModel.AddScreenOverlay` gives a new overlay the lowest free number, and `RemoveScreenOverlay` keeps at least one. The numbers stay through a removal, so a macro that names overlay 3 keeps meaning the same window.
+`ScreenOverlayItem` is one overlay on the **Screen Overlay** page, which the **Screen Overlay** tile of **Extras** opens (`ExtrasPage.xaml`). Its setters clamp `Opacity` to 0 to 1, `Width` to at least 80 and `Height` to at least 60. `DashboardViewModel.AddScreenOverlay` gives a new overlay the lowest free number, and `RemoveScreenOverlay` keeps at least one. The numbers stay through a removal, so a macro that names overlay 3 keeps meaning the same window.
 
 ### In the service
 
@@ -244,14 +244,14 @@ With the switch off and no window up, `InputService.TickKeyboardScreens` runs `T
 
 ### Macros on an overlay
 
-The macro actions carry a `ScreenOverlayNumber`, 0 for every overlay and 1 to 8 for one. `OverlaysFor(number)` reaches the named overlay, or for 0 every number on the Dashboard card (`OverlayNumbers`), windows up or down. A macro on any slot reaches an overlay.
+The macro actions carry a `ScreenOverlayNumber`, 0 for every overlay and 1 to 8 for one. `OverlaysFor(number)` reaches the named overlay, or for 0 every number on the Screen Overlay page (`OverlayNumbers`), windows up or down. A macro on any slot reaches an overlay.
 
 - Show Keyboard Screen with the Overlay kind decodes its frames with `OverlayFrames`: up to 8, each kept with its own proportions and transparency, no longer than `KeyboardScreenFormats.OverlayFrameSide` (800) on a side. A repeat count of 0 holds the show (`Held`) until the next show or mode request. A held show of one frame is still (`IsStill`) and lets the tick go back to four passes a second.
 - Keyboard Screen Mode with the Overlay kind writes the mode and ends a held show.
 - Pan Keyboard Screen Picture moves each overlay it names with `PanOverlay`, held to `ScreenOverlayContentView.PanLimits` for the window's size, or its saved size from `OverlaySize` while the window is down. At 0 it also pans the keyboard screens that feed the slot.
 - Toggle Screen Overlay is `MacroActionType.ToggleScreenOverlay` (66), in both of `EvaluateMacros`' switches. `RequestScreenOverlayToggle` sets bit `number` of `InputManager.ToggleScreenOverlayMask` with `Interlocked.Or`, and the UI tick drains it into `InputService.ToggleScreenOverlays`. Bit 0 turns every overlay off when any is on, and on when none is. Each other bit flips its overlay. The windows follow at once, ahead of the keyboard screens' tick, so a show in the same press finds its window up.
 
-reWASD's crosshair commands import as Toggle Screen Overlay (`RewasdTranslator`): types 101 to 108 name overlays 1 to 8, type 120 names every overlay, and 109 and 110 are skipped with `ImportReasons.NinthCrosshair`.
+reWASD's crosshair commands do not import as Toggle Screen Overlay. Since PadForge's own crosshairs (#585), `RewasdTranslator` turns types 101 to 110 into Toggle Crosshair for crosshairs 1 to 10 and type 120 into Toggle Crosshair for every crosshair ([Crosshair](../features/crosshair.md)).
 
 ### The window
 
@@ -265,11 +265,11 @@ The right button or one finger drags the window, the grip sizes it, and the left
 
 ### Placing the windows
 
-`InputService.SyncScreenOverlays` brings the windows into line with the card whenever `DashboardViewModel.ScreenOverlays` raises a change, and on engine start. It closes windows whose overlay is gone, hides and detaches one turned off, and creates, places, attaches and shows one turned on. An overlay with no saved place is centered on its monitor's working area by `OverlayPlacement.MoveToMonitor` and moved 32 DIPs down and across per number after the first. `OverlayPlacement.EnsureOnScreen` centers an overlay no monitor's working area overlaps. A finished drag or resize saves `Left`, `Top`, `Width`, `Height` and the monitor under the window's center (`GetCurrentMonitor`). Reset Position centers a window that is up, or clears the saved place of one that is down. The engine's stop closes the windows rather than hiding them.
+`InputService.SyncScreenOverlays` brings the windows into line with the page whenever `DashboardViewModel.ScreenOverlays` raises a change, and on engine start. It closes windows whose overlay is gone, hides and detaches one turned off, and creates, places, attaches and shows one turned on. An overlay with no saved place is centered on its monitor's working area by `OverlayPlacement.MoveToMonitor` and moved 32 DIPs down and across per number after the first. `OverlayPlacement.EnsureOnScreen` centers an overlay no monitor's working area overlaps. A finished drag or resize saves `Left`, `Top`, `Width`, `Height` and the monitor under the window's center (`GetCurrentMonitor`). Reset Position centers a window that is up, or clears the saved place of one that is down. The engine's stop closes the windows rather than hiding them.
 
 ### Tests
 
-`PadForge.Tests/ScreenOverlayTests.cs` holds the kind's place and the engine list, the macro editor's overlay choices and ordinals, the requests from any slot and with every window down, held and timed shows, every mode's content, the lightbar slot, the saved choices, picture loading and fitting, zoom, pan limits, the Pan macro and drag, the content view's drawing, the window's styles, arranging, click-through and `KeepOnTop`, opacity, placement, the card's add, remove and load, and the settings and profile round trips.
+`PadForge.Tests/ScreenOverlayTests.cs` holds the kind's place and the engine list, the macro editor's overlay choices and ordinals, the requests from any slot and with every window down, held and timed shows, every mode's content, the lightbar slot, the saved choices, picture loading and fitting, zoom, pan limits, the Pan macro and drag, the content view's drawing, the window's styles, arranging, click-through and `KeepOnTop`, opacity, placement, the page's add, remove and load, and the settings and profile round trips.
 
 ---
 
@@ -288,4 +288,4 @@ No keyboard with a screen, phone with Arx Control or S.T.R.I.K.E. 7 is on the be
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2818,6 +2934,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3411,6 +3533,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3691,6 +3841,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3783,6 +3961,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4133,8 +4339,8 @@
 
 <h1 id="3dconnexion-spacemouse">3Dconnexion SpaceMouse<a class="headerlink" href="#3dconnexion-spacemouse" title="Permanent link">&para;</a></h1>
 <p><em>Use a 6DoF puck as a mapping source: three translation axes and three rotation axes, all moving at once, plus the device's buttons.</em></p>
-<p>A SpaceMouse announces itself to Windows as a multi-axis controller, a device class that game input APIs ignore. Games never see it, and neither do most mappers. PadForge reads the puck directly and presents it as a six-axis controller, so every part of the app that works on a gamepad axis works on it: mapping rows, curves, deadzones, macros, per-app profiles, and virtual controller output.</p>
-<p>No setup. Plug it in (or connect its receiver) and it appears on the <a href="../../features/devices/">Devices</a> page under its own name.</p>
+<p>A SpaceMouse announces itself to Windows as a multi-axis controller, a device class that game input APIs ignore. Games never see it, and neither do most mappers. PadForge reads the puck directly and presents it as a joystick with six axes and 32 buttons, so every part of the app that works on a joystick axis works on it: mapping rows, curves, deadzones, macros, per-app profiles, and virtual controller output.</p>
+<p>No setup. Plug it in (or connect its receiver) and it appears on the <a href="../../features/devices/">Devices</a> page under the product name the device reports, or as <strong>SpaceMouse</strong> when it reports none. PadForge looks for new pucks every two seconds.</p>
 <hr />
 <h2 id="the-axes">The axes<a class="headerlink" href="#the-axes" title="Permanent link">&para;</a></h2>
 <p>Six bipolar axes, one per degree of freedom. Push, pull, twist, and tilt read simultaneously, which is the point of the device: a flight sim can take translation and rotation from one hand in one motion.</p>
@@ -4172,11 +4378,11 @@
 </tr>
 </tbody>
 </table>
-<p>The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes on the <a href="../../features/mappings/">Mappings</a> tab like any stick or trigger, and shape them with the usual <a href="../../features/stick-deadzones/">deadzone and curve</a> machinery. PadForge passes the puck's raw axis values through with no sign correction, so each direction is whatever the hardware reports. If a motion feels backwards for your game, invert that row's axis.</p>
-<p>Buttons map as ordinary buttons. Every model's buttons fit, from the SpaceNavigator's two up through the SpaceMouse Enterprise's full bank.</p>
+<p>The puck is spring-centered, so each axis rests at exactly zero and returns there when released. It behaves like a self-centering analog stick, not like a gyro: map the axes in the <strong>Mappings</strong> section of the controller page (<a href="../../features/mappings/">Mappings</a>) like any stick or trigger, and shape them with the usual <a href="../../features/stick-deadzones/">deadzone and curve</a> controls. PadForge passes the puck's raw axis values through with no sign correction, so each direction is whatever the hardware reports. If a motion feels backwards for your game, invert that row's axis.</p>
+<p>Buttons map as ordinary buttons. PadForge gives the puck 32 buttons, which covers every model from the SpaceNavigator's two up to the SpaceMouse Enterprise's 31.</p>
 <hr />
 <h2 id="supported-models">Supported models<a class="headerlink" href="#supported-models" title="Permanent link">&para;</a></h2>
-<p>Both 3Dconnexion vendor generations are covered.</p>
+<p>Both 3Dconnexion vendor IDs are covered. Under the current one, PadForge takes any device that describes itself to Windows as a multi-axis controller, so a model missing from the list below works too. Under the Logitech-era ID it takes only the twelve products listed.</p>
 <table>
 <thead>
 <tr>
@@ -4187,7 +4393,7 @@
 <tbody>
 <tr>
 <td>Current (VID 256F)</td>
-<td>SpaceMouse Compact, SpaceMouse Wireless (USB or Bluetooth), SpaceMouse Pro Wireless (USB or Bluetooth), SpaceMouse Enterprise, SpaceMouse Module, the Universal Receiver</td>
+<td>Every 6DoF model, among them the SpaceMouse Compact, SpaceMouse Wireless, SpaceMouse Pro Wireless, SpaceMouse Enterprise and the Universal Receiver</td>
 </tr>
 <tr>
 <td>Logitech era (VID 046D)</td>
@@ -4195,11 +4401,11 @@
 </tr>
 </tbody>
 </table>
-<p>The CadMouse and Keyboard Pro families share 3Dconnexion's vendor ID but are pointing and typing devices, not 6DoF pucks. PadForge tells them apart by how the hardware describes itself and leaves them alone.</p>
+<p>The CadMouse and Keyboard Pro families share 3Dconnexion's vendor ID but are pointing and typing devices, not 6DoF pucks. They describe themselves to Windows as a mouse or a keyboard, not as a multi-axis controller, so PadForge leaves them alone.</p>
 <hr />
 <h2 id="alongside-3dxware">Alongside 3DxWare<a class="headerlink" href="#alongside-3dxware" title="Permanent link">&para;</a></h2>
-<p>3Dconnexion's own driver can stay installed. Windows delivers the puck's input to every application that opens it, so PadForge and 3DxWare read the same motion side by side. CAD keeps working while a game takes the mapped output.</p>
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p>3Dconnexion's own driver can stay installed. PadForge opens the puck shared, and Windows delivers every report to each program that has it open, so PadForge and 3DxWare read the same motion side by side. CAD keeps working while a game takes the mapped output.</p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

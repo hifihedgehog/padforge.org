@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -1943,6 +1975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -1979,6 +2039,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2918,6 +3034,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3511,6 +3633,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3791,6 +3941,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3883,6 +4061,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4332,18 +4538,19 @@
 
 
 <h1 id="input-precision">Input Precision<a class="headerlink" href="#input-precision" title="Permanent link">&para;</a></h1>
-<p><em>PadForge reads your controller up to 1000 times a second and keeps the full resolution of every stick value on the way to the game.</em></p>
-<p><img alt="Sticks tab: where the precision pipeline is visible to you" src="../../images/pad-sticks.png" /></p>
+<p><em>PadForge reads your controller 1000 times a second by default, up to 10,000, and keeps the full resolution of every stick value on the way to the game.</em></p>
+<p><img alt="The Sticks &amp; Triggers section: where the precision pipeline is visible to you" src="../../images/pad-sticks.png" /></p>
 <p>This page covers how fast PadForge reads input, how much stick and trigger detail survives the trip to the virtual controller, and how precise each slot type's output is. For the deadzone and curve controls themselves, see <a href="../stick-deadzones/">Stick Deadzones</a> and <a href="../trigger-deadzones/">Trigger Deadzones</a>.</p>
-<p>Related pages: <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../controller-slots/">Controller Slots</a>, <a href="../settings/">Settings</a>, <a href="../dashboard/">Dashboard</a>.</p>
+<p>Related pages: <a href="../stick-deadzones/">Stick Deadzones</a>, <a href="../trigger-deadzones/">Trigger Deadzones</a>, <a href="../force-feedback/">Force Feedback</a>, <a href="../controller-slots/">Controller Slots</a>, <a href="../settings/">Settings</a>, <a href="../dashboard/">Home</a>.</p>
 <hr />
 <h2 id="polling-rate">Polling rate<a class="headerlink" href="#polling-rate" title="Permanent link">&para;</a></h2>
 <p>PadForge reads every connected controller on its own background thread. The default rate is <strong>1000 Hz</strong> (once per millisecond).</p>
-<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling Interval (Unless a Profile Overrides It)</strong>. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.</p>
+<p>You can change the rate in <strong><a href="../settings/">Settings</a> &gt; Input Engine &gt; Polling Rate (Unless a Profile Overrides It)</strong>, in passes a second from 60 to 10000. A higher rate means quicker reads and more CPU. A lower rate means slower reads and less CPU. Most people leave the default. A setting saved by PadForge 5 as an interval in milliseconds (1 to 16 ms) loads as the matching rate, 1000 Hz down to 63 Hz.</p>
+<p>The box's tooltip names how often Windows wakes the engine on this PC. Windows wakes a sleeping thread on its clock's tick, so a rate above that runs several passes back to back at each wake: the rate holds, and the passes come in groups. Above 1000 Hz the engine asks Windows for its finest clock, which ticks every half millisecond (2000 wakes a second), and gives it back at 1000 Hz and below, while the engine idles, and while it pauses behind a game.</p>
 <p>By default PadForge keeps reading even when its window sits behind the game. The <strong>Continue Polling When Window Loses Focus</strong> checkbox, in the same <strong>Input Engine</strong> settings, controls that. Turn it off to pause reads whenever PadForge loses focus.</p>
 <!-- SCREENSHOT: dashboard-polling-readout -->
-<p><img alt="The Dashboard engine card showing the live polling rate in Hz" src="../../images/dashboard-polling-readout.png" /></p>
-<p>The <a href="../dashboard/">Dashboard</a> shows the live rate next to the engine power button, so you can confirm the reads are landing where you set them.</p>
+<p><img alt="The Home page showing the live polling rate in Hz" src="../../images/dashboard-polling-readout.png" /></p>
+<p>The <a href="../dashboard/">Home</a> page shows the live rate as its <strong>Polling rate</strong> figure, so you can confirm the reads are landing where you set them.</p>
 <table>
 <thead>
 <tr>
@@ -4358,11 +4565,11 @@
 </tr>
 <tr>
 <td>Adjustable range</td>
-<td>1000 Hz down to about 60 Hz</td>
+<td>60 Hz to 10,000 Hz</td>
 </tr>
 <tr>
-<td>Jitter</td>
-<td>Under a millisecond. A short spin at the end of each cycle holds the boundary tight</td>
+<td>Timing</td>
+<td>No spin. The thread sleeps on a high-resolution timer between passes, and a pass starts up to one clock tick late, half a millisecond at the finest</td>
 </tr>
 <tr>
 <td>Idle rate</td>
@@ -4370,18 +4577,20 @@
 </tr>
 </tbody>
 </table>
-<p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the <strong>Inactivity Timeout</strong> (60 seconds by default, in the same <strong>Input Engine</strong> settings). Set the timeout to 0 and the engine idles immediately.</p>
+<p>A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero.</p>
+<p>Two bounds keep a slow moment from turning into a busy one. A loop that falls more than 2 ms behind, or four passes where that is longer (after a stall or a resume from sleep), drops the passes it missed and starts its schedule again. Passes owed after a wake run back to back for no longer than one clock tick. Once that time is gone, whether in owed passes or in one long pass, the loop sleeps a whole interval before the next. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the <strong>Inactivity Timeout</strong> (60 seconds by default, in the same <strong>Input Engine</strong> settings). Set the timeout to 0 and the engine idles immediately.</p>
 <p>While a <a href="../../guides/remote-link/">Remote Link</a> peer is connected, the loop stays at full rate even with no local slot active. A connected peer can read this PC's shared controllers, and idling would sample that input choppily.</p>
-<p>Cursor and scroll speed on a <a href="../controller-slots/">Keyboard + Mouse</a> slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.</p>
+<p>Cursor and scroll speed on a <a href="../controller-slots/">Keyboard + Mouse</a> slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling rate changes how often the cursor updates, never how fast it travels.</p>
+<p>The Wii pointer's <strong>FPS Mouse</strong> mode works the same way since 6.0.0: full aim asks for 8 pixels a second for each unit of its speed, at every rate. Before 6.0.0 it moved in proportion to the length of the pass, twice as fast at 500 Hz as at 1000 and half as fast at 2000, so a speed tuned at a rate other than 1000 Hz needs tuning again.</p>
 <h3 id="per-profile-override">Per-profile override<a class="headerlink" href="#per-profile-override" title="Permanent link">&para;</a></h3>
-<p>A profile can carry its own rate. The New Profile and Edit Profile dialogs have a <strong>Polling Rate</strong> dropdown with six entries: <strong>Default (Global Setting)</strong>, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See <a href="../../guides/profiles/">Profiles</a>.</p>
-<p>The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the Polling Interval box: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.</p>
+<p>A profile can carry its own rate. The New Profile and Edit Profile windows have a <strong>Polling Rate</strong> dropdown under <strong>More</strong> with ten entries: <strong>Default (Global Setting)</strong>, then 10000 Hz (0.1 ms), 8000 Hz (0.125 ms), 4000 Hz (0.25 ms), 2000 Hz (0.5 ms), 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms) and 60 Hz (16.667 ms). Pick anything but Default and that rate applies whenever the profile is active. <strong>More</strong> opens by itself on a profile with a rate of its own. See <a href="../../guides/profiles/">Profiles</a>.</p>
+<p>The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override beside the Polling Rate box: Overridden while profile “Name” is active: 250 Hz. Deactivate the profile and the global value returns.</p>
 <hr />
 <h2 id="stick-resolution">Stick resolution<a class="headerlink" href="#stick-resolution" title="Permanent link">&para;</a></h2>
 <p>A stick sends a value between two extremes. PadForge treats that value as a 16-bit number, which means 65,536 possible positions from one edge to the other. That resolution is held through the whole read, and the default processing moves a value by at most one step.</p>
 <p>Most consumer sticks report far less real detail than that. Typical thumbstick hardware produces 10 to 12 usable bits, so 16-bit output preserves every step the stick can actually make.</p>
 <p>At default settings the value that reaches the game is within one step of what the stick sent, a gap well below the noise a physical stick produces on its own. That precision matters most for flight sticks and HOTAS, where a tiny deflection drives a long-throw control surface, and for racing wheels, where smooth sub-degree steering reaches the sim without visible stepping. Only the Axial shape passes the reading through bit-for-bit.</p>
-<p>You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks tab for hardware-level precision. See <a href="../stick-deadzones/">Stick Deadzones</a>.</p>
+<p>You can set any deadzone or range value by raw digit (0 to 32768) in the <strong>Sticks &amp; Triggers</strong> section for hardware-level precision. See <a href="../stick-deadzones/">Stick Deadzones</a>.</p>
 <hr />
 <h2 id="output-precision-by-slot-type">Output precision by slot type<a class="headerlink" href="#output-precision-by-slot-type" title="Permanent link">&para;</a></h2>
 <p>How much of that resolution reaches the game depends on the slot type, and inside Xbox and Nintendo on the profile you pick. Those formats are fixed by the real controller's report descriptor. Extended slots are not, so they carry the most detail.</p>
@@ -4464,7 +4673,7 @@
 <h3 id="nintendo-slots">Nintendo slots<a class="headerlink" href="#nintendo-slots" title="Permanent link">&para;</a></h3>
 <p>A Nintendo slot has four presets: Nintendo Switch Pro Controller, Nintendo Switch Pro Controller (USB), Nintendo Switch 2 Pro Controller, and Nintendo Switch 2 Pro Controller: Full. Switch Pro is the default. Each ships its controller's own report descriptor, so stick depth differs between the Switch Pro and the Switch 2 Pro. The two Switch 2 Pro presets share one descriptor, and the two Switch Pro presets pack their sticks the same way.</p>
 <p>On both Switch Pro presets the report DirectInput reads declares 16-bit stick axes, but HIDMaestro first packs each axis into the 12-bit value a physical Pro Controller sends, from 0x200 to 0xE00 around a 0x800 center, and scales it back up. Each stick axis carries about 3,073 positions, whether a game reads that report or the Pro Controller's own full-mode report. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.</p>
-<p>ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
+<p>ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the <strong>Sticks &amp; Triggers</strong> section shows no trigger cards on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.</p>
 <table>
 <thead>
 <tr>
@@ -4501,7 +4710,7 @@
 <p>Each virtual controller sends one full state report on every read where something changed. Every button, axis, and hat travels in that single report, so the report count does not grow with how many axes or buttons the slot has.</p>
 <p>Xbox, Nintendo, and Extended slots skip a report identical to the last one and resend it every 16 ms as a keepalive, so an idle controller reports about 62 times a second. PlayStation slots and the Steam Controller and Steam Deck Controller (Composite) presets submit on every read, one report per controller per millisecond at 1000 Hz. The Switch Pro preset's driver streams one report every 15 ms, the real pad's cadence. Adding more slots scales the work in a straight line.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

@@ -8,10 +8,14 @@ kind of game instead of a single title. Nothing about them is locked:
 saving one adds an ordinary profile you can edit, exactly like importing
 a community config.
 
-Open them from **Profiles** with **Browse Starter Profiles**, beside
-Browse Community Configs.
+The **Profiles** page shows the first four under **Starter Profiles**:
+Desktop, WASD and Mouse, Hotbar, and Point and Click. A click on a tile
+adds that profile. **See All** beside the row, or **Get Profiles** at the
+top of the page, opens the **Starters** tab of Get Profiles with all
+thirteen. Pick one there and click **Save Profile**, or double-click it,
+or press Enter.
 
-![The starter profile gallery, showing each archetype with its output type and a one-line description](../images/profiles-starter-gallery.png)
+![The Starters tab of Get Profiles, showing each archetype with its output type and a one-line description](../images/profiles-starter-gallery.png)
 
 ---
 
@@ -55,12 +59,12 @@ wanted a gamepad.
 | --- | --- |
 | **Desktop** | Running Windows from the couch |
 | **WASD and Mouse** | Shooters and action games |
+| **Hotbar** | MMOs and ability-heavy games |
 | **Point and Click** | Adventure games and cursor-driven games |
 | **Strategy** | RTS, 4X, and city builders |
 | **Isometric RPG** | Party RPGs and turn-based tactics |
 | **Twin-Stick** | Top-down shooters and roguelites |
 | **Media Remote** | Playback and seeking |
-| **Hotbar** | MMOs and ability-heavy games |
 
 ### Gamepad
 
@@ -70,8 +74,8 @@ hand.
 
 | Profile | For |
 | --- | --- |
-| **Fighting Games** | 2D fighters, set up to clear the rules |
 | **Emulation** | RetroArch and the frontends built on it |
+| **Fighting Games** | 2D fighters, set up to clear the rules |
 | **Racing** | Calmer steering and finer control near center |
 | **Space Sim** | Six degrees of freedom on two sticks |
 | **Gyro Aim** | Motion for fine aim, with the stick still live |
@@ -82,9 +86,9 @@ hand.
 
 ### Desktop opens an on-screen keyboard on X
 
-Desktop carries a **Keyboard** menu, the Keyboard menu style with the Grid layout and its default controls. X opens it, where Valve's desktop scheme puts Show Keyboard. While it is open a press a keyboard control takes stays the keyboard's, so X types Backspace there and B closes it, as Steam's keyboard closes. Earlier versions sent Win+Ctrl+O from a macro on X instead. Edit the menu on the slot's **Menus** tab. See [Menus](menus.md).
+Desktop carries a **Keyboard** menu, the Keyboard menu style with the Grid layout and its default controls. X opens it, where Valve's desktop scheme puts Show Keyboard. While it is open a press a keyboard control takes stays the keyboard's, so X types Backspace there and B closes it, as Steam's keyboard closes. Earlier versions sent Win+Ctrl+O from a macro on X instead. Edit the menu in the controller page's **Macros & Menus** section. See [Menus](menus.md).
 
-The Windows key is Paddle 1, on pads that have paddles. It stays off Start because the quiet layer is a long press of Start.
+The Windows key is Paddle 1, on pads that have paddles. It stays off Start because Start is half of the quiet layer's Guide and Start hold.
 
 ### Hotbar puts 32 abilities behind two triggers
 
@@ -229,4 +233,4 @@ and taking one back is the thing this design exists to avoid.
 - [Shift Layers](shift-layers.md) explains the mechanism the Hotbar and
   Emulation profiles are built on.
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

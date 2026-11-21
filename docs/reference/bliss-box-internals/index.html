@@ -16,7 +16,7 @@
         <link rel="prev" href="../analog-keyboards-internals/">
       
       
-        <link rel="next" href="../keyboard-screens-internals/">
+        <link rel="next" href="../flydigi-apex-internals/">
       
       
         
@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3591,6 +3741,34 @@
     
   
     Wheel Force Feedback Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
   
 
     
@@ -3991,6 +4169,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -4578,7 +4784,7 @@
 </tr>
 </tbody>
 </table>
-<p>The app side: <code>PadForge.App/Common/Input/BlissBoxPort.cs</code> (the HID channel and the worker thread), <code>BlissBoxRuntime.cs</code> (the ports, their pairing with SDL rows, the state merge, the object names), <code>InputManager.BlissBox.cs</code> (Step 1's phase 1l), <code>PadForge.App/Services/DreamcastScreenService.cs</code> (the VMU screens and the ports' saved choices), <code>InputService.BlissBox.cs</code> (status lines and the port's Devices page detail pane), <code>MainWindow.BlissBox.cs</code> (the port's actions), and the two dialogs <code>BlissBoxPlayerDialog</code> and <code>DreamcastScreenDialog</code>.</p>
+<p>The app side: <code>PadForge.App/Common/Input/BlissBoxPort.cs</code> (the HID channel and the worker thread), <code>BlissBoxRuntime.cs</code> (the ports, their pairing with SDL rows, the state merge, the object names), <code>InputManager.BlissBox.cs</code> (Step 1's phase 1l), <code>PadForge.App/Services/DreamcastScreenService.cs</code> (the VMU screens and the ports' saved choices), <code>InputService.BlissBox.cs</code> (status lines and the port's panel on the Devices page), <code>MainWindow.BlissBox.cs</code> (the port's actions), and the two dialogs <code>BlissBoxPlayerDialog</code> and <code>DreamcastScreenDialog</code>.</p>
 <hr />
 <h2 id="the-shape">The shape<a class="headerlink" href="#the-shape" title="Permanent link">&para;</a></h2>
 <p>SDL reads each port's joystick, as it reads any USB joystick. A port is one USB device per player, vendor <code>0x16D0</code>, product <code>0x0D03</code> plus the player number, so <code>0x0D04</code> to <code>0x0D07</code>. The bootloaders (<code>0x0A5F</code>, <code>0x04FB</code>), the 1.x firmware (<code>0x0A60</code>) and the "4-Play Fix" IDs (<code>0x0A61</code> to <code>0x0A64</code>) never match, so nothing talks to an adapter mid-update.</p>
@@ -4863,7 +5069,7 @@
 <p><code>BlissBoxProtocolTests</code> builds every report byte for byte, runs every parser against the references' layouts, checks the picture codec against the "BLISS BOX" example in DeviceBuddy's README, the checksums against libdragon's values, and the native chunking under models of both firmware listings. <code>BlissBoxSessionTests</code> drives a session against a scripted adapter that answers as either generation does, with an N64 controller and a pak behind its native channel, a not-ready first read after each message, the 3.x echo of an unanswered read, the reset a player change causes, and GPA 4.86's Dreamcast motor routines (the shared strength, each command's loop and the one timer): the poll cadence, the motor model and writer's timing, the 3.x pacing with its peak and its refresh, a write in flight, the EEPROM guard, the native arrow poll, the player change, and the Controller Pak backup and restore with their failure paths. <code>BlissBoxAppTests</code> covers the names per controller and their translations, the object list and the state merge, the rumble routing, the raw open, the settings, the screen service's pictures and the macro action. <code>BlissBoxAutoMapTests</code> checks every placement on both generations against SDL's and RetroArch's mappings, the default mapping it gives on Xbox, PlayStation, Nintendo, Extended, Valve, MIDI and VR slots, the positions a port must leave unbound, the DualShock 2's pressure rows, and the fill after a late identification.</p>
 <p>No test runs against an adapter. PadForge's reading of every report is unverified on hardware.</p>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 
@@ -4918,13 +5124,13 @@
         
         
           
-          <a href="../keyboard-screens-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Keyboard Screens Internals">
+          <a href="../flydigi-apex-internals/" class="md-footer__link md-footer__link--next" aria-label="Next: Flydigi Apex Internals">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Keyboard Screens Internals
+                Flydigi Apex Internals
               </div>
             </div>
             <div class="md-footer__button md-icon">

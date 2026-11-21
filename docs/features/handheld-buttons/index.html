@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -2089,6 +2121,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2125,6 +2185,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2884,6 +3000,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3477,6 +3599,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3757,6 +3907,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3849,6 +4027,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4269,9 +4475,9 @@
 <p>PadForge learns them on your machine. There is no table of models inside the app and no release needed for a handheld that ships tomorrow.</p>
 <hr />
 <h2 id="turning-it-on">Turning it on<a class="headerlink" href="#turning-it-on" title="Permanent link">&para;</a></h2>
-<p>Open <strong>Settings</strong>, find the <strong>Handheld PC Buttons</strong> card, and turn on <strong>Enable Handheld PC Buttons</strong>.</p>
+<p>Open <strong>Settings</strong>, find the <strong>Hardware Support</strong> card under <strong>Hardware</strong>, and turn on <strong>Enable Handheld PC Buttons</strong>.</p>
 <!-- SCREENSHOT: settings-handheld-buttons -->
-<p><img alt="Settings page, Handheld PC Buttons card with its toggle" src="../../images/settings-handheld-buttons.png" /></p>
+<p><img alt="Settings page, Hardware Support card with Enable Handheld PC Buttons" src="../../images/settings-handheld-buttons.png" /></p>
 <p>Two rows appear on the <a href="../devices/">Devices</a> page, both named after your machine (the firmware's product name, or its family name when the product name is a bare model code such as 83RU):</p>
 <table>
 <thead>
@@ -4297,15 +4503,15 @@
 <p>With the toggle off, nothing runs: no device rows, no keyboard hook, no vendor HID handles, no sensor subscription, no WMI subscription. A desktop that never uses this pays nothing for it.</p>
 <hr />
 <h2 id="learning-a-button">Learning a button<a class="headerlink" href="#learning-a-button" title="Permanent link">&para;</a></h2>
-<p>Select the <strong>Hidden Buttons</strong> row and click <strong>Learn / Manage Hidden Buttons</strong>. The <strong>Hidden Buttons</strong> dialog names your machine, warns if a vendor tool is running, and walks one press under <strong>Learn a Button</strong>:</p>
+<p>Select the <strong>Hidden Buttons</strong> row on the Devices page and click <strong>Learn / Manage Hidden Buttons</strong> at the foot of its <strong>Settings</strong> card. The <strong>Hidden Buttons</strong> dialog warns if a vendor tool is running, and a learn starts as it opens. The live line walks three steps:</p>
 <ol>
-<li><strong>Start Learning</strong>. For one second the dialog reads <em>Hands off. Reading the idle state…</em> while PadForge samples every vendor report on the machine, so bytes that move on their own (motion sensor words, counters) can never become a button.</li>
-<li><em>Press the hidden button now, then let go…</em> You have three seconds. A tap or a hold both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.</li>
-<li><em>One moment…</em> PadForge listens a second longer for a key that reports late or only on release.</li>
+<li><em>Hands off. Reading the idle state…</em> For one second PadForge samples every vendor report on the machine, so bytes that move on their own (motion sensor words, counters) can never become a button.</li>
+<li><em>Press and hold the button now.</em> You have three seconds. A hold and a tap both work, and a key that only reports on a short tap (a Legion laptop's Smart Connect key) needs the tap.</li>
+<li><em>Let go of the button.</em> PadForge listens a second longer for a key that reports late or only on release.</li>
 </ol>
-<p>Whatever the press changed is shown under <strong>Source:</strong> as the key combination the firmware typed (<em>Keys: Ctrl + Win + F17</em>), the report field that flipped (<em>report 04, byte 20, bit 0x80</em>), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a list appears and you pick one. Give the button a name and click <strong>Register</strong>.</p>
-<p>If nothing changed, the dialog says so and counts what it watched: <em>Watched 3 vendor reports and 10 event classes. During the press: 0 reports, 0 events.</em> Press again, inside the highlighted window.</p>
-<p>Repeat for every paddle and key. The <strong>Learned Buttons</strong> list below shows each one with a <strong>Remove</strong> button. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. <strong>Remove</strong> clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.</p>
+<p>Whatever the press changed shows at the end of the live line: the key combination the firmware typed (<em>Keys: Ctrl + Win + F17</em>), the report field that flipped (<em>report 04, byte 20, bit 0x80</em>), or the system event that fired. Some buttons do two at once (the Legion Go's Desktop button sets a report bit and types Win+D), and PadForge records both halves under one button so the keystroke is swallowed while the report keeps the state. If a press changed more than one report field or system event, a <strong>Source</strong> list appears and you pick one. Give the button a name and click <strong>Register</strong>. <strong>Start Over</strong> runs another learn.</p>
+<p>If nothing changed, the dialog says so and counts what it watched: <em>No change was seen. Select Start Over, then press and hold the button when asked. Vendor reports watched: 3. Event classes watched: 10. Reports during the press: 0. Events during the press: 0.</em></p>
+<p>Repeat for every paddle and key. The list under <strong>Learned on</strong> <em>your machine</em> shows each one with a <strong>Remove</strong> button, and its tooltip names what the button was learned from. A learned button keeps its index while it exists, so a binding survives other buttons being added or removed. <strong>Remove</strong> clears every mapping, macro and saved-profile entry that named the button, because the next button you learn takes the lowest free index and would otherwise inherit them.</p>
 <hr />
 <h2 id="how-the-three-paths-behave">How the three paths behave<a class="headerlink" href="#how-the-three-paths-behave" title="Permanent link">&para;</a></h2>
 <p><strong>Key combinations</strong> go through PadForge's low-level keyboard and mouse hooks. A learned combination is swallowed before the shell sees it, so Win+D no longer minimizes your desktop and F24 no longer reaches the game as a key. A key that is only the start of a combination is held back for 100 ms. If the rest never arrives, it is replayed, so typing F11 by itself still types F11. Modifier keys are never held back, and a prefix is judged in the order the firmware typed it, so the D in WASD is never held for a Win+D chord. A combination containing Win or Alt gets the AutoHotkey treatment (a tap of a reserved key) so releasing Win does not open the Start menu. Keystrokes injected by other software pass through untouched. A button releases when any key of its combination goes up.</p>
@@ -4316,9 +4522,9 @@
 <h2 id="binding">Binding<a class="headerlink" href="#binding" title="Permanent link">&para;</a></h2>
 <p>A learned button binds anywhere a real button does. The mapping picker and the recorders offer it by the name you gave it, at its stable index on the Hidden Buttons row.</p>
 <h2 id="watching-it-live">Watching it live<a class="headerlink" href="#watching-it-live" title="Permanent link">&para;</a></h2>
-<p>The <strong>Hidden Buttons</strong> row's detail pane lists every learned button with its source, and lights each one in cold blue while it is down. If the vendor's daemon (Legion Space, Armoury Crate, MSI Center M, Zotac's quick settings, AYASpace) is running, the pane says <em>… is running. It still reacts to these buttons until you stop it.</em> The check runs every four seconds.</p>
+<p>Select the <strong>Hidden Buttons</strong> row and its <strong>Test Inputs</strong> card lists every learned button under <strong>Hidden Buttons</strong>, lighting each one in cold blue while it is down. If the vendor's daemon (Legion Space, Armoury Crate, MSI Center M, Zotac's quick settings, AYASpace) is running, the row says <em>… is running. It still reacts to these buttons until you stop it.</em> The check runs every four seconds.</p>
 <h2 id="sharing-a-set">Sharing a set<a class="headerlink" href="#sharing-a-set" title="Permanent link">&para;</a></h2>
-<p><strong>Export…</strong> writes the learned set to a JSON file named after your machine (<code>Legion-Go-hidden-buttons.json</code>), and <strong>Import…</strong> reads one in. An imported button keeps its stored index when that index is free, and takes the lowest free one otherwise. One owner's learn pass seeds every machine of that model.</p>
+<p><strong>Export…</strong>, in the dialog's foot, writes the learned set to a JSON file named after your machine (<code>Legion-Go-hidden-buttons.json</code>), and <strong>Import…</strong> reads one in. An imported button keeps its stored index when that index is free, and takes the lowest free one otherwise. One owner's learn pass seeds every machine of that model.</p>
 <hr />
 <h2 id="motion">Motion<a class="headerlink" href="#motion" title="Permanent link">&para;</a></h2>
 <p>The <strong>Motion</strong> row feeds the same gyro pipeline every controller uses: gyro aim, tilt steering, calibration, and axis signs all apply. Readings are converted from the Windows sensor units (degrees per second, g) to the frame PadForge's motion code expects. Unlike a wireless pad, the row never goes stale: a built-in sensor has no link to lose, and a sensor that goes quiet at rest keeps its last reading. The Steam Deck needs none of this: its paddles and motion sensor already arrive through SDL3.</p>
@@ -4336,11 +4542,11 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../devices/">Devices</a>: the Hidden Buttons and Motion rows.</li>
-<li><a href="../settings/">Settings</a>: the Handheld PC Buttons card.</li>
+<li><a href="../settings/">Settings</a>: the Hardware Support card.</li>
 <li><a href="../../reference/handheld-buttons-internals/">Handheld PC Buttons Internals</a>: the three delivery paths and the learner, for whoever has to change the code.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

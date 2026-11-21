@@ -113,7 +113,7 @@ Without that check inside the lock, a haptic event arriving during teardown re-l
 
 ## Availability and install
 
-`HMaestroVRController.IsAvailable()` caches `HMVR.IsSteamVRInstalled` for 5 seconds (`AvailabilityTtlMs`), because the probe reads up to three registry keys and checks up to four install paths on disk, and the sidebar rail rebuild queries once per slot. `ResetAvailability()` drops the cache so the gates lift right after an install instead of waiting out the TTL.
+`HMaestroVRController.IsAvailable()` caches `HMVR.IsSteamVRInstalled` for 5 seconds (`AvailabilityTtlMs`), because the probe walks Steam's library metadata on disk, and the 5-second driver-status timer and every controller type list ask again. `ResetAvailability()` drops the cache so the gates lift right after an install instead of waiting out the TTL.
 
 The cache's "has a value" flag is an explicit `bool`, not a sentinel timestamp. Seeding the tick with `long.MinValue` made `now - s_availCheckedTick` overflow negative, which always reads as inside the TTL, so the first call returned the default `false` and SteamVR read as absent forever.
 
@@ -197,7 +197,7 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 - **Adding a button** means widening `VrHandRaw.Buttons` past `byte` and touching the bit table, the key array order, and HIDMaestro's `HMVRButton` together. The cast hides a mismatch until runtime.
 - **A second Y flip** anywhere in the VR lane cancels the one in `PackHand`.
-- **SteamVR's own Test Controller is not a diagnostic.** Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.
+- **SteamVR's own Test Controller is not a diagnostic.** Switching it from left to right often shows nothing until you switch back and forth again. Trust the VR controller page's **Hands** picture (`VRPreviewView`) or the game.
 - **There is no per-slot VR configuration.** The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.
 - **The two lanes can eat each other.** If you touch the manufacturer string on either side, the #287 self-emission filter stops matching and a VR slot starts consuming its own hands.
 
@@ -212,4 +212,4 @@ Two statics feed the UI, which previously could only ever say SteamVR was instal
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

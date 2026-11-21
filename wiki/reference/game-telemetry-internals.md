@@ -11,11 +11,11 @@ For the user-facing side see [Game Telemetry](../features/game-telemetry.md).
 | `PadForge.App/Common/Input/Telemetry/TelemetryReader.cs` | The format choice: a picked game, or Auto-Detect with its hold. The max RPM fallback. |
 | `PadForge.App/Common/Input/Telemetry/KunosSharedMemory.cs` | Assetto Corsa's three shared memory pages, opened read-only. |
 | `PadForge.App/Common/Input/Telemetry/CustomTelemetryFormat.cs` | The user's formats as saved, and `CompiledTelemetryFormat`, which reads them. |
-| `PadForge.App/Common/Input/Telemetry/GameTelemetryRuntime.cs` | The Dashboard mirror the engine reads, the values Custom Expression variables read, and the engine values the wheel lights read. `TelemetryChannel` lives here. |
+| `PadForge.App/Common/Input/Telemetry/GameTelemetryRuntime.cs` | The mirror of the Game Telemetry page's settings that the engine reads, the values Custom Expression variables read, and the engine values the wheel lights read. `TelemetryChannel` lives here. |
 | `PadForge.App/Common/Input/Telemetry/GameTelemetryDevice.cs` | The row: the socket, the forward socket, the shared memory poll, the axes and buttons, silence, the status. |
 | `PadForge.App/Common/Input/InputManager.GameTelemetry.cs` | Step 1 phase 1i2: open, retire, recreate and reopen the row. |
 | `PadForge.App/Common/Telemetry/GameTelemetryRowSource.cs` | The row as the first source of the wheel lights' `TelemetryHub`. |
-| `PadForge.App/Services/InputService.GameTelemetry.cs` | The Dashboard status line and flame, and the Devices panel line. |
+| `PadForge.App/Services/InputService.GameTelemetry.cs` | The Game Telemetry page's status line and flame, its tile's status on the Extras page, and the Devices panel line. |
 | `PadForge.App/ViewModels/CustomTelemetryFormatEditor.cs`, `Views/CustomTelemetryFormatsDialog.xaml(.cs)` | The custom format window, which edits copies and writes the list back on Save. |
 | `PadForge.App/ViewModels/TelemetryChannelOptions.cs` | The channel picker of a Custom Expression variable. |
 | `PadForge.App/ViewModels/TriggerEffectCatalog.cs` | The Adaptive Trigger Effect action's effects, their parameters and ranges. |
@@ -31,7 +31,8 @@ Every decoder fills one `TelemetryFrame`:
 
 | Field | Unit |
 |---|---|
-| `SpeedMs` | Meters per second, never negative |
+| `SpeedMs`, `SpeedReported` | Meters per second, never negative, and whether the game sent a speed |
+| `Grip` | The road's grip under the front wheels against dry asphalt's (`RoadGrip`), or 0 where the game sends no word on the road |
 | `Rpm`, `MaxRpm` | Revolutions per minute |
 | `Gear` | -1 reverse, 0 neutral, 1 and up |
 | `Throttle`, `Brake`, `Clutch`, `Handbrake` | 0 to 1 |
@@ -55,6 +56,8 @@ Little-endian throughout, offsets in bytes.
 | Project CARS 2 | Telemetry (type 0 at byte 10), 559 bytes. Game State (type 4), 24 bytes. | Brake, throttle, clutch u8 at 29 to 31, speed f32 at 36, RPM u16 40, max RPM u16 42, steering s8 44, gear in the low nibble of 45 (15 reverse), handbrake u8 at 370. Game State: byte 14 and 7, 2 while playing. |
 | Assetto Corsa | Shared memory | Physics: gas 4, brake 8, gear s32 16 (0 reverse, 1 neutral), RPM 20, steer 24, speed km/h 28, clutch as 1 less the value at 364. Static: `smVersion` UTF-16 at 0, 1.8 or later is ACC, max RPM s32 at 412. Graphics: status at 4, 2 while live. |
 | ETS2 and ATS | One JSON object per change from MrHokss's plugin | `speed` (absolute), `rpm`, `gear` (negative is reverse), `steer` (counterclockwise, so negated), `throttle`, `brake`, `clutch`. |
+
+Where a game reports the road, the decoder puts the front axle's grip in `Grip`, through `SurfaceGrips` and `RoadGrip.FrontAxle` (the mean of the two front wheels): Forza's puddle depth, f32 at 132 and 136, F1's surface type, u8 at 58 and 59 of the player's car telemetry entry, Project CARS 2's terrain, u8 at 140 and 141 with the rain density, and Assetto Corsa's surface grip in the graphics page, f32 at 280, or 1240 in ACC. Codemasters, EA SPORTS WRC, OutGauge and the truck plugin send no word on the road. `GameTelemetryRowSource` hands the hub the speed and the grip (`GameTelemetryRuntime.TryGetMotion`) with the engine values (`TryGetEngine`), and the hub hands them to a wheel's Vehicle mode centering. See [Wheel Centering Internals](wheel-centering-internals.md#grip).
 
 F1 claims every packet whose format is 2022 to 2025, whose length is one of that format's packet sizes and whose id is 0 to 15, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.
 
@@ -153,10 +156,10 @@ The effects dispatcher reads the store once per pass, beside a mod's hold. `Fill
 
 ## Tests
 
-- `GameTelemetryTests`: each decoder against packets built from the references' layouts, Auto-Detect and its hold, custom binary formats in both byte orders and JSON, the XML round trips, the row's axes, buttons, silence and truck hold, the port fence, a loopback receive with forwarding, the Assetto Corsa reader on maps of its own, the expression values and specs, a Custom Expression macro firing on telemetry, the wheel lights' hand-off (`YieldPort`, `ReclaimPort`, `TryGetEngine`, both `GameTelemetryRowSource`s and their places in the hub's order, a learned max's headroom against every wheel's shift cue), the Dashboard picker and the custom format window's checks.
+- `GameTelemetryTests`: each decoder against packets built from the references' layouts, Auto-Detect and its hold, custom binary formats in both byte orders and JSON, the XML round trips, the row's axes, buttons, silence and truck hold, the port fence, a loopback receive with forwarding, the Assetto Corsa reader on maps of its own, the expression values and specs, a Custom Expression macro firing on telemetry, the wheel lights' hand-off (`YieldPort`, `ReclaimPort`, `TryGetEngine`, both `GameTelemetryRowSource`s and their places in the hub's order, a learned max's headroom against every wheel's shift cue), the Game Telemetry page's Game picker and the custom format window's checks.
 - `MacroTriggerEffectTests` and `MacroTriggerEffectDispatchTests`: each effect against the encoder, the editor's values, the settings round trip, the store, both evaluators with the release hook and the pass's sweep, the fill order and the inbound copy.
 - The test host binds no real telemetry port and opens no `acpmf` mapping: `GameTelemetryPortOffLimits` and `KunosOffLimits` in `TestHostFences.cs`, both pinned in `TestHostFenceTests`, and the row in the listener census of `TestHostListenerTests`.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/reference/twitch-chat-internals/">
       
       
-        <link rel="prev" href="../screen-color-internals/">
+        <link rel="prev" href="../crosshair-magnifier-internals/">
       
       
         <link rel="next" href="../controller-audio-internals/">
@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3328,6 +3450,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -3790,6 +3940,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3882,6 +4060,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4366,7 +4572,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Twitch/TwitchChatRuntime.cs</code></td>
-<td>The Dashboard mirror the engine reads: switch, channel, pause, approval, the open row. <code>TwitchChatSnapshot</code> lives here.</td>
+<td>The mirror of the Twitch Chat page that the engine reads: switch, channel, pause, approval, the open row. <code>TwitchChatSnapshot</code> lives here.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Twitch/ChatGamepadPlacement.cs</code></td>
@@ -4378,7 +4584,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.TwitchChat.cs</code></td>
-<td>The Dashboard status line and flame, the Devices panel line, the picture page's frame, slot lookups and the word list's change handler.</td>
+<td>The Twitch Chat page's status line and flame, the Devices panel line, the picture page's frame, slot lookups and the word list's change handler.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Services/WebControllerServer.cs</code></td>
@@ -4397,8 +4603,8 @@
 <p>The chat rules come from references credited on the About page: tmi.js and ComfyJS (reading chat without signing in, the <code>!</code> command rule), DougDoug's TwitchPlays template (the newest-20 line), and Yuriy's ForgePlay (the command language and the turn rules, ported to C#). Each rule below names its source where the code does.</p>
 <hr />
 <h2 id="the-shape">The shape<a class="headerlink" href="#the-shape" title="Permanent link">&para;</a></h2>
-<p>The Twitch Chat row is the Game Telemetry row's shape. One synthetic <code>ISdlInputDevice</code> exists while the Dashboard switch is on. The poll thread opens and retires it, and a pooled state copy goes out on every read. The chat connection runs on its own task, so opening the row does no blocking I/O.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Dashboard switch + channel -&gt; TwitchChatRuntime -&gt; InputManager.UpdateTwitchChatDevice
+<p>The Twitch Chat row is the Game Telemetry row's shape. One synthetic <code>ISdlInputDevice</code> exists while the Twitch Chat switch is on. The poll thread opens and retires it, and a pooled state copy goes out on every read. The chat connection runs on its own task, so opening the row does no blocking I/O.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Twitch Chat switch + channel -&gt; TwitchChatRuntime -&gt; InputManager.UpdateTwitchChatDevice
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    -&gt; TwitchChatDevice -&gt;  TwitchChatClient (anonymous IRC over a WebSocket)
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                            -&gt; HandleMessage -&gt; ChatTurns | ChatCommandParser -&gt; ChatCommandPlayer
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                            -&gt; GetCurrentState: the player&#39;s buttons
@@ -4637,13 +4843,13 @@
 <p><code>Skip</code> needs a command playing. A moderator's skip acts at once. Others open a vote, and a second distinct login within <code>SkipWindowMs</code> confirms it. The skip itself is the callback <code>all =&gt; _player.Skip(all)</code>, run outside the turns lock because the player takes its own.</p>
 <p>PadForge posts nothing in chat, so every result is a <code>Notice</code> string the picture page shows. The text is English and never repeats what a viewer typed: an unknown target from someone who cannot approve is answered without its text.</p>
 <h2 id="twitchchatruntime">TwitchChatRuntime<a class="headerlink" href="#twitchchatruntime" title="Permanent link">&para;</a></h2>
-<p>Static, written by the Dashboard view model on the UI thread and read by the poll thread, the row and the picture page. <code>Enabled</code> and <code>Channel</code> bump <code>Version</code> (the channel only while enabled), and the sweep reopens the row when <code>Version</code> moves. <code>Paused</code> and <code>ClaimApproval</code> act on the open row at once, with their own version counters. <code>Paused</code> is not saved and turning the switch off clears it. <code>Live</code> is the open row. <code>Skip()</code>, <code>ClearLine()</code> and <code>EndClaim()</code> reach it for the card's buttons.</p>
+<p>Static, written by <code>DashboardViewModel</code> on the UI thread and read by the poll thread, the row and the picture page. <code>Enabled</code> and <code>Channel</code> bump <code>Version</code> (the channel only while enabled), and the sweep reopens the row when <code>Version</code> moves. <code>Paused</code> and <code>ClaimApproval</code> act on the open row at once, with their own version counters. <code>Paused</code> is not saved and turning the switch off clears it. <code>Live</code> is the open row. <code>Skip()</code>, <code>ClearLine()</code> and <code>EndClaim()</code> reach it for the buttons of the page's While You Are Live card.</p>
 <p><code>SettingsService</code> stores <code>EnableTwitchChat</code>, <code>TwitchChatChannel</code> and <code>TwitchChatClaimApproval</code> in <code>AppSettings</code> alone, and <code>ChatCommands</code> beside them. None is in <code>ProfileData</code>, so a profile switch never opens or closes the connection. <code>MainWindow</code> saves on a change of any of the three.</p>
 <h2 id="inputservicetwitchchat">InputService.TwitchChat<a class="headerlink" href="#inputservicetwitchchat" title="Permanent link">&para;</a></h2>
-<p><code>BuildTwitchChatStatus(channel, state, paused)</code> builds the one line the Dashboard card and the Devices row share, from <code>TwitchChat_Status_*</code> strings, with the paused suffix. The Dashboard line is cached on the row instance, its <code>StatusVersion</code> and the pause, since a reopen restarts the version at 0. <code>IsTwitchChatOpen</code> enables the card's buttons and <code>IsTwitchChatRunning</code> lights its flame, true while the state is <code>Reading</code>.</p>
-<p><code>DisplayFrameFor(slot)</code> is the picture page's view of a slot: its combined output (raw HID state for a Nintendo slot or a Valve lettered one, the gamepad otherwise, the pad page's rule), the layout key from the slot's 2D asset folder (<code>WebLayoutFor</code>) and the pad's saved finish. It returns null while the slot is off. <code>FirstTwitchChatSlot</code> is the lowest <code>MapTo</code> among the row's assignments. <code>ShownSlotNumber</code> is the number PadForge shows for a slot, which <code>?slot=</code> uses.</p>
+<p><code>BuildTwitchChatStatus(channel, state, paused)</code> builds the one line the Twitch Chat page, its Extras tile and the Devices row share, from <code>TwitchChat_Status_*</code> strings, with the paused suffix. The page's line is cached on the row instance, its <code>StatusVersion</code> and the pause, since a reopen restarts the version at 0. <code>IsTwitchChatOpen</code> enables the While You Are Live buttons and <code>IsTwitchChatRunning</code> lights the status card's flame, true while the state is <code>Reading</code>.</p>
+<p><code>DisplayFrameFor(slot)</code> is the picture page's view of a slot: its combined output (raw HID state for a Nintendo slot or a Valve or SInput lettered one, the gamepad otherwise, the controller page's rule), the layout key from the slot's 2D asset folder (<code>WebLayoutFor</code>) and the pad's saved finish. It returns null while the slot is off. <code>FirstTwitchChatSlot</code> is the lowest <code>MapTo</code> among the row's assignments. <code>ShownSlotNumber</code> is the number PadForge shows for a slot, which <code>?slot=</code> uses.</p>
 <h2 id="the-picture-page">The picture page<a class="headerlink" href="#the-picture-page" title="Permanent link">&para;</a></h2>
-<p><code>WebControllerServer.DisplayUrl</code> is <code>&lt;plain base&gt;/display.html?code=&lt;access code&gt;</code>, or null while the plain address is not served. The Dashboard sets <code>TwitchChatDisplayUrl</code> from it. The main address will not do. Its certificate is self-signed, and obs-browser passes no ignore-certificate-errors switch and leaves CEF's <code>OnCertificateError</code> at its default, which cancels the page.</p>
+<p><code>WebControllerServer.DisplayUrl</code> is <code>&lt;plain base&gt;/display.html?code=&lt;access code&gt;</code>, or null while the plain address is not served. <code>DashboardViewModel</code> sets <code>TwitchChatDisplayUrl</code> from it, which the page's Picture for Your Broadcast card shows. The main address will not do. Its certificate is self-signed, and obs-browser passes no ignore-certificate-errors switch and leaves CEF's <code>OnCertificateError</code> at its default, which cancels the page.</p>
 <p>The page opens <code>/ws?view=&lt;slot&gt;&amp;code=&lt;code&gt;</code>. A socket with <code>view</code> goes to <code>HandleDisplayAsync</code>, which makes no device and takes no client slot. At most <code>MaxDisplays</code> (4) run at once and a fifth gets a 503. Every 33 ms the loop does the following:</p>
 <ul>
 <li>Asks <code>DisplaySlotFor(view)</code> once a second: a named number first, else the Twitch row's first slot, else the first slot shown.</li>
@@ -4656,11 +4862,11 @@
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>TwitchChatCommandTests</code>: the registry (preset words at buttons 1 to 16, gaps, the word rules, restore, the settings round trip, change events), the parser (presses, holds, chords, groups, repeats, rejects, the 10 second and 50 step limits, the release gap, the parse budget) and <code>ChatTurns</code> on a fake clock (each approval choice, the 60 second request and five-request limits, skips by two viewers or one moderator, login against shown name, notices that never repeat a viewer's text).</li>
-<li><code>TwitchChatRowTests</code>: <code>IrcLine</code> parsing and unescaping, <code>PING</code> and <code>RECONNECT</code>, the scripted socket (joining, duplicate ids, the ping schedule, the silence and connect limits, <code>NoChat</code> and its re-ask, the retry delay doubling to 30 seconds), channel names, the player (the newest 20, <code>Any Command</code>, skips, the gap), the row's identity and buttons, replies and pause, control and the line, invisible suffixes, default placement, <code>FreedButtonCleanup</code> against every place a button can be mapped, the Dashboard switch and approval reaching the runtime, the status line, the picture page's slot choice, <code>DisplayUrl</code> and the chat message.</li>
+<li><code>TwitchChatRowTests</code>: <code>IrcLine</code> parsing and unescaping, <code>PING</code> and <code>RECONNECT</code>, the scripted socket (joining, duplicate ids, the ping schedule, the silence and connect limits, <code>NoChat</code> and its re-ask, the retry delay doubling to 30 seconds), channel names, the player (the newest 20, <code>Any Command</code>, skips, the gap), the row's identity and buttons, replies and pause, control and the line, invisible suffixes, default placement, <code>FreedButtonCleanup</code> against every place a button can be mapped, the Twitch Chat switch and approval reaching the runtime, the status line, the picture page's slot choice, <code>DisplayUrl</code> and the chat message.</li>
 <li>The test host never reaches Twitch: <code>InTheTestHostTheClientNeverReachesTwitch</code> builds a client whose socket factory is never called, and <code>TestHostFenceTests</code> pins the gate check in <code>SessionAsync</code>.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 
@@ -4698,7 +4904,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../screen-color-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Screen Color Internals">
+          <a href="../crosshair-magnifier-internals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Crosshair and Magnifier Internals">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4708,7 +4914,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Screen Color Internals
+                Crosshair and Magnifier Internals
               </div>
             </div>
           </a>

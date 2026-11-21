@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2649,6 +2765,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3883,6 +4005,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -4163,6 +4313,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -4255,6 +4433,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -5173,7 +5379,12 @@
 <tr>
 <td><code>MaxSlots</code></td>
 <td><code>4</code></td>
-<td>DSU protocol slot limit (PadForge slots 4–15 skip DSU broadcast)</td>
+<td>DSU protocol slot limit (PadForge slots 4–15 skip DSU broadcast). <code>internal</code>, so <code>InputManager</code> sizes <code>DsuMotionSnapshots</code> from it</td>
+</tr>
+<tr>
+<td><code>DefaultPort</code></td>
+<td><code>26760</code></td>
+<td>The port every DSU client polls unless told another, and <code>Start</code>'s default</td>
 </tr>
 <tr>
 <td><code>ProtocolVersion</code></td>
@@ -5303,6 +5514,21 @@
 <td>Per-slot motion capability (device has gyro/accel sensors)</td>
 </tr>
 <tr>
+<td><code>_everyPassGates</code></td>
+<td><code>EveryPassFrameGate[4]</code></td>
+<td>Per-slot gate that spaces unchanged frames above 1000 passes a second (see <a href="#broadcastmotion">BroadcastMotion()</a>)</td>
+</tr>
+<tr>
+<td><code>_gatedSnapshots</code>, <code>_gatedConnected</code></td>
+<td><code>MotionSnapshot[4]</code>, <code>bool[4]</code></td>
+<td>What the last frame each gate let out said</td>
+</tr>
+<tr>
+<td><code>PortInUse</code></td>
+<td><code>bool</code> (public, read-only)</td>
+<td>True after a start that found its port bound by another program, the one failure <code>InputService</code> tries again</td>
+</tr>
+<tr>
 <td><code>_disposed</code></td>
 <td><code>bool</code></td>
 <td>Dispose guard</td>
@@ -5324,7 +5550,7 @@
 </thead>
 <tbody>
 <tr>
-<td><code>"Listening on :{port}"</code></td>
+<td><code>"Listening on port {port}"</code></td>
 <td>Successful bind</td>
 </tr>
 <tr>
@@ -5361,7 +5587,7 @@
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
 <a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    Client-&gt;&gt;Server: Pad Data Request (0x100002)&lt;br/&gt;flags=0x01, slot=0&lt;br/&gt;(subscribes to slot 0)
 <a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    loop Every ~1ms (1000 Hz)
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    loop Every pass of the poll loop (1000 Hz by default)
 <a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>        Poll-&gt;&gt;Server: BroadcastMotion(slot=0, snapshot, connected=true)
 <a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>        Server-&gt;&gt;Server: GetSubscribers(0) -&gt; [Client]
 <a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        Server-&gt;&gt;Client: Pad Data (slot 0, motion data)
@@ -5376,6 +5602,7 @@
 </code></pre></div>
 <ol>
 <li>Returns <code>true</code> immediately if already running.</li>
+<li>Clears <code>PortInUse</code>. While the test assembly sets <code>OffLimitsForTest</code>, a start on <code>DefaultPort</code> binds nothing and returns <code>false</code>, so a test run never takes the port a running PadForge serves. The app never sets it.</li>
 <li>Sets <code>_port</code> and generates <code>_serverId</code> from <code>Environment.TickCount</code>.</li>
 <li>Creates a UDP socket (<code>AddressFamily.InterNetwork</code>, <code>SocketType.Dgram</code>).</li>
 <li>Applies <code>SIO_UDP_CONNRESET</code> IOControl to suppress ICMP port-unreachable exceptions on subsequent <code>ReceiveFrom</code> calls. Catches exceptions on non-Windows or older OS.</li>
@@ -5396,7 +5623,7 @@
 <tbody>
 <tr>
 <td><code>SocketException</code> (<code>AddressAlreadyInUse</code>)</td>
-<td>Disposes socket, raises port-in-use status, returns <code>false</code></td>
+<td>Disposes socket, sets <code>PortInUse</code>, raises port-in-use status, returns <code>false</code></td>
 </tr>
 <tr>
 <td>Any other</td>
@@ -5429,8 +5656,9 @@
 <li>Returns if <code>_dsuServer</code> is already non-null (idempotent).</li>
 <li>Constructs a <code>DsuMotionServer</code> and subscribes to <code>StatusChanged</code>. The handler marshals <code>DsuServerStatus</code> and <code>IsDsuServerRunning</code> onto the dispatcher.</li>
 <li>Reads <code>Dashboard.DsuMotionServerPort</code>. Clamps out-of-range values (below 1024 or above 65535) to the default 26760.</li>
-<li>On <code>Start(port)</code> success, assigns <code>_inputManager.DsuServer = _dsuServer</code>. On failure, disposes the server and nulls the field.</li>
+<li>On <code>Start(port)</code> success, assigns <code>_inputManager.DsuServer = _dsuServer</code>. On failure, records whether the port was in use, which port and when, disposes the server and nulls the field.</li>
 </ol>
+<p>A port another program held is tried again: <code>RetryDsuServerOnPortInUse</code>, on the dashboard tick, calls <code>StartDsuServerIfEnabled</code> once <code>PortInUseRetryMs</code> (3000 ms) has passed since the failed start, so closing the other server brings this one up while the switch is on and the engine runs. The status handler also sets <code>IsDsuServerRunning</code>, which the Motion Server page's status flame shows.</p>
 <p><code>InputService.StopDsuServer()</code> nulls <code>_inputManager.DsuServer</code> first, then disposes the server and nulls <code>_dsuServer</code>. A dispatcher callback settles <code>IsDsuServerRunning</code> to false after the <code>Dispose</code> path's own "Stopped" status has fired.</p>
 <p>The <code>DsuMotionServerPort</code> and <code>EnableDsuMotionServer</code> values persist per-app profile. A profile restore reapplies the port only when it falls in [1024, 65535]. Changing the port while the server is enabled stops and restarts the server so the new port takes effect.</p>
 <hr />
@@ -5438,21 +5666,22 @@
 <h3 id="broadcastmotion">BroadcastMotion()<a class="headerlink" href="#broadcastmotion" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BroadcastMotion</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">slot</span><span class="p">,</span><span class="w"> </span><span class="n">MotionSnapshot</span><span class="w"> </span><span class="n">snapshot</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">connected</span><span class="p">)</span>
 </code></pre></div>
-<p>Called from the InputManager polling thread at ~1000 Hz. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.</p>
+<p>Called from the InputManager polling thread once per pass of the poll loop, 1000 passes a second by default and 60 to 10000 under the Settings page's Polling Rate. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.</p>
 <ol>
 <li>Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).</li>
 <li>When <code>connected</code> is false, replaces the snapshot with an empty one that keeps only <code>TimestampUs</code>. Then updates <code>_slotConnected[slot]</code> and <code>_slotHasMotion[slot]</code>. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.</li>
 <li>Returns if <code>_subCount == 0</code>. A volatile int read, no lock taken.</li>
 <li>Returns if <code>_anyAllSlotSubs</code> is false and this slot's bit is clear in <code>_slotSubMask</code> (<code>Volatile.Read</code>). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.</li>
 <li>Calls <code>GetSubscribers(slot)</code>. Returns if the result is empty.</li>
+<li>While the poll loop runs above 1000 passes a second (<code>EveryPassFrameGate.Engaged</code>), asks the slot's gate whether the frame is due. A frame whose motion or connected state differs from the last one let out (<code>FrameContent.Same</code> compares every field but the timestamp) goes out on the pass that made it. An unchanged frame waits until <code>EveryPassFrameGate.Spacing</code> (0.75 ms) after the last one, which keeps a still pad near 1000 frames a second. At 1000 passes a second or fewer every frame goes out.</li>
 <li>Builds the pad data packet via <code>BuildPadDataPacket(slot, snapshot, connected)</code>, which reuses the <code>_padPacketScratch</code> buffer.</li>
 <li>Sends the packet to each subscriber via <code>_socket.SendTo()</code>. Exceptions caught silently (client may be gone).</li>
 </ol>
-<p><strong>Performance</strong>: at 1000 Hz with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the <code>GetSubscribers</code> collections are reused scratch, so the steady state allocates nothing either.</p>
+<p><strong>Performance</strong>: with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the <code>GetSubscribers</code> collections are reused scratch, so the steady state allocates nothing either.</p>
 <h3 id="snapshot-source">Snapshot Source<a class="headerlink" href="#snapshot-source" title="Permanent link">&para;</a></h3>
 <p><code>InputManager.UpdateMotionSnapshots()</code> fills two arrays each poll cycle: <code>MotionSnapshots[padIndex]</code> for the virtual controller's own motion report, and <code>DsuMotionSnapshots[padIndex]</code> for slots 0–3. <code>BroadcastDsuMotion()</code> runs after Step 4b and the motion stage (<code>ApplyMotionRows</code>) and fans <code>DsuMotionSnapshots</code> out to <code>BroadcastMotion()</code>, with <code>connected</code> taken from <code>IsSlotActive(padIndex)</code>: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:</p>
 <ul>
-<li><strong>Motion rows</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its <code>motionCapableProfile</code> argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. <code>SettingsService.EnsureMotionRowsForAllSlots</code> sets that argument from <code>NintendoPreviewMap.IsValve(ProfileId)</code> on an Extended slot. When either row exists, DSU gets the same reconciled result as <code>MotionSnapshots</code>, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (<code>MaxAbs</code> by default, or <code>Sum</code>, <code>Average</code>, or <code>Custom</code>), after each source's own calibration, grip, and optional tuning.</li>
+<li><strong>Motion rows</strong>: <code>MappingSetMigrator.EnsureMotionRows</code> creates the <code>MotionGyro</code> / <code>MotionAccel</code> mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its <code>motionCapableProfile</code> argument admits: an Extended slot running a Valve profile or the SInput profile (#584), whose native frame carries an IMU. <code>SettingsService.EnsureMotionRowsForAllSlots</code> sets that argument from <code>NintendoPreviewMap.UsesValveRoles(ProfileId)</code> on an Extended slot. When either row exists, DSU gets the same reconciled result as <code>MotionSnapshots</code>, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (<code>MaxAbs</code> by default, or <code>Sum</code>, <code>Average</code>, or <code>Custom</code>), after each source's own calibration, grip, and optional tuning.</li>
 <li><strong>Motion Pitch, Yaw and Roll rows</strong> (#475): while one of them holds an input on a slot that carries motion, <code>UpdateMotionSnapshots</code> publishes nothing for the slot and <code>ApplyMotionRows</code> publishes the composed frame to both arrays, so DSU gets the same frame as <code>MotionSnapshots</code> with no fallback to every assigned sensor. See <a href="../input-pipeline/#motion-pitch-yaw-and-roll">Input Pipeline</a>.</li>
 <li><strong>No motion rows</strong>: every other slot type (Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots), and a motion-capable slot whose rows were removed, still broadcasts. <code>ReconcileAssignedMotion</code> reads every enabled, online device assigned to the slot and combines their readings axis by axis with the default <code>MaxAbs</code> combine. A device without the primary sensor contributes its aux sensor instead. <code>MotionSnapshots</code> stays empty for such a slot, so the virtual controller's own report carries no motion.</li>
 <li><strong>Row source</strong>: the row's source descriptor picks the sensor stream. <code>Motion Gyro</code> and <code>Motion Accel</code> read the body IMU. The aux variants <code>Motion Gyro L</code> (#252) and <code>Motion Accel L</code> (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".</li>
@@ -5848,7 +6077,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>    end
 <a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
 <a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    subgraph &quot;Polling Thread (InputManager)&quot;
-<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>        PT[&quot;~1000Hz polling loop&quot;]
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>        PT[&quot;poll loop, 1000 Hz by default&quot;]
 <a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>        PT --&gt; BM[&quot;BroadcastMotion()&quot;]
 <a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>        BM --&gt; GS[&quot;GetSubscribers()&quot;]
 <a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>        GS --&gt; BP[&quot;BuildPadDataPacket()&quot;]
@@ -5897,21 +6126,22 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <p>The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual controller slots (<code>InputManager.MaxPads = 16</code>), but only slots 0–3 participate in DSU broadcasts. <code>InputManager.BroadcastDsuMotion()</code> loops over <code>DsuMotionSnapshots</code>, which holds <code>DsuMotionServer.MaxSlots</code> (4) entries, and calls <code>BroadcastMotion(padIndex, ...)</code> once per entry. Slots 4–15 never reach the server. Its <code>slot &gt;= MaxSlots</code> guard stays as a backstop.</p>
 <hr />
 <h2 id="polling-optimization">Polling Optimization<a class="headerlink" href="#polling-optimization" title="Permanent link">&para;</a></h2>
-<p><code>BroadcastMotion()</code> runs at ~1000 Hz per slot. Overhead shrinks in tiers, cheapest check first:</p>
+<p><code>BroadcastMotion()</code> runs once per slot on every pass of the poll loop. Overhead shrinks in tiers, cheapest check first:</p>
 <ol>
 <li><strong>Guard clause</strong>: returns immediately on <code>!_running</code>, null socket, or out-of-range slot (no lock).</li>
 <li><strong>Subscriber-count early-out</strong>: <code>_subCount == 0</code> returns after a volatile int read, before any lock. <code>RecountSubscribers()</code> keeps the mirror exact at every subscription mutation.</li>
 <li><strong>Slot-mask early-out</strong>: no all-slot subscribers plus a clear bit for this slot in <code>_slotSubMask</code> returns on a volatile mask read. With one client subscribed to one slot, the other slots skip the lock and the dictionary walk entirely.</li>
 <li><strong>Scratch reuse</strong>: <code>GetSubscribers</code> fills reused collections and <code>BuildPadDataPacket</code> reuses the single <code>_padPacketScratch</code> buffer (<code>Array.Clear</code> per call, every byte rewritten). Even the sending steady state allocates nothing.</li>
 <li><strong>Lazy expiration</strong>: expired subscriptions pruned during <code>GetSubscribers()</code>, not via a separate timer.</li>
+<li><strong>Frame spacing above 1000 Hz</strong>: with a subscriber and the poll loop above 1000 passes a second, an unchanged frame waits for <code>EveryPassFrameGate.Spacing</code>, so a 10000 Hz loop does not send ten datagrams a millisecond to each client.</li>
 </ol>
-<p>At 1000 Hz with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.</p>
+<p>At any polling rate with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.</p>
 <hr />
 <h2 id="dsudiag-tool">DsuDiag Tool<a class="headerlink" href="#dsudiag-tool" title="Permanent link">&para;</a></h2>
 <p><strong>Location:</strong> <code>tools/DsuDiag/</code></p>
 <p>Standalone DSU client that displays received motion data per slot in real time. Used for debugging axis mapping and verifying protocol compliance.</p>
 <ol>
-<li>Enable the DSU motion server on the PadForge Dashboard (default port 26760).</li>
+<li>Turn on the motion server in PadForge under Extras &gt; Motion Server (default port 26760).</li>
 <li>Run <code>DsuDiag.exe</code>. Connects to <code>localhost:26760</code>.</li>
 <li>Sends a version request, then subscribes with <code>flags = 0</code> (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. <code>DsuDiag verdict [slot] [seconds]</code> instead reads the hold from the accelerometer while the controller sits still, then records one rotation (5 s by default) and reports the peak rate and integrated angle per gyro axis. Targets <code>net8.0</code>.</li>
 </ol>
@@ -5926,7 +6156,7 @@ Payload: 4 bytes message type + 80 bytes data.</p>
 <li><a href="../build-and-publish/">Build and Publish</a>: <code>DsuDiag</code> diagnostic tool in <code>tools/</code></li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

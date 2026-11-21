@@ -2,9 +2,9 @@
 
 *Fire action sequences from controller inputs. Hold a combo, deflect a stick, push the D-pad, or run a macro every frame with no trigger at all.*
 
-![Macros tab showing trigger setup and action list](../images/pad-macros.png)
+![The Macros & Menus section showing a macro's trigger setup and action list](../images/pad-macros.png)
 
-Each slot has its own macro list. Open a slot, switch to the **Macros** tab, and click **Add**.
+Each slot has its own macro list. Open a controller, go to its **Macros & Menus** section, and click the **+** beside **Macros** (**New Macro**).
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -13,34 +13,36 @@ Each slot has its own macro list. Open a slot, switch to the **Macros** tab, and
 <source src="/assets/video/padforge-tutorial-macros.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-macros.vtt" default>
 </video>
-<figcaption>A chord macro, both shoulder buttons sending Ctrl+Shift+Esc, and a Text Block macro on D-pad up that types a message, recorded live in PadForge 5.2.1 in 1 minute 11 seconds. Neither macro was fired during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-macros-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>A chord macro, both shoulder buttons sending Ctrl+Shift+Esc, and a Text Block macro on D-pad up that types a message, recorded live in PadForge 5.2.1 in 1 minute 11 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. Neither macro was fired during the take. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-macros-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
 
 ## Make a macro
 
-1. Open a slot. Click the **Macros** tab.
-2. Click **Add** and name the macro.
+1. Open a controller. Click its **Macros & Menus** section.
+2. Click the **+** beside **Macros**, then name the macro with the pencil beside its name.
 3. Set a **trigger**. The input combo that fires the macro.
 4. Add one or more **actions**. The steps that run when the trigger fires.
 5. Pick a **fire mode** and a **repeat mode**.
 
-Each macro has an **Enabled** checkbox at the top of its editor. Unchecked macros stay in your settings but do not fire.
+Each macro has an **Enabled** switch at the top of its editor. A macro switched off stays in your settings but does not fire.
 
 ---
 
 ## Manage macros
 
-A toolbar on the **Macros** tab moves macros around.
+The **More** button beside **Macros** and the selected macro's own **More** button move macros around.
 
-| Button | What it does |
-|---|---|
-| **Duplicate** | Clones the selected macro inside the same virtual controller. The copy is named `<name> (Copy)`. |
-| **Copy** / **Paste** | Copy puts a macro on the system clipboard. Paste drops it into another virtual controller. This works across controllers and survives a restart. |
-| **Copy From...** | Pull every macro from another virtual controller in one step, adding them to the ones already here. |
+| Command | Where | What it does |
+|---|---|---|
+| **Duplicate** | The macro's More | Clones the selected macro inside the same virtual controller. The copy is named `<name> (Copy)`. |
+| **Copy** / **Paste** | Copy in both, Paste beside Macros | Copy puts a macro on the system clipboard. Paste drops it into another virtual controller. This works across controllers and survives a restart. |
+| **Copy From…** | Beside Macros | Pull every macro from another virtual controller in one step, adding them to the ones already here. |
+| **Clear Trigger** | The macro's More | Empties the macro's recorded trigger. |
+| **Remove** | The macro's More | Deletes the macro. |
 
-The Mappings tab's own **Copy** and **Paste** buttons carry the slot's macros as well, alongside its mappings and every other slot setting. That paste replaces the target's macro list with the source's rather than adding to it, so use the buttons here when you mean to merge and the Mappings-tab pair when you mean to make one slot look like another.
+The controller page's own **Copy** and **Paste**, in the header's **More** menu, carry the slot's macros as well, alongside its mappings and every other slot setting. That paste replaces the target's macro list with the source's rather than adding to it, so use the commands here when you mean to merge and the header's pair when you mean to make one slot look like another.
 
 A macro fires only from the physical devices assigned to its own virtual controller. A macro copied from another controller no longer fires off a device that controller does not own.
 
@@ -103,17 +105,17 @@ A trigger can be a touchpad gesture or a mouse gesture instead of a button combo
 <!-- SCREENSHOT: macro-add-from-list -->
 ![The Add from List dropdown showing gestures alongside buttons and axes](../images/macro-add-from-list.png)
 
-Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the [Touchpad](../features/touchpad.md) tab. Mouse gestures (flick left, right, up, down, or a plain click) appear for each button picked under **Gesture Buttons** on the **Mouse** tab, **Custom** included, and fire only while **Enable Mouse Gestures** is on. Gesture triggers work with every fire mode, including On Release.
+Touchpad gestures (swipes, taps, pinch, rotate, shape templates) appear only after you enable them on the [Touchpad](../features/touchpad.md) cards in the **Motion & Touch** section. Mouse gestures (flick left, right, up, down, or a plain click) appear for each button picked under **Gesture Buttons** on the **Mouse Gestures** card in the **Sticks & Triggers** section, **Custom** included, and fire only while **Enable Mouse Gestures** is on. Gesture triggers work with every fire mode, including On Release.
 
 ### Menu cells as triggers
 
 A cell on an on-screen [menu](menus.md) can name a macro. While the cell is fired, the macro counts as triggered, on top of whatever trigger it already has. The macro's own fire mode still applies: a **While Held** macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. A macro with no trigger of its own can be driven this way alone. The **Layer** scope and the rest of the macro's settings apply as usual, since the cell feeds the same evaluator.
 
-Set it up on the **Menus** tab: pick **Macro** as the cell's binding and choose the macro by name. The **Macro** choice appears once the slot has at least one macro.
+Set it up in the menu editor of the **Macros & Menus** section: pick **Macro** as the cell's binding and choose the macro by name. The **Macro** choice appears once the slot has at least one macro.
 
 ### Shake as a trigger
 
-**Motion Shake** and **Nunchuk Shake** are sources on the [Mappings](../features/mappings.md) tab, not entries in the macro trigger list. To fire a macro from a shake, bind the shake to a virtual button on a mapping row, then trigger the macro from the **Virtual Controller** source on that button.
+**Motion Shake** and **Nunchuk Shake** are sources in the [Mappings](../features/mappings.md) section, not entries in the macro trigger list. To fire a macro from a shake, bind the shake to a virtual button on a mapping row, then trigger the macro from the **Virtual Controller** source on that button.
 
 - **Motion Shake** is listed for every assigned device with an accelerometer. It reads the strength of a shake and ignores slow tilting.
 - **Nunchuk Shake** is the Nunchuk's own accelerometer on a Wii Remote. On a combined Joy-Con pair the same entry is **Left Joy-Con Shake**. On any other two-sensor device it is **Aux Motion Shake**.
@@ -237,7 +239,7 @@ Click **Add Action** to add a Button Press step, then pick its kind from the **T
 | **Lightbar & LEDs** | Set Lightbar Color, Clear Lightbar Override, Set Lightbar Mode, Cycle Lightbar Modes, Set Guide LED Brightness, Set Chroma Color, Set Key Colors, Clear Key Colors, Show Dreamcast Screen, Show Keyboard Screen, Keyboard Screen Mode, Stopwatch, Pan Keyboard Screen Picture |
 | **Sound & Volume** | Play Sound, Stop Sounds, System Volume, App Volume, Raise Headphone Volume, Lower Headphone Volume |
 | **Motion & Pointer** | Set Gyro Engaged, Gyro Recenter, Set Pointer Mode, Cycle Pointer Modes |
-| **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay, Toggle Screen Overlay |
+| **Layers & Overlays** | Switch Layer, Toggle Touchpad Overlay, Toggle Screen Overlay, Toggle Crosshair, Toggle Magnifier, Magnifier (While Held) |
 | **System & Apps** | Profile Shortcut, Run Program, Voice Listen (While Held), Disconnect Controller |
 
 ### Button Press / Button Release
@@ -259,7 +261,7 @@ Send a keyboard keystroke. The game sees it as a real key.
 Type a block of plain text as keystrokes. It sends Unicode, so accents, CJK, and emoji all type regardless of keyboard layout. Newlines press Enter. A pasted tab character presses Tab.
 
 - **Text.** The text to type.
-- **Char Delay (ms).** Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.
+- **Delay Between Letters.** Milliseconds between characters, 0 to 1000. 0 types the whole block in one batch. Raise it if a game drops fast input.
 
 Use Key Press for key combos like Ctrl+C. Use Text Block for literal text.
 
@@ -401,7 +403,7 @@ Map an axis to Windows master volume. Updates every frame.
 
 - **Axis.** Which axis drives volume.
 - **Invert Axis.** Release-to-louder.
-- **Show Volume OSD.** The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.
+- **Show Volume Indicator.** The Windows volume flyout. On by default. Updates at about 5 Hz so it does not spam.
 - **Volume Limit.** Caps the maximum. 30 to 50 percent is a safe start for protecting your ears.
 
 ### App Volume
@@ -413,7 +415,7 @@ Same as System Volume, but it drives one app in the Windows audio mixer.
 
 ### Raise Headphone Volume / Lower Headphone Volume
 
-Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same **Headphone Volume** the **Audio** tab carries (see [Controller Audio](../features/controller-audio.md)), so the change sticks the way any Audio-tab edit does.
+Step the hardware volume of the controller's headset jack by 10 percentage points per fire, clamped to 0 and 100. It writes to every device on the slot, and the value is the same **Headphone Volume** the **Audio** card in the **Lights & Sound** section carries (see [Controller Audio](../features/controller-audio.md)), so the change sticks the way any Audio-tab edit does.
 
 The write goes to the pad, so the level holds with no app in the loop.
 
@@ -510,19 +512,19 @@ It takes effect on DualShock 4, DualSense, and DualSense Edge lightbars, the PS 
 <!-- SCREENSHOT: macro-set-chroma-color -->
 ![The Set Chroma Color action editor with its Duration and color](../images/macro-set-chroma-color.png)
 
-Paints one color for the action's **Duration** on the Razer mice, keyboards and keypads assigned to the macro's virtual controller. The color wins over every virtual controller's [Lighting](../features/lighting.md) tab, whether or not a device's **Control This Device’s Lighting** is on. While Razer Synapse runs, the color goes through Synapse, which lights each kind of device all at once, so it also lands on every other Razer device of the same kind, and with the **Razer Chroma** row assigned to that virtual controller it paints every Razer device. While Synapse is closed, it paints the assigned Razer devices PadForge lights on its own. When the action ends, each device goes back to the color a Lighting tab or a vendor row sets, or to its own lighting. On a virtual controller with no Razer device and no Razer Chroma row assigned, the action paints nothing.
+Paints one color for the action's **Duration** on the Razer mice, keyboards and keypads assigned to the macro's virtual controller. The color wins over every virtual controller's [Lighting](../features/lighting.md) settings, whether or not a device's **Control This Device’s Lighting** is on. While Razer Synapse runs, the color goes through Synapse, which lights each kind of device all at once, so it also lands on every other Razer device of the same kind, and with the **Razer Chroma** row assigned to that virtual controller it paints every Razer device. While Synapse is closed, it paints the assigned Razer devices PadForge lights on its own. When the action ends, each device goes back to the color a Lighting tab or a vendor row sets, or to its own lighting. On a virtual controller with no Razer device and no Razer Chroma row assigned, the action paints nothing.
 
 To hold the color for as long as the trigger is held, use **While Held** with **Until Release** and a long **Duration**. When two macros paint at once, the one lower in the list wins, so put a full-press macro below its soft-press twin. When macros on two virtual controllers paint the same kind of Razer device, the smaller player number wins.
 
 ### Set Key Colors
 
-Lights keys in one color on the keyboards and other devices the macro's virtual controller lights. The colors lie over what that controller's **Lighting** tab gives the keys. A keyboard or mouse lights only while its **Control This Device’s Lighting** is on. The action runs once and the macro moves on while the colors play.
+Lights keys in one color on the keyboards and other devices the macro's virtual controller lights. The colors lie over what that controller's **Lights & Sound** section gives the keys. A keyboard or mouse lights only while its **Control This Device’s Lighting** is on. The action runs once and the macro moves on while the colors play.
 
 | Field | Meaning |
 |---|---|
 | **Keys** | The keys to light. **Every Light** takes all of them. Otherwise pick from the keyboard picture, with the shortcut buttons **All Keys**, **Number Row**, **F Keys**, **Number Pad**, **Arrow Keys** and **WASD**, or turn on **Select by Pressing Keys** and press them. The numbers show the order picked. With no key picked the action lights nothing. |
 | **Style** | **Steady** holds the color whole. **Fade Out** dims it to off. **Countdown** turns the keys off one at a time, the last one picked first, so pick 1 to 0 for a cooldown on the number row. |
-| **Holds** | Steady only: **For a Set Time**, **While the Macro's Trigger Is Held** or **Until Cleared**. Fade Out and Countdown always run for a time. |
+| **Holds** | Steady only: **For a Set Time**, **While the Macro’s Trigger Is Held** or **Until Cleared**. Fade Out and Countdown always run for a time. |
 | **Time** | Milliseconds, 1 to 600,000, 3000 by default. Shown when the action runs for a time. |
 | **Other Lights** | What the lights this action leaves out show while it runs: **Keep Their Colors**, **Off** or **One Color**. |
 
@@ -572,7 +574,21 @@ Moves each keyboard screen whose row is in this slot and that shows a chosen pic
 
 ### Toggle Screen Overlay
 
-Shows or hides a [Screen Overlay](../features/keyboard-screens.md). The **Overlay** list picks **Every Overlay** or one of **Screen Overlay 1** to **Screen Overlay 8**. It runs once and the macro moves on.
+Shows or hides a [Screen Overlay](../features/screen-overlay.md). The **Overlay** list picks **Every Overlay** or one of **Screen Overlay 1** to **Screen Overlay 8**. It runs once and the macro moves on.
+
+### Toggle Crosshair
+
+Shows or hides a [crosshair](../features/crosshair.md). The **Crosshair** list picks **Every Crosshair** or one of **Crosshair 1** to **Crosshair 10**. With **Every Crosshair**, a fire turns them all off when any one is on, and all on when none is. It runs once and the macro moves on.
+
+### Toggle Magnifier
+
+Turns the [magnifier](../features/magnifier.md) on or off, as its own switch on the Magnifier page does. It runs once and the macro moves on.
+
+### Magnifier (While Held)
+
+Shows the [magnifier](../features/magnifier.md) while the macro's trigger is held, for aiming down sights, with the zoom and lens set on the Magnifier page. It lets go 100 ms after the trigger releases. A magnifier already switched on stays on.
+
+The crosshairs, the lens and the spotlight draw over windows on the desktop. A game in exclusive full screen hides all three. In the magnifier's Full Screen mode Windows zooms the crosshairs with everything else, while the lens leaves them out. Windows' full-screen zoom serves one program at a time, and the Magnifier page says so when Windows refuses it.
 
 ### Clear Lightbar Override
 
@@ -609,7 +625,7 @@ End any active Rumble Trigger Override on the slot. Pair it with a Rumble Trigge
 
 ### Adaptive Trigger Effect
 
-Play a DualSense adaptive trigger effect on **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**, on every DualSense and DualSense Edge on the slot. The effects are the ones game mods for DSX send: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration and ten named presets. The editor shows the chosen effect's settings with their ranges. **Holds** picks how long it lasts: **While the Macro's Trigger Is Held**, **For a Set Time**, or **Until Stopped**. A game's own trigger effect and a game mod's come first. See [Game Telemetry](../features/game-telemetry.md#adaptive-trigger-effect).
+Play a DualSense adaptive trigger effect on **Right (R2)**, **Left (L2)** or **Both (L2 and R2)**, on every DualSense and DualSense Edge on the slot. The effects are the ones game mods for DSX send: Off, Feedback, Weapon, Vibration, Bow, Galloping, Machine, Slope Feedback, Multiple-Position Feedback, Multiple-Position Vibration and ten named presets. The editor shows the chosen effect's settings with their ranges. **Holds** picks how long it lasts: **While the Macro’s Trigger Is Held**, **For a Set Time**, or **Until Stopped**. A game's own trigger effect and a game mod's come first. See [Game Telemetry](../features/game-telemetry.md#adaptive-trigger-effect).
 
 ### Stop Adaptive Trigger Effect
 
@@ -632,7 +648,7 @@ Jumps the slot to a chosen [shift layer](shift-layers.md) in one fire. The dropd
 
 ### Set Gyro Engaged
 
-Drives the slot's macro gyro-engage bit, OR-combined with the [Gyro](gyro.md) tab's Aim Engage button at the evaluator. Three modes:
+Drives the slot's macro gyro-engage bit, OR-combined with the [Gyro](gyro.md) card's **Aim Engage Button** at the evaluator. Three modes:
 
 | Mode | Effect |
 |---|---|
@@ -650,7 +666,7 @@ It also levels the turn the [Motion Pitch, Yaw and Roll](../features/mappings.md
 
 ### Cycle Pointer Modes / Set Pointer Mode
 
-Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the **Pointer** tab (see [Wii Controllers](../devices/wii-controllers.md)).
+Change the Wii pointer mode for every IR-capable remote on the slot. This is the same Pointer Mode (Mouse, FPS Mouse, 4:3 Border, 16:9 Border) you set on the **IR Pointer** card in the **Motion & Touch** section (see [Wii Controllers](../devices/wii-controllers.md)).
 
 - **Cycle Pointer Modes.** Check the modes you want in the list. Each fire advances to the next checked mode. The list wraps at the end. The cycle position resets on app restart.
 - **Set Pointer Mode.** Sets one fixed mode.
@@ -663,7 +679,7 @@ Set the brightness of the glowing Guide or Home button, 0 to 100 percent, for ev
 - The 2015 Steam Controller accepts it on any connection.
 - Switch pads with a HOME button LED (Pro Controller, right Joy-Con, combined pair, charging grip) accept it on any connection.
 
-The write is transient and not saved. Pair two of these actions to flash the LED when a macro starts and restore it when the macro ends. The [Lighting](../features/lighting.md) tab's Guide Button LED setting reasserts on its next update.
+The write is transient and not saved. Pair two of these actions to flash the LED when a macro starts and restore it when the macro ends. The [Lighting](../features/lighting.md) **Guide Button LED** setting reasserts on its next update.
 
 ### Disconnect Controller
 
@@ -696,7 +712,7 @@ Pick **Assigned Devices** when the axis is unmapped (a throttle lever you want f
 ### Axis options
 
 - **Invert Axis.** Reverse the direction. Volume: release-to-louder. Mouse: opposite cursor.
-- **Show Volume OSD.** The Windows volume flyout. System Volume only. On by default.
+- **Show Volume Indicator.** The Windows volume flyout. System Volume only. On by default.
 
 ### Build the sequence
 
@@ -759,7 +775,7 @@ Consume works for virtual controller buttons, raw device buttons, and touchpad o
 | Type | Actions | Behavior |
 |---|---|---|
 | Sequential | Button Press / Release, Key Press / Release, Mouse Button Press / Release, Mouse Wheel Tick, Nudge Cursor, Move Mouse to Position, Delay, Set Axis, Switch Layer, and every other action not in the next two rows | One at a time, top to bottom. |
-| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held, Voice Listen (While Held) | Every frame, all in parallel. |
+| Continuous | System Volume, App Volume, Mouse Move, Mouse Scroll, Repeat Key While Held, Repeat Button While Held, Repeat Axis While Held, Voice Listen (While Held), Magnifier (While Held) | Every frame, all in parallel. |
 | Latched | Toggle Button, Toggle Key, Toggle Mouse Button, Toggle Axis, Toggle Wheel Scroll, Set Axis (Latched) | Fire in sequence, then the latched output persists until the next fire or a release. |
 
 All three mix in one macro. Two Mouse Move actions (X and Y) run in parallel while a Button Press in the same list runs in sequence next to them. A **Combo Break** splits the sequence: everything above it runs on the first press, everything below waits for the next.
@@ -877,4 +893,4 @@ An Extended slot carries up to 128 buttons, set in its **Buttons** field with **
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -1,6 +1,6 @@
 # 3D and 2D Visualization
 
-*Live visualization of every button press, stick movement, trigger pull, key press, and MIDI note, with click-to-record hit testing on every drawn input.*
+*The picture on a controller's page: every button press, stick movement, trigger pull, key press and MIDI note, live, with click-to-record on every drawn input.*
 
 ![Controller 3D View](../images/pad-controller-3d.png)
 
@@ -10,9 +10,9 @@
 
 ## Which view shows
 
-![The Extended slot's schematic view](../images/pad-extended-schematic.png)
+![The Extended controller's schematic view](../images/pad-extended-schematic.png)
 
-PadForge picks the view from the slot's controller type.
+The picture is the **Picture** view of a controller's first section (**Mappings**, or **Keys & Mouse**, **Notes & Controls** or **Hands** on those types). PadForge picks the view from the controller's type.
 
 | Controller type | Default view | 2D/3D toggle |
 |---|---|---|
@@ -24,7 +24,7 @@ PadForge picks the view from the slot's controller type.
 | **MIDI** | Piano keyboard and CC sliders | No |
 | **VR** | Both SteamVR hands side by side | No |
 
-On Xbox, PlayStation, and Nintendo slots, and on an Extended slot running a Valve profile, a corner button switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on slots that have no second view.
+On Xbox, PlayStation and Nintendo controllers, and on an Extended controller running a Valve profile, a button in the picture's top-left corner switches between the 3D model and the flat 2D overlay. The button's tooltip reads **Switch to 2D view** or **Switch to 3D view** depending on the current view. Your choice persists across sessions. The button is hidden on controllers that have no second view.
 
 The schematic stays the default for Extended because a profile there can be a wheel, a flight stick, or an arcade panel, and a gamepad drawn under those would be wrong. PadForge ships art for every Valve profile, so those draw the pad. Change the profile and the view follows.
 
@@ -57,7 +57,7 @@ Each model registers hit regions for every button, stick, trigger, and the touch
 
 ### Colorways
 
-A model family that ships more than one appearance shows a **Colorway** picker in the top-right corner, left of the annotation toggle. The choice is per virtual controller and is saved with the slot, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
+A model family that ships more than one appearance shows a **Colorway** picker, with a reset button, in the top-right corner, left of the annotation toggle. The choice is per virtual controller and is saved with the slot, so two slots of the same family can wear different colorways. Families with a single appearance hide the picker.
 
 The two views carry separate sets. In 3D the picker appears on Xbox Series (21 colorways), DualSense (10) and DualShock 4 (2). The Xbox 360, DualShock 3, Switch 2 Pro, DualSense Edge and the three Valve pads each ship one appearance. The 2D view has six sets of its own: DualSense and DualSense Edge with six each, Xbox Series with six, DualShock 4 with five, Xbox One with four, and Xbox 360 with two. Both views read the same stored choice, and a view with no art for it draws its default colorway.
 
@@ -88,7 +88,7 @@ Rotation is turntable-style. Horizontal drag controls yaw. Vertical drag control
 
 ### Click-to-record
 
-Click any button, trigger, D-Pad direction, or stick ring to start recording a mapping. Press or move an input on your physical controller and PadForge assigns it to the control you clicked.
+Click any button, trigger, D-Pad direction or stick ring to start recording a mapping. Press or move an input on your physical controller and PadForge assigns it to the control you clicked. The clicked control is also the picked one: an ember ring marks it, and its mapping rows show under the picture. With no device to listen to, a click only picks the control.
 
 Clicking a stick ring picks the axis from where on the ring you click.
 
@@ -98,7 +98,7 @@ Clicking a stick ring picks the axis from where on the ring you click.
 | Right / Left | X axis positive / negative |
 | Top / Bottom | Y axis negative / positive |
 
-This is a quicker alternative to the grid in [Button and Axis Mappings](mappings.md).
+This is a quicker alternative to the **List** view in [Button and Axis Mappings](mappings.md).
 
 ### Map All flash
 
@@ -108,7 +108,7 @@ During Map All (from [Button and Axis Mappings](mappings.md)), outputs flash ora
 
 ## 2D overlay
 
-Switch between 3D and 2D with the view-mode button in the top-left corner of the Preview tab. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlights, click-to-record, hover previews, and Map All flash.
+Switch between 3D and 2D with the view-mode button in the top-left corner of the picture. The 2D view draws a flat controller diagram with image overlays for each control. It supports the same interactions as 3D: live highlights, click-to-record, hover previews, and Map All flash.
 
 Each controller type has its own 2D layout that places buttons, sticks, triggers, and the touchpad over the base diagram. Click anywhere on a control to record a mapping, the same as in 3D.
 
@@ -135,11 +135,10 @@ Turn it on and PadForge draws:
 
 | Overlay element | What it shows |
 |---|---|
-| Chips | One chip per mapped output, docked along the view edges. Each chip names the output. When several inputs drive one output, they share that chip. |
+| Chips | One chip per mapped output, in a column along each side of the view, each beside its control where there is room. Each chip names the output. When several inputs drive one output, they share that chip. |
 | Leader lines | A thin line from each chip to the control it labels on the model. |
-| Trigger bars (3D view only) | Two slim bars beside each trigger: the raw input coming in and the output going out. |
 
-A chip flashes when its input is active, so you can see which mapping fires as you press. Click a chip to jump straight to that mapping's row in the [Button and Axis Mappings](mappings.md) grid. Hover a chip to read its wiring in a strip along the bottom of the view: each input's device and name, marked Inv., Half, Toggle, or Rapid Trigger when the source is inverted, reads half its axis, or has **Primary Mode** set to Toggle or Rapid Trigger.
+A chip lights by its control's output, so you can see which mapping fires as you press. A button's chip is dark or lit. A trigger's or a stick axis's chip takes ember by how far its output is from rest, so the chip says how hard the control is driven. Click a chip to pick its control: the rows under the picture show that mapping's row with its editor open. Hover a chip to read its wiring in a strip along the bottom of the view: each input's device and name, marked Inverted, Half, Toggle or Rapid Trigger when the source is inverted, reads half its axis, or has **Primary Mode** set to Toggle or Rapid Trigger.
 
 The overlay hides itself while you rotate or pan the 3D model, then reappears when you let go. Mouse-wheel zoom keeps it visible and moves the chips with the model. Chips whose control projects off the edge of the view (or behind the camera) drop out until you bring it back into frame.
 
@@ -147,16 +146,16 @@ The overlay hides itself while you rotate or pan the 3D model, then reappears wh
 
 ## Touchpad preview
 
-PlayStation slots (DualShock 4, DualSense) and Extended slots on a Valve profile show a live touchpad preview on both views.
+PlayStation controllers (DualShock 4, DualSense) and Extended controllers on a Valve profile show a live touchpad preview on both views.
 
 | View | Touchpad rendering |
 |---|---|
-| 3D model | Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the slot's combined touchpad output. |
+| 3D model | Live finger contact spheres positioned on the touchpad surface mesh. Sphere position and count follow the controller's combined touchpad output. |
 | 2D overlay | Finger dots drawn on a flat representation of the touchpad area. Same data as the 3D view. |
 
 The touchpad surface is a click target for mapping. Click anywhere on the touchpad in either view to start recording a Touchpad Click mapping. During Map All on PlayStation outputs, Touchpad Click comes after the buttons and axes and finishes the sequence. A DualShock 3 has no touchpad, so its sequence ends with the axes. Map All skips the motion rows.
 
-On a PlayStation slot the spheres and dots follow the Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
+On a PlayStation controller the spheres and dots follow the Touchpad mapping rows (**Touchpad 1 Finger 1 X** through **Touchpad 1 Finger 2 Touch**). Those rows default to the assigned DualShock 4 or DualSense, so the preview mirrors that pad's touchpad out of the box. Re-map a row to change what drives it: another touch surface, such as a Steam Controller pad, moves the finger as absolute position, while a stick or button source moves it cursor-style.
 
 A Valve pad has two trackpads and the preview draws both. The first finger rides the left pad and the second the right, following the **Left Pad X**, **Left Pad Y**, **Left Pad Touch**, **Right Pad X**, **Right Pad Y**, and **Right Pad Touch** rows. Each pad's click is its own button row, **Left Pad Click** and **Right Pad Click**, and lights its own pad. On the 2015 Steam Controller the pads are round, so a finger dot never leaves the circle.
 
@@ -164,19 +163,19 @@ A Valve pad has two trackpads and the preview draws both. The first finger rides
 
 ## Nintendo preview
 
-Nintendo slots get both views, like Xbox and PlayStation. A Nintendo slot runs one of the two Switch Pro Controller profiles or one of the two Switch 2 Pro Controller profiles, and all four draw the Switch 2 Pro mesh in 3D. On a Switch Pro profile the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for both Switch Pro profiles, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.
+Nintendo controllers get both views, like Xbox and PlayStation. A Nintendo controller runs one of the two Switch Pro Controller profiles or one of the two Switch 2 Pro Controller profiles, and all four draw the Switch 2 Pro mesh in 3D. On a Switch Pro profile the S2-only parts still render but stay inert. The 2D overlay has a set per generation: the Switch Pro art for both Switch Pro profiles, and Switch 2 Pro art that adds the C button and the GL / GR grip tiles.
 
 ![Nintendo slot preview](../images/pad-nintendo-configbar.png)
 
 The overlay draws every control on the pad: sticks, ZL / ZR triggers, L / R bumpers, the face buttons in Nintendo positions (A right, B bottom, X top, Y left), the D-Pad, Minus, Plus, Home, and Capture, plus C and GL / GR on the Switch 2 Pro. Live highlights, hover previews, click-to-record, Map All flash, and mapping annotations work the same as on the other 2D overlays.
 
-A Nintendo slot's mappings live in the same raw button / axis / POV grid an Extended slot uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture, plus C, GL, and GR on the Switch 2 Pro. Clicking a control on the diagram records into the matching raw row.
+A Nintendo controller's mappings live in the same raw button / axis / POV rows an Extended controller uses, with rows named in Nintendo terms: B, A, Y, X, L, R, ZL, ZR, Minus, Plus, the stick clicks, Home, and Capture, plus C, GL, and GR on the Switch 2 Pro. Clicking a control on the diagram records into the matching raw row.
 
 ---
 
 ## Valve preview
 
-An Extended slot on a Valve profile gets both views, like the console families. The three pads differ enough that each has its own body and its own 2D set.
+An Extended controller on a Valve profile gets both views, like the console families. The three pads differ enough that each has its own body and its own 2D set.
 
 ![Extended slot on the Steam Controller profile, the 2015 pad's body in the preview](../images/pad-extended-steam-controller.png)
 
@@ -198,7 +197,7 @@ Live highlights, hover quadrant wedges, click-to-record, Map All flash, mapping 
 
 ## VR preview
 
-VR slots draw both SteamVR hands side by side. One slot drives the pair, so there is no single controller body and the 2D/3D toggle is hidden. The art is a flat drawn pack like the branded 2D overlays: one base bitmap with a per-element tint layer composited on top when an element is lit, hovered, or under record.
+VR controllers draw both SteamVR hands side by side. One VR controller drives the pair, so there is no single controller body and the 2D/3D toggle is hidden. The art is a flat drawn pack like the branded 2D overlays: one base bitmap with a per-element tint layer composited on top when an element is lit, hovered, or under record.
 
 Interaction matches the other 2D previews. Hover warms an element, clicking records it, and the element under record flashes.
 
@@ -216,7 +215,7 @@ No direction arrows here. Arrows are the schematic view's grammar, not the drawn
 
 ## Extended schematic
 
-Extended slots show a procedurally generated schematic instead of a controller model, on every HIDMaestro profile except the five Valve ones. The layout rebuilds when the active profile or count overrides change.
+Extended controllers show a procedurally generated schematic instead of a controller model, on every HIDMaestro profile except the five Valve ones. The layout rebuilds when the active profile or count overrides change.
 
 | Element | Appearance | Max |
 |---|---|---|
@@ -229,17 +228,17 @@ Sticks and triggers share a pool of 8 axes.
 
 Click-to-record, Map All flash, stick quadrant detection, and POV cardinal detection all work the same as in the 3D and 2D views.
 
-The schematic represents the live HID layout for the Extended slot. Xbox or PlayStation visuals render for actual Xbox or PlayStation slots, not for Extended slots that happen to be running an Xbox- or PlayStation-style HIDMaestro profile. The Valve profiles are the one exception, because PadForge ships their own bodies (see [Valve preview](#valve-preview)).
+The schematic represents the live HID layout for the Extended controller. Xbox or PlayStation visuals render for actual Xbox or PlayStation controllers, not for Extended controllers that happen to be running an Xbox- or PlayStation-style HIDMaestro profile. The Valve profiles are the one exception, because PadForge ships their own bodies (see [Valve preview](#valve-preview)).
 
 ---
 
 ## Keyboard + Mouse preview
 
-Keyboard+Mouse slots show a keyboard and mouse diagram. The 2D/3D toggle is hidden. A slot set to **Mouse Only** draws only the mouse, and one set to **Keyboard Only** draws only the keyboard.
+Keyboard + Mouse controllers show a keyboard and mouse diagram. The 2D/3D toggle is hidden. A controller set to **Mouse Only** draws only the mouse, and one set to **Keyboard Only** draws only the keyboard.
 
-On Windows input the keyboard is a full ANSI layout with the numpad and four media keys over it (Mute, Volume Down, Volume Up, Play/Pause), where 108-key boards have them. A slot set to a keyboard model draws that board's key set instead, from QMK's layout data: full size (ANSI, ISO, or with four keys over the numpad), tenkeyless, 75 percent, 65 percent with or without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Character keys carry the legends PadForge's input layout types and redraw when the layout changes. Apple boards carry Apple's modifier symbols, and the JIS board its Japanese key legends. A board with no exact drawing shows the nearest set with the caption **Drawn as the nearest standard layout** under it. On a keyboard with lock lights, three lights in the top right corner show Num Lock, Caps Lock and Scroll Lock as Windows last set them, and each is a control for its key: a click records that key's row. A key the model cannot send, or that no row reaches, is drawn faint and takes no clicks.
+On Windows input the keyboard is a full ANSI layout with the numpad and four media keys over it (Mute, Volume Down, Volume Up, Play/Pause), where 108-key boards have them. A controller set to a keyboard model draws that board's key set instead, from QMK's layout data: full size (ANSI, ISO, or with four keys over the numpad), tenkeyless, 75 percent, 65 percent with or without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Character keys carry the legends PadForge's input layout types and redraw when the layout changes. Apple boards carry Apple's modifier symbols, and the JIS board its Japanese key legends. A board with no exact drawing shows the nearest set with the caption **Drawn as the nearest standard layout** under it. On a keyboard with lock lights, three lights in the top right corner show Num Lock, Caps Lock and Scroll Lock as Windows last set them, and each is a control for its key: a click records that key's row. A key the model cannot send, or that no row reaches, is drawn faint and takes no clicks.
 
-A slot set to a mouse model draws the controls that mouse has. It loses the side buttons past the model's button count, a button the model lacks is drawn faint and takes no clicks, the scroll arrows go with a missing wheel, and a mouse that tilts gets left and right arrows on the wheel.
+A controller set to a mouse model draws the controls that mouse has. It loses the side buttons past the model's button count, a button the model lacks is drawn faint and takes no clicks, the scroll arrows go with a missing wheel, and a mouse that tilts gets left and right arrows on the wheel.
 
 | Element | Description |
 |---|---|
@@ -247,7 +246,7 @@ A slot set to a mouse model draws the controls that mouse has. It loses the side
 | LMB / RMB | Shaped around the scroll wheel gap. Accent highlight on press. |
 | Scroll wheel | Center pill for middle-click. Up / down arrows highlight during scroll output, and left / right arrows during tilt output on a mouse that tilts. |
 | Movement circle | Dot deflects to show mouse movement. Click a quadrant to map Mouse X or Mouse Y. |
-| Side buttons | X1 and X2 on the left edge (back / forward), when the slot's mouse has them. |
+| Side buttons | X1 and X2 on the left edge (back / forward), when the controller's mouse has them. |
 
 Every key, mouse button, wheel and tilt arrow, lock light and the movement circle is a control as well as a display: hover one to read its row, and click it to record a mapping to it. Same workflow as click-to-record on the 3D model.
 
@@ -259,7 +258,7 @@ Every key, mouse button, wheel and tilt arrow, lock light and the movement circl
 
 ## MIDI preview
 
-MIDI slots show a piano keyboard and CC slider panel. The 2D/3D toggle is hidden.
+MIDI controllers show a piano keyboard and CC slider panel. The 2D/3D toggle is hidden.
 
 | Element | Description |
 |---|---|
@@ -268,18 +267,18 @@ MIDI slots show a piano keyboard and CC slider panel. The 2D/3D toggle is hidden
 
 The layout rebuilds when MIDI configuration changes (note count, start note, CC count, start CC). With no notes configured, only sliders appear. With no CCs configured, only the piano appears. Click-to-record and Map All flash work on every element.
 
-> **Tip:** Adjust the start note and note count in the MIDI config bar first. The piano keyboard resizes to match, making click-to-record targets larger and easier to hit.
+> **Tip:** Adjust the start note and note count under **More** on the **MIDI Output** card first. The piano keyboard resizes to match, making click-to-record targets larger and easier to hit.
 
 ---
 
 ## Related pages
 
 - [Button and Axis Mappings](mappings.md): where click-to-record assigns its source.
-- [Controller Slots](controller-slots.md): how the 3D and 2D views render different controller types.
+- [Controller Slots](controller-slots.md): the controller types and the page's sections.
 - [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md): tuning controls that don't appear on the controller model itself.
 - [Macros](../guides/macros.md): trigger and action authoring that uses the same recording flow.
-- [Twitch Chat](twitch-chat.md#the-controller-picture-for-obs): a slot's controller drawn as a browser source for a stream.
+- [Twitch Chat](twitch-chat.md#the-controller-picture-for-obs): a controller's picture drawn as a browser source for a stream.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

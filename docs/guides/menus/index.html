@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1412,6 +1408,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1480,7 +1484,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1977,6 +1981,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -2173,6 +2205,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -2209,6 +2269,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2968,6 +3084,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3561,6 +3683,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3841,6 +3991,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3933,6 +4111,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4434,9 +4640,9 @@
 <h1 id="menus">Menus<a class="headerlink" href="#menus" title="Permanent link">&para;</a></h1>
 <p><em>Turn a stick, a touchpad, the D-pad, the face buttons or any two recorded axes into an on-screen ring, grid or hotbar of commands, or open the On-Screen Keyboard.</em></p>
 <!-- SCREENSHOT: pad-menus -->
-<p><img alt="The Menus tab listing three menus, Combat Wheel, Text Chat and Ability Bar, with Combat Wheel selected and its cell bindings below" src="../../images/pad-menus.png" /></p>
+<p><img alt="The Macros &amp; Menus section listing three menus, Combat Wheel, Text Chat and Ability Bar, with Combat Wheel selected and its cells in the editor" src="../../images/pad-menus.png" /></p>
 <p>A menu puts a set of commands on an input surface. Engage the surface and a ring or grid appears on screen. Point at a cell and it highlights. Depending on the fire mode, the cell's binding fires on click, on release, or the whole time it is hovered. It is the same idea as Steam Input's radial and touch menus, and configs imported from the <a href="../steam-workshop-import/">Steam Workshop</a> bring theirs along.</p>
-<p>Each slot has its own menu list. Open a slot, switch to the <strong>Menus</strong> tab, and click <strong>Add</strong>. <strong>Remove</strong> and <strong>Duplicate</strong> manage the list.</p>
+<p>Each slot has its own menu list. Open a controller, go to its <strong>Macros &amp; Menus</strong> section, and click the <strong>+</strong> beside <strong>Menus</strong> (<strong>New Menu</strong>). The selected menu's <strong>More</strong> button holds <strong>Duplicate</strong>, <strong>Remove Last Cell</strong> and <strong>Remove</strong>, and its <strong>Enabled</strong> switch turns it off without deleting it.</p>
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
        poster="/assets/video/padforge-tutorial-shift-layers-and-menus-poster.jpg"
@@ -4444,7 +4650,7 @@
 <source src="/assets/video/padforge-tutorial-shift-layers-and-menus.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-shift-layers-and-menus.vtt" default>
 </video>
-<figcaption>A Pit Stop shift layer held on the left shoulder, then a four-cell radial menu on the right stick whose first cell, Map, presses Back, recorded live in PadForge 5.2.1 in 1 minute 18 seconds. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-shift-layers-and-menus-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>A Pit Stop shift layer held on the left shoulder, then a four-cell radial menu on the right stick whose first cell, Map, presses Back, recorded live in PadForge 5.2.1 in 1 minute 18 seconds. PadForge 6 has since rebuilt the interface, so the screens differ from the steps on this page. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-shift-layers-and-menus-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 <hr />
@@ -4538,7 +4744,7 @@
 <h2 id="hotbar">Hotbar<a class="headerlink" href="#hotbar" title="Permanent link">&para;</a></h2>
 <p>The <strong>Hotbar</strong> style is Steam Input's hotbar: a single row of cells, run by four controls.</p>
 <!-- SCREENSHOT: pad-menus-hotbar -->
-<p><img alt="The Menus tab with the Ability Bar menu selected, its Style set to Hotbar" src="../../images/pad-menus-hotbar.png" /></p>
+<p><img alt="The Macros &amp; Menus section with the Ability Bar menu selected, its Style set to Hotbar" src="../../images/pad-menus-hotbar.png" /></p>
 <table>
 <thead>
 <tr>
@@ -4654,7 +4860,7 @@
 <p>A hotbar has no <strong>Click Input</strong> or <strong>Layer Holds the Menu Open</strong> row. Its <strong>Layer</strong> still applies: while the layer is closed the bar is hidden and fires nothing, and it starts over hidden when the layer opens again. The overlay draws the bar as one row at the menu's <strong>Screen Position</strong>, with the selected cell highlighted. A hotbar from a <a href="../steam-workshop-import/">Steam Workshop</a> config imports as this style, with its cells, its three switches and its place near the bottom of the screen.</p>
 <hr />
 <h2 id="cells">Cells<a class="headerlink" href="#cells" title="Permanent link">&para;</a></h2>
-<p><strong>Cells</strong> sets how many cells the menu carries, 1 to 20. For a radial menu that is the ring count, with the optional <strong>Center Cell</strong> on top. Each cell has:</p>
+<p><strong>Add Cell</strong> under the cell list adds a cell, <strong>Remove Last Cell</strong> in the menu's <strong>More</strong> menu takes the last one off, and the reset beside <strong>Add Cell</strong> puts the count back. A menu carries 1 to 20 cells. For a radial menu that is the ring count, with the optional <strong>Center Cell</strong> on top. Each cell has:</p>
 <ul>
 <li>A <strong>Label</strong>, rendered on the overlay.</li>
 <li>A binding: <strong>None</strong>, a <strong>Keyboard Key</strong>, a <strong>Controller Button</strong>, or a <strong>Macro</strong>.</li>
@@ -4667,15 +4873,15 @@
 <p>The cell is an extra trigger for the macro rather than a copy of it, so the macro's own fire mode decides what happens: a <strong>While Held</strong> macro runs for as long as an On Click cell is held, and a one-shot mode sees the cell's fire as one press. The macro's <strong>Layer</strong> scope and the rest of its settings apply unchanged. A macro with no trigger of its own can be driven entirely from cells.</p>
 <p>Renaming the macro updates every cell that names it. A cell whose macro no longer exists shows as <strong><code>&lt;name&gt;</code> (no such macro)</strong> in the picker and does nothing until you pick another. Macro names on a slot are not unique. When two share a name, the cell fires the first.</p>
 <h3 id="cells-as-sources">Cells as sources<a class="headerlink" href="#cells-as-sources" title="Permanent link">&para;</a></h3>
-<p>Every cell also fires as a menu-item source, pickable in <a href="../../features/mappings/">Mappings</a> rows and macro triggers as entries like <strong>Menu 1 Cell 3</strong>. A cell set to <strong>None</strong> still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows <strong>Used by a mapping or macro</strong> in its binding picker while it has no direct binding of its own.</p>
+<p>Every cell also fires as a menu-item source, pickable in <a href="../../features/mappings/">Mappings</a> rows and macro triggers as entries like <strong>Menu 1 Cell 3</strong>. The picker shows each cell's own number. A Radial Ring's cells count from 1, and its <strong>Center Cell</strong>, headed <strong>Center</strong> in the cell list, is <strong>Cell 0</strong> in a picker. A Touch Grid's and a Hotbar's cells count from 0. A cell set to <strong>None</strong> still fires this way, so a cell can do real work with no direct binding. A cell driven through a mapping row or macro shows <strong>Used by a mapping or macro</strong> in its binding picker while it has no direct binding of its own.</p>
 <p>A menu imported from the Steam Workshop can carry richer cell behavior (key combos, layer switches, macros). Those arrive wired through the profile's mapping rows and macros automatically, so the cell fires whatever the config authored even though the cell row here shows no direct binding.</p>
 <hr />
 <h2 id="cell-icons">Cell icons<a class="headerlink" href="#cell-icons" title="Permanent link">&para;</a></h2>
-<p>Each cell row carries an icon button (tooltip: <strong>Choose this cell's icon: an emoji, an entry from an icon package, or an image file.</strong>). It opens a picker under the button, and every choice in it is drawn as itself.</p>
+<p>Each cell row carries an icon button (tooltip: <strong>Choose this cell’s icon: an emoji, an entry from an icon package, or an image file.</strong>). It opens a picker under the button, and every choice in it is drawn as itself.</p>
 <!-- SCREENSHOT: icon-picker -->
 <p><img alt="The icon picker on its Emoji tab. Menu cells and shift layers open the same picker." src="../../images/icon-picker.png" /></p>
 <ul>
-<li><strong>Emoji</strong> lists the emoji by category, the same catalog the <a href="../shift-layers/">shift layer</a> dialog uses.</li>
+<li><strong>Emoji</strong> lists the emoji by category, the same catalog the <a href="../shift-layers/">Shift Layer</a> window uses.</li>
 <li><strong>Images</strong> shows the pictures in every added icon package, grouped by package. <strong>Browse Files…</strong> at its foot opens a file browser.</li>
 </ul>
 <p><strong>No Icon</strong> at the bottom of the picker clears the icon. The icon the cell holds now is marked, and the picker opens on its tab and its emoji category. A pick closes the picker, and so does a click anywhere else or Escape. Tab moves through the picker. The cell row shows the icon the cell carries.</p>
@@ -4686,9 +4892,9 @@
 </ul>
 <p>On the overlay the icon draws at the center of the cell, 30 pixels tall at the menu's normal size. An emoji fills the same box. WPF, which draws the overlay, has no color emoji, so on the PC an emoji draws in one color, the label's, and takes the hover color with the label. The phone's <a href="../web-controller/#web-menus">Web Menus</a> page draws it in color. The <strong>Icon Size</strong> slider beside the cell's small icon preview scales that cell's icon on its own, from 25% to 200% of the menu's normal icon size, so one cell can read louder than its neighbors. On a Touch Grid with labels shown, an icon above about 120% makes every row of the grid taller to fit it. The slider appears only once the cell has an icon, and clearing the icon puts the size back to 100%. With <strong>Show Labels</strong> on, the icon sits above the label. An icon that cannot be found (a removed package, a moved file) falls back to the label alone. Menus imported from the Steam Workshop keep their Steam icon names and draw them from the local Steam client's art as before.</p>
 <h3 id="icon-packages">Icon packages<a class="headerlink" href="#icon-packages" title="Permanent link">&para;</a></h3>
-<p><img alt="The Icon Packages block on the Menus tab" src="../../images/menu-icon-packs.png" /></p>
+<p><img alt="The Icon Packages card under the menus" src="../../images/menu-icon-packs.png" /></p>
 <p>An icon package is one zip file of images with the <code>.pficons</code> extension. PadForge reads straight from the file and never unpacks it. Keep packages next to <code>PadForge.exe</code> to stay portable.</p>
-<p>The <strong>Icon Packages</strong> block on the <strong>Menus</strong> tab manages them:</p>
+<p>The <strong>Icon Packages</strong> card, folded to one line under the menu editor in the <strong>Macros &amp; Menus</strong> section, manages them:</p>
 <table>
 <thead>
 <tr>
@@ -4717,10 +4923,10 @@
 <h2 id="the-overlay">The overlay<a class="headerlink" href="#the-overlay" title="Permanent link">&para;</a></h2>
 <p>While a menu is engaged, a click-through overlay draws the ring or grid at the configured spot on the primary monitor, with the hovered cell highlighted in PadForge's ember accent. It never steals focus from the game.</p>
 <p>Per-menu appearance controls: <strong>Show Labels</strong>, <strong>Screen Position</strong> (X and Y percent, default centered), <strong>Size</strong> (10–400%), and <strong>Opacity</strong> (5–100%, default 90).</p>
-<p>The overlay itself is optional. The <a href="../../features/dashboard/">Dashboard</a>'s <strong>Overlays</strong> card carries a <strong>Menu Overlay</strong> toggle, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
+<p>The overlay itself is optional. The <strong>Overlays</strong> page under <strong>Extras</strong> carries a <strong>Menu Overlay</strong> switch, on by default. Turn it off and menus still hover and fire, just without the picture, which suits layouts you know by muscle memory. One menu shows at a time: the first one engaged wins until it disengages.</p>
 <hr />
 <h2 id="on-a-phone">On a phone<a class="headerlink" href="#on-a-phone" title="Permanent link">&para;</a></h2>
-<p>A Touch Grid menu can also appear on a phone. Turn on <strong>Show on Web Controller</strong> (tooltip: <strong>Shows this menu as a page of the web controller's Web Menus layout, where a tap on a tile fires its cell.</strong>) and the menu becomes a page of tiles on every phone that runs the web controller's <a href="../web-controller/#web-menus">Web Menus</a> layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.</p>
+<p>A Touch Grid menu can also appear on a phone. Turn on <strong>Show on Web Controller</strong> (tooltip: <strong>Shows this menu as a page of the web controller’s Web Menus layout, where a tap on a tile fires its cell.</strong>) and the menu becomes a page of tiles on every phone that runs the web controller's <a href="../web-controller/#web-menus">Web Menus</a> layout and is assigned to this slot. A tap fires the cell the way the overlay does, mapping rows, macro triggers, and shift layers that read the cell included, and the overlay stays hidden for it.</p>
 <p>The checkbox appears on Touch Grid menus. A menu switched to Radial Ring keeps showing it while it is on, so it can be cleared, and its reset turns it off. The menu's <strong>Layer</strong> and device scope apply on the phone too: a menu scoped to another controller, or to a shift layer that is not active, stays off the phone.</p>
 <hr />
 <h2 id="menus-and-shift-layers">Menus and shift layers<a class="headerlink" href="#menus-and-shift-layers" title="Permanent link">&para;</a></h2>
@@ -4731,7 +4937,7 @@
 <p>The row reset restores <strong>Any Layer</strong> and turns layer-held opening off.</p>
 <hr />
 <h2 id="reset-buttons">Reset buttons<a class="headerlink" href="#reset-buttons" title="Permanent link">&para;</a></h2>
-<p>Every setting row on the Menus tab carries a per-field reset, and the overlay card has a reset of its own.</p>
+<p>Every setting row of a menu carries a per-field reset, and the overlay settings share <strong>Reset Menu Geometry</strong>.</p>
 <hr />
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4743,10 +4949,9 @@
 <li><a href="../profiles/">Profiles</a>: exported profiles carry the icon packages their menus use.</li>
 <li><a href="../../features/touchpad/">Touchpad</a>: the other things a touchpad surface can do.</li>
 <li><a href="../web-controller/#web-menus">Web Controller</a>: the phone page that shows marked Touch Grid menus as tiles.</li>
-<li><a href="../../features/dashboard/">Dashboard</a>: the Menu Overlay toggle.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

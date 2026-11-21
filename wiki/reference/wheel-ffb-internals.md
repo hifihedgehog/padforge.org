@@ -2,7 +2,7 @@
 
 *How a game's force feedback reaches a real wheel: the HID PID decode chain, the three vendor writers, the host-sampled and software paths in `ForceFeedbackState`, and the RPM-LED telemetry system.*
 
-This is the developer-side companion to [Wheel](../features/wheel.md) (the user guide). See [Force Feedback](../features/force-feedback.md) for the rumble and generic-haptic side.
+This is the developer-side companion to [Wheel](../features/wheel.md) (the user guide). See [Force Feedback](../features/force-feedback.md) for the rumble and generic-haptic side, and [Wheel Centering Internals](wheel-centering-internals.md) for Vehicle mode and the Release Test, which ride on the writers below.
 
 ---
 
@@ -21,7 +21,7 @@ A third destination joined in 4.1.0: the Bass Shakers lane (#236) turns the same
 - `TickFfb` packs the pair into the virtual controller's inbound rumble pack via `LfeOutputState.Pack`.
 - `UpdateRumbleAudioLane` in `InputManager.Step5.VirtualDevices.cs` publishes each slot's pack once per poll tick through `RumbleAudioService.PublishIfCurrent`. It runs after `UpdateVirtualDevices` so a slot destroyed on this tick publishes zeros on the same tick, and it max-merges the slot's live `VibrationStates` onto the pack, which is what makes the preview's test-rumble buttons audible on the shakers. A voice the config disables is masked out of the pack by its 16-bit lane.
 
-So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The slot's **Bass Shakers** tab configures the endpoint. See [Force Feedback](../features/force-feedback.md#bass-shakers) for the user-facing side.
+So game force feedback reaches vendor wheels, scalar rumble devices, and bass-shaker audio endpoints. The controller's **Bass Shakers** card configures the endpoint. See [Force Feedback](../features/force-feedback.md#bass-shakers) for the user-facing side.
 
 ---
 
@@ -35,7 +35,9 @@ So game force feedback reaches vendor wheels, scalar rumble devices, and bass-sh
 | `PadForge.App/Common/Input/LogitechRawHidWriter.cs` | Logitech native HID. Original C#, wire protocol checked against `new-lg4ff`, read as documentation. |
 | `PadForge.App/Common/Input/FanatecRawHidWriter.cs` | Fanatec native HID. Original C#, wire protocol checked against `hid-fanatecff`, read as documentation. |
 | `PadForge.App/Common/Input/ThrustmasterRawHidWriter.cs` | Thrustmaster native HID. Original C#, wire protocol checked against `hid-tmff2`, read as documentation. |
-| `PadForge.App/Common/Input/WheelRangeLimits.cs` | The rotation range each native wheel takes, from its writer's `RangeLimits`. The Wheel tab's slider spans it. |
+| `PadForge.App/Common/Input/WheelRangeLimits.cs` | The rotation range each native wheel takes, from its writer's `RangeLimits`. The Wheel card's slider spans it. |
+| `PadForge.App/Common/Input/WheelCenteringWriter.cs` | Vehicle mode's spring, damper, friction and centering force on the three vendor wheels. See [Wheel Centering Internals](wheel-centering-internals.md#sending-a-frame). |
+| `PadForge.App/Common/Input/WheelCenteringFacts.cs` | What a device's wheel can do, which decides the Wheel and Centering cards. |
 | `PadForge.Engine/Common/ForceFeedbackState.cs` | The `Vibration` carrier, the host-sampled and software paths, the SDL writer for generic devices. |
 | `PadForge.App/Common/Input/InputManager.Step3.SteeringLockFeedback.cs` | The at-lock feedback channels for a steering source. |
 | `PadForge.App/Common/Telemetry/` | The RPM-LED telemetry sources, hub, and LED map. |
@@ -78,6 +80,8 @@ All three are `internal static class`, frame a vendor-shaped command padded to t
 
 `IsLogitechWheel` gates G29, G923 (PlayStation variant), G27, G25, Driving Force GT, Driving Force Pro, Driving Force, MOMO Racing, MOMO Force, and WingMan Formula Force GP. The G920 and the Xbox G923 speak HID++ 2.0 and are excluded. Effects: `WriteConstantForce` (with a per-slot download then refresh state), `WriteCondition` (spring command 0x0b, friction command 0x0e only on the G27, G25, DFGT, and DFP, else the damper command for damper and inertia), `WriteAutocenter` (a firmware spring), `WriteRange` (`f8 81` for most, a coarse-plus-fine path for the DFP), and `WriteRpmLeds` (`f8 12`, five LEDs). No firmware periodic, so periodic effects arrive host-sampled.
 
+A wheel with several modes that arrives in its Driving Force mode reports 0xC294. Step 1 calls `SwitchToNativeMode` (`LogitechRawHidWriter.cs` line 361) as each SDL device is accepted. `RealProductId` reads the native model from the wheel's `bcdDevice` (new-lg4ff `lg4ff_identify_multimode_wheel`), and `NativeModeReports` (`LogitechRawHidWriter.cs` line 330) answers the model's own switch, as new-lg4ff does on every probe (`lg4ff_handle_multimode_wheel`): EXT_CMD9 after the revert-on-USB-reset command for the G29, the G27 and the DFGT, EXT_CMD16 for the G25 and EXT_CMD1 for the Driving Force Pro. A G923 in its PlayStation mode (0xC267 with `bcdDevice` 0x38xx) takes its switch in report 0x30 (`lg4ff_switch_from_ps_mode`). Only those two cases are switched. A wheel in another mode of its own stays. Until the wheel detaches and comes back, and on a Driving Force itself, 0xC294 is driven as a Driving Force: 270° and no range command. No wheel has run the switch.
+
 ### Fanatec (`FanatecRawHidWriter`, VID 0x0EB7)
 
 `IsFanatecWheel` gates the CSL Elite, CSL DD, DD Pro, ClubSport DD, ClubSport V2 and V2.5, Podium DD1 and DD2, CSR Elite, and Porsche 911 bases. `IsFanatecPedal` gates the ClubSport V3 and CSL pedals (rumble only). High-resolution bases write 16-bit force. `WriteAutocenter` is a software centering spring routed through a slot-1 condition and re-asserted with every constant-force write, because Fanatec bases expose no firmware auto-center and the range command disables the stock spring. `WriteRange` sends three reports. `WriteRpmLeds` writes the base strip and the rim strip separately, nine LEDs. No firmware periodic.
@@ -86,7 +90,7 @@ Every wheel and pedal command goes out on report 0x01 (`CommandReportId`), the f
 
 ### Thrustmaster (`ThrustmasterRawHidWriter`, VID 0x044F)
 
-`IsThrustmasterWheel` gates the T300RS variants, T-GT II, T248, TX, TS-XW, and TS-PC. The T150 uses a separate driver and is excluded. This writer is stateful and multi-packet (upload, play, update, stop), with a per-device armed-kind cache so switching effect kind re-uploads while the same kind updates live. It is the only writer with `WritePeriodic`, a firmware-native periodic generator (`WaveformCode` maps square, triangle, sine, and the two sawtooths). It takes the un-sampled peak, not the host-sampled level. `WriteAutocenter` and `WriteRange` are firmware-native. `WriteRpmLeds` writes fifteen LEDs.
+`IsThrustmasterWheel` gates the T300RS variants, T-GT II, T248, TX, TS-XW, and TS-PC. The T150 uses a separate driver and is excluded. This writer is stateful and multi-packet (upload, play, update, stop), with an armed-kind cache per effect ID so switching effect kind re-uploads while the same kind updates live. The wheel holds sixteen effects by ID, the header's ID byte being the effect ID plus one (hid-tmt300rs.c `t300rs_fill_header`). The game's force has ID 0 (`GameEffect`), and Vehicle mode's centering has IDs 1 to 4 (`CenteringSpring`, `CenteringDamper`, `CenteringFriction`, `CenteringForce`). It is the only writer with `WritePeriodic`, a firmware-native periodic generator (`WaveformCode` maps square, triangle, sine, and the two sawtooths). It takes the un-sampled peak, not the host-sampled level. `WriteAutocenter` and `WriteRange` are firmware-native. `WriteRpmLeds` writes fifteen LEDs.
 
 ---
 
@@ -97,26 +101,27 @@ Every wheel and pedal command goes out on report 0x01 (`CommandReportId`), the f
 - `ComputeWheelSteeringPeak` gain-scales the signed magnitude and projects the polar direction onto the steering axis. This is the steady amplitude Thrustmaster uploads as a firmware periodic.
 - `ComputeWheelSteeringLevel` multiplies that peak by `PeriodicWaveform`, the instantaneous waveform multiplier. For Logitech and Fanatec, which have no firmware periodic generator, a periodic effect becomes this oscillating constant force, sampled each frame.
 - `ComputeWheelRumbleLevel` turns rumble-only motor values into an oscillating constant force (heavy motor on a 120 ms period, light on 40 ms). This is what wheels get from XInput games.
-- `TryApplyAutoCenterSpring` is the software auto-center for generic SDL wheels. It reads `AutoCenterStrength` and builds a symmetric `SDL_HAPTIC_SPRING`. Vendor wheels never reach here.
-- `IsGenericWheelSpringCapable(hasHaptic, hapticFeatures, inputDeviceType)` is the one predicate deciding whether a device may hold that spring: haptic present, `SDL_HAPTIC_SPRING` in the feature mask, and `InputDeviceType.Driving` (which `SdlDeviceWrapper` derives from `SDL_JOYSTICK_TYPE_WHEEL`). The Wheel tab's `hasGenericWheel` gate calls the same predicate, so the tab and the spring cannot disagree.
+- `AutoCenterCoefficient` and `ApplyAutoCenterSpring` are the software auto-center for generic SDL wheels. The coefficient reads `AutoCenterStrength` (0 to 100% as 0 to 32767), and is 0 while Vehicle mode centers the wheel. The spring is a symmetric `SDL_HAPTIC_SPRING` in an effect of its own beside the main one, so rumble plays on top of it (#572). The game's force or Constant Force takes the wheel from it: the spring is destroyed before the game's effect is made, and comes back when the game stops. `HoldsOnlyTheSpring` handles a device that holds one effect: a spring refused beside the main effect is tried alone, once per device, and on such a device the spring keeps the effect and rumble waits, as before #572. Each finding is a `HAPTICDIAG` line (`NoteRoom`). Vendor wheels never reach here.
+- `IsGenericWheelSpringCapable(hasHaptic, hapticFeatures, inputDeviceType)` is the predicate deciding whether a device may hold that spring: haptic present, `SDL_HAPTIC_SPRING` in the feature mask, and `InputDeviceType.Driving` (which `SdlDeviceWrapper` derives from `SDL_JOYSTICK_TYPE_WHEEL`). `IsGenericWheelVehicleCapable` is its twin for Vehicle mode, with `SDL_HAPTIC_CONSTANT` in place of the spring. `WheelCenteringFacts.Of` calls both, so the Centering card and the forces cannot disagree.
+- `ApplyCentering` holds Vehicle mode's centering on a generic wheel, ahead of the game's force and rumble. See [Wheel Centering Internals](wheel-centering-internals.md#sending-a-frame).
 
-The old clause was `NumHapticAxes <= 1`. That hid the tab for a wheelbase-plus-pedals composite reporting two haptic axes despite a working spring, which is the Moza shape (#282). Axis count is a shape detail, not an identity, so device type replaced it.
+An older clause was `NumHapticAxes <= 1`. That hid the wheel's settings for a wheelbase-plus-pedals composite reporting two haptic axes despite a working spring, which is the Moza shape (#282). Axis count is a shape detail, not an identity, so device type replaced it.
 
 The spring is built as `SDL_HAPTIC_CARTESIAN` with `dir0 = 1`, not `STEERING_AXIS`. SDL encodes `STEERING_AXIS` as a DirectInput Cartesian effect with a **zero** direction vector, and Moza is the vendor Linux had to special-case for exactly that on condition effects (`HID_PIDFF_QUIRK_FIX_CONDITIONAL_DIRECTION` discards the caller's direction and forces `0x4000`). Constant and periodic effects keep their real direction: `STEERING_AXIS` on a device that reports one haptic axis, `SDL_HAPTIC_POLAR` on one that reports two or more.
 
 ---
 
-## Wheel-tab settings
+## Wheel and Centering card settings
 
-`PadSetting.RotationRange` (default 900), `RotationRangeEnabled` (default 1), `AutoCenterStrength` (default 0), and `WheelRpmLeds` (default 0) all participate in the settings checksum. The `PadViewModel` bridges them through `InputService`. In `ApplyForceFeedback`, range and auto-center are one-shot, re-sent only when the cached `_appliedWheelSettings` changes.
+`PadSetting.RotationRange` (default 900), `RotationRangeEnabled` (default 1), `AutoCenterStrength` (default 0), and `WheelRpmLeds` (default 0) all participate in the settings checksum. The first two and the last are the Wheel card's. `AutoCenterStrength` is the Centering card's Spring mode, and the card's Vehicle mode settings are the twelve `Centering*` fields ([Wheel Centering Internals](wheel-centering-internals.md#settings)). The `PadViewModel` bridges them through `InputService`. In `ApplyForceFeedback`, range and auto-center are one-shot, re-sent only when the cached `_appliedWheelSettings` changes. While Vehicle mode centers the wheel or a Release Test runs, the auto-center level is 0, since the wheel's own spring would add to the car's.
 
-`RotationRangeEnabled` "0" is the Wheel tab's Set Rotation Range cleared (#512): `WheelRangeLimits.SendsRange` is false, and the one-shot sends the auto-center alone, never `WriteRange`. The cached range is 0 then, so turning the setting back on sends the range again. For a Fanatec base this also leaves out the `f5` coarse-limit report that switches off the firmware centering spring, the spring `hid-ftecff` disables by setting the range at probe. Through the Remote Link the frame still carries the range, with flag bit 3 (8) of the wheel frame set (`OutputEffectCodec.EncodeWheel`, `rangeLeftToWheel`). The owner's `InputService.ApplyRemoteWheel` reads `RemoteWheelRange`, 0 for a range left to the wheel, and sends no range then. An owner from before the bit reads bits 0 to 2 only and sets the range it always did.
+`RotationRangeEnabled` "0" is the Wheel card's Set Rotation Range cleared (#512): `WheelRangeLimits.SendsRange` is false, and the one-shot sends the auto-center alone, never `WriteRange`. The cached range is 0 then, so turning the setting back on sends the range again. For a Fanatec base this also leaves out the `f5` coarse-limit report that switches off the firmware centering spring, the spring `hid-ftecff` disables by setting the range at probe. Through the Remote Link the frame still carries the range, with flag bit 3 (8) of the wheel frame set (`OutputEffectCodec.EncodeWheel`, `rangeLeftToWheel`). The owner's `InputService.ApplyRemoteWheel` reads `RemoteWheelRange`, 0 for a range left to the wheel, and sends no range then. An owner from before the bit reads bits 0 to 2 only and sets the range it always did.
 
-Each writer's `RangeLimits(pid)` is the range a model takes. `WriteRange` clamps to it, and `WheelRangeLimits.For` gives the Wheel tab the same bounds, which the slider spans through `WheelRangeMinimum` and `WheelRangeMaximum`. A wheel with a fixed range (MOMO, Driving Force, WingMan Formula Force GP) has one bound at both ends. The bounds load with the device whose `PadSetting` loads, through `PadViewModel.LoadWheelRotationRange`, called from `InputService.LoadPadSettingIntoViewModel` and from the startup load in `SettingsService.LoadPadSettings`. They never change from the page's device sync. A device switch saves the outgoing device's values before the incoming device loads, and bounds changed between the two would clamp one wheel's saved range by the other wheel's limits (#512).
+Each writer's `RangeLimits(pid)` is the range a model takes. `WriteRange` clamps to it, and `WheelRangeLimits.For` gives the Wheel card the same bounds, which the slider spans through `WheelRangeMinimum` and `WheelRangeMaximum`. A wheel with a fixed range (MOMO, Driving Force, WingMan Formula Force GP) has one bound at both ends. The bounds load with the device whose `PadSetting` loads, through `PadViewModel.LoadWheelRotationRange`, called from `InputService.LoadPadSettingIntoViewModel` and from the startup load in `SettingsService.LoadPadSettings`. They never change from the page's device sync. A device switch saves the outgoing device's values before the incoming device loads, and bounds changed between the two would clamp one wheel's saved range by the other wheel's limits (#512).
 
 Thrustmaster's ranges follow Thrustmaster's documentation where `hid-tmff2` differs. The TS-PC and TS-XW take 40–1080°, as their SDK notes state, where `hid-tmff2` stops at 140°. A TS-PC set to 40° was sent 140° before this (#512). The T248 takes 180–900°: its support page gives 180° as its minimum. The TX keeps `hid-tmff2`'s 140–900°, since no Thrustmaster document gives its minimum.
 
-The tab-visibility gate is `PadPage.SyncTabVisibility`. `hasWheel` is the OR of the three `IsXxxWheel` gates on the selected device's VID and PID. `hasGenericWheel` covers a non-vendor SDL wheel that can only self-center: not `hasWheel`, `CapType == InputDeviceType.Driving`, and `ForceFeedbackState.IsGenericWheelSpringCapable(ud.Device)`. Moza bases land here, not in a vendor writer. The Wheel tab shows when either is true, but the rotation-range and RPM-LED rows show only for `hasWheel`. See [Wheel](../features/wheel.md) for the user-facing behavior.
+The visibility gate is `PadPage.SyncTabVisibility`, through `WheelCenteringFacts.Of(ud)`. `hasWheel` is the facts' `NativeWheel`: the OR of the three `IsXxxWheel` gates on the selected device's VID and PID, read from the saved row, so the cards show while the wheel is unplugged. `hasGenericWheel` covers a non-vendor SDL wheel: not `hasWheel`, and the facts' `HasCard`, which needs `CapType == InputDeviceType.Driving` and a connected device that is spring capable or Vehicle capable. Moza bases land here, not in a vendor writer. The `TabWheel` group, Wheel tab index 11, shows when either is true. Its Wheel card (`WheelCard`) shows only for `hasWheel`, and its Centering card for both. See [Wheel](../features/wheel.md) for the user-facing behavior.
 
 ---
 
@@ -143,7 +148,7 @@ When `WheelRpmLeds` is on and the device is a vendor wheel, Step 2 requests tele
 
 `TelemetryHub` is demand-driven. `RequestActive` (called each frame a wheel wants LEDs) starts a 60 Hz background poll and auto-stops three seconds after the last request. It polls the registered sources in order and publishes the first with a non-zero max RPM. `RpmLedMap` turns the rev fraction into a bit-0-first LED mask, with a redline blink, and holds the LED counts (5 Logitech, 9 Fanatec, 15 Thrustmaster).
 
-Each source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnapshot`) and reads RPM and max RPM from a shared-memory map or a UDP feed. `BuildSources` sets the order:
+Each source implements `ITelemetrySource` (`Start`, `Stop`, `TryGetSnapshot`) and reads RPM and max RPM from a shared-memory map or a UDP feed. Since PadForge 6 each also fills the snapshot's `Speed` (`SetSpeed`, which sets `HasSpeed`) and, where the game reports the road, `Grip` through `SurfaceGrips`, for Vehicle mode's centering ([Wheel Centering Internals](wheel-centering-internals.md#grip)). The Codemasters flat format and OutGauge send no surface. `MadnessTelemetrySource` reads its sequence number at offset 7320. It read 7316, which is `mCloudBrightness`, before PadForge 6. `BuildSources` sets the order:
 
 | Source | Game | Channel |
 |---|---|---|
@@ -172,13 +177,14 @@ The telemetry readers are original. Where a game's memory layout came from a pub
 
 ## Remote Link wheel relay
 
-A shared wheel works over [Remote Link](remote-link-internals.md) through a parallel dispatch in `InputService`. The consumer ships a semantic wheel frame, and `ApplyRemoteWheel` re-encodes it on the owner with the owner's own vendor writer, calling the same condition, constant-force, periodic, range, auto-center, and RPM-LED entry points Step 2 uses (`WriteCondition` / `WriteConstantForce` on Logitech and Thrustmaster, `WriteWheelCondition` / `WriteWheelConstantForce` on Fanatec, `WritePeriodic` on Thrustmaster only, then `WriteRange`, `WriteAutocenter`, and `WriteRpmLeds` on all three). This is why the writers are referenced from both Step 2 and `InputService`.
+A shared wheel works over [Remote Link](remote-link-internals.md) through a parallel dispatch in `InputService`. The consumer ships a semantic wheel frame, and `ApplyRemoteWheel` re-encodes it on the owner with the owner's own vendor writer, calling the same condition, constant-force, periodic, range, auto-center, and RPM-LED entry points Step 2 uses (`WriteCondition` / `WriteConstantForce` on Logitech and Thrustmaster, `WriteWheelCondition` / `WriteWheelConstantForce` on Fanatec, `WritePeriodic` on Thrustmaster only, then `WriteRange`, `WriteAutocenter`, and `WriteRpmLeds` on all three). This is why the writers are referenced from both Step 2 and `InputService`. The wheel frame also carries Vehicle mode's centering frame, which `ApplyRemoteWheel` (`InputService.cs` line 14188) joins to the game's force with `WheelCenteringWriter.MergedForce` and writes with `WheelCenteringWriter.Apply`, after the one-shot settings, as Step 2 does. A wheel outside the three vendors' lists returns from `ApplyRemoteWheel` at once and takes no centering from the peer.
 
 ---
 
 ## Related pages
 
 - [Wheel](../features/wheel.md): the user guide for this feature.
+- [Wheel Centering Internals](wheel-centering-internals.md): Vehicle mode, the stability rule and the Release Test.
 - [Force Feedback](../features/force-feedback.md): rumble passthrough, the generic-haptic path, and the `Vibration` carrier.
 - [Input Pipeline](input-pipeline.md): where `ApplyForceFeedback` runs in Step 2.
 - [Engine Library](engine-library.md): `ForceFeedbackState` and the `Vibration` struct.
@@ -187,4 +193,4 @@ A shared wheel works over [Remote Link](remote-link-internals.md) through a para
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

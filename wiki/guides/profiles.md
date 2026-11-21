@@ -3,9 +3,9 @@
 *A full snapshot of your PadForge setup. Switch profiles and the slots, mappings, deadzones, macros, and feedback settings all change at once.*
 
 <!-- SCREENSHOT: profiles -->
-![Profiles page with the profile card grid and executable matching](../images/profiles.png)
+![Profiles page with a card for each profile, the starter profiles, and the Automatic Switching, Shortcuts and External Control cards](../images/profiles.png)
 
-Profiles can switch on their own when a game gains focus, or from a controller-button combo you record.
+Profiles can switch on their own when a game gains focus, from a controller-button combo you record, or on a command from a launcher or script.
 
 <figure class="pf-video">
 <video controls playsinline preload="none" width="1920" height="1080"
@@ -14,7 +14,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 <source src="/assets/video/padforge-tutorial-profile-per-game.mp4" type="video/mp4">
 <track kind="captions" srclang="en" label="English" src="/assets/video/padforge-tutorial-profile-per-game.vtt" default>
 </video>
-<figcaption>Save As, a linked program and auto-switch, recorded live in PadForge 5.2.0 in 1 minute 1 second. Character Map stands in for a game, and a panel covers the file dialog, which lists the recording PC's own folders. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-profile-per-game-transcript.txt">Read the transcript</a>.</figcaption>
+<figcaption>Save As, a linked program and auto-switch, recorded live in PadForge 5.2.0 in 1 minute 1 second. The Profiles page has been rebuilt since, so the buttons sit in other places today. Character Map stands in for a game, and a panel covers the file dialog, which lists the recording PC's own folders. The narration is a generated voice, with English captions. <a href="/assets/video/padforge-tutorial-profile-per-game-transcript.txt">Read the transcript</a>.</figcaption>
 </figure>
 
 ---
@@ -37,6 +37,7 @@ Profiles can switch on their own when a game gains focus, or from a controller-b
 | Macros | All [Macros](macros.md). Triggers, actions, repeat modes. |
 | Menus | Per-slot radial and touch [Menus](menus.md): cells, host input, fire mode, and overlay placement. |
 | Touchpad outputs and gestures | Per-slot [Touchpad](../features/touchpad.md) toggles (Stick / D-Pad, Mouse, absolute pointer, swipe haptics, gesture detection) plus custom shape templates recorded with the recorder dialog. Different games can carry different gesture catalogs. |
+| Crosshairs, Magnifier and Screen Overlays | The [Crosshair](../features/crosshair.md), [Magnifier](../features/magnifier.md) and [Screen Overlay](../features/screen-overlay.md) settings from Extras. |
 | Extended slot shape | Per-slot Sticks, Triggers, POVs, and Buttons counts for Extended (HIDMaestro) slots. |
 | Polling rate override | Optional. A profile can carry its own polling rate, set in the profile dialog. While that profile is active it replaces the global Settings value. See [Polling rate override](#polling-rate-override). |
 
@@ -46,11 +47,11 @@ A profile switch changes all of these at once. Its macro list replaces the curre
 
 ## The Default profile
 
-**Default** loads at startup and runs any time no other profile matches the foreground app. If a named profile was active when PadForge closed, startup puts it back on top of Default, and a launch command from a launcher or script, or auto-switching, can pick another. You cannot delete or rename Default.
+**Default** loads at startup and runs any time no other profile matches the foreground app. If a named profile was active when PadForge closed, startup puts it back on top of Default, and a launch command from a launcher or script, or auto-switching, can pick another. You cannot delete, rename, or edit Default. Its card carries a **Built-in** tag.
 
 Set Default to your general layout, like a standard Xbox pad for platformers. Make game-specific profiles only where you want something different.
 
-> **Important.** Changes you make on any page (Dashboard, Mappings, Macros, etc.) save into the profile that is loaded right now.
+> **Important.** Changes you make on any page (Home, a controller's page, Extras, etc.) save into the profile that is loaded right now.
 
 ---
 
@@ -64,36 +65,47 @@ PadForge watches the foreground window at about 30 Hz. When the app in front mat
 
 The outgoing profile's state saves before the new one loads. A virtual controller whose slot keeps the same preset stays connected through the switch. One whose preset changes is rebuilt with the new identity, and one the new profile turns off or removes goes away.
 
-Turn it on from the **Profiles** page. Check **Auto-Switch Profiles Based on Foreground Application**.
+Turn it on from the **Automatic Switching** card on the **Profiles** page: switch on **Switch Profiles by Game**.
 
-### Live foreground readout
+### What is in front now
 
-With auto-switch on, a **FOREGROUND** line appears under the checkbox. It shows the executable name of whatever app is in front right now. The name lights up with a flame and ember color while that executable matches a profile, so you can confirm matching works without launching the game blind.
+With **Switch Profiles by Game** on, a line under the card's title names the program in front right now, by its file name, and says what it loads. It reads once a second, so you can confirm matching works without launching the game blind.
 
-If auto-switch is on but no profile carries an executable rule yet, the line reads **No Profile Has an Executable Yet**. Nothing can auto-switch until you add an executable to a profile.
+| The line reads | When |
+|---|---|
+| **In front now: game.exe, which loads Racing** | A profile lists that program. |
+| **In front now: game.exe, no profile set for it** | No profile lists it. |
+| **In front now: game.exe, and no profile has a game set yet** | No profile lists any program. Nothing can auto-switch until you add one. |
 
 <!-- SCREENSHOT: profiles-foreground-readout -->
-![The FOREGROUND readout showing a matched executable](../images/profiles-foreground-readout.png)
+![The In front now line on the Automatic Switching card, naming a program a profile loads for](../images/profiles-foreground-readout.png)
 
 ---
 
 ## Make a profile
 
 1. Open the **Profiles** page in the sidebar.
-2. Click **New** for an empty profile, or **Save As** to clone the current setup.
-3. Type a name (Forza, Elden Ring, Flight Sim, etc.).
-4. Click **Browse...** and pick the game's executable. Multi-select works.
+2. Click **New Profile** at the top of the page for a profile with no controllers. To clone the current setup, open the **More** menu (the three dots) on the active profile's card and pick **Save As…**.
+3. Type a **Name** (Forza, Elden Ring, Flight Sim, etc.).
+4. Under **Games That Load It**, click **Browse…** and pick the game's executable (multi-select works), or click **Add a Running Game** and pick one of the programs that have a window open now.
+5. Click **Save**.
+
+Each game shows as a chip with its file name. The chip's tooltip gives the full path, and its remove button takes it off the list. Nothing is kept until you click **Save**.
 
 ### The Save As path
 
 The fastest way to make a per-game profile:
 
 1. Set PadForge up the way you want for one game. Mappings, deadzones, macros, slots.
-2. Open **Profiles** and click **Save As**.
+2. Open **Profiles**, open the active card's **More** menu, and pick **Save As…**.
 3. Name it after the game.
-4. Click **Browse...** and pick the game's executable.
+4. Add the game's executable under **Games That Load It**, then click **Save**.
 
-The working setup is now a saved profile, and it loads on its own when the game comes to the front once **Auto-Switch Profiles Based on Foreground Application** is on. It saves no choice for the Dashboard's OpenTrack and FreeTrack head-tracking switches, so loading it leaves them as they are. Flip either one while the profile is active to save that choice into it.
+The working setup is now a saved profile, and it loads on its own when the game comes to the front once **Switch Profiles by Game** is on. It saves no choice for the **Enable UDP Tracking Input** and **Enable FreeTrack 2.0 Shared Memory Input** switches on the [Head Tracking](../features/head-tracking.md) page under Extras, so loading it leaves them as they are. Flip either one while the profile is active to save that choice into it.
+
+### Save Current Setup Here
+
+**Save Current Setup Here** in a stored profile's **More** menu replaces what that profile holds with the current setup, after a confirmation. The profile keeps its name, its games, and its polling rate. The active profile's menu and Default's menu do not offer it.
 
 ---
 
@@ -101,82 +113,75 @@ The working setup is now a saved profile, and it loads on its own when the game 
 
 Each profile can list one or more executables. When the foreground process matches one of them, the profile loads.
 
-- Added through the **Browse...** dialog. Stored as full paths.
+- Added through **Browse…** or **Add a Running Game** in the profile dialog. Stored as full paths.
 - Multiple executables per profile. One profile can cover several launchers or game versions.
-- Case-insensitive. `EldenRing.exe` matches `eldenring.exe`.
-- Click **Remove** to drop an executable from the list.
+- Case-insensitive. `C:\Games\EldenRing.exe` matches `c:\games\eldenring.exe`.
+- The remove button on a game's chip drops it from the list.
 
 ---
 
 ## Profile cards
 
-The profile grid shows one card per profile. Each card carries:
+The page shows one card per profile, with a dashed drop tile after the last one. Each card carries:
 
-- The profile name.
-- An icon pulled from the game's executable, when the stored path still resolves.
-- Up to two executable names, then a `+N` marker for the rest. The full list rides the tooltip.
-- A strip of slot-count badges, one per slot type.
-- An **Auto-switch** rule chip, shown when auto-switch is on and the profile has at least one executable.
-- A **Built-in** chip on the Default card.
+- The profile name, with a **Built-in** tag on Default.
+- A game line. **No game set** when the profile lists no executable. Otherwise up to two executable names, then a `+N` marker for the rest, after **Loads for** while **Switch Profiles by Game** is on and **Set for** while it is off. The tooltip lists every game.
+- A picture of each controller in the profile, with its type and number under it, as many as the card has room for, then a `+N` count of the rest. A profile with no controllers shows **No controllers** instead.
+- **Load** at the foot, or **Active** with a flame on the card of the profile that is loaded now.
+- A **More** button (three dots) with the card's menu.
 
-The active profile's card carries a lit flame and an ember-tinted edge, so you can tell at a glance which one is driving your controllers.
-
-### Slot-count badges
-
-| Badge | Counts |
-|---|---|
-| Xbox | Xbox slots in the profile. |
-| PlayStation | PlayStation slots. |
-| Extended | Extended (HIDMaestro) slots. |
-| MIDI | MIDI slots. |
-| KB+M | Keyboard+Mouse slots. |
-| Nintendo | Nintendo slots. |
-| VR | VR slots. |
-
-A badge hides when its count is zero. The strip gives you a quick read of the profile's shape without loading it.
+The active profile's card carries an ember edge and a glow, and its controller pictures are lit. A click on one of them opens that controller's page. Double-click a card to load its profile.
 
 ---
 
 ## Manage profiles
 
-| Action | What it does |
-|---|---|
-| **New** | Empty profile with no slots. |
-| **Save As** | Clones the current setup into a new profile. |
-| **Load** | Apply the selected profile. Double-click also loads. |
-| **Edit** | Rename and edit the executable list. |
-| **Export…** | Write the selected profile to a shareable `.pfprofile` file. |
-| **Import…** | Read a `.pfprofile` file back in, or turn a reWASD `.rewasd` config or a DS4Windows profile `.xml` into a new profile. See [Import from reWASD and DS4Windows](profile-import.md). |
-| **Browse Starter Profiles** | Open the starter gallery and save a ready-made genre archetype as a new profile. See [Start from a starter profile](starter-profiles.md). |
-| **Browse Community Configs** | Open the Steam Workshop browser and import a community-made Steam Input config as a new profile. See [Steam Workshop Config Import](steam-workshop-import.md). |
-| **Delete** | Remove the selected profile. Default cannot be deleted. |
+| Action | Where | What it does |
+|---|---|---|
+| **New Profile** | Top of the page | A profile with no controllers. |
+| **Get Profiles** | Top of the page | Opens Get Profiles: **Starters**, **Community**, and **Import a File**. |
+| **Load** | A card's foot | Applies that profile. Double-click on the card also loads. |
+| **Edit…** | **More** menu | Rename the profile, edit its games, and set its polling rate. Not on Default. |
+| **Save As…** | **More** menu, active card only | Clones the current setup into a new profile. |
+| **Save Current Setup Here** | **More** menu, other stored profiles | Replaces what the profile holds with the current setup. |
+| **Export…** | **More** menu | Writes the profile to a shareable `.pfprofile` file. |
+| **Delete** | **More** menu | Removes the profile after a confirmation. Not on Default. |
+
+**Get Profiles** has three tabs:
+
+- **Starters**: save a ready-made genre archetype as a new profile. See [Start from a starter profile](starter-profiles.md). The page's **Starter Profiles** row shows the first four. A click on one adds it, and **See All** opens this tab.
+- **Community**: browse the Steam Workshop and import a community-made Steam Input config as a new profile. See [Steam Workshop Config Import](steam-workshop-import.md).
+- **Import a File**: read a `.pfprofile` back in, or turn a reWASD `.rewasd` config or a DS4Windows profile `.xml` into a new profile. See [Import from reWASD and DS4Windows](profile-import.md).
 
 ---
 
 ## Polling rate override
 
-A profile can carry its own polling rate. Open **New**, **Save As**, or **Edit**
-and pick a value from the **Polling Rate** dropdown in the profile dialog.
+A profile can carry its own polling rate. In the **New Profile**, **Save As Profile**, or **Edit Profile** dialog, open **More** and pick a value from the **Polling Rate** dropdown.
 
 | Choice | Interval |
 |---|---|
-| **Default (Global Setting)** | Follows the **Polling Interval** value on the [Settings](../features/settings.md) page. |
+| **Default (Global Setting)** | Follows **Polling Rate (Unless a Profile Overrides It)** on the [Settings](../features/settings.md) page. |
+| **10000 Hz (0.1 ms)** | 0.1 ms |
+| **8000 Hz (0.125 ms)** | 0.125 ms |
+| **4000 Hz (0.25 ms)** | 0.25 ms |
+| **2000 Hz (0.5 ms)** | 0.5 ms |
 | **1000 Hz (1 ms)** | 1 ms |
 | **500 Hz (2 ms)** | 2 ms |
 | **250 Hz (4 ms)** | 4 ms |
 | **125 Hz (8 ms)** | 8 ms |
-| **62.5 Hz (16 ms)** | 16 ms |
+| **60 Hz (16.667 ms)** | 16.667 ms |
 
-While a profile that carries an override is active, the override sets the loop
-interval and the global Settings value does nothing. Every other profile,
-Default included, falls back to the global value.
+A profile from before PadForge 6 stored its override as an interval in milliseconds. It converts to the nearest rate, and a rate the list does not hold gets an entry of its own in the dialog.
 
-The Settings page names the profile in charge under the knob, in ember text:
-**Overridden while profile “Racing” is active: 8 ms**. The line is hidden while
+While a profile that carries an override is active, the override sets the loop rate and the global Settings value does nothing. Every other profile, Default included, falls back to the global value.
+
+The Settings page names the profile in charge beside the polling rate box, in gold text:
+**Overridden while profile “Racing” is active: 125 Hz**. The line is hidden while
 the global value rules.
 
 <!-- SCREENSHOT: profile-polling-override -->
-![The Polling Rate dropdown in the profile dialog](../images/profile-polling-override.png)
+![The Polling Rate dropdown under More in the profile dialog](../images/profile-polling-override.png)
 
 The poll loop stays global and nothing restarts on a switch. The loop recomputes
 its target every cycle, so a new rate takes effect on the next tick.
@@ -187,7 +192,7 @@ its target every cycle, so a new rate takes effect on the next tick.
 
 Export writes a profile to a `.pfprofile` file. That file is one archive holding the profile plus any sound packages its macros use, so a profile with custom macro sounds travels complete. Send it to someone else, or keep it as a backup.
 
-1. Select a profile in the grid.
+1. Open the profile card's **More** menu.
 2. Click **Export…**.
 3. Pick a location and save. The file is named after the profile.
 
@@ -195,34 +200,34 @@ You can export the **Default** profile too. It writes the Default profile's own 
 
 Import reads a `.pfprofile` back in.
 
-1. Click **Import…**.
-2. Pick the `.pfprofile` file.
-3. The profile joins the grid, and any bundled sound packages install alongside it. If the name already exists, PadForge adds a number.
+1. Click **Get Profiles** and open **Import a File**, or click the drop tile after the last card.
+2. Click **Import…** and pick the `.pfprofile` file.
+3. The profile joins the cards, and any bundled sound packages install alongside it. If the name already exists, PadForge adds a number.
 
 Import does not activate the profile. Load it, or let auto-switch pick it up.
 
-The same button reads reWASD `.rewasd` configs and DS4Windows profile `.xml` files. Those open a preview of what came across first, and **Import** there adds a new profile. See [Import from reWASD and DS4Windows](profile-import.md).
+The same tab reads reWASD `.rewasd` configs and DS4Windows profile `.xml` files. Those open a preview of what came across first, and **Import** there adds a new profile. See [Import from reWASD and DS4Windows](profile-import.md).
 
 ### Drag and drop
 
-Drag a `.pfprofile`, `.rewasd` or DS4Windows `.xml` file from Explorer and drop it onto the profile grid to import it. A dashed **Drop to Import Profile** overlay appears while a valid file is over the grid. Several files dropped at once import one after another.
+Drag a `.pfprofile`, `.rewasd` or DS4Windows `.xml` file from Explorer and drop it onto the profile cards to import it. A dashed **Drop to Import Profile** overlay appears while a valid file is over the cards. Several files dropped at once import one after another. The drop tile after the last card (**Drop a profile file here**, **PadForge, reWASD or DS4Windows**) and the **Import a File** tab take a drop the same way.
 
 ---
 
 ## Community configs from the Steam Workshop
 
-**Browse Community Configs** imports a community-made Steam Input config from the Steam Workshop as a new profile. The full flow (opt-in, browsing, the translation manifest) lives on [Steam Workshop Config Import](steam-workshop-import.md). What matters here:
+The **Community** tab of **Get Profiles** imports a community-made Steam Input config from the Steam Workshop as a new profile. The full flow (opt-in, browsing, the translation manifest) lives on [Steam Workshop Config Import](steam-workshop-import.md). What matters here:
 
 - An imported profile carries only the pads the config actually drives. A config with both controller and keyboard/mouse bindings gets an **Xbox** pad and a **Keyboard + Mouse** pad, a pure keyboard/mouse layout gets a single Keyboard + Mouse pad, and a plain controller passthrough gets a single Xbox pad. Extra action sets arrive as [Shift Layers](shift-layers.md), cursor warps and autofire as [Macros](macros.md) on the Xbox pad.
-- It ships with no device assignments and no executable. Assign your controller to each created pad, then select the profile, click **Edit**, and add the game's executable so auto-switch can pick it up.
+- It ships with no device assignments and no executable. Assign your controller to each created pad, then pick **Edit…** in the card's **More** menu and add the game's executable so auto-switch can pick it up.
 - Imports always create a new profile. A taken name gets a number appended.
-- The profile remembers which Workshop config it came from, so **Check Imported Profiles for Updates** on the [Settings](../features/settings.md) page can tell you when the config changed upstream. A **Save As** fork counts as your own work and drops that link.
+- The profile remembers which Workshop config it came from, so **Check Imported Profiles for Updates** on the [Settings](../features/settings.md) page can tell you when the config changed upstream. A **Save As…** fork counts as your own work and drops that link, and so does **Save Current Setup Here**.
 
 ---
 
 ## Controller shortcuts
 
-Record a controller button combo and have it switch profiles, toggle the window, or turn every virtual controller on or off. You can do this without a keyboard.
+Record a controller button combo and have it switch profiles, show or hide the window, or turn every virtual controller on or off. You can do this without a keyboard.
 
 ### Shortcut modes
 
@@ -231,16 +236,18 @@ Record a controller button combo and have it switch profiles, toggle the window,
 | **Next Profile** | Move forward one step in the profile list. |
 | **Previous Profile** | Move backward one step. |
 | **Specific Profile** | Jump straight to a named profile. |
-| **Toggle Window** | Minimize PadForge when it is in front. Restore and raise it when it is minimized, hidden, or in the background. Honors the **Minimize to System Tray** setting and fullscreen. |
-| **Toggle Virtual Controllers Disabled** | Turn every created controller on or off with one combo. If any slot is enabled, the combo disables all of them. If every slot is already disabled, the combo enables them all. A bottom-of-screen flyout confirms the new state. |
+| **Show or Hide PadForge** | Minimize PadForge when it is in front. Restore and raise it when it is minimized, hidden, or in the background. Honors the **Minimize to System Tray** setting and full screen. |
+| **Turn Virtual Controllers On or Off** | Turn every created controller on or off with one combo. If any slot is enabled, the combo disables all of them. If every slot is already disabled, the combo enables them all. A bottom-of-screen flyout confirms the new state. |
 
 ### Add a shortcut
 
-1. Open the **Profiles** page. Click **Add Shortcut** under the **Profile Shortcuts** card.
-2. Pick a **Mode** from the dropdown.
-3. For **Specific Profile**, pick the target profile from the **Profile** dropdown.
-4. Pick a **Device**. One specific controller, or **Any Connected Device** to fire from any pad.
-5. Click **Record** (the record icon) and press your combo within 5 seconds.
+1. Open the **Profiles** page. Click **Add Shortcut** on the **Shortcuts** card.
+2. A shortcut reads as a sentence: the mode, **when**, the buttons, **on**, the device. Pick a mode from the first dropdown.
+3. For **Specific Profile**, pick the target profile from the dropdown that appears after it.
+4. Pick a device after **on**. One specific controller, or **Any Connected Device** to fire from any pad.
+5. Click the record button and press your combo within 5 seconds. The seconds count down while it records.
+
+Each button of the combo shows as a key. The clear button empties the combo, and **Delete** at the row's end removes the shortcut. **Reset All** on the card puts each shortcut's mode, profile, and device back to their defaults and keeps the recorded buttons.
 
 ### Recording details
 
@@ -257,13 +264,14 @@ outside PadForge. Playnite and LaunchBox are the two everyone asks about, and
 both work the same way: run one command before the game starts and another after
 it closes.
 
-Turn it on from the **Profiles** page. Check **Allow External Control by
-Launchers and Scripts**. PadForge then serves a local named pipe,
+Turn it on from the **External Control** card on the **Profiles** page. Click the
+row to open it and switch on **Allow External Control by Launchers and Scripts**.
+The closed row shows **On** or **Off**. PadForge then serves a local named pipe,
 `PadForge.Control`, while the engine is running. Local machine only, off by
 default.
 
 <!-- SCREENSHOT: profiles-external-control -->
-![The Allow External Control checkbox under the auto-switch checkbox on the Profiles page](../images/profiles-external-control.png)
+![The External Control card on the Profiles page, opened, with its switch](../images/profiles-external-control.png)
 
 ### The commands
 
@@ -296,17 +304,17 @@ profiles depending on how it was launched. The hold is never written to disk. It
 ends when:
 
 - the script sends `deactivate`,
-- you switch profiles yourself, by the status-bar switcher, the **Load** button on
-  this page (loading **Default** reverts), a controller shortcut, or a
+- you switch profiles yourself, by the profile switcher in the title bar, a card's
+  **Load** button on this page (loading **Default** reverts), a controller shortcut, or a
   [Web Menus](web-controller.md#profiles-from-the-phone) phone,
-- you uncheck **Allow External Control by Launchers and Scripts** while the engine runs,
+- you switch off **Allow External Control by Launchers and Scripts** while the engine runs,
 - the engine stops, or PadForge restarts.
 
 One exception: a profile set by `--profile` as PadForge starts, with **Allow External Control by Launchers
 and Scripts** off, stays held through an engine stop. Switch profiles yourself or restart PadForge to end it.
 The launch command runs once, so restarting the engine does not apply it again.
 
-A `deactivate` and an unchecked box both tell the foreground monitor to re-read
+A `deactivate` and a switched-off setting both tell the foreground monitor to re-read
 the window in front, so a still-focused game picks its own rule back up on the
 next check.
 
@@ -351,7 +359,7 @@ already up.
 
 | State | What happens |
 |---|---|
-| Already running | The second instance forwards the command over the pipe, prints the reply, and exits with no window. This needs **Allow External Control by Launchers and Scripts** checked. With the pipe off it prints `error not-connected` and changes nothing. |
+| Already running | The second instance forwards the command over the pipe, prints the reply, and exits with no window. This needs **Allow External Control by Launchers and Scripts** on. With the pipe off it prints `error not-connected` and changes nothing. |
 | Not running | PadForge starts and applies the profile once the engine is up, so a launcher can start it straight into a profile. This one is an in-process apply and works with the pipe off. |
 
 PadForge always runs elevated, so this form pops a UAC prompt when called from a
@@ -362,22 +370,22 @@ elevated scripts and Task Scheduler jobs.
 
 ## Switch flyout
 
-A small flyout slides up from the taskbar when a controller shortcut or a [Web Menus](web-controller.md#profiles-from-the-phone) phone switches the profile.
+A small flyout slides up from the taskbar when a controller shortcut, a Profile Shortcut macro action, or a [Web Menus](web-controller.md#profiles-from-the-phone) phone switches the profile.
 
 | Stage | What shows |
 |---|---|
 | Profile name | The new profile's name. Two seconds. |
-| Initializing | Flashing icon while the virtual controllers start up. |
-| Active | Accent-colored checkmark. The controllers are ready. |
-| Offline warning | After the Active stage, if one or more controllers have no online physical devices, a warning icon and "One or more controllers offline" message show for another two seconds. |
+| Initializing | **Initializing** with a flashing icon while the virtual controllers start up. |
+| Active | **Forging** with an accent-colored checkmark. The controllers are ready. Two seconds. |
+| Offline warning | After the Active stage, if one or more controllers have no online physical devices, a warning icon and **One or more controllers offline** show for another two seconds. |
 
 The flyout matches the Windows 11 volume OSD styling and follows your light or dark theme.
 
-An auto-switch on app focus does not raise this flyout. The active profile name updates in the status bar and on the pad page, and glows for a moment.
+An auto-switch on app focus does not raise this flyout. The profile pill in the title bar shows the new name and flares for a moment.
 
-The Toggle Virtual Controllers Disabled shortcut shows its own flyout (enabled or disabled) instead of the profile flyout.
+The Turn Virtual Controllers On or Off shortcut shows its own flyout (**Virtual Controllers Enabled** or **Virtual Controllers Disabled**) instead of the profile flyout.
 
-The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profile Switch Overlay** toggle, on by default. Turn it off and shortcuts still switch profiles, just without the flyout.
+The **Overlays** page under Extras carries a **Profile Switch Overlay** switch, on by default. Switch it off and shortcuts still switch profiles, just without the flyout.
 
 ---
 
@@ -390,15 +398,15 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 | Switch emulator with a Nintendo pad | Make a profile that uses a Nintendo slot instead of Xbox. The emulator sees a Switch Pro Controller and shows Nintendo button prompts. Add the emulator's executable. |
 | Several emulators, one profile | Make an "Emulators" profile and add `Dolphin.exe`, `Cemu.exe`, and `Ryujinx.exe`. All three load the same setup. |
 | Macros for one game only | Make a profile with D-pad-to-keyboard macros for an MMO and add the MMO executable. Keep Default free of those macros. With auto-switching on, the MMO profile loads when the game comes to the front and Default returns when you leave it. |
-| Quick on/off from the couch | Bind **Toggle Virtual Controllers Disabled** to LS + RS. Press it to make every virtual pad go away (for keyboard play), press again to bring them all back. |
+| Quick on/off from the couch | Bind **Turn Virtual Controllers On or Off** to LS + RS. Press it to make every virtual pad go away (for keyboard play), press again to bring them all back. |
 
 ---
 
 ## Tips
 
 - Set up Default first. It is your everyday layout.
-- **Save As** from a working setup is faster than building a profile from scratch.
-- Test auto-switch by Alt+Tabbing between your game and another app. Watch the FOREGROUND readout and the active profile name.
+- **Save As…** from a working setup is faster than building a profile from scratch.
+- Test auto-switch by Alt+Tabbing between your game and another app. Watch the **In front now** line and the profile pill in the title bar.
 - Macros save per profile and run while their profile is active. Auto-switching picks the profile by the game in front, but a profile you load by hand, or one a launcher holds, keeps its macros after you leave the game.
 - Physical device connections stay open across switches. Only the virtual side changes.
 - Export profiles to `.pfprofile` files to back them up or share them.
@@ -410,13 +418,13 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 - Auto-switch reads the foreground window. Games launched from a launcher that stays in front (some bootstrappers) may need the launcher's executable in the list too.
 - Match is by full file path. A game installed in two places needs both paths added.
-- Toggle Virtual Controllers Disabled only acts on slots you have created. It does not create or remove slots.
+- Turn Virtual Controllers On or Off only acts on slots you have created. It does not create or remove slots.
 
 ---
 
 ## Related pages
 
-- [Dashboard](../features/dashboard.md): shows the currently active profile.
+- [Home](../features/dashboard.md): the controllers of the active profile.
 - [Controller Slots](../features/controller-slots.md): a profile switch updates every slot in the configuration.
 - [Devices](../features/devices.md): physical device connections stay open across switches.
 - [Settings](../features/settings.md): **Check Imported Profiles for Updates** for profiles imported from the Steam Workshop.
@@ -427,4 +435,4 @@ The [Dashboard](../features/dashboard.md)'s **Overlays** card carries a **Profil
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

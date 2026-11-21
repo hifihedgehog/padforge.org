@@ -1,26 +1,26 @@
 # Mice, Keyboards and Vendor Rows
 
-*A mouse, keyboard or other lit device assigned to a virtual controller takes that controller's lighting and rumble on its own Lighting and Force Feedback tabs, the way a DualSense does. PadForge lights 1,565 USB identities itself, across Logitech, Razer, SteelSeries and more than a hundred other families, and any HID LampArray device, while the maker's program is closed. While it runs, PadForge lights the device through that program or leaves it to it. Vendor rows reach the headsets, mousepads, speakers, PC parts and Razer Sensa HD gear that PadForge does not read.*
+*A mouse, keyboard or other lit device assigned to a virtual controller takes that controller's lighting and rumble on its own Lighting and Force Feedback cards, the way a DualSense does. PadForge lights 1,572 USB identities itself, across Logitech, Razer, SteelSeries and more than a hundred other families, and any HID LampArray device, while the maker's program is closed. While it runs, PadForge lights the device through that program or leaves it to it. Vendor rows reach the headsets, mousepads, speakers, PC parts and Razer Sensa HD gear that PadForge does not read.*
 
 ---
 
 ## Setting one up
 
-A mouse or keyboard assigned to a virtual controller becomes one of its output devices. It gets a **Lighting** tab when PadForge has a way to light it and a **Force Feedback** tab when it can vibrate.
+A mouse or keyboard assigned to a virtual controller becomes one of its output devices. It gets a **Lighting** card in the controller page's **Lights & Sound** section when PadForge has a way to light it, and a **Force Feedback** card in **Rumble & Haptics** when it can vibrate.
 
-1. On the [Devices](devices.md) page, select the mouse or keyboard and click a virtual controller's number under **Virtual Controller Assignment**.
-2. Open that virtual controller from the sidebar and pick the device in the assigned-devices dropdown.
-3. On the **Lighting** tab, check **Control This Device’s Lighting** on the **Lighting Control** card and pick a mode. Rumble is on from the start, as it is for a gamepad.
+1. On the [Devices](devices.md) page, select the mouse or keyboard and click a virtual controller's chip under **Used By**, or drag the device onto a controller in the sidebar.
+2. Open that virtual controller from the sidebar and pick the device under **Driven by**.
+3. In **Lights & Sound**, turn on **Control This Device’s Lighting** on the **Lighting Control** line of the **Lighting** card and pick a mode. Rumble is on from the start, as it is for a gamepad.
 
-Settings belong to one virtual controller and one device, so a keyboard on two virtual controllers keeps separate settings for each. Assignments and both tabs' settings belong to the active [profile](../guides/profiles.md), as a gamepad's do. The row that **Read Analog Keyboards** adds for an analog keyboard counts as a keyboard here.
+Settings belong to one virtual controller and one device, so a keyboard on two virtual controllers keeps separate settings for each. Assignments and both cards' settings belong to the active [profile](../guides/profiles.md), as a gamepad's do. The row that **Read Analog Keyboards** adds for an analog keyboard counts as a keyboard here.
 
-A lit device that no mouse or keyboard row stands for, such as a headset, a mousepad, a monitor, a dock, a speaker or a light strip, gets a row of its own on the Devices page about five seconds after PadForge finds it. The row has no inputs and no **Lighting Control** card. Assigned to a virtual controller, it takes that controller's lighting on its Lighting tab.
+A lit device that no mouse or keyboard row stands for, such as a headset, a mousepad, a monitor, a dock, a speaker or a light strip, gets a row of its own on the Devices page about five seconds after PadForge finds it. The row has no inputs and no **Lighting Control** line. Assigned to a virtual controller, it takes that controller's lighting on its Lighting card.
 
 ---
 
 ## What PadForge lights
 
-PadForge lights these devices itself, with no maker's program running. The [supported devices](../devices/supported.md) page lists every one by name, 1,565 USB identities in all.
+PadForge lights these devices itself, with no maker's program running. The [supported devices](../devices/supported.md) page lists every one by name, 1,572 USB identities in all.
 
 | Family | How PadForge lights it |
 |---|---|
@@ -29,12 +29,13 @@ PadForge lights these devices itself, with no maker's program running. The [supp
 | SteelSeries | Through the device's own control collection, for 102 product IDs, read out of rivalcfg, OpenRGB and SignalRGB's plugins |
 | The OpenRGB families | 54 keyboard families and 44 families of mice, mousepads, microphones, speakers, keypads, gamepads, monitors, laptop light bars, desk lights and strips, ported from OpenRGB's controllers with the frames OpenRGB sends: Corsair, ASUS Aura, Cooler Master, HyperX, Roccat, Wooting, MSI, Dell and Alienware, Lenovo, HP Omen, Gigabyte Aorus, EVGA, Cherry, Das Keyboard, QMK and many more |
 | SignalRGB's plugins | Every product SignalRGB's plugins light that OpenRGB does not, with the frames each plugin sends, Keychron and other QMK keyboards among them |
-| Other projects | What only G-Helper, ckb-next, libratbag, alienfx-tools, asusctl, tuxedo-drivers and their kin drive: more ASUS laptops, Corsair, Logitech and Alienware devices, and TUXEDO light bars |
+| Other projects | What only G-Helper, ckb-next, libratbag, alienfx-tools, asusctl, tuxedo-drivers and their kin drive: more ASUS laptops, the ROG Falchion Ace 75 HE keyboard, Corsair, Logitech and Alienware devices, and TUXEDO light bars |
 | Any brand | Over HID LampArray, for a device Windows Dynamic Lighting can drive, while Dynamic Lighting is turned off for it |
+| Flydigi | The Apex 4, Apex 5 and Apex 6 Pro, on the pad's own Lighting card, through the session PadForge keeps with the pad for its triggers and rumble. See [Lighting](lighting.md#flydigi-apex-pads) |
 
 A device PadForge lights on its own shows its own virtual controller's color. Devices lit through a maker's program share one color for each kind, except where the program lights each device by itself.
 
-A Razer or SteelSeries mouse or keyboard gets its Lighting tab when PadForge can light it on its own, and otherwise once Razer Synapse or SteelSeries GG is installed. A device PadForge found keeps its tabs while it sleeps. The MX Master 4 gets its Force Feedback tab once PadForge finds its haptic motor, a Rival 500, 700 or 710 once GG is installed, and an iFeel mouse once it is on PadForge's driver.
+A Razer or SteelSeries mouse or keyboard gets its Lighting card when PadForge can light it on its own, and otherwise once Razer Synapse or SteelSeries GG is installed. A device PadForge found keeps its cards while it sleeps. The MX Master 4 gets its Force Feedback card once PadForge finds its haptic motor, a Rival 500, 700 or 710 once GG is installed, and an iFeel mouse once it is on PadForge's driver.
 
 | Brand | Rumble |
 |---|---|
@@ -48,22 +49,22 @@ A Razer or SteelSeries mouse or keyboard gets its Lighting tab when PadForge can
 
 ### Taking over a device's lighting
 
-A mouse or keyboard's Lighting tab opens with the **Lighting Control** card and its **Control This Device’s Lighting** checkbox, off by default. Assigning a keyboard for its keys never repaints it: until the box is checked, this virtual controller leaves the device's lighting alone. The checkbox's tooltip reads: *Off stops this virtual controller from lighting the device. A vendor row, or another device of its kind lit through the same software, can still set its color. A Set Chroma Color macro on this virtual controller still paints a Razer device.*
+A mouse or keyboard's Lighting card holds the **Lighting Control** line and its **Control This Device’s Lighting** switch, off by default. Assigning a keyboard for its keys never repaints it: until the switch is on, this virtual controller leaves the device's lighting alone. The switch's tooltip reads: *Off stops this virtual controller from lighting the device. A vendor row, or another device of its kind lit through the same software, can still set its color. A Set Chroma Color macro on this virtual controller still paints a Razer device.*
 
-![The Lighting tab of a Logitech G502 HERO assigned to an Xbox virtual controller](../images/pad-lighting-peripheral.png)
+![The Lighting card of a Logitech G502 HERO assigned to an Xbox virtual controller](../images/pad-lighting-peripheral.png)
 
-The vendor rows and the rows of lit devices with no inputs have no checkbox. Assigning one is enough.
+The vendor rows and the rows of lit devices with no inputs have no switch. Assigning one is enough.
 
-A device that nothing lights any more goes back to its own lighting, where it has a way back, and so does every device when PadForge's input engine stops. [Letting go of a device](#letting-go-of-a-device) lists what each shows after. PadForge reaches a maker's program or SDK only while something assigned needs it, or while the rumble mark on the [Devices](devices.md) page buzzes a Rival or the Razer Sensa row.
+A device that nothing lights any more goes back to its own lighting, where it has a way back, and so does every device when PadForge's input engine stops. [Letting go of a device](#letting-go-of-a-device) lists what each shows after. PadForge reaches a maker's program or SDK only while something assigned needs it, or while **Test Rumble** on the [Devices](devices.md) page buzzes a Rival or the Razer Sensa row.
 
 ### Modes
 
-The tab's lightbar card is the one a DualSense gets, without the controller art: all fifteen base modes and the **Input Reactive** overlay. The macro lightbar actions reach the device too. [Lighting](lighting.md) covers every mode and setting, the **Key Colors** card that colors a device key by key or zone by zone, the **LED Strips** card and **Map Key Lights**. On a mouse or keyboard:
+The Lighting card's mode rows are the ones a DualSense gets, without the lightbar picture: all fifteen base modes and the **Input Reactive** overlay. The macro lightbar actions reach the device too. [Lighting](lighting.md) covers every mode and setting, the **Key Colors** card that colors a device key by key or zone by zone, the **LED Strips** card and **Map Key Lights**. On a mouse or keyboard:
 
 | Mode | What the device shows |
 |---|---|
 | Player Number (Default) | The virtual controller's player color |
-| Off | The device stays dark. To give it back to its own software, uncheck Control This Device’s Lighting instead |
+| Off | The device stays dark. To give it back to its own software, turn off Control This Device’s Lighting instead |
 | Battery: Gradient by Charge Level | A Logitech device's charge, read over HID++ whichever way it is lit. PadForge reads no charge from any other device, so those and the vendor rows hold the Full Battery color |
 | Screen Color | The colors in one area of a display, one color or spread across the device's lights. See [Screen Color](screen-color.md) |
 
@@ -71,11 +72,11 @@ The tab's lightbar card is the one a DualSense gets, without the controller art:
 
 On a virtual DualSense, DualSense Edge or DualShock 4, a game that writes the lightbar takes over every device the virtual controller lights, the way it does on a DualSense:
 
-- For 1.5 seconds after each write, the game's color shows over the tab's mode and over a macro's lightbar color.
+- For 1.5 seconds after each write, the game's color shows over the card's mode and over a macro's lightbar color.
 - A device left at Player Number, with the Input Reactive overlay off and no macro color running, then keeps the game's last color until 15 seconds pass with no output from the game. Then the player color returns.
 - A device set to any other mode goes back to it 1.5 seconds after the last write.
 
-No game writes a lightbar to the other virtual controller types, so there the tab's own settings set the color. A light given its own color on the Key Colors card keeps it over the game's color.
+No game writes a lightbar to the other virtual controller types, so there the card's own settings set the color. A light given its own color on the Key Colors card keeps it over the game's color.
 
 ### Which way a device is lit
 
@@ -83,7 +84,7 @@ PadForge lights a device one way at a time, except where a device takes colors t
 
 1. While OpenRGB runs and holds the device, the device lights through OpenRGB's SDK Server and nothing else, since OpenRGB writes to it whenever its own lighting changes.
 2. While the maker's program runs, the device lights through it where PadForge has a route through that program, and is left to the program where it has none. PadForge sends the device nothing itself. Two programs that drive one device fight over it.
-3. While Windows Dynamic Lighting lights the device, PadForge leaves it alone, and the Lighting tab says so. A Lenovo Legion keyboard is the exception: its own controller stays in charge beside Windows, so PadForge lights it there.
+3. While Windows Dynamic Lighting lights the device, PadForge leaves it alone, and the line above the Lighting card says so. A Lenovo Legion keyboard is the exception: its own controller stays in charge beside Windows, so PadForge lights it there.
 4. A device whose own controller keeps still pictures only, and that also has a Dynamic Lighting interface Windows does not light, is lit both ways: still colors through its controller and changing colors through the interface, wherever its firmware lets each show. A Lenovo Legion Gen 10 keyboard is one.
 5. Otherwise PadForge lights the device on its own: over the device's own protocol where PadForge speaks it, and over HID LampArray where the device offers that instead.
 6. A Razer or SteelSeries device PadForge cannot light on its own waits for Razer Synapse or SteelSeries GG.
@@ -103,7 +104,7 @@ PadForge looks for the makers' programs by process name, about twice a second wh
 | Wootility | Through the Wooting RGB SDK's reports, key by key, beside Wootility |
 | OpenRGB | Through OpenRGB's SDK Server, LED by LED, for every device OpenRGB holds that has a Direct mode. The server has to be on in OpenRGB. PadForge finds its port from OpenRGB's own settings and the arguments it was started with, 6742 by default |
 
-A device lit through a program shares one color with every device of its kind, except through OpenRGB and the Wooting RGB SDK, which light each device by itself. While the program's SDK is off or will not answer, the device stays with the program, and the tab says why.
+A device lit through a program shares one color with every device of its kind, except through OpenRGB and the Wooting RGB SDK, which light each device by itself. While the program's SDK is off or will not answer, the device stays with the program, and the line above the card says why.
 
 ### Logitech devices
 
@@ -111,7 +112,7 @@ While neither G HUB nor Logitech Gaming Software runs, PadForge lights a Logitec
 
 Over Bluetooth a device confirms no color, so PadForge sends the color again with its next keep-alive, about every 5 seconds.
 
-When PadForge starts painting through the LED engine, it saves the program's lighting, and it restores that lighting when it stops. PadForge loads the engine the program installed and ships no Logitech code. A Logitech device that reports lighting over HID++ in a way PadForge does not drive lights only through the LED engine, so its Lighting tab shows while G HUB or Logitech Gaming Software runs.
+When PadForge starts painting through the LED engine, it saves the program's lighting, and it restores that lighting when it stops. PadForge loads the engine the program installed and ships no Logitech code. A Logitech device that reports lighting over HID++ in a way PadForge does not drive lights only through the LED engine, so its Lighting card shows while G HUB or Logitech Gaming Software runs.
 
 Two devices behave in ways worth knowing:
 
@@ -120,7 +121,7 @@ Two devices behave in ways worth knowing:
 
 ### Lighting Hold
 
-A Logitech device lit through feature 0x8071 can be held more firmly than by its colors alone. Where the device offers it, the **Lighting Control** card shows a **Lighting Hold** picker:
+A Logitech device lit through feature 0x8071 can be held more firmly than by its colors alone. Where the device offers it, the **Lighting Control** line opens to a **Lighting Hold** picker:
 
 | Option | What PadForge holds while the device is lit |
 |---|---|
@@ -160,13 +161,14 @@ While SteelSeries GG is closed, PadForge lights a SteelSeries mouse, keyboard, h
 
 ### The other families
 
-Every other family lights through the reports its reference sends, ported from OpenRGB at commit b9d903b5, from SignalRGB's plugins, or from the project that drives it. PadForge opens the device's lighting collection, reads what the reference reads first, and sends each picture the way the reference does. A family that needs a keep-alive gets one at the reference's interval, and one whose reference reads the device again before each picture does too.
+Every other family lights through the reports its reference sends, ported from OpenRGB at commit 6b681e3c, from SignalRGB's plugins, or from the project that drives it. PadForge opens the device's lighting collection, reads what the reference reads first, and sends each picture the way the reference does. A family that needs a keep-alive gets one at the reference's interval, and one whose reference reads the device again before each picture does too.
 
-- A device that stores each picture in its own memory, such as a Lenovo Legion Gen 10 keyboard or a mouse lit through a stored Static mode, takes a picture only once it has held for a moment and no faster than its reference writes. A color that keeps changing, a color cycle or colors that follow sound, does not show on it, and the Lighting tab says so. On a few, the first picture writes over the effects stored on the device, and the tab says those do not come back.
+- A device that stores each picture in its own memory, such as a Lenovo Legion Gen 10 keyboard or a mouse lit through a stored Static mode, takes a picture only once it has held for a moment and no faster than its reference writes. A color that keeps changing, a color cycle or colors that follow sound, does not show on it, and the line above the Lighting card says so. On a few, the first picture writes over the effects stored on the device, and the tab says those do not come back.
 - A keyboard whose stored lighting PadForge writes over, such as a Lenovo Legion or Corsair keyboard, has that lighting read and saved in PadForge.xml first, and put back at the hand-back. A run that ends without one, as a forced kill does, puts it back at the next start.
-- A device that another program has open, or one Windows holds as a keyboard or mouse and that refuses the report that sets its colors, is named so on its tab. A device that is connected and refuses PadForge's colors is tried again each minute.
+- A device that another program has open, or one Windows holds as a keyboard or mouse and that refuses the report that sets its colors, is named so above its Lighting card. A device that is connected and refuses PadForge's colors is tried again each minute.
 - A laptop keyboard lit through its firmware, and a strip or keyboard on a USB serial port, such as Skydimo's strips, the BlinkyTape and the Dygma Raise, light the same way.
 - A QMK keyboard is asked for its lights by its firmware, with no list of IDs, and is lit key by key where it answers.
+- A Corsair K70 PRO MINI WIRELESS lights its keys from OpenRGB's table and its 28 light bars from the row of SignalRGB's plugin, in one picture. No keyboard of that model was run with this build.
 
 ### Windows Dynamic Lighting devices
 
@@ -183,7 +185,7 @@ A Logitech, Razer or SteelSeries device gets no row of its own while that brand'
 
 Synapse, G HUB, Logitech Gaming Software, GG, Armoury Crate's Aura SDK, Mystic Light and iCUE take one color for each kind of device and show it on every device of that kind. Two Razer mice on two virtual controllers show one color between them while Synapse runs. When more than one assigned device or vendor row lights the same kind:
 
-1. A device lit from its own Lighting tab beats a vendor row, whatever the virtual controller numbers.
+1. A device lit from its own Lighting card beats a vendor row, whatever the virtual controller numbers.
 2. Otherwise the lower-numbered virtual controller sets the color.
 
 A device on two virtual controllers follows the same rule: the lower-numbered one sets its color. Devices PadForge lights on its own do not share a color. Each shows the one its own virtual controller sets.
@@ -211,7 +213,7 @@ If PadForge is ended by force, a device it lit on its own keeps the last color u
 
 ## Rumble
 
-A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback tab a gamepad gets, and [Force Feedback](force-feedback.md) covers its settings. Macro rumble reaches it too, and **Test Rumble** plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. The tab leaves out **Swap Left and Right Motors** for them and for the Razer Sensa row, since swapping the two changes nothing. A device on several virtual controllers takes the strongest rumble among them.
+A mouse that can vibrate takes its virtual controller's rumble through the Force Feedback card a gamepad gets, and [Force Feedback](force-feedback.md) covers its settings. Macro rumble reaches it too, and **Test Rumble** plays on the selected device. Each of these devices plays one strength at a time: the stronger of the left and right motors, after the tab's settings. The card leaves out **Swap Left and Right Motors** for them and for the Razer Sensa row, since swapping the two changes nothing. A device on several virtual controllers takes the strongest rumble among them.
 
 | Rumble strength | MX Master 4 | Rival 500, 700 and 710 |
 |---|---|---|
@@ -230,14 +232,14 @@ PadForge never changes the mouse's haptic settings. With haptic feedback turned 
 
 ### SteelSeries Rival 500, 700 and 710
 
-These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. Clicking the rumble mark of any tactile Rival on the Devices page buzzes all of them, whether or not that Rival is assigned. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.
+These vibrate through the tactile handler in SteelSeries GG, which has to be running. GG drives every tactile Rival at once, so the Rival on the lowest-numbered virtual controller sets the rumble for all of them. Clicking **Test Rumble** for any tactile Rival on the Devices page buzzes all of them, whether or not that Rival is assigned. When no Rival is assigned any more, the motor stops at once. Two seconds after no Rival is assigned and no virtual controller lights a SteelSeries device or the SteelSeries GG row, PadForge ends its GameSense game and GG's own effects come back.
 
 ### Logitech iFeel mice
 
 The iFeel Mouse and the iFeel MouseMan carry a motor that Logitech's old driver buzzed, and no driver for it runs on 64-bit Windows. PadForge plays rumble on these mice itself, once the mouse is on Windows' WinUSB driver. The switch is yours to make, one mouse at a time:
 
 1. On the [Devices](devices.md) page, select the mouse and click **Play Rumble on This Mouse**.
-2. Read the **Switch to PadForge's Driver** dialog and confirm with **Switch Driver**.
+2. Read the **Switch to PadForge’s Driver** dialog and confirm with **Switch Driver**.
 
 The switch has a cost, and the dialog states it. Windows stops using the mouse as a pointer until its driver is restored. PadForge moves the pointer from the mouse only while PadForge runs and the mouse is assigned to a Keyboard + Mouse virtual controller. **Restore the Windows Driver**, in the same place, puts Windows' own driver back.
 
@@ -245,13 +247,13 @@ The switch has a cost, and the dialog states it. Windows stops using the mouse a
 - The switch belongs to the USB port, because these mice have no serial number. On another port the mouse is a Windows mouse again, and PadForge says so when it starts.
 - With a second mouse of the same model plugged in, PadForge refuses the switch and asks you to unplug the others first. Windows would move every plugged-in mouse of that model at once.
 - Rumble plays at the stronger of the virtual controller's two motors, on the scale Logitech's driver used for each model. Under 2% nothing plays. Each frame plays for at most 300 ms, so the motor stops within a third of a second if PadForge stops abnormally.
-- The Force Feedback tab's route line reads *Rumble plays on* the mouse's name *as a buzz, sent straight to the device.*
+- The route line in the Force Feedback card reads *Rumble plays on* the mouse's name *as a buzz, sent straight to the device.*
 
 PadForge offers the switch to an iFeel MouseMan, and to the iFeel Mouse that Windows lists as the iFeel Mouse+, only when the mouse's own descriptor shows the buzz report. The HP, Saitek, Belkin and Kensington mice built on Immersion TouchSense are not offered it.
 
 ### Razer Sensa HD
 
-The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback tab. Its engine runs only while the row is assigned, or while the rumble mark on the Devices page buzzes it.
+The Razer Sensa row plays rumble on Razer Sensa HD devices such as the Wolverine V3 Pro, the Kraken V4 Pro and the Freyja. It appears on the Devices page once Razer Synapse is installed. Assign it to a virtual controller and it takes that controller's rumble on its Force Feedback card. Its engine runs only while the row is assigned, or while **Test Rumble** on the Devices page buzzes it.
 
 The row plays through the Interhaptics engine and its Razer provider, which ship unmodified inside PadForge, and through Razer Synapse 4 with Sensa HD Haptics. In Synapse, set the device's Haptic Source to Sensa HD Games. A Wolverine V3 Pro renders Sensa only on a PC, in PC mode, with firmware v2.02 or later ([Razer's firmware updater](https://mysupport.razer.com/app/answers/detail/a_id/14630)). Hold Function, Menu and A together for two seconds to switch it to PC mode.
 
@@ -261,29 +263,29 @@ Sensa takes one strength and plays it as one looping effect in the 65 to 300 Hz 
 
 ## Vendor rows
 
-Seven rows on the [Devices](devices.md) page stand for output a vendor's software delivers to devices PadForge does not read. Each appears once its software is installed, with **Lighting** or **Haptics** as its type. A row has no inputs, so it adds nothing of its own to a virtual controller's mappings. Assigned to a virtual controller, it takes that controller's lighting on its Lighting tab, or its rumble on its Force Feedback tab.
+Seven rows on the [Devices](devices.md) page stand for output a vendor's software delivers to devices PadForge does not read. Each appears once its software is installed, with **Lighting** or **Haptics** as its type. A row has no inputs, so it adds nothing of its own to a virtual controller's mappings. Assigned to a virtual controller, it takes that controller's lighting on its Lighting card, or its rumble on its Force Feedback card.
 
 | Row | Appears once this is installed | What it reaches |
 |---|---|---|
-| Razer Chroma | Razer Synapse | Every Chroma category that no assigned Razer device lights from its own Lighting tab: headsets, mousepads, and Chroma Link strips, and Razer mice, keyboards and keypads while no virtual controller lights a Razer device of that kind |
-| Logitech LIGHTSYNC | G HUB or Logitech Gaming Software | Every LED engine kind that no assigned Logitech device lights from its own Lighting tab: headsets, mousepads, and speakers, and Logitech mice and keyboards while no virtual controller lights a Logitech device of that kind. Also, in one color, the devices Logitech's LED SDK manual lists without zones: the G710+, G600, G510, G110, G19, G105, G300, G11, G13 and G15 |
+| Razer Chroma | Razer Synapse | Every Chroma category that no assigned Razer device lights from its own Lighting card: headsets, mousepads, and Chroma Link strips, and Razer mice, keyboards and keypads while no virtual controller lights a Razer device of that kind |
+| Logitech LIGHTSYNC | G HUB or Logitech Gaming Software | Every LED engine kind that no assigned Logitech device lights from its own Lighting card: headsets, mousepads, and speakers, and Logitech mice and keyboards while no virtual controller lights a Logitech device of that kind. Also, in one color, the devices Logitech's LED SDK manual lists without zones: the G710+, G600, G510, G110, G19, G105, G300, G11, G13 and G15 |
 | SteelSeries GG | SteelSeries GG | Headsets, and SteelSeries mice and keyboards while no virtual controller lights a SteelSeries device of that kind |
 | Razer Sensa | Razer Synapse, in the x64 build | Rumble on Razer Sensa HD devices, covered under Rumble above |
 | ASUS Aura | Armoury Crate, once its lighting service registers the Aura SDK | Motherboards, graphics cards and memory, and ASUS keyboards and mice while no virtual controller lights an ASUS device of that kind |
 | MSI Mystic Light | Mystic Light, in the x64 build | Motherboards and graphics cards, and MSI devices while no virtual controller lights one of that kind |
 | Corsair iCUE | iCUE 4 or 5, in the x64 build | Mousepads, headsets and headset stands, and Corsair devices while no virtual controller lights one of that kind |
 
-A lighting row lights only while its software runs, and its tab says it is waiting until then. A device lit from its own Lighting tab outranks a vendor row on its kind, whatever the virtual controller numbers. A vendor row removed from the Devices page comes back while its software stays installed.
+A lighting row lights only while its software runs, and its route line says it is waiting until then. A device lit from its own Lighting card outranks a vendor row on its kind, whatever the virtual controller numbers. A vendor row removed from the Devices page comes back while its software stays installed.
 
 ---
 
 ## The route line
 
-Both tabs carry a line in the accent color that says where the output goes and, when it does not arrive, why. On the Lighting tab it sits above the mode card, and with the checkbox off it shows only when something else lights the device. On the Force Feedback tab it sits at the top.
+Both cards carry a line in the accent color that says where the output goes and, when it does not arrive, why. For lighting it sits above the Lighting card, and with the switch off it shows only when something else lights the device. In **Rumble & Haptics** it sits at the top of the Force Feedback group.
 
-Neither tab shows the line while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, the Force Feedback tab shows no line. The Lighting tab there shows only a line that names what else lights the device, or the Logitech LIGHTSYNC row's line for an LED engine that will not load. One line always shows: *Not Available on ARM64*, on a Razer Sensa row that the x64 build's settings carried into the ARM64 build.
+Neither line shows while PadForge's input engine is stopped. On a virtual controller that is not live, such as one that is turned off, the rumble line does not show. The lighting line there shows only a line that names what else lights the device, or the Logitech LIGHTSYNC row's line for an LED engine that will not load. One line always shows: *Not Available on ARM64*, on a Razer Sensa row that the x64 build's settings carried into the ARM64 build.
 
-| The Lighting tab reads | When |
+| The lighting line reads | When |
 |---|---|
 | *Colors go straight to* and the device's name | PadForge lights the device on its own. |
 | *Colors go straight to* the device's name. *It does not dim its lights by itself while it is lit.* | A Logitech device held with Colors and Lighting Power. |
@@ -295,28 +297,28 @@ Neither tab shows the line while PadForge's input engine is stopped. On a virtua
 | *Colors go through Razer Synapse.* | The device lights through Synapse and PadForge has no way to light it on its own. The line names the program that runs instead where it is another: Logitech G HUB, Logitech Gaming Software, SteelSeries GG, Armoury Crate, Mystic Light or Corsair iCUE. |
 | *Colors go through Razer Synapse, which lights every device of this kind at once. While Razer Synapse is not running, PadForge lights this device on its own.* | The device lights through the maker's program for as long as that program runs. The line names the program that runs. |
 | *Lenovo Vantage lights this device while it runs. While Lenovo Vantage is not running, PadForge lights it on its own.* | A program PadForge has no route through runs and has the device. The line names the program. |
-| *Colors go through OpenRGB's SDK Server. While OpenRGB is not running, PadForge lights this device on its own.* | OpenRGB holds the device. Without the second sentence, PadForge has no way to light the device on its own. |
+| *Colors go through OpenRGB’s SDK Server. While OpenRGB is not running, PadForge lights this device on its own.* | OpenRGB holds the device. Without the second sentence, PadForge has no way to light the device on its own. |
 | *OpenRGB holds this device and has no Direct mode for it, so its lighting stays with OpenRGB.* | OpenRGB holds the device and offers no way to set its colors from outside. |
 | *OpenRGB is running and its SDK Server does not answer on port 6742, so PadForge leaves this device to OpenRGB. Turn on the SDK Server in OpenRGB and PadForge lights the device through it.* | OpenRGB runs with its server off, or on a port PadForge did not find. The line names the port tried. |
-| *Corsair iCUE is running with its SDK turned off. Turn on iCUE SDK in iCUE's settings and PadForge lights the device through it.* | iCUE refuses PadForge's connection. |
+| *Corsair iCUE is running with its SDK turned off. Turn on iCUE SDK in iCUE’s settings and PadForge lights the device through it.* | iCUE refuses PadForge's connection. |
 | *Armoury Crate is running and would not let PadForge light its devices. PadForge keeps asking.* | A program's SDK refuses PadForge. The line names the program. |
 | *Windows Dynamic Lighting lights this device. Turn Dynamic Lighting off for it in Windows Settings and PadForge lights it.* | Windows lights the device. For a laptop's own keyboard the line adds: *On some laptops the keyboard then stays dark while PadForge is not lighting it.* |
 | *Another program has this device open, so PadForge cannot light it. PadForge lights it once that program closes.* | Another program opened the device for itself alone. |
 | *Windows holds this device as a keyboard or mouse and refuses the report that sets its colors, so PadForge cannot light it on Windows.* | The device's lighting sits on a keyboard or mouse collection, and Windows refuses the report. |
-| *This device is connected and did not take PadForge's colors. PadForge tries again each minute.* | The device answers and refuses the colors. |
+| *This device is connected and did not take PadForge’s colors. PadForge tries again each minute.* | The device answers and refuses the colors. |
 | *Waiting for SteelSeries GG. Colors show once it runs.* | The software that lights the device does not answer. |
 | *Razer Synapse lights every device of this kind at once, so the one on Virtual Controller 1 sets their color.* | Another device of the same kind sets the color. |
-| *Razer Synapse lights every device of this kind at once, so the Razer Chroma row on Virtual Controller 1 sets their color.* | The checkbox is off, or this virtual controller is not live, and a vendor row lights this kind of device. |
+| *Razer Synapse lights every device of this kind at once, so the Razer Chroma row on Virtual Controller 1 sets their color.* | The switch is off, or this virtual controller is not live, and a vendor row lights this kind of device. |
 | *Virtual Controller 1 also lights this device, and its color shows.* | The same device, or the same vendor row, is lit from a lower-numbered virtual controller too. |
-| *Virtual Controller 1 lights this device.* | The checkbox is off here, or this virtual controller is not live, and another virtual controller lights the device. The Logitech LIGHTSYNC row never reads this while its engine will not load. |
+| *Virtual Controller 1 lights this device.* | The switch is off here, or this virtual controller is not live, and another virtual controller lights the device. The Logitech LIGHTSYNC row never reads this while its engine will not load. |
 | *Another row of this device on this virtual controller sets its color.* | A device PadForge lights on its own has two rows on this virtual controller, such as a mouse row and a keyboard row, and the other one sets the color. |
-| *Another row of this device on this virtual controller lights it.* | This row's checkbox is off, and another row of the same device on this virtual controller lights it. |
+| *Another row of this device on this virtual controller lights it.* | This row's switch is off, and another row of the same device on this virtual controller lights it. |
 | *This device has not answered yet. Its colors show once it wakes up.* | A device PadForge lights on its own is asleep, unplugged or not answering. |
 | *The Logitech LED engine on this PC cannot light this kind of device.* | The LED engine G HUB or Logitech Gaming Software installed lacks the call this kind of device needs, or will not load while that program runs. The Logitech LIGHTSYNC row reads it too when the engine will not load. In the ARM64 build, an engine that will not load reads *Not Available on ARM64* instead. |
 | *Lights the devices Razer Synapse reaches that no assigned device lights on its own, such as headsets, mousepads, and Chroma Link strips.* | The Razer Chroma row, while Synapse answers. Each vendor row names its program and its own examples, listed under [Vendor rows](#vendor-rows). |
 | *Waiting for Razer Synapse. Once it runs, this row lights the devices it reaches that no assigned device lights on its own, such as headsets, mousepads, and Chroma Link strips.* | The Razer Chroma row, while Synapse does not answer. |
 
-| The Force Feedback tab reads | When |
+| The rumble line reads | When |
 |---|---|
 | *Rumble plays through the tactile handler in SteelSeries GG.* | A Rival, while GG answers. |
 | *SteelSeries GG drives every tactile Rival at once, so the one on Virtual Controller 1 sets their rumble.* | A Rival on a lower-numbered virtual controller sets the rumble. |
@@ -332,7 +334,7 @@ On an MX Master 4 the line names the mouse and says its rumble plays as haptic p
 
 ## Set Chroma Color
 
-The **Set Chroma Color** macro action paints the Razer devices assigned to its virtual controller. While it runs, it paints over any virtual controller's Lighting tab, even on a device whose Control This Device’s Lighting checkbox is off. When macros on two virtual controllers paint the same device, or the same kind of device, the lower-numbered virtual controller wins.
+The **Set Chroma Color** macro action paints the Razer devices assigned to its virtual controller. While it runs, it paints over any virtual controller's Lighting card, even on a device whose Control This Device’s Lighting switch is off. When macros on two virtual controllers paint the same device, or the same kind of device, the lower-numbered virtual controller wins.
 
 - While Razer Synapse runs, the action goes through Synapse. It also paints every other Razer device of the same kinds, and every Razer device when the Razer Chroma row is assigned to its virtual controller. It lets go within 120 ms of the action ending.
 - While Synapse is closed, the action paints the assigned Razer devices PadForge lights on its own, and hands each back when the action ends.
@@ -343,7 +345,7 @@ See [Macros](../guides/macros.md#set-chroma-color).
 
 ## Remote Link
 
-A haptic mouse or keyboard shared from another PC over [Remote Link](../guides/remote-link.md) gets a Force Feedback tab, and its rumble plays on the PC it is plugged into. Its lighting stays with that PC, and so do the vendor rows. An iFeel mouse on PadForge's driver shares its motion as any mouse does.
+A haptic mouse or keyboard shared from another PC over [Remote Link](../guides/remote-link.md) gets a Force Feedback card, and its rumble plays on the PC it is plugged into. Its lighting stays with that PC, and so do the vendor rows. An iFeel mouse on PadForge's driver shares its motion as any mouse does.
 
 ---
 
@@ -366,12 +368,12 @@ The ARM64 build has no Razer Sensa row, because Razer ships no ARM64 engine. Log
 
 ## Related pages
 
-- [Lighting](lighting.md): every mode and setting on the Lighting tab.
-- [Force Feedback](force-feedback.md): the Force Feedback tab's settings and Test Rumble.
+- [Lighting](lighting.md): every mode and setting on the Lighting card.
+- [Force Feedback](force-feedback.md): the Force Feedback card's settings and Test Rumble.
 - [Devices](devices.md): assigning a device to a virtual controller, and the Switch Driver buttons.
 - [Macros](../guides/macros.md): Set Chroma Color and the lightbar actions.
 - [Analog Keyboards](analog-keyboards.md): analog keyboard rows, which count as keyboards here.
-- [Profiles](../guides/profiles.md): how a profile carries assignments and tab settings.
+- [Profiles](../guides/profiles.md): how a profile carries assignments and their settings.
 - [Remote Link](../guides/remote-link.md): sharing devices with another PC.
 - [Supported Devices](../devices/supported.md): every device PadForge lights, by name.
 - [Screen Color](screen-color.md): the lighting mode that follows a display.
@@ -379,4 +381,4 @@ The ARM64 build has no Razer Sensa row, because Razer ships no ARM64 engine. Log
 
 ---
 
-*Last updated for PadForge 5.3.1.*
+*Last updated for PadForge 6.0.0.*

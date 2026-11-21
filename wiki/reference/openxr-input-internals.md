@@ -38,7 +38,7 @@ A runtime DLL must export `xrNegotiateLoaderRuntimeInterface`, which hands back 
 
 Each manifest is a JSON file naming the runtime's library. The catalog parses them and marks the one matching `ActiveRuntime` as the default. *System Default* uses that runtime, or the first other registered runtime whose library is on disk when the default's library is missing. Nothing here writes: the machine's active runtime belongs to whatever set it.
 
-A runtime registered only as `ActiveRuntime` drops out of the catalog once another runtime takes the default, because the catalog has no other way to find its manifest. The Dashboard picker still lists it while it is the saved choice, under its manifest's file name (`DashboardViewModel.Repopulate`), and the session reads a saved choice from its manifest path directly (`OpenXrSession.Choose`). The user page covers that case for SteamVR. The picker reads the catalog again each time the input is turned on, the same step that restarts the session.
+A runtime registered only as `ActiveRuntime` drops out of the catalog once another runtime takes the default, because the catalog has no other way to find its manifest. The **OpenXR Runtime** picker on the Extras **Head Tracking** page still lists it while it is the saved choice, under its manifest's file name (`DashboardViewModel.Repopulate`), and the session reads a saved choice from its manifest path directly (`OpenXrSession.Choose`). The user page covers that case for SteamVR. The picker reads the catalog again each time the input is turned on, the same step that restarts the session.
 
 ---
 
@@ -80,9 +80,9 @@ Each hand is one `OpenXrHandDevice`, an `ISdlInputDevice` like any synthetic row
 
 **Silence returns to rest.** A sample older than `SilenceMs` (1000) returns every axis to rest and releases every button. This is the Head Tracker row's failsafe, for the same reason: a controller that goes to sleep or drops out of tracking mid-game must not leave a stick held. One that is set down and still tracked keeps reporting, and its axes follow it.
 
-**Own-vocabulary rows answer no Any Device source.** `AnswersAnyDeviceSources` is false, the rule [discussion #431](../features/devices.md) established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".
+**Own-vocabulary rows answer no Any Device source.** `InputDeviceType.AnswersAnyDeviceSources` is false for `VrController`, the rule [discussion #431](../features/devices.md) established. A row whose axes are named "Controller Yaw" must not satisfy a mapping asking a generic "Axis 0".
 
-**Trigger and Grip are unipolar.** `IsUnipolarActivatorSource` in `InputManager.Step3.MappingSetEval.cs` returns true for axes 8 and 9 on a `VrController`, so an Axis Past Threshold activator reads them as resting at zero rather than at center. Without that branch the activator engages the moment it is saved, which is [discussion #443](../features/mappings.md) on a new device type.
+**Trigger and Grip are unipolar.** `IsUnipolarActivatorSource` in `InputManager.Step3.MappingSetEval.cs` returns true for axes 8 and 9 on a `VrController` (`CanonicalAxisRestsAtZero`, through `OpenXrHandDevice.AxisTrigger` and `AxisSqueeze`), so an Axis Past Threshold activator reads them as resting at zero rather than at center. Without that branch the activator engages the moment it is saved, which is [discussion #443](../features/mappings.md) on a new device type.
 
 ---
 
@@ -96,7 +96,7 @@ The ranges are applied in the shared state fill, so every source that feeds thes
 
 ## Threading
 
-`OpenXrHeadPoseSource` owns a thread that creates the session, pumps events, and publishes poses. On a runtime other than SteamVR the same thread waits for a headset, replaces a session the runtime lost, and asks for a new instance after the runtime retired one. [Head Tracking Internals](head-tracking-internals.md#the-status-line) has the rules. `Stop` joins it for up to 2 s. It cancels under the gate every state write of the loop takes (`Show`), so a thread that outlives the join changes nothing the source shows. The publish side is a lock around the latest sample. The read side is each row's `GetCurrentState`, called from the poll thread's input-state step (`InputManager.Step2.UpdateInputStates.cs`).
+`OpenXrHeadPoseSource` owns a thread that creates the session, pumps events, and publishes poses. On a runtime other than SteamVR the same thread waits for a headset, replaces a session the runtime lost, and asks for a new instance after the runtime retired one. [Head Tracking Internals](head-tracking-internals.md#the-status-line) has the rules. `Stop` joins it for up to 2 s (`StopJoinMs`). It cancels under the gate every state write of the loop takes (`Show`), so a thread that outlives the join changes nothing the source shows. The publish side is a lock around the latest sample. The read side is each row's `GetCurrentState`, called from the poll thread's input-state step (`InputManager.Step2.UpdateInputStates.cs`).
 
 ---
 
@@ -119,4 +119,4 @@ Test coverage is uneven and worth stating plainly. The device rows, the head-pos
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

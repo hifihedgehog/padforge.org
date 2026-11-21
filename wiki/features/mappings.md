@@ -1,29 +1,36 @@
 # Button and Axis Mappings
 
-*One mapping table per virtual controller: every physical device assigned to the slot feeds the same grid, so inputs from different devices combine inside a single row.*
+*One mapping table per virtual controller: every physical device assigned to the slot feeds the same table, so inputs from different devices combine inside a single row.*
 
-![Button and axis mapping grid with source, value, and record columns](../images/pad-mappings.png)
+![The Mappings section in its List view, one row open with its source lines](../images/pad-mappings.png)
 
 ---
 
-## Mapping grid
+## The Mappings section
 
-| Column | What it does |
-|--------|--------------|
-| **Output** | The virtual output this row controls ("A", "Left Stick X", "D-Pad Up"). What the game sees. |
-| **Source** | One or more physical inputs that drive this output. Pick by hand, use Record, or click **+ Add Source** in the row's detail strip to add another. A Custom formula reads the sources as **a**, **b**, **c**, … in row order. |
-| **Value** | Live readout of the row's combined output. Updates in real time so you can verify on the spot. |
-| **Record** | Press a button or move an axis on any assigned physical controller. PadForge fills in the source automatically. |
-| **Clear** | Resets the row's primary source: descriptor, **Invert** / **Half** / **Bidirectional**, deadzone back to 50%, the device tag, and **Primary Mode** back to Direct. Extra sources keep their own remove buttons, and the combine mode and custom formula stay until you remove them or run **Clear All**. |
-| **Options** | Per-source controls: **Invert**, **Half**, **Bidirectional**, plus **Flip Output**, **Acceleration**, and **Sensitivity** where they apply, and the row's **Do Not Inherit** on an inheriting shift layer. Toggles that cannot act on the current source gray out. See [Per-source options](#per-source-options). |
-| **Axis-to-Button Deadzone** | Slider (1–100%) for how far an axis must move before a discrete output fires. Per source. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
+The mapping table is the first section of a controller's page. It is called **Mappings** on a gamepad slot, **Keys & Mouse** on a Keyboard + Mouse slot, **Notes & Controls** on a MIDI slot and **Hands** on a VR slot. Two buttons at the top switch between its two views of the same table:
 
-Two more controls live in the strip beneath the selected row rather than in a column:
+- **Picture** shows the controller. Click a control, then press the input that should drive it. The bar under the picture names the picked control and holds its row's source lines. A control with more than one row (a stick has X and Y) shows an **Output** chip for each, so you pick the row there. While a recording waits, a line under the picture names the control and carries a **Stop** button.
+- **List** shows every row. Its head reads **Games see**, then one column per device that drives the controller. Each row's line has the output's name ("A", "Left Stick X", "D-Pad Up"), a cell under each device's column with a tag for every input of that device that drives the output, the combine choice when the row has more than one source, **Clear**, and an **Options** chevron that opens the row. A click on a cell records for the row. A click elsewhere on a closed row opens it.
 
-- **Primary Mode** picks how the primary source is read (Direct, Toggle, Rapid Trigger, Incremental, Invert On Hold, Ramp). See [Source kinds](#source-kinds).
-- **Combine** appears once a row has two or more sources, or when **Primary Mode** is Incremental, Invert On Hold, or Ramp. See [Combine modes](#combine-modes).
+**Map All** sits at the top in both views. The List view adds the filter box, the device filter button, a **More** button (Copy, Paste, **Copy From…** and **Clear All**), and on a Keyboard + Mouse slot an **All** / **Mouse** / **Keyboard** scope picker. The page header's own **More** button holds the same four for every section.
 
-> **Tip:** The Value column reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.
+An open row lists its sources one line each, under a head that names the columns once: **Device**, **Mode**, **Source**, **Invert**, **Half** and **Bidirectional**. Every source line is alike, the first one included:
+
+| Part | What it does |
+|------|--------------|
+| Letter | The letter a Custom formula reads the source by: **a**, **b**, **c**, … in row order. |
+| **Device** | The device the input belongs to, with a light that is lit while the device sends. A device that is not connected is dimmed and says so, and the source keeps every setting. A source with nothing picked reads **Unassigned**. |
+| **Mode** | How the source is read: Direct, Toggle, Rapid Trigger, Incremental, Invert On Hold or Ramp. See [Source kinds](#source-kinds). |
+| **Source** | The input picker, with **Record** and **Clear** beside it. A mode that reads keys of its own shows its **Up** and **Down** keys, or its **Modifier**, here instead. |
+| **Invert**, **Half**, **Bidirectional** | The three switches, each with its reset. A switch that cannot act on the source is dimmed. Bidirectional can be set only while Half is on. See [Per-source options](#per-source-options). |
+| **Remove** | Takes the source off the row. Clear empties it and keeps it. |
+
+A line under each source holds what that source can be tuned by, and only what applies: the mode's own settings, the [Axis-to-Button Deadzone](#axis-to-button-deadzone), **Flip Output**, **Acceleration** and **Sensitivity**, then the [source shaping](#source-shaping) rows. Under the sources sit **Add Source** and, on a stick axis with one direction mapped, **+ Opposite Direction**. The row's output comes last: **Combine** once there is something to combine (see [Combine modes](#combine-modes)), **Do Not Inherit** on an inheriting shift layer, and the live **Value**.
+
+The row's **Clear** empties its first source: the input, **Invert**, **Half** and **Bidirectional**, the deadzone back to 50%, the device, and **Mode** back to Direct with its keys emptied. Added sources, the combine mode, the custom formula, and the source's dials and shaping stay until you remove them or run **Clear All**.
+
+> **Tip:** The Value bar reflects deadzone, center offset, max range, and combine math in real time. What you see is what the game gets, apart from the SOCD rule and Keep Controller Awake, which act in the last step before the output is sent.
 
 Rows group by category, in this order: **Buttons** (face, shoulder, system, stick clicks), **D-Pad** (four directions), **Triggers** (left and right), **Left Stick / Right Stick** (X and Y axes). PlayStation slots add the touchpad rows, a **Touchpad Click** row, and five motion rows: **Motion Gyro**, **Motion Accelerometer**, **Motion Pitch**, **Motion Yaw**, and **Motion Roll**. The two DualShock 3 presets leave out the touchpad rows, since the pad has no touchpad, and name the system buttons **Select** and **Start** where the other PlayStation presets say **Share** and **Options**. The **DualShock 3 (SIXAXIS): Full** preset adds ten [button pressure](#button-pressure) rows after the triggers. Nintendo and Extended slots arrange their own row sets. See [Nintendo virtual controllers](#nintendo-virtual-controllers) and [Custom DirectInput mappings](#custom-directinput-mappings).
 
@@ -35,8 +42,8 @@ Rows group by category, in this order: **Buttons** (face, shoulder, system, stic
 
 The fastest way to assign one source.
 
-1. Click **Record** on the target row.
-2. The button switches to a stop icon, its tooltip reads "Recording...", and the row pulses orange.
+1. Click **Record** on the source line, click a cell of the row in the List view, or click the control in the Picture view.
+2. The Record button turns into a stop button and its name reads "Recording…". In the List view the row flashes. In the Picture view the line under the picture reads "Listening for A. Press the input on your device."
 3. Press the button or move the axis on any physical controller assigned to this slot.
 4. PadForge detects the input, fills in the source, and stops recording.
 
@@ -44,13 +51,13 @@ PadForge detects buttons (first press), axes (movement past a threshold), D-pad 
 
 On a stick axis row, a button or D-pad press records one direction, and PadForge then asks for the opposite one. Moving an analog axis covers both directions at once.
 
-On the **Motion Gyro** row, recording waits for a controller on the slot to turn, and on the **Motion Accelerometer** row for one to tilt or shake. It records that controller's sensor, or its left Joy-Con or Nunchuk when that part moved more. A press or a stick push records nothing there. When no controller on the slot has the sensor, recording does not start and the status bar says so.
+On the **Motion Gyro** row, recording waits for a controller on the slot to turn, and on the **Motion Accelerometer** row for one to tilt or shake. It records that controller's sensor, or its left Joy-Con or Nunchuk when that part moved more. A press or a stick push records nothing there. When no controller on the slot has the sensor, recording does not start and the message line says so.
 
 > **Tip:** Move only the input you want. Wiggling a stick while pressing a button can catch the stick instead. Push sticks firmly and pull triggers far enough to cross the detection threshold.
 
 ### 2. Source dropdown
 
-Each source has one dropdown that lists the inputs of every device assigned to the slot, grouped under device headings, with an **(Any Device)** group first. The manual alternative to recording. The toolbar's **Filter inputs** box (Ctrl+F) and the funnel button beside it narrow what every dropdown on the tab offers.
+Each source has one dropdown that lists the inputs of every device assigned to the slot, grouped under device headings, with an **(Any Device)** group first. The manual alternative to recording. In the List view, the **Filter outputs and inputs** box (Ctrl+F) shows only the rows and inputs that match, and the device filter button beside it picks which devices' inputs the dropdowns offer.
 
 - **Recognized gamepads** (Xbox, DualSense, DualShock 4, DualShock 3, Switch Pro, etc.) show friendly names. "A", "B", "Left Stick X", "Right Trigger".
 - **Raw or unrecognized devices** (generic joysticks, racing wheels, flight sticks, Force Raw Joystick Mode) show numbered names. "Button 0", "Axis 0", "POV 0 Up".
@@ -73,9 +80,9 @@ Picking an input assigns it on the spot. Same result as recording. Use the row's
 
 **Map All** walks through every row in order. The fastest way to set up a controller from scratch.
 
-1. Click **Map All** (on the Controller tab or the Mappings tab toolbar).
+1. Click **Map All** at the top of the Mappings section, in either view.
 2. PadForge highlights the first row and starts recording.
-3. On the Controller tab, an orange prompt shows which output it expects and where you are in the sequence ("Map: A (1/21)").
+3. In the Picture view, the line under the picture shows which output it expects and where you are in the sequence ("Map: A  (1/21)" on an Xbox slot).
 4. Press the matching button or move the matching axis.
 5. PadForge captures the input and moves to the next row.
 6. Repeat until done. Click **Stop** to stop early.
@@ -113,9 +120,9 @@ A row can drive its output from any number of physical inputs, across any combin
 
 ### Adding sources
 
-Select the row and click **+ Add Source** at the bottom of its detail strip. In a Custom formula the new source reads as the next letter (**a** is the first, **b** the second, **c** the third, …). In the formula editor, the tooltips on the **a** to **d** chips name the source each letter reads.
+Open the row and click **Add Source** under its source lines. In a Custom formula the new source reads as the next letter (**a** is the first, **b** the second, **c** the third, …). In the formula editor, the tooltips on the **a** to **d** chips name the source each letter reads.
 
-Each extra source renders as its own chip with the same controls the primary carries: a mode dropdown, the input picker, Record and Clear buttons, the option checkboxes, the sliders that apply to it, and a remove button that deletes the source outright.
+Each added source is a line of its own, the same as the first: its device, a mode dropdown, the input picker, Record and Clear buttons, the three switches, the dials and shaping rows that apply to it, and **Remove**, which deletes the source outright. Remove on the first source makes the next one first, and on a row with one source it clears the row.
 
 ### Per-source options
 
@@ -123,32 +130,32 @@ Each source carries its own settings:
 
 | Option | What it does |
 |--------|--------------|
-| **Mode** | How the source is read. Direct, Toggle, Rapid Trigger, Incremental, Invert On Hold, or Ramp. The primary source's picker is the **Primary Mode** dropdown in the row's detail strip. Each extra source has its own dropdown at the front of its chip. See [Source kinds](#source-kinds). |
+| **Mode** | How the source is read. Direct, Toggle, Rapid Trigger, Incremental, Invert On Hold, or Ramp. Each source line has its own **Mode** dropdown with a reset. See [Source kinds](#source-kinds). |
 | **Invert** | Flips the source's value sign before the combine step. On a half-axis read of a centered axis it instead selects which half is read. See **Flip Output**. |
 | **Half** | Treats a bipolar axis source as half-range (one side of center only). |
 | **Bidirectional** | Half-axis only. Fires the axis-to-button gate when the input moves past the deadzone in either direction from center. Renamed from "Either" in 3.2. |
 | **Flip Output** | Appears when **Half** is on for a centered axis, where the **Invert** box is consumed as the half selector. Reverses the source's result, so a row can select a half and still invert the output. |
 | **Deadzone** | Per-source axis-to-button activation threshold. See [Axis-to-Button Deadzone](#axis-to-button-deadzone). |
 | **Acceleration** | Slider 0–5 with a reset button, shown on continuous sources (the family that can take **Half**), except the gravity-tilt pairs **Gyro Lean X / Y** and **Gyro Tilt X / Y**, whose engine path never reads it. Fast motion is amplified: the value scales by 1 + acceleration × \|value\|, then re-clamps to range. 0 (the default) keeps the response flat. [Steam Workshop imports](../guides/steam-workshop-import.md) land Steam's mouse acceleration here on stick-hosted rows. |
-| **Sensitivity** | A per-source multiplier with a reset button, shown on five source families only: Gyro rate axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Gyro Lean X / Y (0.1–5.0, where 1.0 reaches full deflection at 90° of tilt), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view, or at the screen's edge on a remote calibrated as a light gun), and Mouse Motion (0.1–5.0). Gyro Tilt X / Y has no dial: its gain is the degree range on the [Gyro tab's](../guides/gyro.md#rate-versus-tilt) Gyro Tilt card. Plain axis, slider, and Gamepad stick or trigger sources have no grid slider. Shape those on the [Sticks tab](stick-deadzones.md): gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier. |
+| **Sensitivity** | A per-source multiplier with a reset button, shown on five source families only: Gyro rate axes (0.1–10.0, where 1.0 is the engine default of 500°/s reaching full deflection), Gyro Lean X / Y (0.001–5.0, where 1.0 reaches full deflection at 90° of tilt), Mouse Position (0.1–5.0, where 1.0 reaches full stick deflection at 10% of screen width from center), IR Pointer (0.1–5.0, where 1.0 reaches full deflection at the edge of the camera's field of view, or at the screen's edge on a remote calibrated as a light gun), and Mouse Motion (0.1–5.0). Gyro Tilt X / Y has no dial: its gain is the degree range on the **Gyro Tilt** card in the **Motion & Touch** section (see [rate versus tilt](../guides/gyro.md#rate-versus-tilt)). Plain axis, slider, and Gamepad stick or trigger sources have no Sensitivity dial. Shape those with the [source shaping](#source-shaping) rows, or in the [Sticks & Triggers](stick-deadzones.md) section: gamepad sticks with the Sensitivity Curves, Keyboard + Mouse pointer sticks with that card's own Sensitivity multiplier. |
 | **Do Not Inherit** | A row setting rather than a per-source one. Shown only while you are editing a shift layer whose activator inherits unmapped targets. Keeps this one row's target off instead of falling through to Base. See [Shift layers](#shift-layers). |
 
 ### Direction badges
 
-When an extra source that is a button, a D-pad direction, or a touchpad click feeds a stick axis, its chip shows a direction badge. It marks which way that press drives the stick:
+When an added source that is a button, a D-pad direction, or a touchpad click feeds a stick axis, its line shows a direction badge beside the device name. It marks which way that press drives the stick:
 
 - **→ +** the press pushes the stick toward the positive side.
 - **← −** the press pushes the stick toward the negative side.
 
 Toggling **Invert** on the source flips the badge, so it always matches what the press does at runtime. Axis and slider sources carry their own sign and get no badge. Trigger rows get no badge either.
 
-On a stick-axis row where only the positive direction is mapped from a button-class source, an italic **+ Opposite Direction** link appears in the Source cell. One click adds a mirrored second source with **Invert** on, covering the negative direction. The link disappears once the row has a second source.
+On a stick-axis row where only the positive direction is mapped from a button-class source, a **+ Opposite Direction** button appears beside **Add Source**. One click adds a mirrored second source with **Invert** on, covering the negative direction. The button disappears once the row has a second source.
 
 ---
 
 ## Combine modes
 
-The **Combine** picker appears in the row's detail strip once a row has two or more sources, or when **Primary Mode** is Incremental, Invert On Hold, or Ramp. A single Direct, Toggle or Rapid Trigger source has nothing to combine.
+The **Combine** picker appears with the open row's output once a row has two or more sources, or when the first source's **Mode** is Incremental, Invert On Hold, or Ramp. A single Direct, Toggle or Rapid Trigger source has nothing to combine.
 
 | Mode | What it does |
 |------|--------------|
@@ -163,15 +170,15 @@ The **Combine** picker appears in the row's detail strip once a row has two or m
 
 For axis rows, including the touchpad finger X and Y rows, **Strongest** is the default. For button and D-pad rows, including **Touchpad Click** and the finger **Touch** rows, **Either** is the default. The reset button beside the picker puts a row back on its default. The Motion Gyro and Motion Accelerometer rows offer only Strongest, Combined, Average, and Custom.
 
-A collapsed row with two or more sources shows the current mode as a small chip next to the source list. Select the row and the **Combine** picker is in the detail strip below.
+A closed row whose sources combine shows the mode's name at the end of its line. Open the row to change it under **Combine**.
 
 ### Gyro plus stick on one axis
 
 The most common multi-source row: the physical stick for coarse movement, gyro for fine aim, both driving the same axis.
 
-1. On the **Right Stick X** row, keep the stick source and click **+ Add Source**.
+1. On the **Right Stick X** row, keep the stick source and click **Add Source**.
 2. Set the second source to **Gyro Yaw** (or **Gyro Horizontal**) for rate aiming, or **Gyro Tilt X** for tilt that holds.
-3. The **Combine** picker appears in the detail strip and auto-selects **Strongest**: whichever source pushes harder wins, so the stick takes over the moment you push it and gyro handles fine aim the rest of the time. Steam and DS4Windows arbitrate the same way.
+3. The **Combine** picker appears under the sources and auto-selects **Strongest**: whichever source pushes harder wins, so the stick takes over the moment you push it and gyro handles fine aim the rest of the time. Steam and DS4Windows arbitrate the same way.
 4. Repeat on **Right Stick Y** with **Gyro Pitch** or **Gyro Tilt Y**.
 
 **Combined** adds the two instead, clipping at full deflection when both push the same way, and **Average** halves both. See the [gyro guide's rate-versus-tilt section](../guides/gyro.md#rate-versus-tilt) for which gyro source fits which feel.
@@ -210,7 +217,7 @@ The operator palette is a row of chips beneath the formula box. Click a chip to 
 
 | Group | Chips |
 |-------|-------|
-| Operators | `+`, `−`, `×`, `÷`, `−A` (negate `a`), `(`, `)` |
+| Operators | `+`, `−`, `×`, `÷`, `−a` (negate the first source), `(`, `)` |
 | Numbers | `0`, `½` (0.5), `1`, `2` |
 | Comparisons | `<`, `>`, `≤`, `≥`, `=`, `≠` |
 | Logic and branch | `and`, `or`, `not`, `if?`, `else:` |
@@ -218,7 +225,7 @@ The operator palette is a row of chips beneath the formula box. Click a chip to 
 
 ### Live preview
 
-Under the formula box, a status line checks the formula as you type. The row's **Value** column shows the result live.
+Under the formula box, a status line checks the formula as you type. The row's **Value** bar shows the result live.
 
 - **✓ valid**, followed by a "refs" list naming the source each variable reads ("refs: a (DualSense · A)").
 - **✓ empty (evaluates to 0)** while the box is empty.
@@ -251,7 +258,7 @@ The **Starter Recipes** section lists ready-made formulas you can drop into the 
 
 ## Source kinds
 
-The **Primary Mode** dropdown in the row's detail strip picks how PadForge evaluates the primary source per frame. Each extra source carries the same choice in the dropdown at the front of its chip.
+The **Mode** dropdown on each source line picks how PadForge evaluates that source per frame. The first source's dropdown leaves out the modes that cannot act on it.
 
 | Kind | What it reads |
 |------|---------------|
@@ -259,7 +266,7 @@ The **Primary Mode** dropdown in the row's detail strip picks how PadForge evalu
 | **Toggle** | The source descriptor's value, latched. One press holds the output on and the next press releases it. A button row holds the button, a trigger row holds a full pull, and a stick row holds full deflection toward the side the press pushed. On a button row a trigger or stick input counts as a press past the **Axis-to-Button Deadzone**, as it does for Direct. On a trigger row a trigger counts past half its pull, and on a stick row a stick counts past half its push from center. A trigger on a stick row rests at full deflection, so Toggle cannot stay on there: the row turns on near the end of the pull and off again on the release. The toggle releases when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline. |
 | **Rapid Trigger** | The source descriptor's value, released and pressed again by short moves past the **Axis-to-Button Deadzone**. See [Rapid Trigger](#rapid-trigger). |
 | **Incremental** | Ramps an accumulator via the Up / Down inputs you pick. Configurable rate (units per second), sticky-vs-snap behavior (hold value when both released, or snap back to floor), and clamp range (Min / Max). |
-| **Invert On Hold** | A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. The modifier reads the controller you picked or recorded it from, the one named under it. An **(Any Device)** modifier counts from any device on the slot that has that input. On a row whose only other source is a Direct, Toggle or Rapid Trigger source set to **(Any Device)**, it flips only the input of the controller it is pressed on. A modifier whose controller is not connected counts as released. It adds no value of its own, so **Primary Mode** offers it only once the row has another source to flip. |
+| **Invert On Hold** | A row modifier. While the modifier button you pick is held, the row's combined output flips: a stick axis changes sign and a trigger reads as its opposite. Button rows ignore it. The modifier reads the controller you picked or recorded it from, the one named under it. An **(Any Device)** modifier counts from any device on the slot that has that input. On a row whose only other source is a Direct, Toggle or Rapid Trigger source set to **(Any Device)**, it flips only the input of the controller it is pressed on. A modifier whose controller is not connected counts as released. It adds no value of its own, so the first source's **Mode** offers it only once the row has another source to flip. |
 | **Ramp** | A time-based axis envelope. An Up key attacks the output toward +1 and a Down key toward -1, each over the **Attack** time. Releasing eases back to center over the **Release** time when **Autocenter** is on, or holds the last position when it is off. **Reverse** scales how fast it returns when you press the opposite key. Stick-axis and trigger targets. On a trigger the Up key drives the pull and the Down key reads as released. Button targets get nothing from a Ramp source. |
 
 Direct, Toggle and Rapid Trigger sources read the descriptor you assigned. Incremental sources ignore the descriptor and read the Up / Down buttons you configure. Invert On Hold sources ignore the descriptor and read only the modifier button. Ramp sources ignore the descriptor too: they read the Up and Down keys you record to drive the envelope. An Up or Down key can be any on/off input: a button, a hat direction, a stick ring, a touchpad finger ring, a touchpad gesture, a mouse gesture, a menu cell, a MIDI note, CC or encoder detent, or **IR Offscreen** (**Gun Offscreen** on a GunCon 2). Each key reads the controller you picked or recorded it from, the one named under it, so Up can be a button on one controller and Down a button on another, and either key keeps working while the other's controller is off. A key from the **(Any Device)** group reads every controller on the slot that has it. A key saved by an earlier version stored no controller, and it takes the one its picker shows. While the list has no entries for the controller its source was saved on, the picker shows no selection and the key keeps reading that controller. A gesture holds the key for as long as it stays fired. A tap or swipe stays fired for the touchpad's **Cooldown** (100 ms unless you change it), so each one moves the value one step. A long press or a radial zone stays fired while your finger stays and for the Cooldown after you lift, and a touch spot only while your finger stays. A MIDI CC counts as held from 64, where a sustain pedal turns on, and an encoder detent holds the key for 24 ms, so each detent moves the value one step. A stick ring (**Left Stick Ring**, **Right Stick Ring**) holds the key while the stick is pushed at least halfway out, and a touchpad finger ring (**Touchpad 1 Finger 1 Ring**) while the finger rests at least halfway from the pad's center to its edge. Pick a ring from the list, because Record sees the movement behind one as an axis, and an axis is no key. The Up and Down pickers list only inputs that read as a key, so a stick axis, a trigger, a slider, a motion axis or pitch bend is not in them. One saved as a key by an earlier version reads nothing, and its picker shows no selection until you pick a key. The per-row **Record** button records the input itself for Direct, Toggle and Rapid Trigger, and a kind's own inputs in sequence for the others (Up, then Down, or the modifier alone).
@@ -271,7 +278,7 @@ Rapid Trigger, the analog keyboard feature, presses and releases on movement ins
 <!-- SCREENSHOT: mapping-rapid-trigger -->
 ![A Right Trigger row in Rapid Trigger mode, with its Distance slider](../images/mapping-rapid-trigger.png)
 
-- **Distance** sits in the row's detail strip when **Primary Mode** is Rapid Trigger, and on an extra source's chip when that source's mode is. It runs from 1 to 50 percent of full travel, 10 by default. A release counts from the deepest point since the press, and the next press from the shallowest point since the release.
+- **Distance** sits on the line under a source whose **Mode** is Rapid Trigger. It runs from 1 to 50 percent of full travel, 10 by default. A release counts from the deepest point since the press, and the next press from the shallowest point since the release.
 - It is offered for inputs with press depth: analog keys, gamepad triggers and sticks, other axes and sliders, MIDI control changes and pitch bend, touchpad pressure, and the Ring-Con squeeze and pull. Picking an input without depth, such as a button, sets the source back to Direct.
 - It acts on rows that press: buttons, D-pad directions, keys, mouse buttons, MIDI notes, Extended buttons and POV directions, VR controller buttons, the touchpad's contact and click rows, and the two trigger rows. A trigger row sends a full pull while pressed and rest while released, so a game that fires on the trigger sees each press, and in this mode it shows the deadzone slider as its actuation point. Stick rows and the touchpad's X and Y rows, which read an input as a position, do not offer it.
 - An **(Any Device)** source follows the deepest of the slot's devices. The input starts over when its row stops running: its shift layer closes, a layer overrides it, or its device goes offline.
@@ -284,15 +291,15 @@ This is Rapid Trigger's standard mode: one distance for both directions, with th
 
 A mapping row's output follows its sources every frame, apart from the state described above: **Toggle** latches its input, **Rapid Trigger** remembers how far its input has traveled, and Incremental, Ramp, and Stick Trim carry a value from frame to frame. Nothing on a row repeats. Other press patterns belong to [Macros](../guides/macros.md), through each macro's **Fire** picker: **On Press**, **On Single Press**, **On Release**, **While Held**, **On Long Press**, **On Short Press**, **On Double Press**, **On Triple Press**, **Toggle** (the first press latches the actions on, the next press releases), **Turbo** (the actions repeat at an interval while the trigger is held), **Always**, and **Custom Expression**.
 
-To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid. A plain toggle needs no macro: set the row's **Primary Mode** to **Toggle**.
+To give a button one of these behaviors, bind the macro's trigger to the physical button and point its action at the virtual button, instead of mapping the button in the grid. A plain toggle needs no macro: set the source's **Mode** to **Toggle**.
 
 ---
 
 ## Modifiers
 
-![Per-source sensitivity on a mapping row](../images/mapping-sensitivity.png)
+![The Left Stick X row’s lines under the controller’s picture, with a line for each of its sources](../images/mapping-sensitivity.png)
 
-The per-source toggles in the Options column. These are per source, not per row.
+The switches on each source line. These are per source, not per row.
 
 ### Invert
 
@@ -311,7 +318,7 @@ Half-axis only. The axis-to-button gate fires on absolute deflection past the de
 
 ### Flip Output
 
-When **Half** is on for a centered axis, the **Invert** box is consumed as the side selector (upper half vs. lower half), which leaves nothing to reverse the result with. The **Flip Output** checkbox appears in that case and flips the output direction, so one source can select a half and still invert. Mouse Motion, Gyro Lean, and Gyro Tilt sources with **Half** on get it too, since **Invert** picks their direction. It rides extra-source chips the same way.
+When **Half** is on for a centered axis, the **Invert** box is consumed as the side selector (upper half vs. lower half), which leaves nothing to reverse the result with. The **Flip Output** checkbox appears in that case and flips the output direction, so one source can select a half and still invert. Mouse Motion, Gyro Lean, and Gyro Tilt sources with **Half** on get it too, since **Invert** picks their direction. It shows on every source line the same way.
 
 ### Descriptor prefixes
 
@@ -324,6 +331,38 @@ The Invert and Half toggles also ride the primary source's descriptor as prefixe
 | **IH** | Both | "IHAxis 2" |
 
 Where PadForge names the source in text, the prefix reads as a word before the input name on any device: "Inv. Axis 1", "Half Axis 0", "Inv. Half Axis 2", or "Inv. Left Stick X" on a recognized gamepad.
+
+---
+
+## Source shaping
+
+Each source carries its own response shaping and up to two inputs it waits on, on the line under the source. They hold the same values a [Steam Workshop](../guides/steam-workshop-import.md) or [Profile Import](../guides/profile-import.md) writes, so an imported row's gates and shaping can be read and changed on any line.
+
+<!-- SCREENSHOT: mapping-source-shaping -->
+![The Right Stick X row open in the List view: under its first source, Only While, And While, Curve, Outer Range, Anti-Deadzone, Deadzone Shape and Inner Deadzone](../images/mapping-source-shaping.png)
+
+| Row | What it does | Range |
+|-----|--------------|-------|
+| **Only While** | The source counts only while this input also reads as pressed on the same controller. An axis counts past half its travel. An import's zone test reads as the stick or trigger range it checks. The **Change Input** picker swaps in another input to wait on. | Shown on a source that has one |
+| **And While** | A second input the source also waits on. | Shown on a source that has one |
+| **Curve** | Raises the reading to this power before it drives the output. 0 and 1 leave it straight. Above 1 is slower near the center. | 0 to 5, 0 by default |
+| **Outer Range** | The output reaches full at this much of the travel. 100% is off. | 1 to 100%, 100% by default |
+| **Anti-Deadzone** | The output starts at this much as soon as the input moves. 0 is off. | 0 to 99%, 0% by default |
+| **Deadzone Shape** | Off leaves the read alone. **Axial** measures this axis alone. **Radial** measures the stick pair together. | Off, Axial, Radial. Off by default |
+| **Inner Deadzone** | Below this much of the travel the input reads as centered. | 0 to 99%, 0% by default |
+
+Each row has a reset. On **Only While** and **And While** the reset removes the gate, so the source counts again whatever that input does. Neither row can be added by hand: they show only on a source that already waits on an input, which is how an import builds a chord or a stick zone.
+
+The five shaping rows show on a source that holds a shaping value, and on every analog source of a row whose output has no shaping card of its own, such as a mouse axis, a key or a raw Extended axis. The stick axis and trigger rows keep them hidden until one holds a value, because those six outputs are shaped on the device's cards in the **Sticks & Triggers** section ([Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md)), which take an import's shaping when the device is assigned.
+
+PadForge applies them in this order:
+
+1. **Deadzone Shape**, when it is Axial or Radial: travel at or under the **Inner Deadzone** reads 0, and the travel from there to the **Outer Range** stretches over the whole output. Radial tests the X and Y axes of the stick together and keeps the stick's direction. An axis with no partner tests on its own. A **Half** read is not shaped this way, and **Inner Deadzone** does nothing while the shape is Off.
+2. **Outer Range**, when the shape is Off: full output at that much of the travel.
+3. **Curve**.
+4. **Anti-Deadzone**, added last so the floor is the same at every curve.
+
+**Clear All** resets all seven on every row. A row's **Clear** leaves them.
 
 ---
 
@@ -345,11 +384,11 @@ See [Shift Layers](../guides/shift-layers.md) for the full activator reference, 
 
 ## Axis-to-Button Deadzone
 
-When a source feeds a discrete output (button, D-pad direction, keyboard key, MIDI note, or Extended HID button), the **Axis-to-Button Deadzone** column controls how far the source must travel before the output fires. This stops small joystick movement from triggering button presses by accident.
+When a source feeds a discrete output (button, D-pad direction, keyboard key, MIDI note, or Extended HID button), the **Axis-to-Button Deadzone** on the source's line controls how far the source must travel before the output fires. This stops small joystick movement from triggering button presses by accident.
 
-- Each source has its own slider (1–100%) with an editable text field and a reset button.
+- Each source has its own slider (1–100%) on the line under it, with an editable text field and a reset button.
 - The default is **50%**. The source must pass the halfway point to fire.
-- The slider applies only when the source is a continuous input, such as an axis, slider, gyro, pointer, or pressure read, a stick or touchpad ring, Motion Shake or Motion Lean, MIDI pitch bend, or inbound rumble, and the target is a discrete output. Otherwise the row hides it and an extra source's chip grays it out. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md) tabs for those.
+- The slider applies only when the source is a continuous input, such as an axis, slider, gyro, pointer, or pressure read, a stick or touchpad ring, Motion Shake or Motion Lean, MIDI pitch bend, or inbound rumble, and the target is a discrete output. Otherwise the source's line hides it. Axis-to-axis mappings (sticks, triggers, mouse movement, MIDI CCs) are not affected. Use the [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md) cards in the **Sticks & Triggers** section for those, or a source's own [shaping rows](#source-shaping).
 - A trigger row in [Rapid Trigger](#rapid-trigger) mode shows the slider too, since that mode turns the trigger into a press. There it is the actuation point.
 - A higher value (80%) means a firmer push before the button fires. A lower value (20%) makes it more sensitive.
 - Values persist per source and ride along with Copy, Paste, and Copy From operations.
@@ -379,7 +418,7 @@ Without **Half**, the 50% threshold sits at the axis's center, so a centered axi
 
 ![SOCD cleaning on a Keyboard and Mouse slot](../images/pad-kbm-socd.png)
 
-The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-tier **Output** tab, alongside Keep Controller Awake. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
+The **SOCD** (Simultaneous Opposite Cardinal Directions) card sits under the picture in the Mappings section's **Picture** view, folded to one line beside Keep Controller Awake. Click the line to open it. It resolves paired buttons held at the same time on this slot's virtual controller output. When both buttons of a pair are down, the chosen rule decides which press the game sees.
 
 | Mode | What it does |
 |------|--------------|
@@ -394,7 +433,7 @@ The **Simultaneous Opposite Cardinal Directions (SOCD)** card lives on the slot-
 - The rule applies to the slot's final combined output right before it is submitted, so physical presses, mapped sources, and macro presses are all cleaned.
 - The card's Reset All turns the mode off and removes every pair.
 
-Keyboard + Mouse slots show a twin card on the same tab that cleans opposing key pairs on the virtual keyboard output instead. See [Controller Slots](controller-slots.md). MIDI and VR slots have no Output tab at all.
+Keyboard + Mouse slots show a twin card in the same place that cleans opposing key pairs on the virtual keyboard output instead. See [Controller Slots](controller-slots.md). MIDI and VR slots have neither card.
 
 ---
 
@@ -414,7 +453,7 @@ For unrecognized devices or Force Raw Joystick Mode, the source picker shows num
 | **Gyro Pitch**, **Gyro Yaw**, **Gyro Roll** | Calibrated gyro rate axes on devices with motion |
 | **Gyro Horizontal (Yaw + Roll)** | Blended horizontal-turn axis that combines yaw and roll, so aiming works the same whether the pad is held flat or upright |
 | **Gyro Lean X**, **Gyro Lean Y** | Sustained tilt from gravity. 90° of tilt from the resting grip reads full scale, the value holds while the tilt holds, and the per-source Sensitivity dial scales it. Gyro Recenter re-zeroes the grip. |
-| **Gyro Tilt X**, **Gyro Tilt Y** | The adjustable-range tilt pair. Full deflection at the range set on the Gyro tab's Gyro Tilt card (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode. |
+| **Gyro Tilt X**, **Gyro Tilt Y** | The adjustable-range tilt pair. Full deflection at the range set on the **Gyro Tilt** card in the **Motion & Touch** section (default 25°), with a tilt deadzone. The closest match to Steam's Joystick Deflection mode. |
 | **Left Joy-Con Gyro Pitch**, **Left Joy-Con Gyro Yaw**, **Left Joy-Con Gyro Roll**, **Left Joy-Con Gyro Horizontal (Yaw + Roll)** | The left half's own gyro on a combined Joy-Con pair. Offered only when the pair reports the second sensor. |
 | **Right Joy-Con Gyro Pitch**, **Right Joy-Con Gyro Yaw**, **Right Joy-Con Gyro Roll**, **Right Joy-Con Gyro Horizontal (Yaw + Roll)** | The right half's own gyro on a combined Joy-Con pair. On a pair the plain Gyro axes read both halves averaged, so these keep the raw right half reachable. Offered only when the pair reports the second sensor. |
 | **IR Pointer X**, **IR Pointer Y** | Wii Remote pointer position from the sensor bar. While the camera can't see the bar they hold their last reading, where 4.5.3 and earlier read center. On a Namco GunCon 2 the picker lists them as **Gun Aim X** and **Gun Aim Y**, and they hold the same way while the gun points off the screen. |
@@ -432,7 +471,7 @@ Touchpad entries also ride the raw list on pads with a touchpad:
 |------------|---------|
 | **Touchpad 1 Finger 1 X / Y**, **Touchpad Click** | Finger position and the hard click. See [Touchpad](touchpad.md) for the full touchpad surface. |
 | **Touchpad 1 Finger 1 Pressure** | The finger's reported press level, 0 to 1. Pads without a force sensor report full while the finger is down, so it also works as a plain touch contact. One entry per touchpad and finger. |
-| **Touchpad 1 Pointer X / Y** | Absolute finger position for cursor warping. Bind to Mouse X/Y on a Keyboard + Mouse slot and the cursor jumps to where the finger sits. Single-pad devices also offer **Left Half** and **Right Half** variants. Tuning lives on the [Touchpad](touchpad.md) tab's Absolute Pointer card. |
+| **Touchpad 1 Pointer X / Y** | Absolute finger position for cursor warping. Bind to Mouse X/Y on a Keyboard + Mouse slot and the cursor jumps to where the finger sits. Single-pad devices also offer **Left Half** and **Right Half** variants. Tuning lives on the [Touchpad](touchpad.md) **Absolute Pointer** card in the **Motion & Touch** section. |
 
 ---
 
@@ -461,7 +500,7 @@ Four more entries read a whole stick rather than one input. They appear in **(An
 
 | Source | What it reads |
 |---|---|
-| **Flick Stick (Right Stick)**, **Flick Stick (Left Stick)** | The stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the Sticks tab. See [flick stick](stick-deadzones.md#flick-stick). |
+| **Flick Stick (Right Stick)**, **Flick Stick (Left Stick)** | The stick as a flick-stick camera source. Map one to Mouse X on a Keyboard + Mouse slot and tune it on the **Flick Stick** card in the **Sticks & Triggers** section. See [flick stick](stick-deadzones.md#flick-stick). |
 | **Gamepad Left Stick Ring**, **Gamepad Right Stick Ring** | The stick pair's deflection magnitude, clamped to 0–1. On a button target the source's [Axis-to-Button Deadzone](#axis-to-button-deadzone) slider sets the ring radius, 50% by default, and **Invert** selects the inner ring instead of the outer one. |
 
 Under a controller the rings drop the Gamepad prefix and read **Left Stick Ring** and **Right Stick Ring**, since they are that controller's own inputs.
@@ -500,7 +539,7 @@ A profile imported from reWASD or DS4Windows (see [Profile Import](../guides/pro
 | A stick sector or a wedge of Steam's D-pad | The stick, then the direction nearest the sector's center: *Left Stick Ring: Up* |
 | One stage of a two-stage trigger pull | The trigger, then the mode and the stage: *Left Trigger: Hair Trigger, Full Pull*. Hip Fire and Hip Fire Exclusive add the wait in milliseconds: *Left Trigger: Hip Fire, Soft Pull, 70 ms* |
 
-The numbers behind a label stay as imported. Pick another input from the dropdown to replace the read. The **Sensitivity** floor is 0.001 on an imported row, below the 0.1 of the slider, because a rotated stick's row carries the sine or cosine of its rotation.
+The numbers behind a label stay as imported. Pick another input from the dropdown to replace the read. The plain **Sensitivity** value floors at 0.001, because an imported rotated stick's row carries the sine or cosine of its rotation.
 
 ---
 
@@ -514,7 +553,7 @@ Pads with a motion sensor add whole-sensor, tilt, and shake sources to the picke
 | **Motion Accelerometer** | The device's full accelerometer stream to the virtual controller's motion accelerometer output. |
 | **Left Joy-Con Motion Gyro** | The left half's full rate vector on a combined Joy-Con pair, instead of the right half's. Offered only when the pair reports the second gyro. |
 | **Nunchuk Accelerometer** / **Left Joy-Con Accelerometer** | The accelerometer on an attached Nunchuk or left Joy-Con instead of the main body. Shows as **Aux Motion Accelerometer** on other devices. |
-| **Motion Lean** | Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. On a trigger, a lean either way pulls it. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the Gyro tab's Motion Steering card, per assigned device. |
+| **Motion Lean** | Tilt as a plain input axis: lean the controller like a wheel and the lean angle drives whatever axis the row targets. On a trigger, a lean either way pulls it. Offered on any device with an accelerometer. Tilt deadzones and grip orientation live on the **Motion Steering** card in the **Motion & Touch** section, per assigned device. |
 | **Nunchuk Lean** / **Left Joy-Con Lean** | The aux sensor's tilt: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Lean** on other devices. |
 | **Motion Shake** | How far the accelerometer's magnitude leaves its resting level, as a decaying envelope: 0 at rest, full scale at 2 g of deviation. Shake the pad and the source rises. A slow reorientation keeps the magnitude at gravity, so tilt never fires it. On an axis or a trigger the read is unsigned and **Invert** does nothing. On a button it fires once the envelope passes the row's **Axis-to-Button Deadzone**, 50% of full scale (about 1 g) unless you change it. Offered on any device with an accelerometer. |
 | **Nunchuk Shake** / **Left Joy-Con Shake** | The aux sensor's shake: the Nunchuk on a Wii Remote, the left half of a combined Joy-Con pair. Shows as **Aux Motion Shake** on other devices. |
@@ -559,7 +598,7 @@ The **DualShock 3 (SIXAXIS)**, **Nintendo Switch 2 Pro Controller** and **Steam 
 
 ### Turn a stick into motion
 
-1. Open the slot's **Mappings** tab. On the **Motion Pitch** row, click **Record** and push the stick up, or pick its Y axis in the source dropdown.
+1. Open the controller's **Mappings** section in the **List** view. On the **Motion Pitch** row, click **Record** and push the stick up, or pick its Y axis in the source dropdown.
 2. On **Motion Yaw** to turn, or **Motion Roll** to lean sideways, record the stick pushed right, or pick its X axis.
 3. On **Motion Pitch** or **Motion Roll**, pick **Speed** or **Angle** under **Motion Mode** in the row's details. **Motion Yaw** always turns at a speed.
 4. If the **Motion Gyro** row holds stick sources from an earlier attempt, remove them. That row reads only a controller's own gyro, and its note says so.
@@ -568,7 +607,7 @@ The **DualShock 3 (SIXAXIS)**, **Nintendo Switch 2 Pro Controller** and **Steam 
 
 ## Button pressure
 
-A DualShock 3 measures how hard twelve of its buttons are pressed: the four face buttons, the four D-pad directions, L1, R1, L2 and R2. The **DualShock 3 (SIXAXIS): Full** preset on a PlayStation slot sends that pressure the way the pad reports it to Sony's sixaxis driver and DsHidMini's SXS mode, the form PCSX2 reads pressure from through its SDL input source and RPCS3 through its DualShock 3 handler. HIDMaestro added the preset in version 1.10.0, and PadForge 5.0.0 ships HIDMaestro 1.10.1. Its grid adds ten rows after **L2** and **R2**: **✕ Pressure**, **○ Pressure**, **◻ Pressure**, **△ Pressure**, **L1 Pressure**, **R1 Pressure**, and one for each D-pad direction. L2 and R2 need no pressure rows, because the L2 and R2 rows are their pressure.
+A DualShock 3 measures how hard twelve of its buttons are pressed: the four face buttons, the four D-pad directions, L1, R1, L2 and R2. The **DualShock 3 (SIXAXIS): Full** preset on a PlayStation slot sends that pressure the way the pad reports it to Sony's sixaxis driver and DsHidMini's SXS mode, the form PCSX2 reads pressure from through its SDL input source and RPCS3 through its DualShock 3 handler. HIDMaestro added the preset in version 1.10.0, and PadForge 6.0.0 ships HIDMaestro 2.3.0. Its grid adds ten rows after **L2** and **R2**: **✕ Pressure**, **○ Pressure**, **◻ Pressure**, **△ Pressure**, **L1 Pressure**, **R1 Pressure**, and one for each D-pad direction. L2 and R2 need no pressure rows, because the L2 and R2 rows are their pressure.
 
 A pressure row reads its source the way the L2 row does: released is no pressure, a full press is full pressure. The button's own row still decides whether the button is pressed, and its pressure goes out only while it is. A turbo, a macro that consumes the press, SOCD cleaning, or a shift layer that releases the button releases its pressure with it. A pressed button whose pressure row is empty, or reads nothing, goes out fully pressed, so a key, a macro, or a pad without pressure sensors presses it all the way. Any press past released goes out as at least the lightest pressure, 1 of 255, so a very light press never turns into a full one.
 
@@ -587,15 +626,15 @@ In PCSX2, enable the **SDL Input Source** and use **Automatic Mapping** on the v
 
 ## Copy, Paste, Copy From
 
-The toolbar above the mapping grid has bulk operations. **Clear All** sits apart at the far end in warning colors.
+These act on the whole slot. They sit in the **More** menu at the top of the List view and in the page header's **More** menu, where **Clear All** sits apart under a separator in warning colors. **Map All** is a button of its own.
 
 | Button | Action |
 |--------|--------|
 | **Copy** | Copies the whole slot to the clipboard: the mapping table with every row's sources, shift layers, radial and touch menus, every assigned device's tuning (sticks, triggers, gyro, touchpad, FFB, impulse triggers) and its adaptive trigger, lighting, LED and audio settings, the slot's Bass Shakers, SOCD, and Keep Awake settings, and its macros. |
-| **Paste** | Applies a copied slot. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side stick, trigger, gyro, touchpad, FFB and impulse trigger tuning when it is the same physical pad, or the same controller model on a different physical unit. Its adaptive trigger, lighting, LED and audio settings, and the Touchpad tab's **Synthetic Pressure**, follow the same physical device only. Macros are replaced, not added: the target ends up with the source's list, and pasting a slot that has none clears the target's. |
-| **Copy From...** | Same as Paste, sourced from another slot instead of the clipboard, except that it leaves this slot's macros alone. The Macros tab has its own **Copy From...**, which adds another slot's macros. |
+| **Paste** | Applies a copied slot. Translates automatically if source and target controller types differ. Each device on the target slot picks up its source-side stick, trigger, gyro, touchpad, FFB and impulse trigger tuning when it is the same physical pad, or the same controller model on a different physical unit. Its adaptive trigger, lighting, LED and audio settings, and the Touchpad's **Synthetic Pressure** card, follow the same physical device only. Macros are replaced, not added: the target ends up with the source's list, and pasting a slot that has none clears the target's. |
+| **Copy From…** | Same as Paste, sourced from another slot instead of the clipboard, except that it leaves this slot's macros alone. The **Macros & Menus** section has its own **Copy From…**, which adds another slot's macros. |
 | **Map All** | Starts the [Map All wizard](#3-map-all). |
-| **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their option flags, **Acceleration**, every **Sensitivity**, **Do Not Inherit**, **Primary Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, Stick Trim settings, and the Motion Pitch, Yaw and Roll settings all reset. A cleared row hands nothing to the next mapping. |
+| **Clear All** | Wipes every row back to factory state, behind a confirmation prompt. Sources and their switches, **Flip Output**, **Acceleration**, every **Sensitivity**, every source's [shaping rows](#source-shaping) and gates, **Do Not Inherit**, **Mode** back to Direct, deadzones back to 50%, device tags, extra sources, combine modes, custom formulas, Stick Trim settings, and the Motion Pitch, Yaw and Roll settings all reset. A cleared row hands nothing to the next mapping. |
 
 Multi-source rows round-trip whole. Every source on a row, its mode, every per-source option, the combine mode, the custom formula, and the Motion Pitch, Yaw and Roll settings all copy together. Each source moves to the same controller on the target slot, or to another unit of the same model there. A source whose model the target slot lacks is dropped, except in a Custom row, which keeps its letter as a neutral input.
 
@@ -711,4 +750,4 @@ The clone replaces that device's existing rows on the slot with its own inputs. 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

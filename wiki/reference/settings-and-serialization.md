@@ -4,9 +4,9 @@
 
 > **v3 (2026-04-26):** Rewritten for v3. The HIDMaestro SDK surface, OpenXInput shim, thread-pool lifecycle, and bubble-up cascade live on [HIDMaestro Deep Dive](hidmaestro-deep-dive.md). If anything here drifts from the live source, the live source wins.
 
-> **v3.4 additions.** `AppSettingsData` gains the Remote Link settings: the identity (protected private key, public key, protection mode), the paired-peer trust list (`RemoteLinkPeers`), `EnableRemoteLink`, `RemoteLinkAutoReconnect`, and `RemoteLinkPort`. `PadSetting` gains `RotationRange`, `AutoCenterStrength`, and `WheelRpmLeds` for the wheel tab (all in the checksum). The controller-audio mirror toggle and source persist on the per-device slot config. A MIDI input device persists as an ordinary `UserDevice` record. See [Remote Link Internals](remote-link-internals.md), [Wheel Force Feedback Internals](wheel-ffb-internals.md), and [Controller Audio Internals](controller-audio-internals.md) for how each field is consumed.
+> **v3.4 additions.** `AppSettingsData` gains the Remote Link settings: the identity (protected private key, public key, protection mode), the paired-peer trust list (`RemoteLinkPeers`), `EnableRemoteLink`, `RemoteLinkAutoReconnect`, and `RemoteLinkPort`. `PadSetting` gains `RotationRange`, `AutoCenterStrength`, and `WheelRpmLeds` for the wheel settings (all in the checksum). The controller-audio mirror toggle and source persist on the per-device slot config. A MIDI input device persists as an ordinary `UserDevice` record. See [Remote Link Internals](remote-link-internals.md), [Wheel Force Feedback Internals](wheel-ffb-internals.md), and [Controller Audio Internals](controller-audio-internals.md) for how each field is consumed.
 
-> **v4.0.0 additions.** The per-(slot, device) config bag was renamed from `PlayStationSlotConfigData` to `DeviceSlotConfigData`, and its on-disk element names changed to `<DeviceSlotConfigs><Config/>` (AppSettings) and `<ProfileDeviceSlotConfigs><Config/>` (Profiles). The old `PlayStationConfigs` / `ProfilePlayStationConfigs` spellings are read-only legacy aliases migrated forward on load (`ShouldSerialize` false), so one load-save cycle rewrites an old file. `AppSettingsData` and `ProfileData` gain the Keyboard+Mouse SOCD / Snap-Tap config (`KbmConfigs` of `KbmSlotConfigData`, #205), `SoundPackages` (#83), `SlotSoundVolumes`, the default-profile custom touchpad gestures, and `FirstRunTourCompleted` (which retires the `PadForge.firstrun` marker file). `PadSetting` gains the stick boundary-calibration pair (#174), the 12-field trigger rumble routing block (#102), and the Wii pointer-mode fields (#203), all in the checksum and clone list. `ShiftActivator` gains `AutoCancelMs` (Toggle-mode inactivity auto-cancel, #206). `MappingRow` gains the stick-trim trio (#155) and the `StickTrim` combine. `ActionData` grows the sound, rumble-detail, cursor, run-program, text-block, pointer-mode, and Guide-LED action fields.
+> **v4.0.0 additions.** The per-(slot, device) config bag was renamed from `PlayStationSlotConfigData` to `DeviceSlotConfigData`, and its on-disk element names changed to `<DeviceSlotConfigs><Config/>` (AppSettings) and `<ProfileDeviceSlotConfigs><Config/>` (Profiles). The old `PlayStationConfigs` / `ProfilePlayStationConfigs` spellings are read-only legacy aliases migrated forward on load (`ShouldSerialize` false), so one load-save cycle rewrites an old file. `AppSettingsData` and `ProfileData` gain the Keyboard+Mouse SOCD / Snap-Tap config (`KbmConfigs` of `KbmSlotConfigData`, #205), `SoundPackages` (#83), `SlotSoundVolumes`, the default-profile custom touchpad gestures, and `FirstRunTourCompleted` (which retires the `PadForge.firstrun` marker file, and which 6.0.0 removed). `PadSetting` gains the stick boundary-calibration pair (#174), the 12-field trigger rumble routing block (#102), and the Wii pointer-mode fields (#203), all in the checksum and clone list. `ShiftActivator` gains `AutoCancelMs` (Toggle-mode inactivity auto-cancel, #206). `MappingRow` gains the stick-trim trio (#155) and the `StickTrim` combine. `ActionData` grows the sound, rumble-detail, cursor, run-program, text-block, pointer-mode, and Guide-LED action fields.
 
 > **v4.1.0 additions.** The raw-surface key grammar renamed from `Extended*` to `Raw*` (`RawAxis0`, `RawBtn0`, `RawPov0Up`). On-disk element names stay pinned and legacy keys normalize on load (see [Raw-Surface Custom Mappings](#raw-surface-custom-mappings)). `VirtualControllerType` gains `Nintendo` (5, the virtual Switch Pro, #215), with `NintendoSlotOrder`, `MaxNintendoSlots`, and its own positional raw auto-map. `MappingSet` gains the Base-layer appearance trio, `<RumbleAudio>` (bass shakers, #236), button SOCD (`SocdMode` / `SocdPairs`), the `Authoritative` flag, and the Workshop provenance stamps, all gated by `HasAuthoredContent`. `MacroData` gains seven activation modes (`MacroTriggerMode` 5–11, #253) plus `TriggerHoldMs`, `TriggerDoublePressMs`, the shift-layer `LayerMask` gate (#253/#254), `PairId`, and `ReleaseLingerMs`. `MacroActionType` runs through `AxisScale` (51, #251). `MappingSource` and `ShiftActivator` grow the per-source shaping / gating fields and the release / double-press activator fields listed in their tables. `DeviceSlotConfigData` gains the Guide Button LED pair and the synthetic touchpad pressure pair. `TouchpadGestureSettings` gains the Pointer Response block (libinput port) and the mouse-feel fields.
 
@@ -16,11 +16,13 @@
 
 > **v4.3.2 additions.** `UserDevice` gains the sparse position arrays `CapButtonIndices` / `CapAxisIndices` (discussion #344), and `LoadFromDevice` gates the effective axis count on `SupportedAxisIndices` when the wrapper produced one. `PadSetting` gains the clipboard-only `SlotSetExtrasJson` / `SlotMacrosJson` payloads (`__SlotSetExtras` / `__SlotMacros`), so a slot Copy / Paste carries the MappingSet's Bass Shakers, SOCD and Keep Awake state plus the slot's macros. `AppSettingsData` gains `DiagnosticsLoggingEnabled` (#303). Autosave is two-tier (#331): a 250 ms engine-visible push every tick, the full save after 2 s of quiet.
 
-> **v4.4.0 additions.** `ProfileData` gains `PollingRateOverrideMs` (#365, `0` = follow the global knob) and four nullable legs, `EnableChromaLightbar` (#373), `EnableLightsyncLightbar` (#382), `EnableSensaHaptics` (#374), and `EnableHeadTracking` (#355), where `null` = no opinion. Every one of the five is authored, never snapshotted, and every profile saved before the field reads as no opinion. `AppSettingsData` gains their global legs (`EnableChromaLightbar`, `EnableSensaHaptics`, `EnableLightsyncLightbar`, the `HeadTracking*` quintet), `EnableExternalControl` (#366), the handheld trio `HandheldButtons` / `HandheldMachineKey` / `HandheldButtonsEnabled` (#353), `IconPackages` (#390), and the assignment-prompt pair `AssignOfferNewDevice` / `AssignOfferEmptySlot`. `UserDevice` gains `QuickChargeEnabled` (#372). `PadSetting` gains `MotionGrip` (#392), taking the checksum's gyro group to 43. `MenuItemDefinition` gains `MacroName` (#390). `DeviceSlotConfigData` gains `AudioTritonLowPassHz` (#381, default 250).
+> **v4.4.0 additions.** `ProfileData` gains `PollingRateOverrideMs` (#365, `0` = follow the global knob, a rate in Hz as `PollingRateOverrideHz` since 6.0.0) and four nullable legs, `EnableChromaLightbar` (#373), `EnableLightsyncLightbar` (#382), `EnableSensaHaptics` (#374), and `EnableHeadTracking` (#355), where `null` = no opinion. Every one of the five is authored, never snapshotted, and every profile saved before the field reads as no opinion. `AppSettingsData` gains their global legs (`EnableChromaLightbar`, `EnableSensaHaptics`, `EnableLightsyncLightbar`, the `HeadTracking*` quintet), `EnableExternalControl` (#366), the handheld trio `HandheldButtons` / `HandheldMachineKey` / `HandheldButtonsEnabled` (#353), `IconPackages` (#390), and the assignment-prompt pair `AssignOfferNewDevice` / `AssignOfferEmptySlot`. `UserDevice` gains `QuickChargeEnabled` (#372). `PadSetting` gains `MotionGrip` (#392), taking the checksum's gyro group to 43. `MenuItemDefinition` gains `MacroName` (#390). `DeviceSlotConfigData` gains `AudioTritonLowPassHz` (#381, default 250).
 
 > **v4.5.3 additions.** `AppSettingsData` gains the in-app update switches `CheckForUpdatesAutomatically` (default true), `InstallUpdatesAutomatically` and `IncludePreReleaseUpdates` (#457). `UpdateService` reads all three straight from `PadForge.xml` at startup, before the settings service loads. See [Updates Internals](updates-internals.md).
 
-> **Peripheral outputs (#494).** The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and the Razer Sensa switch (#374) left the Dashboard. Their global legs on `AppSettingsData` and their nullable legs on `ProfileData` are read once at load by `PeripheralSwitchMigration` and never written again, since each `ShouldSerialize` method returns false. A switch that was on becomes an assignment of the vendor row that replaced it (see [Retired Vendor Switches](#retired-vendor-switches-494)). `UserDevice` gains `PeripheralOutputs`, the haptic and lighting outputs found for a mouse, keyboard or vendor row. `DeviceSlotConfigData` gains `PeripheralLightingEnabled`, the Lighting tab's Control This Device’s Lighting switch, off by default. `InputDeviceType` gains `PeripheralLighting` (40) and `PeripheralHaptics` (41), the device types of the vendor rows.
+> **Peripheral outputs (#494).** The Razer Chroma (#373) and Logitech LIGHTSYNC (#382) lightbar mirrors and the Razer Sensa switch (#374) left the Dashboard, which Home replaced in 6.0.0. Their global legs on `AppSettingsData` and their nullable legs on `ProfileData` are read once at load by `PeripheralSwitchMigration` and never written again, since each `ShouldSerialize` method returns false. A switch that was on becomes an assignment of the vendor row that replaced it (see [Retired Vendor Switches](#retired-vendor-switches-494)). `UserDevice` gains `PeripheralOutputs`, the haptic and lighting outputs found for a mouse, keyboard or vendor row. `DeviceSlotConfigData` gains `PeripheralLightingEnabled`, the Control This Device’s Lighting switch (in the Lights & Sound section since 6.0.0), off by default. `InputDeviceType` gains `PeripheralLighting` (40) and `PeripheralHaptics` (41), the device types of the vendor rows.
+
+> **6.0.0 additions.** `AppSettingsData.PollingRateMs` becomes `PollingRateHz`, a rate from 60 to 10000 Hz, and `ProfileData.PollingRateOverrideMs` becomes `PollingRateOverrideHz`. The old elements load once into `LegacyPollingIntervalMs` / `LegacyPollingIntervalOverrideMs` and turn into rates (see [Polling Interval to Rate](#polling-interval-to-rate-600)). `AppSettingsData` gains `OpenCards` (the cards opened further, `CardFoldState`), `HomeCards`, `AssignOfferHome` and the Extras switches' memories `HeadTrackingLastSources` / `OverlaysLastShown` / `ScreenOverlaysLastOn` / `CrosshairsLastOn` (#574), `Crosshairs` and `Magnifier` (#585, on `ProfileData` too), and `FlydigiScreenBindings` (#586), and loses `FirstRunTourCompleted`. `PadSetting` gains the twelve wheel centering fields `Centering*` (#588) and the gyro activation pair `GyroActivation` / `GyroRecenterOnEngage`, all in the checksum and the clone list, taking the checksum's force feedback group to 46, its gyro group to 48 and `CopyablePropertyNames` to 225. The Workshop gyro stamps `WorkshopGyroActivation`, `WorkshopGyroRatchetDescriptors` and `WorkshopGyroRecenterOnEngage` become carriers that fold onto those two fields at assignment and at load (`SettingsFileData.FoldCarriedGyroStamps`, see [Carried Gyro Stamps](#carried-gyro-stamps-600)). `ShiftActivator` gains `Flyout` and `MappingSet` gains `BaseFlyout` (#581). `UserDevice` gains `FlydigiApexModel` (#586), `HomeOfferPending` (#574) and `WheelCalibration`, and the runtime `Centering` (#588). `ActionData` gains `CrosshairNumber`, and `MacroActionType` runs through `MagnifierWhileHeld` (70, #585). `SettingsService.MarkViewStateDirty()` saves interface state quietly, and `MirrorOnly()` keeps a page's reload from marking the file changed.
 
 ---
 
@@ -29,7 +31,7 @@ This page is a developer reference for PadForge's settings persistence.
 ```mermaid
 flowchart TD
     subgraph "Save Flow"
-        S1[User Action<br/>slider drag · mapping change · toggle] --> S2[SettingsService.MarkDirty]
+        S1[User Action<br/>slider drag · mapping change · toggle · card opened] --> S2[SettingsService.MarkDirty<br/>or MarkViewStateDirty]
         S2 --> S3[250ms DispatcherTimer<br/>starts once, never restarts]
         S3 --> S3b[Tier 1 every tick<br/>UpdatePadSettingsFromViewModels + PushUiExtraSourcesIntoSlotMappingSets<br/>engine-visible, no disk]
         S3b --> S3c{2 s quiet<br/>since last MarkDirty?}
@@ -39,19 +41,20 @@ flowchart TD
         S5 --> S6[UpdateActiveProfileSnapshot<br/>deep clone to active profile if named]
         S6 --> S7[Collect Data under SyncRoot<br/>Devices · Settings · PadSettings deduplicated]
         S7 --> S8[Build DTOs<br/>AppSettings · Macros · Profiles]
-        S8 --> S9[XmlSerializer.Serialize<br/>write PadForge.xml]
+        S8 --> S9[XmlSafeText.Serialize<br/>temp file swapped in for PadForge.xml]
         S9 --> S10[IsDirty = false<br/>raise AutoSaved event]
     end
 
     subgraph "Load Flow"
         L1[LoadFromFile] --> L2[XmlSerializer.Deserialize<br/>stream to SettingsFileData]
-        L2 --> L3[Populate UserDevices<br/>lock · clear · add from XML]
+        L2 --> L2b[MigrateLegacySchema · FoldCarriedGyroStamps<br/>old spellings · interval to rate · gyro stamps onto devices]
+        L2b --> L3[Populate UserDevices<br/>lock · clear · add from XML]
         L3 --> L4[Populate UserSettings<br/>match PadSetting by checksum · CloneDeep]
         L4 --> L5[Purge Orphans<br/>remove parked rows with no PadSetting]
         L5 --> L6[LoadAppSettings<br/>SlotCreated before OutputType]
         L6 --> L7[LoadPadSettings<br/>deadzones · curves · ranges · mappings]
-        L7 --> L8[LoadMacros<br/>reconstruct from serialized data]
-        L8 --> L9[LoadProfiles<br/>Default profile · restore active profile topology]
+        L7 --> L8[LoadProfiles<br/>Default profile · restore active profile topology]
+        L8 --> L9[LoadMacros<br/>reconstruct from serialized data]
         L9 --> L10[PeripheralSwitchMigration #494<br/>retired vendor switches become row assignments]
     end
 
@@ -63,7 +66,7 @@ flowchart TD
     style L1 fill:#f3e5f5
     style L2 fill:#f3e5f5
     style L4 fill:#fff3e0
-    style L9 fill:#e8f5e9
+    style L8 fill:#e8f5e9
 ```
 
 **Source files:**
@@ -75,6 +78,13 @@ flowchart TD
 - `PadForge.Engine/Data/UserSetting.cs`. Device-to-slot linkage
 - `PadForge.Engine/Data/MappingSet.cs` + `MappingRow.cs` / `MappingSource.cs` / `ShiftActivator.cs`. (v3.2) Per-VC multi-source mapping + shift-layer schema
 - `PadForge.Engine/Data/DeviceTuning.cs`. (v3.2) Per-device tuning placeholder for the future migration off `PadSetting`
+- `PadForge.Engine/Data/GyroActivation.cs`. (6.0.0) The text form of `PadSetting.GyroActivation`
+- `PadForge.Engine/Data/LayerFlyout.cs`. (6.0.0, #581) The values of `ShiftActivator.Flyout` and `MappingSet.BaseFlyout`
+- `PadForge.Engine/Menus/MenuDefinitionEntry.cs`. The menus a slot's `MappingSet` stores
+- `PadForge.App/Services/WorkshopTuningApplier.cs`. A Workshop import's slot stamps moved onto an assigned device, and the load-time fold of carried gyro stamps
+- `PadForge.App/Services/CrosshairData.cs`. (6.0.0, #585) `CrosshairData` and `MagnifierData`
+- `PadForge.App/Common/CardFoldState.cs`. (6.0.0, #574) The open cards, saved as `AppSettings.OpenCards`
+- `PadForge.App/Common/Input/PollingRates.cs`. (6.0.0) The polling rate's resolution, the old interval's conversion, and the profile dialog's choices
 
 ---
 
@@ -106,7 +116,7 @@ XML document with `SettingsFileData` as the root element (serialized as `<PadFor
 
 1. `PadForge.xml`. Preferred
 2. `Settings.xml`. Legacy fallback
-3. If neither exists, creates `PadForge.xml` in the application directory
+3. If neither exists, the `PadForge.xml` path in the application directory, which the first save creates
 
 ### SettingsFileData (Root DTO)
 
@@ -140,6 +150,10 @@ public class SettingsFileData
 
     [XmlArray("Profiles")][XmlArrayItem("Profile")]
     public ProfileData[] Profiles { get; set; }
+
+    // Run by LoadFromFile right after the deserialize, in this order.
+    public void MigrateLegacySchema();     // old spellings, the pre-6 polling interval
+    public void FoldCarriedGyroStamps();   // 6.0.0: Workshop gyro stamps onto assigned devices
 }
 ```
 
@@ -319,7 +333,7 @@ public class SettingsFileData
     <StartMinimized>false</StartMinimized>
     <StartAtLogin>false</StartAtLogin>
     <EnablePollingOnFocusLoss>true</EnablePollingOnFocusLoss>
-    <PollingRateMs>1</PollingRateMs>
+    <PollingRateHz>1000</PollingRateHz>
     <ThemeIndex>0</ThemeIndex>
     <Language></Language>
     <EnableAutoProfileSwitching>false</EnableAutoProfileSwitching>
@@ -506,7 +520,7 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapAxisIndices` | `int[]` | `<CapAxisIndices>` | (v4.3.2) Axis twin of `CapButtonIndices`: the populated axis positions (a Move Navigation fills three of the first six and seven of the ten extras). Null/empty = dense fallback. |
 | `HasExtraGenericAxes` | `bool` | `<HasExtraGenericAxes>` | (#193) Device carries raw axes past the standard six that should surface as generic "Axis N" sources. Not derivable from the counts: it excludes devices whose extras are already sensor sources. |
 | `CapPovCount` | `int` | `<CapPovCount>` | POV hat count. |
-| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics, 42=KeyboardScreenKeys, 43=NovintFalcon, 44=GameTelemetry). 18–25 match DirectInput. 26–44 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles. |
+| `CapType` | `int` | `<CapType>` | `InputDeviceType` static-class constant (18=Mouse, 19=Keyboard, 20=Joystick, 21=Gamepad, 22=Driving, 23=Flight, 24=FirstPerson, 25=Supplemental, 26=Touchpad, 27=Midi, 28=Nfc, 29=ConsumerControl, 30=HeadsetMotion, 31=Microphone, 32=HandheldButtons, 33=SystemMotion, 34=HeadTracker, 35=Tablet, 36=VrController, 37=LogitechGKeys, 38=AnalogKeyboard, 39=WebMenus, 40=PeripheralLighting, 41=PeripheralHaptics, 42=KeyboardScreenKeys, 43=NovintFalcon, 44=GameTelemetry, 45=TwitchChat). 18–25 match DirectInput. 26–45 are PadForge extensions. 40 and 41 are the vendor rows (#494): Razer Chroma, Logitech LIGHTSYNC and SteelSeries GG light, Razer Sensa rumbles. |
 | `HasGyro` | `bool` | `<HasGyro>` | Has gyroscope (DualSense, Switch Pro, DS4, Switch 2 Pro, Steam Controller, Steam Deck). |
 | `HasAccel` | `bool` | `<HasAccel>` | Has accelerometer. |
 | `HasAccelAux` | `bool` | `<HasAccelAux>` | (#199) Has an auxiliary (left-side) accelerometer: the Nunchuk's own sensor, or the left half of a combined Joy-Con pair. Mirrors `ISdlInputDevice.HasAccelAux`. |
@@ -516,7 +530,9 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `CapTouchpadFingerCounts` | `int[]` | `<CapTouchpadFingerCounts>` | Per-touchpad simultaneous-contact count, index-aligned with the touchpad index. Persisted so the picker offers only the fingers each pad supports offline. Null/empty on older configs. Callers fall back to two fingers. |
 | `CapTouchpadPressure` / `CapTouchpadClick` | `bool?` | `<CapTouchpadPressure>` / `<CapTouchpadClick>` | Whether the device's touchpads report pressure and click, from the wrapper. Written only when known. Null = inferred: `SupportsTouchpadPressure` / `SupportsTouchpadClick` read it as supported except on a tablet or an offline touchpad-class record. |
 | `HasRumbleTriggers` | `bool` | `<HasRumbleTriggers>` | Has impulse-trigger motors (Xbox One / Elite / Series). Driven by `SDL_PROP_JOYSTICK_CAP_TRIGGER_RUMBLE_BOOLEAN`. |
-| `PeripheralOutputs` | `int` | `<PeripheralOutputs>` | (#494) The outputs the peripheral link pass found for a mouse, keyboard, unit row or vendor row: bit 0 haptics, bit 1 lighting, bit 2 a device that offers the first Lighting Hold above colors alone, bit 3 one that offers the second (`UserDevice.cs` line 502). Persisted so the row's Force Feedback and Lighting tabs, and the Lighting Hold choice, stay up while the device sleeps or is unplugged, as a gamepad's tabs do. A Logitech row keeps the bits it had until the HID++ worker's first scan, and while a device slot in its container has yet to answer. Any device row keeps them until every direct backend has scanned once, while one of its units is listed asleep, and for 5 s after its last unit left. `0` on configs predating it and on every other row. |
+| `CapSenseChannelMask` | `int` | `<CapSenseChannelMask>` | The pad's capacitive sensors as a bitmask over the `SDL_GAMEPAD_CAPSENSE_*` indices (bit 0 left stick top, 1 right stick top, 2 left grip, 3 right grip). Persisted so the picker and the automap list a sensor only when the pad has it, online or not. Written only when nonzero. |
+| `FlydigiApexModel` | `int` | `<FlydigiApexModel>` | (6.0.0, #586) The Flydigi Apex model the pad answered with when PadForge asked it: `1` Apex 4, `2` Apex 5, `3` Apex 6 Pro (`PadForge.Engine.Flydigi.FlydigiApexModel`, which only grows at its end). `0` for every other device and for a pad not asked yet. Persisted so the pad's trigger and lighting controls stay up while it sleeps, as `HasRumbleTriggers` keeps an Xbox pad's. Written only when nonzero. |
+| `PeripheralOutputs` | `int` | `<PeripheralOutputs>` | (#494) The outputs the peripheral link pass found for a mouse, keyboard, unit row or vendor row: bit 0 haptics, bit 1 lighting, bit 2 a device that offers the first Lighting Hold above colors alone, bit 3 one that offers the second (`UserDevice.cs` line 519). Persisted so the device's Rumble & Haptics and Lights & Sound controls, and the Lighting Hold choice, stay up while the device sleeps or is unplugged, as a gamepad's do. A Logitech row keeps the bits it had until the HID++ worker's first scan, and while a device slot in its container has yet to answer. Any device row keeps them until every direct backend has scanned once, while one of its units is listed asleep, and for 5 s after its last unit left. `0` on configs predating it and on every other row. |
 | `DeviceObjects` | `DeviceObjectItem[]` | `<DeviceObjects>` | Axis/button/hat metadata. Populated in Step 1 and persisted so mapping dropdowns remain populated when devices are offline. |
 
 ### Serializable Metadata
@@ -533,6 +549,11 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `IdleDisconnectSeconds` | `int` | `<IdleDisconnectSeconds>` | (v3.6, #162) Bluetooth idle-disconnect timeout in seconds. When the device is Bluetooth-connected and its input stays idle this long, the host radio drops the link so the controller sleeps. `0` disables (default). Over USB there is no radio link to drop. Unlike DS4Windows there is no charging gate: an idle pad on a charger still disconnects, because dropping Bluetooth does not interrupt charging. |
 | `QuickChargeEnabled` | `bool` | `<QuickChargeEnabled>` | (v4.4, #372) Drop the Bluetooth link when the pad reports charging, so it charges without powering the radio. Default false. Fires on the false-to-true charging edge only. A Sony pad carries the same MAC on both transports, so a cable rebinds this one record to the USB wrapper rather than creating a twin: a Bluetooth-pathed record drops through the idle timeout's lane, a wired-rebound record drops the radio by its own MAC serial. |
 | `GunCalibration` | `string` | `<GunCalibration>` | A GunCon 2's aim range (hifihedgehog/SDL#33), `"minX,maxX,minY,maxY"` in beam counts, from the Devices page's calibration screen. Empty means X 175..720 and Y 20..240. A Wii Remote's light-gun window (#485) in the same form, in pointer counts (aim times 512 across and 384 down). Empty means the remote's default aim range. |
+| `FalconCalibration` | `string` | `<FalconCalibration>` | (#521) A Novint Falcon's reach as `"x,y,z"` in millimeters, set by Calibrate Reach on the Falcon's Devices panel. Empty means 60 mm on each axis. Kept per device, which the Falcon's serial number identifies. |
+| `WheelCalibration` | `string` | `<WheelCalibration>` | (6.0.0, #588) What the Release Test measured on a force feedback wheel, in the form `Steering.WheelCalibration.Format` writes. Empty means the wheel has not been measured. Kept per device because it belongs to the wheel. |
+| `TouchpadOnlyInPadForge` | `bool` | `<TouchpadOnlyInPadForge>` | Use Only in PadForge on a precision touchpad's row: while the engine runs, HidHide hides the touchpad's collection from every other program, Windows included, and PadForge opens it itself (`TouchpadCapture`). Kept apart from `HidHideEnabled`, which a touchpad's rows ignore. |
+| `TouchpadKeepPending` | `bool` | `<TouchpadKeepPending>` | True from the moment Use Only in PadForge is set until the user keeps it at the Keep prompt. Written at once, so a touchpad still pending when PadForge starts is one nobody kept, and it goes back to Windows. `[DefaultValue(false)]`. |
+| `HomeOfferPending` | `bool` | `<HomeOfferPending>` | (6.0.0, #574) Home still owes this device its offer. Set when PadForge meets a device for the first time, and cleared for good by Use It, by Not Now, or by any assignment to a virtual controller. A file from before 6.0.0 holds no such element, so a device known for years is never offered. `[DefaultValue(false)]`, so the element is written only while set. |
 
 ### Input Hiding
 
@@ -558,6 +579,9 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `LastQuickChargeCheckTick` | `long` | (#372) Same ~1 Hz discipline as the idle countdown. Zero means the check has not observed this record yet: that observation seeds `QuickChargePrevCharging` and is never an edge. |
 | `ActuatorCount` | `int` | FFB actuator axis count. Computed from `DeviceObjects` in `LoadFromDevice`. |
 | `ForceFeedbackState` | `ForceFeedbackState` | FFB/haptic state tracker. Created for devices with rumble or haptic. |
+| `Centering` | `WheelCenteringRuntime` | (6.0.0, #588) A wheel's centering as it runs: the composer, a Release Test while one runs, and the last frame. Made the first time it is asked for, by the force feedback pass on the polling thread or by the Centering card on the UI thread (`LazyInitializer.EnsureInitialized`). |
+| `OutputSync` | `object` | (#416) Serializes the two writers of the device's output that run on different threads: a remote peer's relayed frame being applied, and the feedback pass stopping a device with no local slots. |
+| `InstanceGuidString` | `string` | Cached `InstanceGuid.ToString()`, so the poll loop does not allocate it per tick. Invalidated when `InstanceGuid` is assigned. |
 
 ### Convenience Properties (`[XmlIgnore]`)
 
@@ -567,7 +591,9 @@ Represents a physical input device. Contains serializable (XML-persisted) proper
 | `IsKeyboard` | `bool` | `CapType == InputDeviceType.Keyboard` |
 | `IsTouchpad` | `bool` | `CapType == InputDeviceType.Touchpad` |
 | `IsConsumerControl` | `bool` | `CapType == InputDeviceType.ConsumerControl` (#168) |
-| `HasIrCamera` | `bool` | `VendorId == 0x057E` and `ProductName` is "Nintendo Wii Remote", "Nintendo Wii Remote with Nunchuk" or "Nintendo Wii Remote with Classic Controller" (`WiiRemoteIdentity`). Gates the IR Pointer sources / Pointer tab (#146). |
+| `HasIrCamera` | `bool` | `VendorId == 0x057E` and `ProductName` is "Nintendo Wii Remote", "Nintendo Wii Remote with Nunchuk" or "Nintendo Wii Remote with Classic Controller" (`WiiRemoteIdentity`). Gates the IR Pointer sources and the IR Pointer card (#146). |
+| `HasRingCon` | `bool` | `HasJoyConIr`: a Ring-Con rides a right Joy-Con, standalone or the right half of a gen-1 pair. Gates the "Ring-Con Squeeze" and "Ring-Con Pull" sources (hifihedgehog/SDL#33 Part 13). |
+| `IsGunCon2` | `bool` | `VendorId == 0x0B9A && ProdId == 0x016A`, a Namco GunCon 2 (hifihedgehog/SDL#33 Part 9), whose aim feeds the IR pointer sources under the gun's own names. |
 | `IsBalanceBoard` | `bool` | `VendorId == 0x057E` and `ProductName` contains "Balance Board". Gates the Balance sources (#146). |
 | `HasJoyConIr` | `bool` | `VendorId == 0x057E` and either `ProductName` is exactly "Nintendo Switch Joy-Con (R)" or `ProdId == 0x2008` (the combined gen-1 pair, whose right half's camera posts on the pair, #275). Gates the IR Brightness source (#151). |
 | `HasJoyCon2Mouse` | `bool` | `VendorId == 0x057E` and `ProductName` is a Switch 2 Joy-Con (L)/(R). Gates the Mouse Motion sources (#154). |
@@ -639,6 +665,8 @@ Links a physical device (`InstanceGuid`) to a virtual controller slot (`MapTo`) 
 | `MapTo` | `int` | `<MapTo>` | `-1` | Slot index (0–15). -1 = unmapped. Fires `PropertyChanged`. |
 | `PadSettingChecksum` | `string` | `<PadSettingChecksum>` | `""` | Links to a PadSetting record. Multiple UserSettings can share one checksum. |
 | `IsEnabled` | `bool` | `<IsEnabled>` | `true` | Active mapping. Disabled mappings are skipped. |
+| `BlissBoxOwed` | `BlissBoxOwedMapping` | `<BlissBoxOwed>` | `None` | (#469) What a Bliss-Box port still owes this slot: a default built while the port had nothing to place its controls through, an assignment's or a live profile change's fill, or the button pressure rows of a change to the DualShock 3 (SIXAXIS): Full. The port completes it once it can be placed (`DeviceService.AutoMapIdentifiedPort`). Clear All, a paste, Copy From and Force Raw Joystick Mode drop it. `None` writes nothing. |
+| `BlissBoxKeptTargets` | `string[]` | `<BlissBoxKeptTargets><Target>` | `null` | (#469) The slot's targets the user bound, recorded or cleared while `BlissBoxOwed` was pending, which its completion leaves as the user left them. |
 | `DateCreated` | `DateTime` | `<DateCreated>` | `DateTime.Now` | Creation time. |
 | `DateUpdated` | `DateTime` | `<DateUpdated>` | `DateTime.Now` | Last modified time. |
 
@@ -654,6 +682,8 @@ Links a physical device (`InstanceGuid`) to a virtual controller slot (`MapTo`) 
 | `KbmRawOutputState` | `KbmRawState` | Raw KB+M output. Populated only for KeyboardMouse slots. |
 | `VrRawOutputState` | `VrRawState` | (#49) Raw VR output. Populated only for Vr slots. All-value struct, so assignment publishes atomically enough for the Step 4 reader. |
 | `TouchpadOutputState` | `TouchpadState` | Touchpad output state for this device. Written by the background thread (Step 3), read by Step 4. |
+| `MotionRowsOutputState` | `MotionRowValues` | (#475) The Motion Pitch, Yaw and Roll rows' values for this device, computed in Step 3 and stamped with the pass that computed them. Step 4 combines only the current pass's values, so a device that drops mid-turn stops turning the slot. |
+| `PressureOutputState` | `ButtonPressureState` | (discussion #476) This device's button pressure rows, computed in Step 3 on a slot whose preset carries pressure. Holds its last value while the device is briefly unavailable and goes to rest when the device leaves. |
 | `_cachedPadSetting` | `PadSetting` (internal) | Cached PadSetting. Set during load, accessed via `GetPadSetting()`/`SetPadSetting()`. |
 
 ### Multi-Slot Assignment Design
@@ -697,14 +727,14 @@ public string PadSettingChecksum { get; set; } = string.Empty;
 5. **Thumbstick axes** (8): LeftThumbAxisX, LeftThumbAxisY, RightThumbAxisX, RightThumbAxisY, LeftThumbAxisXNeg, LeftThumbAxisYNeg, RightThumbAxisXNeg, RightThumbAxisYNeg
 6. **Touchpad** (7): TouchpadX1, TouchpadY1, TouchpadX2, TouchpadY2, TouchpadContact1, TouchpadContact2, TouchpadClick
 7. **Deadzones and curves** (36): LeftThumbDeadZoneX/Y, RightThumbDeadZoneX/Y, LeftThumbDeadZoneShape, RightThumbDeadZoneShape, LeftThumbAntiDeadZone, RightThumbAntiDeadZone, LeftThumbAntiDeadZoneX/Y, RightThumbAntiDeadZoneX/Y, LeftThumbLinear, RightThumbLinear, LeftThumbSensitivity, RightThumbSensitivity (the per-stick output multipliers, without which two PadSettings differing only in stick sensitivity hash identically), all 6 sensitivity curves, all 8 max range properties, all 4 center offset properties, LeftThumbBoundaryMap, RightThumbBoundaryMap (the stick boundary-calibration pair, #174)
-8. **Force feedback** (34): ForceType, ForceOverall, RotationRange, RotationRangeEnabled (#512), AutoCenterStrength, WheelRpmLeds (wheel, #81), the nine Falcon fields (#521: Feel, Spring, KickButton, Kick, Shake, BraceButton, PreloadButton, Gravity, ForceCap), the five SteeringAngleRumble fields (continuous steering rumble: Enabled, Axis, Strength, Deadzone, and Motor from #510), the 10 SteeringLock fields (#94: RumbleEnabled, TriggerVibEnabled, LightbarEnabled, ATResistanceEnabled, PulseMs, LightbarColor, LightbarColorSource, LightbarPaletteCsv, LightbarHoldMs, LightbarFadeMs), ForceSwapMotor, TriggerRumbleFold (#271), LeftMotorStrength, RightMotorStrength
+8. **Force feedback** (46): ForceType, ForceOverall, RotationRange, RotationRangeEnabled (#512), AutoCenterStrength, WheelRpmLeds (wheel, #81), the nine Falcon fields (#521: Feel, Spring, KickButton, Kick, Shake, BraceButton, PreloadButton, Gravity, ForceCap), the twelve wheel centering fields (6.0.0, #588: CenteringMode, CenteringVehicle, CenteringSpeedSource, CenteringFixedSpeed, CenteringWeight, CenteringOnCenter, CenteringAssist, CenteringDamping, CenteringFriction, CenteringGrip, CenteringWheelTorque, CenteringWheelRange), the five SteeringAngleRumble fields (continuous steering rumble: Enabled, Axis, Strength, Deadzone, and Motor from #510), the 10 SteeringLock fields (#94: RumbleEnabled, TriggerVibEnabled, LightbarEnabled, ATResistanceEnabled, PulseMs, LightbarColor, LightbarColorSource, LightbarPaletteCsv, LightbarHoldMs, LightbarFadeMs), ForceSwapMotor, TriggerRumbleFold (#271), LeftMotorStrength, RightMotorStrength
 9. **Impulse triggers** (5, v3.2): ImpulseOverallGain, ImpulseLeftStrength, ImpulseRightStrength, ImpulseSwapTriggers, AtVibrationToImpulseEnabled (#271)
 10. **Constant trigger force** (3, v3.2): ConstantTriggerForceEnabled, ConstantTriggerForceLeft, ConstantTriggerForceRight
 11. **Audio bass trigger rumble** (5, v3.2): AudioRumbleTriggersEnabled, AudioRumbleTriggersSensitivity, AudioRumbleTriggersCutoffHz, AudioRumbleLeftTrigger, AudioRumbleRightTrigger
 12. **Audio bass rumble** (5): AudioRumbleEnabled, AudioRumbleSensitivity, AudioRumbleCutoffHz, AudioRumbleLeftMotor, AudioRumbleRightMotor
 13. **Constant force** (3): ConstantForceEnabled, ConstantForceX, ConstantForceY
-14. **Gyro tuning, IR pointer, and 3D appearance** (46, v3.2 and later): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the legacy 3D preview colorway map, kept for old settings files and clipboard copies now that the appearance belongs to the slot through `SlotModel3DAppearances`), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, GyroSimulation and GyroSimulationSmoothingMs (#474), GyroCalibratedDevice (#474), MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, MotionGrip (v4.4, #392), GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through `GyroInvertRollEffective` to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.
-15. **Trigger rumble routing** (12, v4, #102): LeftTriggerRouteSource, RightTriggerRouteSource, LeftTriggerRouteMode, RightTriggerRouteMode, LeftTriggerRouteScale, RightTriggerRouteScale, LeftTriggerRouteActivator, RightTriggerRouteActivator, LeftTriggerRouteActivatorDeviceGuid, RightTriggerRouteActivatorDeviceGuid, LeftTriggerRouteActivatorMode, RightTriggerRouteActivatorMode. Emitted inside the gyro region, between GyroAimEngageMode and GyroInvertPitch.
+14. **Gyro tuning, IR pointer, and 3D appearance** (48, v3.2 and later): GyroSensitivityH/V, GyroDeadZoneDegPerSec, GyroSmoothingAlpha, GyroAcceleration, GyroOutputCurve, GyroSensitivityUnits, GyroEasyAimStickThreshold, GyroEngageStickSide (v3.6, #120), GyroEngageStickDirection (v3.6, #120), IrSensorBarPos (v3.6, #146/#151), IrSensorBarComp (v3.6, #146/#151), IrSmoothing (v3.6, #146/#151), PointerMode (v4, #203), PointerFpsSpeed (v4, #203), Model3DAppearances (the legacy 3D preview colorway map, kept for old settings files and clipboard copies now that the appearance belongs to the slot through `SlotModel3DAppearances`), GyroBiasPitch/Yaw/Roll, GyroAuxBiasPitch, GyroCompassYaw, GyroSimulation and GyroSimulationSmoothingMs (#474), GyroCalibratedDevice (#474), MagBiasX/Y/Z, MagFieldNorm, GyroAuxBiasYaw, GyroAuxBiasRoll, GyroCalibratedAtUtc, GyroSpace, MotionGrip (v4.4, #392), GyroPlayerSpaceYawRelaxFactor, GyroWorldSpaceSideReductionThreshold, GyroTighteningThresholdDegPerSec, GyroSmoothingThresholdDegPerSec, GyroSmoothingWindowMs, GyroRealWorldCalibration, GyroAimEngageButton, GyroAimEngageDeviceGuid, GyroAimEngageMode, GyroActivation and GyroRecenterOnEngage (6.0.0), GyroInvertPitch, GyroInvertYaw, GyroInvertRoll (#321 split the combined toggle. The XML element name for yaw is unchanged, and an empty GyroInvertRoll is a sentinel meaning "saved before the split", resolved through `GyroInvertRollEffective` to the yaw value), GyroApplyTuningToPassthrough. The eight fields from GyroEngageStickSide through Model3DAppearances append between GyroEasyAimStickThreshold and GyroBiasPitch in checksum order. The aux-bias and magnetometer fields interleave as written above, not in name order.
+15. **Trigger rumble routing** (12, v4, #102): LeftTriggerRouteSource, RightTriggerRouteSource, LeftTriggerRouteMode, RightTriggerRouteMode, LeftTriggerRouteScale, RightTriggerRouteScale, LeftTriggerRouteActivator, RightTriggerRouteActivator, LeftTriggerRouteActivatorDeviceGuid, RightTriggerRouteActivatorDeviceGuid, LeftTriggerRouteActivatorMode, RightTriggerRouteActivatorMode. Emitted inside the gyro region, between GyroRecenterOnEngage and GyroInvertPitch.
 16. **Axis inversion** (4): LeftThumbAxisXInvert, LeftThumbAxisYInvert, RightThumbAxisXInvert, RightThumbAxisYInvert
 17. **Threshold** (1): AxisToButtonThreshold
 18. **Motion passthrough markers** (2): MotionGyro, MotionAccel
@@ -714,7 +744,7 @@ public string PadSettingChecksum { get; set; } = string.Empty;
 22. **VR custom mappings** (v4.2, #49). Same sorted key=value format, from the `VrMappings` dictionary. A lane missing here would let two devices whose settings differ only in that lane collapse into one stored object on the dedup-by-checksum save.
 23. **Mapping deadzones**. Same sorted key=value format (from `MappingDeadZones` dictionary), prefixed with `MDZ:` in the checksum string
 24. **Per-mapping bidirectional flags** (v4). Same sorted key=value format (from the `MappingBidirectional` dictionary), prefixed with `MBD:`. Without these, two devices identical except for a per-mapping Bidirectional flag collide on `SaveToFile`'s dedup and the dropped device inherits the survivor's flag.
-25. **Touchpad per-(device, pad) settings** (v3.3, 57 fields per entry). Keyed by `DeviceGuid@TouchpadIndex`, prefixed with `TPS:`, sorted by (DeviceGuid, TouchpadIndex) so the checksum is content-defined not array-order-defined. Each entry serializes the master Enable / Mode / CooldownMs, the gesture toggles + thresholds (swipes / radial zones / touch spots (`EnableTouchSpots`) / taps / multi-tap gap / longpress / two-finger / pinch / rotate / three- to five-finger / shape templates / match threshold), the Stick / D-Pad output knobs (EnableJoystickOutput / max radius / inner deadzone / DPadMode / activation threshold), the Mouse output knobs (sensitivity X/Y / invert X/Y), the mouse-feel block (MouseMomentum / MouseMomentumDecay / MouseMomentumMaxSpeed / MouseMomentumMinLift / MouseMomentumFlingGain / MouseMomentumStacking / MouseJitterReduction / MouseAcceleration), the Pointer Response block (PointerResponse / TrackpadThresholdMmPerSec / TrackpadPadWidthMm, the libinput port), the swipe-haptics pair (EnableSwipeHaptics / SwipeHapticsIntensity, v4.1, discussion #219), and the absolute-pointer region (PointerRegionSizeX/Y, PointerRegionCenterX/Y, PointerRegionAuthored, RegionSchema, #9). Skipping this category lets two devices with identical mappings but different touchpad-tab settings collide on `SaveToFile`'s dedup-by-checksum, silently dropping one device's per-pad toggles.
+25. **Touchpad per-(device, pad) settings** (v3.3, 57 fields per entry). Keyed by `DeviceGuid@TouchpadIndex`, prefixed with `TPS:`, sorted by (DeviceGuid, TouchpadIndex) so the checksum is content-defined not array-order-defined. Each entry serializes the master Enable / Mode / CooldownMs, the gesture toggles + thresholds (swipes / radial zones / touch spots (`EnableTouchSpots`) / taps / multi-tap gap / longpress / two-finger / pinch / rotate / three- to five-finger / shape templates / match threshold), the Stick / D-Pad output knobs (EnableJoystickOutput / max radius / inner deadzone / DPadMode / activation threshold), the Mouse output knobs (sensitivity X/Y / invert X/Y), the mouse-feel block (MouseMomentum / MouseMomentumDecay / MouseMomentumMaxSpeed / MouseMomentumMinLift / MouseMomentumFlingGain / MouseMomentumStacking / MouseJitterReduction / MouseAcceleration), the Pointer Response block (PointerResponse / TrackpadThresholdMmPerSec / TrackpadPadWidthMm, the libinput port), the swipe-haptics pair (EnableSwipeHaptics / SwipeHapticsIntensity, v4.1, discussion #219), and the absolute-pointer region (PointerRegionSizeX/Y, PointerRegionCenterX/Y, PointerRegionAuthored, RegionSchema, #9). Skipping this category lets two devices with identical mappings but different Touchpad card settings collide on `SaveToFile`'s dedup-by-checksum, silently dropping one device's per-pad toggles.
 26. **Per-device mouse-gesture settings** (v4, #200). Keyed by `DeviceGuid`, prefixed with `MGS:`, sorted by DeviceGuid. Each entry serializes Enabled, GestureButtons, FlickThresholdCounts, CooldownMs, plus CustomEngageButton and CustomEngageDeviceGuid (v4.1, discussion #216). Without the custom pair, two devices differing only in the recorded Custom input collide and one gets dropped. Same dedup-collision guard as the touchpad block.
 
 The string is UTF-8 encoded, hashed with `MD5.HashData()`, and the first 4 bytes returned as 8-char uppercase hex:
@@ -843,7 +873,7 @@ Individual `DPadUp/Down/Left/Right` override the combined `DPad` property.
 | `RightThumbAntiDeadZoneY` | `"0"` | Right stick ADZ Y (0–100%) |
 | `LeftThumbLinear` | `"0"` | Left stick linearity (0–100). 0 = default curve, 100 = fully linear. |
 | `RightThumbLinear` | `"0"` | Right stick linearity (0–100). |
-| `LeftThumbSensitivity` | `"1"` | Per-stick output multiplier (1 = unchanged). Applied AFTER the deadzone / range / curve stage, so the Sticks tab scales what the mapping table already produced. The mapping grid carries no sensitivity for plain analog sources. |
+| `LeftThumbSensitivity` | `"1"` | Per-stick output multiplier (1 = unchanged). Applied AFTER the deadzone / range / curve stage, so the Sticks & Triggers section scales what the mapping table already produced. The mapping grid carries no sensitivity for plain analog sources. |
 | `RightThumbSensitivity` | `"1"` | Right stick output multiplier. |
 
 #### Deadzone Shape
@@ -965,6 +995,34 @@ All `[XmlElement]`, all `string`, all in `ComputeChecksum()` and `CopyableProper
 | `PointerFpsSpeed` | `"35"` | (v4, #203) FPS-Mouse speed knob, pixels per 10 ms at full deflection. |
 | `MotionGrip` | `"Pointing"` | (v4.4, #392) How the controller is held: `Pointing` (the frame the driver delivers), `Sideways` (top edge left, face up), `WiiWheel` (top edge left, face toward the player), or `Upright` (top edge up). One rotation applied to the body gyro, the accelerometer, and gravity together, for mapping sources and for the motion the virtual controller reports. The D-pad follows the same frame. Per (device, slot). Sits between `GyroSpace` and `GyroPlayerSpaceYawRelaxFactor` in checksum order. |
 
+#### Gyro Activation Properties (6.0.0)
+
+Steam's gyro activation, ratchet and re-center on PadForge's own settings. The Motion & Touch section's Gyro card writes them through its Layer, Gyro On, Gyro On Buttons, Needs and Re-Center When Gyro Turns On rows. A Steam Workshop import's carried stamps fold into them at assignment and at load (see [Carried Gyro Stamps](#carried-gyro-stamps-600)). Both are `[XmlElement]`, `string`, in `ComputeChecksum()` and `CopyablePropertyNames`, between `GyroAimEngageMode` and `GyroInvertPitch`.
+
+| Property | Default | Description |
+|---|---|---|
+| `GyroActivation` | `""` | The buttons that turn the gyro on, by layer, in the `GyroActivation` text form (`PadForge.Engine/Data/GyroActivation.cs`): `layer=Mode,Any\|All,button\|button` entries joined by `;`. `Mode` is `Hold` (on while held), `Release` (on while not held) or `Toggle` (flips on each press). `All` needs every button held, `Any` one of them. The engaged layer's entry applies, else Base's, else none, and the result is ANDed with the engage button. Buttons are device-free descriptors, held on any device of the slot. Empty = no buttons, and the gyro stays on. The first device on the slot with an entry sets it, as the engage button does. |
+| `GyroRecenterOnEngage` | `"0"` | `"1"` re-centers the gyro each time it turns on, taking the controller's pose as the resting point (Steam's Use Relative). Any device on the slot with it on turns it on for the slot. |
+
+#### Wheel Centering Properties (6.0.0, #588)
+
+The Centering card in the Rumble & Haptics section, for a force feedback wheel. All `[XmlElement]`, all `string` holding invariant-culture integers except `CenteringVehicle`, all in `ComputeChecksum()` (after the Falcon fields) and `CopyablePropertyNames`. `PadViewModel.Centering.cs` clamps each value to the range given here. `WheelCentering` (`PadForge.Engine/Common/Steering/WheelCentering.cs`) reads them each poll.
+
+| Property | Default | Description |
+|---|---|---|
+| `CenteringMode` | `"0"` | Mode. `0` Spring, the spring of `AutoCenterStrength`, listed as Off on a wheel with no spring effect. `1` Vehicle, a car's steering (`PadForge.Engine/Common/Steering`). |
+| `CenteringVehicle` | `"sedan"` | The car Vehicle mode steers, by `SteeringVehicle.Id`: `sedan` (Sedan), `compact` (Compact), `van` (Van), `race` (Race Car) or `x1` (Stanford X1). |
+| `CenteringSpeedSource` | `"0"` | Speed. `0` From the Game, the game's telemetry, with `CenteringFixedSpeed` while no game sends one. `1` Fixed, the fixed speed at all times. |
+| `CenteringFixedSpeed` | 97 or 100 | Fixed Speed in km/h, 0 to 320. A new setting starts at 97 km/h (60 mph) where this PC reads speeds in miles and 100 km/h elsewhere (`SpeedUnits.DefaultFixedSpeedKmh`). |
+| `CenteringWeight` | `"100"` | Steering Weight, 0 to 200 percent of the car's own: the tire moment gain. |
+| `CenteringOnCenter` | `"100"` | On-Center Feel, 0 to 200 percent of the car's own: the jacking stiffness. |
+| `CenteringAssist` | `"100"` | Power Assist, 0 to 200 percent of the car's own. |
+| `CenteringDamping` | `"100"` | Damping, 0 to 200 percent of the damping that returns the wheel without overshoot. |
+| `CenteringFriction` | `"30"` | Friction in hundredths of a newton meter, 0 to 150. The row shows only on a wheel that runs a friction effect. |
+| `CenteringGrip` | `"0"` | Grip. `0` from the game's telemetry (dry while no game sends one), `1` Dry, `2` Wet, `3` Snow, `4` Ice. |
+| `CenteringWheelTorque` | `"0"` | Wheel Torque, the most torque the wheel gives, in tenths of a newton meter, 0 to 500. `0` takes the figure listed for the model. |
+| `CenteringWheelRange` | `"900"` | Wheel Range in degrees, 40 to 2520, for a wheel whose range PadForge does not set. Vehicle mode needs it to read the wheel's angle. |
+
 ### Dictionary-Based Mapping Systems
 
 The raw surface, MIDI, KB+M, and VR use dictionary-based storage for arbitrary key counts. All four share `RawMappingEntry` as the serialization type and follow the same pattern: in-memory `Dictionary<string, string>` backed by a serializable `RawMappingEntry[]`. Dictionary is lazily populated on first access and flushed to the array before serialization.
@@ -979,9 +1037,9 @@ Extended (HIDMaestro custom-HID) and Nintendo slots with arbitrary axis/button/P
 
 Legacy `Extended*` tokens in older settings files are rewritten at load by `MappingSetMigrator.NormalizeRawToken` (idempotent, applied to row targets and dictionary keys alike), so pre-4.1.0 files keep loading. The XML ELEMENT names stay pinned (`<ExtendedMappings><Map>`), so the on-disk container shape never changed.
 
-The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Nine keys per device: `FlickStickDots` (default 14400), `FlickStickTime` (0.1), `FlickStickThreshold` (0.9), `FlickStickSnapMode` (`"None"`), `FlickStickSnapStrength` (1.0), `FlickStickForwardDz` (0), `FlickStickSmoothing` (-1), `FlickStickOnEngage` (`"1"` / `"0"`, default off), `FlickStickRotationOffset` (0). `SaveFlickStickCard` writes them (invariant-culture numbers, snap mode as a plain string) and `LoadFlickStickCard` reads them (both in `PadForge.App/Services/SettingsService.cs`). The save path also re-stamps the stored values onto every `"Flick Stick ..."` source's `ParamFlick*` fields via `ApplyFlickStickParamsToRow`. An absent `FlickStickDots` means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 18 above) and survive `ClearMappingDescriptors()` through `IsPerDeviceTuningKey`'s `StartsWith("FlickStick")` clause, the same per-device-tuning carve-out the `MotionSteer*` and steering keys use.
+The same dictionary carries the Flick Stick card's per-device tuning (#225, v4.1), regardless of slot type. Nine keys per device: `FlickStickDots` (default 14400), `FlickStickTime` (0.1), `FlickStickThreshold` (0.9), `FlickStickSnapMode` (`"None"`), `FlickStickSnapStrength` (1.0), `FlickStickForwardDz` (0), `FlickStickSmoothing` (-1), `FlickStickOnEngage` (`"1"` / `"0"`, default off), `FlickStickRotationOffset` (0). `SaveFlickStickCard` writes them (invariant-culture numbers, snap mode as a plain string) and `LoadFlickStickCard` reads them (both in `PadForge.App/Services/SettingsService.cs`). The save path also re-stamps the stored values onto every `"Flick Stick ..."` source's `ParamFlick*` fields via `ApplyFlickStickParamsToRow`. An absent `FlickStickDots` means the card was never stored for that device. The load path then seeds the card from the slot's flick source, so a Workshop import's translator-carried tuning survives until the user tunes the card. The keys ride the normal sorted Extended fold in the checksum (item 19 above) and survive `ClearMappingDescriptors()` through `IsPerDeviceTuningKey`'s `StartsWith("FlickStick")` clause, the same per-device-tuning carve-out the `MotionSteer*` and steering keys use.
 
-`IsPerDeviceTuningKey` is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with `Stick` that also contain `Steer` (the stick-steering mode keys), `MotionSteer`, `FlickStick`, `KbmMouseMomentum` (the Sticks tab's Momentum rows on a KBM slot's mouse stick, #291), `GyroTilt` (the Gyro tab's tilt card, #292), and `RawStick`, plus `RawTrigger*` keys ending in `Dz`, `Adz`, `Mr`, or `Curve`. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.
+`IsPerDeviceTuningKey` is the full list of raw-bag keys that survive a descriptor rewrite. At HEAD it covers keys starting with `Stick` that also contain `Steer` (the stick-steering mode keys), `MotionSteer`, `FlickStick`, `KbmMouseMomentum` (the Sticks & Triggers section's Momentum rows on a KBM slot's mouse stick, #291), `GyroTilt` (the Motion & Touch section's tilt card, #292), and `RawStick`, plus `RawTrigger*` keys ending in `Dz`, `Adz`, `Mr`, or `Curve`. Any new per-device tuning key that is not on this list gets wiped by the descriptor rewrite within seconds of being set, which is exactly how the momentum toggle failed before #291 landed here.
 
 ```csharp
 [XmlArray("ExtendedMappings")]
@@ -1158,7 +1216,7 @@ Each entry carries a `DeviceGuid` key and a `MouseGestureSettings` payload (Enab
 
 Static array defining which properties participate in `CopyFrom()`, `ToJson()`, and `FromJson()`. Includes all user-facing configuration. Excludes identity and metadata.
 
-**Complete list (211 properties):**
+**Complete list (225 properties):**
 
 | Category | Properties |
 |---|---|
@@ -1174,6 +1232,7 @@ Static array defining which properties participate in `CopyFrom()`, `ToJson()`, 
 | **Stick boundary** (2, #174) | `LeftThumbBoundaryMap`, `RightThumbBoundaryMap` |
 | **Force feedback / wheel** (15) | `ForceType`, `ForceOverall`, `ForceSwapMotor`, `TriggerRumbleFold`, `LeftMotorStrength`, `RightMotorStrength`, `RotationRange`, `RotationRangeEnabled`, `AutoCenterStrength`, `WheelRpmLeds`, `SteeringAngleRumbleEnabled`, `SteeringAngleRumbleAxis`, `SteeringAngleRumbleStrength`, `SteeringAngleRumbleDeadzone`, `SteeringAngleRumbleMotor` |
 | **Novint Falcon** (9, #521) | `FalconFeel`, `FalconSpring`, `FalconKickButton`, `FalconKick`, `FalconShake`, `FalconBraceButton`, `FalconPreloadButton`, `FalconGravity`, `FalconForceCap` |
+| **Wheel centering** (12, 6.0.0, #588) | `CenteringMode`, `CenteringVehicle`, `CenteringSpeedSource`, `CenteringFixedSpeed`, `CenteringWeight`, `CenteringOnCenter`, `CenteringAssist`, `CenteringDamping`, `CenteringFriction`, `CenteringGrip`, `CenteringWheelTorque`, `CenteringWheelRange` |
 | **Steering at-lock feedback** (10, #94) | `SteeringLockRumbleEnabled`, `SteeringLockTriggerVibEnabled`, `SteeringLockLightbarEnabled`, `SteeringLockATResistanceEnabled`, `SteeringLockPulseMs`, `SteeringLockLightbarColor`, `SteeringLockLightbarFadeMs`, `SteeringLockLightbarColorSource`, `SteeringLockLightbarPaletteCsv`, `SteeringLockLightbarHoldMs` |
 | **Impulse triggers** (5, v3.2) | `ImpulseOverallGain`, `ImpulseLeftStrength`, `ImpulseRightStrength`, `ImpulseSwapTriggers`, `AtVibrationToImpulseEnabled` |
 | **Constant trigger force** (3, v3.2) | `ConstantTriggerForceEnabled`, `ConstantTriggerForceLeft`, `ConstantTriggerForceRight` |
@@ -1181,7 +1240,7 @@ Static array defining which properties participate in `CopyFrom()`, `ToJson()`, 
 | **Trigger rumble routing** (12, #102) | `LeftTriggerRouteSource`, `RightTriggerRouteSource`, `LeftTriggerRouteMode`, `RightTriggerRouteMode`, `LeftTriggerRouteScale`, `RightTriggerRouteScale`, `LeftTriggerRouteActivator`, `RightTriggerRouteActivator`, `LeftTriggerRouteActivatorDeviceGuid`, `RightTriggerRouteActivatorDeviceGuid`, `LeftTriggerRouteActivatorMode`, `RightTriggerRouteActivatorMode` |
 | **Audio bass rumble** (5) | `AudioRumbleEnabled`, `AudioRumbleSensitivity`, `AudioRumbleCutoffHz`, `AudioRumbleLeftMotor`, `AudioRumbleRightMotor` |
 | **Constant force** (3) | `ConstantForceEnabled`, `ConstantForceX`, `ConstantForceY` |
-| **Gyro tuning, IR pointer, 3D appearance** (46, v3.2 and later) | `GyroSensitivityH`, `GyroSensitivityV`, `GyroDeadZoneDegPerSec`, `GyroSmoothingAlpha`, `GyroAcceleration`, `GyroOutputCurve`, `GyroSensitivityUnits`, `GyroEasyAimStickThreshold`, `GyroEngageStickSide`, `GyroEngageStickDirection`, `IrSensorBarPos`, `IrSensorBarComp`, `IrSmoothing`, `PointerMode`, `PointerFpsSpeed`, `Model3DAppearances`, `GyroBiasPitch`, `GyroBiasYaw`, `GyroBiasRoll`, `GyroAuxBiasPitch`, `GyroAuxBiasYaw`, `GyroAuxBiasRoll`, `GyroCompassYaw`, `GyroSimulation`, `GyroSimulationSmoothingMs`, `GyroCalibratedDevice`, `MagBiasX`, `MagBiasY`, `MagBiasZ`, `MagFieldNorm`, `GyroCalibratedAtUtc`, `GyroSpace`, `MotionGrip`, `GyroPlayerSpaceYawRelaxFactor`, `GyroWorldSpaceSideReductionThreshold`, `GyroTighteningThresholdDegPerSec`, `GyroSmoothingThresholdDegPerSec`, `GyroSmoothingWindowMs`, `GyroRealWorldCalibration`, `GyroAimEngageButton`, `GyroAimEngageDeviceGuid`, `GyroAimEngageMode`, `GyroInvertPitch`, `GyroInvertYaw`, `GyroInvertRoll`, `GyroApplyTuningToPassthrough` |
+| **Gyro tuning, IR pointer, 3D appearance** (48, v3.2 and later) | `GyroSensitivityH`, `GyroSensitivityV`, `GyroDeadZoneDegPerSec`, `GyroSmoothingAlpha`, `GyroAcceleration`, `GyroOutputCurve`, `GyroSensitivityUnits`, `GyroEasyAimStickThreshold`, `GyroEngageStickSide`, `GyroEngageStickDirection`, `IrSensorBarPos`, `IrSensorBarComp`, `IrSmoothing`, `PointerMode`, `PointerFpsSpeed`, `Model3DAppearances`, `GyroBiasPitch`, `GyroBiasYaw`, `GyroBiasRoll`, `GyroAuxBiasPitch`, `GyroAuxBiasYaw`, `GyroAuxBiasRoll`, `GyroCompassYaw`, `GyroSimulation`, `GyroSimulationSmoothingMs`, `GyroCalibratedDevice`, `MagBiasX`, `MagBiasY`, `MagBiasZ`, `MagFieldNorm`, `GyroCalibratedAtUtc`, `GyroSpace`, `MotionGrip`, `GyroPlayerSpaceYawRelaxFactor`, `GyroWorldSpaceSideReductionThreshold`, `GyroTighteningThresholdDegPerSec`, `GyroSmoothingThresholdDegPerSec`, `GyroSmoothingWindowMs`, `GyroRealWorldCalibration`, `GyroAimEngageButton`, `GyroAimEngageDeviceGuid`, `GyroAimEngageMode`, `GyroActivation`, `GyroRecenterOnEngage`, `GyroInvertPitch`, `GyroInvertYaw`, `GyroInvertRoll`, `GyroApplyTuningToPassthrough` |
 | **Axis inversion** (4) | `LeftThumbAxisXInvert`, `LeftThumbAxisYInvert`, `RightThumbAxisXInvert`, `RightThumbAxisYInvert` |
 | **Threshold** (1) | `AxisToButtonThreshold` |
 | **Touchpad descriptors** (7) | `TouchpadX1`, `TouchpadY1`, `TouchpadX2`, `TouchpadY2`, `TouchpadContact1`, `TouchpadContact2`, `TouchpadClick` |
@@ -1194,11 +1253,11 @@ The `Gyro tuning` block carries a code comment flagging it as the historical clo
 - `RawMappingEntries`, `MidiMappingEntries`, `KbmMappingEntries`, `VrMappingEntries`, `MappingDeadZoneEntries`, `MappingBidirectionalEntries`. Deep-copied separately in `CopyFrom()` and serialized separately in `ToJson()` / `FromJson()`.
 - `TouchpadSettings`. The v3.3 per-(device, padIdx) typed sub-tree. Deep-copied separately in `CopyFrom()`, serialized as `__TouchpadSettings` in `ToJson()` / `FromJson()`.
 - `MouseGestureSettings`. The v4 per-device typed sub-tree (#200). Deep-copied separately in `CopyFrom()`, serialized as `__MouseGestureSettings`.
-- `SlotMultiSourceRows`, `DeviceScopedMultiSourceRows`, `SlotPerDeviceSettingsJson`, `SlotDeviceConfigsJson`, `SlotExtendedConfigJson`, `SlotMidiConfigJson`, `SlotKbmConfigJson`, `SlotShiftActivatorsJson`, `SlotMenusJson` (v4.1, #9: the slot's `MappingSet.Menus`, so Copy / Paste carries the Menus-tab state like the shift authoring), `SlotSetExtrasJson` (v4.3.2: the slot MappingSet's non-row state, the `<RumbleAudio>` Bass Shakers config, `SocdMode` / `SocdPairs`, and the Keep Awake quartet), `SlotMacrosJson` (v4.3.2: the slot's macros, in the same envelope the Macros tab's own clipboard uses). Clipboard-only payloads populated by the Copy path on the source side. `[XmlIgnore]` + `[JsonIgnore]` so they never reach the on-disk XML.
+- `SlotMultiSourceRows`, `DeviceScopedMultiSourceRows`, `SlotPerDeviceSettingsJson`, `SlotDeviceConfigsJson`, `SlotExtendedConfigJson`, `SlotMidiConfigJson`, `SlotKbmConfigJson`, `SlotShiftActivatorsJson`, `SlotMenusJson` (v4.1, #9: the slot's `MappingSet.Menus`, so Copy / Paste carries the slot's menus like the shift authoring), `SlotSetExtrasJson` (v4.3.2: the slot MappingSet's non-row state, the `<RumbleAudio>` Bass Shakers config, `SocdMode` / `SocdPairs`, and the Keep Awake quartet), `SlotMacrosJson` (v4.3.2: the slot's macros, in the same envelope the Macros & Menus section's own macro clipboard uses), `SlotProfileId` (the HIDMaestro profile of the slot the payload was copied from, so a lettered slot's raw rows are read by the source's wire. A payload without it is read as the type's default wire). Clipboard-only payloads populated by the Copy path on the source side. `[XmlIgnore]` + `[JsonIgnore]` so they never reach the on-disk XML.
 
 **Usage:**
 - `CopyFrom()`. Copies all properties via reflection, deep-copies mapping arrays (including `MappingBidirectionalEntries`), deep-copies `TouchpadSettings` and `MouseGestureSettings`.
-- `ToJson()`. Serializes properties + `__ExtendedMappings` / `__MidiMappings` / `__KbmMappings` / `__VrMappings` / `__MappingDeadZones` / `__MappingBidirectional` / `__TouchpadSettings` / `__MouseGestureSettings` + layout metadata (`__OutputType`, `__IsExtended`) + the clipboard-only payloads (`__SlotPerDeviceSettings`, `__SlotDeviceConfigs`, `__SlotExtendedConfig`, `__SlotMidiConfig`, `__SlotKbmConfig`, `__SlotShiftActivators`, `__SlotMenus`, `__SlotSetExtras`, `__SlotMacros`, `__MultiSourceRows` from `DeviceScopedMultiSourceRows`, `__SlotRows` from `SlotMultiSourceRows`).
+- `ToJson()`. Serializes properties + `__ExtendedMappings` / `__MidiMappings` / `__KbmMappings` / `__VrMappings` / `__MappingDeadZones` / `__MappingBidirectional` / `__TouchpadSettings` / `__MouseGestureSettings` + layout metadata (`__OutputType`, `__IsExtended`) + the clipboard-only payloads (`__SlotPerDeviceSettings`, `__SlotDeviceConfigs`, `__SlotExtendedConfig`, `__SlotMidiConfig`, `__SlotKbmConfig`, `__SlotShiftActivators`, `__SlotMenus`, `__SlotSetExtras`, `__SlotMacros`, `__SlotProfile`, `__MultiSourceRows` from `DeviceScopedMultiSourceRows`, `__SlotRows` from `SlotMultiSourceRows`).
 - `FromJson()`. Deserializes JSON, extracts layout metadata for cross-layout paste, reattaches the typed sub-trees and the clipboard-only payloads (including `__SlotSetExtras` and `__SlotMacros`) if present. Reads the pre-v4 `__SlotPlayStationConfigs` key into `SlotDeviceConfigsJson` for back-compat.
 
 ### Utility Methods
@@ -1210,7 +1269,7 @@ The `Gyro tuning` block carries a code comment flagging it as the historical clo
 | `CopyFromTranslated` | `void CopyFromTranslated(PadSetting source, ...)` | Cross-layout copy with positional translation (see [Cross-Layout Mapping Translation](#cross-layout-mapping-translation)). |
 | `ToJson` | `string ToJson(VirtualControllerType, bool)` | JSON for clipboard. Includes layout metadata. |
 | `FromJson` | `static PadSetting FromJson(string json, out ...)` | Deserialize JSON. Returns null on invalid input. Extracts layout metadata. |
-| `ClearMappingDescriptors` | `void ClearMappingDescriptors()` | Clears all mapping descriptors. Preserves DZ, FFB, and other config. |
+| `ClearMappingDescriptors` | `void ClearMappingDescriptors(seed = null, deadZoneSeed = null, bidirectionalSeed = null)` | Replaces the standard, raw, MIDI, KB+M and VR descriptors and their deadzone / bidirectional companions with the seeds (each an `IReadOnlyDictionary<string, string>` keyed by target), clearing every descriptor a seed omits, so the poll thread never reads a temporary blank. Preserves per-device tuning (`IsPerDeviceTuningKey`), DZ, FFB, and other config. |
 | `GetAllMappingDescriptors` | `List<string> GetAllMappingDescriptors()` | All non-empty descriptors: the standard buttons (including the Share / Mute / paddle / Fn extras), D-Pad, triggers, stick axes, and touchpad fields, then every value from the raw-surface, MIDI, KB+M, and VR dictionaries. |
 | `HasAnyMapping` | `bool` (property) | True if any mapping property has a non-empty descriptor. |
 
@@ -1232,17 +1291,21 @@ Per-virtual-controller mapping store. One `MappingSet` per slot, persisted under
 | Element | Type | Description |
 |---|---|---|
 | `BaseLayerName` / `BaseColor` / `BaseIcon` | attributes | (4.1.0) Base layer display name, color, and icon, the Base half of the shift-layer appearance model. The icon is an emoji, or (#471) a `pficon://Package/entry` icon-pack reference or a loose image path, the same forms a shift activator's `Icon` takes. A `.pfprofile` export bundles the packages these reference. |
+| `BaseFlyout` | attribute | (6.0.0, #581) How long the Shift Layer Flyout shows Base when a shift layer ends: `""` for the default (the window's two seconds) or `LayerFlyout.Off`, read through `LayerFlyout.OfBase`. It travels with the appearance trio and counts toward `HasAuthoredContent`. |
 | `<RumbleAudio>` | `RumbleAudioConfig` | (4.1.0, #236) Bass Shakers: `Enabled`, `EndpointId`, `MasterGainPercent` (50), `ChannelMode`, and four `<Voice>` entries (enable, frequency, gain per feedback channel). |
 | `SocdMode` / `SocdPairs` | attributes | (4.1.0, #245) Controller-button SOCD cleaning: resolution mode plus the opposing button pairs, applied to the combined output right before submit. |
 | `KeepAwakeEnabled` / `KeepAwakeAxis` / `KeepAwakeDeflection` | attributes | (4.2.0) Idle output deflection for this slot, applied by Step 5 right before submit like `SocdMode`, so the mapping pipeline's curves and deadzones stay untouched. `KeepAwakeAxis` is `"LX"` (the empty default), `"LY"`, `"RX"`, or `"RY"`. `KeepAwakeDeflection` is a percent of full axis travel, `0` meaning unset and treated as 25 at apply time. Real input at or above the held level passes through unchanged. |
 | `KeepAwakeMotion` | attribute | (4.3.0, discussion #263) Sweeps the held deflection instead of parking it at a constant value, for titles that gate vibration on the stick moving rather than on it being off center (Prey 2017 is the measured example). Off by default, since a constant hold covers every other reported title and is the quieter of the two. Counts toward `HasAuthoredContent`. |
 | `Authoritative` | attribute | (4.1.0) Marks a mapping set the grid writer owns. Guards the domain-swap window, and gates every Workshop stamp below. |
 | `WorkshopLeftStickDeadZoneShape` / `WorkshopRightStickDeadZoneShape` | attributes | (4.2.0, #9) Steam `deadzone_shape` per thumb pair, carried as a `DeadZoneShape` ordinal string (`"0"` Axial for Steam's Cross / Square, `"2"` ScaledRadial for Circle). Empty = no stamp. |
-| `WorkshopGyroEngageDescriptor` / `WorkshopGyroEngageInvert` / `WorkshopGyroEngageToggle` | attributes | (4.2.0, #9) Steam `gyro_button` as a device-free engage descriptor (empty DeviceGuid contract), plus its invert and Toggle arms from Steam's three-state Gyro Button Behavior. Gyro rows fire only while engaged. |
-| `WorkshopGyroRatchetDescriptors` | attribute | (4.2.0, #9) Steam `gyro_ratchet_button_mask` as pipe-joined device-free descriptors. While any of them is held on any slot device the slot's gyro reads are clutched, Steam's ratchet. A separate AND-NOT lane beside the engage stamp, never a replacement, so it composes with an authored engage button, the user's own engage PadSetting, and the `SetGyroEngaged` macro bit alike. |
+| `WorkshopCurves` / `WorkshopRumblePercent` / `WorkshopIdleDisconnectSeconds` / `WorkshopBatteryColors` / `WorkshopGyroDeadZone` / `WorkshopTouchpadGlide` / `WorkshopGyroSpace` | attributes | (5.3.0, #561) An import's response curves (`Target=points` joined by `\|`), a rumble strength under 100 percent, the Bluetooth idle time in seconds, the battery light colors (`r,g,b;r,g,b`, empty then full), a gyro dead zone in degrees per second, touchpad 0's glide, and the gyro space (`Player` or `World`). Empty = no stamp. |
+| `WorkshopGyroEngageDescriptor` / `WorkshopGyroEngageInvert` / `WorkshopGyroEngageToggle` | attributes | (4.2.0, #9) Steam `gyro_button` as a device-free engage descriptor (empty DeviceGuid contract), plus its invert and Toggle arms from Steam's three-state Gyro Button Behavior. Moved onto the assigned device's engage button and cleared. |
+| `WorkshopGyroRatchetDescriptors` | attribute | (4.2.0, #9) Steam `gyro_ratchet_button_mask` as pipe-joined device-free descriptors. Since 6.0.0 a carrier only: it folds onto the device's `GyroActivation` as the Base layer's While Not Held on any of these buttons (`Base=Release,Any,...`), the way the Gyro card writes a ratchet, where the import stamped no `WorkshopGyroActivation`. |
+| `WorkshopGyroActivation` | attribute | (5.3.0) Steam gyro activations the engage button cannot carry, by layer, in the `GyroActivation` text form: several buttons, a set that needs all of them, or layers whose gyro groups turn the gyro on differently. Since 6.0.0 a carrier only, folded onto the device's `GyroActivation`. |
+| `WorkshopGyroRecenterOnEngage` | attribute | (5.3.0) Steam's Use Relative on a deflection mode with a gyro button. Since 6.0.0 a carrier only, folded onto the device's `GyroRecenterOnEngage`. |
 | `<Row>` | `MappingRow[]` | Every row across every layer, tagged by `MappingRow.LayerMask`. Base rows tag `Base`. Shift-layer rows tag the activator's mask. A single target can have multiple rows when more than one layer is configured. |
 | `<ShiftActivator>` | `ShiftActivator[]` | One entry per non-Base shift layer. Names the layer (`LayerMask`), the input that engages it, the mode, color, emoji, and debounce. Empty list = Base-only slot. |
-| `<Menu>` | `List<MenuDefinitionEntry>` | (v4.1, #9) Radial, touch, keyboard and hotbar menus authored for or imported onto this slot (`PadForge.Engine/Menus/MenuDefinitionEntry.cs`). Every scalar field serializes as an `[XmlAttribute]`: per-entry `DeviceGuid` (`""` = any device on the slot, the Workshop-import form), `MenuId` (default 1), `Name`, `Kind` (`Radial` / `Grid` / `Keyboard` / `Hotbar`, saved by name, the 5.3.0 two appended), `HostDescriptor` (an abstract stick, default `"Gamepad RightStick"`, `"Gamepad DPad"`, `"Gamepad Diamond"` for the face buttons, `"Touchpad N"`, or `"Custom"`), `HostHalf`, the custom host pair `CustomXDescriptor` / `CustomYDescriptor`, `ClickDescriptor`, `LayerMask`, `FireType` (default `Click`), `CellCount` (default 4), `HasCenter`, `ShowLabels` (default true), the overlay geometry (`PosXPercent` / `PosYPercent` default 50, `ScalePercent` default 100, `OpacityPercent` default 90), `EngageDeadzonePercent` (default 25), `SensitivityPercent` (default 100), `Enabled` (default true), `LayerHoldsOpen` (#413, default false: when `LayerMask` names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover), `ShowOnWebController` (#471, default false: a Touch Grid menu shows as a page on Web Menus phones assigned to the slot). Cells serialize as `<Item>` child elements (`MenuItemDefinition`: `Index`, `Label`, `Icon`, `MacroName`, and the optional direct bindings `VirtualKey` / `XboxButtons` / `ExtendedButton`, all attributes). `MacroName` (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. `Icon` is an emoji (#471, one text element, drawn as text), or resolves in order as a `pficon://Package/entry` icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor `"Menu {MenuId} Item {k}"`. (5.3.0, #566) A `Keyboard` menu, the [On-Screen Keyboard](on-screen-keyboard-internals.md), adds `KeyboardLayout` (`Grid` / `Split` / `Wheel`, default `Grid`), `OpenDescriptor` (Opens With, default `""`: no input opens it), `OpenOnTextFocus` (default false), `FunctionRow` (default false) and `Suggestions` (default true), written on every keyboard menu, and these only when set: `OpenDeviceGuid`, `OpenAndDescriptor` and `OpenAndDeviceGuid` (a second input held with Opens With), `OpenThreshold` (the press point in percent, 0 = 50), `OpenPress` (`Hold`, `DoublePress`, `Release`, `WhileHeld`, `ShortPress`, `TriplePress` or `SinglePress`, absent = `Press`), `OpenPressMs` (0 = the press's default, 500 or 442), `TypesThrough` (absent = Windows Input, `"slot:N"` the Keyboard + Mouse slot at pad index N, else a HIDMaestro keyboard profile id) and `Symbols` (absent = the default set). Controls that differ from their layout's default serialize as `<KeyboardControl>` child elements (`KeyboardControlEntry`): `Layout`, `Action` (a `KeyboardControlAction` name) and `Descriptor` always, an empty `Descriptor` for a cleared control, and `DeviceGuid`, `AndDescriptor`, `AndDeviceGuid` and `Threshold` only when set. An untouched keyboard writes no `<KeyboardControl>`. (5.3.0) A `Hotbar` menu adds seven attributes: `HotbarWrap` (default false), `HotbarDismissOnFire` (default true) and `HotbarRecenter` (default true), written on every hotbar, and `HotbarShowDescriptor`, `HotbarPreviousDescriptor`, `HotbarNextDescriptor` and `HotbarFireDescriptor` only when set (absent = the host's direction). None of the keyboard or hotbar members is written on a menu of another `Kind`, so a radial or grid menu saves as it did before 5.3.0. Empty list = no menus. |
+| `<Menu>` | `List<MenuDefinitionEntry>` | (v4.1, #9) Radial, touch, keyboard and hotbar menus authored for or imported onto this slot (`PadForge.Engine/Menus/MenuDefinitionEntry.cs`). Every scalar field serializes as an `[XmlAttribute]`: per-entry `DeviceGuid` (`""` = any device on the slot, the Workshop-import form), `MenuId` (default 1), `Name`, `Kind` (`Radial` / `Grid` / `Keyboard` / `Hotbar`, saved by name, the 5.3.0 two appended), `HostDescriptor` (an abstract stick, default `"Gamepad RightStick"`, `"Gamepad DPad"`, `"Gamepad Diamond"` for the face buttons, `"Touchpad N"`, or `"Custom"`), `HostHalf`, the custom host pair `CustomXDescriptor` / `CustomYDescriptor`, `ClickDescriptor`, `LayerMask`, `FireType` (default `Click`), `CellCount` (default 4), `HasCenter`, `ShowLabels` (default true), the overlay geometry (`PosXPercent` / `PosYPercent` default 50, `ScalePercent` default 100, `OpacityPercent` default 90), `EngageDeadzonePercent` (default 25), `SensitivityPercent` (default 100), `Enabled` (default true), `LayerHoldsOpen` (#413, default false: when `LayerMask` names a real layer, engaging that layer opens the menu and leaving it closes the menu, and the host surface only steers the hover), `ShowOnWebController` (#471, default false: a Touch Grid menu shows as a page on Web Menus phones assigned to the slot). Cells serialize as `<Item>` child elements (`MenuItemDefinition`: `Index`, `Label`, `Icon`, `IconScalePercent` (#413, default 100, the cell icon's size in percent of the menu's icon box, clamped to 25..200 by the editor and the overlay), `MacroName`, and the optional direct bindings `VirtualKey` / `XboxButtons` / `ExtendedButton`, all attributes). `MacroName` (v4.4, #390) names a macro on the same slot the cell triggers while fired. The cell is an additional trigger source, so the macro's own trigger mode keeps its meaning. A name the slot no longer declares is an inert no-op, and renames retag through the macro name-change hook. `Icon` is an emoji (#471, one text element, drawn as text), or resolves in order as a `pficon://Package/entry` icon-pack reference (#390), a loose image path (exe-relative preferred), or a bare Steam binding-icon file name. Both are append-only: absent in older files = empty. Items without a direct binding or macro deliver through rows / macros keyed on the fired descriptor `"Menu {MenuId} Item {k}"`. (5.3.0, #566) A `Keyboard` menu, the [On-Screen Keyboard](on-screen-keyboard-internals.md), adds `KeyboardLayout` (`Grid` / `Split` / `Wheel`, default `Grid`), `OpenDescriptor` (Opens With, default `""`: no input opens it), `OpenOnTextFocus` (default false), `FunctionRow` (default false) and `Suggestions` (default true), written on every keyboard menu, and these only when set: `OpenDeviceGuid`, `OpenAndDescriptor` and `OpenAndDeviceGuid` (a second input held with Opens With), `OpenThreshold` (the press point in percent, 0 = 50), `OpenPress` (`Hold`, `DoublePress`, `Release`, `WhileHeld`, `ShortPress`, `TriplePress` or `SinglePress`, absent = `Press`), `OpenPressMs` (0 = the press's default, 500 or 442), `TypesThrough` (absent = Windows Input, `"slot:N"` the Keyboard + Mouse slot at pad index N, else a HIDMaestro keyboard profile id) and `Symbols` (absent = the default set). Controls that differ from their layout's default serialize as `<KeyboardControl>` child elements (`KeyboardControlEntry`): `Layout`, `Action` (a `KeyboardControlAction` name) and `Descriptor` always, an empty `Descriptor` for a cleared control, and `DeviceGuid`, `AndDescriptor`, `AndDeviceGuid` and `Threshold` only when set. An untouched keyboard writes no `<KeyboardControl>`. (5.3.0) A `Hotbar` menu adds seven attributes: `HotbarWrap` (default false), `HotbarDismissOnFire` (default true) and `HotbarRecenter` (default true), written on every hotbar, and `HotbarShowDescriptor`, `HotbarPreviousDescriptor`, `HotbarNextDescriptor` and `HotbarFireDescriptor` only when set (absent = the host's direction). None of the keyboard or hotbar members is written on a menu of another `Kind`, so a radial or grid menu saves as it did before 5.3.0. Empty list = no menus. |
 
 Last-engaged-wins resolves conflicts between simultaneously-active activators (the most recently engaged activator's layer is the active one).
 
@@ -1278,6 +1341,8 @@ Every row writes the `Trim*` and `Motion*` attributes, whatever its target, and 
 
 Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are read only when the matching `Kind` is set, but persist across kind changes so flipping back-and-forth keeps the user's settings. Every `double` field refuses a value that is not finite (NaN or infinity) and keeps the one it had, on load and from the grid alike, so a hand-edited or damaged file cannot carry one into the engine. The view models' number setters refuse NaN the same way (`FiniteObservableObject`).
 
+Since 6.0.0 each source line on the controller page edits a source's gates and its five shaping values, each row with its own reset (`MappingSourceItem.Shaping.cs`, the `SourceShaping` template in `PadPage.xaml`): Only While (`GateDescriptor`) and And While (`Gate2Descriptor`), shown where the source holds a gate, and Curve (`ParamCurveExponent`), Outer Range (`ParamRangeOuter`), Anti-Deadzone (`ParamAntiDeadzone`), Deadzone Shape (`ParamStickDeadZoneShape`) and Inner Deadzone (`ParamStickDeadZoneInner`), shown where the source holds a value, and on a continuous source of a row whose output has no device card (a mouse axis, a raw axis). A stick or trigger output's shaping lives on the device's own card, which takes an import's values at assignment.
+
 | Member | Type | Default | Description |
 |---|---|---|---|
 | `Kind` | `string` | `"Direct"` | `"Direct"`, `"Toggle"` (the Direct read latched by each press, #461), `"RapidTrigger"` (the Direct read released and pressed again by travel past the deadzone, #482), `"Incremental"`, `"InvertOnHold"`, `"Ramped"` (keyboard-to-axis time ramp, #111), or the steering kinds `"WindingStick"` / `"AngleToAxisX"` / `"AngleToAxisY"` / `"MotionLeanX"` (#94). Unknown values treated as Direct. Kind-specific fields persist across kind changes so flipping back keeps the settings. `Invert` is the exception: a source drops it when it takes Incremental or Ramp in the editor. |
@@ -1312,12 +1377,12 @@ Every field is an `[XmlAttribute]` (no child elements). Kind-specific fields are
 | `ParamWindUnwindRate` | `double` | `1800` | WindingStick: unwind rate, degrees per second. |
 | `ParamAngleInnerDz` | `double` | `0` | AngleToAxisX/Y: inner deadzone in degrees from the on-axis direction. |
 | `ParamAngleOuterDz` | `double` | `10` | AngleToAxisX/Y: outer deadzone in degrees from max. |
-| `ParamTiltRangeDeg` | `double` | `0` | (v4.3, #292) Gravity-tilt envelope for a `"Gyro Tilt X"` / `"Gyro Tilt Y"` source: degrees of tilt for full deflection. `0` means unset, resolved through `GyroTiltDefaultRangeDeg` = 25, the modal Steam-corpus deflection max. Stamped per (slot, device) from the Gyro tab's Tilt card, the Motion Steering push pattern. |
+| `ParamTiltRangeDeg` | `double` | `0` | (v4.3, #292) Gravity-tilt envelope for a `"Gyro Tilt X"` / `"Gyro Tilt Y"` source: degrees of tilt for full deflection. `0` means unset, resolved through `GyroTiltDefaultRangeDeg` = 25, the modal Steam-corpus deflection max. Stamped per (slot, device) from the Motion & Touch section's tilt card, the Motion Steering push pattern. |
 | `ParamTiltInnerDz` | `double` | `0` | (v4.3, #292) Subtract-style inner deadzone on the same envelope, in degrees. |
 | `ParamMotionInnerDz` | `double` | `15` | MotionLeanX: inner tilt deadzone in degrees. |
 | `ParamMotionOuterDz` | `double` | `135` | MotionLeanX: outer tilt deadzone in degrees. |
 | `ParamControllerOrientation` | `string` | `"Forward"` | MotionLeanX: `Forward` / `Left` / `Right` / `Backward`. |
-| `ParamFlickTime` | `double` | `0.1` | (#225, v4.1) Flick stick (descriptor family `"Flick Stick Left"` / `"Flick Stick Right"` on a `KbmMouseX` row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The pad-page Flick Stick card re-stamps all nine `ParamFlick*` fields on save (`ApplyFlickStickParamsToRow`). See the `FlickStick*` Extended keys. |
+| `ParamFlickTime` | `double` | `0.1` | (#225, v4.1) Flick stick (descriptor family `"Flick Stick Left"` / `"Flick Stick Right"` on a `KbmMouseX` row): easing duration in seconds for a full 180° flick. Shorter turns complete in the same time. Tuning is per-source so a Workshop import's per-group values survive materialization. The controller page's Flick Stick card re-stamps all nine `ParamFlick*` fields on save (`ApplyFlickStickParamsToRow`). See the `FlickStick*` Extended keys. |
 | `ParamFlickCountsPer360` | `double` | `14400` | Flick stick: mouse counts emitted per full 360° camera turn (Steam's Dots Per 360°). |
 | `ParamFlickThreshold` | `double` | `0.9` | Flick stick: raw stick deflection (0..1) at which a flick engages. A 0.9× hysteresis applies to the release while flicking. |
 | `ParamFlickSnapMode` | `string` | `"None"` | Flick stick: snap mode. `"None"`, `"Forward"`, `"Half"`, `"Four"`, `"Sixths"`, `"Eight"`. Stored as a string, not a serialized enum, so the value set stays append-only. |
@@ -1373,6 +1438,7 @@ Every field is an `[XmlAttribute]` (no child elements).
 | `CycleIncludeBase` | `bool` | `false` | (#119) When true, unshifted Base is a stop in the rotation. When false, Base is only the resting state before the first press. |
 | `JumpToLayer` | `string` | `""` | Custom-mode jump-target layer mask. |
 | `AutoCancelMs` | `int` | `0` | (v4, #206) Toggle mode only. While engaged, if none of the layer's own mapped inputs is active for this many ms, the toggle disengages by itself. `0` = never. The timer starts at engage and re-arms on layer-input activity. Not offered for Sticky/Latch. |
+| `Flyout` | `string` | `""` | (6.0.0, #581) How long the Shift Layer Flyout shows this layer: `""` for the default (`LayerFlyout.Stay`, the flyout stays while the layer is on), `"Brief"` (the window's own timer takes it away) or `"Off"` (no flyout, and Base shows none when the layer ends). Read through `LayerFlyout.OfLayer`, where a value this build does not know reads as the default. Display only. When several activators name one layer, the first speaks for it, as with `LayerName`, `Color` and `Icon`. |
 
 ### MappingSetMigrator
 
@@ -1404,11 +1470,15 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `BatteryNotifyVibrate` | `bool` | `[XmlElement]` | `false` | (v4.3, #293) Also buzz the device when the notification fires. |
 | `AssignOfferNewDevice` | `bool` | `[XmlElement]` | `true` | (v4.4) Offer a never-seen device to the open virtual controller when it connects. |
 | `AssignOfferEmptySlot` | `bool` | `[XmlElement]` | `true` | (v4.4) Offer any connecting device when the open virtual controller has nothing assigned. |
+| `AssignOfferHome` | `bool` | `[XmlElement]` | `true` | (6.0.0, #574) The Assignment Prompts card's **Offer New Devices on Home**: Home offers a device PadForge has just met a virtual controller of its own. On for a file from before it. |
+| `BatteryNotifyRepeatMinutes` | `int` | `[XmlElement]` | `0` | **Repeat the Notice Every**: minutes between repeats of the low-battery notice. `0` = never. |
+| `BatteryNotifyFull` | `bool` | `[XmlElement]` | `false` | **Notify When Fully Charged**. |
 | `StartMinimized` | `bool` | `[XmlElement]` | `false` | Start minimized |
 | `DiagnosticsLoggingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.3, #303) Persistent mirror of the engine event ring to `diagnostics.log` beside the exe, for auto-started sessions where a launch flag cannot help. |
 | `StartAtLogin` | `bool` | `[XmlElement]` | `false` | Register as startup app |
 | `EnablePollingOnFocusLoss` | `bool` | `[XmlElement]` | `true` | Continue polling on focus loss |
-| `PollingRateMs` | `int` | `[XmlElement]` | `1` | Polling interval in ms (~1000 Hz at 1 ms) |
+| `PollingRateHz` | `int` | `[XmlElement]` | `0` | (6.0.0) The Settings page's **Polling Rate (Unless a Profile Overrides It)**: how many times a second the engine reads the devices and updates the virtual controllers, 60 to 10000 (`InputManager.MinPollingRateHz` / `MaxPollingRateHz`). `0`, in a file that holds none, loads as `InputManager.DefaultPollingRateHz` (1000). `PollingRates.Resolve` holds the live rate to the range. |
+| `LegacyPollingIntervalMs` | `int` | `[XmlElement("PollingRateMs")]`, read only | `0` | (6.0.0) The interval of a file saved before PadForge 6, 1 to 16 ms. `MigrateLegacySchema` turns it into `PollingRateHz` with `PollingRates.FromIntervalMs` (1000 / ms to the nearest hertz, a half going up, so 1 ms is 1000 Hz and 16 ms is 63 Hz) when the file holds no rate, then zeroes it. `[DefaultValue(0)]` keeps the zero out of the file, so the old element is never written again. See [Polling Interval to Rate](#polling-interval-to-rate-600). |
 | `HmInactivityDestroyTimeoutSeconds` | `int` | `[XmlElement]` | `60` | (v3.0) Seconds an HM VC waits for mapped devices to come back online before tearing itself down. `0` disables. |
 | `ThemeIndex` | `int` | `[XmlElement]` | `0` | UI theme index |
 | `Language` | `string` | `[XmlElement]` | `""` | Language code (`"en"`, `"fr"`, `"ja"`). Empty = system default. |
@@ -1441,9 +1511,9 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `WebControllerPlainHttpPort` | `int` | `[XmlElement]` | `8081` | The plain address's port. A stored value outside 1024-65535 loads as 8081 |
 | `WebControllerPlainHttpLocalOnly` | `bool` | `[XmlElement]` | `false` | Admit only loopback peers on the plain address, and remove its firewall rule |
 | `WebControllerAccessCodeProtected` | `string` | `[XmlElement]` | `null` | The plain address's access code, DPAPI-encrypted with machine scope by `WebControllerAccess.ProtectForStorage`, the protection Remote Link's Secure mode gives its private key. Missing, damaged, or written on another PC, it reads as null, the view model keeps a freshly generated code, and the load marks the file dirty so that code is saved |
-| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 7018). |
-| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (line 7026). |
-| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (line 7034). |
+| `EnableChromaLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #373) The retired Razer Chroma lightbar mirror switch, the global leg. Read once at load by `PeripheralSwitchMigration` (#494), and `ShouldSerializeEnableChromaLightbar` returns false, so it is never written again (`SettingsService.cs` line 7374). |
+| `EnableSensaHaptics` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #374) The retired Razer Sensa switch, the global leg. Read once the same way (`SettingsService.cs` line 7382). |
+| `EnableLightsyncLightbar` | `bool` | `[XmlElement]`, read only | `false` | (v4.4, #382) The retired Logitech LIGHTSYNC lightbar mirror switch, the global leg. Read once the same way (`SettingsService.cs` line 7390). |
 | `HeadTrackingEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #355) The OpenTrack UDP input, the global leg. A file without `HeadTrackingIndependentInputs` reads it as the old master switch over UDP and FreeTrack. Per-profile leg: `ProfileData.EnableHeadTracking`. The Head Tracker device row exists while any of the three inputs is on. |
 | `HeadTrackingIndependentInputs` | `bool` | `[XmlElement]` | `false` | Marks a file saved after the inputs split. Every save writes `true`. On a file without it, load keeps FreeTrack on only when `HeadTrackingEnabled` and `HeadTrackingFreeTrack` were both on. |
 | `HeadTrackingUdpPort` | `int` | `[XmlElement]` | `4242` | (v4.4, #355) UDP port OpenTrack's "UDP over network" output sends to. Global only. |
@@ -1468,11 +1538,37 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `MainWindowState` | `int` | `[XmlElement]` | `0` | 0=Normal, 2=Maximized |
 | `MainWindowFullScreen` | `bool` | `[XmlElement]` | `false` | Borderless full-screen mode |
 | `Use2DControllerView` | `bool` | `[XmlElement]` | `false` | 2D controller view (instead of 3D) |
+| `HomeCards` | `int` | `[XmlElement]` | `0` | (6.0.0, #574) The size of Home's controller cards: `0` follows the window (Auto), `1` detailed, `2` compact (`HomeCardSize`). |
+| `OpenCards` | `List<string>` | `[XmlArray("OpenCards")][XmlArrayItem("Card")]` | empty | (6.0.0, #574) The cards the user has opened further: the keys of the More rows and of the folded cards that are open. `CardFoldState.Snapshot()` writes it on save and `CardFoldState.Load` restores it at load (`PadForge.App/Common/CardFoldState.cs`), so a card opened once is open at the next launch. Interface state, never in a profile. `ShouldSerializeOpenCards` writes the element only while a card is open, so a file with none open reads as a 5.x file does. |
+| `HeadTrackingLastSources` | `int` | `[XmlElement]` | `0` | (6.0.0, #574) The inputs the Extras page's Head Tracking switch turned off last, as the bits `DashboardViewModel` names, so turning it back on restores the same inputs. Written only when nonzero. |
+| `OverlaysLastShown` | `int` | `[XmlElement]` | `0` | (6.0.0, #574) The same for the Extras switch of Overlays. Written only when nonzero. |
+| `ScreenOverlaysLastOn` | `int` | `[XmlElement]` | `0` | (6.0.0, #574) The same for the Extras switch of Screen Overlay, a bit for each overlay's number. Written only when nonzero. |
+| `CrosshairsLastOn` | `int` | `[XmlElement]` | `0` | (6.0.0, #585) The same for the Extras switch of Crosshair, a bit for each crosshair's number. Written only when nonzero. |
+| `ScreenOverlays` | `ScreenOverlayData[]` | `[XmlArray("ScreenOverlays")][XmlArrayItem("Overlay")]` | `null` | (5.3.0, #560) The Screen Overlays: each one's `Number` (attribute), `Enabled`, `Opacity` (0.8), `Monitor`, `Left` / `Top` (unplaced until moved), `Width` (320) and `Height` (240). Null in a file from before them, which reads as one overlay, off. Profiles carry their own (`ProfileData.ScreenOverlays`). |
+| `Crosshairs` | `CrosshairData[]` | `[XmlArray("Crosshairs")][XmlArrayItem("Crosshair")]` | `null` | (6.0.0, #585) The crosshairs, each one's switch, style, display, offset and look. Null in a file from before them, which reads as one crosshair, off. Profiles carry their own (`ProfileData.Crosshairs`). See [CrosshairData](#crosshairdata-600). |
+| `Magnifier` | `MagnifierData` | `[XmlElement]` | `null` | (6.0.0, #585) The magnifier. Null in a file from before it, which reads as the defaults, off. Profiles carry their own (`ProfileData.Magnifier`). See [MagnifierData](#magnifierdata-600). |
 | `LegacyDriverCleanupOffered` | `bool` | `[XmlElement]` | `false` | True once the v3 legacy-driver cleanup offer has run. A launch that finds neither ViGEmBus nor vJoy sets it without prompting. Otherwise the prompt shows once and sets it whatever the answer. |
-| `FirstRunTourCompleted` | `bool` | `[XmlElement]` | `false` | (v4) True once the first-run welcome tour is completed or skipped. Replaces the pre-v4 `PadForge.firstrun` marker file beside the exe. |
 | `EnableInputHiding` | `bool` | `[XmlElement]` | `true` | Master switch for HidHide + hooks. When false, no hiding occurs. |
 | `KeepHidHideCloaksBetweenLaunches` | `bool` | `[XmlElement]` | `false` | Leave cloaks asserted across shutdowns so Steam / other launchers still see physicals as hidden when PadForge isn't running. |
-| `FlydigiEnhancedProtocol` | `bool` | `[XmlElement]` | `true` | (#395) The Input Engine card's **Flydigi Enhanced Protocol**: SDL's Flydigi HIDAPI driver. Off leaves Flydigi pads on their XInput view so Flydigi Space Station keeps sight of the pad. The load applies it as an SDL hint, which must be set before `SDL_Init`. |
+| `FlydigiScreenBindings` | `string[]` | `[XmlArray("FlydigiScreenBindings")][XmlArrayItem("Id")]` | `null` | (6.0.0, #586) The Flydigi Apex 4 nodes a screen send moved to WinUSB and has not given back. The next start gives them back. Null when there are none. |
+| `KeyboardTakeovers` | `KeyboardTakeoverEntry[]` | `[XmlArray("KeyboardTakeovers")][XmlArrayItem("Keyboard")]` | `null` | (#549) The keyboards taken from Windows for PadForge alone on the Devices page: the bound node, the ID its package names and the row the keyboard had. Null when there are none. |
+| `AnalogKeyboardsEnabled` | `bool` | `[XmlElement]` | `false` | (#468) Read analog keyboards over their vendor HID interface. Off by default, because the polled families share their configurator's channel. |
+| `BlissBoxEnabled` | `bool` | `[XmlElement]` | `false` | (#469) Drive Bliss-Box adapters through their API. Off by default, because it talks to the adapter over the channel the Bliss-Box API Tool and DeviceBuddy use. |
+| `BlissBoxPorts` | `BlissBoxPortData[]` | `[XmlArray("BlissBoxPorts")][XmlArrayItem("Port")]` | `null` | (#469) Each Bliss-Box port's own choices, by the port's device. |
+| `DefaultProfileDreamcastPicture` | `string` | `[XmlElement]` | `null` | (#469) The Default profile's Dreamcast screen picture, 192 bytes in image order as base64. Named profiles keep theirs on `ProfileData.DreamcastPicture`. |
+| `KeyboardScreensEnabled` | `bool` | `[XmlElement]` | `false` | (#519) The keyboard screens. Off by default, because it loads other vendors' libraries, opens sessions with their software, and can bind WinUSB to a G19's screen interface. |
+| `KeyboardScreens` | `KeyboardScreenData[]` | `[XmlArray("KeyboardScreens")][XmlArrayItem("Screen")]` | `null` | (#519) Each keyboard screen's choices, by the screen's row. Null when every screen is at its defaults. |
+| `DefaultProfileKeyboardScreenPicture` | `string` | `[XmlElement]` | `null` | (#519) The Default profile's keyboard screen picture, a stored path. Named profiles keep theirs on `ProfileData.KeyboardScreenPicture`. |
+| `Strike7LibraryPath` | `string` | `[XmlElement]` | `null` | (#519) A `Strike7API.dll` the user picked, a stored path. Null for the copy PadForge downloads. |
+| `NovintFalconEnabled` | `bool` | `[XmlElement]` | `false` | (#521) Drive the Novint Falcon. Off by default, because the Falcon moves on its own and an open Falcon is locked against every other program. |
+| `FalconLibraryPath` | `string` | `[XmlElement]` | `null` | (#521) A `dhd64.dll` the user picked, a stored path. Null for Force Dimension's installed copies. |
+| `LearnedKeyMaps` | `LearnedKeyMapData[]` | `[XmlArray("LearnedKeyMaps")][XmlArrayItem("Model")]` | `null` | (#557) Key names learned with Map Key Lights, per device model. |
+| `KeyboardProfileBackups` | `KeyboardProfileBackupData[]` | `[XmlArray("KeyboardProfileBackups")][XmlArrayItem("Backup")]` | `null` | (#557) Keyboard lighting profiles PadForge wrote over and has not yet put back, one per laptop keyboard and one per external device. |
+| `EnableTwitchChat` | `bool` | `[XmlElement]` | `false` | (#555) Whether the Twitch Chat row reads the channel. Machine-scoped like the plain web address. |
+| `TwitchChatChannel` | `string` | `[XmlElement]` | `null` | (#555) The channel as the streamer typed it. |
+| `TwitchChatClaimApproval` | `int` | `[XmlElement]` | `0` | (#555) Who approves a viewer's `!claim`, a `TwitchClaimApproval` by number. `0` = the streamer alone. |
+| `ChatCommands` | `ChatCommandData[]` | `[XmlArray("ChatCommands")][XmlArrayItem("Command")]` | `null` | (#555) The Twitch Chat row's words. Null in a file written before the list existed, which registers the usual words. |
+| `FlydigiEnhancedProtocol` | `bool` | `[XmlElement]` | `true` | (#395) The Hardware Support card's **Flydigi Enhanced Protocol**: SDL's Flydigi HIDAPI driver. Off leaves Flydigi pads on their XInput view so Flydigi Space Station keeps sight of the pad. The load applies it as an SDL hint, which must be set before `SDL_Init`. |
 | `HidHideWhitelistPaths` | `string[]` | `[XmlArray][XmlArrayItem("Path")]` | `null` | HidHide whitelisted app paths. Null = empty. |
 | `SerialControllers` | `SerialControllerEntry[]` | `[XmlArray][XmlArrayItem("Controller")]` | `null` | Controllers on COM ports added in the pairing dialog (hifihedgehog/SDL#33), handed to SDL as `SDL_JOYSTICK_SERIAL`. |
 | `WinUsbOptIns` | `string[]` | `[XmlArray][XmlArrayItem("Id")]` | `null` | IDs of the devices moved to PadForge's WinUSB driver on request (hifihedgehog/SDL#33 Part 15), so each start can say when Windows put one back. |
@@ -1480,7 +1576,7 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `DjiRemoteHosts` | `string[]` | `[XmlArray][XmlArrayItem("Host")]` | `null` | DJI RC and RC 2 remotes added by address in the pairing dialog (hifihedgehog/SDL#33 Part 6), `a.b.c.d:port` keys handed to SDL as `SDL_JOYSTICK_DJI_REMOTE_TCP_HOSTS`. |
 | `UsioLayout` | `string` | `[XmlElement]` | `null` | The Namco USIO's layout (hifihedgehog/SDL#33 Part 14): `"tekken"`, or null for the fork's default, Taiko. |
 | `ExtendedConfigs` | `ExtendedSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot Extended config (Customize toggle, axis/trigger/POV/button counts, HIDMaestro OEM/product overrides) |
-| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type, a lit mouse, keyboard, unit row or vendor row included (#494). Its `PeripheralLightingEnabled` attribute is the Lighting tab's Control This Device’s Lighting switch, and a config written before #494 reads it as off. Its `PeripheralClaimLevel` attribute is the Lighting Hold under that switch, saved by name (`Colors`, `Power` or `HostMode`), and a config without it reads `Colors`. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
+| `DeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("DeviceSlotConfigs")][XmlArrayItem("Config")]` | `null` | Per-(slot, device) config (adaptive triggers, lighting, audio mirror, tone filter) for any hardware on any slot type, a lit mouse, keyboard, unit row or vendor row included (#494). Its `PeripheralLightingEnabled` attribute is the Lights & Sound section's Control This Device’s Lighting switch, and a config written before #494 reads it as off. Its `PeripheralClaimLevel` attribute is the Lighting Hold under that switch, saved by name (`Colors`, `Power` or `HostMode`), and a config without it reads `Colors`. Renamed from `PlayStationConfigs` / `PlayStationSlotConfigData` in v4. |
 | `LegacyDeviceSlotConfigs` | `DeviceSlotConfigData[]` | `[XmlArray("PlayStationConfigs")][XmlArrayItem("Config")]` | `null` | Read-only pre-v4 spelling. `MigrateLegacySchema()` moves it into `DeviceSlotConfigs` on load. `ShouldSerializeLegacyDeviceSlotConfigs()` returns false so it never re-serializes. |
 | `UserProfiles` | `UserProfileData[]` | `[XmlArray][XmlArrayItem("Profile")]` | `null` | User-imported HIDMaestro profile JSONs (captured via HMDeviceExtractor). Appear in the Extended dropdown alongside the catalog. |
 | `MidiConfigs` | `MidiSlotConfigData[]` | `[XmlArray][XmlArrayItem("Config")]` | `null` | Per-slot MIDI config (channel, CC/note ranges, velocity, legacy output port) |
@@ -1495,8 +1591,8 @@ Application-level settings stored as a single `<AppSettings>` element.
 | `VoiceListeningMode` | `int` | `[XmlElement]` | `0` | (v4.3, #317) 0 = always listening, 1 = push-to-talk. |
 | `HandheldButtons` | `HandheldButtonData[]` | `[XmlArray("HandheldButtons")][XmlArrayItem("Button")]` | `null` | (v4.4, #353) Learned handheld hidden buttons, each a named stable raw-button index plus its delivery path. See [HandheldButtonData](#handheldbuttondata-v44). |
 | `HandheldMachineKey` | `string` | `[XmlElement]` | `""` | (v4.4, #353) The machine the learned buttons belong to. |
-| `HandheldButtonsEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #353) The Settings card's **Enable Handheld PC Buttons**. Off means no device rows, no keyboard hook, no vendor HID handles, no sensor subscription. |
-| `GKeysEnabled` | `bool` | `[XmlElement]` | `false` | (#454) The Input Engine card's **Read Logitech G-Keys**: read G-keys through the Logitech G-key SDK. Off by default because it loads a third-party library and opens a session with the Logitech software. |
+| `HandheldButtonsEnabled` | `bool` | `[XmlElement]` | `false` | (v4.4, #353) The Settings page's Hardware Support card's **Enable Handheld PC Buttons**. Off means no device rows, no keyboard hook, no vendor HID handles, no sensor subscription. |
+| `GKeysEnabled` | `bool` | `[XmlElement]` | `false` | (#454) The Hardware Support card's **Read Logitech G-Keys**: read G-keys through the Logitech G-key SDK. Off by default because it loads a third-party library and opens a session with the Logitech software. |
 | `IconPackages` | `IconPackageData[]` | `[XmlArray("IconPackages")][XmlArrayItem("Package")]` | `null` | (v4.4, #390) Registered `.pficons` menu icon packs: Name + stored path (exe-relative when the pack sits in the application directory). Same shape as `SoundPackages`. |
 | `MappingPickerHiddenDevices` | `string[]` | `[XmlArray("MappingPickerHiddenDevices")][XmlArrayItem("Slot")]` | `null` | (v4.3, #322) Per-slot hidden picker device keys. Index is the slot, value is semicolon-joined device GUIDs plus the `any` token for the device-agnostic group. A view preference, so it lives in the settings root and never in a profile. |
 | `PsMoveCalibrations` | `string[]` | `[XmlArray("PsMoveCalibrations")][XmlArrayItem("Pad")]` | `null` | (v4.3, #277) PS Move per-pad calibration blobs as `mac=hex` entries, captured over USB at pair time and consumed by the Bluetooth lane for sensor scaling. |
@@ -1596,6 +1692,8 @@ public class KbmSlotConfigData
     [XmlAttribute] public string Surfaces { get; set; } = KbmSlotConfig.DefaultSurfaces;
     [XmlAttribute] public string SocdMode { get; set; } = "Off";
     [XmlAttribute] public string SocdPairs { get; set; } = KbmSlotConfig.DefaultSocdPairs;
+    [XmlAttribute] public string KeyboardDevice { get; set; } = KbmSlotConfig.WindowsInput;
+    [XmlAttribute] public string MouseDevice { get; set; } = KbmSlotConfig.WindowsInput;
 }
 ```
 
@@ -1605,6 +1703,8 @@ public class KbmSlotConfigData
 | `Surfaces` | `"Both"` | (#408) Which halves of the slot are live: `Both`, `KeyboardOnly`, or `MouseOnly`. Any other value reads as `Both`, which is what every file written before the field loads as. A half turned off stops dispatching and hides its rows, and its mappings stay on the PadSetting. |
 | `SocdMode` | `"Off"` | SOCD resolution mode. |
 | `SocdPairs` | `KbmSlotConfig.DefaultSocdPairs` | The opposing key pairs the SOCD / Snap-Tap logic resolves. |
+| `KeyboardDevice` | `""` (`WindowsInput`) | The keyboard half's HIDMaestro profile id, or `""` for Windows input (SendInput). Written only when set, so an absent attribute is Windows input, what every file written before the device pickers existed meant. |
+| `MouseDevice` | `""` (`WindowsInput`) | The mouse half's HIDMaestro profile id, the twin of `KeyboardDevice`. A mouse profile that carries a keyboard collection makes one device for both halves. |
 
 ### NfcTagData (v3.6)
 
@@ -1672,6 +1772,48 @@ A learned handheld hidden button (issue #353). Stored in `<HandheldButtons>` on 
 **File:** `PadForge.App/Services/SettingsService.cs` (top-level class co-located in the service file)
 
 A registered menu icon pack (issue #390). Stored in `<IconPackages>` on `AppSettings`, one `<Package>` per entry, both members `[XmlAttribute]`: `Name` and `Path` (exe-relative when under the application directory). Menu cells reference an entry as `pficon://Package/entry` in `MenuItemDefinition.Icon`.
+
+### CrosshairData (6.0.0)
+
+**File:** `PadForge.App/Services/CrosshairData.cs`
+
+One crosshair (#585). Stored in `<Crosshairs>` on `AppSettings` and in each profile's own `<Crosshairs>`, one `<Crosshair>` per entry, up to `MaxCrosshairs` (10). `Number` is an `[XmlAttribute]`, every other member an `[XmlElement]`. `Normalize()` brings every value back inside its range on load, a non-finite number taking the default. See [Crosshair and Magnifier Internals](crosshair-magnifier-internals.md).
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `Number` | `int` | `1` | The crosshair's number, 1 to 10, which a Toggle Crosshair macro names (`ActionData.CrosshairNumber`). |
+| `Enabled` | `bool` | `false` | Whether it shows. |
+| `Style` | `CrosshairStyle` | `Cross` | `Cross` (0), `Circle` (1), `Dot` (2) or `Image` (3). An unknown value reads as `Cross`. |
+| `Display` | `string` | `""` | The display it draws on, by its Windows name (`\\.\DISPLAY2`). Empty, or a display that is not connected, is the primary display. |
+| `OffsetX` / `OffsetY` | `double` | `0` | Offset from the display's center, -4000 to 4000. |
+| `ColorR` / `ColorG` / `ColorB` | `byte` | `0x2E` / `0xFA` / `0x2E` | The color. |
+| `Opacity` | `double` | `1.0` | 0 to 1. |
+| `Outline` / `OutlineThickness` | `bool` / `double` | `true` / `1` | The outline and its thickness, 1 to 10. |
+| `OutlineR` / `OutlineG` / `OutlineB` | `byte` | `0` | The outline's color. |
+| `Rotation` | `double` | `0` | Degrees clockwise, 0 to 359. |
+| `SmoothEdges` | `bool` | `false` | Smooth edges. Off, each edge lands on whole pixels. |
+| `Length` / `Thickness` / `Gap` | `double` | `10` / `2` / `4` | The arm's length past the gap (0 to 200), the arm's or the ring's width (1 to 40), and the gap from the center to where an arm begins (-20 to 200, negative overlapping the arms). |
+| `CenterDot` / `TShape` | `bool` | `false` | A dot at the center (Cross and Circle), and no top arm (Cross). |
+| `Radius` / `Sides` | `double` / `int` | `12` / `64` | Circle: from the center to the middle of the ring's line (2 to 400), and the polygon's sides (3 to 64). |
+| `DotSize` | `double` | `4` | Dot: the size, 1 to 100. |
+| `ImagePath` / `ImageWidth` / `ImageHeight` / `KeepProportions` | `string` / `double` / `double` / `bool` | `""` / `64` / `64` / `true` | Image: the picture's file, its size (1 to 8000 each), and whether width and height move together in the picture's proportions. |
+
+### MagnifierData (6.0.0)
+
+**File:** `PadForge.App/Services/CrosshairData.cs`
+
+The magnifier (#585). Stored as `<Magnifier>` on `AppSettings` and on each profile. Every member is an `[XmlElement]`.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `Enabled` | `bool` | `false` | Whether it shows. |
+| `Mode` | `MagnifierMode` | `Lens` | `Lens` (a lens over the area it magnifies), `FullScreen` (Windows' full-screen magnifier) or `Spotlight` (the display dimmed except for a circle). |
+| `Follow` | `MagnifierFollow` | `ScreenCenter` | What it centers on: `ScreenCenter`, `Pointer` or `Crosshair` (the first crosshair that is on, its display's center plus its offset, or the display's center with none on). |
+| `Display` | `string` | `""` | The display it works on. |
+| `Zoom` | `double` | `2` | 1.25 to 16. |
+| `LensShape` / `LensWidth` / `LensHeight` | `LensShape` / `double` / `double` | `Circle` / `400` / `400` | Lens: `Circle` or `Rectangle`, and its size (80 to 2000). |
+| `Border` / `BorderR` / `BorderG` / `BorderB` / `BorderThickness` | `bool` / `byte` / `double` | `true` / `0xFF` / `4` | Lens: the border, its color and its thickness (1 to 20). |
+| `SpotlightSize` / `SpotlightDim` | `double` | `400` / `0.6` | Spotlight: the circle's size (40 to 2000) and the dimming (0.1 to 0.95). |
 
 ---
 
@@ -1766,7 +1908,7 @@ public class MacroData
 
 ### ActionData
 
-70 serialized properties, every one an `[XmlElement]`.
+100 serialized properties, every one an `[XmlElement]`.
 
 ```csharp
 public class ActionData
@@ -1831,6 +1973,10 @@ public class ActionData
     [XmlElement] public string ScreenFrames { get; set; }
     [XmlElement] public int ScreenFrameMs { get; set; } = 1000;
     [XmlElement] public int ScreenRepeat { get; set; } = 1;
+    // The screen overlay number of Toggle Screen Overlay and the keyboard screen
+    // actions (#560), and Toggle Crosshair's crosshair (#585, 0 for every crosshair)
+    [XmlElement] public int ScreenOverlayNumber { get; set; }
+    [XmlElement] public int CrosshairNumber { get; set; }
     [XmlElement] public KeyboardScreenMode ScreenMode { get; set; } = KeyboardScreenData.DefaultMode;
     [XmlElement] public KeyboardScreenStopwatchAction StopwatchAction { get; set; }
     [XmlElement] public KeyboardScreenPanDirection PanDirection { get; set; } = KeyboardScreenPanDirection.Right;
@@ -1841,6 +1987,18 @@ public class ActionData
     [XmlElement] public string TriggerEffectParameters { get; set; }
     [XmlElement] public MacroTriggerEffectHold TriggerEffectHold { get; set; } = MacroTriggerEffectHold.UntilRelease;
     [XmlElement] public int TriggerEffectMs { get; set; } = 500;
+    // Profile Shortcut (#561)
+    [XmlElement] public SwitchProfileMode ProfileShortcutMode { get; set; }
+    [XmlElement] public string ProfileShortcutName { get; set; }
+    // Set Key Colors and Clear Key Colors (#557). The lights' color is LightbarR/G/B.
+    [XmlElement] public string KeyColorTargets { get; set; }
+    [XmlElement] public MacroKeyColorStyle KeyColorStyle { get; set; } = MacroKeyColorStyle.Steady;
+    [XmlElement] public MacroKeyColorHold KeyColorHold { get; set; } = MacroKeyColorHold.Duration;
+    [XmlElement] public int KeyColorMs { get; set; } = 3000;
+    [XmlElement] public MacroKeyColorRest KeyColorRest { get; set; } = MacroKeyColorRest.Keep;
+    [XmlElement] public byte KeyRestR { get; set; }
+    [XmlElement] public byte KeyRestG { get; set; }
+    [XmlElement] public byte KeyRestB { get; set; }
 
     // Sound actions (#83)
     [XmlElement] public string SoundFilePath { get; set; }
@@ -1870,6 +2028,8 @@ public class ActionData
         = ViewModels.CursorClampMode.XAndY;
     [XmlElement] public int CursorClampInsetX { get; set; } = 50;
     [XmlElement] public int CursorClampInsetY { get; set; } = 50;
+    [XmlElement] public int CursorClampOffsetX { get; set; }
+    [XmlElement] public int CursorClampOffsetY { get; set; }
 
     // MoveMouseToScreenPosition target (#9) and the turbo pulse period
     [XmlElement] public int MouseX { get; set; }
@@ -1901,9 +2061,9 @@ public class ActionData
 
 **`MacroActionType`** is **APPEND-ONLY** (`PadForge.App/ViewModels/MacroItem.cs`): the macro clipboard leg writes the enum numerically via `System.Text.Json` defaults, so inserting a member re-meanings every previously copied clipboard payload. The settings XML writes names and is insertion-safe, the clipboard is not. New members go at the end. The full ordered set (index in parentheses):
 
-`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40, translator v15), `MouseNudge` (41, translator v16), `CycleTapList` (42, translator v16), `ToggleMouseButton` (43, translator v18), `ToggleVcAxis` (44, translator v18), `RepeatVcAxisWhileHeld` (45, translator v18), `ToggleWheel` (46, translator v18), `AxisAdd` (47, #237 relative deflection), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251), `HeadphoneVolumeUp` (52), `HeadphoneVolumeDown` (53), `VoiceListenWhileHeld` (54, #317 push-to-talk: while the macro is held, the voice recognizer's listen gate is open), `SwitchLayer` (55, #377: engages the shift layer named by `SwitchLayerMask`), `SetChromaColor` (56, #468), `ShowDreamcastScreen` (57, #469), `ShowKeyboardScreen` (58, #519), `KeyboardScreenMode` (59, #519), `Stopwatch` (60, #519), `PanKeyboardScreen` (61, #519), `TriggerEffect` (62, #531: plays a DSX trigger mode on the slot's DualSense triggers), `TriggerEffectStop` (63, #531).
+`ButtonPress` (0), `ButtonRelease` (1), `KeyPress` (2), `KeyRelease` (3), `Delay` (4), `AxisSet` (5), `SystemVolume` (6), `AppVolume` (7), `MouseMove` (8), `MouseButtonPress` (9), `MouseButtonRelease` (10), `MouseScroll` (11), `ToggleTouchpadOverlay` (12, v3.2), `LightbarColor` (13), `LightbarColorClear` (14), `LightbarModeSet` (15), `LightbarModeCycle` (16), `SetGyroEngaged` (17), `Rumble` (18), `RumbleStop` (19), `RumbleTrigger` (20, #102), `RumbleTriggerStop` (21, #102), `PlaySound` (22, #83), `SoundStop` (23, #83), `MouseRecenter` (24, #108), `MouseFixPosition` (25, #109), `MouseLimitRegion` (26, #110), `DisconnectController` (27, #162), `RunProgram` (28), `TextBlock` (29, #201), `PointerModeCycle` (30, #203), `PointerModeSet` (31, #203), `GuideLedBrightness` (32, #209), `MoveMouseToScreenPosition` (33, #9), `RepeatKeyWhileHeld` (34), `RepeatVcButtonWhileHeld` (35), `ToggleVcButton` (36), `ToggleKey` (37), `GyroRecenter` (38), `AxisHold` (39), `MouseWheelTap` (40, translator v15), `MouseNudge` (41, translator v16), `CycleTapList` (42, translator v16), `ToggleMouseButton` (43, translator v18), `ToggleVcAxis` (44, translator v18), `RepeatVcAxisWhileHeld` (45, translator v18), `ToggleWheel` (46, translator v18), `AxisAdd` (47, #237 relative deflection), `ComboBreak` (48, #237), `AxisSetLatched` (49, #251), `AxisLatchRelease` (50, #251), `AxisScale` (51, #251), `HeadphoneVolumeUp` (52), `HeadphoneVolumeDown` (53), `VoiceListenWhileHeld` (54, #317 push-to-talk: while the macro is held, the voice recognizer's listen gate is open), `SwitchLayer` (55, #377: engages the shift layer named by `SwitchLayerMask`), `SetChromaColor` (56, #468), `ShowDreamcastScreen` (57, #469), `ShowKeyboardScreen` (58, #519), `KeyboardScreenMode` (59, #519), `Stopwatch` (60, #519), `PanKeyboardScreen` (61, #519), `TriggerEffect` (62, #531: plays a DSX trigger mode on the slot's DualSense triggers), `TriggerEffectStop` (63, #531), `SetKeyColors` (64, #557), `ClearKeyColors` (65, #557), `ToggleScreenOverlay` (66, #560), `ProfileShortcut` (67, #561), `ToggleCrosshair` (68, 6.0.0, #585: `CrosshairNumber` names the crosshair, 0 every one), `ToggleMagnifier` (69, 6.0.0, #585), `MagnifierWhileHeld` (70, 6.0.0, #585).
 
-`HeadphoneVolumeUp` / `HeadphoneVolumeDown` step the slot's headphone-jack hardware volume (`DeviceSlotConfig.HeadphoneVolume`) by 10%, clamped to 0–100, and persist like any other Audio-tab edit.
+`HeadphoneVolumeUp` / `HeadphoneVolumeDown` step the slot's headphone-jack hardware volume (`DeviceSlotConfig.HeadphoneVolume`) by 10%, clamped to 0–100, and persist like any other Audio card edit.
 
 The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`RumbleHoldMode`, `RumbleStrengthLeft`, `RumbleStrengthRight`, `RumbleHoldMs`, `RumbleFadeMs`) are `[XmlElement]` on `ActionData` and round-trip through disk. Both macro converters (`BuildActionData` save, `BuildMacroAction` load) carry them, and the runtime applies them via `MacroRumbleOverride.Fire*`.
 
@@ -1960,7 +2120,9 @@ The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`Rumb
 | `ScreenKind` | `KeyboardScreenKind` | `Monochrome` | (#519) The kind of keyboard screen Show Keyboard Screen and Keyboard Screen Mode act on. |
 | `ScreenFrames` | `string` | `null` | (#519) Show Keyboard Screen: the pictures in the order they show, each a PNG at the kind's size in base64, joined by commas. |
 | `ScreenFrameMs` | `int` | `1000` | (#519) How long each picture shows, ms. |
-| `ScreenRepeat` | `int` | `1` | (#519) How many times the pictures play, 1 at least. |
+| `ScreenRepeat` | `int` | `1` | (#519) How many times the pictures play, 0 to 1000. `0` keeps them playing until another Show Keyboard Screen or Keyboard Screen Mode action. |
+| `ScreenOverlayNumber` | `int` | `0` | (#560) The Screen Overlay the action acts on, by its number, or `0` for every overlay. A macro on any slot reaches it. The keyboard screen actions read it for an overlay target too. |
+| `CrosshairNumber` | `int` | `0` | (6.0.0, #585) The crosshair a Toggle Crosshair action toggles, 1 to 10, or `0` for every crosshair. |
 | `ScreenMode` | `KeyboardScreenMode` | `Lightbar` | (#519) The mode Keyboard Screen Mode switches to. |
 | `StopwatchAction` | `KeyboardScreenStopwatchAction` | `StartPause` | (#519) Stopwatch: start or pause, or reset. |
 | `PanDirection` | `KeyboardScreenPanDirection` | `Right` | (#519) Pan Keyboard Screen Picture's direction. |
@@ -1970,6 +2132,11 @@ The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`Rumb
 | `TriggerEffectParameters` | `string` | `null` | (#531) The effect's values in the encoder's order, comma-separated. Saved for `TriggerEffect` alone. A short list takes the effect's starting values for the rest. |
 | `TriggerEffectHold` | `MacroTriggerEffectHold` | `UntilRelease` | (#531) `Duration`, `UntilRelease` or `UntilStopped`. Append-only. |
 | `TriggerEffectMs` | `int` | `500` | (#531) The effect's length for `Duration`, 1 to 60,000 ms. |
+| `ProfileShortcutMode` / `ProfileShortcutName` | `SwitchProfileMode` / `string` | `0` / `null` | (#561) Profile Shortcut: what it does, and the profile's name when it names one. |
+| `KeyColorTargets` | `string` | `null` | (#557) Set Key Colors and Clear Key Colors: the lights named, in the order picked (`"kUU"`, `"gNAME"`, `"all"`). The lights' color is `LightbarR` / `LightbarG` / `LightbarB`. |
+| `KeyColorStyle` | `MacroKeyColorStyle` | `Steady` | (#557) `Steady` (the color until the action ends), `Fade` (dimming to off over the action's time) or `Countdown` (the keys going dark one by one, the last one picked first). Saved by name, append-only. |
+| `KeyColorHold` / `KeyColorMs` | `MacroKeyColorHold` / `int` | `Duration` / `3000` | (#557) How long the colors hold: `Duration` (for `KeyColorMs` ms, the only hold Fade and Countdown take), `UntilRelease` (until the trigger is let go) or `UntilCleared` (until a Clear Key Colors action). |
+| `KeyColorRest` / `KeyRestR` / `KeyRestG` / `KeyRestB` | `MacroKeyColorRest` / `byte` | `Keep` / `0` | (#557) What the lights the action leaves out show: `Keep` (their own colors), `Off`, or `Color` (the second color in the three bytes). |
 | `SoundFilePath` | `string` | `null` | (#83) Sound file path for `PlaySound`. |
 | `SoundVolume` | `int` | `100` | (#83) Per-action sound volume percentage (0–100). `0` is muted and survives a load. |
 | `SoundLoop` | `bool` | `false` | (#83) Loop the sound until `SoundStop` / trigger release. |
@@ -1986,6 +2153,7 @@ The Rumble / RumbleTrigger action's per-motor strength + hold/fade fields (`Rumb
 | `CursorClampMode` | `CursorClampMode` | `XAndY` | (#110) Which axes a `MouseLimitRegion` action clamps. |
 | `CursorClampInsetX` | `int` | `50` | (#110) Per-edge X inset for the region clamp, pixels. |
 | `CursorClampInsetY` | `int` | `50` | (#110) Per-edge Y inset for the region clamp, pixels. |
+| `CursorClampOffsetX` / `CursorClampOffsetY` | `int` | `0` | Pixels the region sits right of and below the screen's center. |
 | `ProgramPath` | `string` | `null` | Program/file path for a `RunProgram` action. |
 | `ProgramArgs` | `string` | `null` | Command-line arguments for `RunProgram`. |
 | `ProgramWorkingDir` | `string` | `null` | Working folder for `RunProgram`. |
@@ -2020,9 +2188,13 @@ public class ProfileData
     [XmlElement] public string Name { get; set; } = "New Profile";
     [XmlElement] public string ExecutableNames { get; set; } = string.Empty;
 
-    // v4.4 (#365): per-profile polling interval. 0 = follow the global knob.
-    // Authored like Name and ExecutableNames, skipped by the state-save copy.
-    [XmlElement] public int PollingRateOverrideMs { get; set; }
+    // v4.4 (#365), a rate in Hz since 6.0.0: per-profile polling rate.
+    // 0 = follow the global setting. Authored like Name and ExecutableNames,
+    // skipped by the state-save copy.
+    [XmlElement] public int PollingRateOverrideHz { get; set; }
+    // 6.0.0: the pre-6 interval in ms, read once and never written.
+    [XmlElement("PollingRateOverrideMs")][DefaultValue(0)]
+    public int LegacyPollingIntervalOverrideMs { get; set; }
 
     // Device-to-slot assignments captured with the profile
     [XmlArray("Entries")][XmlArrayItem("Entry")]
@@ -2133,6 +2305,13 @@ public class ProfileData
     [XmlElement] public double TouchpadOverlayWidth { get; set; } = 500;
     [XmlElement] public double TouchpadOverlayHeight { get; set; } = 250;
 
+    // Screen Overlays (#560), crosshairs and magnifier (6.0.0, #585)
+    [XmlArray("ScreenOverlays")][XmlArrayItem("Overlay")]
+    public ScreenOverlayData[] ScreenOverlays { get; set; }
+    [XmlArray("Crosshairs")][XmlArrayItem("Crosshair")]
+    public CrosshairData[] Crosshairs { get; set; }
+    [XmlElement] public MagnifierData Magnifier { get; set; }
+
     // v4.1 (#9): Steam Workshop import provenance. Null on non-imported profiles.
     [XmlElement("SteamWorkshopSource")]
     public SteamWorkshopSource WorkshopSource { get; set; }
@@ -2144,7 +2323,8 @@ public class ProfileData
 | `Id` | `string` (attribute) | GUID without hyphens |
 | `Name` | `string` | Display name |
 | `ExecutableNames` | `string` | Pipe-separated exe paths for auto-switching |
-| `PollingRateOverrideMs` | `int` | (v4.4, #365) Per-profile polling interval in ms, 1..16. `0` = no opinion, follow the global `PollingRateMs`, which is what every pre-#365 profile deserializes to. Authored, not snapshotted: `SaveActiveProfileState`'s field copy skips it like `Name` and `ExecutableNames`, and the default profile never carries one. Resolved by `InputService.ResolvePollingMs(override, global)`, the single writer of the live rate, from `ResetRuntimeStateForProfileSwitch`. |
+| `PollingRateOverrideHz` | `int` | (v4.4, #365, a rate since 6.0.0) Per-profile polling rate in passes a second, 60 to 10000. The profile dialog's Polling Rate list offers 10000, 8000, 4000, 2000, 1000, 500, 250, 125 and 60 Hz (`PollingRates.Choices`). `0` = no opinion, follow the global `PollingRateHz`, which is what every pre-#365 profile deserializes to. Authored, not snapshotted: `SaveActiveProfileState`'s field copy skips it like `Name` and `ExecutableNames`, and the default profile never carries one. `InputService.ApplyEffectivePollingRate`, the one writer of the live rate, resolves it through `PollingRates.Resolve(override, global)` at engine start, on a Settings change, on every profile switch (`ResetRuntimeStateForProfileSwitch`), and on an edit of the active profile. |
+| `LegacyPollingIntervalOverrideMs` | `int` | (6.0.0) XML `<PollingRateOverrideMs>`, the interval of a profile saved before PadForge 6, 1 to 16 ms. `MigrateLegacySchema` turns it into `PollingRateOverrideHz` with `PollingRates.FromIntervalMs` when the profile holds no rate, then zeroes it, and `[DefaultValue(0)]` keeps it out of the file. |
 | `Entries` | `ProfileEntry[]` | Device-to-slot assignments |
 | `PadSettings` | `PadSetting[]` | Deep-cloned, checksum-deduplicated PadSettings |
 | `SlotMappingSets` | `MappingSet[]` | (v3.2) Per-VC mapping tables. Null on profiles saved before multi-source landed. `ApplyProfile` falls back to the legacy migrator in that case. |
@@ -2173,13 +2353,18 @@ public class ProfileData
 | `EnableMenuOverlay` | `bool` | (v4.1, #9) Menu overlay enable state. Default `true`. |
 | `EnableShiftLayerFlyout` | `bool` | (v4.2) Shift-layer flyout enable state. Default `true`. |
 | `EnableProfileOverlay` | `bool` | (v4.2) Profile-switch overlay enable state. Default `true`. |
-| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 8052, 8058 and 8065). |
-| `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Dashboard toggle changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
+| `EnableChromaLightbar` / `EnableLightsyncLightbar` / `EnableSensaHaptics` | `bool?` | (v4.4, #373 / #382 / #374) The retired vendor switches' opinions in this profile. `PeripheralSwitchMigration` (#494) reads each once at load. It assigns the matching vendor row in this profile when the opinion was on, or when the profile has none and the global value was on, then clears the opinion. Never written again: each `ShouldSerialize` method returns false (`SettingsService.cs` lines 8549, 8555 and 8562). |
+| `EnableHeadTracking` | `bool?` | (v4.4, #355) The OpenTrack UDP input. `null` = no opinion, the global `AppSettings.HeadTrackingEnabled` stands, and every profile saved before the field reads as `null`. A plain `bool` here would read as `false` in every pre-existing profile, and the first profile switch would turn the input off. Authored: the profile records a value when the Head Tracking switch changes while it is active, and no snapshot builder invents one, so the default snapshot and a Save As copy start with no opinion. The port, the OpenXR input, and the ranges stay global. |
 | `EnableHeadTrackingFreeTrack` | `bool?` | The FreeTrack input, same contract. |
 | `HeadTrackingIndependentInputs` | `bool` | False on profiles saved while `EnableHeadTracking` was one master switch for both inputs. `MigrateHeadTrackingInputs` converts such a profile once at load: a stored master opinion also becomes a FreeTrack opinion, gated by the old global FreeTrack preference. |
 | `TouchpadOverlayOpacity` | `double` | (v3.2) 0.0–1.0. Default 0.25. |
 | `TouchpadOverlayMonitor` | `int` | (v3.2) Monitor index the overlay is pinned to |
 | `TouchpadOverlayLeft` / `Top` / `Width` / `Height` | `double` | (v3.2) Overlay window position and size. `-1` defaults to centered. |
+| `DreamcastPicture` | `string` | (#469) The profile's Dreamcast screen picture, 192 bytes in image order as base64. The Default profile keeps its own on `AppSettings.DefaultProfileDreamcastPicture`. |
+| `KeyboardScreenPicture` | `string` | (#519) The profile's keyboard screen picture, a stored path. The Default profile keeps its own on `AppSettings.DefaultProfileKeyboardScreenPicture`. |
+| `ScreenOverlays` | `ScreenOverlayData[]` | (5.3.0, #560) The profile's Screen Overlays, the shape of `AppSettings.ScreenOverlays`. |
+| `Crosshairs` | `CrosshairData[]` | (6.0.0, #585) The profile's crosshairs, the shape of `AppSettings.Crosshairs`. |
+| `Magnifier` | `MagnifierData` | (6.0.0, #585) The profile's magnifier, the shape of `AppSettings.Magnifier`. |
 | `WorkshopSource` | `SteamWorkshopSource` | (v4.1, #9) Steam Workshop import provenance, serialized as `<SteamWorkshopSource>`. Null on non-imported profiles. |
 
 ### SteamWorkshopSource (v4.1, #9)
@@ -2385,19 +2570,28 @@ Defined in `InputManager.Step1.UpdateDevices.cs`:
 ```csharp
 public class DeviceCollection
 {
-    public List<UserDevice> Items { get; } = new();
-    public object SyncRoot { get; } = new();
+    public DeviceList Items { get; } = new DeviceList();
+    public object SyncRoot { get; } = new object();
+}
+
+// A List<UserDevice> that counts each change to which records it holds.
+public sealed class DeviceList : List<UserDevice>
+{
+    public int Version { get; }
 }
 
 public class SettingsCollection
 {
-    public List<UserSetting> Items { get; } = new();
-    public object SyncRoot { get; } = new();
+    public List<UserSetting> Items { get; } = new List<UserSetting>();
+    public object SyncRoot { get; } = new object();
+    public int Count { get; }   // under the lock
 
     public UserSetting FindByInstanceGuid(Guid guid) { ... }
     public List<UserSetting> FindByPadIndex(int padIndex) { ... }
 }
 ```
+
+(6.0.0) `DeviceList.Version` counts the changes made through the list's own methods, so a reader that keeps a record it found asks the list again only once the count moved, with no lock taken to learn that. A change made through a `List` or `IList` reference to it is not counted. `SettingsCollection.Count` sizes the reusable buffer the hot path hands the non-allocating `FindByPadIndex` overload.
 
 ### Device Management Methods
 
@@ -2494,9 +2688,12 @@ Re-automaps all devices assigned to a slot for the given output type. Called whe
 User action (slider drag, mapping change, etc.)
     |
     v
-SettingsService.MarkDirty()
-    |-- Sets IsDirty = true
-    |-- Sets SettingsViewModel.HasUnsavedChanges = true
+SettingsService.MarkDirty()  (or MarkViewStateDirty() for a card opened or folded)
+    |-- Ignored while MirrorOnly() runs a reload on the calling thread
+    |-- Sets IsDirty = true, and _onlyViewStateIsDirty while nothing but
+    |   interface state waits
+    |-- Sets SettingsViewModel.HasUnsavedChanges = true unless only
+    |   interface state waits
     |-- Records _lastDirtyTickMs
     |-- Starts the 250ms DispatcherTimer if it is not already running (never restarts it)
     |
@@ -2548,11 +2745,18 @@ Timer stops -> Tier 2: Save() -> SaveToFile(filePath)
     |    data.Macros = BuildMacroData()  -- from all PadViewModels
     |    data.Profiles = SettingsManager.Profiles.ToArray()  -- only when any exist
     |
-    v  Step 6: XmlSerializer.Serialize into a MemoryStream, then File.WriteAllBytes
-    |    A serializer failure never truncates the file on disk (#53)
+    v  Step 6: XmlSafeText.Serialize into a byte buffer, then WriteWhole():
+    |    the bytes go to PadForge.xml.tmp beside the file, flushed to disk,
+    |    and File.Replace swaps it in (up to 5 tries 50 ms apart), so a
+    |    serializer failure, a killed process or a full disk leaves the
+    |    previous file intact (#53). An I/O failure there falls back to
+    |    File.WriteAllBytes
     |
     v  Step 7: IsDirty = false, HasUnsavedChanges = false, status line
+         (no status line for an autosave of interface state alone)
 ```
+
+(6.0.0) Two entry points narrow what counts as a change. `MarkViewStateDirty()` marks interface state, a card opened further or folded back (`CardFoldState`, saved as `AppSettings.OpenCards`). It rides the same timer, but while nothing else waits the Settings page shows no Unsaved Changes line and the autosave raises no saved message. A setting that changes before that save makes it an ordinary one. `MirrorOnly(Action reload)` runs a reload that copies stored state into a view, the rows a controller's page shows when it opens, and for the length of the call ignores every mark made on the calling thread, so opening a page writes nothing. A mark another thread makes meanwhile still counts.
 
 The autosave tick raises `AutoSaved` after `Save()` returns. A direct `Save()` call does not raise it. MainWindow handles it: with no named profile active it calls `InputService.RefreshDefaultSnapshot()`, then `ApplyAutomaticDeviceHiding()`.
 
@@ -2564,9 +2768,12 @@ The autosave tick raises `AutoSaved` after `Save()` returns. A direct `Save()` c
 LoadFromFile(filePath)
     |
     v  Step 1: XmlSerializer.Deserialize(stream) -> SettingsFileData
-    |  Then MigrateLegacySchema() (PlayStationConfigs spellings), and a
-    |  legacy "Button 11" TouchpadClick becomes "Touchpad 0 Click" on
-    |  PadSettings paired with a touchpad device
+    |  Then MigrateLegacySchema() (PlayStationConfigs spellings, and since
+    |  6.0.0 the pre-6 polling interval turned into a rate, on AppSettings,
+    |  every profile and the default snapshot), then FoldCarriedGyroStamps()
+    |  (6.0.0: a slot's carried Workshop gyro stamps onto the devices
+    |  already assigned there), and a legacy "Button 11" TouchpadClick
+    |  becomes "Touchpad 0 Click" on PadSettings paired with a touchpad device
     |
     v  Step 2: Populate UserDevices
     |  Lock UserDevices.SyncRoot, clear, add the devices from XML
@@ -2592,7 +2799,9 @@ LoadFromFile(filePath)
     |  legacy PadSetting fields
     |
     v  Step 5: LoadAppSettings(data.AppSettings) -- ORDER MATTERS
-    |  a. Load scalar settings (AutoStartEngine, MinimizeToTray, etc.)
+    |  a. Load scalar settings (AutoStartEngine, MinimizeToTray, etc.).
+    |     PollingRateHz 0 loads as InputManager.DefaultPollingRateHz (1000),
+    |     and CardFoldState.Load(OpenCards) restores the open cards
     |  b. SetLanguageFromCode(appSettings.Language)
     |  c. Sync EnableAutoProfileSwitching and ActiveProfileId
     |  d. Load SlotCreated[] (MUST be before OutputType!)
@@ -2616,10 +2825,7 @@ LoadFromFile(filePath)
     |      PadSetting descriptor fields (those are stale whenever a row's
     |      primary lives on a device other than the selected one)
     |
-    v  Step 7: LoadMacros(data.Macros)
-    |  Clear all pad macros, reconstruct from serialized data
-    |
-    v  Step 8: LoadProfiles(data.Profiles, data.AppSettings)
+    v  Step 7: LoadProfiles(data.Profiles, data.AppSettings)
     |  Always includes built-in "Default" profile at top
     |  Add all serialized profiles
     |  If a named profile was active at shutdown:
@@ -2627,6 +2833,12 @@ LoadFromFile(filePath)
     |    - Apply the named profile's topology (SlotCreated, SlotEnabled, types)
     |    - Apply the named profile's Extended, per-device, MIDI and KB+M configs,
     |      gestures, server and overlay settings, and service-toggle opinions
+    |
+    v  Step 8: LoadMacros(data.Macros)
+    |  Clear all pad macros, reconstruct from serialized data. Runs after
+    |  LoadProfiles: it drops every macro on an uncreated slot, so it must
+    |  see the active profile's topology, or a named profile's macros on a
+    |  slot only that profile owns are lost (discussion #467)
     |
     v  Step 9: MaskMappingSetsForUncreatedSlots(), then EnsureMotionRowsForAllSlots()
     |  Authored sets at uncreated slot indices are replaced with empty ones,
@@ -2690,7 +2902,7 @@ The `bool isExtended` parameter on `MappingTranslation` methods routes Extended 
 
 Xbox and PlayStation share property names, so `IsSameLayout()` skips translation between them.
 
-Translation runs automatically during Pad page copy/paste when controller types differ.
+Translation runs automatically during the controller page's copy and paste when controller types differ.
 
 ---
 
@@ -2749,6 +2961,27 @@ Old profiles without topology (`SlotCreated == null`) skip topology application 
 
 On load, `RemoveAll(IsEmptyLegacyOrphan)` purges the entries older versions left at `MapTo == -1` with no PadSetting. A parked row that still carries a PadSetting survives, because `ApplyProfile` parks every device the incoming profile does not assign that way and keeps its mappings (#404).
 
+### Polling Interval to Rate (6.0.0)
+
+PadForge 5 stored the polling rate as an interval in whole milliseconds, 1 to 16, as `<PollingRateMs>` on `AppSettings` and `<PollingRateOverrideMs>` on a profile. PadForge 6 stores a rate in passes a second, `<PollingRateHz>` and `<PollingRateOverrideHz>`, 60 to 10000. The old elements deserialize into `AppSettingsData.LegacyPollingIntervalMs` and `ProfileData.LegacyPollingIntervalOverrideMs`. `MigrateLegacySchema()` runs right after the deserialize, on `AppSettings`, every profile and the default profile snapshot. Where the file holds an interval and no rate, it sets the rate to `PollingRates.FromIntervalMs` of the interval, then zeroes the interval:
+
+```csharp
+internal static int FromIntervalMs(int intervalMs)
+    => (int)Math.Round(1000.0 / Math.Clamp(intervalMs, 1, 16), MidpointRounding.AwayFromZero);
+```
+
+So 1 ms becomes 1000 Hz, 2 ms 500 Hz, 3 ms 333 Hz, 8 ms 125 Hz and 16 ms 63 Hz. A profile interval of `0`, no opinion, stays `0`. Both legacy members carry `[DefaultValue(0)]`, so the next save writes the rate alone and the old element never comes back. A PadForge 5 build reading a PadForge 6 file finds no `<PollingRateMs>` and runs at its own default.
+
+### Carried Gyro Stamps (6.0.0)
+
+A Steam Workshop import carries three gyro stamps on the slot's `MappingSet`: `WorkshopGyroActivation`, `WorkshopGyroRatchetDescriptors` and `WorkshopGyroRecenterOnEngage`. PadForge 5 read them in the engine. PadForge 6 reads only `PadSetting.GyroActivation` and `GyroRecenterOnEngage`, the Gyro card's own rows, so the stamps are carriers: `WorkshopTuningApplier.ApplyToAssignedDevice` folds them onto a device's `PadSetting` when the device is assigned to the slot, and clears them.
+
+A file saved by PadForge 5 can hold stamps on a slot whose devices were assigned long ago, and assignment will not run for them again. `SettingsFileData.FoldCarriedGyroStamps()` covers that case at load, right after `MigrateLegacySchema()`. It calls `WorkshopTuningApplier.FoldCarriedGyroStamps` for the root (the `UserSettings` against `SlotMappingSets` and `PadSettings`), for every profile (`ProfileData.FoldCarriedGyroStamps`, its `Entries` against its own sets and PadSettings), and for the default profile snapshot. For each slot that still carries a stamp:
+
+1. Every assignment on the slot whose checksum names a PadSetting takes the fold (`FoldGyroStamps`). The activation lands on `GyroActivation` only where the PadSetting holds none. A ratchet stands in for a missing activation as the Base layer's While Not Held on any of its buttons (`Base=Release,Any,<buttons>`), the way the Gyro card writes a ratchet. The re-center stamp sets `GyroRecenterOnEngage` to `"1"`.
+2. A PadSetting that an assignment on another slot shares is cloned first, the clone takes the fold and a new checksum, and the assignment is pointed at it, so the other slot's device keeps its own settings.
+3. Once any assignment took the fold, the slot's three stamps are cleared. A slot with no assigned device keeps them for the assignment to fold.
+
 ### Retired Vendor Switches (#494)
 
 The Razer Chroma and Logitech LIGHTSYNC lightbar mirrors and the Razer Sensa switch were Dashboard toggles with a global value and a nullable opinion per profile. Their outputs are vendor rows now, assigned to a virtual controller like any device. `PeripheralSwitchMigration.Run` (`PeripheralSwitchMigration.cs` line 193) turns a switch that was on into an assignment of its row:
@@ -2781,4 +3014,4 @@ Each profile's opinion is cleared once read, and the switches are never written 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

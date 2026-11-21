@@ -2,9 +2,9 @@
 
 *Per-slot touchpad tuning: continuous output modes (relative mouse, absolute pointer, virtual analog stick, D-pad), synthetic pressure, swipe haptics, and the gesture stack (swipes, taps, longpress, pinch, rotate, shape templates). One physical touchpad in two slots carries two independent configurations.*
 
-![Touchpad tab](../images/pad-touchpad.png)
+![The Touchpad card in the Motion & Touch section](../images/pad-touchpad.png)
 
-The **Touchpad** tab appears on any slot whose assigned device exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, a [Web Controller](../guides/web-controller.md) client whose layout has a touchpad or that runs in touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), a Windows Precision Touchpad enumerated through the [Devices](devices.md) page, or a drawing tablet (below).
+The **Touchpad** card sits in the **Motion & Touch** section of the controller page. It appears when the device picked under **Driven by** exposes a touchpad surface: DualSense, DualSense Edge, DualShock 4, Steam Controller (2015 and 2026), Steam Deck, an SInput pad with a touchpad, a [Web Controller](../guides/web-controller.md) client whose layout has a touchpad or that runs in touchpad-only mode, the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay), a Windows Precision Touchpad enumerated through the [Devices](devices.md) page, or a drawing tablet (below).
 
 ---
 
@@ -14,14 +14,14 @@ Windows HID pen and digitizer devices appear as **Drawing Tablet** on the Device
 
 Enable **Hide from Games (HidHide)** on that tablet to use it exclusively in PadForge. With the engine running, this restarts the tablet's pen input collection and opens a dedicated reader. Windows then stops using that collection for its native pointer and contact clicks. Other mice keep their own buttons and movement. Separate mouse or touch inputs exposed by the same hardware remain separate devices.
 
-The status below that checkbox changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with that checkbox.
+The status below that switch changes from Shared Input through Switching Input and Waiting For Tablet Input to Captured By PadForge after a valid report arrives. If a newly hidden tablet cannot be captured, PadForge removes that new hide setting and attempts to return the pen to Windows. If the hiding change itself cannot be verified, the setting remains enabled and the status shows the failure. A cloak kept from an earlier session remains selected on failure and can be cleared with that switch.
 
-Turning the checkbox off returns the pen to Windows. Stopping PadForge follows **Keep Devices Cloaked Between Launches**: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.
+Turning the switch off returns the pen to Windows. Stopping PadForge follows **Keep Devices Cloaked Between Launches**: if enabled, the native pen stays hidden after shutdown. Start PadForge again to read it, or clear the hide setting to return it to Windows.
 
 | Use | Mapping |
 |---|---|
 | Relative mouse movement | Assign the tablet to a Keyboard / Mouse virtual controller. Map Touchpad 1 Finger 1 X and Y to Mouse X and Y. A new contact starts with zero movement. |
-| Stick movement from a swipe | Enable Stick / D-Pad Output on the Touchpad tab. Map Touchpad Stick X and Y to the desired stick axes. Each contact sets a new center. |
+| Stick movement from a swipe | Enable Stick / D-Pad Output on the Touchpad card. Map Touchpad Stick X and Y to the desired stick axes. Each contact sets a new center. |
 | Fixed contact zones | Map the Touchpad 1 Finger 1 Touch (North Quadrant), (South Quadrant), (East Quadrant), and (West Quadrant) sources to D-pad directions or other buttons. |
 | Pressure as a trigger | Map Touchpad 1 Finger 1 Pressure to the trigger. Pressure returns to zero on lift. This source appears only if the tablet reports pressure. |
 | Virtual controller touchpad | On a PlayStation virtual controller, the default mapping carries the tablet's position and contact. A DualShock 3 preset is the exception: it has no touchpad, so the tablet maps to nothing there. Other layouts with touchpad targets can use explicit X, Y, and contact mappings. Pen contact does not automatically press the virtual touchpad click button. |
@@ -37,9 +37,9 @@ Support covers the standard Windows HID pen/digitizer interface. PadForge does n
 
 ## Precision touchpads read by PadForge alone
 
-A laptop or external Windows Precision Touchpad moves the cursor in Windows whether or not PadForge reads it. **Use Only in PadForge** stops that. Select the touchpad's card on the [Devices](devices.md) page, or the card of its mouse, and click **Use Only in PadForge** in the **Input Hiding** section. **Hide from Games (HidHide)** is not shown for these rows.
+A laptop or external Windows Precision Touchpad moves the cursor in Windows whether or not PadForge reads it. **Use Only in PadForge** stops that. Select the touchpad on the [Devices](devices.md) page, or its mouse, and click **Use Only in PadForge** in its **Settings** card. **Hide from Games (HidHide)** is not shown for these rows.
 
-The switch needs three things, and the status bar names the first one missing before anything is asked:
+The switch needs three things, and the message line names the first one missing before anything is asked:
 
 - HidHide installed. See [Driver Management](driver-management.md).
 - **Hide Devices from Games** on in [Settings](settings.md).
@@ -64,24 +64,23 @@ Measured on one Goodix I2C touchpad: the switch took it in about a second, the K
 
 ---
 
-## What lives on this tab
+## What lives on this card
 
-Eight cards, top to bottom:
+The card's face holds **Mouse Output**: Mouse Sensitivity X, Mouse Sensitivity Y and Jitter Reduction, with the rest of the mouse rows under **More**, and a live surface that draws the fingers on the pad. Under it, seven lines fold open, top to bottom:
 
 1. **Stick / D-Pad Output.** Turn a touchpad finger into a virtual analog stick (anchor-relative) and/or a wedge-thresholded D-pad.
-2. **Mouse Output.** Sensitivity, invert, jitter reduction, momentum, and the pointer response curve for touchpad-finger → mouse X/Y on a Keyboard / Mouse virtual controller.
-3. **Absolute Pointer.** The screen region the Touchpad Pointer sources map onto, which warp the cursor to where your finger sits on the pad.
-4. **Synthetic Pressure.** DualShock 2 / DualShock 3-style pressure simulation for pads that report a touch as full pressure.
-5. **Swipe Haptics.** A haptic tick each time the finger travels a set distance, like Steam Input's trackpad ticks. Shown only for pads PadForge can pulse.
-6. **Gesture Detection.** Master enable, recognize mode (in-box / custom / both), and cooldown between fires.
-7. **In-Box Gestures.** Swipes (4-way / 8-way), radial zones, taps, longpress, two-finger swipes, pinch / spread, rotate, three / four / five finger gestures, in-box shape templates.
-8. **Custom Gestures.** The profile's saved custom shape templates plus a recorder dialog to capture new ones.
+2. **Absolute Pointer.** The screen region the Touchpad Pointer sources map onto, which warp the cursor to where your finger sits on the pad.
+3. **Synthetic Pressure.** DualShock 2 / DualShock 3-style pressure simulation for pads that report a touch as full pressure.
+4. **Swipe Haptics.** A haptic tick each time the finger travels a set distance, like Steam Input's trackpad ticks. Shown only for pads PadForge can pulse.
+5. **Gesture Detection.** Master enable, recognize mode (in-box / custom / both), and cooldown between fires.
+6. **In-Box Gestures.** Swipes (4-way / 8-way), radial zones, taps, longpress, two-finger swipes, pinch / spread, rotate, three / four / five finger gestures, in-box shape templates.
+7. **Custom Gestures.** The profile's saved custom shape templates plus a recorder dialog to capture new ones.
 
-The first three are continuous output modes you bind in the [Button and Axis Mappings](mappings.md) table. Synthetic Pressure reshapes the device's existing Pressure sources rather than adding new ones, and Swipe Haptics is feedback with nothing to bind. The last three drive a per-tick gesture engine whose fires you bind the same way.
+Mouse Output, Stick / D-Pad Output and Absolute Pointer are continuous output modes you bind in the [Button and Axis Mappings](mappings.md) table. Synthetic Pressure reshapes the device's existing Pressure sources rather than adding new ones, and Swipe Haptics is feedback with nothing to bind. The last three drive a per-tick gesture engine whose fires you bind the same way.
 
-On a multi-pad device (Steam Controller, Steam Deck) a **Touchpad Number** selector sits at the top of the tab. Every setting here is kept per touchpad, so each pad carries its own gestures, mouse feel and pointer region, and the selector picks which pad the cards edit. Single-pad devices skip the selector. Synthetic Pressure is the one exception: it is stored per device and ignores the selector.
+On a multi-pad device (Steam Controller, Steam Deck) a **Touchpad Number** selector sits at the top of the card. Every setting here is kept per touchpad, so each pad carries its own gestures, mouse feel and pointer region, and the selector picks which pad the cards edit. Single-pad devices skip the selector. Synthetic Pressure is the one exception: it is stored per device and ignores the selector.
 
-> **Defaults are off.** Every output mode and gesture toggle starts disabled. Open the tab, flip the master switch, then enable each gesture or output you actually want. Numeric thresholds (cooldown, swipe distance, tap time window, longpress duration, deadzones) keep tuned defaults so a feature works correctly the moment it's turned on. The one on-by-default checkbox is Jitter Reduction on the Mouse Output card, which only shapes motion you've already mapped.
+> **Defaults are off.** Every output mode and gesture toggle starts disabled. Open the card, flip the master switch, then enable each gesture or output you actually want. Numeric thresholds (cooldown, swipe distance, tap time window, longpress duration, deadzones) keep tuned defaults so a feature works correctly the moment it's turned on. The one on-by-default switch is Jitter Reduction in Mouse Output, which only shapes motion you've already mapped.
 
 ---
 
@@ -105,7 +104,7 @@ On single-pad controllers (DualSense, DualShock 4) the picker shows these labels
 
 ## Mouse Output
 
-Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a Keyboard / Mouse virtual controller.
+Tunes cursor speed and feel when a touchpad finger is mapped to mouse X/Y on a Keyboard / Mouse virtual controller. Mouse Sensitivity X, Mouse Sensitivity Y and Jitter Reduction sit on the card's face. Every other row below is under **More**, whose hint reads "Invert, Momentum, Response, Acceleration, fling".
 
 | Knob | Default | Effect |
 |---|---|---|
@@ -148,7 +147,7 @@ The Mouse Output sources above move the cursor relatively, like a laptop touchpa
 - Devices with a single touchpad (a DualShock 4 or DualSense, for example) also offer **Touchpad 1 Pointer X (Left Half)** and **(Right Half)** variants (and the same pair on Y) that read one half of the pad as the whole surface. A device with two pads already has a real pad per half, so it skips these.
 - A row that mixes a pointer source with relative sources (gyro, stick) keeps the relative aim live while no finger is down. The moment a finger lands, the pointer takes over.
 
-The card tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.
+The Absolute Pointer line tunes the screen region the pad maps onto. At the defaults the pad covers the whole primary monitor 1:1.
 
 | Knob | Default | Effect |
 |---|---|---|
@@ -157,7 +156,7 @@ The card tunes the screen region the pad maps onto. At the defaults the pad cove
 | Region Center X | 0.50 | Horizontal placement of that area, 0.00–1.00. 0.00 is the left edge, 0.50 the middle, 1.00 the right edge. |
 | Region Center Y | 0.50 | Vertical placement, 0.00–1.00. 0.00 is the top edge, 1.00 the bottom edge. |
 
-Steam Workshop configs that use mouse regions arrive on these sources with the region's position and size carried over, so an imported corner region (a pad mapped to a minimap or a menu strip) shows up here and stays editable. The first edit on this card hands the region to this pad's own settings for good: from then on, Reset restores the full-screen defaults instead of silently bringing the imported rectangle back. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
+Steam Workshop configs that use mouse regions arrive on these sources with the region's position and size carried over, so an imported corner region (a pad mapped to a minimap or a menu strip) shows up here and stays editable. The first edit on this line hands the region to this pad's own settings for good: from then on, Reset restores the full-screen defaults instead of silently bringing the imported rectangle back. See [Steam Workshop Config Import](../guides/steam-workshop-import.md).
 
 ---
 
@@ -170,22 +169,22 @@ Simulates DualShock 2 / DualShock 3 pressure buttons on pads whose hardware repo
 | Enable Synthetic Pressure | off | Shapes this device's Pressure mapping sources into three steps: no touch reads 0%, a resting touch reads the Touch Pressure Level, and clicking the pad reads 100%. Off keeps raw readings on pads with true analog pressure. |
 | Touch Pressure Level | 50% | How much pressure a resting (unclicked) touch reports, 0–100%. 50% leaves an even step up to a full pad click. |
 
-The card is stored per device, not per pad, so the Touchpad Number selector on multi-pad devices does not pivot it. Like every per-device setting, it follows the (slot, device) pair: the same DualSense in two slots carries two independent Synthetic Pressure configurations.
+Synthetic Pressure is stored per device, not per pad, so the Touchpad Number selector on multi-pad devices does not pivot it. Like every per-device setting, it follows the (slot, device) pair: the same DualSense in two slots carries two independent Synthetic Pressure configurations.
 
 ---
 
 ## Swipe Haptics
 
-Pulses the controller's haptics as your finger travels across this touchpad, like Steam Input's trackpad ticks. Steam Controllers and the Steam Deck tick the actuator under the pad. DualSense and DualShock 4 pulse the rumble motors in a short burst, and game rumble always wins when it is stronger.
+Pulses the controller's haptics as your finger travels across this touchpad, like Steam Input's trackpad ticks. Steam Controllers and the Steam Deck tick the actuator under the pad. An SInput pad plays a 20 ms tick at 160 Hz on the motor of the pad's side. DualSense and DualShock 4 pulse the rumble motors in a short burst, and game rumble always wins when it is stronger.
 
 | Knob | Default | Effect |
 |---|---|---|
 | Enable Swipe Haptics | off | Fires a short haptic tick each time the finger moves a set distance on this pad. Landing a finger or clicking the pad never ticks. |
 | Pulse Intensity | 50% | Strength of each tick, 5–100%. |
 
-The card appears only when the selected device has a haptic lane PadForge can pulse: Steam Controller (2015 and 2026), Steam Deck, DualSense, DualSense Edge, and DualShock 4. Laptop trackpads, the on-screen overlay, and web touchpads have nothing to pulse, so the card stays hidden for them.
+The line appears only when the selected device has a haptic lane PadForge can pulse: Steam Controller (2015 and 2026), Steam Deck, an SInput pad with a touchpad, DualSense, DualSense Edge, and DualShock 4. Laptop trackpads, the on-screen overlay, and web touchpads have nothing to pulse, so the line stays hidden for them.
 
-One honest note: the Steam Deck's left/right tick codes are inferred from the 2015 Steam Controller library and have not been hardware-benched, so the worst case on a Deck is a swapped side.
+The Steam Deck's left/right tick codes are inferred from the 2015 Steam Controller library and have not been hardware-benched, so the worst case on a Deck is a swapped side. No SInput pad was run with this build.
 
 ---
 
@@ -203,7 +202,7 @@ Master controls for the per-tick gesture recognizer.
 
 ## In-Box Gestures
 
-Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: **Enable Gestures on This Touchpad** (Gesture Detection card above), a **Recognize** setting that includes the in-box catalog (`In-Box Only` or `Both`), and the gesture's own category toggle. A family is never gated on another family's checkbox.
+Every toggle here is off by default. Flip the ones you want. Gating is three levels, and all three have to pass before a gesture's entries appear in the mapping picker: **Enable Gestures on This Touchpad** (Gesture Detection, above), a **Recognize** setting that includes the in-box catalog (`In-Box Only` or `Both`), and the gesture's own category toggle. A family is never gated on another family's checkbox.
 
 **Touch spots.** Held buttons for where the pad is being touched: **Left Touch**, **Right Touch**, **Top Touch**, and **Multitouch**. One finger lands in Left, Right, or Top (the top quarter). Two or more fingers hold Multitouch. The left/right split sits at two fifths of the width, the same boundary DS4Windows uses, and exactly one spot is held at a time. The mapped button holds while the finger stays in the zone, releases the moment it lifts, and hands over live when the finger slides across a boundary. Bind them like any button: touchpad left to A, right to B, top to C.
 
@@ -215,7 +214,7 @@ Every toggle here is off by default. Flip the ones you want. Gating is three lev
 
 Each gesture appears as an entry in the mapping picker. Bind **Swipe Up** to a button to fire on swipe, **Two-Finger Pinch / Spread Axis** to an analog axis to read the continuous pinch magnitude, and so on. On a multi-pad device each entry carries its pad number, for example **Touchpad 1: Swipe Up**.
 
-**Macros.** Every enabled gesture (in-box and custom) is also a macro trigger. In the macro editor's Trigger panel, pick it from the **Add from List** dropdown next to the Record button. The dropdown lists buttons, POV directions, stick and trigger axes, the touchpad click, and whatever gestures are enabled on this tab. Recording deliberately does not capture gestures for macro triggers, so a stray swipe can't overwrite the combo, and re-recording keeps any gesture entries you picked. Gesture triggers work with every trigger mode, including On Release. Mapping rows are the opposite: their Record button does detect an enabled gesture performed while recording, so you can bind a touch spot or swipe without opening the dropdown. The recorder decides when the fingers lift: a swipe, tap, shape, or zone beats a touch spot crossed on the way, and a plain touch-and-lift records the last spot held. Multi-stage gestures (Double Tap, Triple Tap) record as their first stage, so pick those from the dropdown instead.
+**Macros.** Every enabled gesture (in-box and custom) is also a macro trigger. In the macro editor's Trigger panel, pick it from the **Add from List** dropdown next to the Record button. The dropdown lists buttons, POV directions, stick and trigger axes, the touchpad click, and whatever gestures are enabled on this card. Recording deliberately does not capture gestures for macro triggers, so a stray swipe can't overwrite the combo, and re-recording keeps any gesture entries you picked. Gesture triggers work with every trigger mode, including On Release. Mapping rows are the opposite: their Record button does detect an enabled gesture performed while recording, so you can bind a touch spot or swipe without opening the dropdown. The recorder decides when the fingers lift: a swipe, tap, shape, or zone beats a touch spot crossed on the way, and a plain touch-and-lift records the last spot held. Multi-stage gestures (Double Tap, Triple Tap) record as their first stage, so pick those from the dropdown instead.
 
 ---
 
@@ -223,7 +222,7 @@ Each gesture appears as an entry in the mapping picker. Bind **Swipe Up** to a b
 
 Profile-scoped: captured custom gestures travel with whichever profile is active when they're recorded. Each gesture has a name, finger count, and the recorded finger path(s).
 
-Click **+ Record New Gesture** to open the recorder dialog. The dialog mirrors the live touchpad surface. Trace the gesture once per sample: the **Samples to Capture** dropdown offers 1, 3, or 5, and defaults to 3. The hint under it says it straight: "3 is the standard. More samples = sturdier match, fewer = faster recording." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
+Click **+ Record New Gesture** to open the **Record a Gesture** dialog. The dialog mirrors the live touchpad surface and names the touchpad it records from. With no touchpad to read, it says "Touchpad unavailable. Draw here with the mouse, a pen or a finger." and takes the gesture drawn on its canvas. Trace the gesture once per sample. **Samples to Capture**, under the dialog's **More**, offers 1, 3, or 5, and defaults to 3, with the hint "3 is the standard. More samples give a surer match, and fewer are quicker to record." A counter tracks progress, and when the last sample lands the status line reads "All samples captured. Name the gesture and click Save." Name it, click **Save**, and the samples are averaged into one template. Drawing a different finger count from the previous samples clears the stack and starts over. The new gesture appears in the list and shows up in the mapping picker under the name you gave it.
 
 A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn't currently selected as the active mapping device still drives the recorder, so you can capture a gesture on the touchpad while the slot's primary device is something else.
 
@@ -233,7 +232,7 @@ A touchpad-only device (laptop trackpad, web touchpad client, overlay) that isn'
 
 The same physical touchpad assigned to two slots carries two independent gesture engines. Each slot runs the recognizer with its own settings, and each slot's mapping rows see only that slot's fires.
 
-Practical consequence: if you assign a DualSense to slot 0 with 4-way swipes on and to slot 1 with 4-way swipes off, a horizontal swipe fires **Swipe Right** only on slot 0's mapping rows. Slot 1's toggle truly disables 4-way for slot 1. It does not inherit slot 0's behavior. The same per-slot scoping applies to every Stick / D-Pad / Mouse setting on this tab.
+Practical consequence: if you assign a DualSense to slot 0 with 4-way swipes on and to slot 1 with 4-way swipes off, a horizontal swipe fires **Swipe Right** only on slot 0's mapping rows. Slot 1's toggle truly disables 4-way for slot 1. It does not inherit slot 0's behavior. The same per-slot scoping applies to every Stick / D-Pad / Mouse setting on this card.
 
 Laptop trackpads (Windows Precision Touchpads on the [Devices](devices.md) page) arrive as a system touchpad with no controller behind them, so they carry no touchpad-click button. **Touchpad Click** is left out of their picker entries and their auto-map. DualSense, DualShock 4, web touchpad, and overlay devices report a click of their own and expose it.
 
@@ -241,7 +240,7 @@ Laptop trackpads (Windows Precision Touchpads on the [Devices](devices.md) page)
 
 ## Reset buttons
 
-Every setting row carries a per-field **Reset** button (the small reset arrow on the right). Each setting card carries a **Reset All** button in its header that restores the card's defaults in one click.
+Every setting row carries a per-field **Reset** button (the small reset arrow on the right). The Touchpad card's header carries a **Reset All** for Mouse Output, and each line below carries its own **Reset All** that restores that line's defaults in one click.
 
 ---
 
@@ -257,9 +256,9 @@ Shape matching runs two gesture recognizers on every single-finger shape and kee
 - [Virtual Controllers](virtual-controllers.md) for which output types accept touchpad-finger-as-mouse / stick / D-pad.
 - [Menus](../guides/menus.md) for hosting an on-screen radial or touch menu on a touchpad.
 - [Web Controller](../guides/web-controller.md) for using a phone screen as a touchpad source.
-- [Dashboard](dashboard.md) for the [Touchpad Overlay](dashboard.md#touchpad-overlay) (transparent on-screen touchpad surface).
+- [Extras](dashboard.md#extras) for the [Touchpad Overlay](dashboard.md#touchpad-overlay) (transparent on-screen touchpad surface).
 - [Devices](devices.md) for enumerating a laptop trackpad as a touchpad source.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

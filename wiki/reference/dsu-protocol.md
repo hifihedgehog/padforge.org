@@ -60,7 +60,8 @@ public sealed class DsuMotionServer : IDisposable
 
 | Constant | Value | Description |
 |---|---|---|
-| `MaxSlots` | `4` | DSU protocol slot limit (PadForge slots 4–15 skip DSU broadcast) |
+| `MaxSlots` | `4` | DSU protocol slot limit (PadForge slots 4–15 skip DSU broadcast). `internal`, so `InputManager` sizes `DsuMotionSnapshots` from it |
+| `DefaultPort` | `26760` | The port every DSU client polls unless told another, and `Start`'s default |
 | `ProtocolVersion` | `1001` | cemuhook protocol version |
 | `HeaderSize` | `16` | Packet header size in bytes |
 | `MsgTypeVersion` | `0x100000` | Server to client: version response |
@@ -89,6 +90,9 @@ public sealed class DsuMotionServer : IDisposable
 | `_subSeenScratch` | `HashSet<EndPoint>` | Reused `GetSubscribers` dedup set (polling thread only) |
 | `_slotConnected` | `bool[4]` | Per-slot connection state reported to clients |
 | `_slotHasMotion` | `bool[4]` | Per-slot motion capability (device has gyro/accel sensors) |
+| `_everyPassGates` | `EveryPassFrameGate[4]` | Per-slot gate that spaces unchanged frames above 1000 passes a second (see [BroadcastMotion()](#broadcastmotion)) |
+| `_gatedSnapshots`, `_gatedConnected` | `MotionSnapshot[4]`, `bool[4]` | What the last frame each gate let out said |
+| `PortInUse` | `bool` (public, read-only) | True after a start that found its port bound by another program, the one failure `InputService` tries again |
 | `_disposed` | `bool` | Dispose guard |
 
 ### RecountSubscribers()
@@ -105,7 +109,7 @@ Raised on server status changes. Localized values from `Strings.Instance`:
 
 | Status | Trigger |
 |---|---|
-| `"Listening on :{port}"` | Successful bind |
+| `"Listening on port {port}"` | Successful bind |
 | `"Port {port} in use"` | `SocketError.AddressAlreadyInUse` |
 | `"Failed to start"` | Other exceptions |
 | `"Stopped"` | After `Stop()` |
@@ -133,7 +137,7 @@ sequenceDiagram
 
     Client->>Server: Pad Data Request (0x100002)<br/>flags=0x01, slot=0<br/>(subscribes to slot 0)
 
-    loop Every ~1ms (1000 Hz)
+    loop Every pass of the poll loop (1000 Hz by default)
         Poll->>Server: BroadcastMotion(slot=0, snapshot, connected=true)
         Server->>Server: GetSubscribers(0) -> [Client]
         Server->>Client: Pad Data (slot 0, motion data)
@@ -153,20 +157,21 @@ public bool Start(int port = 26760)
 ```
 
 1. Returns `true` immediately if already running.
-2. Sets `_port` and generates `_serverId` from `Environment.TickCount`.
-3. Creates a UDP socket (`AddressFamily.InterNetwork`, `SocketType.Dgram`).
-4. Applies `SIO_UDP_CONNRESET` IOControl to suppress ICMP port-unreachable exceptions on subsequent `ReceiveFrom` calls. Catches exceptions on non-Windows or older OS.
-5. Binds to `IPAddress.Loopback` on the given port.
-6. Sets `_running = true`.
-7. Starts background receive thread (`"PadForge.DsuServer"`, `IsBackground = true`).
-8. Raises `StatusChanged` with listening message.
-9. Returns `true`.
+2. Clears `PortInUse`. While the test assembly sets `OffLimitsForTest`, a start on `DefaultPort` binds nothing and returns `false`, so a test run never takes the port a running PadForge serves. The app never sets it.
+3. Sets `_port` and generates `_serverId` from `Environment.TickCount`.
+4. Creates a UDP socket (`AddressFamily.InterNetwork`, `SocketType.Dgram`).
+5. Applies `SIO_UDP_CONNRESET` IOControl to suppress ICMP port-unreachable exceptions on subsequent `ReceiveFrom` calls. Catches exceptions on non-Windows or older OS.
+6. Binds to `IPAddress.Loopback` on the given port.
+7. Sets `_running = true`.
+8. Starts background receive thread (`"PadForge.DsuServer"`, `IsBackground = true`).
+9. Raises `StatusChanged` with listening message.
+10. Returns `true`.
 
 **Error handling:**
 
 | Exception | Action |
 |---|---|
-| `SocketException` (`AddressAlreadyInUse`) | Disposes socket, raises port-in-use status, returns `false` |
+| `SocketException` (`AddressAlreadyInUse`) | Disposes socket, sets `PortInUse`, raises port-in-use status, returns `false` |
 | Any other | Disposes socket, raises failure status, returns `false` |
 
 ### Stop()
@@ -202,7 +207,9 @@ Calls `Stop()` if not already disposed. Sets `_disposed = true`. Not thread-safe
 2. Returns if `_dsuServer` is already non-null (idempotent).
 3. Constructs a `DsuMotionServer` and subscribes to `StatusChanged`. The handler marshals `DsuServerStatus` and `IsDsuServerRunning` onto the dispatcher.
 4. Reads `Dashboard.DsuMotionServerPort`. Clamps out-of-range values (below 1024 or above 65535) to the default 26760.
-5. On `Start(port)` success, assigns `_inputManager.DsuServer = _dsuServer`. On failure, disposes the server and nulls the field.
+5. On `Start(port)` success, assigns `_inputManager.DsuServer = _dsuServer`. On failure, records whether the port was in use, which port and when, disposes the server and nulls the field.
+
+A port another program held is tried again: `RetryDsuServerOnPortInUse`, on the dashboard tick, calls `StartDsuServerIfEnabled` once `PortInUseRetryMs` (3000 ms) has passed since the failed start, so closing the other server brings this one up while the switch is on and the engine runs. The status handler also sets `IsDsuServerRunning`, which the Motion Server page's status flame shows.
 
 `InputService.StopDsuServer()` nulls `_inputManager.DsuServer` first, then disposes the server and nulls `_dsuServer`. A dispatcher callback settles `IsDsuServerRunning` to false after the `Dispose` path's own "Stopped" status has fired.
 
@@ -218,23 +225,24 @@ The `DsuMotionServerPort` and `EnableDsuMotionServer` values persist per-app pro
 public void BroadcastMotion(int slot, MotionSnapshot snapshot, bool connected)
 ```
 
-Called from the InputManager polling thread at ~1000 Hz. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.
+Called from the InputManager polling thread once per pass of the poll loop, 1000 passes a second by default and 60 to 10000 under the Settings page's Polling Rate. Primary data path. While the engine idles (a 20 Hz loop) or stays suspended because PadForge lost focus with background polling off (a 10 Hz loop), the same thread keeps calling it with a zeroed snapshot and a fresh timestamp, so subscribers receive neutral packets.
 
 1. Returns immediately if not running, socket is null, or slot is out of range [0, MaxSlots).
 2. When `connected` is false, replaces the snapshot with an empty one that keeps only `TimestampUs`. Then updates `_slotConnected[slot]` and `_slotHasMotion[slot]`. These writes stay unconditional because they feed the controller-info replies a client reads before it subscribes.
 3. Returns if `_subCount == 0`. A volatile int read, no lock taken.
 4. Returns if `_anyAllSlotSubs` is false and this slot's bit is clear in `_slotSubMask` (`Volatile.Read`). With one client subscribed to one slot, the other slots' calls stop here instead of taking the lock.
 5. Calls `GetSubscribers(slot)`. Returns if the result is empty.
-6. Builds the pad data packet via `BuildPadDataPacket(slot, snapshot, connected)`, which reuses the `_padPacketScratch` buffer.
-7. Sends the packet to each subscriber via `_socket.SendTo()`. Exceptions caught silently (client may be gone).
+6. While the poll loop runs above 1000 passes a second (`EveryPassFrameGate.Engaged`), asks the slot's gate whether the frame is due. A frame whose motion or connected state differs from the last one let out (`FrameContent.Same` compares every field but the timestamp) goes out on the pass that made it. An unchanged frame waits until `EveryPassFrameGate.Spacing` (0.75 ms) after the last one, which keeps a still pad near 1000 frames a second. At 1000 passes a second or fewer every frame goes out.
+7. Builds the pad data packet via `BuildPadDataPacket(slot, snapshot, connected)`, which reuses the `_padPacketScratch` buffer.
+8. Sends the packet to each subscriber via `_socket.SendTo()`. Exceptions caught silently (client may be gone).
 
-**Performance**: at 1000 Hz with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the `GetSubscribers` collections are reused scratch, so the steady state allocates nothing either.
+**Performance**: with no subscribers, the method returns after a volatile int read. No lock, no dictionary access, no allocation. When sending, the packet buffer and the `GetSubscribers` collections are reused scratch, so the steady state allocates nothing either.
 
 ### Snapshot Source
 
 `InputManager.UpdateMotionSnapshots()` fills two arrays each poll cycle: `MotionSnapshots[padIndex]` for the virtual controller's own motion report, and `DsuMotionSnapshots[padIndex]` for slots 0–3. `BroadcastDsuMotion()` runs after Step 4b and the motion stage (`ApplyMotionRows`) and fans `DsuMotionSnapshots` out to `BroadcastMotion()`, with `connected` taken from `IsSlotActive(padIndex)`: the slot is created, enabled, and holds an online assigned device. The slot's motion rows decide what DSU carries:
 
-- **Motion rows**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile, whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.IsValve(ProfileId)` on an Extended slot. When either row exists, DSU gets the same reconciled result as `MotionSnapshots`, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (`MaxAbs` by default, or `Sum`, `Average`, or `Custom`), after each source's own calibration, grip, and optional tuning.
+- **Motion rows**: `MappingSetMigrator.EnsureMotionRows` creates the `MotionGyro` / `MotionAccel` mapping rows for PlayStation (slot type 1) and Nintendo (slot type 5), and for one more case its `motionCapableProfile` argument admits: an Extended slot running a Valve profile or the SInput profile (#584), whose native frame carries an IMU. `SettingsService.EnsureMotionRowsForAllSlots` sets that argument from `NintendoPreviewMap.UsesValveRoles(ProfileId)` on an Extended slot. When either row exists, DSU gets the same reconciled result as `MotionSnapshots`, even when a row is empty or its sources are offline. Several sources on one row combine through the row's combine mode (`MaxAbs` by default, or `Sum`, `Average`, or `Custom`), after each source's own calibration, grip, and optional tuning.
 - **Motion Pitch, Yaw and Roll rows** (#475): while one of them holds an input on a slot that carries motion, `UpdateMotionSnapshots` publishes nothing for the slot and `ApplyMotionRows` publishes the composed frame to both arrays, so DSU gets the same frame as `MotionSnapshots` with no fallback to every assigned sensor. See [Input Pipeline](input-pipeline.md#motion-pitch-yaw-and-roll).
 - **No motion rows**: every other slot type (Xbox, Keyboard + Mouse, MIDI, VR, and other Extended slots), and a motion-capable slot whose rows were removed, still broadcasts. `ReconcileAssignedMotion` reads every enabled, online device assigned to the slot and combines their readings axis by axis with the default `MaxAbs` combine. A device without the primary sensor contributes its aux sensor instead. `MotionSnapshots` stays empty for such a slot, so the virtual controller's own report carries no motion.
 - **Row source**: the row's source descriptor picks the sensor stream. `Motion Gyro` and `Motion Accel` read the body IMU. The aux variants `Motion Gyro L` (#252) and `Motion Accel L` (#199) read the left half of a combined Joy-Con pair instead, and for accel also a Nunchuk. In the mapping grid the gyro variant displays as "Left Joy-Con Motion Gyro". The accel variant resolves per device: "Nunchuk Accelerometer", "Left Joy-Con Accelerometer", or "Aux Motion Accelerometer".
@@ -544,7 +552,7 @@ graph LR
     end
 
     subgraph "Polling Thread (InputManager)"
-        PT["~1000Hz polling loop"]
+        PT["poll loop, 1000 Hz by default"]
         PT --> BM["BroadcastMotion()"]
         BM --> GS["GetSubscribers()"]
         GS --> BP["BuildPadDataPacket()"]
@@ -574,15 +582,16 @@ The DSU protocol supports 4 slots (0–3). PadForge supports up to 16 virtual co
 
 ## Polling Optimization
 
-`BroadcastMotion()` runs at ~1000 Hz per slot. Overhead shrinks in tiers, cheapest check first:
+`BroadcastMotion()` runs once per slot on every pass of the poll loop. Overhead shrinks in tiers, cheapest check first:
 
 1. **Guard clause**: returns immediately on `!_running`, null socket, or out-of-range slot (no lock).
 2. **Subscriber-count early-out**: `_subCount == 0` returns after a volatile int read, before any lock. `RecountSubscribers()` keeps the mirror exact at every subscription mutation.
 3. **Slot-mask early-out**: no all-slot subscribers plus a clear bit for this slot in `_slotSubMask` returns on a volatile mask read. With one client subscribed to one slot, the other slots skip the lock and the dictionary walk entirely.
 4. **Scratch reuse**: `GetSubscribers` fills reused collections and `BuildPadDataPacket` reuses the single `_padPacketScratch` buffer (`Array.Clear` per call, every byte rewritten). Even the sending steady state allocates nothing.
 5. **Lazy expiration**: expired subscriptions pruned during `GetSubscribers()`, not via a separate timer.
+6. **Frame spacing above 1000 Hz**: with a subscriber and the poll loop above 1000 passes a second, an unchanged frame waits for `EveryPassFrameGate.Spacing`, so a 10000 Hz loop does not send ten datagrams a millisecond to each client.
 
-At 1000 Hz with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.
+At any polling rate with 4 active slots and no subscribers: zero lock acquisitions, zero dictionary lookups, zero allocation. Each call costs one volatile int read.
 
 ---
 
@@ -592,7 +601,7 @@ At 1000 Hz with 4 active slots and no subscribers: zero lock acquisitions, zero 
 
 Standalone DSU client that displays received motion data per slot in real time. Used for debugging axis mapping and verifying protocol compliance.
 
-1. Enable the DSU motion server on the PadForge Dashboard (default port 26760).
+1. Turn on the motion server in PadForge under Extras > Motion Server (default port 26760).
 2. Run `DsuDiag.exe`. Connects to `localhost:26760`.
 3. Sends a version request, then subscribes with `flags = 0` (all pads) and prints accelerometer/gyroscope values to the console. Pass a slot number as the single argument to filter the display to one slot. `DsuDiag verdict [slot] [seconds]` instead reads the hold from the accelerometer while the controller sits still, then records one rotation (5 s by default) and reports the peak rate and integrated angle per gyro axis. Targets `net8.0`.
 
@@ -609,4 +618,4 @@ Standalone DSU client that displays received motion data per slot in real time. 
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

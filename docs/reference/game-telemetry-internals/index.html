@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3611,6 +3761,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3703,6 +3881,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4340,7 +4546,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Telemetry/GameTelemetryRuntime.cs</code></td>
-<td>The Dashboard mirror the engine reads, the values Custom Expression variables read, and the engine values the wheel lights read. <code>TelemetryChannel</code> lives here.</td>
+<td>The mirror of the Game Telemetry page's settings that the engine reads, the values Custom Expression variables read, and the engine values the wheel lights read. <code>TelemetryChannel</code> lives here.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/Common/Input/Telemetry/GameTelemetryDevice.cs</code></td>
@@ -4356,7 +4562,7 @@
 </tr>
 <tr>
 <td><code>PadForge.App/Services/InputService.GameTelemetry.cs</code></td>
-<td>The Dashboard status line and flame, and the Devices panel line.</td>
+<td>The Game Telemetry page's status line and flame, its tile's status on the Extras page, and the Devices panel line.</td>
 </tr>
 <tr>
 <td><code>PadForge.App/ViewModels/CustomTelemetryFormatEditor.cs</code>, <code>Views/CustomTelemetryFormatsDialog.xaml(.cs)</code></td>
@@ -4389,8 +4595,12 @@
 </thead>
 <tbody>
 <tr>
-<td><code>SpeedMs</code></td>
-<td>Meters per second, never negative</td>
+<td><code>SpeedMs</code>, <code>SpeedReported</code></td>
+<td>Meters per second, never negative, and whether the game sent a speed</td>
+</tr>
+<tr>
+<td><code>Grip</code></td>
+<td>The road's grip under the front wheels against dry asphalt's (<code>RoadGrip</code>), or 0 where the game sends no word on the road</td>
 </tr>
 <tr>
 <td><code>Rpm</code>, <code>MaxRpm</code></td>
@@ -4472,6 +4682,7 @@
 </tr>
 </tbody>
 </table>
+<p>Where a game reports the road, the decoder puts the front axle's grip in <code>Grip</code>, through <code>SurfaceGrips</code> and <code>RoadGrip.FrontAxle</code> (the mean of the two front wheels): Forza's puddle depth, f32 at 132 and 136, F1's surface type, u8 at 58 and 59 of the player's car telemetry entry, Project CARS 2's terrain, u8 at 140 and 141 with the rain density, and Assetto Corsa's surface grip in the graphics page, f32 at 280, or 1240 in ACC. Codemasters, EA SPORTS WRC, OutGauge and the truck plugin send no word on the road. <code>GameTelemetryRowSource</code> hands the hub the speed and the grip (<code>GameTelemetryRuntime.TryGetMotion</code>) with the engine values (<code>TryGetEngine</code>), and the hub hands them to a wheel's Vehicle mode centering. See <a href="../wheel-centering-internals/#grip">Wheel Centering Internals</a>.</p>
 <p>F1 claims every packet whose format is 2022 to 2025, whose length is one of that format's packet sizes and whose id is 0 to 15, read or not, so format 2024's 237-byte Motion Ex packet never reaches the EA SPORTS WRC rule.</p>
 <h2 id="auto-detect">Auto-Detect<a class="headerlink" href="#auto-detect" title="Permanent link">&para;</a></h2>
 <p><code>TelemetryReader</code> tries, in order: the custom formats that name a length or a key, JSON (the truck plugin), F1, Project CARS 2, OutGauge, EA SPORTS WRC, Codemasters, Forza. Formats with a signature come ahead of formats known only by their length.</p>
@@ -4622,12 +4833,12 @@
 <p><code>AppSettings</code> and <code>ProfileData</code> both carry <code>EnableGameTelemetry</code>, <code>GameTelemetryPort</code> (20777), <code>GameTelemetryFormat</code>, <code>GameTelemetryCustomFormat</code>, <code>GameTelemetryForwardPort</code> (0) and <code>GameTelemetryFullSpeed</code> (300), so they follow profiles like the Game Mods settings. <code>GameTelemetryFormats</code> is in <code>AppSettings</code> alone. On load the formats go first, then the game, port, forward port and Full Speed, and the switch last, so the row opens once with the whole configuration. A saved custom game whose format is gone reads as Auto-Detect, and a number out of range keeps the current value.</p>
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>GameTelemetryTests</code>: each decoder against packets built from the references' layouts, Auto-Detect and its hold, custom binary formats in both byte orders and JSON, the XML round trips, the row's axes, buttons, silence and truck hold, the port fence, a loopback receive with forwarding, the Assetto Corsa reader on maps of its own, the expression values and specs, a Custom Expression macro firing on telemetry, the wheel lights' hand-off (<code>YieldPort</code>, <code>ReclaimPort</code>, <code>TryGetEngine</code>, both <code>GameTelemetryRowSource</code>s and their places in the hub's order, a learned max's headroom against every wheel's shift cue), the Dashboard picker and the custom format window's checks.</li>
+<li><code>GameTelemetryTests</code>: each decoder against packets built from the references' layouts, Auto-Detect and its hold, custom binary formats in both byte orders and JSON, the XML round trips, the row's axes, buttons, silence and truck hold, the port fence, a loopback receive with forwarding, the Assetto Corsa reader on maps of its own, the expression values and specs, a Custom Expression macro firing on telemetry, the wheel lights' hand-off (<code>YieldPort</code>, <code>ReclaimPort</code>, <code>TryGetEngine</code>, both <code>GameTelemetryRowSource</code>s and their places in the hub's order, a learned max's headroom against every wheel's shift cue), the Game Telemetry page's Game picker and the custom format window's checks.</li>
 <li><code>MacroTriggerEffectTests</code> and <code>MacroTriggerEffectDispatchTests</code>: each effect against the encoder, the editor's values, the settings round trip, the store, both evaluators with the release hook and the pass's sweep, the fill order and the inbound copy.</li>
 <li>The test host binds no real telemetry port and opens no <code>acpmf</code> mapping: <code>GameTelemetryPortOffLimits</code> and <code>KunosOffLimits</code> in <code>TestHostFences.cs</code>, both pinned in <code>TestHostFenceTests</code>, and the row in the listener census of <code>TestHostListenerTests</code>.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

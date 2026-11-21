@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://padforge.org/docs/features/nfc-tags/">
       
       
-        <link rel="prev" href="../wheel/">
+        <link rel="prev" href="../wheel-centering/">
       
       
         <link rel="next" href="../voice-macros/">
@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1744,6 +1748,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -2056,6 +2088,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -2092,6 +2152,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2851,6 +2967,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3444,6 +3566,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3724,6 +3874,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -3816,6 +3994,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4203,7 +4409,7 @@
 <p>PadForge reads NFC tags from two kinds of hardware: a contactless smart-card reader (PC/SC class, such as an ACR122U) and the tag reader built into Switch controllers. Amiibo-style figures, tag stickers, and cards all work. Register a tag once, give it a name, and bind it like any other button. Both paths share one tag registry, so a tag registered on either binds on either.</p>
 <hr />
 <h2 id="the-reader-as-a-device">The reader as a device<a class="headerlink" href="#the-reader-as-a-device" title="Permanent link">&para;</a></h2>
-<p>Plug in a PC/SC reader and it shows up on the <a href="../devices/">Devices</a> page as a device typed <strong>NFC Reader</strong>. Select its card to manage tags and to watch taps live.</p>
+<p>Plug in a PC/SC reader and it shows up on the <a href="../devices/">Devices</a> page as a device typed <strong>NFC Reader</strong>. Select it to manage tags and to watch taps live.</p>
 <p>The reader exposes buttons you can map:</p>
 <ul>
 <li><strong>Any NFC Tag</strong>. Fires whenever any tag touches the reader, registered or not.</li>
@@ -4247,17 +4453,17 @@
 <h2 id="registering-a-tag">Registering a tag<a class="headerlink" href="#registering-a-tag" title="Permanent link">&para;</a></h2>
 <ol>
 <li>On the <a href="../devices/">Devices</a> page, select the NFC reader or the Switch controller.</li>
-<li>Click <strong>Register / Manage NFC Tags</strong>.</li>
+<li>Click <strong>Register / Manage NFC Tags</strong> at the foot of its <strong>Settings</strong> card.</li>
 <li>Tap a tag on the reader or on the controller. Its UID is captured.</li>
 <li>Type a name for the tag.</li>
 <li>Click <strong>Register</strong>.</li>
 </ol>
-<p>The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "(waiting)".</p>
-<p>The dialog lists your registered tags. Each row shows its name and UID with a <strong>Remove</strong> button. Tap another tag to add more.</p>
+<p>The dialog listens to every source while open. A tap on a PC/SC reader and a tap on a connected Switch controller both capture the UID, and the dialog works with no PC/SC reader attached. When PadForge has no PC/SC connection, which is the case while the Windows Smart Card service is off, its status line reads "Tap a tag on your Switch controller…". Otherwise it reads "Tap a tag on the reader."</p>
+<p>The dialog lists your registered tags under <strong>Registered</strong>. Each row shows its name and UID with a <strong>Remove</strong> button. Tap another tag to add more.</p>
 <p>Tags are keyed by UID, not by reader. They carry over when you swap readers, from a reader to a controller, and across restarts.</p>
 <hr />
 <h2 id="live-tag-preview">Live tag preview<a class="headerlink" href="#live-tag-preview" title="Permanent link">&para;</a></h2>
-<p>With the NFC reader selected, the Devices page lists your named tags, plus an <strong>Any NFC Tag</strong> row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.</p>
+<p>With the NFC reader selected, the Devices page's <strong>Test Inputs</strong> card lists your named tags under <strong>NFC Tags</strong>, plus an <strong>Any NFC Tag</strong> row. Tap a tag and its row highlights, so you can confirm the reader sees it and check which tag you just touched.</p>
 <p><img alt="NFC reader named-tag list with a tapped tag row highlighted" src="../../images/nfc-live-preview.png" /></p>
 <hr />
 <h2 id="binding-a-tag">Binding a tag<a class="headerlink" href="#binding-a-tag" title="Permanent link">&para;</a></h2>
@@ -4275,7 +4481,7 @@
 <li><a href="../../guides/macros/">Macros</a>: bind a tag tap to an action sequence.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 
@@ -4313,7 +4519,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../wheel/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Wheels">
+          <a href="../wheel-centering/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Wheel Centering">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4323,7 +4529,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Wheels
+                Wheel Centering
               </div>
             </div>
           </a>

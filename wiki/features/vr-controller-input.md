@@ -10,7 +10,7 @@ This page is about reading real VR controllers *into* PadForge. For the opposite
 
 ## Turning it on
 
-There is no separate switch. Turn on **Enable OpenXR Headset Input** in the Head Tracking section of the [Dashboard](dashboard.md), and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.
+There is no separate switch. Turn on **Enable OpenXR Headset Input** on the [Head Tracking](head-tracking.md) page, which opens from its tile on the **Extras** page, and both controller rows appear. They are there whether or not a runtime ever answers, so mappings can be made before a headset is plugged in. A row that never goes live simply holds its axes at rest.
 
 A Quest on Link has to be read through SteamVR's runtime rather than Meta's. [Setting up an OpenXR headset](head-tracking.md#setting-up-an-openxr-headset) says how to choose it.
 
@@ -90,4 +90,4 @@ The row stays online while **Enable OpenXR Headset Input** is on, so mappings ca
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

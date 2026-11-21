@@ -4,7 +4,9 @@ Renders interactive Xbox, PlayStation, Nintendo, and Valve controller models fro
 
 Valve's CAD is CC BY-NC-SA 4.0, Copyright Valve Corporation. PadForge is not associated with or endorsed by Valve.
 
-**Namespace:** `PadForge.Models3D` (model classes), `PadForge.Views` (view)
+The model is the picture in the controller page's Mappings section when the 3D view is on. A controller's Home card shows a still of the same model, and the model itself, moving, while the controller forges (see [Home cards](#home-cards-the-still-and-the-live-model)).
+
+**Namespace:** `PadForge.Models3D` (model classes, the still, the live model), `PadForge.Views` (view, framing, legend), `PadForge.Controls` (`LiveStage`)
 
 ---
 
@@ -32,11 +34,19 @@ ControllerModelView (UserControl)
     +-- HelixViewport3D          (3D rendering viewport)
     +-- ModelVisual3D            (hosts the model3DGroup scene graph)
     +-- CompositionTarget.Rendering  (per-frame visual updates)
+
+Shared by the view and a Home card
+    +-- ControllerPose           (stick tilt and trigger turn angles)
+    +-- ModelGlow                (press highlight and graded glow)
+    +-- ControllerModelFraming   (where the default camera stands)
+
+ControllerStill  -> a still of the model for a Home card
+LiveModel        -> the same model, frozen, shown moving by LiveStage
 ```
 
 Model classes own geometry and materials. The view class owns the viewport, input handling, and animation.
 
-`ControllerModelBase.Create(family, appearance, extraControls)` is the one construction path. `ControllerModelView.EnsureModel()` calls it and assigns the result to `ModelVisual3D.Content`, and the interaction tests call it too, so the two cannot drift. It ends in `EnsureHighlightMaterials()`, because a model reaching the viewport with no glow materials is the defect that path exists to prevent.
+`ControllerModelBase.Create(family, appearance, extraControls)` is the one construction path. `ControllerModelView.EnsureModel()` calls it and assigns the result to `ModelVisual3D.Content`, `ControllerStill.Render` calls it for a Home card's still, and the interaction tests call it too, so none of them can drift. It ends in `EnsureHighlightMaterials()`, because a model reaching the viewport with no glow materials is the defect that path exists to prevent.
 
 ---
 
@@ -59,7 +69,7 @@ public abstract class ControllerModelBase : IDisposable
 | `DefaultMaterials` | `Dictionary<Model3DGroup, Material>` | Original material per group. Restored after highlight/flash. |
 | `HighlightMaterials` | `Dictionary<Model3DGroup, Material>` | Accent-colored material per group. Applied on press or flash. |
 | `QuadrantMap` | `Dictionary<Model3DGroup, string[]>` | Surfaces whose hover resolves by quadrant instead of as one target. Four names in up, down, left, right order, in model space (X across the face, +Z toward its top edge). See [Quadrant surfaces](#quadrant-surfaces). |
-| `StickRiders` | `Dictionary<Model3DGroup, List<Model3DGroup>>` | Parts that lean with a stick without lighting with it, keyed on that stick's ring, and filled through `AddStickRider`. No model registers one at present: the Steam Deck's stem, the part it was written for, is registered under the stick button and lights with the base. |
+| `ExtraControlRoles` | `HashSet<string>` | The buttons of a shared mesh that some presets drawn with it lack: `ButtonShare` on the Xbox Series mesh, `ButtonC`, `LeftPaddle` and `RightPaddle` on the Switch 2 Pro mesh. Filled through `RegisterExtraButton` whether or not the model wired them. See [Extra controls](#extra-controls). |
 
 ### Scene Graph
 
@@ -176,6 +186,25 @@ protected void RegisterButton(string padSettingName, Model3DGroup group)
 
 Adds `group` to `ButtonMap[padSettingName]` (creates list if needed) and sets `ClickMap[group] = padSettingName`. This bidirectional mapping drives the highlight (name -> groups) and click detection (group -> name).
 
+### Extra controls
+
+```csharp
+protected void RegisterExtraButton(string padSettingName, Model3DGroup group, bool wired)
+internal static bool HasExtraControls(string family, string profileId)
+```
+
+Two meshes serve presets that do not all have every control on them. `RegisterExtraButton` adds the role to `ExtraControlRoles` and calls `RegisterButton` only when `wired` is true. The mesh draws either way, so a preset without the control shows it inert: no hover, no click-to-record, no glow.
+
+`HasExtraControls` is the one rule for both the controller page and a Home card:
+
+| Family | Test | Roles |
+|--------|------|-------|
+| `XboxSeries` | `ProfileId` starts with `xbox-series-` | `ButtonShare` |
+| `Switch2Pro` | `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0` | `ButtonC`, `LeftPaddle`, `RightPaddle` |
+| any other | false | none |
+
+The Switch test asks the canonical wire table rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control and the two cannot drift apart.
+
 ### Quadrant surfaces
 
 ```csharp
@@ -225,7 +254,7 @@ protected void PaintTarget(string padSettingName, Material material)
 protected virtual void DrawAccentHighlights()
 ```
 
-Creates accent-colored `DiffuseMaterial` for all children. Reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`. Falls back to `#FF6B2C` ember orange. The brush stays solid because `GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight now derives from the accent `Color` instead. The Xbox 360, DualShock 3, DS4, Xbox Series, DualSense, and Switch 2 Pro constructors call it.
+Gives every `Model3DGroup` child of `model3DGroup` one shared accent material from `CreateAccentHighlight()`. That reads the `SystemAccentColorPrimary` resource (a WPF-UI theme `Color`) and wraps it in a `SolidColorBrush`, falling back to `#FF6B2C` ember orange. The brush stays solid because `ModelGlow.GradientHighlight()` lerps its `Color`. `AccentButtonBackground` became an ember gradient in #175, so the highlight derives from the accent `Color` instead. A child that is a bare `GeometryModel3D` is skipped rather than cast. The Xbox 360, DualShock 3, DS4, Xbox Series, DualSense, and Switch 2 Pro constructors call it.
 
 `EnsureHighlightMaterials()` is the backstop `Create` runs on every model. It gives each `ClickMap` group, each `ButtonMap` group, both stick rings, and every scene child the accent material when it has none, and keeps any highlight a model set by hand. The three Valve models call neither method themselves, so their glow comes from here.
 
@@ -247,6 +276,16 @@ resourceName = FindResource(new[] { suffix });
 
 `TryLoadModel` tries the model's own folder first, then its `SharedGeometry` donor once (see [SharedGeometry](#sharedgeometry)).
 
+### One read per file
+
+Each mesh file is read once while any model built from it lives. `TryLoadModelFrom` parses the expanded OBJ, freezes the result and keeps it in `s_parsed`, a weak table keyed on the resource name. Every later model gets its own copy of the groups and parts around the same frozen meshes and materials (`Instance`), so it can paint its parts and move its groups without touching another model's. `s_parsedBy`, a `ConditionalWeakTable`, ties each copy to the file it came from, so the file lives as long as any group built from it. Textures work the same way: `TryLoadTexturedMaterial` keeps each frozen material in `s_textures`, keyed on the resource name and the opacity.
+
+Before this, the controller page and a Home card's still each built the same model at launch and each read every file: some 250 MB of garbage a model, with collections that held the poll loop up to 40 ms at a time in the first half minute, and about 90 MB of texture buffers a model (measured 2026-11-16).
+
+`KeepFirst` guards the moment two models are built at once. Both find nothing kept and both read the file outside the lock. The first copy kept is the one returned to both, so a file is never held twice.
+
+A rider decal's group is emptied into its host and dropped (`AttachRiderDecal`), so nothing in the scene holds its file. The model keeps every file it loaded in a private `_files` list and exposes it as `Files`, and a Home card's `LiveModel` copies that list, because it draws the model's meshes after the model itself is let go. Without it, the next collection let the decal files go and the next Xbox Series model read its `Decal-*.obj` rider files again.
+
 ### Texture and Decal Helpers
 
 ```csharp
@@ -257,7 +296,7 @@ protected void AttachRiderDecal(Model3DGroup host, string filename, Material mat
 protected static void ApplyMaterial(Model3DGroup group, Material material)
 ```
 
-`TryLoadTexturedMaterial` takes the atlas name a caller passes (`"Body.png"`), keeps its stem, and tries `.{folder}.{stem}.jpg` first and the packed `.{folder}.{stem}.pngbr` second, Brotli-expanding the second before decoding. It decodes with `BitmapCacheOption.OnLoad` from a `MemoryStream`, disposes the stream right after `EndInit` (keeping it alive pinned the expanded image, about 21 MB per Xbox Series model), and wraps the bitmap in a frozen `DiffuseMaterial` over an `ImageBrush`. `ViewportUnits` must be `Absolute`: the default `RelativeToBoundingBox` remaps the image onto each mesh's texcoord bounding box, which would render the whole atlas squeezed onto every part's own UV island.
+`TryLoadTexturedMaterial` takes the atlas name a caller passes (`"Body.png"`), keeps its stem, and tries `.{folder}.{stem}.jpg` first and the packed `.{folder}.{stem}.pngbr` second, Brotli-expanding the second before decoding. `LoadTexturedMaterial` falls back to a flat `#5C5D60` gray. A texture already in use comes back from `s_textures` undecoded. Otherwise it decodes with `BitmapCacheOption.OnLoad` from a `MemoryStream`, disposes the stream right after `EndInit` (keeping it alive pinned the expanded image, about 21 MB per Xbox Series model), and wraps the bitmap in a frozen `DiffuseMaterial` over an `ImageBrush`. `ViewportUnits` must be `Absolute`: the default `RelativeToBoundingBox` remaps the image onto each mesh's texcoord bounding box, which would render the whole atlas squeezed onto every part's own UV island.
 
 `AddGloss` wraps a material in a `MaterialGroup` with a `SpecularMaterial` on top. `DiffuseMaterial` has no specular term, so a semi-transparent diffuse layer renders as a flat tint and clear ABXY shells read as no shell at all.
 
@@ -270,10 +309,9 @@ protected static void ApplyMaterial(Model3DGroup group, Material material)
 ```csharp
 public void Dispose()
 protected virtual void Dispose(bool disposing)
-~ControllerModelBase()
 ```
 
-Clears `ButtonMap`, `QuadrantMap`, `ClickMap`, `DefaultMaterials`, `HighlightMaterials`, and `model3DGroup.Children`. Standard dispose pattern with finalizer. Called by `EnsureModel()` before every rebuild and by the view's `Unbind()`.
+Clears `ButtonMap`, `QuadrantMap`, `ClickMap`, `DefaultMaterials`, `HighlightMaterials`, `model3DGroup.Children`, and the held file list. There is no finalizer. Called by `EnsureModel()` before every rebuild, by the view's `Unbind()`, and by `ControllerStill.Render` for a model it could not freeze. A model a `LiveModel` took is never disposed, because disposing empties its frozen parts.
 
 ---
 
@@ -470,7 +508,7 @@ Twenty-one colorways share the mesh: Carbon Black, Robot White, Electric Volt, D
 
 ### Share Button Wiring
 
-The constructor takes a `bool enableShare`. The view passes `true` only when `ProfileId` starts with `xbox-series-`. Xbox One, Elite, and Adaptive profiles get `false`, and the Share mesh stays inert: visible body geometry, no hover, no click, no accent highlight. HM silently drops the Share bit on non-Series profiles, so the mapping UI does not surface it either.
+The constructor takes a `bool enableShare` and registers the mesh through `RegisterExtraButton("ButtonShare", ShareButton, enableShare)`. The view passes `HasExtraControls("XboxSeries", ProfileId)` through `Create`, which is true only when `ProfileId` starts with `xbox-series-`. Xbox One, Elite, and Adaptive profiles get `false`, and the Share mesh stays inert: visible body geometry, no hover, no click, no accent highlight. Those presets have no Share control, so the mapping UI does not surface it either. A Home card's still is built with `true` and drops the Share mark for those presets (see [Home cards](#home-cards-the-still-and-the-live-model)).
 
 ### Materials
 
@@ -492,7 +530,7 @@ Rider decals: knurl rings onto the stick cap-head groups, dotted grip panels ont
 
 ### Draw Order
 
-1. Load `Share.obj`. Register `ButtonShare` if `enableShare`.
+1. Load `Share.obj`. List `ButtonShare` as an extra control, and register it as a button if `enableShare`.
 2. Paint every `ButtonMap` group with the body atlas.
 3. Paint every remaining scene child with the body atlas.
 4. On a custom-shell colorway, repaint `MainBody` with its `Shell.jpg`.
@@ -534,7 +572,7 @@ Ten colorways: White, Midnight Black, Cosmic Red, Gray Camouflage, Nova Pink, De
 
 ### Materials
 
-`Body.jpg`, `Decal.png`, and `Transparent.png` per colorway. The transparent atlas carries alpha from the source opacity map. Midnight Black merged its trim into the body mesh and ships no `Transparent.png`, so it samples the body atlas at 30 % opacity instead. Either way it goes through `AddGloss(…, 0.60, 40.0)`. The ungloss'd flat material is kept as the highlight fallback, because that path reads a `DiffuseMaterial` brush.
+`Body.jpg`, `Decal.png`, and `Transparent.png` per colorway. The transparent atlas carries alpha from the source opacity map. Midnight Black merged its trim into the body mesh and ships no `Transparent.png`, so it samples the body atlas at 30 % opacity instead. Either way it goes through `AddGloss(…, 0.60, 40.0)`. The unglossed flat material is kept as the highlight fallback, because that path reads a `DiffuseMaterial` brush.
 
 Rider decals: L2/R2 label faces into the trigger groups, stick-cap knurl art into the ring groups, `Decal-L1.obj` / `Decal-R1.obj` onto the bumpers.
 
@@ -570,7 +608,7 @@ public sealed class ControllerModelDualSenseEdge : ControllerModelDualSense
 public ControllerModelDualSenseEdge() : base("Edge", "DualSenseEdge")
 ```
 
-Its own family with a one-entry appearance list (`"Edge"` / `"DualSense Edge"`), shadowing the base arrays with `new` because statics cannot be virtual. Nothing resolves those through a base-typed expression: the view's family switch names this type explicitly, and the Edge reaches the shared body through the protected family-scoped constructor.
+Its own family with a one-entry appearance list (`"Edge"` / `"DualSense Edge"`), shadowing the base arrays with `new` because statics cannot be virtual. Nothing resolves those through a base-typed expression: the family switches in `ControllerModelBase.Create` and `ControllerModelBase.Appearances` name this type explicitly, and the Edge reaches the shared body through the protected family-scoped constructor.
 
 The Edge extras live in the DualSense body, gated by `TryLoadModel` so they are absent on the plain colorways.
 
@@ -624,7 +662,7 @@ Serves every Nintendo slot: both the `switch-pro` and `switch2-pro` profile fami
 
 ### Switch 2 Control Wiring
 
-The `enableSwitch2Controls` flag gates C, GL, and GR into the click-to-record and highlight maps. The view resolves it by asking the canonical wire table, `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0`, rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control. On an original Switch Pro profile the three meshes still draw, they just never respond.
+The `enableSwitch2Controls` flag gates C, GL, and GR into the click-to-record and highlight maps through `RegisterExtraButton`. The view passes `HasExtraControls("Switch2Pro", ProfileId)` through `Create`, which asks the canonical wire table, `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0`, rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control. On an original Switch Pro profile the three meshes still draw, they just never respond.
 
 ### Materials
 
@@ -1176,13 +1214,14 @@ the generic body pass.
 
 **File:** `PadForge.App/Views/ControllerModelView.xaml`, `ControllerModelView.xaml.cs`
 
-WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2208 lines: rendering, input, hit testing, flash) and `ControllerModelView.Annotations.cs` (1052 lines: the annotation overlay, see below).
+WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. It implements `IPictureWithPick`, the interface the controller page draws the picked control's ring through. The code-behind spans two partial files: `ControllerModelView.xaml.cs` (2,142 lines: rendering, input, hit testing, the pick box, flash) and `ControllerModelView.Annotations.cs` (911 lines: the annotation overlay, see below). Helpers in their own files: `ControllerModelFraming.cs` (the default camera), `ControllerModelPickBox.cs` (where a control is drawn), `LegendColumn.cs` and `TagLight.cs` (the legend, shared with the 2D view).
 
 ### XAML Structure
 
 ```xml
 <Grid>
-    <helix:HelixViewport3D x:Name="ModelViewPort"
+    <helix:HelixViewport3D FlowDirection="LeftToRight" x:Name="ModelViewPort"
+        Focusable="False"
         IsRotationEnabled="False" IsPanEnabled="False"
         IsMoveEnabled="False" IsZoomEnabled="False"
         ShowViewCube="False" ZoomExtentsWhenLoaded="False"
@@ -1207,35 +1246,42 @@ WPF `UserControl` hosting a `HelixViewport3D` for 3D controller visualization. T
         </helix:HelixViewport3D.Camera>
     </helix:HelixViewport3D>
 
-    <!-- Annotation overlay (#175): chips, leader lines, trigger bars.
+    <!-- Annotation overlay (#175): tags and leader lines.
          No Background so empty space stays click-through to the viewport. -->
-    <Canvas x:Name="AnnotationCanvas" Visibility="Collapsed" ClipToBounds="True" />
+    <Canvas FlowDirection="LeftToRight" x:Name="AnnotationCanvas"
+            Visibility="Collapsed" ClipToBounds="True" />
 
     <!-- Top-right controls: colorway picker and its reset button,
          annotation toggle (Tag glyph E8EC), Reset View -->
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+    <StackPanel x:Name="CornerTools" Orientation="Horizontal" HorizontalAlignment="Right"
                 VerticalAlignment="Top" Margin="0,8,8,0">
-        <ComboBox x:Name="AppearancePicker" MinWidth="130"
+        <ComboBox x:Name="AppearancePicker" MinWidth="130" Margin="0,0,8,0"
                   Visibility="Collapsed"
+                  ToolTip="{Binding Pad_Colorway, ...}"
                   SelectionChanged="AppearancePicker_SelectionChanged" />
         <reset:SettingResetButton Click="ResetAppearance_Click"
-                  Visibility="{Binding Visibility, ElementName=AppearancePicker}" />
+                  Visibility="{Binding Visibility, ElementName=AppearancePicker}"
+                  IsEnabled="{Binding IsEnabled, ElementName=AppearancePicker}" />
         <ui:Button x:Name="AnnotationToggleButton"
                    Style="{StaticResource EmberIconButton}"
+                   ToolTip="{Binding Pad_ToggleAnnotations, ...}"
                    Click="AnnotationToggle_Click">
-            <TextBlock x:Name="AnnotationToggleGlyph"
-                       FontFamily="Segoe MDL2 Assets" Text="&#xE8EC;" />
+            <reset:GlyphText x:Name="AnnotationToggleGlyph"
+                       FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xE8EC;" />
         </ui:Button>
-        <Button x:Name="ResetViewButton" Click="ResetView_Click" />
+        <Button x:Name="ResetViewButton" Content="{Binding Pad_ResetView, ...}"
+                Padding="8,4" Click="ResetView_Click" />
     </StackPanel>
 </Grid>
 ```
 
-The camera is wrapped in `<helix:HelixViewport3D.Camera>` rather than being a bare child. The viewport is named `ModelViewPort` (the code-behind reads it for hit testing and projection). The rim light is a third light source (see [Lighting](#lighting)). All built-in HelixToolkit camera controls are disabled. Rotation, zoom, and pan are handled by custom event handlers to avoid conflicts with PadForge's click-to-map and touch gesture handling.
+The camera is wrapped in `<helix:HelixViewport3D.Camera>` rather than being a bare child. Its XAML values are the classic camera, which `ApplyDefaultCamera()` replaces as soon as a model loads (see [Camera Setup](#camera-setup)). The viewport is named `ModelViewPort` (the code-behind reads it for hit testing and projection) and takes no focus: rotation, pan, move and zoom are off, so it has no keyboard role, and clicks still reach the preview handlers. The rim light is a third light source (see [Lighting](#lighting)). All built-in HelixToolkit camera controls are disabled. Rotation, zoom, and pan are handled by custom event handlers to avoid conflicts with PadForge's click-to-map and touch gesture handling. The viewport and the annotation canvas always lay out left to right, so a right-to-left language never mirrors the controller.
+
+The corner buttons' tooltips read "Colorway" and "Mapping Annotations", and the last button reads "Reset View". The legend reads how far down `CornerTools` reaches and keeps its tags under it.
 
 ### Colorway Picker
 
-`AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `AppearanceRegistry(family)`. The registry is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360, Switch 2 Pro, and the three Valve models are not in the registry at all, so their pickers never appear.
+`AppearancePicker` shows only when the current model family ships more than one appearance, which `UpdateAppearancePicker()` decides from `ControllerModelBase.Appearances(family)` (the view's `AppearanceRegistry` passes straight through to it, and a Home card's still asks the same list). It is a switch over `"XboxSeries"`, `"DualSense"`, `"DS4"`, and `"DualSenseEdge"`, reading each model class's static `AppearanceIds` / `AppearanceNames`. `DualSenseEdge` has one entry, so its picker stays collapsed. Xbox 360, DualShock 3, Switch 2 Pro, and the three Valve models are not in the switch at all, so their pickers never appear.
 
 Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Model3DAppearances`, which re-enters `EnsureModel()` and rebuilds against the new atlas set. The choice is per virtual controller and saved with the slot (`SlotModel3DAppearances` in the settings file and in each profile), so two VCs of the same family can wear different colorways. The reset button beside the picker shows and hides with it and returns it to the first entry, the family default.
 
@@ -1243,6 +1289,8 @@ Selection writes `PadViewModel.SetModelAppearance(family, id)`, which raises `Mo
 
 ```csharp
 public event EventHandler<string> ControllerElementRecordRequested;   // xaml.cs
+public event EventHandler PickBoundsChanged;                          // xaml.cs
+public bool TryGetPickBounds(string target, out Rect bounds, out bool round);  // xaml.cs
 public event EventHandler<bool> AnnotationsToggled;                   // Annotations.cs
 public event EventHandler<string> AnnotationChipNavigateRequested;    // Annotations.cs
 public bool AnnotationsEnabled { get; set; }                          // Annotations.cs
@@ -1251,9 +1299,13 @@ public bool AnnotationsEnabled { get; set; }                          // Annotat
 | Member | Fires when | Payload |
 |--------|-----------|---------|
 | `ControllerElementRecordRequested` | User clicks a mappable 3D element | PadSetting target name (`"ButtonA"`, `"LeftThumbAxisXNeg"`) |
+| `PickBoundsChanged` | The model is drawn elsewhere: another model loaded, or the camera or the model turned, moved or changed size | none |
+| `TryGetPickBounds` | (method) | Where a target's control is drawn, and whether it is round, for the ring on the picked control. See [The pick box](#the-pick-box). |
 | `AnnotationsToggled` | User clicks the annotation toggle button | New on/off state (`bool`) |
-| `AnnotationChipNavigateRequested` | User clicks an annotation chip | The chip row's `TargetSettingName` |
+| `AnnotationChipNavigateRequested` | User clicks an annotation tag | The tag row's `TargetSettingName` |
 | `AnnotationsEnabled` | (property, not event) | Session-only overlay on/off. The hosting page pushes the ViewModel state in on bind and writes it back on `AnnotationsToggled`. The setter raises nothing, so the write-back can't loop. |
+
+`PadPage.OnModelRecordRequested` turns a clicked element into the slot's own row name (`MappingTargetOf`: through `NintendoPreviewMap.ToRaw` on a Nintendo slot or a Valve lettered Extended profile) and sets `PadViewModel.PickedTarget`, so the bar under the picture shows that control's rows whether or not a recording starts. A tag click does the same through `OnAnnotationChipNavigate`: it picks the tag's control and opens its row. It was a jump to the Mappings tab while the table lived there.
 
 The last three drive the annotation overlay (see [Annotation Overlay](#annotation-overlay)).
 
@@ -1295,7 +1347,11 @@ The last three drive the annotation overlay (see [Annotation Overlay](#annotatio
 | `_modelScaleTransform` | `ScaleTransform3D` | Per-model uniform scale, composed into `_modelRotation` so rotation and scale share one `Transform` assignment. Used for the DualSense, Switch 2 Pro, and Valve scale corrections. |
 | `_modelRecenter` | `TranslateTransform3D` | Vertical recenter, computed once per model load from the mesh's static bounds. First child of `_modelRotation`, so scale and rotation both see a model whose visual center is the origin. Never live bounds: trigger pulls change the group's bounds a little, and the whole model would bob with them. |
 | `_stickTransforms3D` | `Dictionary<Model3DGroup, …>` | Retained per-stick rotation graph keyed on the ring group. Cleared on every model rebuild, since the keys are the outgoing model's groups. |
-| `_stickParts` | `Dictionary<Model3DGroup, Model3DGroup[]>` | Every group one stick is made of, keyed on its ring: the ring, the click mesh, any other group registered to the stick button, and the model's `StickRiders`. Built once per model and cleared with `_stickTransforms3D`. |
+| `_stickParts` | `Dictionary<Model3DGroup, Model3DGroup[]>` | Every group one stick is made of, keyed on its ring: the ring, the click mesh, and any other group registered to the stick button. Built once per model and cleared with `_stickTransforms3D`. |
+| `_modelOutline` | `ControllerModelFraming.Outline` | The loaded model's outline at rest, measured once per model load, which the default camera is fitted to |
+| `_cameraIsDefault` | `bool` | True until the user zooms, pans or pinches. While true, a change of the view's size moves the camera to fit again. Reset View sets it back. |
+| `_pickShapes` | `Dictionary<string, ControllerModelPickBox.Shape>` | Each target's shape for the pick box, read once per model. Cleared on every model rebuild. |
+| `_lastToScreen` | `Matrix3D` | How the model was last put on the screen, so `PickBoundsChanged` fires once per frame that moved it |
 | `_touchpadHighlightMaterial` | `DiffuseMaterial` | Fully opaque accent material shown on the touchpad surface while click is held |
 | `_touchpadCurrentlyHighlighted` | `bool` | Tracks the current touchpad material swap so it does not churn every frame |
 | `_touchpadFinger0Visual` / `_touchpadFinger1Visual` | `ModelVisual3D` | Finger-sphere visuals (orange, blue) parented under `ModelVisual3D` |
@@ -1324,6 +1380,7 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 |----------------|-----------------|-------------|
 | DualSense Edge | `DualSenseEdge` | `ControllerModelDualSenseEdge` |
 | DualSense | `DualSense` | `ControllerModelDualSense` |
+| DualShock 3 | `DS3` | `ControllerModelDS3` |
 | DualShock 4 | `DS4` | `ControllerModelDS4` |
 | Xbox Series | `XboxSeries` | `ControllerModelXboxSeries` |
 | Xbox One, Xbox Elite, Xbox Adaptive | `XboxSeries` | `ControllerModelXboxSeries` |
@@ -1335,45 +1392,39 @@ Resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(Profil
 | Xbox 360, and the fallback for non-PlayStation slots | `XBOX360` | `ControllerModelXbox360` |
 | Fallback for an unrecognized profile on a PlayStation slot | `DS4` | `ControllerModelDS4` |
 
-The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh. `steam-controller-2` is tested before `steam-controller` for the same reason.
+The Edge check runs before the plain DualSense one, because Edge profile ids start with `dualsense` too and must never get a plain DualSense mesh. `dualshock-3` is tested before the generic `dualshock` match, which would give it the DS4's body, and `steam-controller-2` is tested before `steam-controller` for the same reason.
 
 `ResolveAssetFolders` also reports whether the match was real art or the fallback body, which `HMaestroProfileCatalog.HasDedicatedArt` exposes. `PadPage` uses it to decide whether an Extended slot draws the schematic or a body, so the Valve profiles get their own bodies while a wheel or a flight stick still gets the generic view.
 
-Two meshes are shared by profiles that do not all have every control. `wantExtraControls` decides whether the borrowed-but-absent controls get wired into the hover, click-to-record, and highlight maps. The meshes draw either way.
-
-| Folder | Test | Gates |
-|--------|------|-------|
-| `XboxSeries` | `ProfileId` starts with `xbox-series-` | Share button |
-| `Switch2Pro` | `NintendoPreviewMap.IndexOf(ProfileId, "ButtonC") >= 0` | C, GL, GR |
-
-The Switch test asks the canonical wire table rather than matching on the profile id, so the mesh is interactive exactly when the pad has the control and the two cannot drift apart.
+Two meshes are shared by profiles that do not all have every control. `wantExtraControls`, from `ControllerModelBase.HasExtraControls(folder, ProfileId)`, decides whether the borrowed-but-absent controls get wired into the hover, click-to-record, and highlight maps. The meshes draw either way. The rule and its two tests are in [Extra controls](#extra-controls).
 
 The rebuild is skipped when `_currentModel.ModelFamily`, `_currentModelExtraControlsEnabled`, and `_currentModelAppearance` all match what is wanted, so re-entrancy from PropertyChanged storms is cheap. Comparing `ModelFamily` and not `ModelName` is what keeps a colorway from reading as a family change.
 
-On a real rebuild: `_stickTransforms3D` and `_stickParts` are cleared and both retained trigger angles reset to zero, because both key on the outgoing model. Without the reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one constructed and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds, and the finger visuals and annotations are rebuilt.
+On a real rebuild: `_stickTransforms3D`, `_stickParts` and `_pickShapes` are cleared, `_lastToScreen` is reset so the next frame raises `PickBoundsChanged`, and both retained trigger angles reset to zero, because all of these key on the outgoing model. Without the angle reset a switch carried the old model's pull angles into the new one and the triggers rendered part-pressed at rest. The arrow overlay is removed, the old model disposed, the new one built through `ControllerModelBase.Create` and assigned to `ModelVisual3D.Content`, then `ModelScale` is pushed into `_modelScaleTransform`, `_modelRecenter.OffsetZ` is computed from the fresh static bounds (`ControllerModelFraming.RecenterZ`), the outline is measured under that placement, the default camera is applied when the user has not moved it, and the finger visuals and annotations are rebuilt.
 
-`PadPage.ApplyViewMode()` routes MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, VR to `VRPreview`, and an Extended slot to `ControllerSchematicView` unless `HasDedicatedArt` says PadForge ships that controller's own body. This control serves the gamepad presets, which means Xbox, PlayStation, Nintendo, and the five Valve profiles under Extended. A profile change re-runs `ApplyViewMode`.
+`PadPage.ApplyViewMode()` routes MIDI to `MidiPreviewView`, KB+Mouse to `KBMPreviewView`, VR to `VRPreviewView`, and an Extended slot to `ControllerSchematicView` unless `HasDedicatedArt` says PadForge ships that controller's own body. This control serves the gamepad presets, which means Xbox, PlayStation, Nintendo, and the five Valve profiles under Extended. A profile change re-runs `ApplyViewMode`.
 
 ### Render-Frame Update Pipeline
 
-`CompositionTarget.Rendering` handler (~60 fps), gated by `_dirty` flag:
+`CompositionTarget.Rendering` handler, once per display frame, gated by `_dirty` flag. It subscribes on `Loaded` and unsubscribes on `Unloaded`, so a page swapped out does not keep the view rooted:
 
 ```
 OnRendering()
     |
     +-> visibility gate (skip if !IsVisible or the window is minimized)
+    +-> TrackWhereTheModelIsDrawn() -- PickBoundsChanged when the model moved on screen
     +-> _dirty check (skip if clean)
     |
     +-> HighlightButtons()          -- swap materials for 31 button roles
     +-> UpdateJoystick() x2         -- tilt left/right stick meshes
     +-> UpdateTrigger() x2          -- rotate left/right trigger meshes
     +-> UpdateTouchpadPreview3D()   -- touchpad highlight + finger spheres
-    +-> UpdateAnnotationLevelBars() -- trigger bar heights (no-op if overlay off)
+    +-> UpdateAnnotationChipLights() -- light each legend tag (no-op if overlay off)
 ```
 
 The visibility gate is a retained-page guard. Pages are eagerly instantiated and visibility-toggled, so `Loaded` fires at startup even for hidden pages and `Unloaded` never fires. Without it a connected device's 30 Hz updates kept `_dirty` set and this handler rebuilt the whole WPF3D transform and material graph every frame while invisible. `_dirty` stays set, so the first visible frame catches up. `IsVisible` stays true while minimized, which is why the minimize probe is a separate test.
 
-`UpdateTouchpadPreview3D()` runs every dirty frame but returns immediately when the current model has no `Touchpad`. `UpdateAnnotationLevelBars()` returns immediately when the overlay is off.
+`TrackWhereTheModelIsDrawn()` runs ahead of the dirty check, because dragging and the wheel write the camera and the model's angles directly and nothing else reports them. `UpdateTouchpadPreview3D()` runs every dirty frame but returns immediately when the current model has no `Touchpad`. `UpdateAnnotationChipLights()` returns immediately when the overlay is off.
 
 #### HighlightButtons()
 
@@ -1401,6 +1452,8 @@ private static readonly string[] ButtonProperties =
 
 One table, because two hand-kept lists drifted and the drift shipped: the reader switch grew the Valve roles while the array the press loop iterates did not, so Quick Access, the four rear buttons, the grips, and the two pad clicks were read by nothing and never lit on any Valve model. `ButtonProperties` and the by-name lookup are both derived from `ButtonReaders`, so adding a role reaches every half at once.
 
+A Home card reads the same table. `ButtonRoles` lists the roles in this order, `HeldButtons(vm)` packs the held ones into a `ulong`, one bit per role with the first role the lowest bit, and `TryReadButton(vm, role, out held)` answers whether a role is one this view lights and whether it is held. `StillMarks.Reads` uses the last to decide which controls a still marks.
+
 Many roles resolve to a mesh on only some models: `ButtonShare` on Xbox Series and on Switch 2 Pro (where the Capture button always takes that grammar slot), `ButtonMute` on DualSense and Edge, `LeftFunction` / `RightFunction` on the Edge alone, `ButtonC` / `LeftPaddle` / `RightPaddle` on Switch 2 Pro when the extra controls are wired with the paddles also on the Edge, `LeftGrip` / `RightGrip` on the 2015 Steam Controller, and the four `PaddleN` roles on the Steam Deck and the 2026 Steam Controller. Everywhere else `ButtonMap.TryGetValue` misses and the entry is skipped.
 
 For each button, iterates all `Model3DGroup` entries in `ButtonMap` (multi-mesh support). The pass drives a group only when its current material is one the view set (the registered default or the registered highlight), so a glossy or textured default such as the DualSense mute button still lights on press. The stick rings, the stick clicks, and the bumpers bypass that check, because mid-deflection they carry a graded `MaterialGroup` and the press-and-restore pass must still own them. The hovered target is skipped outright: hover owns it while the cursor sits on it.
@@ -1414,10 +1467,10 @@ private void UpdateJoystick(
     Vector3D rotationPoint, float maxAngleDeg)
 ```
 
-1. Normalizes raw values (`short.MaxValue`) to &minus;1–1 range.
+1. Normalizes raw values (`short.MaxValue`) to &minus;1–1 range. Returns at once on a stick with no ring.
 2. **Ownership check**: If the stick button is pressed, hovered, or flashing, the button highlight owns the whole stick at full intensity and this pass skips the grading so it does not stomp the glow back to rest.
-3. **Gradient highlight**: Grades every geometry in the ring group and in each group the stick button lights, cap and knurl riders alike, by deflection magnitude. A visual deadzone of 0.05 gates it, because a drifting stick otherwise keeps its ring permanently accent-tinted. Mapping is unaffected: this gates only the preview glow.
-4. **Rotation**: `AxisAngleRotation3D` for X (around Z) and Y (around X), centered at `rotationPoint`. Every part in `_stickParts` shares one retained `Transform3DGroup`, cached in `_stickTransforms3D` and mutated in place. Allocating the five-object graph per dirty frame was pure churn.
+3. **Gradient highlight**: Grades every geometry in the ring group and in each group the stick button lights, cap and knurl riders alike, by the larger of the two axes. A visual deadzone, `ModelGlow.StickGlowsFrom` = 0.05, gates it, because a drifting stick otherwise keeps its ring permanently accent-tinted. Mapping is unaffected: this gates only the preview glow. A finger on a capacitive stick top (`LeftStickTouch` / `RightStickTouch`, on the Steam Deck and the 2026 Steam Controller) grades the cap at no less than `StickTouchGlow` = 0.4, below a click's full glow, so a touch reads as a touch. The 2D view's twin is `ControllerModel2DView.StickTouchOpacity`.
+4. **Rotation**: the angles come from `ControllerPose.StickAngles(rawX, rawY, maxAngleDeg)`: X turns the stick about Z, Y about X, each `maxAngleDeg` at full deflection, centered at `rotationPoint`. A Home card's model takes its angles from the same call. Every part in `_stickParts` shares one retained `Transform3DGroup`, cached in `_stickTransforms3D` and mutated in place, and skipped when both angles are unchanged. Allocating the five-object graph per dirty frame was pure churn.
 
 #### UpdateTrigger()
 
@@ -1431,25 +1484,34 @@ private void UpdateTrigger(
 ```
 
 1. **Hover check**: Returns immediately when the trigger is the hovered group.
-2. **Gradient color**: Grades the trigger geometry and its label decal riders by trigger value (0–1), above a 0.03 deadzone so sensor noise does not keep the pull glow lit at rest.
-3. **Rotation**: `AxisAngleRotation3D` around X axis at `rotationPoint`. Max angle: `-maxAngleDeg * value`.
+2. **Gradient color**: Grades the trigger geometry and its label decal riders by trigger value (0–1), above `ModelGlow.TriggerGlowsFrom` = 0.03 so sensor noise does not keep the pull glow lit at rest.
+3. **Rotation**: `AxisAngleRotation3D` around X axis at `rotationPoint`. Angle: `ControllerPose.TriggerAngle(value, maxAngleDeg)`, which is `-maxAngleDeg * value`.
 4. **Change detection**: Skips the rotation if angle delta < 0.01 degrees.
 
-#### GradientHighlight()
+#### ModelGlow
+
+**File:** `PadForge.App/Models3D/ModelGlow.cs`
 
 ```csharp
-private static Material GradientHighlight(GeometryModel3D owner,
+internal static Material GradientHighlight(GeometryModel3D owner,
     Material defaultMaterial, Material highlightMaterial, float factor,
     bool riderDecal = false)
+internal static bool SetGroupHighlight(Model3DGroup group, GeometryModel3D primary, Material hlMat,
+    bool wholeGlow, ISet<GeometryModel3D> riders, ISet<GeometryModel3D> covering)
+internal static void RestoreRiders(Model3DGroup group, GeometryModel3D primary, ISet<GeometryModel3D> riders)
 ```
 
-Two paths, chosen by what the default material is.
+The glow code the view and a Home card's model share, so the two light alike. It holds the two glow thresholds (`StickGlowsFrom`, `TriggerGlowsFrom`).
+
+`SetGroupHighlight` lights a pressed control. A stick ring or a bumper (`wholeGlow`) glows whole: every geometry, riders included, takes the graded glow at factor 1, so the knurl art and the L1 / R1 lettering glow with the part. Otherwise a covering rider (the Xbox guide emblem) tints its own texels accent while the host keeps its rest material, other riders hide for the press, and the host takes the accent. `RestoreRiders` puts riders back to their rest materials.
+
+`GradientHighlight` has two paths, chosen by what the default material is.
 
 A flat `DiffuseMaterial` over a solid brush takes the ARGB interpolation path between default and highlight colors.
 
 A textured default, meaning an `ImageBrush` or an existing `MaterialGroup`, cannot express the lerp as a solid color: a color fallback made any deflection show the full accent over the atlas. That path instead builds a `MaterialGroup` of the art plus a lit accent overlay whose alpha scales with the factor, so the glow grades while the texture stays visible underneath. Rider overlays are additionally masked by the rider's own alpha, which is what `riderDecal` selects.
 
-Both paths retain their result per geometry in a `ConditionalWeakTable` keyed on the owning `GeometryModel3D` and mutate the brush color in place on later calls, so a rebuilt model's entries collect on their own. `s_riderDefaults` holds the per-geometry rest material, because a rider inside a ring or trigger group carries its own decal material and restoring the group default would repaint it wrongly.
+Both paths retain their result per geometry in a `ConditionalWeakTable` keyed on the owning `GeometryModel3D` and mutate the brush color in place on later calls, so a rebuilt model's entries collect on their own. `s_riderDefaults` holds the per-geometry rest material (`RiderDefault`, `TryRiderDefault`), because a rider inside a ring or trigger group carries its own decal material and restoring the group default would repaint it wrongly. A themed material that carries a gradient brush lerps from its first stop (`BrushColor`), and a brush with no color falls back to `#FF6B2C`.
 
 ### Model Rotation and Panning
 
@@ -1465,14 +1527,16 @@ Turntable rotation (left-drag) and camera panning (right-drag) via Preview (tunn
 | `PreviewMouseWheel` | Zoom camera along look direction |
 | `PreviewTouchDown` | First finger: rotation. Second finger: pinch-to-zoom + pan. |
 | `PreviewTouchMove` | One finger: rotation. Two fingers: pinch-to-zoom + midpoint pan. |
-| `PreviewTouchUp` | Release touch. Demote the second finger to first if needed. |
+| `PreviewTouchUp` | Release touch. Promote the second finger to first if it is still down. |
 | `PreviewStylusSystemGesture` | Block WPF press-and-hold / flick gestures |
 | `ManipulationStarting` | Cancel WPF manipulation HelixToolkit may re-enable |
 
 Rotation is applied to `ModelVisual3D.Transform` (not the camera), keeping lighting screen-relative:
 - **Yaw**: axis `(0,0,1)`, angle = `_modelYaw`
 - **Pitch**: axis `(1,0,0)`, angle = `_modelPitch` (clamped &minus;60–+60 degrees)
-- **Sensitivity**: 0.5 degrees per pixel. "Reset View" sets both to 0.
+- **Sensitivity**: 0.5 degrees per pixel. The drag threshold is `DragThreshold` = 5 px, which the controller page also reads, so a press that turned the model is no click on the picture.
+
+A wheel zoom, a right-drag pan, or a two-finger pinch moves the camera and clears `_cameraIsDefault`, so the camera stays where the user put it when the view changes size. Turning the model moves no camera. "Reset View" sets `_cameraIsDefault` back, applies the default camera for the view's size, and sets yaw and pitch to 0.
 
 **Touch details:**
 - **Single finger**: Rotation (same as left-drag), captured via `_touchDragId`.
@@ -1528,7 +1592,7 @@ private void UpdateFlashTarget(string target)
 
 Starts when `CurrentRecordingTarget` changes. A `DispatcherTimer` at 400 ms toggles highlight/default materials:
 
-- **Nintendo targets first**: a Nintendo slot's `CurrentRecordingTarget` is a raw grid name (`RawBtn1`, `RawAxis0Neg`), while the flash machinery speaks the preview element grammar. `NintendoPreviewMap.ToPreview(target, ProfileId)` translates it before anything resolves. `ShowArrowForTarget()` does the same translation for the same reason.
+- **Raw targets first**: on a Nintendo slot or a Valve lettered Extended profile, `CurrentRecordingTarget` is a raw grid name (`RawBtn1`, `RawAxis0Neg`), while the flash machinery speaks the preview element grammar. `NintendoPreviewMap.ToPreview(target, ProfileId)` translates it and `NintendoPreviewMap.ArtRole` maps the result to the role the art draws it under, before anything resolves. `ShowArrowForTarget()` translates with `ToPreview` for the same reason.
 - **Buttons/triggers**: Swaps materials via `ResolveFlashGroups()`.
 - **Stick axes**: `ShowQuadrantRingOverlay()` for the target quadrant + `ShowArrowForTarget()` for direction. `FlashQuadrantRing()` toggles overlay alpha between 200 and 0.
 - Stops when `CurrentRecordingTarget` becomes null.
@@ -1560,6 +1624,16 @@ Builds a highlight overlay from the ring's mesh triangles:
 3. **Torus-outward offset**: `OffsetTorusOutward()` pushes vertices 0.8 mm outward along the tube's radial direction to prevent z-fighting (computes nearest point on torus center circle, offsets along tube normal).
 4. Triangulates clipped polygons as fans.
 
+### The pick box
+
+**File:** `PadForge.App/Views/ControllerModelPickBox.cs`
+
+The controller page draws a ring around the picked control (`PadViewModel.PickedTarget`) on whichever picture is showing, through `IPictureWithPick.TryGetPickBounds`. Here that resolves the target to the groups that flash while it records (`ResolveFlashGroups`), or to the part its tag points at, and asks `ControllerModelPickBox` for the box the visible part of those groups covers. A raw target goes through `ToPreview` and `ArtRole` first.
+
+A control's mesh is more than what shows: a face button has a stem inside the shell, a trigger a hinge, a bumper an end under the trigger. So the box is taken from the points nothing stands in front of. Each point of the control is held against the triangles of the rest of the model near it (`Reach`: as far as the control is long, 6 to 20 model units), with a depth slack of 0.004 of the point's distance so the rim of a button's hole does not hide its edge. A control with more than 800 points is thinned evenly. Clear plastic hides nothing: the domes over the DualSense and Xbox Series face buttons, the Xbox 360's tinted shells and a decal's empty plate are told apart by their material at rest. A part's own transform is left out, so the box is the control's at rest and does not swim while a stick tilts.
+
+`Read` builds a target's shape once per model (`_pickShapes`) and `TryGetBox` projects it for each frame that turned the model. Measured 2026-11-13 over every control of the ten models, each from seven sides: 0.33 ms a call on average and 4.6 ms at worst. `IsRound` calls a box round when its width is between 0.6 and 1.67 of its height. `PicturePick.TryMap` turns the viewport box into the view's own coordinates. `PickBoundsChanged` tells the page to draw the ring again.
+
 ### Touchpad Preview
 
 The view renders a live touchpad preview for any model that exposes a `Touchpad` mesh: DualSense and Edge via `Touchpad.obj`, DS4 via `Screen.obj`, and every Valve model via `LeftPadTouch.obj` plus a `TouchpadRight` from `RightPadTouch.obj`.
@@ -1585,20 +1659,22 @@ private static void PositionFingerSphere(
 
 **File:** `PadForge.App/Views/ControllerModelView.Annotations.cs` (partial class, #175)
 
-A 2D `Canvas` (`AnnotationCanvas`) layered over the viewport labels each mapped control with a chip at the canvas edge, a leader line to the control's projected position on the 3D model, and live input/output readouts. Off by default. State is session-only: the hosting page pushes the ViewModel value in on bind and writes it back on `AnnotationsToggled`, so nothing persists on its own.
+A 2D `Canvas` (`AnnotationCanvas`) layered over the viewport labels each mapped control with a tag (a chip) at the canvas edge and a leader line to the control's projected position on the 3D model. The tag is lit by its control's output. Off by default. State is session-only: the hosting page pushes the ViewModel value in on bind and writes it back on `AnnotationsToggled`, so nothing persists on its own. The 2D view's legend uses the same `LegendColumn` and `TagLight`, so the two legends stand and light alike.
 
-Design constraints baked in: no storyboards, no `Effect`s. Every live state change is a plain brush or property swap (the Atom Z8350 floor re-evaluates dozens of chips at 150 ms). Re-projection is timer-driven, never per-frame.
+Design constraints baked in: no storyboards, no `Effect`s. Every live state change is a plain brush or property swap, and a tag's brushes change only when its light step does. Re-projection is timer-driven, never per-frame.
 
 ### Constants
 
 | Constant | Value | Meaning |
 |----------|-------|---------|
-| `AnnotationChipHeight` | `20` | Chip height in DIPs |
-| `AnnotationChipGap` | `6` | Minimum vertical gap between stacked chips |
-| `AnnotationEdgeMargin` | `8` | Inset from the canvas edge |
-| `AnnotationBarHeight` | `36` | Trigger level-bar fill track height |
-| `AnnotationBarTrackWidth` | `12` | Trigger level-bar track width |
+| `LegendColumn.ChipHeight` (`AnnotationChipHeight`) | `20` | Tag height in DIPs |
+| `LegendColumn.Gap` | `6` | Vertical gap between stacked tags where the picture has room |
+| `LegendColumn.LeastGap` | `2` | The least gap, in a short picture |
+| `LegendColumn.EdgeMargin` (`AnnotationEdgeMargin`) | `8` | Inset from the canvas edge |
 | `AnnotationDetailMaxRows` | `12` | Wiring rows shown before a `+N` tail |
+| `TagLight.Steps` | `16` | Light steps between dark and fully lit |
+| `TagLight.Rest` | `0.02` | A level under this lights nothing |
+| `TagLight.FirstShare` | `0.35` | The share of ember a tag takes as its control leaves rest |
 
 ### Toggle and state
 
@@ -1613,11 +1689,17 @@ The top-right toggle button (`AnnotationToggleButton`, Segoe MDL2 glyph `E8EC`) 
 
 `RebuildAnnotations()` walks `_vm.Mappings`. For each row with a resolvable anchor (`ButtonMap` first, then the named stick/trigger groups via `ResolveAnnotationAnchor`) it subscribes to the row and, when the row `HasAnySource`, creates a chip. `HasAnySource` rather than `IsMapped` is used so a stateful primary (Ramp / Incremental), whose feeds live on the `PrimaryKindSource` keys, still gets a chip.
 
-Each chip is a steel `Border` holding the output name, a 1px cold `Line` leader to the projected anchor, and a 6px ember `Ellipse` output dot. The chip face shows only the output name. Clicking a chip raises `AnnotationChipNavigateRequested` with the row's `TargetSettingName`. Hovering a chip shows the detail strip.
+Each tag is a steel `Border`, corner 6, holding the output name at 12 in the body face with tabular figures, and a 1px `ColdBrush` `Line` leader at 0.40 opacity to the projected anchor. The tag face shows only the output name. Clicking a tag raises `AnnotationChipNavigateRequested` with the row's `TargetSettingName`, and the controller page picks that control. Hovering a tag shows the detail strip.
 
-### Trigger level bars
+### How a tag is lit
 
-For each shoulder trigger present, `CreateTriggerBars()` builds a steel track holding two `Rectangle`s side by side, each filling from the bottom: a cold bar (raw selected-device level, `_vm.DeviceLeftTrigger` / `DeviceRightTrigger`) and an ember bar (combined slot output, `_vm.LeftTrigger` / `RightTrigger`). `UpdateAnnotationLevelBars()` sets bar heights every dirty frame from `OnRendering`. The track shows only when both its anchor projects on-canvas and a level is above `0.02`, so an idle empty track never reads as a stray box on the trigger.
+**Files:** `PadForge.App/Views/TagLight.cs`, `ControllerModelView.Annotations.cs`
+
+`UpdateAnnotationChipLights()` runs in the render pass that paints the model, so a tag lights in the same frame as its control. `ChipStep` reads the control's output on the virtual controller: `TagLight.AnalogLevel` for a trigger's pull (`LeftTrigger`, `RightTrigger`) and a stick axis's deflection either way from center (`Math.Abs(ThumbLX - 0.5) * 2` and its siblings), and the button state from `ButtonReaders` for everything else, 1 or 0. A raw Nintendo name goes through `ToPreview` first, so a Nintendo slot's tags light too.
+
+`TagLight.StepOf` cuts the level into steps. Under `Rest` (0.02) is step 0, so the idle reading of a worn trigger or stick lights nothing. From there the share of ember is `FirstShare + (1 - FirstShare) * level`, 0.35 at the first movement and 1 at full, rounded to one of 16 steps. A button is step 0 or step 16. `TagLight.Paint` gives step 0 the theme's `SteelLineSoftBrush` edge and `TextFillColorSecondaryBrush` name, step 16 `EmberBrush` on both, and every step between a frozen mix of each rest color and ember.
+
+The tag is the one light. A press used to flash the tag blue for 250 ms while a 6px ember dot beside it showed the output, and the flash went out with the button still held. The triggers had two level bars of their own beside them, raw input in blue and output in ember. Both are gone.
 
 ### Detail strip and tooltips
 
@@ -1625,12 +1707,44 @@ For each shoulder trigger present, `CreateTriggerBars()` builds a steel track ho
 
 ### Re-projection cadence
 
-`ProjectAnnotationAnchor()` projects a group's centroid: local → world via the same `ModelVisual3D.Transform` the hit-test path inverts, world → 2D via `Viewport3DHelper.Point3DtoPoint2D`, with a behind-camera cull. `ReprojectAnnotations()` runs the full projection plus a two-pass column layout (downward greedy, then an upward overflow fix) that keeps chips from overlapping.
+`ProjectAnnotationAnchor()` projects a group's centroid: local → world via the same `ModelVisual3D.Transform` the hit-test path inverts, world → 2D via `Viewport3DHelper.Point3DtoPoint2D`, with a behind-camera cull. `ReprojectAnnotations()` runs the full projection, sends each tag to the left or right column by its projected X (so the split holds after the model is spun 180 degrees), and lays each column out with `LegendColumn.Tops`.
 
-The 150 ms `AnnotationTick` is the primary re-projection trigger. `CameraChanged` and `SizeChanged` also call `ReprojectAnnotations()`, but the direct `cam.Position` / rotation-angle writes this view uses bypass Helix's `CameraController`, so `CameraChanged` may never fire. The overlay hides during an active drag (`SetAnnotationsDragHidden`) and re-projects once when the drag ends. Only the trigger bar heights update at render rate (from `OnRendering`). The ember output dots flip on the 150 ms `AnnotationTick`. Chip positions move only on re-projection.
+`LegendColumn.Tops` puts each tag beside its control where it can and never lets two overlap: a tag is pushed down by the one over it, and a column that would run past the picture's foot is pushed up from the foot. The first tag stands a gap under the corner buttons (`CornerBottom()`, how far down `CornerTools` reaches, which the page's view switch at the left shares). In a picture too short for the column at the usual 6 gap, the gap closes down to 2, and in one too short for that the column takes the corner's room too.
+
+The 150 ms `AnnotationTick` is the primary re-projection trigger, and it skips a hidden or minimized view. `CameraChanged` and `SizeChanged` also call `ReprojectAnnotations()`, but the direct `cam.Position` / rotation-angle writes this view uses bypass Helix's `CameraController`, so `CameraChanged` may never fire. The wheel zoom and Reset View re-project at once. The overlay hides during an active drag (`SetAnnotationsDragHidden`) and re-projects once when the drag ends. Only the tag lights update at render rate (from `OnRendering`). Tag positions move only on re-projection.
 
 <!-- SCREENSHOT: 3d-model-annotation-overlay -->
-![3D controller model with the annotation overlay enabled: edge chips, leader lines, and trigger level bars](../images/3d-model-annotation-overlay.png)
+![3D controller model with the annotation overlay enabled: tags at both edges, leader lines, and a pulled trigger's tag partly lit](../images/3d-model-annotation-overlay.png)
+
+---
+
+## Home cards: the still and the live model
+
+**Files:** `PadForge.App/Models3D/ControllerStill.cs`, `LiveModel.cs`, `ControllerPose.cs`, `ModelGlow.cs`, `PadForge.App/Controls/LiveStage.cs`, `PadForge.App/Common/StagePictures.cs`, `StillMark.cs`
+
+While the controller page shows the 3D view, a controller's Home card shows a still of the same model in the finish chosen on that page. `InputService.PictureOf` asks `StagePictures.StillFor` for the family and finish, and `StagePictures.MakeStillOnAWorker` makes a still the first time one is wanted, on a background STA thread named "PadForge stills" at below-normal priority, because a model takes up to a second and a half to draw. Until it is made the card has no picture (`Coming`), and a model that cannot be drawn leaves the 2D art (see [2D Overlay System](2d-overlay-system.md#home-cards-and-the-devices-page), which also covers the Devices page and `StagePictures.SameController`).
+
+### The still
+
+`ControllerStill.Render(family, finish)` builds the model through `ControllerModelBase.Create(family, finish, extraControls: true)` and draws it once, at rest, into a 1056 by 696 `RenderTargetBitmap` (`DrawWidth`, `DrawHeight`, three times the room a stage's picture has), with no window. The viewport is framed by `ControllerModelFraming` and lit by the page's three lights (see [Lighting](#lighting)), so the card shows the controller as the page's default camera does. The viewport lays out left to right in every language. `StagePictures.Fit` then cuts the bitmap to the drawn controller, which also smooths the edges a 3D drawing leaves rough, and makes the gray copy for a controller that is not forging.
+
+The still records where each control is drawn. `ReadMarks` boxes, through `ControllerModelPickBox`, every `ButtonMap` role the view lights (`StillMarks.Reads`), the two triggers and the two sticks' click meshes, and `StillMarks.Place` turns the boxes into shares of the cut picture. A still card lights those marks while the controller forges and its picture does not move. One still serves every preset drawn with the model, so the model wires its extra controls and the still marks them all. `StagePictures.StillMarksFor` leaves out the marks of the extra controls a preset lacks, by `HasExtraControls`.
+
+### The live model
+
+After drawing, `ControllerStill` hands the model to `LiveModel.From`, which freezes its parts and accents and keeps it with the still (`LiveModelOf`). A model whose parts or accents cannot be frozen gets no live model and is disposed, and its card keeps the still. A model a `LiveModel` took is never disposed, since disposing empties its frozen parts. `LiveModel` keeps the model's file list (`ControllerModelBase.Files`), because it draws the model's meshes after the model is let go (see [One read per file](#one-read-per-file)).
+
+`LiveModel` reads, at build time, what the page would move and light: each stick's tilt parts (the ring, the click mesh and anything else registered to the click, as `StickParts` builds them) and glow parts (the ring and what the click lights), each button role in `ControllerModelView.ButtonRoles` order with the groups the page lights for it, the triggers, each group's accent and rest material, and whether it glows whole (a stick ring or a bumper). `ButtonsFor(profileId)` drops the bits of the extra controls when the preset lacks them.
+
+`NewInstance()` gives each card its own frame of groups around the same frozen meshes and materials, so cards of one model share their geometry, and building one takes the interface thread no longer than walking the model. A `LiveModelInstance` holds the card's stick tilts and trigger turns and its lights.
+
+### LiveStage
+
+`LiveStage` is the `FrameworkElement` that shows a card's instance in a `Viewport3D` while the controller forges. Its camera stands where the still's stood (`LiveModel.Camera`) and it applies the still's placement, and `ArrangeOverride` sizes the viewport so the cut piece (`LiveModel.Cut`) lands on the still's box, so at rest the model stands exactly where the still stands. It is clipped to that box, takes no click and no focus, and no screen reader reads it.
+
+The card's view model hands it a `StagePose`: the four raw stick axes in steps of 256, the two trigger pulls in 64ths, the held buttons as bits (`HeldButtons(pad) & LiveModel.ButtonsFor(profileId)`), and a finger on either stick top. A new pose comes only when a step changes. `LiveModelInstance.Pose` turns the sticks and triggers by `ControllerPose`, the page's own angles, and lights the groups through the page's three passes in its order: buttons, then sticks (graded by the larger axis above `StickGlowsFrom`, at least `StickTouchGlow` on a touch, left alone while the click is held), then triggers (graded above `TriggerGlowsFrom`). A group shows a new light only when its light changed, so a controller at rest changes nothing to draw.
+
+`LiveStage` draws nothing on a computer that draws 3D in software (`RenderCapability.Tier >> 16` is 0), where a moving model would cost the processor every frame, and it follows `RenderCapability.TierChanged`, so starting or ending a remote desktop session switches it. There the card keeps its still. `HomePage.xaml` shows it through the `CardLiveStage` style while `Heat` is `Forging` and `ShowsLiveModel` is true, and hides the still under it. The 2D art has its own moving twin, `LiveArtStage`.
 
 ---
 
@@ -1641,8 +1755,8 @@ Xbox 360, all three Valve models, and Switch 2 Pro's generated parts use `Diffus
 | Category | Source | Storage | Usage |
 |----------|--------|---------|-------|
 | **Default** | Per-colorway atlases (`Body.jpg`, `Decal.png`, `Transparent.png`, `StickModule.jpg`, `Shell.jpg`) and the Switch 2 Pro's one atlas, or flat hex colors on Xbox 360, the Valve models, and the Switch 2 Pro's generated parts. Xbox 360 face overlays use `Alpha = 150`. Registered by `Paint` / `PaintTarget`, never by assigning a geometry's material alone. | `DefaultMaterials[group]` | Restored after highlight/flash |
-| **Highlight** | `DrawAccentHighlights()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. One shared material for every group in the scene at the time it runs. `EnsureHighlightMaterials()` then fills any interactive group still without one. | `HighlightMaterials[group]` | Applied on press or flash |
-| **Gradient** | `GradientHighlight()` interpolates ARGB for solid defaults, or layers an alpha-scaled accent overlay for textured ones. | `ConditionalWeakTable` keyed on the `GeometryModel3D` | Sticks and triggers (proportional) |
+| **Highlight** | `CreateAccentHighlight()` reads `SystemAccentColorPrimary` (WPF-UI theme), falls back to `#FF6B2C` ember. `DrawAccentHighlights()` gives one shared material to every group in the scene at the time it runs. `EnsureHighlightMaterials()` then fills any interactive group still without one. | `HighlightMaterials[group]` | Applied on press or flash |
+| **Gradient** | `ModelGlow.GradientHighlight()` interpolates ARGB for solid defaults, or layers an alpha-scaled accent overlay for textured ones. | `ConditionalWeakTable` keyed on the `GeometryModel3D` | Sticks and triggers (proportional) |
 
 Gradient materials are retained per geometry and mutated in place rather than reallocated. The DualSense `TransparentTrim` and `MuteButton` set their highlight material by hand, since `DrawAccentHighlights()` ran before either joined the scene.
 
@@ -1662,7 +1776,17 @@ Standard WPF3D right-handed coordinates:
 
 ### Camera Setup
 
-`PerspectiveCamera`: Position `(0, -172, 132)` (behind and above), LookDirection `(0, 0.793, -0.609)` (forward + slightly down), Z-up, 55-degree FOV.
+**File:** `PadForge.App/Views/ControllerModelFraming.cs`
+
+`PerspectiveCamera`: LookDirection `(0, 0.793, -0.609)` (`ControllerModelFraming.Look`, toward the model's face and 37.5 degrees down), Z-up, 55-degree FOV across the view's width. The direction never changes. The position does.
+
+The camera used to stand at the fixed point `(0, -172, 132)`. PadForge 6 shows the controller in a wide, short picture, where that point cut the triggers off at the top and sat the controller high, because its triggers reach farther above its center than its grips reach below. `ApplyDefaultCamera()` now fits the camera to the model and the view's size:
+
+1. `Measure` takes the model's outline once per load, at rest, under the recenter and the scale: the model is cut into 128 depth slices 4 units deep, and each keeps its nearest depth, its widest reach and its highest and lowest point. The fit reads the model's own points, not its bounding box, because a controller fills little of its box and a box would leave a different margin around each model.
+2. `Fit` backs the camera off from the classic distance (the length of `(0, -172, 132)`, about 216.8) until every point is in view with room kept clear: 0.08 of the view's height above and below, never less than 46 above (the corner buttons end 40 down, plus 6) and 50 below (the recording bar over the picture's foot is 45 tall, plus 5), and 0.05 of the width at each side. It never comes closer than the classic distance and never backs off past six times it.
+3. The camera is lifted or lowered, still looking the same way, until the controller stands in the middle of the room left over (`CameraAt(distance, lift)`).
+
+A view with no size yet, or no model, gets the classic camera. The camera follows the view's size until the user zooms, pans or pinches, and Reset View gives it back to the view. A Home card's still and its live model use the same framing, so the card shows the controller the way its page does.
 
 ### Model Rotation Transform
 
@@ -1685,11 +1809,11 @@ One `Transform3DGroup` shared by every part of the stick (`_stickParts`):
 1. **X tilt**: Around Z axis, proportional to stick X, centered at `JoystickRotationPointCenter{Left/Right}Millimeter`.
 2. **Y tilt**: Around X axis, proportional to stick Y, same center.
 
-Both capped at `JoystickMaxAngleDeg`: 19 degrees on Xbox 360 and DS4, 18 on both Steam Controllers, 14 on Xbox Series, DualSense, Switch 2 Pro, and the Steam Deck.
+Both capped at `JoystickMaxAngleDeg`: 19 degrees on Xbox 360, DualShock 3 and DS4, 18 on both Steam Controllers, 14 on Xbox Series, DualSense, Switch 2 Pro, and the Steam Deck. The angles come from `ControllerPose.StickAngles`: X drives the turn about Z, Y the turn about X, with up on the stick tipping the cap away.
 
 ### Trigger Rotation Transform
 
-Rotates around X axis at `ShoulderTriggerRotationPointCenter{Left/Right}Millimeter`. Angle: `-TriggerMaxAngleDeg * value` (negative = downward). Skips update if angle delta < 0.01 degrees.
+Rotates around X axis at `ShoulderTriggerRotationPointCenter{Left/Right}Millimeter`. Angle: `ControllerPose.TriggerAngle`, `-TriggerMaxAngleDeg * value` (negative = downward). Skips update if angle delta < 0.01 degrees.
 
 ---
 
@@ -1700,6 +1824,8 @@ Three light sources in XAML:
 - **`DirectionalHeadLight`**: Camera-relative at brightness 0.35, prevents dark spots during rotation.
 - **Ember rim `DirectionalLight`** (#175): dim warm rim, `Color="#5A321C"`, `Direction="0,-0.7,0.7"` (from behind and below), so the model catches a forge-glow edge. The RGB stays low to keep it a rim rather than a wash.
 
+A Home card's still and its `LiveStage` draw under the same three lights, built in code: a `SunLight`, a `DirectionalLight` of `ControllerStill.HeadLight` (RGB 89, 89, 89, which is 0.35 of white) along `ControllerModelFraming.Look`, and one of `ControllerStill.RimLight` (`#5A321C`) along `(0, -0.7, 0.7)`.
+
 ---
 
 ## Performance Considerations
@@ -1707,13 +1833,14 @@ Three light sources in XAML:
 | Technique | Detail |
 |-----------|--------|
 | **Visibility gate** | `OnRendering` returns before any work when the control is not visible or the window is minimized. |
-| **Dirty flag batching** | 31 button roles + 4 axes + 2 triggers + touchpad preview + annotation bars coalesced into one render-frame update. |
+| **Dirty flag batching** | 31 button roles + 4 axes + 2 triggers + touchpad preview + legend tag lights coalesced into one render-frame update. |
+| **Stepped tag lights** | A legend tag's brushes change only when its `TagLight` step does. |
 | **High-churn property skip** | The six gyro and accel readout properties never set `_dirty`, so a motion pad at rest does not re-arm the refresh every tick. |
 | **Trigger change detection** | Skips rotation if angle delta < 0.01 degrees. |
 | **Visual deadzones** | Stick grading below 0.05 deflection and trigger grading below 0.03 restore the rest material instead of grading, so sensor noise does not hold the glow lit. |
 | **Retained transforms** | Per-stick rotation graphs live in `_stickTransforms3D` and get their two angles mutated, instead of a five-object graph allocated per dirty frame. |
 | **Retained gradient materials** | Per-geometry `ConditionalWeakTable` entries whose brush color is mutated in place. Weak keys let a rebuilt model's entries collect. |
-| **One-time mesh loading** | OBJ meshes and texture atlases load in the constructor. `EnsureModel()` recreates only when the family, the extra-controls flag, or the colorway changes. |
+| **One-time mesh loading** | OBJ meshes and texture atlases load in the constructor, and each file is read once for every model built from it while any of them lives (see [One read per file](#one-read-per-file)). `EnsureModel()` recreates only when the family, the extra-controls flag, or the colorway changes. |
 | **Preview events** | Tunneling events prevent double-processing by HelixToolkit and PadForge. |
 
 ---
@@ -1725,8 +1852,8 @@ Three light sources in XAML:
 - [XAML Views](xaml-views.md): `PadPage` hosts and switches between 3D, 2D, schematic, KBM, and MIDI views
 - [Virtual Controllers](../features/virtual-controllers.md): Output type determines which preview view is active
 - [Engine Library](engine-library.md): `Gamepad` struct providing button/axis state for 3D animation
-- [Build and Publish](build-and-publish.md): 3D OBJ meshes (`3DModels/`) included as `EmbeddedResource` items
+- [Build and Publish](build-and-publish.md): 3D OBJ meshes (`3DModels/`) embedded as packed resources
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

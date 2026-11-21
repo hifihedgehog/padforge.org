@@ -10,25 +10,25 @@ PadForge reads chat without signing in to Twitch and never posts in it. Nobody n
 
 ## Turning it on
 
-1. On the [Dashboard](dashboard.md), find the **Twitch Chat** card.
-2. Type your channel under **Channel**. The name works, and so does the channel's twitch.tv address. A channel name is 1 to 25 letters, digits and underscores.
-3. Check **Read Twitch Chat**. It is off by default.
+1. Open **Extras** in the sidebar and click the **Twitch Chat** tile, in the **More Ways to Play** group.
+2. Type your channel in the **Channel** card's **Channel** box. The name works, and so does the channel's twitch.tv address. A channel name is 1 to 25 letters, digits and underscores.
+3. Turn on **Read Twitch Chat** at the top of the page, or the switch on the tile. It is off by default.
 4. Start the input engine. The row opens only while the engine runs.
 
 <!-- SCREENSHOT: dashboard-twitch-chat -->
-![The Twitch Chat card on the Dashboard with no channel entered](../images/dashboard-twitch-chat.png)
+![The Twitch Chat page under Extras with no channel entered](../images/dashboard-twitch-chat.png)
 
-The Twitch Chat switch, the channel and **Who approves !claim** belong to this PC. They are not part of any [profile](../guides/profiles.md), so switching profiles never opens or closes the connection.
+The Twitch Chat switch, the channel and **Who Approves !claim** belong to this PC. They are not part of any [profile](../guides/profiles.md), so switching profiles never opens or closes the connection.
 
 ### The status line
 
-The card and the Twitch Chat row on the Devices page show the same line.
+The page's status card, the tile and the Twitch Chat row on the Devices page show the same line.
 
 | Line | What it means |
 |---|---|
-| *Enter your channel's name.* | The switch is on and no channel is set. The row still opens, so you can map its buttons before you have a channel. |
+| *Enter your channel’s name.* | The switch is on and no channel is set. The row still opens, so you can map its buttons before you have a channel. |
 | *Connecting to `<channel>`'s chat…* | PadForge is reaching Twitch. |
-| *Reading `<channel>`'s chat.* | Joined. Commands play. The card's flame is lit. |
+| *Reading `<channel>`'s chat.* | Joined. Commands play. The status card's flame burns. |
 | *Could not reach `<channel>`'s chat. Trying again.* | The connection failed or dropped. PadForge retries after 1 second, then 2, then 4, up to 30 seconds between tries, and starts over once a connection joins. |
 | *Twitch has no chat for `<channel>`. Check the channel's name.* | The channel does not exist or is suspended. PadForge asks again each minute. |
 | *Paused.* | Added after any line above while you have chat control paused. |
@@ -51,7 +51,7 @@ Map the buttons in [Button and Axis Mappings](mappings.md) or use them as [macro
 
 ## Manage Chat Commands
 
-On the Twitch Chat row, **Manage Chat Commands** opens the **Chat Commands** window.
+**Manage Chat Commands** opens the **Chat Commands** window. The button is on the Twitch Chat row of the Devices page, and on the Twitch Chat page in the **Words Viewers Can Type** row.
 
 <!-- SCREENSHOT: twitch-chat-commands -->
 ![The Chat Commands window with the word list and the Restore Usual Words button](../images/twitch-chat-commands.png)
@@ -89,7 +89,7 @@ A message counts when it starts with `!`, or with a reply's `@name` and then `!`
 | `![a b]*3` | Repeats the group three times. |
 | `![a+b]500ms` | Gives each press in the group a 500 ms hold. |
 
-The window's own hint reads: *Viewers type ! and a word in your stream's chat, like !jump. Each word is a button on the Twitch Chat row, mapped like any input. !a500ms holds A for 500 ms, !a+b presses both, and !a b presses one after the other.*
+The window's own hint reads: *Viewers type ! and a word in your stream’s chat, like !jump. Each word is a button on the Twitch Chat row, mapped like any input. !a500ms holds A for 500 ms, !a+b presses both, and !a b presses one after the other.*
 
 The grammar comes from Yuriy's ForgePlay. These limits are PadForge's:
 
@@ -122,7 +122,7 @@ By default everyone's commands play together. A viewer can ask for sole control 
 | `!skip` | Stops the command that is playing. It takes two viewers within 30 seconds, or one moderator. |
 | `!skipall` | The same, and clears the line too. |
 
-**Who approves !claim** on the Dashboard card decides who can grant control:
+**Who Approves !claim** in the page's **Channel** card decides who can grant control:
 
 | Choice | Who approves |
 |---|---|
@@ -138,9 +138,9 @@ A moderator's `!skip` needs no second vote, and a broadcaster counts as a modera
 
 ---
 
-## Controls on the card
+## While You Are Live
 
-These buttons act on the open row at once. They are grayed out while the row is closed.
+The page's **While You Are Live** card holds four buttons that act on the open row at once. They are grayed out while the row is closed.
 
 | Button | What it does |
 |---|---|
@@ -153,9 +153,9 @@ These buttons act on the open row at once. They are grayed out while the row is 
 
 ## The controller picture for OBS
 
-The card can show the controller on your broadcast: the slot's controller drawn with the [web controller's](../guides/web-controller.md) art, lit from the slot's live output, with a panel under it that says who is playing, what is next in line, who has control and the latest turn notice.
+The page's **Picture for Your Broadcast** card can put the controller on your broadcast: the slot's controller drawn with the [web controller's](../guides/web-controller.md) art, lit from the slot's live output, with a panel under it that says who is playing, what is next in line, who has control and the latest turn notice.
 
-Below the status line the card shows an address. Add it to OBS as a **Browser** source. **Copy** puts it on the clipboard.
+The card shows an address, with the line *Add this address to OBS as a browser source.* Add it to OBS as a **Browser** source. **Copy Address** puts it on the clipboard.
 
 It is an address on the Web Controller's [plain HTTP address](../guides/web-controller.md#plain-http-address), with its access code at the end:
 
@@ -165,7 +165,7 @@ http://192.168.1.100:8081/display.html?code=7KQ2M9XH4P
 
 Use that address and not the main one. The main address uses a self-signed certificate, and OBS's browser source refuses a page whose certificate it does not trust.
 
-If the plain address is off, the card shows no address and says so instead: turn on **Also Serve Plain HTTP** in the **Web Controller** card. **This PC Only** is enough when OBS runs on this PC.
+If the plain address is off, the card shows no address and says so instead: turn on **Also Serve Plain HTTP** on the [Web Controller](../guides/web-controller.md) page, under **More**. **This PC Only** is enough when OBS runs on this PC.
 
 The page has a transparent background and sends nothing. It watches the first slot the Twitch Chat row is assigned to, or the slot PadForge shows first when none is. To pick one, add `&slot=2` to the address, numbered as PadForge shows slots. `&layout=` draws another controller and `&finish=` another finish. At most four of these pages connect at once.
 
@@ -184,4 +184,4 @@ See [Twitch Chat Internals](../reference/twitch-chat-internals.md) for how the c
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

@@ -20,9 +20,9 @@ PadForge finds `dhd64.dll` in this order: a copy you chose with **Choose dhd64.d
 
 ## Turning it on
 
-Open **Settings**, find the **Novint Falcon** card and tick **Drive Novint Falcon**. It is off by default. While the engine runs, the card says which library loaded, for example *Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll*.
+Open **Settings**, find the **Novint Falcon** row in the **Hardware Support** card, and turn on **Drive Novint Falcon**. It is off by default. While the engine runs, the row says which library loaded, for example *Force Dimension SDK 3.17.7, loaded from C:\Program Files\Force Dimension\sdk-3.17.7\bin\dhd64.dll*.
 
-![The Novint Falcon card in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension's SDK buttons](../images/settings-novint-falcon.png)
+![The Novint Falcon row in Settings on a PC without Force Dimension's SDK, with its Choose dhd64.dll and Get Force Dimension’s SDK buttons](../images/settings-novint-falcon.png)
 
 Each open Falcon gets a row on the [Devices](devices.md) page, and the row's detail pane says how that Falcon is doing:
 
@@ -35,7 +35,7 @@ An open Falcon belongs to PadForge alone. FalconJoyForce and Force Dimension's o
 
 ### The driver
 
-Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, in Windows' driver store, and Windows gives it to a Falcon when it is plugged in. When no Falcon opens, the card says why:
+Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, in Windows' driver store, and Windows gives it to a Falcon when it is plugged in. When no Falcon opens, the row says why:
 
 | Line | What to do |
 |---|---|
@@ -44,7 +44,7 @@ Force Dimension's installer puts its USB driver, which runs on Windows' WinUSB, 
 | *The Falcon is on Force Dimension's driver, and Force Dimension's library could not open it: (…)* | The driver is right. The line gives the library's own reason, then says to check the Falcon's power and its USB cable. |
 | *No Falcon found* | Plug in its power and its USB cable. |
 
-**Install Falcon Driver** shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the card says *The dhd64.dll you chose did not load, so PadForge uses the copy above.*, and the copy in use keeps its Falcons.
+**Install Falcon Driver** shows only when the SDK folder holds the driver package with its signed catalog. When a copy you chose does not load, the row says *The dhd64.dll you chose did not load, so PadForge uses the copy above.*, and the copy in use keeps its Falcons.
 
 ---
 
@@ -71,9 +71,9 @@ On an Xbox or PlayStation slot, a Falcon maps the way @pobgithub's RumbleRoute f
 
 ## How it feels
 
-A slot with a Falcon shows a **Novint Falcon** section on its [Force Feedback](force-feedback.md) tab. Each slot keeps its own settings, so a profile carries them per game.
+A Falcon picked in the **Driven by** row of a controller's header shows a **Novint Falcon** card in the **Rumble & Haptics** section, above the [Force Feedback](force-feedback.md) card. Its settings belong to the slot, as the card's description says, so a profile carries them per game. **Feel**, **Centering Spring** and **Force Limit** are on the card. The rest are under **More**.
 
-![The Novint Falcon section on an Xbox slot's Force Feedback tab, above the slot's rumble settings](../images/pad-forcefeedback-falcon.png)
+![The Novint Falcon card on an Xbox slot, above the Force Feedback card](../images/pad-forcefeedback-falcon.png)
 
 | Setting | Range | What it does |
 |---|---|---|
@@ -95,7 +95,7 @@ A slot with a Falcon shows a **Novint Falcon** section on its [Force Feedback](f
 
 ## A game's force
 
-Rumble reaches the Falcon after the tab's **Overall Gain**, **Left Motor**, **Right Motor**, **Swap Left and Right Motors** and **Fold Trigger Rumble into Main Motors**, as it reaches any controller. **Overall Gain** then scales the kick, the shake and the effects below.
+Rumble reaches the Falcon after the Force Feedback card's **Overall Gain**, **Left Motor**, **Right Motor**, **Swap Left and Right Motors** and **Fold Trigger Rumble into Main Motors**, as it reaches any controller. **Overall Gain** then scales the kick, the shake and the effects below.
 
 - **The kick** is 8 N at full rumble and at least 4.5 N, held while the rumble keeps coming, and it fades faster after a weak shot than after a strong one.
 - **The shake** wanders in direction every 140 milliseconds and runs between 3.2 and 9 N, under the 7.8 N cap on the handle's left/right and up/down force.
@@ -113,4 +113,4 @@ See the technical page, [Novint Falcon Internals](../reference/novint-falcon-int
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

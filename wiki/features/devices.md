@@ -1,101 +1,123 @@
 # Devices
 
-*Every gamepad, joystick, keyboard, mouse, and touchpad PadForge can see lives on this page as a card.*
+*Every gamepad, joystick, keyboard, mouse and touchpad PadForge can see is a row on this page.*
 
-![Devices page showing detected controllers with status and slot badges](../images/devices.png)
+![Devices page with the device table on the left and the selected device's panel on the right](../images/devices.png)
 
 ---
 
 ## Page layout
 
 | Area | What it holds |
-|------|----------|
-| **Left panel** | One card for each detected device |
-| **Right panel** | Detail pane for the selected device. Identity, slot assignment, hiding, live raw input. |
-| **Header** | **Refresh** button, **Pair** button (Wii controllers, DualShock 3, PS Move / Navigation, serial controllers and DJI remotes), **Online** count, **Total** count (includes disconnected) |
+|------|---------------|
+| **Head** | The title, **N connected** under it, **Pair a Controller** (Wii controllers, DualShock 3, PS Move / Navigation, serial controllers and DJI remotes), and a refresh button (tooltip "Refresh"). |
+| **Filter row** | **Search devices**, the Show segments and the connection segments. |
+| **Device table** | The connected devices, in parts by kind, then a folded **Not Connected** line for the devices PadForge remembers. |
+| **Panel** | The selected device: its picture, name and type, link and battery, **Used By**, **Test Inputs**, **Settings** and **Details**. With no device selected it reads "Select a device to see its settings and test its inputs." |
+
+The table and the panel stand side by side and scroll on their own while the window is wide. On a narrow window the panel stands under the table and the page scrolls as one.
 
 ---
 
-## Device card list
+## The device table
 
-Physical devices sort first. Merged devices (All Keyboards, All Mice, All Touchpads, All Consumer Controls) sort to the bottom. Within each group, cards sort alphabetically by name, then by Vendor ID, then by Product ID.
+### Search and segments
 
-### Type filter chips
+**Search devices** finds a device by its name, its product's name, its type and its VID:PID, ignoring case.
 
-A row of chips sits above the card list: **ALL**, **GAMEPAD**, **JOYSTICK**, **WHEEL**, **KEYBOARD**, **MOUSE**, **OTHER**. Each chip carries a live count of the cards in that group, offline cards included. Click one to show only that type. Click **ALL** to clear the filter. The active chip lights up in ember orange.
+The Show segments pick the kinds of device shown: **All**, **Gamepad**, **Joystick**, **Wheel**, **Keyboard**, **Mouse** and **Other**. Gamepad covers standard pads and First Person and Supplemental devices. Joystick covers joysticks and flight sticks. Keyboard covers keyboards and analog keyboards. Other holds everything else: touchpads, drawing tablets, MIDI devices, NFC readers, Consumer Control devices, microphones, Web Menus phones, the rows PadForge and the extras feed, and anything unclassified.
 
-GAMEPAD covers standard pads, plus First Person and Supplemental devices. JOYSTICK covers joysticks and flight sticks. WHEEL covers racing wheels. OTHER holds everything else: touchpads, MIDI devices, NFC readers, analog keyboard cards, Web Menus phones, and anything unclassified.
+The connection segments pick **All**, **Connected** or **Not Connected**. Under All and Connected the table lists the connected devices and the **Not Connected** fold holds the rest. Under Not Connected the table lists the devices PadForge remembers and cannot see.
 
-<!-- SCREENSHOT: devices-facet-chips -->
-![Type filter chips above the device list, each with a live count](../images/devices-facet-chips.png)
+The table stands in parts, one for each kind, in the segments' order, each under its name and its count. A part with no row is left out. Within a part, rows sort by name, then by Vendor ID, then by Product ID, and a merged row (All Keyboards, All Mice, All Touchpads, All Consumer Controls) comes last. "No devices match." shows when the search and segments leave nothing.
 
-### Card layout
+### Rows
 
-Top row:
+Every row is 64 pixels tall, a keyboard's and a mouse's as a controller's, with the device's type under its name.
 
-| Element | Description |
-|---------|-------------|
-| **Status flame** | The same ember flame the driver cards wear. Filled and glowing for connected, outline only for disconnected. |
-| **Device name** | The name the hardware reports (e.g., "Xbox Wireless Controller"). Merged devices show "All Keyboards (Merged)", "All Mice (Merged)", "All Touchpads (Merged)", or "All Consumer Controls (Merged)". |
-| **Slot badges** | [Slot](controller-slots.md) numbers the device is assigned to, each with the slot's controller-type icon (a Nintendo slot wears the Switch mark). No badge shows if the device is unassigned. |
-| **Remove button** | X. Opens a **Remove Device** confirmation, and the device and its settings are deleted once you click **Remove**. Revealed on hover or keyboard focus. |
+| Part | Description |
+|------|-------------|
+| **Kind tile** | The device's kind on a square tile, lit while the device is sending input. |
+| **Name and type** | The name the hardware reports (such as "Xbox Wireless Controller"), and under it the type: Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, Game Telemetry, Twitch Chat, Haptics, Lighting, or Device for anything unclassified. Merged rows read "All Keyboards (Merged)", "All Mice (Merged)", "All Touchpads (Merged)" or "All Consumer Controls (Merged)". |
+| **Link** | Bluetooth, USB, PS/2 or I2C, where PadForge knows it. A wireless receiver reads USB. A virtual device has none. |
+| **Battery** | A meter and the percentage for a connected device that reports a battery level, in gold with the word **Low** at or under the low level set in [Settings](settings.md). The meter shows a charging mark while the device charges. |
+| **Used By** | A pill for each virtual controller that uses the device, with the type's mark and its number within the type, such as `Xbox #1`. Ember means the device is in use now. On a device that is not connected the pill is steel. A connected game controller that nothing uses shows **Use It** in its place while a controller can still be added. It opens Add a Controller, and the controller made there takes the device. |
+| **Remove (X)** | Shows while the pointer is on the row or the X has the keyboard focus. Tooltip: "Remove this device and its settings". |
 
-Bottom row (one wrapping metadata line):
+Where the table is too narrow for Link and Battery as columns, the two follow the type on the row's second line and Used By keeps its column.
 
-| Element | Description |
-|---------|-------------|
-| **Type** | Gamepad, Joystick, Wheel, Flight Stick, First Person, Supplemental, Mouse, Keyboard, Touchpad, Drawing Tablet, NFC Reader, Consumer Control, MIDI Controller, Microphone, Headset Tracker, Handheld Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, Keyboard Screen, Novint Falcon, Analog Keyboard, Web Menus, Game Telemetry, Twitch Chat, Haptics, Lighting, or plain Device for anything unclassified. |
-| **VID:PID** | USB Vendor and Product ID in hex (`054C:0CE6` for DualSense). Omitted for merged and virtual sources that report no ID. |
-| **Capabilities** | Axis, button, and POV hat counts plus feature tags: Rumble, Gyro, Accel, Touchpad (a gamepad with a touch surface), and NFC (a Switch controller with a tag reader) |
-| **Battery** | A battery glyph and percentage for a connected device that reports a battery level. The glyph switches to a charging variant while the device is charging or plugged in at full charge. |
+Click a row to select it. The selected row has an ember bar at its start and a warm wash that fades toward its end. Drag a row onto a controller in the sidebar to assign the device to it. The line under the table says so: "Drag a device onto a controller in the sidebar to assign it."
 
-Devices that report no battery (wired pads without one, most wired sticks and wheels) and offline devices show no battery indicator. A battery-equipped pad on a USB cable shows the charging glyph. The same percentage appears again as a small suffix next to the device name in a slot's assigned-device list, so you can read a controller's charge without opening its card.
-
-### Selecting a card
-
-Click a card. A vertical accent bar appears on the left edge. The detail pane fills in.
+Devices that report no battery (wired pads without one, most wired sticks and wheels) and devices that are not connected show no battery. A battery-equipped pad on a USB cable shows the charging mark. The same percentage appears beside the device's name on its controller's card on [Home](dashboard.md), so you can read a controller's charge without opening the Devices page.
 
 ### Removing a device
 
-The X button opens a **Remove Device** confirmation. Click **Remove** and the device and all its settings (mappings, slot assignments, hiding) are deleted. A keyboard screen's choices go with it, and a Bliss-Box port's go back to the defaults. The [slot](controller-slots.md) stays. It just becomes unassigned.
+The X opens a **Remove Device** confirmation: "*Name* will be removed from the device list and its saved settings forgotten." Click **Remove** and the device and all its settings (mappings, assignments, hiding) are deleted. A keyboard screen's choices go with it, and a Bliss-Box port's go back to the defaults. The [virtual controller](controller-slots.md) stays. It just loses that device. **Remove Device** at the foot of the panel's **Details** card does the same.
 
 If the device is still plugged in, it comes back on the next scan as a fresh device with no settings.
 
 ---
 
-## Device detail pane
+## The device panel
 
-### Device name and dossier
+### Head
 
-The detail pane opens with the device name as a large heading. Below it sits the **Device Dossier**, a recessed monospace card that gathers every identity field PadForge holds for the device into one place. A **Copy** button at the top-right of the card copies the whole dossier to the clipboard as text, handy when filing a bug report.
+The panel opens with the device's picture on a stage, its name as a large heading and its type under it. **Test Rumble** rumbles the device so you can tell which one it is. Tiles for **Link** and **Battery** follow where the device has one to show, and the battery's tile has a gold edge while the charge is low.
 
-Rows whose fact the device does not report collapse instead of showing a blank placeholder. A wired pad shows no LINK row, a device that reports no serial number shows no SERIAL row, and a device with no path shows no PATH row.
+Lines about the device stand under the name when they apply: a Bliss-Box port's player number, controller and firmware, what draws a keyboard screen, how a Novint Falcon runs, a Razer analog keyboard waiting for Razer Synapse, a handheld's own tool still reacting to its buttons, the Flydigi Space Station service, the Head Tracker's, Game Telemetry's and Twitch Chat's status, and what a game mod sets on the controller.
+
+### Used By
+
+**Used By** lists a chip for each virtual controller, named by type and number. A click on a chip puts the device on that controller or takes it off (tooltip: "Assigns this device to this controller, or takes it off."). More than one chip can be on at the same time (see [Multi-controller assignment](#multi-controller-assignment)). **New Controller** after the chips opens Add a Controller for this device while a controller can still be added.
+
+### Test Inputs
+
+**Test Inputs** shows what the device sends now. A device in SDL's gamepad layout shows its two sticks, its two triggers and the buttons held now ("None" while nothing is), and the full readout opens under **More** ("Every axis, button and sensor"). Every other device's card is its full readout. See [Raw input](#raw-input).
+
+### Settings
+
+The **Settings** card holds the device's own settings, with **Reset All** for what it shows. The rows appear only for devices they apply to:
+
+- **Hide from Games (HidHide)** and **Consume Mapped Inputs (Hooks)**, or **Use Only in PadForge** and its restore. See [Input hiding](#input-hiding).
+- **Idle Disconnect** and **Disconnect Bluetooth When Plugged In over USB**. See [Power](#power).
+- **Read Arrows One by One** for a PlayStation pad on a Bliss-Box port.
+- **Gun Calibration** for a light gun. See [Light gun](#light-gun).
+
+The device's tools stand at the card's foot: the [Switch Driver buttons](#switch-driver-buttons), **Read as iCade Controller** and **Read as Keyboard**, **Read as Tekken Sticks** and **Read as Taiko Drums**, **Register / Manage NFC Tags**, **Manage Voice Macros**, **Manage Chat Commands**, **Learn / Manage Hidden Buttons**, **Map Key Lights**, the Bliss-Box port's actions, a keyboard screen's button, **Controller Screen…** for a Flydigi pad with a screen, and **Calibrate Reach** for a Novint Falcon.
+
+### Details
+
+**Details** is folded to one line at the panel's foot, with the hint "IDs, path, capabilities", or "IDs, path, capabilities, Force Raw Joystick Mode" where that switch applies. Open, it lists every identity field PadForge holds for the device. A row whose fact the device does not report is left out: a device with no link has no Link row, one that reports no serial number has no Serial Number row, and one with no path has no Path row.
 
 <!-- SCREENSHOT: devices-dossier -->
-![Device Dossier card with labeled identity rows and a Copy button](../images/devices-dossier.png)
+![The Details card open, with its rows and the Copy Details button](../images/devices-dossier.png)
 
 | Row | Description |
 |-----|-------------|
-| **PRODUCT** | Product name from hardware |
-| **TYPE** | Device category |
-| **CAPS** | Axis / button / POV counts and feature tags |
-| **APP GUID** | The identity string PadForge builds for the device, from its serial number when it reports one and from its path otherwise. [How the GUID is built](#how-the-guid-is-built) has the full order. It is what keeps a device's settings across reboots and re-plugs. Marquee-scrolls if long. |
-| **SDL GUID** | The 32-character hex string SDL uses to look up the device's mapping. Shown when the device reports one. Marquee-scrolls if long. |
-| **PATH** | HID path used for HidHide hiding. A bridged device (such as a DualShock 3 over Bluetooth) shows its connection path here instead, and a merged row or a row PadForge builds itself shows its internal address, such as `aggregate://keyboards` or `headtrack://opentrack`. |
-| **VID:PID** | Vendor and Product ID in hex |
-| **LINK** | Reads **BT** for a Bluetooth connection. Absent for wired and other links. |
-| **SERIAL** | The serial number the device reports (a Bluetooth MAC address on most wireless pads). Shown when reported. A Wii Remote on a Mayflash DolphinBar reports none, so PadForge builds one from the remote's factory calibration: `wiical-` and the calibration bytes in hex. See [Wii Controllers](../devices/wii-controllers.md#mayflash-dolphinbar). |
-| **FIRMWARE** | The firmware version of the open device. Shown when the device reports one. See [Firmware and revision](#firmware-and-revision). |
-| **REV** | The product revision: the USB release number, such as `0x0100`, or the PnP ID version over Bluetooth LE. Shown when reported. |
-| **BATT** | Battery glyph and percentage. Shown only when the device reports a battery. |
+| **Product** | Product name from hardware |
+| **Type** | Device category |
+| **Capabilities** | The axis, button and POV counts, each in the singular when it is one ("1 axis, 12 buttons, 1 POV"), then Rumble, Gyro, Accelerometer, Touchpad (a gamepad with a touch surface) and NFC (a Switch controller with a tag reader) where the device has them |
+| **VID:PID** | Vendor and Product ID in hex (`054C:0CE6` for a DualSense). Left out for merged and virtual sources that report no ID. |
+| **Link** | Bluetooth, USB, PS/2 or I2C, as the Link tile names it. Bluetooth keeps its mark. |
+| **Battery** | The level as a picture, the percentage, and charging when it is. Shown only when the device reports a battery. |
+| **Path** | HID path used for HidHide hiding. A bridged device (such as a DualShock 3 over Bluetooth) shows its connection path here instead, and a merged row or a row PadForge builds itself shows its internal address, such as `aggregate://keyboards` or `headtrack://opentrack`. |
+| **Serial Number** | The serial number the device reports (a Bluetooth MAC address on most wireless pads). A Wii Remote on a Mayflash DolphinBar reports none, so PadForge builds one from the remote's factory calibration: `wiical-` and the calibration bytes in hex. See [Wii Controllers](../devices/wii-controllers.md#mayflash-dolphinbar). |
+| **Firmware** | The firmware version of the open device. See [Firmware and revision](#firmware-and-revision). |
+| **Revision** | The product revision: the USB release number, such as `0x0100`, or the PnP ID version over Bluetooth LE. |
+| **App GUID** | The identity PadForge builds for the device, from its serial number when it reports one and from its path otherwise. [How the GUID is built](#how-the-guid-is-built) has the full order. It is what keeps a device's settings across reboots and re-plugs. |
+| **SDL GUID** | The 32-character hex string SDL uses to look up the device's mapping. Shown when the device reports one. |
 
-**Copy** includes every row that shows, **FIRMWARE** and **REV** among them.
+**Force Raw Joystick Mode (Bypass Gamepad Remapping)** follows the rows where it applies. See [Force Raw Joystick Mode](#force-raw-joystick-mode).
+
+Three buttons close the card: **Copy Details**, **Submit Device Mapping** (only for devices PadForge does not already recognize) and **Remove Device**.
+
+**Copy Details** copies the record to the clipboard as text for a bug report, under fixed English labels: `PRODUCT`, `TYPE`, `CAPS`, `APP GUID`, `SDL GUID`, `PATH`, `VID:PID`, `LINK`, `SERIAL`, `FIRMWARE`, `REV` and `BATT`. A fact the device does not report is left out. `LINK` names every link: `BT`, `USB`, `PS/2` or `I2C`. `BATT` adds `CHG` while the device charges.
 
 ### Firmware and revision
 
-**FIRMWARE** and **REV** read from the open device, so an offline card shows neither. Each hides when the device reports nothing.
+**Firmware** and **Revision** read from the open device, so a device that is not connected shows neither. Each hides when the device reports nothing.
 
-| Device | How **FIRMWARE** reads |
+| Device | How **Firmware** reads |
 |---|---|
 | DualSense and DualSense Edge | Hex around a dot, so `0x0224` reads `2.24` |
 | Xbox pads on the GIP and Xbox One drivers, Switch pads over Bluetooth | Decimal major and minor, so `0x0505` reads `5.5` and `0x0348` reads `3.72` |
@@ -103,13 +125,11 @@ Rows whose fact the device does not report collapse instead of showing a blank p
 | An Xbox pad or other Bluetooth LE pad that reports no version to SDL | The Firmware Revision String of its Device Information service, such as `5.23.6.0`, read while the pad is connected |
 | Flydigi pads and other makers' devices | Raw hex, such as `0x0123` |
 
-PadForge reads the version again every five seconds, so one the pad reports after it opens reaches the card. Third-party Xbox and Switch pads show raw hex.
-
-A row of capability icons sits at the bottom of the card, with a rumble, gyro, or touchpad mark for each of those the device has. Click the rumble mark to vibrate the device and identify it.
+PadForge reads the version again every five seconds, so one the pad reports after it opens reaches the panel. Third-party Xbox and Switch pads show raw hex.
 
 ### Submit Device Mapping button
 
-Shows in the detail pane for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, Game Telemetry, Lighting, and Haptics rows. Everything else gets the button, so joysticks, wheels, flight sticks, and unclassified HID devices all qualify.
+Shows in the **Details** card for any device PadForge does not already recognize. It is hidden for known gamepads, keyboards, mice, touchpads, drawing tablets, MIDI devices, NFC readers, headset motion trackers, Consumer Control devices, microphones, analog keyboards, Web Menus phones, Novint Falcons, and the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, Game Telemetry, Twitch Chat, Lighting and Haptics rows. Everything else gets the button, so joysticks, wheels, flight sticks and unclassified HID devices all qualify.
 
 Click it. Your browser opens a GitHub issue pre-filled with every field PadForge can read from the device:
 
@@ -121,9 +141,9 @@ Click it. Your browser opens a GitHub issue pre-filled with every field PadForge
 - Button count
 - Hat / POV count
 
-You fill in the per-input mapping by hand. Which raw axis index is Left Stick X. Which raw button index is A. Read those off the **raw input** section on this page while pressing each control.
+You fill in the per-input mapping by hand. Which raw axis index is Left Stick X. Which raw button index is A. Read those off **Test Inputs** while pressing each control.
 
-Once the issue is merged, the mapping ships in the app's built-in controller mapping database and auto-loads on every PadForge install. Future users with the same hardware get the device recognized without further setup.
+Once the issue is merged, the mapping ships in the app's built-in controller mapping database and loads on every PadForge install. Future users with the same hardware get the device recognized without further setup.
 
 #### Why use the button over a blank template
 
@@ -131,75 +151,72 @@ The blank Device Mapping issue template makes you type the device identification
 
 ### Switch Driver buttons
 
-Five devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button in the detail pane:
+Five devices can give PadForge more when they run on Windows' WinUSB driver, but the switch takes something away from Windows, so PadForge moves them only when you ask. Selecting one shows a button at the foot of the **Settings** card:
 
 | Device | Button | What the switch costs |
 |---|---|---|
-| Xbox 360 wired controller, revisions 1.10 and 1.14 | **Read the Chatpad** | The controller then works only while PadForge runs, and games see it through PadForge's virtual controller. Every plugged-in controller of this model moves with it, and each needs assigning to its slot again. |
-| Microsoft Xbox 360 wireless receiver | **Read Chatpads and uDraw Tablets** | Every controller and headset on the receiver moves with it, works only while PadForge runs, and needs assigning to its slot again. |
+| Xbox 360 wired controller, revisions 1.10 and 1.14 | **Read the Chatpad** | The controller then works only while PadForge runs, and games see it through PadForge's virtual controller. Every plugged-in controller of this model moves with it, and each needs assigning to its controller again. |
+| Microsoft Xbox 360 wireless receiver | **Read Chatpads and uDraw Tablets** | Every controller and headset on the receiver moves with it, works only while PadForge runs, and needs assigning to its controller again. |
 | Intel Wireless Series base station | **Read the Gamepads** | The Intel wireless keyboard on it stops typing in Windows. |
 | Creative Prodikeys | **Read the Music Keys** | The keyboard's media and sleep keys stop working in Windows. Its typing keys keep working. |
 | Logitech iFeel Mouse and iFeel MouseMan | **Play Rumble on This Mouse** | Windows stops using the mouse as a pointer until its driver is restored. PadForge moves the pointer from it only while PadForge runs and the mouse is assigned to a Keyboard + Mouse virtual controller. One mouse of a model moves at a time, so unplug the others of that model first. See [Logitech iFeel mice](peripherals.md#logitech-ifeel-mice). |
 
-A **Switch to PadForge's Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
+A **Switch to PadForge’s Driver** confirmation states the cost before anything moves. Once a device is on PadForge's driver, the same place shows **Restore the Windows Driver**, which removes PadForge's driver package and puts every device it served back on its Windows driver. A few seconds into each start, PadForge names any of these devices that Windows moved back on its own.
 
-A USB keyboard or mouse takes the same switch, named **Use Only in PadForge**, and its button stands in the **Input Hiding** section. See [Use Only in PadForge](#use-only-in-padforge).
+A USB keyboard or mouse takes the same switch, named **Use Only in PadForge**, and its button stands with the hiding rows of the **Settings** card. See [Use Only in PadForge](#use-only-in-padforge).
 
 ### Pads in iCade mode
 
-A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's card and click **Read as iCade Controller**. The keyboard's card goes offline, and an **iCade Controller** card takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. **Read as Keyboard**, on either card, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge keeps up to 32 keyboard IDs in iCade mode and reads up to eight iCade devices at a time, the ION iCade cabinet included.
+A pad in iCade mode pairs as a Bluetooth keyboard and types one letter when a button goes down and another when it comes up. The ION iCade cabinet reads as a controller on its own. For any other pad, select its keyboard's row and click **Read as iCade Controller**. The keyboard's row goes offline, and an **iCade Controller** row takes its place with a gamepad layout: A on Back, B on the left shoulder, C on Start, D on the right shoulder, E, F, G and H on the face buttons. **Read as Keyboard**, on either row, turns it back into a keyboard. The letters still reach the program in the foreground, because Windows still sees a keyboard. PadForge keeps up to 32 keyboard IDs in iCade mode and reads up to eight iCade devices at a time, the ION iCade cabinet included.
 
 ### Namco USIO layout
 
-One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's card and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's card, goes back. The board opens again in the new layout, so its cards leave and the other layout's arrive a moment later. While the engine is stopped, or paused in the background, the change waits and takes effect when it runs again.
+One USB ID serves the Namco USIO boards of Taiko no Tatsujin and Tekken cabinets, and each game lays out the board's inputs its own way. PadForge reads the board as two Taiko drums until told otherwise. Select a drum's row and click **Read as Tekken Sticks** to read four arcade sticks instead. **Read as Taiko Drums**, on a stick's row, goes back. The board opens again in the new layout, so its rows leave and the other layout's arrive a moment later. While the engine is stopped, or paused in the background, the change waits and takes effect when it runs again.
 
 ---
 
-## Assigning devices to slots
+## Assigning devices to controllers
 
-### Toggle buttons
+### Used By chips
 
-The **Virtual Controller Assignment** section in the detail pane shows numbered toggles, one per existing [slot](controller-slots.md).
+Click a chip under **Used By** in the panel to put the device on that [virtual controller](controller-slots.md) or take it off. A lit chip means assigned.
 
-- **Highlighted** = assigned to that slot
-- **Normal** = not assigned
-- More than one toggle can be on at the same time (see Multi-slot below)
-
-Assigning a device builds a default [mapping](mappings.md) if none exists and updates the slot badges. You stay on the Devices page. Open the slot's config page from the sidebar when you want to tune the mapping.
+Assigning a device builds a default [mapping](mappings.md) if none exists and updates the row's Used By pills. You stay on the Devices page. Open the controller's page from the sidebar when you want to tune the mapping.
 
 ### Drag and drop
 
-Drag a card from the left panel onto a sidebar slot card. Same result as switching that slot's toggle on.
+Drag a row onto a controller's pill in the sidebar. Same result as turning that controller's chip on.
+
+### Use It and New Controller
+
+A connected game controller that nothing uses shows **Use It** on its row, and every device's panel offers **New Controller** after its chips. Either opens Add a Controller, and the controller you make there takes the device. Both show only while a controller can still be added.
 
 ### What happens on assignment
 
-1. The slot's [virtual controller](controller-slots.md) is created if it does not exist yet
-2. A default [mapping](mappings.md) is built for the device type and output type (Xbox, PlayStation, Nintendo, Extended, etc.)
-3. For gamepads, joysticks, wheels, flight sticks, and First Person devices, **Hide from Games (HidHide)** turns on if HidHide is installed
-4. Slot badges update right away
+1. A default [mapping](mappings.md) is built for the device type and output type (Xbox, PlayStation, Nintendo, Extended and the rest)
+2. For gamepads, joysticks, wheels, flight sticks and First Person devices, **Hide from Games (HidHide)** turns on if HidHide is installed
+3. The Used By pills update right away
 
-Unassigning a device from every slot clears both hiding options.
+Unassigning a device from every controller clears both hiding options.
 
 ---
 
-## Multi-slot assignment
+## Multi-controller assignment
 
-One physical device can feed more than one [slot](controller-slots.md) at the same time. Real uses:
+One physical device can feed more than one [virtual controller](controller-slots.md) at the same time. Real uses:
 
-- **Two output types at once.** One pad feeding an Xbox slot for the game and an Extended slot for a flight sim overlay.
-- **Split button subsets.** Left side mapped to one slot, right side to another.
-- **A/B testing.** Compare [deadzone](stick-deadzones.md), sensitivity, or [macro](../guides/macros.md) setups without swapping hardware.
+- **Two output types at once.** One pad feeding an Xbox controller for the game and an Extended controller for a flight sim overlay.
+- **Split button subsets.** Left side mapped to one controller, right side to another.
+- **A/B testing.** Compare [deadzone](stick-deadzones.md), sensitivity or [macro](../guides/macros.md) setups without swapping hardware.
 - **MIDI plus gamepad.** Game input and MIDI signals from the same pad.
 
-Toggle multiple slot buttons in the detail pane. Each slot keeps its own [mapping](mappings.md), so the same physical input can mean different things on different slots.
-
-Slot badges show every assigned slot number at a glance.
+Turn on several chips under **Used By**. Each controller keeps its own [mapping](mappings.md), so the same physical input can mean different things on different controllers. The row's Used By column shows every controller that uses the device.
 
 ---
 
 ## Raw input
 
-The bottom of the detail pane shows live hardware data before any [mapping](mappings.md), [deadzone](stick-deadzones.md), or sensitivity work. Updates about 30 times a second while the engine runs.
+**Test Inputs** in the panel shows live hardware data before any [mapping](mappings.md), [deadzone](stick-deadzones.md) or sensitivity work. For a device in SDL's gamepad layout the full readout below opens under **More**. It updates about 30 times a second while the engine runs.
 
 ### Axes
 
@@ -209,11 +226,11 @@ Each axis row has:
 |---------|-------------|
 | **Name** | Axis N, numbered by the axis's real slot. In gamepad mode a pad that lacks a stick or trigger skips those numbers, so gaps are normal (a PS Move Navigation reads Axis 0, 1, 2, then 6, 7, 10, and 12 through 15). Raw mode numbers densely from 0. The row never switches to friendly names like LX or LT. The Head Tracker and Game Telemetry rows are the exceptions: the Head Tracker's axes read Head Yaw through Head Z, and Game Telemetry's read Speed, RPM, Throttle, Brake, Clutch, Handbrake, Steering and each custom variable by name. |
 | **Progress bar** | Horizontal, 0-1 range. A centered stick reads ~50%. |
-| **Raw value** | Exact integer (0-65535) in monospace |
+| **Raw value** | Exact integer (0-65535) on the bar, in tabular figures |
 
 Look for:
 
-- **Center drift.** The axis does not rest at ~32768 when you let go. Use Calibrate Center on the [Sticks](stick-deadzones.md) tab.
+- **Center drift.** The axis does not rest at ~32768 when you let go. Use **Calibrate Center** in the controller page's [Sticks & Triggers](stick-deadzones.md) section.
 - **Trigger baseline.** Some triggers rest at 0, others at 32768. Depends on hardware and input mode.
 - **Dead axes.** Axis never moves. The mapping database may have a bad entry. Try Force Raw Joystick Mode.
 
@@ -244,7 +261,7 @@ A mouse graphic replaces axes and buttons:
 
 ### POV / D-pad
 
-Compass widgets with a direction line, labeled "POV 0", "POV 1", etc.
+Under **D-Pad / POV**, compass widgets with a direction line, labeled "POV 0", "POV 1" and so on.
 
 | State | Look |
 |-------|------------|
@@ -287,82 +304,82 @@ A second block, **Aux Accelerometer**, appears when a device carries a second se
 
 PadForge reads two kinds of touch surfaces on the Devices page.
 
-- **Gamepad touchpads.** The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in the raw input view with contact position and finger count.
-- **Windows Precision Touchpad.** Laptop trackpads and external precision touchpads. PadForge treats each one as its own device card with a live touch preview. It reads no click from these trackpads, so no click input appears for them in the mapping picker or auto-map.
+- **Gamepad touchpads.** The touch surfaces on DualShock 4, DualSense, Steam Controller, and Steam Deck. SDL3 reports them as part of the gamepad. They show up in **Test Inputs** with contact position and finger count.
+- **Windows Precision Touchpad.** Laptop trackpads and external precision touchpads. PadForge treats each one as its own row with a live touch preview. It reads no click from these trackpads, so no click input appears for them in the mapping picker or auto-map.
 
-Surface count comes from SDL. Most pads report one. The Steam Controller 2026, the Steam Deck, and the 2015 Steam Controller each report two. A multi-surface device shows a separate live preview per pad, labeled **Touchpad 1** and **Touchpad 2** in the raw input view. The Devices page draws at most those two previews. Every surface still maps.
+Surface count comes from SDL. Most pads report one. The Steam Controller 2026, the Steam Deck, and the 2015 Steam Controller each report two. A multi-surface device shows a separate live preview per pad, labeled **Touchpad 1** and **Touchpad 2** in **Test Inputs**. The Devices page draws at most those two previews. Every surface still maps.
 
-Pressure maps too on gamepad touchpads. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device **Enable Synthetic Pressure** option on the [Touchpad](touchpad.md) tab. A Windows Precision Touchpad reports no pressure, so it gets no Pressure source.
+Pressure maps too on gamepad touchpads. Each finger gets a Touchpad N Finger M Pressure source in the mapping picker, and pads that report a touch as full pressure (DualShock 4, DualSense, Steam Controller 2015) can shape it with the per-device **Enable Synthetic Pressure** option in the [touchpad](touchpad.md) settings of the controller page's Motion & Touch section. A Windows Precision Touchpad reports no pressure, so it gets no Pressure source.
 
-A third and fourth source live elsewhere: [Web Controller](../guides/web-controller.md) clients in touchpad-only or DS4-with-touchpad mode, and the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay). All four feed the same per-slot configuration on the [Touchpad](touchpad.md) tab.
+A third and fourth source live elsewhere: [Web Controller](../guides/web-controller.md) clients in touchpad-only or DS4-with-touchpad mode, and the on-screen [Touchpad Overlay](dashboard.md#touchpad-overlay). All four feed the same per-controller configuration in the [touchpad](touchpad.md) settings of the controller page's Motion & Touch section.
 
 ---
 
 ## MIDI devices
 
-A connected MIDI keyboard, pad controller, or control surface shows up here as its own device card. Select it and the detail pane shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.
+A connected MIDI keyboard, pad controller, or control surface shows up here as its own row. Select it and **Test Inputs** shows a live preview: a piano that lights the notes you play and vertical sliders that follow the knobs and faders. Its notes, Control Change knobs, pitch bend, and encoder dials map like any button or axis.
 
-MIDI input runs on Windows MIDI Services, the same API the MIDI virtual controller uses, or without it on the legacy MIDI API. Under the legacy API a MIDI device's port opens only while a slot has the device assigned, so its preview stays still until then. See [MIDI Input](midi-input.md) for the full list of what maps.
+MIDI input runs on Windows MIDI Services, the same API the MIDI virtual controller uses, or without it on the legacy MIDI API. Under the legacy API a MIDI device's port opens only while a virtual controller has the device assigned, so its preview stays still until then. See [MIDI Input](midi-input.md) for the full list of what maps.
 
 ---
 
 ## Analog keyboards
 
-With **Read Analog Keyboards** on in [Settings](settings.md), each supported analog or Hall effect keyboard gets a card of its own, typed **Analog Keyboard**, beside its normal keyboard card. Select it and a **Key Depth** panel replaces the axes and button grid. Each key you press joins the panel with a bar and a percentage for how far down it is. Every key maps as a button, a trigger or one side of a stick axis. See [Analog Keyboards](analog-keyboards.md).
+With **Read Analog Keyboards** on in [Settings](settings.md), each supported analog or Hall effect keyboard gets a row of its own, typed **Analog Keyboard**, beside its normal keyboard row. Select it and **Test Inputs** shows a **Key Depth** readout in place of the axes and button grid. Each key you press joins it with a bar and a percentage for how far down it is. Every key maps as a button, a trigger or one side of a stick axis. See [Analog Keyboards](analog-keyboards.md).
 
-The card reads a vendor interface beside the keyboard, so it has no Input Mode or Input Hiding sections. A Razer keyboard that waits for Razer Synapse says so in its own detail pane.
+The row reads a vendor interface beside the keyboard, so it has no hiding rows and no Force Raw Joystick Mode. A Razer keyboard that waits for Razer Synapse says so in its own panel.
 
 ---
 
 ## Bliss-Box ports
 
-With **Read Bliss-Box Adapters** on in [Settings](settings.md), a Bliss-Box port's detail pane carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, assigning the port maps that controller the way SDL maps its console's pad, and a DualShock 2 adds a **DualShock 2 Pressure** panel to the detail pane. See [Bliss-Box Adapters](bliss-box.md).
+With **Read Bliss-Box Adapters** on in [Settings](settings.md), a Bliss-Box port's panel carries a line with its player number, the controller in it and the adapter's firmware, and the port's actions: **Player Number…**, **Dreamcast Screen…** for a Dreamcast pad, **Back Up Controller Pak…** and **Restore Controller Pak…** for an N64 controller on an adapter with firmware 3.0 or later, and **Read Arrows One by One** for a PlayStation digital pad or dance mat on a 3.x adapter. In the mapping picker the port's buttons take the names of the controller plugged in, assigning the port maps that controller the way SDL maps its console's pad, and a DualShock 2 adds a **DualShock 2 Pressure** readout to **Test Inputs**. See [Bliss-Box Adapters](bliss-box.md).
 
 ## Keyboard screens
 
-With **Drive Keyboard Screens** on in [Settings](settings.md), each keyboard screen is its own row: one for each monochrome keyboard and G19 plugged in, one for Logitech Arx Control and one for the S.T.R.I.K.E. 7. A screen's detail pane carries a line that says what draws the screen or why nothing does, and a button named for the kind of screen, **Monochrome Screen…**, **Color Screen…**, **Arx Control…** or **S.T.R.I.K.E. 7…**, which opens the dialog that sets what that screen shows. Two keyboards with screens keep their own settings. See [Keyboard Screens](keyboard-screens.md).
+With **Drive Keyboard Screens** on in [Settings](settings.md), each keyboard screen is its own row: one for each monochrome keyboard and G19 plugged in, one for Logitech Arx Control and one for the S.T.R.I.K.E. 7. A screen's panel carries a line that says what draws the screen or why nothing does, and a button named for the kind of screen, **Monochrome Screen…**, **Color Screen…**, **Arx Control…** or **S.T.R.I.K.E. 7…**, which opens the dialog that sets what that screen shows. Two keyboards with screens keep their own settings. See [Keyboard Screens](keyboard-screens.md).
 
 ## Novint Falcons
 
-With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's detail pane carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and **Calibrate Reach**, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every slot it feeds uses it. See [Novint Falcon](novint-falcon.md).
+With **Drive Novint Falcon** on in [Settings](settings.md), each open Falcon's panel carries a line with its name and how it runs, a homing prompt for its first seconds and then its rate, and **Calibrate Reach**, the four-second sweep that measures how far its handle travels. The reach belongs to the Falcon, so every virtual controller it feeds uses it. See [Novint Falcon](novint-falcon.md).
 
 ## Game Telemetry
 
-With **Listen for Game Telemetry** on, on the [Dashboard](dashboard.md), the **Game Telemetry** row carries the speed, RPM, gear and pedals a driving game sends. Its axes are Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, then one per custom variable, and its buttons are Driving, Reverse, Neutral and Gear 1 to Gear 18. The detail pane shows the same status line as the Dashboard, such as *Listening on UDP port 20777. F1 25 from 127.0.0.1.* The row stays listed with no game running, so you can map it first. See [Game Telemetry](game-telemetry.md).
+With **Listen for Game Telemetry** on, on the Game Telemetry page of [Extras](dashboard.md#game-telemetry), the **Game Telemetry** row carries the speed, RPM, gear and pedals a driving game sends. Its axes are Speed, RPM, Throttle, Brake, Clutch, Handbrake and Steering, then one per custom variable, and its buttons are Driving, Reverse, Neutral and Gear 1 to Gear 18. The panel shows the same status line as the extra's page, such as *Listening on UDP port 20777. F1 25 from 127.0.0.1.* The row stays listed with no game running, so you can map it first. See [Game Telemetry](game-telemetry.md).
 
 ## Twitch Chat
 
-With **Read Twitch Chat** on, on the [Dashboard](dashboard.md), the **Twitch Chat** row carries the words viewers type in your channel's chat. Each word is a button on the row, mapped like any input, so assign the row to a slot like any controller. The row exists while the engine runs and the switch is on. Its detail pane shows a status line, such as *Reading yourchannel's chat.*, and a **Manage Chat Commands** button that opens the **Chat Commands** dialog, where you add words and **Restore Usual Words**. A peer's shared copy of the row is managed on its owner. See [Twitch Chat](twitch-chat.md).
+With **Read Twitch Chat** on, on the Twitch Chat page of [Extras](dashboard.md#twitch-chat), the **Twitch Chat** row carries the words viewers type in your channel's chat. Each word is a button on the row, mapped like any input, so assign the row to a virtual controller like any device. The row exists while the engine runs and the switch is on. Its panel shows a status line, such as *Reading yourchannel's chat.*, and a **Manage Chat Commands** button that opens the **Chat Commands** dialog, where you add words and **Restore Usual Words**. A peer's shared copy of the row is managed on its owner. See [Twitch Chat](twitch-chat.md).
 
 ## Map Key Lights
 
-A connected keyboard or other device that PadForge lights one light at a time, at least one of them a key, shows a **Map Key Lights** button in its detail pane. The button opens a window that lights one key light at a time. Press the key under the lit light to name it. The names are kept for every device of that model. The device does not have to be assigned to a slot, and the input engine has to run. A device reached through [Remote Link](../guides/remote-link.md) is mapped on the PC it is plugged into. See [Map Key Lights](lighting.md#map-key-lights).
+A connected keyboard or other device that PadForge lights one light at a time, at least one of them a key, shows a **Map Key Lights** button in its panel. The button opens a window that lights one key light at a time. Press the key under the lit light to name it. The names are kept for every device of that model. The device does not have to be assigned to a virtual controller, and the input engine has to run. A device reached through [Remote Link](../guides/remote-link.md) is mapped on the PC it is plugged into. See [Map Key Lights](lighting.md#map-key-lights).
 
 ## Game mods
 
-While a [game mod made for DSX](game-mods.md) sets something that reaches a controller, the controller's detail pane names the mod's program and what it sets, such as *GTA5.exe is setting this controller's triggers and lights*. A DualSense shows its triggers and lights, a DualShock 4 its lightbar, and an Xbox controller with impulse triggers the trigger vibrations it plays while **Translate Adaptive Trigger Vibrations** is on. **Clear Mod Effects** below the line ends what the mods set on every virtual controller this device feeds, and the controllers' own settings return until a mod sends again.
+While a [game mod made for DSX](game-mods.md) sets something that reaches a controller, the controller's panel names the mod's program and what it sets, such as *GTA5.exe is setting this controller’s triggers and lights.* A DualSense shows its triggers and lights, a DualShock 4 its lightbar, and an Xbox controller with impulse triggers the trigger vibrations it plays while **Translate Adaptive Trigger Vibrations** is on. **Clear Mod Effects** below the line ends what the mods set on every virtual controller this device feeds, and the controllers' own settings return until a mod sends again.
 
 ---
 
 ## Consumer Control devices
 
-Media keys show up here as their own device card, typed **Consumer Control**. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.
+Media keys show up here as their own row, typed **Consumer Control**. A keyboard's media row, a standalone media remote, and a headset's media buttons all land here.
 
-![Consumer Control device detail pane with named media chips](../images/devices-consumer.png)
+![Consumer Control device panel with named media chips](../images/devices-consumer.png)
 
-Select the card and the detail pane shows named button chips instead of the numbered-button grid: Play/Pause, Mute, Volume Up, Volume Down, Next Track, Previous Track, and the rest of PadForge's standard media, menu, and browser keys, whether or not this device has them. A key outside that set gets a chip named by its usage code once a device on this PC sends it. A chip lights up in cold blue while its key is held.
+Select the row and **Test Inputs** shows named button chips instead of the numbered-button grid: Play/Pause, Mute, Volume Up, Volume Down, Next Track, Previous Track, and the rest of PadForge's standard media, menu, and browser keys, whether or not this device has them. A key outside that set gets a chip named by its usage code once a device on this PC sends it. A chip lights up in cold blue while its key is held.
 
-Each named media key maps as a [source](mappings.md) and works as a [macro](../guides/macros.md) trigger. These devices have no sticks or triggers. **Consume Mapped Inputs** does not apply to them, so that toggle is left out.
+Each named media key maps as a [source](mappings.md) and works as a [macro](../guides/macros.md) trigger. These devices have no sticks or triggers. **Consume Mapped Inputs** does not apply to them, so that switch is left out.
 
 ---
 
 ## NFC readers
 
-A contactless smart-card / NFC reader (PC/SC class, such as an ACR122U) shows up as a device card typed **NFC Reader**.
+A contactless smart-card / NFC reader (PC/SC class, such as an ACR122U) shows up as a row typed **NFC Reader**.
 
-![NFC Reader detail pane with the Register / Manage NFC Tags button](../images/devices-nfc.png)
+![NFC Reader panel with the Register / Manage NFC Tags button](../images/devices-nfc.png)
 
-The detail pane has a **Register / Manage NFC Tags** button. It opens a dialog where you tap a tag to capture it, then give the tag a name. Each registered tag becomes its own button you can [map](mappings.md), alongside an **Any NFC Tag** button that any tag triggers. The pane lists your named tags and highlights the one you just tapped.
+The panel has a **Register / Manage NFC Tags** button. It opens a dialog where you tap a tag to capture it, then give the tag a name. Each registered tag becomes its own button you can [map](mappings.md), alongside an **Any NFC Tag** button that any tag triggers. **Test Inputs** lists your named tags and highlights the one you just tapped.
 
 The deep how-to (registering, naming, and mapping tags) lives on [NFC Tags](nfc-tags.md).
 
@@ -370,43 +387,43 @@ The deep how-to (registering, naming, and mapping tags) lives on [NFC Tags](nfc-
 
 ## Microphones
 
-Every active Windows microphone, the one in a wired DualSense included, shows up as a device card typed **Microphone**. The detail pane has a **Manage Voice Macros** button and a **Voice Macros** list in place of the numbered-button grid: **Any Phrase** plus one row per registered phrase, each lighting as its phrase fires. A DualSense on Bluetooth carries the same button and list on its own card. See [Voice Macros](voice-macros.md).
+Every active Windows microphone, the one in a wired DualSense included, shows up as a row typed **Microphone**. The panel has a **Manage Voice Macros** button, and **Test Inputs** has a **Voice Macros** list in place of the numbered-button grid: **Any Phrase** plus one row per registered phrase, each lighting as its phrase fires. A DualSense on Bluetooth carries the same button and list on its own row. See [Voice Macros](voice-macros.md).
 
 ---
 
 ## Web Menus phones
 
-A phone that opens the web controller's [Web Menus](../guides/web-controller.md#web-menus) layout shows up as a device card typed **Web Menus**, named **Web Menus 1**, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a slot and its tiles fire that slot's Touch Grid [menus](../guides/menus.md#on-a-phone). Remote Link does not offer it to a paired PC.
+A phone that opens the web controller's [Web Menus](../guides/web-controller.md#web-menus) layout shows up as a row typed **Web Menus**, named **Web Menus 1**, then 2 for a second phone. It has no axes, buttons, or hats, so it adds nothing of its own to a slot's mappings. What it carries is taps: assign it to a virtual controller and its tiles fire that controller's Touch Grid [menus](../guides/menus.md#on-a-phone). Remote Link does not offer it to a paired PC.
 
 ---
 
 ## Machine and tracker rows
 
-Seven rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the Input Mode and Input Hiding sections are left out of its detail pane, and none of them offers **Submit Device Mapping**.
+Seven rows on this page come from the PC itself or from a program on it, not from a plugged-in device. Each has no HID path, so the hiding rows and Force Raw Joystick Mode are left out of its panel, and none of them offers **Submit Device Mapping**.
 
 | Row | Type | Where it is turned on | What it carries |
 |-----|------|----------------------|-----------------|
-| *Your machine* **Hidden Buttons** | Handheld Buttons | **Enable Handheld PC Buttons** in [Settings](settings.md) | One button per paddle or key you have learned, at a stable index. The detail pane lists them by name and lights each one while it is down. A **Learn / Manage Hidden Buttons** button opens the learn dialog. |
-| *Your machine* **Motion** | System Motion | The same Settings toggle. Appears only when Windows reports a gyroscope. | The machine's gyroscope and accelerometer as a motion source |
-| **Head Tracker (OpenTrack)**, or **Head Tracker (OpenXR)** when OpenXR is its only input | Head Tracker | Any of the three inputs in the Head Tracking section of the [Dashboard](dashboard.md) | Six absolute axes, Head Yaw through Head Z, with a status line that says which source is live |
-| **VR Controller (Left)** and **VR Controller (Right)** | VR Controller | **Enable OpenXR Headset Input** on the [Dashboard](dashboard.md) | Six pose axes in the head tracker's convention, plus a thumbstick, a trigger, a grip and four buttons. Each hand is its own row, so one going to sleep leaves the other alone. See [VR Controller Input](vr-controller-input.md). |
+| *Your machine* **Hidden Buttons** | Handheld Buttons | **Enable Handheld PC Buttons** in [Settings](settings.md) | One button per paddle or key you have learned, at a stable index. **Test Inputs** lists them by name and lights each one while it is down. A **Learn / Manage Hidden Buttons** button opens the learn dialog. |
+| *Your machine* **Motion** | System Motion | The same Settings switch. Appears only when Windows reports a gyroscope. | The machine's gyroscope and accelerometer as a motion source |
+| **Head Tracker (OpenTrack)**, or **Head Tracker (OpenXR)** when OpenXR is its only input | Head Tracker | Any of the three inputs on the Head Tracking page of [Extras](dashboard.md#head-tracking) | Six absolute axes, Head Yaw through Head Z, with a status line that says which source is live |
+| **VR Controller (Left)** and **VR Controller (Right)** | VR Controller | **Enable OpenXR Headset Input** on the Head Tracking page of [Extras](dashboard.md#head-tracking) | Six pose axes in the head tracker's convention, plus a thumbstick, a trigger, a grip and four buttons. Each hand is its own row, so one going to sleep leaves the other alone. See [VR Controller Input](vr-controller-input.md). |
 | **Logitech G-Keys** | Logitech G-Keys | **Read Logitech G-Keys** in [Settings](settings.md) | The G-keys and extra mouse buttons on Logitech gaming gear, read through the vendor SDK. See [Logitech G-Keys](logitech-g-keys.md). |
 | **Logitech G15 Screen**, **Logitech G19 Screen**, **Logitech Arx Control**, **Mad Catz S.T.R.I.K.E. 7 Screen** and the like | Keyboard Screen | **Drive Keyboard Screens** in [Settings](settings.md) | One row per screen: the keys beside it, five on a monochrome screen and eight on a G19, none on Arx Control or the S.T.R.I.K.E. 7, and the button that sets what it shows. See [Keyboard Screens](keyboard-screens.md). |
-| **Novint Falcon** | Novint Falcon | **Drive Novint Falcon** in [Settings](settings.md) | The handle's Left/Right, Up/Down and In/Out and the grip's four buttons, one row per Falcon, opened through Force Dimension's library, with its line and **Calibrate Reach** in its detail pane. See [Novint Falcon](novint-falcon.md). |
+| **Novint Falcon** | Novint Falcon | **Drive Novint Falcon** in [Settings](settings.md) | The handle's Left/Right, Up/Down and In/Out and the grip's four buttons, one row per Falcon, opened through Force Dimension's library, with its line and **Calibrate Reach** in its panel. See [Novint Falcon](novint-falcon.md). |
 
 The machine name in the first two rows is the product name the firmware reports, or the family name when the product name is a bare model code. See [Handheld PC Buttons](handheld-buttons.md) and [Head Tracking](head-tracking.md) for setup.
 
-A drawing tablet is not in this group. Windows HID pen and digitizer devices are real HID devices, so they enumerate normally and keep their Input Hiding section.
+A drawing tablet is not in this group. Windows HID pen and digitizer devices are real HID devices, so they enumerate normally and keep their hiding rows.
 
 ---
 
 ## Pairing a controller
 
-The header has a **Pair** button next to **Refresh**. It opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, **PlayStation Move / Navigation**, **Serial Controller (COM Port)** and **DJI RC or RC 2 (Network)**.
+**Pair a Controller** in the page's head opens the **Pair a Controller** dialog. A **Controller Family** selector offers **Nintendo Wii**, **Sony DualShock 3**, **PlayStation Move / Navigation**, **Serial Controller (COM Port)** and **DJI RC or RC 2 (Network)**.
 
 The Wii family walks a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller through Bluetooth pairing. The Windows pairing wizard can't pair these on its own, since their PIN is raw bytes rather than a typed code, so PadForge runs the handshake itself. See [Wii Controllers](../devices/wii-controllers.md) for the pairing steps and the per-controller button layouts.
 
-The DualShock 3 family pairs over USB: connect the controller with a cable, click **Pair**, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See [DualShock 3](../devices/dualshock-3.md).
+The DualShock 3 family pairs over USB: connect the controller with a cable, click **Pair** in the dialog, and PadForge writes this PC into the controller. Unplug it and press the PS button to connect over Bluetooth. See [DualShock 3](../devices/dualshock-3.md).
 
 The PlayStation Move / Navigation family pairs over USB the same way. PadForge writes this PC into the controller, saves the Move's motion calibration, and registers it. Unplug it and press the PS button to connect over Bluetooth.
 
@@ -443,19 +460,19 @@ The DJI RC or RC 2 (Network) family reads a DJI RC or DJI RC 2 over the network.
 <!-- SCREENSHOT: dji-pair -->
 ![The Pair a Controller dialog set to DJI RC or RC 2 (Network)](../images/dji-pair.png)
 
-Once paired, a controller appears as a normal device card here, with the same slot assignment, hiding, and live raw input as any other pad.
+Once paired, a controller appears as an ordinary row here, with the same assignment, hiding and Test Inputs as any other pad.
 
 ---
 
 ## Input hiding
 
-When a physical device feeds a [slot](controller-slots.md), games can see both devices and double up the input. PadForge offers two ways to stop that, set per device.
+When a physical device feeds a [virtual controller](controller-slots.md), games can see both devices and double up the input. PadForge offers two ways to stop that, set per device.
 
 ### Hide from Games (HidHide)
 
-Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). Anything that already had the device open, Windows included, keeps it until it reconnects. When PadForge hides a USB controller that was already connected, it reconnects it in Windows for you, so anything that had it open loses it. A Bluetooth controller, or one that shares a receiver with another controller, stays with whatever opened it first until it next connects. From then on it is hidden from every app that is not on the whitelist. PadForge is whitelisted automatically, and it checks that it can still open what it hides. A controller hidden from PadForge itself stops responding, so when HidHide refuses PadForge, PadForge takes the hide back and says so in the status bar. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The toggle is grayed out if HidHide is not installed. Install it from [Driver Management](driver-management.md).
+Hides the physical device at the OS level using [HidHide](https://github.com/nefarius/HidHide). Anything that already had the device open, Windows included, keeps it until it reconnects. When PadForge hides a USB controller that was already connected, it reconnects it in Windows for you, so anything that had it open loses it. A Bluetooth controller, or one that shares a receiver with another controller, stays with whatever opened it first until it next connects. From then on it is hidden from every app that is not on the whitelist. PadForge is whitelisted automatically, and it checks that it can still open what it hides. A controller hidden from PadForge itself stops responding, so when HidHide refuses PadForge, PadForge takes the hide back and says so in the message line. The setting persists across restarts. Best for gamepads, joysticks, racing wheels, and flight sticks. The switch is grayed out if HidHide is not installed, and its tooltip reads "Install the HidHide driver to enable this option". Install it from [Driver Management](driver-management.md).
 
-PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own connected device, such as a handheld's touchpad, follows its own checkbox. Leave that checkbox off and the interface stays visible while the pad is hidden. An offline card does not count once PadForge's engine has listed the connected devices: from then on only a connected row with hiding off keeps its interface out of the pad's hide list. Right after the engine starts, and while it is stopped, PadForge cannot tell which cards are connected, so a card with hiding off keeps its interface from being newly hidden until the engine has listed its devices.
+PadForge hides every interface of the device that HidHide can filter, including the XInput node of a controller built into a USB composite device, such as a handheld PC's controller or a pad on the Xbox 360 wireless receiver. An interface that appears on this page as its own connected device, such as a handheld's touchpad, follows its own switch. Leave that switch off and the interface stays visible while the pad is hidden. A device that is not connected does not count once PadForge's engine has listed the connected devices: from then on only a connected row with hiding off keeps its interface out of the pad's hide list. Right after the engine starts, and while it is stopped, PadForge cannot tell which cards are connected, so a row with hiding off keeps its interface from being newly hidden until the engine has listed its devices.
 
 Hiding is not permanent and does not reach into Windows itself. HidHide blocks only programs that open the device after the entry lands, and only programs that are not on the whitelist. Windows' own drivers keep using a hidden touchpad or keyboard, so the cursor still moves. A game that opened the controller before you hid it keeps it until the controller reconnects, which PadForge does in Windows for a USB controller, the built-in controller of a handheld included. It leaves alone Bluetooth controllers, since dropping the link turns most pads off, and a USB device that carries more than one controller, such as the Xbox 360 wireless receiver or a Steam Controller dongle with two pads. PadForge removes its entries when it exits and puts them back when its engine starts. Turn on **Keep Devices Cloaked Between Launches** in [Settings](settings.md) to keep them in place while PadForge is closed, so a controller is hidden before any game or launcher can open it.
 
@@ -465,7 +482,7 @@ You can whitelist more apps in [Settings](settings.md) so they can still see hid
 
 ### Consume Mapped Inputs (Hooks)
 
-Suppresses only the specific keys or mouse buttons [mapped](mappings.md) to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The toggle only shows for keyboards and mice.
+Suppresses only the specific keys or mouse buttons [mapped](mappings.md) to a virtual controller output. Unmapped keys still type. The cursor still moves. No driver needed. Windows low-level input hooks handle it. The switch shows only for keyboards and mice.
 
 A mapped Numpad Enter is consumed like any other key. Earlier builds let it through to other programs, and consuming the main Enter key swallowed Numpad Enter as well.
 
@@ -473,11 +490,11 @@ Windows' low-level hooks do not say which keyboard or mouse sent an event. Consu
 
 An Up, Down or modifier key counts as mapped on the keyboard or mouse it was picked or recorded from.
 
-Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, are never consumed. A key you consume as a source can still go out as an output.
+Keys and clicks PadForge itself sends, from a Keyboard + Mouse controller or a macro, are never consumed. A key you consume as a source can still go out as an output.
 
 ### Use Only in PadForge
 
-**Use Only in PadForge** takes a keyboard, mouse or touchpad from Windows so that PadForge alone reads it. It is a button in the **Input Hiding** section of the device's detail pane. HidHide cannot hide a mouse from Windows' own pointer driver, which was measured with HidHide running. [Driver Management](driver-management.md#keyboards-mice-and-touchpads-use-only-in-padforge) covers the same switch from the driver side.
+**Use Only in PadForge** takes a keyboard, mouse or touchpad from Windows so that PadForge alone reads it. It is a button with the hiding rows of the device's **Settings** card. HidHide cannot hide a mouse from Windows' own pointer driver, which was measured with HidHide running. [Driver Management](driver-management.md#keyboards-mice-and-touchpads-use-only-in-padforge) covers the same switch from the driver side.
 
 | Device | What the switch does | What it needs |
 |---|---|---|
@@ -485,11 +502,11 @@ Keys and clicks PadForge itself sends, from a Keyboard + Mouse slot or a macro, 
 | USB mouse | The same, and Windows stops moving the pointer with it. | The same, for the mouse. |
 | Precision touchpad | HidHide hides the touchpad from Windows while the engine runs, and PadForge reads it. Windows gets it back when the engine stops or PadForge closes. See [Touchpad](touchpad.md#precision-touchpads-read-by-padforge-alone). | HidHide installed, **Hide Devices from Games** on in [Settings](settings.md), and the engine running. |
 
-The row keeps its ID, so its slots, mappings and macros carry over. A switched row shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**, since Windows no longer sees the device as a keyboard or mouse. In their place the section shows **Restore the Windows Driver**, or **Give Back to Windows** for a touchpad. A **Hide from Games (HidHide)** tick left on a touchpad by an earlier build does not take it.
+The row keeps its ID, so its controllers, mappings and macros carry over. A switched row shows neither **Hide from Games (HidHide)** nor **Consume Mapped Inputs (Hooks)**, since Windows no longer sees the device as a keyboard or mouse. In their place the card shows **Restore the Windows Driver**, or **Give Back to Windows** for a touchpad. A **Hide from Games (HidHide)** tick left on a touchpad by an earlier build does not take it.
 
 The switch confirms first. The confirmation says what Windows loses. It names what else shares the same USB connection and leaves Windows with the device: a mouse on a shared receiver, media keys, power and sleep keys, a game controller or the maker's own interface. It repeats the warning about losing your only keyboard or mouse.
 
-PadForge refuses the switch while another keyboard or mouse of the same model is plugged in, because Windows moves every device with that ID at once. The status bar says to unplug the others first.
+PadForge refuses the switch while another keyboard or mouse of the same model is plugged in, because Windows moves every device with that ID at once. The message line says to unplug the others first.
 
 After the switch a **Keep This Keyboard in PadForge?** prompt (or **Keep This Mouse in PadForge?**, or **Keep This Touchpad in PadForge?**) counts down 15 seconds. Click **Keep** to stay. Click **Give It Back**, or let the countdown end, and PadForge restores the Windows driver. The prompt exists because a person whose only keyboard or mouse was just taken cannot answer it. A one-shot Windows boot task also gives the device back after a crash, a power cut or a restart during the prompt.
 
@@ -520,7 +537,7 @@ Hardware status: the switch, the Keep prompt and the restore have run on one key
 
 Keyboards and mice **do not** auto-enable any hiding. Blocking them by accident makes the PC hard to use.
 
-Unassigning a device from every slot clears both hiding options.
+Unassigning a device from every controller clears both hiding options.
 
 ### Safety warnings
 
@@ -541,13 +558,13 @@ The global **Hide Devices from Games** toggle in [Settings](settings.md) (under 
 
 ## Power
 
-Wireless controllers get a **Power** section in the detail pane. It draws when either of its two controls applies to the device: **Idle Disconnect** for any pad PadForge can tell to disconnect, and **Disconnect Bluetooth When Plugged In over USB** for a pad that reports its Bluetooth address as its serial number, which keeps that checkbox on the card while the pad is on a cable.
+Wireless controllers get two power rows in the panel's **Settings** card. Each shows when it applies to the device: **Idle Disconnect** for any pad PadForge can tell to disconnect, and **Disconnect Bluetooth When Plugged In over USB** for a pad that reports its Bluetooth address as its serial number, which keeps that switch on the panel while the pad is on a cable.
 
-![Power section with the Idle Disconnect timer and the Quick Charge checkbox](../images/devices-power.png)
+![The Settings card's Idle Disconnect and Quick Charge rows](../images/devices-power.png)
 
 ### Idle Disconnect
 
-Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes, and the suffix reads **Minutes (0 = Never)**. Set it to 0 to leave the controller on.
+Sets how long a controller can sit with no input before PadForge tells it to disconnect. The controller sleeps and saves battery. The value is in minutes: the unit beside the box reads "min", and the line under the label reads "0 means never". The tooltip reads "Disconnects this Bluetooth controller after this many minutes without input, so it sleeps and saves battery. 0 turns it off. Never fires over USB." Set it to 0 to leave the controller on.
 
 Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link to drop, so nothing happens. Charging doesn't hold it off. Dropping Bluetooth doesn't interrupt the charge, so an idle pad left on a charger still disconnects. It targets any Bluetooth-linked pad (Sony, gen-1 Switch Pro and Joy-Cons, Wii Remote, and the rest), Xbox controllers on the XInput driver, the Switch 2 family, and the combined gen-1 Joy-Con pair, where PadForge drops both halves' links. A pad reaching this PC through [Remote Link](../guides/remote-link.md) is excluded. This machine holds no radio link to it.
 
@@ -556,7 +573,7 @@ Idle Disconnect drops the Bluetooth link. Over a USB cable there's no radio link
 A Bluetooth pad that you plug in to charge keeps its radio link up, and the radio keeps drawing from the battery you are trying to fill. **Disconnect Bluetooth When Plugged In over USB** drops that link the moment the pad reports it is charging. Off by default, saved per device.
 
 <!-- SCREENSHOT: devices-quick-charge -->
-![Power section with the Disconnect Bluetooth When Plugged In over USB checkbox](../images/devices-quick-charge.png)
+![The Disconnect Bluetooth When Plugged In over USB row](../images/devices-quick-charge.png)
 
 The trigger is the pad's own charging report, read from SDL's battery state, which PadForge refreshes about every five seconds. Any power source that makes the pad report charging counts, a PC port and a wall charger alike. The drop fires once, on the change from not charging to charging:
 
@@ -564,24 +581,24 @@ The trigger is the pad's own charging report, read from SDL's battery state, whi
 |-----------|--------------|
 | Pad is on Bluetooth, cable goes in | The Bluetooth link is dropped. On a PC port the pad carries on over USB. On a wall charger it goes quiet and charges. |
 | You re-pair Bluetooth while the cable stays in | Left alone. The pad already reads charging, so there is no change to act on until the next unplug. |
-| You turn the checkbox on while already plugged in | Nothing until the next unplug and replug. |
+| You turn the switch on while already plugged in | Nothing until the next unplug and replug. |
 | PadForge starts with the cable already in | Nothing. The first reading only seeds the check. |
 
-A Sony pad reports the same Bluetooth address as its serial number over both links, so PadForge holds one device card for it, and a cable rebinds that card to the USB path. That is why the checkbox stays on the card while the pad is wired, and why the drop can still find the radio link: it is addressed by that serial. A pad that was never paired makes that a lookup that finds nothing.
+A Sony pad reports the same Bluetooth address as its serial number over both links, so PadForge holds one row for it, and a cable rebinds that row to the USB path. That is why the switch stays on the panel while the pad is wired, and why the drop can still find the radio link: it is addressed by that serial. A pad that was never paired makes that a lookup that finds nothing.
 
-The checkbox appears for any pad Idle Disconnect can target, plus any device whose serial number parses as a nonzero Bluetooth address. In a diagnostics log every outcome prints a `QUICKCHARGE` line, so a silent log means the charging change never arrived or the checkbox was off.
+The switch appears for any pad Idle Disconnect can target, plus any device whose serial number parses as a nonzero Bluetooth address. In a diagnostics log every outcome prints a `QUICKCHARGE` line, so a silent log means the charging change never arrived or the switch was off.
 
 ---
 
 ## Light gun
 
-A Namco GunCon 2 gets a **Light Gun** section in the detail pane. The gun times the picture of a 15 kHz CRT, and the readings that meet the picture's edges depend on the CRT, the video mode and the game. The section shows the aim range PadForge reads the gun with, in the gun's own counts. It starts at X 175 to 720 and Y 20 to 240, the range the PC tools for the gun start from.
+A Namco GunCon 2 gets a **Gun Calibration** row in the panel's **Settings** card. The gun times the picture of a 15 kHz CRT, and the readings that meet the picture's edges depend on the CRT, the video mode and the game. The row shows the aim range PadForge reads the gun with, in the gun's own counts: "Default aim range: X 175 to 720, Y 20 to 240", the range the PC tools for the gun start from.
 
-**Calibrate** turns every monitor white and shows four targets in turn, set in from the corners. Aim the gun at each target on the CRT and pull the trigger. The gun sees only the CRT, so the other monitors show the same targets to no effect. A shot the gun takes off the screen is asked for again, and four shots too close together start over from the first target. Esc, or the gun's A or B button, cancels. The range is saved for that gun and applies at once, and the section's reset button returns it to the starting range. The gun has to be connected to this PC to calibrate. A gun reached through [Remote Link](../guides/remote-link.md) is calibrated on the PC it is plugged into.
+**Calibrate** turns every monitor white and shows four targets in turn, set in from the corners. Aim the gun at each target on the CRT and pull the trigger. The gun sees only the CRT, so the other monitors show the same targets to no effect. A shot the gun takes off the screen is asked for again, and four shots too close together start over from the first target. Esc, or the gun's A or B button, cancels. The range is saved for that gun and applies at once, and the row's reset button returns it to the starting range. The gun has to be connected to this PC to calibrate. A gun reached through [Remote Link](../guides/remote-link.md) is calibrated on the PC it is plugged into.
 
-A Wii Remote with its IR camera gets the same section, and its line says whether the remote is calibrated to the screen. **Calibrate** shows the same white screens and targets. From where you play, point the remote at each target and press **B**. A press while the remote can't see the sensor bar is asked for again, and Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. A calibrated remote ignores the Pointer tab's **Sensor Bar Position** and **Vertical Offset**, because the calibration measured where the bar sits. The reset button returns the remote to its default range. [Wii Controllers](../devices/wii-controllers.md#light-gun) covers a light-gun setup.
+A Wii Remote with its IR camera gets the same row, and its line says whether the remote is calibrated to the screen. **Calibrate** shows the same white screens and targets. From where you play, point the remote at each target and press **B**. A press while the remote can't see the sensor bar is asked for again, and Esc or **Home** cancels. The range is saved for that remote, and every IR Pointer source and pointer mode aims through it. A calibrated remote ignores the IR pointer's **Sensor Bar Position** and **Vertical Offset** on the controller page, because the calibration measured where the bar sits. The reset button returns the remote to its default range. [Wii Controllers](../devices/wii-controllers.md#light-gun) covers a light-gun setup.
 
-A gun or remote reached through [Remote Link](../guides/remote-link.md) has no Light Gun section here, because it is calibrated on the PC it is plugged into. The calibration screen closes if the gun disconnects or reconnects partway through, including a Wii Remote reconnecting when an extension is plugged in. A GunCon 2's aim takes no **Sensor Bar Position** or **Vertical Offset** either, which a Copy From of a Wii Remote's settings would otherwise carry onto the gun.
+A gun or remote reached through [Remote Link](../guides/remote-link.md) has no Gun Calibration row here, because it is calibrated on the PC it is plugged into. The calibration screen closes if the gun disconnects or reconnects partway through, including a Wii Remote reconnecting when an extension is plugged in. A GunCon 2's aim takes no **Sensor Bar Position** or **Vertical Offset** either, which a Copy From of a Wii Remote's settings would otherwise carry onto the gun.
 
 ---
 
@@ -604,9 +621,9 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 
 ### How to turn it on
 
-1. Select the device card
-2. In the detail pane, find the **Input Mode** section (gamepad-type devices only. The section is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the section whatever its type or source, so you can turn it off.)
-3. Check **Force Raw Joystick Mode (Bypass Gamepad Remapping)**
+1. Select the device's row
+2. In the panel, open **Details** (the switch shows for gamepad-type devices only. It is hidden for sources with no Windows HID path: web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, and Novint Falcon rows, and pads reaching this PC over Remote Link. A device that already has Force Raw Joystick Mode on shows the switch whatever its type or source, so you can turn it off.)
+3. Turn on **Force Raw Joystick Mode (Bypass Gamepad Remapping)**
 4. Saved right away. Persists across restarts.
 
 ### What changes
@@ -614,13 +631,13 @@ By default, PadForge uses SDL3's gamepad layer for known gamepads. SDL3 translat
 - Axis count can change. The raw layer often exposes more axes than the six the gamepad layer reports. Rows stay labeled Axis 0, Axis 1, and so on in both modes.
 - Button count can rise. Raw mode exposes every physical button, including any the gamepad layer folded away. Circles stay labeled by number in both modes.
 - Auto-mapping is off. Record each [mapping](mappings.md) by hand from the Record button.
-- The raw input display updates right away
+- **Test Inputs** updates right away
 
 ### When not to use it
 
 If the controller works fine in gamepad mode, raw mode gains you nothing. Gamepad mode gives you friendly names and a default mapping.
 
-The toggle shows for devices SDL3 recognizes as gamepads, and for any device that already has it on. Devices already running as raw joysticks (flight sticks, wheels, generic HID) always use raw indices.
+The switch shows for devices SDL3 recognizes as gamepads, and for any device that already has it on. Devices already running as raw joysticks (flight sticks, wheels, generic HID) always use raw indices.
 
 ---
 
@@ -640,17 +657,17 @@ PadForge identifies devices with deterministic GUIDs so they survive reboots and
 ### What that means
 
 - **Bluetooth controllers** (DualSense, DualShock 4, Switch Pro). GUID stays the same across reboots and re-pairs. Settings stick.
-- **Wired USB controllers that report no serial number.** GUID stays the same on the same USB port. A different port makes a new GUID. The old settings stay on the offline (gray) card. A wired DualSense or DualShock 4 reports its Bluetooth address as its serial, so it keeps one GUID on any port.
+- **Wired USB controllers that report no serial number.** GUID stays the same on the same USB port. A different port makes a new GUID. The old settings stay on the row under **Not Connected**. A wired DualSense or DualShock 4 reports its Bluetooth address as its serial, so it keeps one GUID on any port.
 - **[Profiles](../guides/profiles.md).** A profile falls back to VID:PID. If a profile was saved with a device that now has a different identity (a port change, for example), PadForge matches by VID:PID so the profile still applies.
 
-### Offline device cards
+### Devices that are not connected
 
-Disconnected devices stay in the list with an unlit status flame.
+Disconnected devices stay on the page, in the **Not Connected** fold or under the **Not Connected** segment, with their Used By pills in steel.
 
-- Every mapping, slot assignment, and setting is kept
+- Every mapping, assignment and setting is kept
 - Reconnect with the same GUID and everything comes back
-- Remove with the X button if you no longer need it (a **Remove Device** confirmation asks first)
-- Offline cards cost nothing at runtime. Stored settings only.
+- Remove with the X if you no longer need it (a **Remove Device** confirmation asks first)
+- They cost nothing at runtime. Stored settings only.
 
 ---
 
@@ -660,7 +677,7 @@ Disconnected devices stay in the list with an unlit status flame.
 
 Fixes center drift: a stick that does not rest in the middle.
 
-1. Go to the **Sticks** tab on the controller's config page (see [Stick Deadzones](stick-deadzones.md))
+1. Go to the **Sticks & Triggers** section of the controller's page (see [Stick Deadzones](stick-deadzones.md))
 2. Click **Calibrate Center** while the stick is at rest (do not touch it)
 3. PadForge samples hardware values for ~500 ms and calculates the offset
 
@@ -679,51 +696,51 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 - Start the engine if it is stopped. PadForge looks for new devices every two seconds while the engine runs, and every five while it idles. **Refresh** only redraws the list.
 - Confirm the device shows up in Device Manager or joy.cpl
 - For Bluetooth controllers, check pairing in Windows Bluetooth settings
-- For a Wii controller, pair it with the header **Pair** button, not Windows Bluetooth settings. See [Wii Controllers](../devices/wii-controllers.md).
+- For a Wii controller, pair it with **Pair a Controller** on this page, not Windows Bluetooth settings. See [Wii Controllers](../devices/wii-controllers.md).
 - PadForge filters out its own [virtual controllers](controller-slots.md) (HIDMaestro outputs) on purpose
 - Some devices need a manufacturer driver
 
 ### Device appears but shows no input
 
-- Check the raw input section. Are axes, buttons, and POVs drawn?
+- Check **Test Inputs**. Are axes, buttons and POVs drawn?
 - If they show but never change, try **Force Raw Joystick Mode**
-- For Bluetooth devices, confirm a stable connection (lit status flame)
+- For Bluetooth devices, confirm a stable connection (the row stays under Connected and its kind tile lights while you press)
 
 ### Buttons missing or mapped wrong
 
 - Turn on **Force Raw Joystick Mode (Bypass Gamepad Remapping)** to skip SDL3's mapping
-- Compare PadForge's raw input view with joy.cpl
+- Compare **Test Inputs** with joy.cpl
 - For an unmapped joystick-type device, click **Submit Device Mapping** to contribute a mapping
 
 ### Double input in games
 
-- Turn on **Hide from Games (HidHide)** on the device, or **Consume Mapped Inputs (Hooks)** for keyboards and mice
-- Confirm the master **Hide Devices from Games** toggle in [Settings](settings.md) is on
+- Turn on **Hide from Games (HidHide)** in the device's **Settings** card, or **Consume Mapped Inputs (Hooks)** for keyboards and mice
+- Confirm the master **Hide Devices from Games** switch in [Settings](settings.md) is on
 - Confirm HidHide is installed via [Driver Management](driver-management.md)
 
 ### Settings lost after reconnecting
 
-- A wired controller that reports no serial number gets a new GUID on a different USB port. Old settings stay on the offline (gray) card. Plug back into the original port, or reconfigure on the new card.
+- A wired controller that reports no serial number gets a new GUID on a different USB port. Old settings stay on the row under **Not Connected**. Plug back into the original port, or reconfigure on the new row.
 - Bluetooth controllers keep their GUID via MAC address. Settings persist.
 
 ### Center drift after calibration
 
 - Make sure the stick was completely at rest during calibration
-- For bad drift, the stick may be worn out. Raise the [deadzone](stick-deadzones.md) on the Sticks tab to cover it.
+- For bad drift, the stick may be worn out. Raise the [deadzone](stick-deadzones.md) in the Sticks & Triggers section to cover it.
 
-### HidHide toggle grayed out or missing
+### HidHide switch grayed out or missing
 
 - **Grayed out**: HidHide is not installed. Install it from [Driver Management](driver-management.md).
-- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, Novint Falcon, Game Telemetry, Lighting, and Haptics rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the toggle is left out instead of shown disabled. An analog keyboard card has no toggle either, since hiding its analog interface would hide it from the vendor's own software, which a Razer keyboard needs before it reports at all.
-- **Also missing**: a USB keyboard or mouse switched with **Use Only in PadForge**, and a precision touchpad row. Their section holds **Restore the Windows Driver** or **Use Only in PadForge** instead. See [Use Only in PadForge](#use-only-in-padforge).
+- **Missing**: the device has no Windows HID path to hide (web controller clients, the touchpad overlay, MIDI devices, NFC readers, microphones, the Hidden Buttons, System Motion, Head Tracker, VR Controller, Logitech G-Keys, keyboard screen, Novint Falcon, Game Telemetry, Twitch Chat, Lighting and Haptics rows, pads reaching this PC over Remote Link), or it is a merged row such as "All Keyboards (Merged)", which stands for many devices and has no HID instance of its own. HidHide cannot cloak either kind, so the switch is left out instead of shown disabled. An analog keyboard row has no switch either, since hiding its analog interface would hide it from the vendor's own software, which a Razer keyboard needs before it reports at all.
+- **Also missing**: a USB keyboard or mouse switched with **Use Only in PadForge**, and a precision touchpad row. Their card holds **Restore the Windows Driver**, **Give Back to Windows** or **Use Only in PadForge** instead. See [Use Only in PadForge](#use-only-in-padforge).
 
 ---
 
 ## Related pages
 
-- [Controller Slots](controller-slots.md): create slots before assigning devices.
-- [Wii Controllers](../devices/wii-controllers.md): pair a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller from the header Pair button.
-- [DualShock 3](../devices/dualshock-3.md): pair a DualShock 3 over USB from the same Pair button.
+- [Controller Slots](controller-slots.md): add virtual controllers and assign devices to them.
+- [Wii Controllers](../devices/wii-controllers.md): pair a Wii Remote, Nunchuk, Classic Controller, or Wii U Pro Controller from Pair a Controller.
+- [DualShock 3](../devices/dualshock-3.md): pair a DualShock 3 over USB from the same dialog.
 - [Button and Axis Mappings](mappings.md): map inputs after assigning a device.
 - [Stick Deadzones](stick-deadzones.md): calibrate center offset and deadzones.
 - [Macros](../guides/macros.md): automated actions triggered by device inputs.
@@ -734,11 +751,11 @@ Sets how much physical travel (1-100%) maps to full output, with one slider per 
 - [Head Tracking](head-tracking.md): set up OpenTrack for the Head Tracker row.
 - [DSU Motion Server](../reference/dsu-motion-server.md): Gyro and accel data for motion-enabled emulators.
 - [Profiles](../guides/profiles.md): device connections persist across profile switches.
-- [Dashboard](dashboard.md): connected device counts at a glance.
-- [Settings](settings.md): master device hiding toggle.
+- [Home](dashboard.md): connected device counts at a glance.
+- [Settings](settings.md): master device hiding switch.
 - [Driver Management](driver-management.md): HIDMaestro and HidHide driver installation.
 - [Troubleshooting](../troubleshooting.md): general troubleshooting guide.
 
 ---
 
-*Last updated for PadForge 5.3.1.*
+*Last updated for PadForge 6.0.0.*

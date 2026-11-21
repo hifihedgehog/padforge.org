@@ -79,7 +79,7 @@ The registry stamps `MachineKey` when the first button is learned. Definitions s
 
 Persistence is `AppSettingsData.HandheldButtons`, an array of `HandheldButtonData` with every field as an XML attribute (`Keys` is comma-joined), plus `HandheldMachineKey` and `HandheldButtonsEnabled`. The registry loads before the toggle. The export file is the same DTO under `{"padforgeHandheldButtons": 1, "machine": "...", "buttons": [...]}`.
 
-Two flags on the registry drive the hooks: `FeatureEnabled` (the Settings toggle) and `LearnCaptureActive` (the dialog is open). Either flipping raises `ActivityChanged`, which sends `InputService.ApplyDeviceHiding` back through `ApplyInputHooks`, where `HandheldChordRuntime.NeedsHooks` is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.
+Two flags on the registry drive the hooks: `FeatureEnabled` (the Settings switch, Enable Handheld PC Buttons) and `LearnCaptureActive` (the dialog is open). Either flipping raises `ActivityChanged`, which sends `InputService.ApplyDeviceHiding` back through `ApplyInputHooks`, where `HandheldChordRuntime.NeedsHooks` is the one extra term beside the suppression sets. The hooks stay installed with nothing to suppress while a chord is defined or a capture is armed, and come down when neither holds.
 
 ---
 
@@ -242,4 +242,4 @@ The WMI path has run on real hardware: a Lenovo Legion Pro 7 learned its Vantage
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

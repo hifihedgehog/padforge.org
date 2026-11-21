@@ -1,6 +1,6 @@
 # 2D Overlay System
 
-PNG overlays on a WPF Canvas show live controller state for Xbox, PlayStation, and Nintendo layouts. Custom Extended controllers use a procedurally generated schematic view. Keyboard+Mouse, MIDI, and VR types have dedicated preview views.
+PNG overlays on a WPF Canvas show live controller state for Xbox, PlayStation, and Nintendo layouts. Custom Extended controllers use a procedurally generated schematic view. Keyboard+Mouse, MIDI, and VR types have dedicated preview views. Every one of them is drawn in the picture at the top of the controller page's first section, labeled Mappings on a controller and Keys & Mouse, Notes & Controls or Hands on the Keyboard + Mouse, MIDI and VR types. The same 2D art, layer by layer, is the picture on a Home card and on the Devices page (see [Home cards and the Devices page](#home-cards-and-the-devices-page)).
 
 ---
 
@@ -34,11 +34,19 @@ MidiPreviewView.xaml.cs         (piano + CC slider view)
         |
         v
 VRPreviewView.xaml.cs           (SteamVR left+right hand pair)
+
+ControllerOverlayLayout.cs + StagePictures.LayoutOf()
+        |
+        v
+LiveArt.cs                      (the 2D art as layers)
+        |
+        v
+LiveArtStage.cs                 (a Home card's moving 2D picture)
 ```
 
 ### When Each View Is Used
 
-`PadPage.ApplyViewMode()` selects the view. Priority: KeyboardMouse > Midi > Extended without dedicated art > Vr > standard gamepad (2D/3D toggle). Nintendo slots take the last branch, so they get the same 2D/3D toggle as Xbox and PlayStation. `ControllerModel2DView` draws them from the SWITCHPRO or SWITCH2PRO layout, and `ControllerModelView` draws the Switch 2 Pro mesh for both profile generations. An Extended slot on one of the five Valve profiles takes the last branch too, because `HMaestroProfileCatalog.HasDedicatedArt` reports that PadForge ships that controller's body.
+The six views share one host, `PictureHost` in `PadPage.xaml`, with the `TouchSensorStrip`, the picked-control ring and the 2D/3D toggle (`ViewModeToggle`, top left) over them. `PadPage.ApplyViewMode()` selects the view. Priority: KeyboardMouse > Midi > Extended without dedicated art > Vr > standard gamepad (2D/3D toggle). Nintendo slots take the last branch, so they get the same 2D/3D toggle as Xbox and PlayStation. `ControllerModel2DView` draws them from the SWITCHPRO or SWITCH2PRO layout, and `ControllerModelView` draws the Switch 2 Pro mesh for both profile generations. An Extended slot on one of the five Valve profiles takes the last branch too, because `HMaestroProfileCatalog.HasDedicatedArt` reports that PadForge ships that controller's body.
 
 | Condition | View | Toggle |
 |-----------|------|--------|
@@ -51,7 +59,9 @@ VRPreviewView.xaml.cs           (SteamVR left+right hand pair)
 
 `VirtualControllerType` is `Xbox = 0`, `PlayStation = 1`, `Extended = 2`, `Midi = 3`, `KeyboardMouse = 4`, `Nintendo = 5`, `Vr = 6`. Numeric values are persisted, so the list is append-only.
 
-The mapping grid of a Nintendo slot, or of an Extended slot on a Valve profile, speaks the raw HID grammar (`RawBtn7`, `RawAxis0Neg`) while the preview art speaks the element grammar (`ButtonA`, `LeftThumbAxisXNeg`). `PadPage.OnModelRecordRequested` translates clicks with `NintendoPreviewMap.ToRaw`, and `ControllerModel2DView.UpdateFlashTarget` translates the recording target back with `NintendoPreviewMap.ToPreview`.
+The mapping grid of a Nintendo slot, or of an Extended slot on a Valve profile, speaks the raw HID grammar (`RawBtn7`, `RawAxis0Neg`) while the preview art speaks the element grammar (`ButtonA`, `LeftThumbAxisXNeg`). `PadPage.OnModelRecordRequested` translates clicks with `NintendoPreviewMap.ToRaw` (through `MappingTargetOf`), and `ControllerModel2DView.UpdateFlashTarget` translates the recording target back with `NintendoPreviewMap.ToPreview` and then `NintendoPreviewMap.ArtRole`, which names the art a role is drawn as.
+
+A click on a control also picks it: `OnModelRecordRequested` sets `PadViewModel.PickedTarget`, and the bar under the picture shows that control's rows, whether or not a recording starts. The page rings the picked control (`PickRing`, an ember line with a soft band outside it) where the picture says the control is drawn. All six views and the touch sensor strip implement `IPictureWithPick` (`Views/PicturePick.cs`): `TryGetPickBounds(target, out bounds, out round)` answers the place, and `PickBoundsChanged` asks the page to place the ring again after a rebuild.
 
 ---
 
@@ -313,7 +323,7 @@ Two finger dots (`Ellipse`, 22 px) render at Z=7 over the touchpad surface:
 
 ```
 PadForge.App/2DModels/
-  XBOX360/  (28 images)
+  XBOX360/  (50 images)
     XB360_base.png                        (1545x955, base controller image)
     Xbox 360 Controller Overlay.png       (composite overlay for refinement tool)
     XB360_A_Button.png, XB360_B_Button.png, ...
@@ -327,6 +337,7 @@ PadForge.App/2DModels/
     XB360_base_Black.png                  (colorway base)
     XB360_LeftStick_Black.png, XB360_RightStick_Black.png,
       XB360_LeftTrigger_Black.png, XB360_RightTrigger_Black.png  (colorway rest art)
+    XB360_*_WLG.png                       (22 files, the web controller's WLG finish)
   XBOXONE/  (34 images)
     XB1_S_base.png                        (1543x956, base controller image)
     Xbox One S Controller Overlay.png     (composite overlay for refinement tool)
@@ -341,7 +352,7 @@ PadForge.App/2DModels/
     XB1_S_base_Carbon/PulseRed/ShockBlue.png              (colorway bases)
     XB1_Left/RightStick_PulseRed/ShockBlue.png,
       XB1_Left/RightTrigger_PulseRed/ShockBlue.png        (colorway rest art)
-  XBOXSERIES/  (40 images)
+  XBOXSERIES/  (64 images)
     XBSeries_base.png                     (1534x954, base controller image)
     Xbox Series X Controller Overlay.png  (composite overlay for refinement tool)
     XBSeries_A_Button.png, XBSeries_B_Button.png, XBSeries_X_Button.png, XBSeries_Y_Button.png
@@ -356,7 +367,8 @@ PadForge.App/2DModels/
     XBSeries_base_Carbon/DeepPink/ElectricVolt/PulseRed/ShockBlue.png  (colorway bases)
     XBSeries_Left/RightStick_DeepPink/ElectricVolt/PulseRed/ShockBlue.png,
       XBSeries_Left/RightTrigger_Carbon.png               (colorway rest art)
-  DualSense/  (33 images)
+    XBSeries_*_WLG.png                    (24 files, the web controller's WLG finish)
+  DualSense/  (60 images)
     DualSense_base.png                    (1467x816, base controller image)
     DualSense Controller Overlay.png      (composite overlay for refinement tool)
     DualSense_Cross.png, DualSense_Circle.png,
@@ -373,8 +385,9 @@ PadForge.App/2DModels/
     DualSense_Touchpad_Click.png          (touchpad-click highlight, used by the 2D view)
     DualSense_base_CosmicRed/GalacticPurple/Midnight/NovaPink/StarlightBlue.png
                                           (colorway bases, no rest-art overrides)
+    DualSense_*_WLG.png                   (27 files, the web controller's WLG finish)
   DUALSENSEEDGE/  (34 images)
-    Same file names as DualSense/ (the bases are the wider 1817x816 renders),
+    Same file names as DualSense/ without the WLG set (the bases are the wider 1817x816 renders),
     plus DualSense_EdgeTile.png           (the four floating back-button tiles)
   DS4/  (29 images)
     DS4_V2_base.png                       (1466x783, base controller image)
@@ -448,7 +461,7 @@ PadForge.App/2DModels/
     SC2_LeftShoulder.png, SC2_RightShoulder.png,
       SC2_LeftTrigger.png, SC2_RightTrigger.png,
       SC2_Paddle1/2/3/4.png               (margin tiles for what a front view cannot show)
-  MOUSE/  (8 images + LICENSE)
+  MOUSE/  (7 PNG images, mouse.svg and its LICENSE)
     mouse_body.png, mouse_lmb.png, mouse_rmb.png, mouse_wheel.png
     mouse_sideupper.png, mouse_sidelower.png, mouse_line.png, mouse.svg
   VRCONTROLLER/  (15 images)
@@ -464,7 +477,7 @@ All PNGs are declared as WPF `Resource` (not `EmbeddedResource`):
 <Resource Include="2DModels\**\*.png" />
 ```
 
-They are loaded through `EmbeddedBitmaps.Load`, which reads the assembly's `<assemblyname>.g.resources` stream directly. `pack://` URIs are not used. They throw "Part URI cannot end with a forward slash" on the .NET 10 single-file publish. `EmbeddedBitmaps` lowercases the resource path, looks it up via `ResourceManager`, and returns a frozen `BitmapImage` (or null, so callers degrade to an empty placeholder instead of crashing). Results are cached per path in a `ConcurrentDictionary`, negative results included, so a repeated theme rebuild does not re-decode the art. Shared with the PadPage lightbar preview, the mouse glyph, the VR preview, and the Workshop preview.
+They are loaded through `EmbeddedBitmaps.Load`, which reads the assembly's `<assemblyname>.g.resources` stream directly. `pack://` URIs are not used. They throw "Part URI cannot end with a forward slash" on the .NET 10 single-file publish. `EmbeddedBitmaps` lowercases the resource path, looks it up via `ResourceManager`, and returns a frozen `BitmapImage` (or null, so callers degrade to an empty placeholder instead of crashing). Results are cached per path in a `ConcurrentDictionary`, negative results included, so a repeated theme rebuild does not re-decode the art. Shared with the PadPage lightbar preview, the mouse glyph, the VR preview, the Workshop preview, and `LiveArt`, which builds the Home card and Devices page pictures.
 
 Source artwork: [Gamepad-Asset-Pack](https://github.com/AL2009man/Gamepad-Asset-Pack) by AL2009man (MIT license).
 
@@ -474,7 +487,7 @@ Source artwork: [Gamepad-Asset-Pack](https://github.com/AL2009man/Gamepad-Asset-
 
 **File:** `PadForge.App/Views/ControllerModel2DView.xaml`, `ControllerModel2DView.xaml.cs`
 
-WPF `UserControl` with a `Canvas` inside a `Viewbox` for resolution-independent scaling. About 1,183 lines of code-behind, plus a 964-line `ControllerModel2DView.Annotations.cs` partial that carries the annotation overlay (#175).
+WPF `UserControl` with a `Canvas` inside a `Viewbox` for resolution-independent scaling. About 1,250 lines of code-behind, plus a 908-line `ControllerModel2DView.Annotations.cs` partial that carries the annotation overlay (#175).
 
 ### XAML Structure
 
@@ -485,11 +498,11 @@ WPF `UserControl` with a `Canvas` inside a `Viewbox` for resolution-independent 
     </Viewbox>
 
     <!-- Annotation overlay: chips + leader lines, outside the Viewbox
-         so chip text stays 10 DIP and leaders stay 1 px at any scale -->
+         so chip text stays 12 px and leaders stay 1 px at any scale -->
     <Canvas x:Name="AnnotationCanvas" Visibility="Collapsed" ClipToBounds="True"/>
 
     <!-- Top-right chrome: colorway picker, its reset button, annotation toggle -->
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+    <StackPanel x:Name="CornerTools" Orientation="Horizontal" HorizontalAlignment="Right"
                 VerticalAlignment="Top" Margin="0,8,8,0">
         <ComboBox x:Name="AppearancePicker" MinWidth="130" Visibility="Collapsed"
                   SelectionChanged="AppearancePicker_SelectionChanged" />
@@ -497,12 +510,14 @@ WPF `UserControl` with a `Canvas` inside a `Viewbox` for resolution-independent 
                   Visibility="{Binding Visibility, ElementName=AppearancePicker}" />
         <ui:Button x:Name="AnnotationToggleButton" Style="{StaticResource EmberIconButton}"
                    Click="AnnotationToggle_Click">
-            <TextBlock x:Name="AnnotationToggleGlyph" FontFamily="Segoe MDL2 Assets"
-                       Text="&#xE8EC;"/>
+            <reset:GlyphText x:Name="AnnotationToggleGlyph" FontFamily="Segoe MDL2 Assets"
+                       FontSize="14" Text="&#xE8EC;"/>
         </ui:Button>
     </StackPanel>
 </Grid>
 ```
+
+Both canvases set `FlowDirection="LeftToRight"`, so a right-to-left language does not mirror the controller. The picker's tooltip is "Colorway" (`Pad_Colorway`) and the toggle's is "Mapping Annotations" (`Pad_ToggleAnnotations`).
 
 The `Viewbox` scales the canvas uniformly to fit available space. Canvas dimensions match the layout's `BaseWidth`/`BaseHeight` (e.g., 1545x955 for Xbox 360). `AnnotationCanvas` and the top-right chrome sit outside the `Viewbox` so they keep a fixed pixel size regardless of the model scale.
 
@@ -510,14 +525,19 @@ The `Viewbox` scales the canvas uniformly to fit available space. Canvas dimensi
 
 ```csharp
 public event EventHandler<string> ControllerElementRecordRequested;
+public event EventHandler PickBoundsChanged;          // IPictureWithPick
+public event EventHandler<bool> AnnotationsToggled;
+public event EventHandler<string> AnnotationChipNavigateRequested;
 ```
+
+`BuildCanvas` raises `PickBoundsChanged` after every rebuild. `TryGetPickBounds` reads `_pickRects`: each control's traced hit outline, or its box when it has no `HitPath`. A raw row name goes through `ToPreview` and `ArtRole`, a `Neg` direction drops the suffix, and a stick's axes and button fall back to its ring. A stick ring counts as round, and so does a button whose box is between 0.8 and 1.25 as wide as it is tall.
 
 ### Private State
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `_vm` | `PadViewModel` | Bound ViewModel |
-| `_loadedModel` | `string` | One of `"XBOX360"`, `"XBOXONE"`, `"XBOXSERIES"`, `"DS4"`, `"DualSense"`, `"DUALSENSEEDGE"`, `"SWITCHPRO"`, `"SWITCH2PRO"`, `"STEAMDECK"`, `"STEAMCONTROLLER"`, `"STEAMCONTROLLER2"` |
+| `_loadedModel` | `string` | One of `"XBOX360"`, `"DS3"`, `"XBOXONE"`, `"XBOXSERIES"`, `"DS4"`, `"DualSense"`, `"DUALSENSEEDGE"`, `"SWITCHPRO"`, `"SWITCH2PRO"`, `"STEAMDECK"`, `"STEAMCONTROLLER"`, `"STEAMCONTROLLER2"` |
 | `_loadedColorway` | `string` | Colorway id the canvas was built on (null when the folder ships one) |
 | `_colorwayFamilyKey` | `string` | Appearance-store key shared with the 3D picker |
 | `_colorwaySet` | `Colorway2D[]` | The folder's colorways, held for the picker handler |
@@ -543,6 +563,7 @@ public event EventHandler<string> ControllerElementRecordRequested;
 | `_touchpadOverlay1` | `OverlayElement` | The pad finger 1 rides (`Touchpad`, or `RightTouchpad` on a two-pad layout) |
 | `_padClickTarget` | `Dictionary<string, string>` | Pad target to its click target (`Touchpad` to `TouchpadClick`, `LeftTouchpad` to `LeftTouchpadClick`), for hover and click-to-record |
 | `_padAreas` | `Dictionary<string, PadTouchArea>` | Each pad's touch area, measured from its click art |
+| `_pickRects` | `Dictionary<string, Rect>` | Target name to where the art draws it, in canvas pixels, for the picked-control ring |
 
 ### ViewModel Binding
 
@@ -654,11 +675,11 @@ Created from StickClick overlay images at 40% opacity. Initially collapsed. Used
 private static Image CreateImage(string resourcePath, double x, double y, double w, double h)
 ```
 
-Loads a PNG through `EmbeddedBitmaps.Load(resourcePath)` (the `.g.resources` stream, not a `pack://` URI) into a `BitmapImage`, positioned with `Canvas.SetLeft/SetTop`. A missing resource returns an empty placeholder `Image` instead of crashing.
+Loads a PNG through `EmbeddedBitmaps.Load(resourcePath)` (the `.g.resources` stream, not a `pack://` URI) and shows it in a `DecorativeImage`, an `Image` a screen reader passes over, positioned with `Canvas.SetLeft/SetTop`. A missing resource returns an empty placeholder instead of crashing.
 
 ### Per-Frame Updates
 
-`CompositionTarget.Rendering` handler, gated by `_dirty`. The handler returns early when `!IsVisible` or when `AmbientMotionProbe.Instance.IsWindowMinimized`, because `IsVisible` stays true on a minimized window and the repaint would otherwise run per display frame against nothing.
+`CompositionTarget.Rendering` handler, gated by `_dirty`. The handler returns early when `!IsVisible` or when `AmbientMotionProbe.Instance.IsWindowMinimized`, because `IsVisible` stays true on a minimized window and the repaint would otherwise run per display frame against nothing. It runs `UpdateButtons`, `UpdateTriggers`, `UpdateSticks`, `UpdateTouchpadPreview` and `UpdateAnnotationChipLights`, in that order, so the legend tags light in the frame that lights the picture.
 
 #### UpdateButtons()
 
@@ -670,7 +691,9 @@ SetOverlayVisible("ButtonB", _vm.ButtonB);
 // ... 29 more
 ```
 
-Beyond the thirteen shared gamepad targets (four face buttons, four dpad directions, two shoulders, Back, Start, Guide), the list covers `ButtonShare` (Xbox Series, Switch Capture), `ButtonMute` (DualSense), `ButtonC` (Switch 2 Pro), `LeftPaddle` / `RightPaddle` (Edge, Switch 2 Pro grips), `LeftFunction` / `RightFunction` (Edge), both thumb-click targets, and the Valve roles: `ButtonQuickAccess`, `Paddle1` to `Paddle4`, `LeftGrip` / `RightGrip`, and `LeftTouchpadClick` / `RightTouchpadClick`. A layout without an element for a target simply has no entry in `_overlayImages`, so the call is a no-op. `SetOverlayVisible()` skips elements currently being flash-animated or hovered.
+Beyond the thirteen shared gamepad targets (four face buttons, four dpad directions, two shoulders, Back, Start, Guide), the list covers `ButtonShare` (Xbox Series, Switch Capture), `ButtonMute` (DualSense), `ButtonC` (Switch 2 Pro), `LeftPaddle` / `RightPaddle` (Edge, Switch 2 Pro grips), `LeftFunction` / `RightFunction` (Edge), both thumb-click targets, and the Valve roles: `ButtonQuickAccess`, `Paddle1` to `Paddle4`, `LeftGrip` / `RightGrip`, and `LeftTouchpadClick` / `RightTouchpadClick`. A layout without an element for a target has no entry in `_overlayImages`, so the call is a no-op. `SetOverlayVisible()` skips elements currently being flash-animated or hovered.
+
+The two thumb clicks go through `SetStickCapVisible` instead, which also reads `LeftStickTouch` / `RightStickTouch`. A clicked stick shows its click art whole, and a finger resting on a capacitive stick top (Steam Deck, 2026 Steam Controller) shows it at `StickTouchOpacity` (0.4), since the art has no touch state of its own.
 
 #### UpdateTriggers()
 
@@ -698,7 +721,7 @@ Raw short values (-32768–32767) are normalized to -1–1. `StickMaxTravel` is 
 private void HitArea_Click(object sender, MouseButtonEventArgs e)
 ```
 
-For non-stick elements, fires `ControllerElementRecordRequested` with the `Tag` value. For stick rings, calls `DetermineAxisFromQuadrant()`:
+Fires `ControllerElementRecordRequested` with what `ClickTargetAt()` names: the `Tag` value for most elements, the pad's own click for a `Touchpad` element (`TouchpadClick`, or `LeftTouchpadClick` / `RightTouchpadClick` through `_padClickTarget`), and for a stick ring the result of `DetermineAxisFromQuadrant()`:
 
 ```csharp
 private static string DetermineAxisFromQuadrant(
@@ -786,26 +809,57 @@ Built by `BuildTouchpadPreview()` for every layout that declares a touchpad elem
 
 ### Annotation Overlay (#175)
 
-`ControllerModel2DView.Annotations.cs` (a partial of the same class) draws one mapping chip per row at the canvas edge, with a 1 px cold leader line to the control anchor, an ember output dot, and a hover detail strip. Off by default. The hosting page pushes the session state in on bind.
+`ControllerModel2DView.Annotations.cs` (a partial of the same class) draws the picture's legend: one tag per row that has a source, at the canvas edge, with a 1 px cold leader line at 0.40 opacity to the control's anchor, and a detail strip docked at the foot of the picture while the pointer is on a tag. The tag's face is the output's name (`TargetLabel`). Its tooltip and the detail strip show every source feeding the row with its device, and one arrow into the output, capped at 12 rows with a `+N` tail. Off by default. The overlay state is session-only (`PadViewModel.AnnotationOverlayEnabled`): the hosting page pushes it in on bind and writes it back on `AnnotationsToggled`.
 
-Constants (identical to the 3D view's annotation layer):
+The 3D view's legend uses the same two helpers, so the two legends stand and light alike.
 
-| Constant | Value |
-|----------|-------|
-| `AnnotationChipHeight` | 20 |
-| `AnnotationChipGap` | 6 |
-| `AnnotationEdgeMargin` | 8 |
-| `AnnotationDetailMaxRows` | 12 |
-| Timer interval | 150 ms |
+| Constant | Value | Source |
+|----------|-------|--------|
+| `AnnotationChipHeight` | 20 | `LegendColumn.ChipHeight` |
+| Gap between tags | 6, closing to 2 in a short picture | `LegendColumn.Gap`, `LegendColumn.LeastGap` |
+| `AnnotationEdgeMargin` | 8 | `LegendColumn.EdgeMargin` |
+| `AnnotationDetailMaxRows` | 12 | the partial itself |
 
-Anchors come from the active layout table: `SetAnnotationAnchors()` stores each overlay's rect center by TargetName, skipping `TriggerBase` rows. `ResolveAnnotationAnchor()` first translates raw grid names (Nintendo slots, and Extended slots on a Valve profile) through `NintendoPreviewMap.ToPreview`, then falls back from a direct name to the stick ring for `LeftThumbAxisX/Y` and `RightThumbAxisX/Y`. `LayoutAnnotations()` translates every anchor through the live `Viewbox` transform, splits chips into left and right columns, then runs a two-pass slot assignment (downward greedy, upward overflow fix) so chips never overlap. Re-layout is event-driven (size change, rebuild, source-text refresh), not per-frame. The 150 ms timer only expires flashes and evaluates ember dots.
+Anchors come from the active layout table: `SetAnnotationAnchors()` stores each overlay's rect center by TargetName, skipping `TriggerBase` rows. `ResolveAnnotationAnchor()` first translates raw grid names (Nintendo slots, and Extended slots on a Valve profile) through `NintendoPreviewMap.ToPreview`, then falls back from a direct name to the stick ring for `LeftThumbAxisX/Y` and `RightThumbAxisX/Y`. `LayoutAnnotations()` translates every anchor through the live `Viewbox` transform, drops a tag whose anchor falls outside the canvas, and splits the rest into left and right columns at the canvas's middle.
+
+`LegendColumn.Tops()` (`Views/LegendColumn.cs`) places each column. A tag stands beside its control where it can and is pushed down by the tag above it, so tags never overlap. A column that would run past the picture's foot is pushed up from the foot. The first tag stands a gap below the buttons in the picture's top corners (`CornerBottom()`, the height of `CornerTools`, which also covers the page's 2D/3D switch at the left). In a picture too short for that, the gap closes toward 2, and a column too long even then takes the corner's room as well. Re-layout is event-driven (size change, rebuild, source-text refresh), not per-frame, and the partial runs no timer.
 
 The size change is the overlay canvas's own `SizeChanged`, not the view's. `AnnotationCanvas` stays collapsed, and unmeasured, until the toggle shows it, so its first size is what lays the chips out. With the handler on the view, turning the overlay on drew nothing until the window was resized.
 
-`AnnotationToggleButton` (glyph E8EC, top-right) flips `AnnotationsEnabled` and raises `AnnotationsToggled`. Chip clicks raise `AnnotationChipNavigateRequested` with the row's `TargetSettingName`.
+A tag is lit by its control's output (`Views/TagLight.cs`). `UpdateAnnotationChipLights()` runs in the render pass. A button's tag is dark or fully lit. A trigger's tag, and a stick axis's, takes ember by how far the output is from rest: `TagLight.AnalogLevel` reads the trigger's pull, or the axis's distance from center times two, from 0 to 1. `TagLight.StepOf` cuts that level into 16 steps (`Steps`). A level under 0.02 (`Rest`) is rest and lights nothing, so a worn stick's idle reading stays dark. The first step out of rest jumps to 0.35 of full (`FirstShare`), so the least movement shows, and the rest follows the level. `TagLight.Paint` gives a tag at rest the theme's `SteelLineSoftBrush` edge and `TextFillColorSecondaryBrush` name, a fully lit tag `EmberBrush` for both, and a step between a frozen mix of each rest color and ember. A tag's brushes change only when its step does. This replaced a 250 ms blue flash on press, an ember output dot beside each tag, and the two level bars that stood beside each trigger's tag. A raw row name is read as the control it is drawn as (`ToPreview`), so the tags of a Nintendo or Valve slot light too.
+
+`AnnotationToggleButton` (glyph E8EC, top-right) flips `AnnotationsEnabled` and raises `AnnotationsToggled`. While on, its glyph and edge take `ColdBrush`. A tag click raises `AnnotationChipNavigateRequested` with the row's `TargetSettingName`, and `PadPage.OnAnnotationChipNavigate` picks that control, so the bar under the picture shows its row with its editor open.
 
 <!-- SCREENSHOT: 2d-annotation-overlay -->
 ![2D controller preview with annotation chips and leader lines enabled](../images/2d-annotation-overlay.png)
+
+---
+
+## Home cards and the Devices page
+
+**Files:** `PadForge.App/Common/StagePictures.cs`, `PadForge.App/Models2D/LiveArt.cs`, `PadForge.App/Controls/LiveArtStage.cs`
+
+A controller's card on Home shows the picture its own page shows. `InputService.PictureOf` picks it: while the controller page shows the 3D view, a still of the 3D model (see [3D Model System](3d-model-system.md)), and while it shows the 2D view, the 2D art. A model that cannot be drawn falls back to the 2D art, as the page does. `Use2DControllerView` is the one switch for both.
+
+`StagePictures.HasBody` follows the page's rule. Xbox and PlayStation controllers always have a body, their family's fallback where the preset is unknown. Nintendo and Extended controllers have one only when `HasDedicatedArt` reports PadForge's own art for the preset, since another family's body under their name would be wrong. Keyboard + Mouse, MIDI and VR controllers have none, and the card shows the type's symbol.
+
+`StagePictures.PathFor` resolves the folder through `ResolveAssetFolders` and the base render of the finish chosen on the controller page (`Controller2DColorways`, entry 0 when none is chosen). `StagePictures.LayoutOf(folder)` is the same twelve-way table `BuildCanvas` switches on. `LayoutMarks` records where each button, stick click, trigger and stick is drawn, for the marks that light over a picture that does not move.
+
+`StagePictures.Color(path)` builds the picture once per path through `LiveArt.From`. At rest the layers make it, in `BuildCanvas` order: the triggers behind the body, the body, the sticks and the printed marks. The picture is cut to what is drawn in it and fitted into 352 by 232 (`BoxWidth`, `BoxHeight`), twice its size on screen. `StagePictures.Gray` makes a gray copy of the same shape for a controller that is not forging.
+
+While a controller forges, the card draws its 2D art moving in the picture's place (`LiveArtStage`, the `CardLiveArt` style in `HomePage.xaml`). Each `LiveArt` layer has a kind: `Still`, `Stick`, `Trigger`, `Button` or `StickClick`. `LiveArtStage.OnRender` draws them over the picture's box (`HeldGlow.PictureBox`), driven by the card's `StagePose`: a stick's art shifts by its raw axis over 32767 times the layout's `StickMaxTravel`, with up on the stick up on the picture, a trigger's art is clipped from the bottom by its pull, a held button's art is drawn, and a stick's click art is drawn whole while clicked and at `ControllerModel2DView.StickTouchOpacity` while its top is touched. The stage takes no clicks, no screen reader reads it, and it always lays out left to right. A still of the 3D model moves through `LiveStage` instead.
+
+The Devices page shows the selected device's picture by the same rule (`InputService.UpdateSelectedDevicePicture`). `StagePictures.ForDevice(vendorId, productId)` takes the first preset in the catalog with the device's own ids and art of its own, in that family's first finish. A preset is one device on one link, so the same pad on another link or through its own dongle is in no preset. `StagePictures.SameController` maps those ids to the preset whose body is theirs, from SDL's `src/joystick/controller_list.h`:
+
+| Ids | Device | Preset |
+|-----|--------|--------|
+| `28DE:1101`, `28DE:1105`, `28DE:1106`, `28DE:1142` | 2015 Steam Controller: first hardware, Bluetooth in both firmwares, wireless dongle | `steam-controller` |
+| `28DE:1303`, `28DE:1304`, `28DE:1305` | 2026 Steam Controller: Bluetooth and its two dongles | `steam-controller-2` |
+| `054C:0BA0` | DualShock 4 through Sony's wireless adaptor | `dualshock-4-v2` |
+| `045E:02E0`, `045E:0B20` | Xbox One S pad on Bluetooth, first firmware and Bluetooth LE | `xbox-one-s-bt` |
+| `045E:0B0C`, `045E:0B21` | Xbox Adaptive Controller on Bluetooth and Bluetooth LE | `xbox-adaptive` |
+
+A device no preset names gets no picture, for the same reason a Nintendo card without its own art gets none.
 
 ---
 
@@ -813,7 +867,7 @@ The size change is the overlay canvas's own `SizeChanged`, not the view's. `Anno
 
 **File:** `PadForge.App/Views/ControllerSchematicView.xaml`, `ControllerSchematicView.xaml.cs`
 
-Procedurally generated view for custom Extended controllers. Displays stick circles, trigger bars, POV compasses, and button grids. About 938 lines of code-behind.
+Procedurally generated view for custom Extended controllers. Displays stick circles, trigger bars, POV compasses, and button grids. About 979 lines of code-behind.
 
 ### XAML Structure
 
@@ -883,6 +937,7 @@ private struct TriggerWidget
     public Rectangle Background;           // Border rectangle
     public Rectangle Fill;                 // Fill bar (grows from bottom)
     public double X, Y;
+    public double LabelWidth;              // The next widget steps past the wider of bar and label
 }
 
 private sealed class PovWidget
@@ -961,7 +1016,7 @@ Creates:
 2. **Crosshair lines** (`Line` x2). Horizontal and vertical at 50% opacity
 3. **Position dot** (`Ellipse`). 10 px accent-colored dot at center
 4. **Direction arrow** (`Polygon` inside `Canvas`). Hidden until flash/hover, rotated via `RotateTransform`
-5. **Label** (`TextBlock`). "Stick N" above the circle
+5. **Label** (`TextBlock`). "Stick N" above the circle (`Preview_Stick_Format`)
 
 **Hover:** `MouseMove` on the outer circle determines quadrant from mouse position, shows direction arrow with `HoverBrush`, highlights stroke.
 
@@ -983,7 +1038,7 @@ private TriggerWidget CreateTriggerWidget(int index, int axisIdx, double x, doub
 Creates:
 1. **Background** (`Rectangle`). Dim stroke, dark fill, rounded corners, hand cursor
 2. **Fill bar** (`Rectangle`). Accent-colored, height 0 initially, grows from bottom
-3. **Label**. "TN" above the bar
+3. **Label**. "Trigger N" above the bar (`Preview_Trigger_Format`). `RebuildLayout` steps the next widget past the wider of the bar and its label
 
 **Click-to-record:** fires `RawAxis{axisIdx}`.
 
@@ -996,7 +1051,7 @@ private PovWidget CreatePovWidget(int index, double x, double y)
 Creates:
 1. **Outer circle** (`Ellipse`). Dim stroke, dark background
 2. **Arrow** (`Polygon` inside `Canvas`). Triangular, rotated around POV center, initially hidden
-3. **Label**. "D-Pad" (1 POV) or "POV N" (multiple)
+3. **Label**. "D-Pad" (1 POV, `Preview_DPad`) or "POV N" (multiple, `Preview_POV_Format`)
 
 **Hover:** direction arrow rotated to mouse quadrant (0/90/180/270 degrees).
 
@@ -1107,7 +1162,7 @@ double angle = dir switch
 
 **File:** `PadForge.App/Views/KBMPreviewView.xaml`, `KBMPreviewView.xaml.cs`
 
-WPF `UserControl` for Keyboard+Mouse virtual controllers. Displays the slot's keyboard above its mouse: the generic keyboard on Windows input or the picked keyboard's board, and the mouse with the controls the picked mouse has. About 986 lines of code-behind. Every key, mouse control, arrow and lock light is a click-to-record control as well as a display.
+WPF `UserControl` for Keyboard+Mouse virtual controllers. Displays the slot's keyboard above its mouse: the generic keyboard on Windows input or the picked keyboard's board, and the mouse with the controls the picked mouse has. About 1,041 lines of code-behind. Every key, mouse control, arrow and lock light is a click-to-record control as well as a display.
 
 ### XAML Structure
 
@@ -1138,7 +1193,7 @@ The generic keyboard is `KeyboardKeyItem.BuildLayout()` (full ANSI QWERTY with n
 
 A board drawing is one of eleven key sets in `KeyboardFamilies.g.cs`, which `tools/gen_kbm_layouts.py` generates from QMK's layout data (`layouts/default`, `keyboards/hhkb/jp`) and Keychron's QMK fork for the Q6: full size ANSI, ISO and with four keys over the number pad, tenkeyless, 75 percent, 65 percent with and without a blocker, 60 percent, Happy Hacking in ANSI and JIS, and the Keychron Q6. Each `LayoutKey` holds its position and size in key units (24 px each) and the HID usage it sends. `KeyboardFamilies` maps each of HIDMaestro's 51 keyboard profiles to a set, and `KbmHidDeviceTests` holds that table to the catalog, so a profile a later SDK adds cannot go undrawn. A board no QMK layout matches draws as the nearest set, marked `Approximate`, and the canvas adds the caption `Pad_Kbm_Preview_Approximate` under it.
 
-The Lighting tab's **Key Colors** card draws a lit device's lights with `KeyLightsView` (`KeyLightsView.cs`), built in code the way `BuildDeviceKeyboard` builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the `KeyboardFamilies.g.cs` set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through `KeyTargetPickerViewModel`.
+The Lights section's **Key Colors** card draws a lit device's lights with `KeyLightsView` (`KeyLightsView.cs`), built in code the way `BuildDeviceKeyboard` builds a board and reusing its legends and key fill. A light sits at the position the device reports (a LampArray's micrometers). A device that names its keys without positions takes the `KeyboardFamilies.g.cs` set that holds the most of them. Every other light is a chip in a row under the picture. A light's fill is the color the layer being colored gives it, faded where it shows the Base layer's, and a selected light is outlined in ember. The same view serves the key picker of the Set Key Colors macro action through `KeyTargetPickerViewModel`, and the Map Key Lights dialog (`MapKeyLightsDialog.xaml`).
 
 Each board key stands for the row the input layout gives it: `KbmHidKeyMap.TargetOf(usage, UiLayout())` turns its usage into the virtual-key index of its row, and a layout change redraws the board. A language switch rebuilds both canvases once the switch's other handlers have run (`Strings.CultureChanged`), so the tooltips and the approximate-board caption take the new language. Its legend comes from, in order, `KeyboardFamilies.FixedLegend` (Apple's modifier symbols on a Mac board, the JIS keys' own legends, `Fn` for a key that sends nothing), a media glyph for a consumer usage, the character the layout types (`KbmHidKeyMap.CharacterLegend`), and `ShortLegend`. A key the picked keyboard cannot send (`KbmDeviceCaps`), or that no row reaches (`InputManager.IsKbmKeyTarget`), is drawn at 35 percent and takes no clicks.
 
@@ -1285,7 +1340,7 @@ Expects `Gamepad-Asset-Pack/Controller Asset Pack/` as a sibling of the PadForge
 
 **File:** `PadForge.App/Views/MidiPreviewView.xaml`, `MidiPreviewView.xaml.cs`
 
-WPF `UserControl` for MIDI virtual controllers. Displays a piano keyboard for note outputs and vertical CC sliders. About 797 lines of code-behind. The same control also runs in an input mode on the Devices page (see MIDI Input Mode below).
+WPF `UserControl` for MIDI virtual controllers. Displays a piano keyboard for note outputs and vertical CC sliders. About 815 lines of code-behind. The same control also runs in an input mode on the Devices page (see MIDI Input Mode below).
 
 ### XAML Structure
 
@@ -1397,7 +1452,7 @@ Canvas sized to fit both sections.
 Creates:
 1. **Background** (`Rectangle`). Dim stroke, dark fill, rounded corners, hand cursor
 2. **Fill bar** (`Rectangle`). Accent-colored, height 0 initially, grows from bottom
-3. **Label**. CC number below the bar (centered, 9 pt)
+3. **Label**. CC number below the bar (centered, font size 9)
 
 **Click-to-record:** fires `MidiCC{index}`.
 
@@ -1468,7 +1523,7 @@ The same control is reused on the Devices page to visualize a MIDI input device'
 
 **File:** `PadForge.App/Views/VRPreviewView.xaml`, `VRPreviewView.xaml.cs`
 
-Live preview for a VR slot (#49). About 645 lines of code-behind. Same `Viewbox > Canvas` shape as the schematic and MIDI views, with the canvas named `VrCanvas`.
+Live preview for a VR slot (#49). About 671 lines of code-behind. Same `Viewbox > Canvas` shape as the schematic and MIDI views, with the canvas named `VrCanvas`.
 
 One VR slot drives both SteamVR hands, so the art is the pair side by side: `2DModels/VRCONTROLLER/VRController_base.png` at 975x726, with a per-element tint layer composited over it.
 
@@ -1556,7 +1611,7 @@ Mirrors `SoundPackageManager` leg for leg.
 | `FileExtension` | `".pficons"` |
 | `ImageExtensions` | `.png`, `.jpg`, `.jpeg`, `.bmp`, `.gif` (WPF's stock decoder set, shared by the pack probe, the entry lister, and the editor's loose-file gate) |
 | `Packages` / `PackageRef { Name, Path }` | The registry. `Path` is exe-relative when the file sits under the application directory, absolute otherwise. |
-| `RegistryChanged` | Raised on every `LoadRegistry`, `Register`, and `Unregister`. The Menus tab refreshes its list on it, and `MenuIconResolver` drops its cache. |
+| `RegistryChanged` | Raised on every `LoadRegistry`, `Register`, and `Unregister`. The Icon Packages card refreshes its list on it, and `MenuIconResolver` drops its cache. |
 | `Register(filePath, out probedName)` | Probes the pack, dedups the display name against other entries with a `" (n)"` suffix, refreshes an existing entry for the same file. Returns null for a zip with no image entry. |
 | `Unregister(name)` | Removes the entry. The file stays. |
 | `ResolvePackageFile(name)` | Registered name to the resolved file path. |
@@ -1578,7 +1633,7 @@ Mirrors `SoundPackageManager` leg for leg.
 
 **File:** `PadForge.App/Common/MenuIconResolver.cs`
 
-`Resolve(string iconName)` returns a frozen, cached `BitmapImage` or null. Three forms, tested in this order:
+`Resolve(string iconName)` returns a frozen, cached `BitmapSource` or null. Three forms, tested in this order:
 
 | Form | Test | Loader |
 |------|------|--------|
@@ -1592,7 +1647,9 @@ SVG was declined. Steam ships its binding icons at 256 px, and a cell at its lar
 
 ### Overlay rendering
 
-`MenuOverlayWindow.PlaceCellContent(item, showLabels, index, cx, cy, maxLabelWidth, fontSize, scale)` resolves `item.Icon` through `MenuIconResolver.Resolve`. A resolved icon is an `Image` of `30 * Math.Max(scale, 0.7)` pixels times the cell's `IconScalePercent` (clamped to 25..200) over 100, centered on the cell, raised by `iconSize * 0.45` when a label is also shown, with the label placed `iconSize * 0.55` below center. A null result renders the label alone, the pre-icon behavior. Icons are not hit-test visible and do not restyle on hover, so only labels register in `_cellLabels`.
+A fourth form never reaches `Resolve`: an emoji or other single character stored as the icon itself (#471). `MenuIconResolver.IsGlyph` accepts a reference of one text element (`StringInfo`, so a flag or a joined sequence counts as one), at most 32 characters, that does not start with whitespace or a control character. Shift layer icons have always used that form, and `ResolveLayerIcon` draws a layer's icon as its picture, its emoji, or the default ⇧.
+
+`MenuOverlayWindow.PlaceCellContent(item, showLabels, index, cx, cy, maxLabelWidth, fontSize, scale)` draws an emoji icon as text in the label brush at 0.8 of the icon box, in the emoji face (`TextFaces.Emoji`), and resolves any other `item.Icon` through `MenuIconResolver.Resolve`. A resolved icon is an `Image` of `30 * Math.Max(scale, 0.7)` pixels times the cell's `IconScalePercent` (clamped to 25..200) over 100, centered on the cell, raised by `iconSize * 0.45` when a label is also shown, with the label placed `iconSize * 0.55` below center. A null result renders the label alone, the pre-icon behavior. Icons are not hit-test visible and do not restyle on hover, so only labels register in `_cellLabels`.
 
 ### Editor UI
 
@@ -1600,14 +1657,15 @@ SVG was declined. Steam ships its binding icons at 256 px, and a cell at its lar
 
 | Handler | What it does |
 |---------|--------------|
-| `MenuCellChooseIcon_Click` | Builds a `PickSoundDialog` item list: `Menu_Icon_None` when the cell has an icon, then every `ListIcons` entry of every registered package as `pficon://` references. `allowBrowse: true` adds the file-browser entry. An empty list skips the dialog and browses directly. |
-| `BrowseMenuIconFromDisk` | `OpenFileDialog` filtered to the image extensions plus `*.pficons`. A `.pficons` pick registers the pack and binds its single icon, or prompts with `PromptPickFromList` when it holds several. An image pick stores `IconPackageManager.MakeStoredPath(file)`. |
-| `IconPackageAdd_Click` | `OpenFileDialog` for `.pficons`, then `Register`. |
-| `IconPackageCreate_Click` | `OpenFileDialog` (multi-select images, title `Pad_Menus_IconPackages_PickImages`), `SaveFileDialog` for the destination, `ExportPackage`, then `Register`. |
+| `MenuCellChooseIcon_Click` | Opens the shared icon picker under the button (`IconPickerHost.Open`, #471) with the cell's icon marked and `Menu_Icon_None` as the clear choice, and stores the chosen reference through `MenuCellItem.SetIcon`. |
+| `IconPackageAdd_Click` | `OpenFileDialog` for `.pficons`, multi-select, then `Register` for each file. |
+| `IconPackageCreate_Click` | `OpenFileDialog` (multi-select images, title `Pad_Menus_IconPackages_PickImages`, the keyboard screen's picture filter), `SaveFileDialog` for the destination, `ExportPackage`, then `Register`. |
 | `IconPackageRemove_Click` | `Unregister` on the selected `PackageRef`. |
 | `RefreshIconPackages` | Rebinds `IconPackagesList` and toggles `IconPackagesEmptyText`. Subscribed to `RegistryChanged` on load, marshaled through the dispatcher. |
 
-The Icon Packages card sits on the Menus tab (`PadPage.xaml`, strings `Pad_Menus_IconPackages_*`) and mirrors the Sound Packages card. The per-cell icon preview binds `MenuCellItem.IconImage`, which calls `MenuIconResolver.Resolve` when `HasIcon`.
+The icon picker (`Views/IconPicker.xaml`) serves menu cells and the shift layer dialog alike. Its Emoji tab is the catalog the shift layer dialog has always offered (`ShiftActivatorDialog.EmojiCatalog`), and its Images tab draws every registered package's entries as pictures, read through `IconPackageManager.ReadIcons` (at most 2048 entries and 128 MB per package, `MaxPickerIcons` and `MaxPickerBytes`). Browse Files runs `IconPickerHost.BrowseFromDisk`: an `OpenFileDialog` for the image extensions plus `.pficons`. A package is registered, and one with a single entry is chosen at once. One with several opens the picker again on that package's pictures. A loose image stores `IconPackageManager.MakeStoredPath(file)` through `StoredImagePath`, which keeps a leading `.\` on a file directly in PadForge's folder, since a bare name would read as a Steam icon name.
+
+The Icon Packages card sits in the controller page's Macros & Menus section (`PadPage.xaml`, strings `Pad_Menus_IconPackages_*`) and mirrors the Sound Packages card. The per-cell icon preview binds `MenuCellItem.IconImage`, which calls `MenuIconResolver.Resolve` when the cell has an icon that is not an emoji (`HasIcon && !IsGlyphIcon`).
 
 ### Persistence
 
@@ -1640,8 +1698,8 @@ All six views share the same architecture:
 1. **ViewModel interface**. Read from `PadViewModel`, fire `ControllerElementRecordRequested` with PadSetting target names.
 2. **Bind/Unbind lifecycle**. `PadPage.BindActiveModelView()` calls `Unbind()` on all six, then `Bind(vm)` on the active one. Only one view processes `CompositionTarget.Rendering` at a time.
 3. **Dirty-flag rendering**. `CompositionTarget.Rendering` gated by `_dirty`, set by `PropertyChanged`. Every handler also returns early while the control is hidden or the window is minimized.
-4. **Interactions**. Click-to-record, hover highlight, flash animation (Map All). Same target names across views.
-5. **Model selection** (2D/3D only). `EnsureModel()` resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, which picks one of `"DS4"`, `"DualSense"`, `"DUALSENSEEDGE"`, `"XBOXONE"`, `"XBOXSERIES"`, `"SWITCHPRO"`, `"SWITCH2PRO"`, `"STEAMDECK"`, `"STEAMCONTROLLER"`, `"STEAMCONTROLLER2"`, or `"XBOX360"` for the 2D view (the 3D view takes the tuple's second folder). Extended slots without dedicated art route to `ControllerSchematicView` and VR slots to `VRPreviewView`, so this logic fires for Xbox, PlayStation, and Nintendo slots and for Extended slots on the five Valve profiles.
+4. **Interactions**. Click-to-record, hover highlight, flash animation (Map All), and the picked-control ring through `IPictureWithPick`. Same target names across views.
+5. **Model selection** (2D/3D only). `EnsureModel()` resolves the asset folder via `HMaestroProfileCatalog.ResolveAssetFolders(ProfileId, OutputType)`, which picks one of `"DS3"`, `"DS4"`, `"DualSense"`, `"DUALSENSEEDGE"`, `"XBOXONE"`, `"XBOXSERIES"`, `"SWITCHPRO"`, `"SWITCH2PRO"`, `"STEAMDECK"`, `"STEAMCONTROLLER"`, `"STEAMCONTROLLER2"`, or `"XBOX360"` for the 2D view (the 3D view takes the tuple's second folder). Extended slots without dedicated art route to `ControllerSchematicView` and VR slots to `VRPreviewView`, so this logic fires for Xbox, PlayStation, and Nintendo slots and for Extended slots on the five Valve profiles.
 
 Key differences:
 
@@ -1668,4 +1726,4 @@ Key differences:
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

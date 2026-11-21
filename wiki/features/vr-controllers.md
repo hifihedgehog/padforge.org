@@ -2,7 +2,7 @@
 
 *One slot drives a full SteamVR left and right hand pair. Any controller, keyboard, or motion source can move them, and their haptics come back to the device you are actually holding.*
 
-![The VR slot preview showing both hand controllers, their sticks, triggers and grips](../images/pad-vr-preview.png)
+![The Hands section's picture showing both hand controllers, their sticks, triggers and grips](../images/pad-vr-preview.png)
 
 PadForge can present a pair of VR motion controllers to SteamVR. Add a **VR** slot, assign a device to it, and SteamVR sees a left hand and a right hand. What moves those hands is up to you: a gamepad, a flight stick, a keyboard, a phone over Wi-Fi, or any other source PadForge can read.
 
@@ -14,13 +14,13 @@ This page is the direction where PadForge *presents* hands to SteamVR. For the o
 
 ## What you need
 
-VR slots require **SteamVR**. The Add Controller popup disables the VR tile without it and the tooltip reads *VR (requires SteamVR)*.
+VR slots require **SteamVR**. Without it, the **VR** tile under **More Outputs** in the Add Controller dialog cannot be picked. Its line reads *Needs SteamVR. Install it from Settings, under Drivers.* and its tooltip *VR (requires SteamVR)*.
 
-You do not need a Steam account, the Steam client, or a headset plugged in to install the runtime. PadForge can fetch it for you: open **Settings**, find the **SteamVR** card, and use **Install**. The card describes itself as *VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).*
+You do not need a Steam account, the Steam client, or a headset plugged in to install the runtime. PadForge can fetch it for you: open **Settings**, find the **SteamVR** card, and use **Install**. The card's line reads *Runtime for virtual VR controllers.*, and its tooltip *VR runtime for virtual VR controllers. Installs from Valve’s servers with no Steam account or Steam client needed (several GB).*
 
-Two details worth knowing before you start it:
+Two details before you start it:
 
-- **Choose where it goes.** The card has an **Install Location** field with a **Browse...** button, shown until SteamVR is installed. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
+- **Choose where it goes.** The card has an **Install Location** field with a **Browse…** button, shown until SteamVR is installed. It defaults to `C:\SteamVR` and accepts any full path on any drive. A drive root on its own is refused, because the uninstall side would then be pointed at an entire drive.
 - **It is several gigabytes.** The download runs for a few minutes on a fast connection and considerably longer on a slow one.
 
 An existing SteamVR is found automatically when it came from Steam, or when it sits at `C:\SteamVR`, and the card then reports it as installed. A hand-placed install somewhere else is not discovered. Point the install location at it and click **Install** to register it, or let PadForge fetch its own copy. A registered folder counts as PadForge's own, so the card's **Uninstall** deletes it.
@@ -29,20 +29,20 @@ An existing SteamVR is found automatically when it came from Steam, or when it s
 
 ## Creating a VR slot
 
-![The VR slot's config bar](../images/pad-vr-configbar.png)
+![The VR controller page's header, with the SteamVR state after its name](../images/pad-vr-configbar.png)
 
-1. On the **Dashboard**, click **Add Controller**.
-2. Pick the **VR** tile.
-3. Assign a physical device to the slot on the **Devices** page, the same as any other slot type.
-4. Map its inputs on the **Mappings** tab.
+1. Click **Add Controller** at the end of the sidebar's controller list.
+2. Pick the **VR** tile under **More Outputs**.
+3. Assign a physical device to the slot, the same as any other slot type.
+4. Map its inputs in the controller page's **Hands** section.
 
-The slot's **Preview** tab draws both hands side by side, with each stick, trigger, grip, and button lighting as you press it, so you can confirm a mapping without putting a headset on.
+The **Hands** section's picture draws both hands side by side, with each stick, trigger, grip, and button lighting as you press it, so you can confirm a mapping without putting a headset on.
 
 ---
 
 ## What each hand exposes
 
-![The VR slot's mapping grid with both hands' targets](../images/pad-vr-mappings.png)
+![The Hands section's list view with both hands' targets](../images/pad-vr-mappings.png)
 
 Both hands carry the same control set, and all of it is mappable.
 
@@ -78,10 +78,10 @@ PadForge does not fabricate positional tracking. The driver anchors both hands a
 
 Stated plainly, because they will shape whether this is useful to you:
 
-- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added, and the Add Controller tile's tooltip reads *VR (max 1)* once one exists.
+- **One VR slot, ever.** The pair is the unit. A second VR slot cannot be added. Once one exists, the VR tile's tooltip reads *VR (max 1)* and its line *There is a VR controller already. One drives both hands.*
 - **No per-slot VR configuration.** The driver ships one honest identity. There is no VR equivalent of the PlayStation or Extended profile pickers.
 - **The runtime is a hard requirement.** No SteamVR, no VR slot, and the tile stays disabled.
-- **SteamVR's own Test Controller is not a reliable indicator.** Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the app's own Preview tab, or the game.
+- **SteamVR's own Test Controller is not a reliable indicator.** Switching it from the left hand to the right hand often shows nothing until you switch back to the left and to the right again. That is a quirk of that tool, not of the slot. Trust the **Hands** section's picture, or the game.
 
 ---
 
@@ -95,4 +95,4 @@ Stated plainly, because they will shape whether this is useful to you:
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

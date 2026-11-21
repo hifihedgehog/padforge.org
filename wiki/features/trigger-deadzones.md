@@ -2,15 +2,17 @@
 
 *Set a floor, a ceiling, an anti-deadzone, and a sensitivity curve for every trigger.*
 
-![Trigger deadzone settings with range slider and sensitivity curve](../images/pad-triggers.png)
+![A trigger's card in the Sticks & Triggers section, with its range slider and sensitivity curve](../images/pad-triggers.png)
 
-Triggers go from 0% released to 100% pressed in one direction. The Triggers tab carves out which part of the physical pull counts and reshapes the response on top.
+Triggers go from 0% released to 100% pressed in one direction. The trigger cards in the controller page's **Sticks & Triggers** section carve out which part of the physical pull counts and reshape the response on top. Each trigger has a card, two to a row where they fit, with **Reset All** in its head. The card holds **Range**, **Anti-Deadzone** and the **Sensitivity** preset with its curve, then the live instrument. Its **More** holds the same values typed as numbers.
+
+These cards shape a device's trigger outputs. A single mapping source can carry shaping of its own as well, on its line in the Mappings section: see [source shaping](mappings.md#source-shaping).
 
 ---
 
 ## Floor and ceiling
 
-Each trigger has a range slider with two handles. The two handles set the active physical range.
+Each trigger's **Range** row is a slider with two handles. The two handles set the active physical range.
 
 ### Floor (left handle)
 
@@ -122,7 +124,7 @@ Press and release the trigger to watch both stages move together.
 
 ## Setting values
 
-Every slider has 0.1% precision. Each value has a percentage field and a digit field, so the Range row carries one pair for each handle:
+Every slider has 0.1% precision. The card's **More** types the values as numbers: each end of the Range in percent and as a raw value, and the Anti-Deadzone as a raw value.
 
 | Field | What it accepts |
 |---|---|
@@ -137,7 +139,7 @@ A profile imported from reWASD or DS4Windows brings its triggers' response curve
 
 ## Reset buttons
 
-Every row has a reset button (circular arrow icon) that restores the default. Reset All at the top of each trigger section resets everything for that trigger in one click.
+Every row has a reset button (circular arrow icon) that restores the default. **Reset All** in each trigger card's head resets everything for that trigger in one click.
 
 ---
 
@@ -199,14 +201,14 @@ Keep defaults. Physical range maps 1:1 to virtual.
 
 ## Custom DirectInput triggers
 
-When a slot uses Extended output with the **Customize** toggle on, the Triggers tab follows the **Triggers** field:
+When a slot uses Extended output with the **Customize** toggle on, the trigger cards follow the **Triggers** field:
 
 | Triggers | Display |
 |---|---|
-| 0 | Triggers tab is hidden |
+| 0 | No trigger cards |
 | 1 | Trigger 1 only |
 | 2 | Trigger 1 and 2 (same as Xbox or PlayStation) |
-| 3–8 | Each extra trigger gets its own row. Each uses 1 of the 8 axes shared with sticks. |
+| 3–8 | Each extra trigger gets its own card. Each uses 1 of the 8 axes shared with sticks. |
 
 Every trigger gets its own range slider, anti-deadzone, sensitivity curve, and live instrument.
 
@@ -214,7 +216,7 @@ Every trigger gets its own range slider, anti-deadzone, sensitivity curve, and l
 
 ## Stick-assisted analog trigger
 
-Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live on the **Mappings** tab (see [Button and Axis Mappings](mappings.md)), not this one, but the result is an analog trigger.
+Some pads have no analog triggers. This turns a button into a variable trigger you steer with a stick, for feathered throttle and brake. The controls live in the **Mappings** section (see [Button and Axis Mappings](mappings.md#stick-trim)), not on the trigger cards, but the result is an analog trigger.
 
 Set it up on a trigger output:
 
@@ -251,4 +253,4 @@ Stick Trim shows only on trigger outputs.
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

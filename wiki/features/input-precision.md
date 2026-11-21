@@ -1,12 +1,12 @@
 # Input Precision
 
-*PadForge reads your controller up to 1000 times a second and keeps the full resolution of every stick value on the way to the game.*
+*PadForge reads your controller 1000 times a second by default, up to 10,000, and keeps the full resolution of every stick value on the way to the game.*
 
-![Sticks tab: where the precision pipeline is visible to you](../images/pad-sticks.png)
+![The Sticks & Triggers section: where the precision pipeline is visible to you](../images/pad-sticks.png)
 
 This page covers how fast PadForge reads input, how much stick and trigger detail survives the trip to the virtual controller, and how precise each slot type's output is. For the deadzone and curve controls themselves, see [Stick Deadzones](stick-deadzones.md) and [Trigger Deadzones](trigger-deadzones.md).
 
-Related pages: [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Controller Slots](controller-slots.md), [Settings](settings.md), [Dashboard](dashboard.md).
+Related pages: [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigger-deadzones.md), [Force Feedback](force-feedback.md), [Controller Slots](controller-slots.md), [Settings](settings.md), [Home](dashboard.md).
 
 ---
 
@@ -14,33 +14,39 @@ Related pages: [Stick Deadzones](stick-deadzones.md), [Trigger Deadzones](trigge
 
 PadForge reads every connected controller on its own background thread. The default rate is **1000 Hz** (once per millisecond).
 
-You can change the rate in **[Settings](settings.md) > Input Engine > Polling Interval (Unless a Profile Overrides It)**. The range is 1 ms (about 1000 Hz) to 16 ms (about 60 Hz). Lower means quicker reads and more CPU. Higher means slower reads and less CPU. Most people leave the default.
+You can change the rate in **[Settings](settings.md) > Input Engine > Polling Rate (Unless a Profile Overrides It)**, in passes a second from 60 to 10000. A higher rate means quicker reads and more CPU. A lower rate means slower reads and less CPU. Most people leave the default. A setting saved by PadForge 5 as an interval in milliseconds (1 to 16 ms) loads as the matching rate, 1000 Hz down to 63 Hz.
+
+The box's tooltip names how often Windows wakes the engine on this PC. Windows wakes a sleeping thread on its clock's tick, so a rate above that runs several passes back to back at each wake: the rate holds, and the passes come in groups. Above 1000 Hz the engine asks Windows for its finest clock, which ticks every half millisecond (2000 wakes a second), and gives it back at 1000 Hz and below, while the engine idles, and while it pauses behind a game.
 
 By default PadForge keeps reading even when its window sits behind the game. The **Continue Polling When Window Loses Focus** checkbox, in the same **Input Engine** settings, controls that. Turn it off to pause reads whenever PadForge loses focus.
 
 <!-- SCREENSHOT: dashboard-polling-readout -->
-![The Dashboard engine card showing the live polling rate in Hz](../images/dashboard-polling-readout.png)
+![The Home page showing the live polling rate in Hz](../images/dashboard-polling-readout.png)
 
-The [Dashboard](dashboard.md) shows the live rate next to the engine power button, so you can confirm the reads are landing where you set them.
+The [Home](dashboard.md) page shows the live rate as its **Polling rate** figure, so you can confirm the reads are landing where you set them.
 
 | Property | Value |
 |----------|-------|
 | Default rate | 1000 Hz (1 ms per read) |
-| Adjustable range | 1000 Hz down to about 60 Hz |
-| Jitter | Under a millisecond. A short spin at the end of each cycle holds the boundary tight |
+| Adjustable range | 60 Hz to 10,000 Hz |
+| Timing | No spin. The thread sleeps on a high-resolution timer between passes, and a pass starts up to one clock tick late, half a millisecond at the finest |
 | Idle rate | About 20 Hz when no slot is active, to save power |
 
-A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the **Inactivity Timeout** (60 seconds by default, in the same **Input Engine** settings). Set the timeout to 0 and the engine idles immediately.
+A slot counts as active once it is turned on and at least one of its assigned controllers is connected. When no slot is active, the loop drops to roughly 20 Hz to keep CPU near zero.
+
+Two bounds keep a slow moment from turning into a busy one. A loop that falls more than 2 ms behind, or four passes where that is longer (after a stall or a resume from sleep), drops the passes it missed and starts its schedule again. Passes owed after a wake run back to back for no longer than one clock tick. Once that time is gone, whether in owed passes or in one long pass, the loop sleeps a whole interval before the next. It jumps back to full rate the moment a slot goes live. A slot that is turned off, has no controller assigned, or whose assigned controllers are all disconnected or asleep does not hold the loop awake. One exception: when every controller on a live slot disconnects, the loop stays at full rate until that slot's virtual controller is torn down by the **Inactivity Timeout** (60 seconds by default, in the same **Input Engine** settings). Set the timeout to 0 and the engine idles immediately.
 
 While a [Remote Link](../guides/remote-link.md) peer is connected, the loop stays at full rate even with no local slot active. A connected peer can read this PC's shared controllers, and idling would sample that input choppily.
 
-Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling interval changes how often the cursor updates, never how fast it travels.
+Cursor and scroll speed on a [Keyboard + Mouse](controller-slots.md) slot does not depend on this setting. Since 4.1.0 both are wall-clock rates rather than per-poll steps: full stick deflection moves the cursor 1,200 pixels per second and scrolls about 33 wheel notches per second, whether the engine reads at 1000 Hz or 60 Hz. Changing the polling rate changes how often the cursor updates, never how fast it travels.
+
+The Wii pointer's **FPS Mouse** mode works the same way since 6.0.0: full aim asks for 8 pixels a second for each unit of its speed, at every rate. Before 6.0.0 it moved in proportion to the length of the pass, twice as fast at 500 Hz as at 1000 and half as fast at 2000, so a speed tuned at a rate other than 1000 Hz needs tuning again.
 
 ### Per-profile override
 
-A profile can carry its own rate. The New Profile and Edit Profile dialogs have a **Polling Rate** dropdown with six entries: **Default (Global Setting)**, 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms), and 62.5 Hz (16 ms). Pick anything but Default and that rate applies whenever the profile is active. See [Profiles](../guides/profiles.md).
+A profile can carry its own rate. The New Profile and Edit Profile windows have a **Polling Rate** dropdown under **More** with ten entries: **Default (Global Setting)**, then 10000 Hz (0.1 ms), 8000 Hz (0.125 ms), 4000 Hz (0.25 ms), 2000 Hz (0.5 ms), 1000 Hz (1 ms), 500 Hz (2 ms), 250 Hz (4 ms), 125 Hz (8 ms) and 60 Hz (16.667 ms). Pick anything but Default and that rate applies whenever the profile is active. **More** opens by itself on a profile with a rate of its own. See [Profiles](../guides/profiles.md).
 
-The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override under the Polling Interval box: Overridden while profile “Name” is active: 4 ms. Deactivate the profile and the global value returns.
+The profile rate wins over the Settings value, which is why the Settings label reads “Unless a Profile Overrides It”. While such a profile is active, the Settings page prints the override beside the Polling Rate box: Overridden while profile “Name” is active: 250 Hz. Deactivate the profile and the global value returns.
 
 ---
 
@@ -52,7 +58,7 @@ Most consumer sticks report far less real detail than that. Typical thumbstick h
 
 At default settings the value that reaches the game is within one step of what the stick sent, a gap well below the noise a physical stick produces on its own. That precision matters most for flight sticks and HOTAS, where a tiny deflection drives a long-throw control surface, and for racing wheels, where smooth sub-degree steering reaches the sim without visible stepping. Only the Axial shape passes the reading through bit-for-bit.
 
-You can set any deadzone or range value by raw digit (0 to 32768) on the Sticks tab for hardware-level precision. See [Stick Deadzones](stick-deadzones.md).
+You can set any deadzone or range value by raw digit (0 to 32768) in the **Sticks & Triggers** section for hardware-level precision. See [Stick Deadzones](stick-deadzones.md).
 
 ---
 
@@ -101,7 +107,7 @@ A Nintendo slot has four presets: Nintendo Switch Pro Controller, Nintendo Switc
 
 On both Switch Pro presets the report DirectInput reads declares 16-bit stick axes, but HIDMaestro first packs each axis into the 12-bit value a physical Pro Controller sends, from 0x200 to 0xE00 around a 0x800 center, and scales it back up. Each stick axis carries about 3,073 positions, whether a game reads that report or the Pro Controller's own full-mode report. Switch 2 Pro packs two axes into three shared bytes at 12 bits each, matching the real pad.
 
-ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the Triggers tab does not appear on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
+ZL and ZR are digital buttons on every preset, not analog triggers, matching the real hardware. There is no analog trigger channel on the wire, and the **Sticks & Triggers** section shows no trigger cards on the slot. A physical trigger mapped to ZL or ZR fires on press detection (any movement past zero), the way PlayStation pads assert their digital trigger followers, rather than at a 50% midpoint. A threshold you set on the mapping row still wins.
 
 | Preset | Sticks | Triggers |
 |----------|--------|----------|
@@ -138,4 +144,4 @@ Xbox, Nintendo, and Extended slots skip a report identical to the last one and r
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

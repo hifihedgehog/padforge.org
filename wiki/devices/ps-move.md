@@ -15,12 +15,12 @@ Both connect over Bluetooth through the same bundled PlayStation Bluetooth drive
 <!-- SCREENSHOT: move-pair -->
 ![The Pair a Controller dialog set to PlayStation Move / Navigation](../images/move-pair.png)
 
-1. Open the [Devices](../features/devices.md) page and click **Pair**.
-2. Set **Controller Family** to **PlayStation Move / Navigation**.
-3. Connect the controller with a USB cable and click **Pair**. PadForge writes this PC's address into the controller and, on a wand, reads out its motion calibration.
+1. Open the [Devices](../features/devices.md) page and click **Pair a Controller**.
+2. Set **Controller Family** to **PlayStation Move / Navigation**. The dialog's title changes to **Pair a Move or Navigation Controller**.
+3. Connect the controller with a USB cable and click **Pair**. PadForge writes this PC's address into the controller and, on a wand, saves its motion calibration.
 4. Unplug and press the controller's **PS** button. It connects over Bluetooth.
 
-Docking an original Move or a Navigation controller over USB also runs this on its own, so a controller that has never been paired pairs the first time you plug it in.
+Docking an original Move or a Navigation controller over USB also runs this on its own when the controller does not already hold this PC's address, so a controller that has never been paired pairs the first time you plug it in.
 
 ---
 
@@ -34,12 +34,12 @@ USB is a pairing and charging dock, not an input path, for the original Move (ZC
 
 | Source | Notes |
 |---|---|
-| **Gyroscope** | Three axes, feeding the whole [Gyro](../guides/gyro.md) pipeline: gyro-to-stick, gyro-to-mouse, Aim Engage, and the DSU motion server. |
+| **Gyroscope** | Three axes, feeding the whole [Gyro](../guides/gyro.md) pipeline: gyro-to-stick, gyro-to-mouse, aim engage, and the DSU motion server. |
 | **Accelerometer** | Three axes, for tilt and gesture work. |
-| **Buttons** | Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. Move sits on the right shoulder, beside the trigger. |
+| **Buttons** | Eight: Cross, Circle, Square, Triangle, Select, Start, PS, and the big Move button. The Move button maps as the right shoulder button. |
 | **Trigger** | Analog, on the right-trigger axis, so it maps to a trigger rather than collapsing to a press. |
 
-The wand's sphere is an output, not a source. PadForge drives it from the [Lighting](../features/lighting.md) tab, and it idles at the slot's player color.
+The wand's sphere is an output, not a source. PadForge drives it from the Lighting card in the controller page's **Lights & Sound** section ([Lighting](../features/lighting.md)), and while nothing else sets it, it shows the slot's player color: blue, red, green or pink for players 1 to 4.
 
 The Navigation controller reports its left stick, its D-pad, Cross, Circle, L1, L3, PS, and its analog L2. It has no motion sensors. L2 is its only analog trigger, and it maps like any other trigger, pressure and all.
 
@@ -53,9 +53,9 @@ Over Bluetooth, the Navigation controller needs the pairing driver's startup ord
 
 ## Using the motion
 
-The Move's gyro is an ordinary motion source once it is mapped, so everything the [Gyro guide](../guides/gyro.md) describes applies: reference frames, real-world calibration, Aim Engage, and Gyro Tilt.
+The Move's gyro is an ordinary motion source once it is mapped, so everything the [Gyro guide](../guides/gyro.md) describes applies: the Gyro card in the controller page's **Motion & Touch** section, its reference frames, real-world calibration, aim engage and **Gyro Tilt**.
 
-Because the wand is held rather than gripped in two hands, Aim Engage is usually the right pairing. Motion that is always live is disorienting when the device is also being waved.
+Because the wand is held rather than gripped in two hands, an **Aim Engage Button** (in the Gyro card's **Engage** fold) is usually the right pairing. Motion that is always live is disorienting when the device is also being waved.
 
 ---
 
@@ -66,7 +66,7 @@ An original Move (ZCM1) connected over Bluetooth reads the two accessories Sony 
 | Device | Sources |
 |---|---|
 | **PlayStation Move Racing Wheel** | L1 and R1 on the shoulders, the D-pad, the left and right paddles, L2 and R2 on the triggers, and the throttle as **Axis 6**. Rumble drives the motor in each handle, low frequencies on the left and high on the right. |
-| **PlayStation Move Sharp Shooter** | Reload on the X position, the three weapon positions as **Misc 2**, **Misc 3** and **Misc 4**, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move. |
+| **PlayStation Move Sharp Shooter** | Reload on the left face button (Square on a PlayStation layout, X on an Xbox one), the three weapon positions as **Misc 2**, **Misc 3** and **Misc 4**, and the trigger on the right trigger. The pump-action grip pulls the Move's own trigger, so it reaches only the Move. |
 
 The wheel's face buttons, Start and Select, and the Sharp Shooter's Move button, Triangle and Square, arrive in the Move's own report, so those report on the Move. The PS4-era Move (ZCM2) has no EXT socket, and the socket works only over Bluetooth.
 
@@ -89,4 +89,4 @@ The wheel's face buttons, Start and Select, and the Sharp Shooter's Move button,
 
 ---
 
-*Last updated for PadForge 5.3.0.*
+*Last updated for PadForge 6.0.0.*

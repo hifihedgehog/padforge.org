@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1177,6 +1173,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1742,6 +1746,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/nfc-tags/" class="md-nav__link">
         
   
@@ -1938,6 +1970,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../features/flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../features/keyboard-screens/" class="md-nav__link">
         
   
@@ -1974,6 +2034,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../features/magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2735,6 +2851,12 @@
       
         
       
+        
+      
+        
+      
+        
+      
     
     
     
@@ -3331,6 +3453,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../twitch-chat-internals/" class="md-nav__link">
         
   
@@ -3874,6 +4024,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../midi-input-internals/" class="md-nav__link">
         
   
@@ -3966,6 +4144,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4609,7 +4815,7 @@
 <p>Without that check inside the lock, a haptic event arriving during teardown re-latches a motor on a slot the virtual controller no longer drives, and <code>ScheduleExpiryLocked</code> builds a fresh timer nothing will ever dispose. Both symptoms are a stuck rumble that outlives the slot.</p>
 <hr />
 <h2 id="availability-and-install">Availability and install<a class="headerlink" href="#availability-and-install" title="Permanent link">&para;</a></h2>
-<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe reads up to three registry keys and checks up to four install paths on disk, and the sidebar rail rebuild queries once per slot. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
+<p><code>HMaestroVRController.IsAvailable()</code> caches <code>HMVR.IsSteamVRInstalled</code> for 5 seconds (<code>AvailabilityTtlMs</code>), because the probe walks Steam's library metadata on disk, and the 5-second driver-status timer and every controller type list ask again. <code>ResetAvailability()</code> drops the cache so the gates lift right after an install instead of waiting out the TTL.</p>
 <p>The cache's "has a value" flag is an explicit <code>bool</code>, not a sentinel timestamp. Seeding the tick with <code>long.MinValue</code> made <code>now - s_availCheckedTick</code> overflow negative, which always reads as inside the TTL, so the first call returned the default <code>false</code> and SteamVR read as absent forever.</p>
 <p><code>Connect()</code> refuses twice, once on <code>IsSteamVRInstalled</code> and once on <code>EnsureDriverRegistered()</code>, before constructing the pipe.</p>
 <p>Install lives in <code>DriverInstaller</code>:</p>
@@ -4685,7 +4891,7 @@
 <ul>
 <li><strong>Adding a button</strong> means widening <code>VrHandRaw.Buttons</code> past <code>byte</code> and touching the bit table, the key array order, and HIDMaestro's <code>HMVRButton</code> together. The cast hides a mismatch until runtime.</li>
 <li><strong>A second Y flip</strong> anywhere in the VR lane cancels the one in <code>PackHand</code>.</li>
-<li><strong>SteamVR's own Test Controller is not a diagnostic.</strong> Switching it from left to right often shows nothing until you switch back and forth again. Trust the app's Preview tab or the game.</li>
+<li><strong>SteamVR's own Test Controller is not a diagnostic.</strong> Switching it from left to right often shows nothing until you switch back and forth again. Trust the VR controller page's <strong>Hands</strong> picture (<code>VRPreviewView</code>) or the game.</li>
 <li><strong>There is no per-slot VR configuration.</strong> The driver ships one identity, so there is no VR equivalent of the PlayStation or Extended profile pickers.</li>
 <li><strong>The two lanes can eat each other.</strong> If you touch the manufacturer string on either side, the #287 self-emission filter stops matching and a VR slot starts consuming its own hands.</li>
 </ul>
@@ -4698,7 +4904,7 @@
 <li><a href="../driver-installation-internals/">Driver Installation Internals</a> for the installer</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 

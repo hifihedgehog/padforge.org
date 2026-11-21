@@ -44,10 +44,6 @@
       
     
     
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
@@ -1179,6 +1175,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1250,7 +1254,7 @@
   <span class="md-ellipsis">
     
   
-    Dashboard
+    Home
   
 
     
@@ -1747,6 +1751,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../wheel-centering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../nfc-tags/" class="md-nav__link">
         
   
@@ -1943,6 +1975,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../flydigi-apex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Controllers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../keyboard-screens/" class="md-nav__link">
         
   
@@ -1979,6 +2039,62 @@
     
   
     Screen Overlay
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crosshair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../magnifier/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Magnifier
   
 
     
@@ -2622,10 +2738,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-settings-card" class="md-nav__link">
+  <a href="#the-settings-row" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Settings card
+        The Settings row
       
     </span>
   </a>
@@ -3153,6 +3269,12 @@
       
         
           
+        
+      
+        
+      
+        
+      
         
       
         
@@ -3832,6 +3954,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/crosshair-magnifier-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crosshair and Magnifier Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/twitch-chat-internals/" class="md-nav__link">
         
   
@@ -4112,6 +4262,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/wheel-centering-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wheel Centering Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/midi-input-internals/" class="md-nav__link">
         
   
@@ -4204,6 +4382,34 @@
     
   
     Bliss-Box Internals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/flydigi-apex-internals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Flydigi Apex Internals
   
 
     
@@ -4786,10 +4992,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-settings-card" class="md-nav__link">
+  <a href="#the-settings-row" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Settings card
+        The Settings row
       
     </span>
   </a>
@@ -4975,7 +5181,8 @@
 
 <h1 id="driver-management">Driver Management<a class="headerlink" href="#driver-management" title="Permanent link">&para;</a></h1>
 <p><em>PadForge needs one driver (HIDMaestro, which auto-installs the first time you create a virtual controller) and offers two optional ones (HidHide and SteamVR) that install and uninstall from </em><em>Settings</em><em>. Windows MIDI Services comes with Windows 11 25H2 from the late-November 2026 update. Until a PC has it, PadForge installs the Windows MIDI Services runtime from </em><em>Settings</em><em>, and without either it uses the legacy MIDI API.</em></p>
-<p><img alt="Driver management cards" src="../../images/settings-drivers.png" /></p>
+<p><img alt="The Drivers card in Settings" src="../../images/settings-drivers.png" /></p>
+<p>Every driver sits on one <strong>Drivers</strong> card, under <strong>Settings &gt; Drivers</strong>. Each row has the driver's name and what it does, its status and version, and its <strong>Install</strong> or <strong>Uninstall</strong> button.</p>
 <hr />
 <h2 id="whats-required-vs-optional">What's required vs optional<a class="headerlink" href="#whats-required-vs-optional" title="Permanent link">&para;</a></h2>
 <table>
@@ -5010,7 +5217,7 @@
 <tr>
 <td><strong>SteamVR</strong></td>
 <td>Optional. Install for the VR controller type.</td>
-<td>VR runtime for virtual VR controllers. Installs from Valve's servers with no Steam account or Steam client needed (several GB).</td>
+<td>VR runtime for virtual VR controllers. Installs from Valve’s servers with no Steam account or Steam client needed (several GB).</td>
 </tr>
 </tbody>
 </table>
@@ -5019,9 +5226,10 @@
 </blockquote>
 <hr />
 <h2 id="first-run-auto-install">First-run auto-install<a class="headerlink" href="#first-run-auto-install" title="Permanent link">&para;</a></h2>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller: an Xbox, PlayStation, Nintendo or Extended slot, or a Keyboard + Mouse half set to a keyboard or mouse model. That happens once the engine runs, the slot is on and an online device is assigned to it. An empty slot creates nothing and installs nothing. PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch. The HIDMaestro card on the <strong>Settings</strong> page reads <strong>Not Installed</strong> until that first install, then <strong>Installed</strong>.</p>
-<p>HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. They sit on the <strong>Settings</strong> page until you click <strong>Install</strong>. The runtime's <strong>Install</strong> shows only on a PC that needs it (see <a href="#windows-midi-services">Windows MIDI Services</a>).</p>
-<p>Two more drivers install outside <strong>Settings</strong>, and only when something needs them. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a>, <a href="../../devices/ps-move/">PS Move</a> or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. Its card in <strong>Settings</strong> shows whether it is installed, and removes it (see <a href="#bthps3">BthPS3</a>). The first controller on a composite profile (the three PlayStation profiles named <strong>Full</strong>, <strong>Nintendo Switch 2 Pro Controller: Full</strong>, the two Valve <strong>Composite</strong> profiles, and <strong>Steam Controller (2026)</strong>) installs usbip-win2's virtual USB host controller, the USB transport HIDMaestro carries for those profiles. The PlayStation slot's default profile, <strong>DualSense (PS5): Full</strong>, is one of them. That install needs no prompt and restarts no USB hub.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller: an Xbox, PlayStation, Nintendo or Extended slot, or a Keyboard + Mouse half set to a keyboard or mouse model. That happens once the engine runs, the slot is on and an online device is assigned to it. An empty slot creates nothing and installs nothing. PadForge already runs as administrator, so no extra prompt appears. Install takes a few seconds. No restart. The driver ships inside PadForge, so the Xbox, PlayStation, Nintendo, and Extended slot types are available from the first launch. The HIDMaestro row of the <strong>Drivers</strong> card reads <strong>Not Installed</strong> until that first install, then <strong>Installed</strong>.</p>
+<p>On Windows on ARM, every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver the first time PadForge creates a virtual controller. Windows' own drivers then bind each controller. There the HIDMaestro row reads <strong>Installed</strong> while that host controller is installed.</p>
+<p>HidHide, SteamVR and the Windows MIDI Services runtime do not auto-install. Each waits on the <strong>Drivers</strong> card until you click <strong>Install</strong>. The runtime's <strong>Install</strong> shows only on a PC that needs it (see <a href="#windows-midi-services">Windows MIDI Services</a>).</p>
+<p>Two more drivers install outside <strong>Settings</strong>, and only when something needs them. Pairing a <a href="../../devices/dualshock-3/">DualShock 3</a>, <a href="../../devices/ps-move/">PS Move</a> or Navigation controller for Bluetooth installs the bundled PlayStation Bluetooth driver (BthPS3 and its BthPS3PSM filter) the first time. Its <strong>BthPS3 Bluetooth</strong> row in <strong>Settings</strong> shows whether it is installed, and removes it (see <a href="#bthps3">BthPS3</a>). On x64, the first controller on a profile that runs as a USB device installs usbip-win2's virtual USB host controller, the USB transport HIDMaestro carries. Those profiles are the three PlayStation profiles named <strong>Full</strong>, <strong>Nintendo Switch 2 Pro Controller: Full</strong>, the two Valve <strong>Composite</strong> profiles, <strong>Steam Controller (2026)</strong>, <strong>Xbox One S Controller (Model 1708): Full</strong>, and <strong>Nintendo Switch Joy-Con Charging Grip with Joy-Con (L)</strong> and <strong>(R)</strong>. The PlayStation slot's default profile, <strong>DualSense (PS5): Full</strong>, is one of them. That install needs no prompt and restarts no USB hub.</p>
 <hr />
 <h2 id="controllers-windows-leaves-without-a-driver">Controllers Windows leaves without a driver<a class="headerlink" href="#controllers-windows-leaves-without-a-driver" title="Permanent link">&para;</a></h2>
 <p>Some controllers plug in and sit dead, because Windows has no driver for them or gives them one that reads nothing. While the engine runs, PadForge binds the driver a controller needs within a few seconds of it appearing, with no prompt:</p>
@@ -5029,43 +5237,43 @@
 <li><strong>WinUSB</strong>, Windows' own generic USB driver, for the controllers PadForge's controller library reads directly: the Wii U GameCube adapter, the Xbox 360 Big Button receiver, the Gametrak, the DJI RC remote, force-feedback wheels and sticks built on the I-Force chip, Namco's GunCon 2 and USIO, Konami's P3IO and P4IO arcade boards, Densha de GO! and other train controllers, the CH Products Multi-Function Panel, the Ergodex DX1, the TrackIR 2 and 3, the Tacx T1904 and T1932, and original Xbox controllers.</li>
 <li><strong>xusb22</strong>, Windows' own Xbox 360 driver, for clone Xbox 360 wireless receivers (USB IDs 045E:0291, 045E:02A9 and 05C6:9244) and the Guitar Hero Live Xbox 360 dongle (1430:070B). By ID, that driver's own list names only Microsoft's receiver, wired controller and Play and Charge cable, and since Windows 10 version 2004 it can no longer be picked by hand for these. Once bound, they reach every game through XInput, with PadForge running or not.</li>
 </ul>
-<p>On its own, PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names one ID, the controller's own or, for original Xbox controllers, their USB device class, and is signed with the certificate this PC's <a href="../../devices/dualshock-3/">DualShock 3</a> binding uses.</p>
-<p>Five devices lose something to the switch, so they move only when you ask, from their card on the <a href="../devices/#switch-driver-buttons">Devices</a> page.</p>
+<p>On its own, PadForge takes a controller only from no driver, or for WinUSB from Windows' generic HID driver, and never from another vendor's driver. A second controller of the same model on another vendor's driver keeps the whole model where it is. Each driver package names one ID, the controller's own or, for original Xbox controllers, their USB device class, and is signed with the certificate this PC's <a href="../../devices/dualshock-3/">DualShock 3</a> binding uses. PadForge writes each package's catalog and signs it itself, with no outside tool.</p>
+<p>Five devices lose something to the switch, so they move only when you ask, from the device's entry on the <a href="../devices/#switch-driver-buttons">Devices</a> page.</p>
 <hr />
 <h2 id="keyboards-mice-and-touchpads-use-only-in-padforge">Keyboards, mice and touchpads: Use Only in PadForge<a class="headerlink" href="#keyboards-mice-and-touchpads-use-only-in-padforge" title="Permanent link">&para;</a></h2>
 <p>HidHide hides a controller from games. It cannot hide a keyboard or mouse from Windows, because their input reaches Windows through a stack HidHide does not filter. For a keyboard, a mouse or a precision touchpad, the <strong>Input Hiding</strong> section on the <a href="../devices/">Devices</a> page can show <strong>Use Only in PadForge</strong>. It stands beside <strong>Hide from Games (HidHide)</strong> and <strong>Consume Mapped Inputs (Hooks)</strong>.</p>
 <p><strong>A USB keyboard or mouse.</strong> The button moves the device's USB node to Windows' WinUSB driver. On a receiver or a composite device only that interface moves. Windows then stops typing with the keyboard or moving the pointer with the mouse in every program, even while PadForge is closed, until you click <strong>Restore the Windows Driver</strong>. PadForge reads the device's reports itself and keeps the device's row, so its slots, mappings and macros carry over. The confirmation lists what else leaves Windows with the device: a mouse or keyboard sharing the interface, media keys, power and sleep keys, a game controller, or the link to the maker's software.</p>
 <ul>
 <li>After the switch, a <strong>Keep This Keyboard in PadForge?</strong> or <strong>Keep This Mouse in PadForge?</strong> prompt counts down 15 seconds. Click <strong>Keep</strong> to stay. Any other answer, or none, puts the Windows driver back, so a switch that leaves you without a working keyboard or mouse undoes itself.</li>
-<li>One device of a model moves at a time, because Windows moves every plugged-in device with the same ID. The status bar asks you to unplug the others first.</li>
+<li>One device of a model moves at a time, because Windows moves every plugged-in device with the same ID. The message line at the lower left of the window asks you to unplug the others first.</li>
 <li>A keyboard or mouse on Bluetooth, PS/2 or I2C has no USB node and gets no button.</li>
 <li>A switched device shows neither <strong>Hide from Games (HidHide)</strong> nor <strong>Consume Mapped Inputs (Hooks)</strong>. Its row is PadForge's alone, so there is nothing left to hide or consume.</li>
 <li>If a program such as a laptop vendor's utility holds the device open, Windows cannot restart it on the new driver and the switch fails. PadForge then removes its driver package so the device does not move at the next Windows restart.</li>
 </ul>
-<p><strong>A precision touchpad.</strong> An I2C touchpad cannot move to WinUSB. <strong>Use Only in PadForge</strong> hides its collection from Windows with HidHide while the engine runs, and PadForge reads the collection itself. The button shows on the touchpad's row and on its mouse row. It needs HidHide installed, <strong>Hide Devices from Games</strong> on under <strong>Settings</strong>, and the engine running, and the status bar says which is missing. While the touchpad is taken, its mouse row reads the touchpad's own frames: motion, clicks, taps and two-finger scrolling, following your Windows touchpad settings. Windows gets the touchpad back when the engine stops or PadForge closes, and the same Keep prompt gives it back after 15 seconds. The button then reads <strong>Give Back to Windows</strong>. <strong>Hide from Games (HidHide)</strong> no longer acts on a touchpad's rows, because a touchpad hidden with nothing reading it is dead in Windows and in PadForge.</p>
+<p><strong>A precision touchpad.</strong> An I2C touchpad cannot move to WinUSB. <strong>Use Only in PadForge</strong> hides its collection from Windows with HidHide while the engine runs, and PadForge reads the collection itself. The button shows on the touchpad's row and on its mouse row. It needs HidHide installed, <strong>Hide Devices from Games</strong> on under <strong>Settings &gt; Drivers &gt; HidHide Options</strong>, and the engine running, and the message line says which is missing. While the touchpad is taken, its mouse row reads the touchpad's own frames: motion, clicks, taps and two-finger scrolling, following your Windows touchpad settings. Windows gets the touchpad back when the engine stops or PadForge closes, and the same Keep prompt gives it back after 15 seconds. The button then reads <strong>Give Back to Windows</strong>. <strong>Hide from Games (HidHide)</strong> no longer acts on a touchpad's rows, because a touchpad hidden with nothing reading it is dead in Windows and in PadForge.</p>
 <hr />
 <h2 id="status-indicators">Status indicators<a class="headerlink" href="#status-indicators" title="Permanent link">&para;</a></h2>
-<p>Each driver card on the Settings page shows an ember flame next to its status text.</p>
-<p><img alt="Driver cards with their status flames and versions" src="../../images/driver-status-flames.png" /></p>
+<p>Each row of the <strong>Drivers</strong> card starts with a dot beside the driver's name.</p>
+<p><img alt="The Drivers card's rows with their status dots and versions" src="../../images/driver-status-flames.png" /></p>
 <table>
 <thead>
 <tr>
-<th>Flame</th>
+<th>Dot</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Lit flame</strong> (orange, glowing) "Installed"</td>
-<td>Driver installed. HidHide shows its installed version below, and HIDMaestro and BthPS3 the version PadForge carries. A lit HIDMaestro card means its driver is in Windows' driver store, not that a virtual controller is running. The SteamVR card has no version line, and its text changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active.</td>
+<td><strong>Filled</strong> (ember) "Installed"</td>
+<td>Driver installed. HidHide shows its installed version beside the status, and HIDMaestro and BthPS3 Bluetooth the version PadForge carries. A filled HIDMaestro dot means its driver is in Windows' driver store, or on Windows on ARM that usbip-win2's host controller is installed, not that a virtual controller is running. The SteamVR row has no version, and its status changes to "Running", "Running, driver connected", or "Running, controllers live" while SteamVR is active.</td>
 </tr>
 <tr>
-<td><strong>Unlit flame</strong> (outline only) "Not Installed"</td>
+<td><strong>Outline</strong> "Not Installed"</td>
 <td>Install before the matching slot type works.</td>
 </tr>
 </tbody>
 </table>
-<p>The HIDMaestro card's flame lights while the driver is in Windows' driver store, so it stays dark on a PC that has never created a virtual controller and after <strong>Uninstall</strong>. The Windows MIDI Services card has its own states, listed under <a href="#the-settings-card">Windows MIDI Services</a>. Driver status lives on the Settings page and nowhere else. The <a href="../dashboard/">Dashboard</a> carried a <strong>Drivers</strong> text row through 4.3.2 and no longer does.</p>
+<p>The HIDMaestro dot fills while the driver is in Windows' driver store, so it stays an outline on a PC that has never created a virtual controller and after <strong>Uninstall</strong>. On Windows on ARM it fills while usbip-win2's virtual USB host controller is installed. The Windows MIDI Services row has its own states, listed under <a href="#the-settings-row">Windows MIDI Services</a>. Driver status lives on the Settings page and nowhere else.</p>
 <hr />
 <h2 id="what-happens-with-a-driver-missing">What happens with a driver missing<a class="headerlink" href="#what-happens-with-a-driver-missing" title="Permanent link">&para;</a></h2>
 <p>PadForge runs whether or not the optional drivers are installed. Missing drivers only limit the features that need them.</p>
@@ -5091,11 +5299,11 @@
 </tr>
 <tr>
 <td><strong>Windows MIDI Services</strong></td>
-<td>MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI slot type won't switch on, and its button shows the tooltip "MIDI (not running, see the Windows MIDI Services card in Settings)". Every other slot type works.</td>
+<td>MIDI runs on the legacy MIDI API instead: each MIDI slot sends to a port you pick, and MIDI input opens only devices assigned to a slot. If no MIDI API starts at all, the MIDI tile in <strong>Add a Controller</strong> is dimmed and cannot be picked. Its line gives the reason from the Windows MIDI Services row, or "Windows MIDI Services is not responding. See it in Settings, under Drivers." Every other slot type works.</td>
 </tr>
 <tr>
 <td><strong>SteamVR</strong></td>
-<td>The VR slot type won't switch on. Its button stays visible and shows the tooltip "VR (requires SteamVR)". Every other slot type works.</td>
+<td>The VR tile in <strong>Add a Controller</strong> is dimmed and cannot be picked. Its line reads "Needs SteamVR. Install it from Settings, under Drivers." and its tooltip "VR (requires SteamVR)". Every other slot type works.</td>
 </tr>
 </tbody>
 </table>
@@ -5126,21 +5334,21 @@
 <li>A custom controller shape for niche games</li>
 </ul>
 <h3 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h3>
-<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The HIDMaestro card on the <strong>Settings</strong> page lights its flame while the driver is in Windows' driver store, and shows the HIDMaestro version PadForge carries. The Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.</p>
+<p>HIDMaestro installs itself the first time PadForge creates a virtual controller. There is no Install button. Because PadForge already runs as administrator, no extra prompt appears. The HIDMaestro row of the <strong>Drivers</strong> card fills its dot while the driver is in Windows' driver store, or on Windows on ARM while usbip-win2's host controller is installed, and shows the HIDMaestro version PadForge carries. The Xbox, PlayStation, Nintendo, and Extended slot types are always available, because the driver ships inside PadForge.</p>
 <h3 id="uninstall">Uninstall<a class="headerlink" href="#uninstall" title="Permanent link">&para;</a></h3>
-<p><strong>Uninstall</strong> on the HIDMaestro card removes HIDMaestro from the PC. It first shows what HIDMaestro left: each item it would remove, each item it keeps and why, and any running program that uses HIDMaestro. Such a program blocks the removal until you close it and select <strong>Refresh</strong>. <strong>Also remove usbip-win2 set up by its own installer</strong> also takes what usbip-win2's installer left on a PC where an older PadForge set it up that way, its USB root hub filter included, unless another program uses usbip-win2. Taking the filter off restarts every USB 3 root hub, so the USB devices on them disconnect for a moment.</p>
+<p><strong>Uninstall</strong> on the HIDMaestro row removes HIDMaestro from the PC. It first shows what HIDMaestro left: each item it would remove, each item it keeps and why, and any running program that uses HIDMaestro. Such a program blocks the removal until you close it and click <strong>Refresh</strong> in the preview, which reads the PC again. <strong>Also remove usbip-win2 set up by its own installer</strong> also takes what usbip-win2's installer left on a PC where an older PadForge set it up that way, its USB root hub filter included, unless another program uses usbip-win2. Taking the filter off restarts every USB 3 root hub, so the USB devices on them disconnect for a moment.</p>
 <p><img alt="The HIDMaestro uninstall preview, with what it removes and what stays" src="../../images/settings-hidmaestro-uninstall.png" /></p>
 <p>When you confirm, PadForge stops its engine, and HIDMaestro removes every virtual controller and the records Windows keeps of them, its driver packages, its signing certificate, its registry keys and its files. The controller names and GameInput tables it changed go back to what they held, unless another program changed them since. A file in use under <code>%ProgramFiles%\HIDMaestro</code> goes when Windows next starts, and so does the filter's service after a removal that took usbip-win2's filter. The status line says how the removal ended, and one that could not take everything lists what stayed and why. The engine stays stopped, and PadForge installs HIDMaestro again the next time it starts a virtual controller. Other programs that use HIDMaestro lose its driver until they next start.</p>
 <p>On a PC where PadForge is already gone, download <code>HIDMaestro-v2.3.0.zip</code> (<code>HIDMaestro-v2.3.0-arm64.zip</code> on Windows on ARM) from the <a href="https://github.com/hifihedgehog/HIDMaestro/releases/latest">HIDMaestro releases</a> and extract it. In a terminal opened as administrator, change to its <code>HIDMaestroUninstall</code> folder and run <code>.\HIDMaestroUninstall.exe</code>. It lists what it would remove and keep, asks before it removes anything, and then prints what it removed and kept. It needs no .NET runtime. Removing the devices in Device Manager leaves the driver packages, the certificate and the files behind.</p>
 <p>For the contract between PadForge and HIDMaestro, see <a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>.</p>
 <hr />
 <h2 id="bthps3">BthPS3<a class="headerlink" href="#bthps3" title="Permanent link">&para;</a></h2>
-<p>Nefarius's BthPS3 drivers let a <a href="../../devices/dualshock-3/">DualShock 3</a>, a <a href="../../devices/ps-move/">PS Move</a> and a Navigation controller connect over the PC's Bluetooth: a profile driver, and a filter on Bluetooth that steers those controllers to it. PadForge carries them and installs them the first time one of those controllers is paired. The <strong>BthPS3 Bluetooth Driver</strong> card on the <strong>Settings</strong> page lights its flame while either driver is installed, and shows the BthPS3 version PadForge carries.</p>
-<p><img alt="The BthPS3 Bluetooth Driver card in Settings" src="../../images/settings-bthps3.png" /></p>
+<p>Nefarius's BthPS3 drivers let a <a href="../../devices/dualshock-3/">DualShock 3</a>, a <a href="../../devices/ps-move/">PS Move</a> and a Navigation controller connect over the PC's Bluetooth: a profile driver, and a filter on Bluetooth that steers those controllers to it. PadForge carries them and installs them the first time one of those controllers is paired. The <strong>BthPS3 Bluetooth</strong> row of the <strong>Drivers</strong> card fills its dot while either driver is installed, and shows the BthPS3 version PadForge carries.</p>
+<p><img alt="The BthPS3 Bluetooth row in Settings" src="../../images/settings-bthps3.png" /></p>
 <h3 id="uninstall_1">Uninstall<a class="headerlink" href="#uninstall_1" title="Permanent link">&para;</a></h3>
-<p><strong>Uninstall</strong> on the card removes BthPS3 from the PC. It first lists what it would remove: the filter's registration on Bluetooth, the drivers and their files, and the WinUSB driver PadForge gave PlayStation 3 and Navigation controllers for pairing, with the certificate that signs it. The certificate stays while another of PadForge's WinUSB drivers is signed with it. When BthPS3's own setup installed the drivers, its own uninstaller removes them first.</p>
+<p><strong>Uninstall</strong> on the row removes BthPS3 from the PC. It first lists what it would remove: the filter's registration on Bluetooth, the drivers and their files, and the WinUSB driver PadForge gave PlayStation 3 and Navigation controllers for pairing, with the certificate that signs it. The certificate stays while another of PadForge's WinUSB drivers is signed with it. When BthPS3's own setup installed the drivers, its own uninstaller removes them first.</p>
 <p><img alt="The BthPS3 uninstall preview, listing what it removes" src="../../images/settings-bthps3-uninstall.png" /></p>
-<p>The removal waits while a PlayStation controller is connected over Bluetooth. Turn the controller off, then select <strong>Refresh</strong>. Unloading the drivers while a controller is connected can crash Windows. The drivers stay while DsHidMini is installed, since DsHidMini needs them.</p>
+<p>The removal waits while a PlayStation controller is connected over Bluetooth. Turn the controller off, then click <strong>Refresh</strong> in the preview. Unloading the drivers while a controller is connected can crash Windows. The drivers stay while DsHidMini is installed, since DsHidMini needs them.</p>
 <p>When you confirm, PadForge stops its engine and Bluetooth switches off for a moment while the drivers unload, then back on. A driver still loaded goes when Windows next starts. The status line says how the removal ended, and one that could not take everything lists what stayed and why. The engine stays stopped. PlayStation 3, Move and Navigation controllers then work over USB, and pairing one installs BthPS3 again. Starting the engine with a PlayStation 3 or Navigation controller plugged in puts its WinUSB driver back.</p>
 <p>For the steps and the checks behind them, see <a href="../../reference/driver-installation-internals/#removal_1">Driver Installation Internals</a>.</p>
 <hr />
@@ -5167,7 +5375,7 @@
 <tbody>
 <tr>
 <td><strong>Per-device hiding</strong></td>
-<td>Toggle <strong>Hide from Games (HidHide)</strong> on each device card (<a href="../devices/">Devices</a> page).</td>
+<td>Toggle <strong>Hide from Games (HidHide)</strong> for each device on the <a href="../devices/">Devices</a> page.</td>
 </tr>
 <tr>
 <td><strong>Automatic whitelist</strong></td>
@@ -5175,11 +5383,11 @@
 </tr>
 <tr>
 <td><strong>Self-check</strong></td>
-<td>After hiding a controller, PadForge opens it once itself, the way it reopens every device on each scan, and once more each time a hidden controller reconnects. If HidHide refuses, PadForge takes every entry back and says so in the status bar, because a controller hidden from PadForge itself stops responding at the next scan. PadForge hides again as soon as HidHide's whitelist changes, which is when HidHide reconsiders a program it refused, or when HidHide's Inverse application cloak goes off.</td>
+<td>After hiding a controller, PadForge opens it once itself, the way it reopens every device on each scan, and once more each time a hidden controller reconnects. If HidHide refuses, PadForge takes every entry back and says so in the message line, because a controller hidden from PadForge itself stops responding at the next scan. PadForge hides again as soon as HidHide's whitelist changes, which is when HidHide reconsiders a program it refused, or when HidHide's Inverse application cloak goes off.</td>
 </tr>
 <tr>
 <td><strong>Inverse application cloak</strong></td>
-<td>This HidHide option turns the whitelist into a list of programs that cannot see hidden devices, so PadForge's own entry would hide every controller from PadForge. While it is on, PadForge keeps itself off the list, hides nothing, and says so in the status bar. When it goes off, the line clears and PadForge hides again.</td>
+<td>This HidHide option turns the whitelist into a list of programs that cannot see hidden devices, so PadForge's own entry would hide every controller from PadForge. While it is on, PadForge keeps itself off the list, hides nothing, and says so in the message line. When it goes off, the line clears and PadForge hides again.</td>
 </tr>
 <tr>
 <td><strong>Engine-aware</strong></td>
@@ -5199,31 +5407,31 @@
 </tr>
 <tr>
 <td><strong>Master switch</strong></td>
-<td><strong>Settings &gt; HidHide Driver &gt; Hide Devices from Games</strong> (global on/off). Turning it off mid-session unhides every controller right away.</td>
+<td><strong>Settings &gt; Drivers &gt; HidHide Options &gt; Hide Devices from Games</strong> (global on/off). Turning it off mid-session unhides every controller right away.</td>
 </tr>
 <tr>
 <td><strong>Keep Devices Cloaked Between Launches</strong></td>
-<td><strong>Settings &gt; HidHide Driver</strong> checkbox, off by default. Leaves physical controllers hidden even while PadForge is closed. Turn it on when another app (Steam, for example) scans for controllers between PadForge sessions and should keep seeing only the virtual ones.</td>
+<td>Switch under <strong>Settings &gt; Drivers &gt; HidHide Options</strong>, off by default. Leaves physical controllers hidden even while PadForge is closed. Turn it on when another app (Steam, for example) scans for controllers between PadForge sessions and should keep seeing only the virtual ones.</td>
 </tr>
 </tbody>
 </table>
 <h3 id="whitelist">Whitelist<a class="headerlink" href="#whitelist" title="Permanent link">&para;</a></h3>
-<p>Other controller utilities (Steam Input, for example) need their own whitelist entry to see hidden controllers.</p>
+<p>Other controller utilities (Steam Input, for example) need their own whitelist entry to see hidden controllers. The list is <strong>Whitelisted Applications</strong>, under <strong>Settings &gt; Drivers &gt; HidHide Options</strong>, which shows while HidHide is installed.</p>
 <ul>
-<li><strong>Add...</strong> browses for an .exe.</li>
+<li><strong>Add…</strong> browses for an .exe.</li>
 <li><strong>Remove</strong> drops the selected entry.</li>
 </ul>
 <h3 id="install-steps">Install steps<a class="headerlink" href="#install-steps" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Open <strong>Settings</strong>. Scroll to <strong>HidHide Driver</strong>.</li>
-<li>Click <strong>Install</strong>. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>Click <strong>Install</strong> on the <strong>HidHide</strong> row. The installer runs inside PadForge's session, which is already running as administrator, so no extra prompt appears.</li>
 </ol>
 <p>Turn on <strong>Keep a Diagnostics Log</strong> under <strong>Settings</strong> to see what hiding actually did. Each pass records the devices it hid, the interfaces the visible-row rule held back, which rule the transport sweep used, whether HidHide's whitelist could be read and written, and whether PadForge could still open a device it hid. The log also lists HidHide entries that PadForge did not add, and flags any that names one of PadForge's own virtual controllers, which hides it from every program HidHide does not list. <strong>Save Snapshot</strong> writes HidHide's flags and list, every present XInput interface, and each virtual controller's HID node with its problem code into the history. When hiding is requested and the HidHide control device will not open, the log says so and names the Windows error, instead of failing quietly.</p>
 <h3 id="uninstall-steps">Uninstall steps<a class="headerlink" href="#uninstall-steps" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Turn off <strong>Hide from Games (HidHide)</strong> on every device. <strong>Uninstall</strong> stays disabled while any device has hiding on.</li>
-<li>Open <strong>Settings</strong>. Scroll to <strong>HidHide Driver</strong>.</li>
-<li>Click <strong>Uninstall</strong>. It runs inside the same administrator session, so no extra prompt appears.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>Click <strong>Uninstall</strong> on the <strong>HidHide</strong> row. It runs inside the same administrator session, so no extra prompt appears.</li>
 </ol>
 <p>Every physical controller becomes visible again the moment the driver leaves.</p>
 <hr />
@@ -5244,11 +5452,11 @@
 <h3 id="installing-the-runtime">Installing the runtime<a class="headerlink" href="#installing-the-runtime" title="Permanent link">&para;</a></h3>
 <p><strong>Install</strong> shows on Windows 11 24H2 or later when Windows has no API of its own yet, Legacy API mode is off, and no runtime is installed.</p>
 <ol>
-<li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
-<li>Click <strong>Install</strong>.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>Click <strong>Install</strong> on the <strong>Windows MIDI Services</strong> row.</li>
 </ol>
 <p>PadForge downloads the package for your PC, x64 or ARM64 and about 1 MB, from GitHub, and installs it only when it matches the SHA-256 it was published with. The runtime needs the Microsoft Visual C++ Redistributable 14.51 or later. When the PC's copy is missing or older, PadForge downloads Microsoft's redistributable first and runs it only after its Microsoft signature checks out. The runtime goes to <code>C:\Program Files\PadForge MIDI Runtime</code>. Once it is in, MIDI slots rebuild with ports of their own and MIDI input reopens through it. When a program holds the old Visual C++ runtime open so Windows cannot swap in the new one, PadForge runs the redistributable again as a repair, twice at most, five seconds apart. When the redistributable is still running after three minutes, or Windows starts it without letting PadForge follow it, the install stops with "The Visual C++ Redistributable installer is still running. Select Install again once it finishes." The runtime's own installer has not run at that point.</p>
-<h3 id="the-settings-card">The Settings card<a class="headerlink" href="#the-settings-card" title="Permanent link">&para;</a></h3>
+<h3 id="the-settings-row">The Settings row<a class="headerlink" href="#the-settings-row" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -5270,12 +5478,12 @@
 </tr>
 <tr>
 <td><strong>Legacy MIDI API</strong></td>
-<td>"Each MIDI slot sends to a port picked on the slot's page. MIDI input opens only devices assigned to a slot."</td>
+<td>"Each MIDI slot sends to a port picked on the slot’s page. MIDI input opens only devices assigned to a slot."</td>
 <td>No Windows MIDI Services API runs, so PadForge uses the legacy API.</td>
 </tr>
 <tr>
 <td><strong>Legacy MIDI API</strong></td>
-<td>"The MIDI API built into Windows did not start (error 0x<em>code</em>), so PadForge uses the legacy MIDI API. Each MIDI slot sends to a port picked on the slot's page. MIDI input opens only devices assigned to a slot."</td>
+<td>"The MIDI API built into Windows did not start (error 0x<em>code</em>), so PadForge uses the legacy MIDI API. Each MIDI slot sends to a port picked on the slot’s page. MIDI input opens only devices assigned to a slot."</td>
 <td>Windows registers its own API, but it failed to start. The code is the error Windows answered with.</td>
 </tr>
 <tr>
@@ -5290,22 +5498,22 @@
 </tr>
 <tr>
 <td><strong>Not Running</strong></td>
-<td>"The runtime's uninstaller is still running. MIDI starts again once it finishes."</td>
+<td>"The runtime’s uninstaller is still running. MIDI starts again once it finishes."</td>
 <td>An uninstall of the runtime holds MIDI released until its uninstaller exits.</td>
 </tr>
 </tbody>
 </table>
-<p>The flame lights while any of them works. Until the engine first opens MIDI, the card goes by what Windows has registered. After that it shows what the engine found.</p>
+<p>The dot fills while any of them works. Until the engine first opens MIDI, the row goes by what Windows has registered. After that it shows what the engine found.</p>
 <p>When Windows MIDI Services is present but did not start when PadForge first checked, PadForge runs on the legacy API and tries Windows MIDI Services again beside it, first after 10 seconds and then every two minutes. Once it starts, MIDI moves onto it: MIDI slots rebuild with ports of their own and MIDI input reopens. Nothing is restarted for that, and in Legacy API mode nothing is tried.</p>
 <p>In Legacy API mode Windows keeps the MIDI service off, so PadForge uses the legacy MIDI API and offers no <strong>Install</strong>. Microsoft's <a href="https://microsoft.github.io/MIDI/kb/how-to-change-api-mode/">How to change the API mode</a> covers switching back.</p>
 <h3 id="the-legacy-midi-api">The legacy MIDI API<a class="headerlink" href="#the-legacy-midi-api" title="Permanent link">&para;</a></h3>
 <p>The legacy API cannot create a port for a MIDI slot, so each slot sends to a port that already exists: a MIDI interface, a synth, or a loopback driver that another program reads.</p>
 <ul>
-<li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked, and the status bar says "Virtual Controller <em>N</em> has no Output Port. Pick one on its page."</li>
-<li>A port that is already in use cannot be opened, and the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is already in use." When another MIDI slot is set to the same port, the line names both: "Virtual Controller <em>N</em> and Virtual Controller <em>M</em> are set to the same Output Port “<em>port</em>”. Pick another port for one of them." The slot that failed starts by itself once either slot has moved to another port. For a port another program holds, close that program, then turn the slot off and on.</li>
+<li>While the legacy API runs, the slot's page shows <strong>Output Port</strong> beside its MIDI settings. Pick the port there. A slot set to <strong>None</strong> does not start until a port is picked, and the message line says "Virtual Controller <em>N</em> has no Output Port. Pick one on its page."</li>
+<li>A port that is already in use cannot be opened, and the message line says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is already in use." When another MIDI slot is set to the same port, the line names both: "Virtual Controller <em>N</em> and Virtual Controller <em>M</em> are set to the same Output Port “<em>port</em>”. Pick another port for one of them." The slot that failed starts by itself once either slot has moved to another port. For a port another program holds, close that program, then turn the slot off and on.</li>
 <li>Picking another port moves the slot there.</li>
-<li>A slot whose port is missing, because its device is off or unplugged, does not start, and the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is not connected. The slot starts once the port is back." About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.</li>
-<li>When a port fails to open for any other reason, the status bar says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> did not open."</li>
+<li>A slot whose port is missing, because its device is off or unplugged, does not start, and the message line says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> is not connected. The slot starts once the port is back." About a second after the device is back, it starts by itself. A running slot whose device is unplugged closes the port and waits the same way.</li>
+<li>When a port fails to open for any other reason, the message line says "The Output Port “<em>port</em>” of Virtual Controller <em>N</em> did not open."</li>
 <li>Each of these lines clears once the slot starts.</li>
 <li>The port is saved with the slot and in profiles. A profile saved before a port was picked leaves the slot's port alone, and copying one slot's MIDI settings to another leaves the second slot's port alone. A profile saved with <strong>None</strong> picked sets the slot to <strong>None</strong>.</li>
 <li>MIDI input opens a port only while a slot has the device assigned, on this PC or on a Remote Link peer. On Windows 10, Windows 11 before 24H2 and in Legacy API mode a MIDI port serves one program at a time, so PadForge holds no port that nothing uses. A device's assignments do not carry over when PadForge moves between the legacy API and Windows MIDI Services, since each names devices its own way.</li>
@@ -5314,27 +5522,27 @@
 <h3 id="removing-the-runtime">Removing the runtime<a class="headerlink" href="#removing-the-runtime" title="Permanent link">&para;</a></h3>
 <p><strong>Uninstall</strong> shows while a runtime is installed. It removes PadForge's build, or Microsoft's runtime together with everything Microsoft's <strong>Windows MIDI Services Runtime and Tools</strong> setup installed beside it, the MIDI Settings app included. Microsoft no longer offers that setup for download, so PadForge asks before it removes it. The API built into Windows stays.</p>
 <ol>
-<li>If the card reads <strong>App SDK Runtime</strong>, delete or retype every MIDI slot on the Dashboard first. When it reads <strong>Built into Windows</strong> or <strong>Legacy MIDI API</strong>, MIDI slots run without the runtime and can stay.</li>
-<li>Open <strong>Settings</strong>. Scroll to <strong>Windows MIDI Services</strong>.</li>
-<li>Click <strong>Uninstall</strong>.</li>
+<li>If the row reads <strong>App SDK Runtime</strong>, delete every MIDI controller or change its type first. When it reads <strong>Built into Windows</strong> or <strong>Legacy MIDI API</strong>, MIDI slots run without the runtime and can stay.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>Click <strong>Uninstall</strong> on the <strong>Windows MIDI Services</strong> row.</li>
 </ol>
-<p>While PadForge uses the runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes. Under the legacy API, MIDI keeps running through the uninstall. <strong>Uninstall</strong> and <strong>Install</strong> stay disabled while a runtime uninstaller PadForge started is still running, and Install's tooltip reads "The runtime's uninstaller is still running. Install is available once it finishes."</p>
-<p>Before the uninstaller starts, PadForge releases MIDI from the runtime and waits up to a minute for that. A second Uninstall that finds the first one's release still at work waits for it first, then gives its own release the minute again, so the card can wait up to two minutes. When MIDI is not released in time, the uninstaller does not start, and the status bar says "The Windows MIDI service did not respond, so the runtime was not uninstalled. Select Uninstall again in a moment." Where a classic MIDI driver is what did not answer, it says "A MIDI driver did not respond, so the runtime was not uninstalled. Select Uninstall again once MIDI is running."</p>
+<p>While PadForge uses the runtime, MIDI input pauses during the uninstall and comes back when the uninstaller finishes. Under the legacy API, MIDI keeps running through the uninstall. <strong>Uninstall</strong> and <strong>Install</strong> stay disabled while a runtime uninstaller PadForge started is still running, and Install's tooltip reads "The runtime’s uninstaller is still running. Install is available once it finishes."</p>
+<p>Before the uninstaller starts, PadForge releases MIDI from the runtime and waits up to a minute for that. A second Uninstall that finds the first one's release still at work waits for it first, then gives its own release the minute again, so the row can wait up to two minutes. When MIDI is not released in time, the uninstaller does not start, and the message line says "The Windows MIDI service did not respond, so the runtime was not uninstalled. Select Uninstall again in a moment." Where a classic MIDI driver is what did not answer, it says "A MIDI driver did not respond, so the runtime was not uninstalled. Select Uninstall again once MIDI is running."</p>
 <hr />
 <h2 id="steamvr">SteamVR<a class="headerlink" href="#steamvr" title="Permanent link">&para;</a></h2>
 <p>The runtime behind the VR slot type. PadForge installs it Steam-free from Valve's servers: no Steam account, no Steam client. It is several GB.</p>
 <h3 id="install-steps_1">Install steps<a class="headerlink" href="#install-steps_1" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
-<li>Set <strong>Install Location</strong> if you do not want the default path, by typing a path or using <strong>Browse</strong>. The row only shows while SteamVR is missing.</li>
-<li>Click <strong>Install</strong>. The download runs from Valve's servers and the flame lights when it finishes.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>On the <strong>SteamVR</strong> row, set <strong>Install Location</strong> if you do not want the default path, by typing a path or using <strong>Browse</strong>. The row only shows while SteamVR is missing.</li>
+<li>Click <strong>Install</strong>. The download runs from Valve's servers and the dot fills when it finishes.</li>
 </ol>
 <h3 id="uninstall-steps_1">Uninstall steps<a class="headerlink" href="#uninstall-steps_1" title="Permanent link">&para;</a></h3>
 <p><strong>Uninstall</strong> only appears for an install PadForge itself made. A SteamVR that arrived with the Steam client is left alone, and PadForge shows no removal button for it.</p>
 <ol>
 <li>Close SteamVR. The uninstall refuses while it is running.</li>
-<li>Open <strong>Settings</strong>. Scroll to <strong>SteamVR</strong>.</li>
-<li>Click <strong>Uninstall</strong>, then confirm. The dialog names the folder it removes. It removes the Steam-free install and frees the space, including the <code>logs</code> and <code>config</code> subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.</li>
+<li>Open <strong>Settings &gt; Drivers</strong>.</li>
+<li>Click <strong>Uninstall</strong> on the <strong>SteamVR</strong> row, then confirm. The dialog names the folder it removes. It removes the Steam-free install and frees the space, including the <code>logs</code> and <code>config</code> subfolders SteamVR keeps inside it. VR virtual controllers stop working until SteamVR is installed again.</li>
 </ol>
 <p>Reading real VR hardware as an input source pauses for the rest of the session after an uninstall, and comes back the next time PadForge starts. PadForge holds SteamVR's client library open while it is running and lets go of it during the uninstall, so it does not go back to it until a fresh launch. Virtual VR controllers are unaffected by this: they run inside SteamVR's own process, not PadForge's.</p>
 <p>For the slot type itself, see <a href="../vr-controllers/">Virtual VR Controllers</a>.</p>
@@ -5424,10 +5632,10 @@
 </tr>
 </tbody>
 </table>
-<p>(1) Preliminary. Nothing in the ARM64 column has run on ARM64 hardware yet.
+<p>(1) Preliminary. HIDMaestro and HidHide have run with this build on one ARM64 PC. The rest of the column has not run on ARM64 hardware.
 (2) Built into 25H2 from the late-November 2026 update. Elsewhere, through the runtime PadForge installs from <strong>Settings</strong>.</p>
 <ul>
-<li><strong>HIDMaestro</strong> runs in user mode, so it installs with no reboot. It carries an x64 and an ARM64 driver and installs the one that matches the machine.</li>
+<li><strong>HIDMaestro</strong> installs with no reboot. On x64 it is a user-mode driver. On Windows on ARM every virtual controller runs as a USB device on usbip-win2's virtual USB host controller, which HIDMaestro installs in place of its own driver.</li>
 <li><strong>HidHide</strong> is a kernel driver, so it has to match the machine: x64 on an x64 PC, ARM64 on an ARM64 PC. Neither install asks for a restart. It does not run on 32-bit Windows.</li>
 <li><strong>Windows MIDI Services</strong> is part of Windows 11 25H2 (build 26200) from the late-November 2026 update, x64 and ARM64 alike. On 24H2 (build 26100), and on 25H2 before that update, it runs through the runtime, which PadForge installs for x64 and ARM64. Earlier Windows has neither.</li>
 <li><strong>The legacy MIDI API</strong> (WinMM) is part of every Windows. PadForge falls back to it wherever no Windows MIDI Services API runs.</li>
@@ -5474,12 +5682,12 @@
 </thead>
 <tbody>
 <tr>
-<td>The status bar says Windows started the installer without letting PadForge follow it</td>
-<td>The installer runs on its own. The card shows the result once it finishes.</td>
+<td>The message line says Windows started the installer without letting PadForge follow it</td>
+<td>The installer runs on its own. The row shows the result once it finishes.</td>
 </tr>
 <tr>
-<td>Flame stays unlit after install</td>
-<td>The status bar names why the install failed, such as an installer's exit code. Click <strong>Install</strong> again.</td>
+<td>Dot stays an outline after install</td>
+<td>The message line names why the install failed, such as an installer's exit code. Click <strong>Install</strong> again.</td>
 </tr>
 <tr>
 <td>HIDMaestro fails to install</td>
@@ -5494,12 +5702,12 @@
 <td>Microsoft's redistributable was still running after three minutes, or Windows started it without letting PadForge follow it, so the runtime's own installer has not run. Click <strong>Install</strong> again once the redistributable has finished.</td>
 </tr>
 <tr>
-<td>Windows MIDI Services card reads <strong>Legacy MIDI API</strong> on Windows 11 25H2</td>
-<td>Windows has no API of its own until the late-November 2026 update. <strong>Settings &gt; System &gt; About</strong> in Windows shows the version, and Windows Update brings the update. Until then, click <strong>Install</strong> on the card.</td>
+<td>Windows MIDI Services row reads <strong>Legacy MIDI API</strong> on Windows 11 25H2</td>
+<td>Windows has no API of its own until the late-November 2026 update. <strong>Settings &gt; System &gt; About</strong> in Windows shows the version, and Windows Update brings the update. Until then, click <strong>Install</strong> on the row.</td>
 </tr>
 <tr>
-<td>Windows MIDI Services card reads <strong>Not Running</strong></td>
-<td>The line below the status says why. Under "The Windows MIDI service did not respond. PadForge restarts the service and checks again." PadForge restarts the service once its check has been pending 15 seconds, then once every two minutes until MIDI answers, and the card changes then. Under "A MIDI driver did not respond. PadForge checks again once it answers." the check is waiting on a classic MIDI driver (Windows 10, Windows 11 before 24H2, Legacy API mode, the legacy API in Hybrid mode, or a PC that has no MIDI service), so no service is restarted and the card changes when the driver answers. Under "The runtime's uninstaller is still running. MIDI starts again once it finishes." MIDI comes back when the uninstaller exits.</td>
+<td>Windows MIDI Services row reads <strong>Not Running</strong></td>
+<td>The line below the status says why. Under "The Windows MIDI service did not respond. PadForge restarts the service and checks again." PadForge restarts the service once its check has been pending 15 seconds, then once every two minutes until MIDI answers, and the row changes then. Under "A MIDI driver did not respond. PadForge checks again once it answers." the check is waiting on a classic MIDI driver (Windows 10, Windows 11 before 24H2, Legacy API mode, the legacy API in Hybrid mode, or a PC that has no MIDI service), so no service is restarted and the row changes when the driver answers. Under "The runtime’s uninstaller is still running. MIDI starts again once it finishes." MIDI comes back when the uninstaller exits.</td>
 </tr>
 </tbody>
 </table>
@@ -5517,12 +5725,12 @@
 <td>HIDMaestro auto-installs on first use. If that install failed, see "HIDMaestro fails to install" under <strong>Install issues</strong> above.</td>
 </tr>
 <tr>
-<td>Clicking the MIDI slot type does nothing, and its tooltip reads "MIDI (not running, see the Windows MIDI Services card in Settings)"</td>
-<td>No MIDI API started. The Windows MIDI Services card on <strong>Settings</strong> says why.</td>
+<td>The MIDI tile in <strong>Add a Controller</strong> is dimmed, and its tooltip reads "MIDI (not running, see Windows MIDI Services in Settings, under Drivers)"</td>
+<td>No MIDI API started. The Windows MIDI Services row under <strong>Settings &gt; Drivers</strong> says why.</td>
 </tr>
 <tr>
 <td>A MIDI slot does not start under the legacy MIDI API</td>
-<td>The status bar names the reason. Pick an <strong>Output Port</strong> on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. When two MIDI slots are set to the same port, pick another port for one of them, and the slot that failed starts by itself. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
+<td>The message line names the reason. Pick an <strong>Output Port</strong> on the slot's page. If the port's device is off or unplugged, turn it on: the slot starts by itself about a second later. When two MIDI slots are set to the same port, pick another port for one of them, and the slot that failed starts by itself. A port another program holds cannot be opened: close that program, then turn the slot off and on.</td>
 </tr>
 <tr>
 <td>A MIDI keyboard does nothing under the legacy MIDI API</td>
@@ -5568,11 +5776,11 @@
 <td>Add those apps to the whitelist on the <strong>Settings</strong> page (see <a href="../settings/#hidhide-whitelisted-applications">HidHide Whitelisted Applications</a>).</td>
 </tr>
 <tr>
-<td>The status bar says HidHide blocked PadForge from a device it had hidden</td>
+<td>The message line says HidHide blocked PadForge from a device it had hidden</td>
 <td>PadForge took the hide back, so the controller keeps working in PadForge, and it hides again as soon as HidHide's whitelist changes or its Inverse application cloak goes off. The diagnostics log names the device path, the Windows error HidHide answered with, and whether PadForge was on HidHide's whitelist at that moment.</td>
 </tr>
 <tr>
-<td>The status bar says HidHide's Inverse application cloak is on</td>
+<td>The message line says HidHide's Inverse application cloak is on</td>
 <td>PadForge hides no controllers while this HidHide option is on. With it on, HidHide hides devices only from the programs on its list, so it cannot hide a controller from a game that is not listed. The line clears and PadForge hides again when the option goes off.</td>
 </tr>
 <tr>
@@ -5585,14 +5793,14 @@
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../start/installation/">Installation</a>: first-time setup and driver install.</li>
-<li><a href="../settings/">Settings</a>: where the driver cards live.</li>
+<li><a href="../settings/">Settings</a>: where the Drivers card lives.</li>
 <li><a href="../controller-slots/">Controller Slots</a>: which driver each slot type needs.</li>
 <li><a href="../devices/">Devices</a>: per-device hiding with HidHide.</li>
 <li><a href="../../reference/hidmaestro-deep-dive/">HIDMaestro Deep Dive</a>: how PadForge talks to HIDMaestro.</li>
 <li><a href="../../troubleshooting/">Troubleshooting</a>: more help.</li>
 </ul>
 <hr />
-<p><em>Last updated for PadForge 5.3.0.</em></p>
+<p><em>Last updated for PadForge 6.0.0.</em></p>
 
 
 
