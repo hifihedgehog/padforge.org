@@ -57,6 +57,9 @@ SPECIALTY = [
     "MIDI keyboard", "MIDI pad controller", "NFC reader", "amiibo",
     "Keyboard", "Mouse", "Precision touchpad", "Trackball", "Microphone",
     "Phone", "Tablet", "iPhone", "Android phone", "Web controller",
+    # SDL's SInput driver claims these by USB identity (#584), with no SDL name of their own.
+    "SInput gamepad", "HHL GC Ultimate", "HHL ProGCC", "Bonziri FireBird",
+    "Void Gaming PS4 FireBird", "Void Gaming Void GENESIS",
 ]
 
 PEDALS = ["Fanatec ClubSport Pedals V3", "Fanatec CSL Elite Pedals",
@@ -96,6 +99,10 @@ ALIASES = [
     ("precision touchpad", "trackpad laptop"),
     ("nfc reader", "amiibo ACR122U tag"),
     ("web controller", "phone browser wifi"),
+    ("sinput", "HOJA OpenPuck"),
+    ("hhl ", "SInput HOJA Hand Held Legend"),
+    ("firebird", "SInput"),
+    ("void genesis", "SInput"),
     ("midi", "music DAW"),
     ("g29", "Driving Force"),
     ("g920", "Driving Force"),

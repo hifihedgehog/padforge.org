@@ -20,7 +20,7 @@ def norm(t):
     # Singular/plural and punctuation collapse, so "Multi-source mappings"
     # and "Multi-source mapping" cannot both ship as separate rows.
     k = re.sub(r'[^a-z0-9 ]', '', t.lower()).strip()
-    return re.sub(r's', '', k)
+    return re.sub(r's\b', '', k)
 
 pool = []
 seen = {}
@@ -115,7 +115,7 @@ CATS = [
    "nintendo virtual controller", "nintendo output", "virtual vr controllers",
    "midi virtual output", "hide physical controllers",
    "a keyboard or mouse for padforge alone", "steam workshop config import",
-   "rewasd and ds4windows import"]),
+   "rewasd and ds4windows import", "hidmaestro 2.3.0"]),
  ("feel", "Feel and feedback", [
    "native wheel force feedback", "force feedback both ways", "impulse triggers",
    "trigger motors that feel the game", "adaptive triggers and lightbar",
@@ -123,7 +123,8 @@ CATS = [
    "dualsense effects in any game", "guide led brightness", "bass shaker output",
    "bass shakers", "controller speaker audio", "audio through the controller speaker",
    "headphone dsp chain", "rumble and lighting in mice and keyboards",
-   "dsx game mods without dsx", "dualsense haptics as rumble", "novint falcon"]),
+   "dsx game mods without dsx", "dualsense haptics as rumble", "novint falcon",
+   "wheel centering", "flydigi apex pads"]),
  ("motion", "Motion", [
    "gyro at steam input parity", "flick stick", "headset head tracking",
    "dsu motion server", "motion to emulators", "wii pointer modes",
@@ -135,7 +136,7 @@ CATS = [
    "remote link", "share controllers across your pcs", "phone-as-controller",
    "midi input", "a midi keyboard as a controller", "midi from a gamepad",
    "nfc tag triggers", "twitch chat plays", "wii controllers", "wii controllers, paired in-app",
-   "dualshock 3, paired in-app", "battery and idle disconnect", "1000 hz polling",
+   "dualshock 3, paired in-app", "battery and idle disconnect", "polling rate", "sinput pads",
    "keyboard screens", "screen overlay"]),
 ]
 
@@ -153,7 +154,7 @@ leftovers = [(t, d) for t, d in pool if t.lower() not in used]
 if leftovers:
     sections.append(("more", "Also included", leftovers))
 
-def esc(x): return html.escape(unescape(x), quote=False).replace(" ", "&nbsp;")
+def esc(x): return html.escape(unescape(x), quote=False).replace("\xa0", "&nbsp;")
 
 rows = []
 for cid, title, items in sections:
@@ -215,10 +216,7 @@ page = '''<!DOCTYPE html>
     <title>PadForge specifications: every capability, in full</title>
     <meta name="description" content="The complete PadForge capability list: mapping, virtual controllers, force feedback, motion, touch, connectivity, and platform details.">
     <link rel="icon" type="image/png" href="assets/icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=v8">
+    <link rel="stylesheet" href="style.css?v=v11">
     <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
@@ -243,7 +241,7 @@ page = '''<!DOCTYPE html>
         <h1 class="display-l reveal" data-d="1">Everything, in full.</h1>
         <p class="lede reveal" data-d="2">
             The complete capability list. The <a href="index.html">product page</a> shows
-            what PadForge feels like; this page proves what it does. Each entry is
+            what PadForge feels like. This page proves what it does. Each entry is
             covered at length in the <a href="/docs/">documentation</a>.
         </p>
     </div>
@@ -252,7 +250,7 @@ page = '''<!DOCTYPE html>
 <div class="container spec-wrap">
     <aside class="spec-nav">
         <div class="spec-nav-in">
-            <p class="mono-tag">Contents</p>
+            <p class="list-label">Contents</p>
 %s
         </div>
     </aside>
@@ -268,7 +266,7 @@ page = '''<!DOCTYPE html>
             <div class="footer-links"><a href="/">Home</a><a href="/press/">Press</a><a href="/specs.html">Specifications</a><a href="/docs/">Documentation</a><a href="https://github.com/hifihedgehog/PadForge" target="_blank" rel="noopener">GitHub</a></div>
         </div>
         <div class="footer-note">
-            <span>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" style="color:var(--text-muted)">CC BY-NC-SA 4.0</a></span>
+            <span>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" style="color:var(--text-2)">CC BY-NC-SA 4.0</a></span>
             <span>Powered by HIDMaestro</span>
         </div>
     </div>

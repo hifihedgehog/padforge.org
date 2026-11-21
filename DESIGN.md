@@ -46,64 +46,189 @@ the product page if it changes what the product *is*.
 
 ## 3. Type
 
-Display face is Archivo, body is Instrument Sans, mono is JetBrains Mono.
+One family, the system's own: Segoe UI Variable, the face PadForge 6 uses
+in the app. No web font loads anywhere on the site or in the docs.
 
-The scale is deliberately extreme. What separates display type from
-scaled-up body type is optical correction, and both directions are
-already encoded in the classes:
+```
+--font:         'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif
+--font-display: 'Segoe UI Variable Display', then the --font stack
+```
 
-| Class | Size | Tracking | Leading | Use |
-|---|---|---|---|---|
-| `.display-xl` | 3.2 → 9rem | -0.038em | 0.92 | Hero only. Once per page. |
-| `.display-l` | 2.6 → 6rem | -0.032em | 0.96 | Section headline. |
-| `.display-m` | 2 → 3.6rem | -0.026em | 1.03 | Moment headline inside a section. |
-| `.display-s` | 1.5 → 2.1rem | -0.018em | 1.15 | Spec block heading. |
-| `.lede` | 1.1 → 1.45rem | n/a | 1.5 | The **one** paragraph under a headline. |
+Text takes the Text cut. Anything 18px and larger may take the Display
+cut, which is drawn for size. On a machine without Segoe UI Variable the
+stack falls to the platform's own interface face.
 
-Rules:
+The scale is deliberately extreme. Tracking tightens and leading
+compresses as size grows:
 
-- **Tracking tightens as size grows. Leading compresses as size grows.**
-  If you add a size, follow the curve.
-- `.lede` is capped at `46ch` and is meant to be the only body paragraph
+| Class | Size | Weight | Tracking | Leading | Use |
+|---|---|---|---|---|---|
+| `.display-xl` | 3.2 → 9rem | 700 | -0.03em | 0.95 | Hero only. Once per page. |
+| `.display-l` | 2.6 → 6rem | 600 | -0.025em | 0.98 | Section headline. |
+| `.display-m` | 2 → 3.6rem | 600 | -0.02em | 1.04 | Moment headline inside a section. |
+| `.display-s` | 1.5 → 2.1rem | 600 | -0.012em | 1.15 | Spec block heading. |
+| `.lede` | 1.1 → 1.45rem | 400 | n/a | 1.5 | The **one** paragraph under a headline. |
+
+Rules, from the app's type rules of 2026-11-17:
+
+- **No monospace for labels, numbers or eyebrows.** Numbers that change or
+  stand in columns take tabular figures (`font-variant-numeric:
+  tabular-nums`): the stats, the figures, the compare table, run times,
+  file sizes. Code in the docs is code and stays monospace (Cascadia Mono,
+  then Consolas).
+- **No capitals or letter-spacing for emphasis.** Labels are words in
+  sentence or title case, as written in the markup. `text-transform:
+  uppercase` appears in no stylesheet.
+- **12px is the smallest text, 13px the value size.** On the site that is
+  0.75rem and 0.8125rem. In the docs the root is 20px, so 0.6rem and
+  0.65rem.
+- **Curly quotes and the one-character ellipsis** in text.
+- `.lede` is capped at `56ch` and is meant to be the only body paragraph
   in a section. If you need a second, you need `specs.html` or a
   `<details>`.
-- Never set a headline in body face, and never set body copy in Archivo.
-- `.kicker` is mono, uppercase, 0.24em tracking. One per section, above
-  the headline. It names the section. It is not a sentence.
+- `.kicker` (`.eyebrow` on the press page, `.pf-kicker` in the docs) is
+  one word or a short phrase in the body face, 16px semibold, in ember.
+  It names the section. It is not a sentence.
 
 ---
 
 ## 4. Color
 
-Defined once in `:root`. Do not introduce new colors in a section.
+Every color is one of the app's brushes, defined once in `:root` and
+named beside its value, the same names `PadForge.App/WebAssets/css/
+padforge.css` uses for the web controller. Do not introduce a color that
+is not an app brush.
 
-- **Canvas**: `--bg #06080c`, alternating with `--bg-alt #0d1117`. The
-  alternation is what separates sections. Borders are a last resort.
-- **Ember** `--ember #f2652a` is the single accent. It marks one thing at
-  a time: the primary button, the active state, a kicker, one word in a
-  headline. If two ember things compete in a viewport, one is wrong.
-- **Telemetry cyan** `--telemetry` is for technical labels only (spec
-  eyebrow text, the diagram's kicker). Never for a call to action.
-- Text runs `--text-hi` → `--text` → `--text-muted` → `--text-dim`. Use
-  the dimmest one that still reads.
-- **Color in a product shot comes from the product**, never from a
-  filter or an overlay.
+The landing, specs and press pages are dark. The docs have a light and a
+dark scheme, each from the app's theme of the same name.
 
-## 5. Light and depth
+### Dark (the site, and the docs' dark scheme)
 
-The look is dark, but never flat. Three devices, already in the CSS:
+| Token | Value | App brush | Use |
+|---|---|---|---|
+| `--ground` | `#0a0e15` | SteelGroundBrush | The page. |
+| `--band` | `#0f1520` | SteelBandBrush | Alternate sections. |
+| `--card` | `#121925` | CardBackgroundFillColorDefaultBrush | Cards, tables, chips, callouts. |
+| `--card-lift` | `#161e2b` | SteelCardHoverBrush | A card under the pointer. |
+| `--raised` | `#18202e` | SteelRaisedBrush | Buttons, table headers, a steel chapter band. |
+| `--raised-lift` | `#212c3d` | SteelLiftBrush | A raised button under the pointer. |
+| `--segment` | `#263142` | SteelSegmentBrush | The chosen segment of a switch. |
+| `--field` | `#0d131d` | SteelFieldBrush | A text field. |
+| `--card-edge` | `#263142` | SteelPillLineBrush | A card's edge. |
+| `--card-edge-top` | `#2c374a` | EmberTheme.CardEdgeTop | The lit top of a card's edge. |
+| `--line` | `#2a3546` | SteelLineBrush | A control's edge. |
+| `--line-soft` | `#1e2734` | SteelLineSoftBrush | Rules between rows and sections. |
+| `--text-1` | `#eef2f7` | TextFillColorPrimaryBrush | Headlines, names, values. |
+| `--text-sub` | `#cfd7e3` | SubRowTextBrush | Body copy. |
+| `--text-2` | `#a9b4c4` | TextFillColorSecondaryBrush | Ledes, descriptions, labels. |
+| `--text-3` | `#8693a6` | TextFillColorTertiaryBrush | Quiet notes, placeholders. |
+| `--selected` | `#ffffff` | SelectedTextBrush | Text on the chosen segment. |
+| `--ember` | `#ff6b2c` | EmberBrush | What is live or picked, and the kicker. |
+| `--ember-lift` / `--ember-press` | `#ff8450` / `#e85f25` | EmberLiftBrush / EmberPressBrush | The primary button's hover and press. |
+| `--ember-hot` | `#ff8a57` | EmberHotBrush | Inline links. |
+| `--ember-ink` | `#160a03` | EmberInkBrush | Text on ember. |
+| `--ember-pick` / `--ember-edge` | `#1d1611` / `#4a2c1a` | EmberPickBrush / EmberEdgeBrush | A picked card. |
+| `--ember-tint` / `--ember-wash` / `--ember-ring` | ember at 10%, 5%, 30% | EmberTintBrush / EmberWashBrush / EmberRingFaintBrush | A hotspot's halo, the PadForge column, a hotspot's ring. |
+| `--ember-glow` | ember at 30% | the light around a lit tile (padforge.css) | The main download button, the picked hotspot. |
+| `--link-hover` | `#ffb08a` | LinkHoverBrush | A link under the pointer. |
+| `--focus` | `#7cc7ea` | ColdBrush | Focus. |
+| `--cold-tint` | cold at 10% | ColdTintBrush | The halo of a focused field. |
+| (docs) wait | `#f2b84b` | WaitBrush | Warnings and code strings in the docs. |
+| `--veil` | ground at 82% | the ground over a picture (padforge.css) | The nav once the page scrolls. |
 
-1. **Radial bloom behind a product** (`.stage::before`,
-   `.diagram::before`). A soft ember or cyan radial, blurred 30-50px,
-   sitting behind the subject. This is what makes a machine feel lit
-   rather than pasted onto the page.
-2. **Contact shadow plus a long floor throw**, two shadows on the rig.
-   Long, soft, and low-opacity.
-3. **Hairlines**, `--hairline` at 7% white, for structure. A full
-   `--border` is heavier and is for panels that must read as objects.
+The docs page is a step over the pane, as in the app:
+ApplicationBackgroundBrush `#0b1018` for the page, SteelPaneBrush
+`#0a0e16` for the header, tabs and footer, and SteelPaneLineBrush
+`#161e2b` under them.
 
-Never use a flat fill where a gradient reads as light, and never use a
-hard drop shadow.
+### Light (the docs' light scheme)
+
+| Token | Value | App brush |
+|---|---|---|
+| page | `#ffffff` | SteelFieldBrush |
+| pane, home cards | `#f3f4f7` | SteelPaneBrush |
+| pane line, soft line | `#d6d8de` | SteelPaneLineBrush, SteelLineSoftBrush |
+| card edge, line | `#c9cdd6` | SteelPillLineBrush, SteelLineBrush |
+| raised | `#e4e7ee` | SteelRaisedBrush |
+| raised lift | `#d9dde6` | SteelLiftBrush |
+| code well | `#eef0f4` | SteelWellBrush |
+| text 1, 2 | `#1a2433`, `#44536b` | TextFillColorPrimaryBrush, TextFillColorSecondaryBrush |
+| text 3 | `#6b7a94` | TextFillColorTertiaryBrush. Marks only: 4.34:1 on white, so never text. |
+| ember text | `#c24a12` | EmberTextBrush |
+| link hover | `#9a3a10` | LinkHoverBrush |
+| cold | `#1e6e9f` | ColdBrush |
+| wait | `#8f6200` | WaitBrush |
+
+Raw ember `#ff6b2c` is a fill on light (the primary button), never text:
+it reads 2.6:1 on white.
+
+### Code in the docs
+
+Keywords cold, strings wait, numbers and constants ember hot (on light,
+the link hover brown), comments and punctuation the secondary text, names
+the primary text. Code sits on the card in the dark scheme and on the
+well in the light one, inside the card edge.
+
+### Old names
+
+The PadForge 5 tokens map onto the brushes like this. A stylesheet that
+still names an old token is out of date.
+
+| Old token | Old value | Now |
+|---|---|---|
+| `--bg` | `#06080c` | `--ground` `#0a0e15` |
+| `--bg-raise` | `#0a0d12` | `--card` `#121925` (the compare table) |
+| `--bg-alt` | `#0d1117` | `--band` `#0f1520` |
+| `--panel` | `#12171f` | `--card` `#121925` |
+| `--panel-hi` | `#171d27` | `--card-lift` `#161e2b` |
+| `--border` | `#212a36` | `--card-edge` `#263142`, or `--line` `#2a3546` on a control |
+| `--border-soft` | `#19202a` | `--line-soft` `#1e2734` |
+| `--hairline` | white at 7% | `--line-soft` `#1e2734` |
+| `--ember` | `#f2652a` | `--ember` `#ff6b2c` |
+| `--ember-bright` | `#ff7d3d` | `--ember-lift` `#ff8450` for fills, `--ember-hot` `#ff8a57` for links |
+| `--ember-deep` | `#d9531c` | `--ember-press` `#e85f25` |
+| `--ember-glow` | `#f2652a` at 38% | `--ember-glow`, ember at 30% |
+| `--ember-glow-soft` | `#f2652a` at 12% | `--ember-tint`, ember at 10% |
+| `--grad-ember` | a three-stop gradient | flat `--ember` |
+| `--telemetry` | `#6fc3d6` | `--focus` `#7cc7ea` (ColdBrush), for focus only |
+| `--telemetry-dim` | `#4d8a9a` | `--text-3` `#8693a6` |
+| `--brand-xbox`, `--brand-ps`, `--brand-nin`, `--brand-steam` | four brand colors | removed: a manifest row is a card with no colored bar |
+| `--text-hi` | `#f7f9fc` | `--text-1` `#eef2f7` |
+| `--text` | `#d4dae3` | `--text-sub` `#cfd7e3` |
+| `--text-muted` | `#929fb0` | `--text-2` `#a9b4c4` |
+| `--text-dim` | `#5d6877` | `--text-3` `#8693a6` (the old value failed AA) |
+| `--font-body`, `--font-display`, `--font-mono` | Instrument Sans, Archivo, JetBrains Mono | `--font`, `--font-display`, no monospace |
+
+**Color in a product shot comes from the product**, never from a filter
+or an overlay.
+
+## 5. Shapes and light
+
+**Shapes.** A button is a pill whose corner is half its height (the app's
+sidebar controller pill is 38 tall with corner 19). `--pill` is `999px`,
+which a browser clamps to exactly half the height. Cards sit on `--card`
+with the card edge and its lit top (`--card-edge-top`), corner `--radius`
+12px. A panel that holds a table or a card's worth of copy takes
+`--radius-lg` 16px. Buttons are raised steel with one flat edge
+(`.btn-ghost`). The primary button is filled ember with ember ink
+(`.btn-primary`), the app's primary button. A picked card takes ember
+pick on an ember edge (`.dg-step.on`). The chosen segment of a switch
+takes the segment steel with white text (`.film-pick.on`). A search field
+is a pill on the field steel.
+
+**Light means something.** Ember marks what is live or picked, cold blue
+marks focus, and nothing else is colored:
+
+- A glow sits only on a live or picked thing: the main download button
+  (`.btn-primary`, not the small one in the nav) and the picked hotspot
+  (`.hot.on`). Nothing else on the site glows.
+- No colored bloom behind a product, a diagram or the download section.
+  The app's screens carry their own light, the forging pills and the
+  title bar's warmth, and that is the only light on them.
+- Depth comes from the card edge, the lit top of an edge, and a long, soft
+  contact shadow under a staged screen. Never a hard drop shadow.
+- Focus is a 2px cold outline, 3px clear of the control, on every
+  focusable thing.
 
 ---
 
@@ -117,11 +242,11 @@ The rule now: **no two consecutive sections share a shape.** The current
 order alternates deliberately:
 
 1. Hero: centered headline, one large staged program screen
-2. Manifest: sticky copy left, a long accent-barred capability list right
+2. Manifest: sticky copy left, a long list of capability cards right, the names in one column
 3. Chapter band: one word, full bleed, poster scale
 4. Finishes: centered, the program screen morphing its finish
 5. The controller: asymmetric two-column, copy left / diagram right
-6. Stats: four-up typographic band
+6. Stats: typographic band, four figures across and the fifth centered under them
 7. Remap: split, copy left / media bleeding off the right edge
 8. Feel: centered headline, full-bleed media
 9. Motion: split, **flipped** (media bleeding off the left)
@@ -132,10 +257,12 @@ order alternates deliberately:
 14. FAQ: list
 
 Chapter bands (`.chapter`) separate the acts: MAP, FEEL, MOVE, REACH.
-One word at poster scale on a saturated full-bleed band, alternating
-ember, cyan and steel. They are the reason a long scroll reads as
-chapters rather than an unbroken list, and they are the one place a
-saturated field of accent color is correct.
+One word at poster scale on a full-bleed band. `.chapter-ember` is flat
+ember with ember ink, the forge's own color. `.chapter-raised` is raised
+steel and `.chapter-steel` is the card on its edge, both with the word in
+the primary text. They are the reason a long scroll reads as chapters
+rather than an unbroken list, and the ember band is the one place a full
+field of accent color is correct.
 
 If you add a section, look at its neighbors and pick a shape neither of
 them uses.
@@ -165,7 +292,7 @@ the application, so the application gets photographed like hardware:
 the WHOLE window, staged on a lit surface, turned slightly toward the
 reader.
 
-The rig is `.rig` / `.rig-in` in `style.css`, and it is made of five
+The rig is `.rig` / `.rig-in` in `style.css`, and it is made of three
 things, none of which are optional. Drop one and it stops reading as an
 object:
 
@@ -173,13 +300,16 @@ object:
    on a 2400px perspective. `.rig-r` mirrors it, `.rig-soft` halves it.
    Under 900px the angle stands down and the screen goes flat, because
    the angle is a presentation device and never a legibility tax.
-2. **A rim light.** `0 0 0 1px rgba(255,255,255,0.10)` plus a brighter
-   inset top edge. PadForge's UI is nearly the same value as the page,
-   so without a rim the window dissolves into the canvas.
+2. **A rim.** The card edge all the way around, `--card-edge`, with its lit
+   top `--card-edge-top` as an inset line. PadForge's UI is nearly the
+   same value as the page, so without a rim the window dissolves into the
+   ground.
 3. **A contact shadow and a long floor throw.** Two shadows, not one.
-4. **A glass sheen**, a shallow diagonal highlight across the panel.
-5. **A bloom behind it** (`.stage`), ember by default and `.stage-cy`
-   for the cyan sections.
+
+The PadForge 5 rig also carried a glass sheen and an ember bloom behind
+it. Both were light used as decoration, and PadForge 6 keeps light for
+what is live or picked, so both are gone, and `.stage-cy` with them. `.stage`
+stays in the markup as a wrapper and draws nothing.
 
 **Never crop the app down to one panel.** The version this replaced
 lifted the 3D controller preview out of the window, blurred a backdrop
@@ -229,7 +359,7 @@ exists to show. Size comes from a wider column and a wider container,
 and detail comes from click-to-zoom. Nothing on the page may clip a
 window.
 
-**Chips** (`.rig-chip`) pin a short line onto a staged screen. They must
+**Chips** (`.rig-chip`) pin a short line onto a staged screen. A chip is a pill on the card. They must
 sit over dead space, never over the UI they describe, and they must say
 something the screenshot cannot say on its own. A chip that repeats a
 number already legible in the screenshot is noise on the product: the
@@ -268,7 +398,7 @@ the whole window.**
 
 ## 8. The annotated controller
 
-`#controller` is the centrepiece and the answer to "show, don't tell".
+`#controller` is the centerpiece and the answer to "show, don't tell".
 
 - Hotspot positions are **derived from the app's own generated overlay
   geometry** (`PadForge.App/Models2D/ControllerOverlayLayout.cs`, base
@@ -278,8 +408,9 @@ the whole window.**
   near its own control without colliding.
 - Callouts point **inward**. A label that points outward escapes the
   diagram box and lands in the copy column.
-- The label carries a blurred panel so it stays legible over the product
-  as well as over the backdrop. Never rely on what happens to be behind.
+- The label sits on a card with its edge so it stays legible over the
+  product as well as over the backdrop. Never rely on what happens to be
+  behind.
 - Below 780px the callouts stand down. The caption list already carries
   the same text.
 
@@ -313,13 +444,13 @@ the whole window.**
   a screenshot on hover, or zooming a product render on selection, reads
   as the page twitching. Hover changes color, border, or brightness.
   Selection cross-fades opacity only. Small chips (swatches) may scale
-  slightly; images never do.
+  slightly. Images never do.
 - Reveal-on-scroll is staggered with `data-d="1..5"` (90ms steps).
 - **`.reveal` is gated on `.js`.** Content is visible by default and JS
   opts into animating it. The opposite order ships a blank page the one
   time a script fails. Never invert this.
 - `prefers-reduced-motion` is honored. Keep it that way.
-- Auto-advancing components (colourway morph, diagram tour) pause when
+- Auto-advancing components (colorway morph, diagram tour) pause when
   off-screen and stop on interaction.
 
 ---
@@ -335,7 +466,7 @@ the whole window.**
    ```
    Use `_capture.html` (`tools/make_capture.py`), because a `100svh`
    hero fills a tall capture window and reads as an empty page. The
-   harness neutralises the hero's `min-height`, forces the `.reveal`
+   harness neutralizes the hero's `min-height`, forces the `.reveal`
    state, and freezes every transition, animation, and `will-change`, so
    a transition photographed mid-flight cannot masquerade as a layout
    bug. **The harness collapses the hero, so anything positioned against
@@ -346,7 +477,12 @@ the whole window.**
    actually on top, which is how the "Scroll" collision was found after
    font-swap, compositing, and device-scale theories had all been
    disproved.
-2. **Check every asset resolves.** No broken `src`.
+2. **Check every asset resolves and states its size.** No broken `src`.
+   After the screenshots change, run
+   `python tools/stamp_image_sizes.py index.html specs.html press/index.html`:
+   each `<img>` carries its file's width and height, so a lazy image
+   holds its room before it arrives and the page does not grow under
+   the reader. `--check` reports a stale tag and changes nothing.
 3. **Run the retention diff** if you removed or moved copy: extract the
    visible text of the previous commit and of the new `index.html` +
    `specs.html`, and compare word counts and distinctive terms. Loss must
@@ -355,7 +491,21 @@ the whole window.**
    silently nests a column inside its neighbor and the layout collapses
    to one column, which looks like a CSS bug and is not.
 5. **Check it at 780px and 400px.** The callouts stand down, the diagram
-   moves above the copy, the nav links collapse.
+   moves above the copy, the nav links collapse. Nothing may scroll
+   sideways at 400px, and no text may run past the 16px gutter.
+6. **Check contrast.** Every text token on every ground it sits on meets
+   WCAG AA, 4.5:1, and the focus ring meets 3:1. Compute the ratio, do not
+   judge it by eye. A new token or a new ground adds its row to the check.
+7. **Check it with reduced motion and with scripts off.** Every section
+   must show in both. `.reveal` is gated on `.js`, and reduced motion
+   forces it visible.
+8. **Check the docs in both schemes.** Code blocks, tables, notes, the
+   search box with results open, and the navigation tabs, in light and
+   in dark. Build into a scratch folder with `python -m mkdocs build -d
+   <scratch>`, never into `docs/` for a look.
+9. **Sweep the type rules.** No `text-transform: uppercase`, no
+   `letter-spacing` on a label, no monospace outside code, nothing under
+   12px, no web font link in any page or in `wiki/overrides/main.html`.
 
 ---
 
@@ -368,7 +518,16 @@ Every item here has already happened once.
 - Do not use the light 2D plate art on a dark section.
 - Do not let a second paragraph creep in under a `.lede`.
 - Do not introduce a color, a font, or an easing curve that is not in
-  `:root`.
+  `:root`, and no color that is not an app brush.
+- Do not load a web font. The family is the system's Segoe UI Variable.
+- Do not set a label, a number or an eyebrow in monospace, and do not
+  uppercase or letter-space a word for emphasis.
+- Do not put text under 12px.
+- Do not glow anything that is not live or picked, and do not put a
+  colored bloom behind a product.
+- Do not color a row, a bar or a chip to tell it apart from its
+  neighbors. Color says live, picked, focus or waiting.
+- Do not use a gradient for a button or a band. Ember is flat.
 - Do not hand-edit `specs.html`.
 - Do not hide content behind JS by default.
 - Do not repeat the previous section's shape.

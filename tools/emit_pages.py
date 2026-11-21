@@ -20,10 +20,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from emit_supported import fam, mapped, CAT, N, FAM_ORDER, lines, SITE
 from emit_lit import LIT_NAMES, vendor as lit_vendor
 
-# The count of HIDMaestro profiles PadForge's pickers offer: the ones that
-# carry a captured HID descriptor (HMaestroProfileCatalog keeps only
-# IsDeployable profiles). Checked by hand against the bundled DLL.
-OFFERED_PROFILES = 136
+# The count of HIDMaestro controller profiles PadForge's pickers offer:
+# HMaestroProfileCatalog keeps the IsDeployable profiles that are not
+# withheld, and the keyboards and mice go to the Keyboard+Mouse pickers.
+# HIDMaestro 2.3.0: 246 offered, less 51 keyboards and 52 mice. Checked
+# against the bundled DLL (PublishedFactsTests.EveryProfileCountMatchesTheBundledCatalog).
+OFFERED_PROFILES = 143
 
 WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
          6: "six", 7: "seven", 8: "eight", 9: "nine"}
@@ -53,24 +55,24 @@ if N["lit_all"] == N["lit"]:
 # else does. A rebase that changes either needs the sentence rewritten.
 if N["overlap_arcade"] != N["arcade"]:
     raise SystemExit("not every arcade stick is in the gamepad list now: reword HEADLINE")
-if N["mapped_padforge"] != 2 or N["padforge"] != 1:
-    raise SystemExit("PadForge's own mapping file no longer holds the two rows HEADLINE names: reword it")
+if N["mapped_padforge"] != 3 or N["padforge"] != 2:
+    raise SystemExit("PadForge's own mapping file no longer holds the three rows HEADLINE names: reword it")
 HEADLINE = (
     "PadForge recognizes **{union_fmt}** devices by their USB identity: {pads} gamepads in SDL's "
     "controller list, {community} more pads that the community SDL_GameControllerDB maps, "
     "{flydigi} Flydigi pads, {claimed} pads and specialty devices that SDL's dedicated drivers "
     "claim, {wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} "
     "arcade sticks, {gamecube} GameCube adapters, {native} devices PadForge's own code "
-    "claims, the PS VR Aim Controller, which PadForge's own mapping file names, and "
+    "claims, the PS VR Aim Controller and the GameSir G7 Pro, which PadForge's own mapping file names, and "
     "{lit_all_fmt} RGB keyboards, mice, headsets and other devices PadForge lights itself, "
     "[listed below](#rgb-keyboards-mice-and-other-lit-devices). The arcade sticks, {ow} wheels "
     "and {og} adapters also sit in the gamepad list, and {lit_over} of the lit devices are "
     "controllers counted above, so the total is smaller than the sum. Behind those sit "
     "**{mapped_all}** named gamepad mappings: {mapped_sdl} from "
     "SDL's Windows database, {mapped_community} more from the community database, and "
-    "PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. For "
-    "virtual controllers, HIDMaestro ships {profiles} device profiles. PadForge's controller "
-    "pickers offer the {offered} controllers that carry a captured HID descriptor, and a "
+    "PadForge's own three, for the DualShock 3 under DsHidMini, the PS VR Aim Controller and the "
+    "GameSir G7 Pro on DirectInput. For virtual controllers, HIDMaestro ships {profiles} device "
+    "profiles. PadForge's controller pickers offer {offered} of its controllers, and a "
     "Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed "
     "below](#virtual-keyboards-and-mice)."
 )
@@ -178,7 +180,8 @@ def md():
         "Pads carrying a mapping in the database, so their buttons and axes land in the right places",
         "the moment they are plugged in. SDL's database holds {0} names in its Windows section, the".format(N["mapped_sdl"]),
         "community SDL_GameControllerDB that PadForge's SDL3 build adds holds {0} more, and PadForge".format(N["mapped_community"]),
-        "adds {0} of its own, for the DualShock 3 under DsHidMini and the PS VR Aim Controller.".format(word(N["mapped_padforge"])),
+        "adds {0} of its own, for the DualShock 3 under DsHidMini, the PS VR Aim Controller and the".format(word(N["mapped_padforge"])),
+        "GameSir G7 Pro on DirectInput.",
         "",
     ] + vendor_table(mapped) + [
         "",
@@ -195,7 +198,7 @@ def md():
         "",
         "**MOZA, both generations.** Each MOZA base has two USB product IDs, one per hardware revision.",
         "PadForge's SDL fork carries the second-generation IDs (R3 0015, R5 0014, R9 0012, R12 0016, R16/R21 0010,",
-        "under vendor 346E) alongside the originals, so a newer base is typed as a wheel and gets the Wheel tab.",
+        "under vendor 346E) alongside the originals, so a newer base is typed as a wheel, the way the originals are.",
         "",
         "**Pedals.** Fanatec ClubSport V3, CSL Elite, CSL Loadcell and CSL Loadcell V2, each with its",
         "own rumble output. Pedal sets that enumerate separately are read as their own device, so they",

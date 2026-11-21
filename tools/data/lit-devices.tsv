@@ -401,6 +401,7 @@
 0B05	1C5E	ASUS TUF Gaming K3 GEN II MIKU EDITION	OpenRGB AsusAuraUSBController
 0B05	1C60	ASUS TUF Gaming K3 GEN II Miku	G-Helper
 0B05	1C69	ASUS ROG Harpe II Ace	app/Peripherals/Mouse/Models/HarpeIIAce.cs
+0B05	1C7D	ASUS ROG Falchion Ace 75 HE	G-Helper Falchion.cs:98-118
 0B05	1C7F	ASUS ROG Bulwark Dock	app/Peripherals/Mouse/Models/BulwarkDock.cs
 0B05	1C8D	ASUS ROG Gladius III Core	OpenRGB AsusAuraUSBController
 0B05	1C8F	ASUS ROG Harpe Mini Core	app/Peripherals/Mouse/Models/HarpeAceMini.cs
@@ -1003,21 +1004,21 @@
 1B1C	1BB2	Corsair Darkstar Wireless	SignalRGB Corsair_Bragi_Device.js
 1B1C	1BB3	Corsair K70 RGB PRO V2	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BB5	Corsair M65 RGB Ultra Wireless (Wired)	OpenRGB CorsairPeripheralV2Controller
-1B1C	1BB6	Corsair K70 Pro Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BB6	Corsair K70 PRO MINI WIRELESS Black	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BB8	Corsair Nightsabre Wireless	SignalRGB Corsair_Bragi_Device.js
 1B1C	1BB9	Corsair K70 RGB TKL Champion Series	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BBA	Corsair Katar Pro V2	OpenRGB CorsairPeripheralV2Controller
-1B1C	1BBD	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BBD	Corsair K65 Mini	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BC0	Corsair K70 Max	SignalRGB Corsair_Bragi_Device.js
-1B1C	1BC3	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BC3	Corsair K65 Mini	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BC4	Corsair K70 RGB PRO	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BC5	Corsair K100 RGB Optical	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BC6	Corsair K70 RGB PRO Optomechanical	OpenRGB CorsairPeripheralController
 1B1C	1BC7	Corsair K60 RGB PRO TKL Black	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BC9	Corsair MM700 3XL	OpenRGB CorsairPeripheralV2Controller
-1B1C	1BCF	Corsair K65 Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BCF	Corsair K65 Mini	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BD0	Corsair Voyager A1600	SignalRGB Corsair_Bragi_Device.js
-1B1C	1BD3	Corsair K70 Pro Mini	SignalRGB Corsair_Bragi_Device.js
+1B1C	1BD3	Corsair K70 PRO MINI WIRELESS White	OpenRGB CorsairPeripheralV2Controller
 1B1C	1BD4	Corsair K70 RGB PRO	SignalRGB Corsair_Bragi_Device.js
 1B1C	1BD6	Corsair M65 Ultra Wireless	SignalRGB Corsair_Bragi_Device.js
 1B1C	1BD7	Corsair K65 Pro Mini	SignalRGB Corsair_Bragi_Device.js
@@ -1078,6 +1079,7 @@
 1E7D	2D60	Roccat Kain 200	Roccat/Roccat_Kain_200_Mouse_Wireless.js
 1E7D	2DE1	Roccat Burst Pro	OpenRGB RoccatController
 1E7D	2DE6	Roccat Burst Core	OpenRGB RoccatController
+1E7D	2E22	Roccat Kone XTD	OpenRGB RoccatController
 1E7D	2E24	roccat kone emp	libratbag roccat-kone-emp.device
 1E7D	2E27	Roccat Kone Aimo	OpenRGB RoccatController
 1E7D	2E2C	Roccat Kone Aimo 16K	OpenRGB RoccatController
@@ -1143,14 +1145,19 @@
 2516	0165	Cooler Master MM730	OpenRGB CoolerMasterController
 2516	0169	Cooler Master MM712	OpenRGB CoolerMasterController
 2516	016B	Cooler Master CK720	CoolerMaster/CoolerMaster_CK720_Keyboard.js
-2516	016D	Cooler Master CK721	CoolerMaster/CoolerMaster_CK721_Keyboard.js
+2516	016D	Cooler Master CK721	OpenRGB CoolerMasterController
+2516	016F	Cooler Master MK721	OpenRGB CoolerMasterController
 2516	0173	Cooler Master ARGB Gen 2 A1	OpenRGB CoolerMasterController
+2516	0183	Cooler Master CK721	OpenRGB CoolerMasterController
 2516	01A9	Cooler Master GD160 ARGB Gaming Desk	OpenRGB CoolerMasterController
 2516	01AB	Cooler Master SK653	OpenRGB CoolerMasterController
 2516	01BB	Cooler Master GM27-FQS ARGB Monitor	OpenRGB CoolerMasterController
 2516	01BF	Cooler Master GM34-CWQ ARGB Monitor	OpenRGB CoolerMasterController
+2516	01C3	Cooler Master MK721	OpenRGB CoolerMasterController
 2516	01C9	Cooler Master ARGB Gen 2 A1 V2	OpenRGB CoolerMasterController
 2516	01CB	Cooler Master ARGB Gen 2 A1 Mini	OpenRGB CoolerMasterController
+2516	01EE	Cooler Master CK721 LINE	OpenRGB CoolerMasterController
+2516	01F2	Cooler Master CK721 LINE	OpenRGB CoolerMasterController
 2516	1000	Cooler Master Small ARGB	OpenRGB CoolerMasterController
 2516	1011	Cooler Master ARGB	OpenRGB CoolerMasterController
 258A	0012	Nubwo X7 Spectrum	src/driver-sinowealth-nubwo.c

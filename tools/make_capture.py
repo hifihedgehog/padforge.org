@@ -2,7 +2,7 @@
 """Write _capture.html: a copy of index.html for full-page screenshots.
 
 A 100svh hero fills a tall capture window and photographs as an empty
-page, so the harness neutralises the viewport-height rule and forces the
+page, so the harness neutralizes the viewport-height rule and forces the
 reveal state. Never ship _capture.html; it exists only to be looked at.
 """
 import io, os.path

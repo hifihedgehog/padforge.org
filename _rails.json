@@ -17,12 +17,12 @@
  {
   "eyebrow": "Shift layers",
   "t": "Caps Lock for your controller.",
-  "d": "Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages."
+  "d": "Each slot can carry extra mapping tables that turn on while a button, chord, or axis is held. Six activation modes: Hold, Toggle, Latch, Cycle, Sticky, and No Button. Cycle walks a queue of layers you choose, with a Previous button that can live on another device. Per-layer color and emoji icon. A Win11-style flyout confirms the active layer the moment it engages, and each layer sets how long it stays."
  },
  {
   "eyebrow": "Stick-assisted triggers",
   "t": "A digital trigger that pulls like an analog one.",
-  "d": "Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger's combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets on release."
+  "d": "Some pads only give you a digital trigger, on or off. Stick Trim changes that. Set a trigger\u2019s combine mode to Stick Trim and a stick axis ramps the pull while you hold the button, so a bumper press plus a nudge of the stick reads as a partial squeeze in the game. Each mapping sets its own deadzone, ramp rate, and whether the pull resets on release."
  },
  {
   "eyebrow": "SOCD cleaning",
@@ -41,8 +41,8 @@
  },
  {
   "eyebrow": "Media keys as inputs",
-  "t": "Your keyboard's media keys, mapped.",
-  "d": "The media row on a keyboard, a media remote, a headset's transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or track keys to a virtual button or a macro trigger, same as any other input."
+  "t": "Your keyboard\u2019s media keys, mapped.",
+  "d": "The media row on a keyboard, a media remote, a headset\u2019s transport buttons: PadForge reads them as their own device with named button chips. Map Play/Pause, Mute, Volume, or track keys to a virtual button or a macro trigger, same as any other input."
  },
  {
   "eyebrow": "Trigger motors that feel the game",
@@ -51,13 +51,13 @@
  },
  {
   "eyebrow": "DualSense effects in any game",
-  "t": "Adaptive triggers and lightbar that don't need the game's blessing.",
+  "t": "Adaptive triggers and lightbar that don\u2019t need the game\u2019s blessing.",
   "d": "Seven adaptive trigger modes with a live preview that draws the resistance curve as you drag. Fifteen lightbar modes, six of them driven by your system audio (three Audio Pulse variants and three that follow the level), and one that follows your screen. The DualSense lights and triggers light up in games that have never heard of a DualSense."
  },
  {
   "eyebrow": "Audio through the controller speaker",
   "t": "Sound from the speaker in your hands.",
-  "d": "The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot's macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone, and a combined Joy-Con pair plays it through the coil the game drives. A Wii Remote plays them through its own speaker. The DualSense and DualShock 4 also get a processing chain of their own: bs2b crossfeed for the headset jack, a graphic parametric EQ you drag into shape or load from an AutoEq profile, and a limiter."
+  "d": "The DualSense and DualShock 4 have a speaker built in, and PadForge can drive it. Mirror a Windows audio output to the pad, or send a slot\u2019s macro sounds straight to it. DualSense over USB or Bluetooth, DualShock 4 over Bluetooth. Pads with haptic actuators instead of a speaker, like a Joy-Con, Switch Pro, Steam Controller, or Steam Deck, play the same sounds as a vibrating tone, and a combined Joy-Con pair plays it through the coil the game drives. A Wii Remote plays them through its own speaker. The DualSense and DualShock 4 also get a processing chain of their own: bs2b crossfeed for the headset jack, a graphic parametric EQ you drag into shape or load from an AutoEq profile, and a limiter."
  },
  {
   "eyebrow": "Guide LED brightness",
@@ -67,7 +67,7 @@
  {
   "eyebrow": "Bass shakers",
   "t": "Rumble you can sit on.",
-  "d": "The Bass Shakers tab routes the game rumble and force feedback a slot receives to any audio output as low-frequency tones. Four voices, low motor, high motor, and both triggers, each with its own 20 to 120 Hz frequency and gain, a mono or controller-stereo split, and a frequency sweep to find where your shaker responds strongest."
+  "d": "The Bass Shakers card routes the game rumble and force feedback a slot receives to any audio output as low-frequency tones. Four voices, low motor, high motor, and both triggers, each with its own 20 to 120 Hz frequency and gain, a mono or controller-stereo split, and a frequency sweep to find where your shaker responds strongest."
  },
  {
   "eyebrow": "Touchpad as more than a touchpad",
@@ -92,7 +92,7 @@
  {
   "eyebrow": "Wii pointer modes",
   "t": "Point the Wii Remote like a light gun, or a mouse.",
-  "d": "The Pointer tab reads the Wii Remote's IR camera several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen's aspect ratio. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or jump straight to one from a macro."
+  "d": "The IR Pointer card reads the Wii Remote\u2019s IR camera several ways. FPS Mouse drives the desktop mouse for shooters. The border modes keep the aimed area square, corrected for your screen\u2019s aspect ratio. When the camera loses the sensor bar, IR-offscreen freeze holds the last position instead of snapping to a corner. Cycle the modes live, or jump straight to one from a macro."
  },
  {
   "eyebrow": "Joy-Con 2 optical mouse",
@@ -106,7 +106,7 @@
  },
  {
   "eyebrow": "Share controllers across your PCs",
-  "t": "The controller is on the other PC. The game doesn't care.",
+  "t": "The controller is on the other PC. The game doesn\u2019t care.",
   "d": "Remote Link shares devices across the PadForge PCs on your network. A controller, wheel, or HOTAS plugged into one PC drives a game on another, both directions at once, and the feedback comes home: rumble, force feedback, adaptive triggers, lightbar, player LEDs, and the controller speaker all play on the physical device wherever it lives. Pair once with a six-digit code. Trusted PCs reconnect on their own. A gamepad-only switch keeps a paired PC away from your keyboard, mouse, and macros."
  },
  {
@@ -132,7 +132,7 @@
  {
   "eyebrow": "Wii controllers, paired in-app",
   "t": "Pair a Wii Remote without leaving PadForge.",
-  "d": "A Wii controller's PIN is six raw bytes set by the sync button, not text you can type into the Windows prompt. So PadForge runs the pairing itself: click Pair, press the red SYNC button, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller all map as normal pads, with the accelerometer and Motion Plus gyro feeding the same motion pipeline as a DualSense. A Balance Board reports weight and lean as mapping sources."
+  "d": "A Wii controller\u2019s PIN is six raw bytes set by the sync button, not text you can type into the Windows prompt. So PadForge runs the pairing itself: click Pair, press the red SYNC button, and the controller bonds and reconnects on any button press after that. A bare Wii Remote, Remote plus Nunchuk, Classic Controller, and Wii U Pro Controller all map as normal pads, with the accelerometer and Motion Plus gyro feeding the same motion pipeline as a DualSense. A Balance Board reports weight and lean as mapping sources."
  },
  {
   "eyebrow": "DualShock 3, paired in-app",
@@ -147,6 +147,6 @@
  {
   "eyebrow": "Unknown hardware welcome",
   "t": "If Windows sees it, you can map it.",
-  "d": "For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Device Mapping on the device's card: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
+  "d": "For unrecognized gamepads, Force Raw Joystick Mode exposes every raw button and axis directly. Or click Submit Device Mapping under the device\u2019s Details on the Devices page: your browser opens a pre-filled GitHub issue, you name the inputs, and once merged the mapping ships to every PadForge user on the next release."
  }
 ]
