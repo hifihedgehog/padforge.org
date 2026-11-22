@@ -6,16 +6,14 @@ That can be a different controller, a keyboard and mouse, a flight stick, your p
 
 PadForge works with a screen reader and from the keyboard. Here is NVDA reading PadForge, one Tab key at a time.
 
-NVDA: Slot 1, data item, 4 of 5
-NVDA: Delete virtual controller, button
+NVDA: Slot 1, Xbox Series X|S Controller (Bluetooth), 5 of 6
 NVDA: Enabled, toggle button, pressed, Awaiting devices
-NVDA: Xbox, radio button, not checked
-NVDA: PlayStation, radio button, not checked
-NVDA: Nintendo, radio button, checked
-NVDA: Settings saved to PadForge.xml.
+NVDA: Xbox, button
+NVDA: Delete virtual controller, button
+NVDA: Add Controller, not selected, 6 of 6
 
 Every control the Tab key reaches has a spoken name. Buttons speak their state, status changes are announced as they happen, and Escape closes a dialog. The interface comes in 109 languages, and the spoken names follow the one you pick.
 
-PadForge is free, with no subscription, no paywall and no nag screens. It runs on Windows 10 and 11, with a preliminary build for Windows 11 on ARM. Windows asks for administrator permission each time it starts.
+PadForge is free, with no subscription, no paywall and no nag screens. It runs on Windows 10 and 11, and its virtual controllers now work on Windows 11 on ARM. Windows asks for administrator permission each time it starts.
 
-Get it at padforge.org. That's P-A-D, forge, dot org. Thanks for listening.
+Get it at padforge.org. That's P-A-D, forge, dot org. If anything does not work, tell us right away. Thanks for listening.
