@@ -143,7 +143,7 @@ PadForge.App/
   MainWindow.xaml / MainWindow.xaml.cs # Shell: title bar with Search and the profile switcher, sidebar, page hosting, event wiring
   MainWindow.BlissBox.cs / .Falcon.cs / .FlydigiScreen.cs / .KeyboardScreens.cs  # The shell's handlers for those devices' actions and dialogs
   app.manifest                        # requireAdministrator, per-monitor DPI awareness
-  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (three entries: the DualShock 3 under DsHidMini SDF / SXS, the PS VR Aim Controller (#506) and the GameSir G7 Pro)
+  gamecontrollerdb_padforge.txt       # Custom SDL gamepad mappings (two entries: the DualShock 3 under DsHidMini SDF / SXS and the PS VR Aim Controller (#506))
   Properties/
     AssemblyInfo.cs                   # Assembly metadata only (title, copyright, theme, COM GUID). AssemblyVersion + AssemblyFileVersion live in ..\SharedVersion.cs, linked into the App, Engine, and SteamWorkshop csproj files.
 

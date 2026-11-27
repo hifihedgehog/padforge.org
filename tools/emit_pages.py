@@ -55,23 +55,23 @@ if N["lit_all"] == N["lit"]:
 # else does. A rebase that changes either needs the sentence rewritten.
 if N["overlap_arcade"] != N["arcade"]:
     raise SystemExit("not every arcade stick is in the gamepad list now: reword HEADLINE")
-if N["mapped_padforge"] != 3 or N["padforge"] != 2:
-    raise SystemExit("PadForge's own mapping file no longer holds the three rows HEADLINE names: reword it")
+if N["mapped_padforge"] != 2 or N["padforge"] != 1:
+    raise SystemExit("PadForge's own mapping file no longer holds the two rows HEADLINE names: reword it")
 HEADLINE = (
     "PadForge recognizes **{union_fmt}** devices by their USB identity: {pads} gamepads in SDL's "
     "controller list, {community} more pads that the community SDL_GameControllerDB maps, "
     "{flydigi} Flydigi pads, {claimed} pads and specialty devices that SDL's dedicated drivers "
     "claim, {wheels} racing wheels, {sticks} flight sticks, {throttles} throttles, {arcade} "
     "arcade sticks, {gamecube} GameCube adapters, {native} devices PadForge's own code "
-    "claims, the PS VR Aim Controller and the GameSir G7 Pro, which PadForge's own mapping file names, and "
+    "claims, the PS VR Aim Controller, which PadForge's own mapping file names, and "
     "{lit_all_fmt} RGB keyboards, mice, headsets and other devices PadForge lights itself, "
     "[listed below](#rgb-keyboards-mice-and-other-lit-devices). The arcade sticks, {ow} wheels "
     "and {og} adapters also sit in the gamepad list, and {lit_over} of the lit devices are "
     "controllers counted above, so the total is smaller than the sum. Behind those sit "
     "**{mapped_all}** named gamepad mappings: {mapped_sdl} from "
     "SDL's Windows database, {mapped_community} more from the community database, and "
-    "PadForge's own three, for the DualShock 3 under DsHidMini, the PS VR Aim Controller and the "
-    "GameSir G7 Pro on DirectInput. For virtual controllers, HIDMaestro ships {profiles} device "
+    "PadForge's own two, for the DualShock 3 under DsHidMini and the PS VR Aim Controller. "
+    "For virtual controllers, HIDMaestro ships {profiles} device "
     "profiles. PadForge's controller pickers offer {offered} of its controllers, and a "
     "Keyboard+Mouse slot can send through any of its 51 keyboards and 52 mice, [listed "
     "below](#virtual-keyboards-and-mice)."
@@ -180,8 +180,7 @@ def md():
         "Pads carrying a mapping in the database, so their buttons and axes land in the right places",
         "the moment they are plugged in. SDL's database holds {0} names in its Windows section, the".format(N["mapped_sdl"]),
         "community SDL_GameControllerDB that PadForge's SDL3 build adds holds {0} more, and PadForge".format(N["mapped_community"]),
-        "adds {0} of its own, for the DualShock 3 under DsHidMini, the PS VR Aim Controller and the".format(word(N["mapped_padforge"])),
-        "GameSir G7 Pro on DirectInput.",
+        "adds {0} of its own, for the DualShock 3 under DsHidMini and the PS VR Aim Controller.".format(word(N["mapped_padforge"])),
         "",
     ] + vendor_table(mapped) + [
         "",
